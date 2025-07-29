@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Certamen Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+        }
+        .font-display { font-family: 'Montserrat', sans-serif; }
+        .font-neon { font-family: 'Orbitron', sans-serif; }
+        .pozo-text {
+            color: #2dd4bf;
+            text-shadow: 0 0 5px #2dd4bf, 0 0 15px #2dd4bf;
+        }
+        .province-btn {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .province-btn:hover {
+            background-color: #2bb7d1;
+            color: #121212;
+            transform: translateY(-4px);
+            border-color: #2bb7d1;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Encabezado Fijo -->
+    <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
+        <div class="flex items-center space-x-4">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
+            <p class="text-gray-400 text-xs tracking-widest font-display hidden sm:block">CERTAMEN DE CANTO</p>
+        </div>
+        <nav class="flex items-center space-x-4 text-sm">
+            <a href="ranking.html" class="text-gray-300 hover:text-white">Ranking</a>
+            <a href="batallas.html" class="text-gray-300 hover:text-white">Batallas</a>
+            <a href="inscripcion.html" class="bg-[#2bb7d1] text-black py-2 px-4 rounded-full font-bold">Inscribite</a>
+        </nav>
+    </header>
+
+    <main class="p-6 md:p-10">
+        <!-- Sección del Pozo -->
+        <section class="text-center my-10">
+            <h1 class="font-display text-lg uppercase tracking-widest text-gray-400">Pozo actual del certamen</h1>
+            <div class="font-neon pozo-text text-6xl md:text-8xl font-bold my-2">$512,450</div>
+            <p class="text-gray-400">El premio de la gente, para la gente.</p>
+        </section>
+
+        <!-- Selección de Provincia -->
+        <section class="text-center my-16">
+            <h2 class="text-3xl font-display font-bold mb-2">Este es tu momento.</h2>
+            <p class="text-lg text-gray-300 mb-8">Seleccioná tu provincia para empezar a competir.</p>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
+                <!-- Provincias Argentinas -->
+                <a href="inscripcion.html?prov=BuenosAires" class="province-btn p-4 rounded-lg font-bold">Buenos Aires</a>
+                <a href="inscripcion.html?prov=Catamarca" class="province-btn p-4 rounded-lg font-bold">Catamarca</a>
+                <a href="inscripcion.html?prov=Chaco" class="province-btn p-4 rounded-lg font-bold">Chaco</a>
+                <a href="inscripcion.html?prov=Chubut" class="province-btn p-4 rounded-lg font-bold">Chubut</a>
+                <a href="inscripcion.html?prov=Cordoba" class="province-btn p-4 rounded-lg font-bold">Córdoba</a>
+                <a href="inscripcion.html?prov=Corrientes" class="province-btn p-4 rounded-lg font-bold">Corrientes</a>
+                <a href="inscripcion.html?prov=EntreRios" class="province-btn p-4 rounded-lg font-bold">Entre Ríos</a>
+                <a href="inscripcion.html?prov=Formosa" class="province-btn p-4 rounded-lg font-bold">Formosa</a>
+                <a href="inscripcion.html?prov=Jujuy" class="province-btn p-4 rounded-lg font-bold">Jujuy</a>
+                <a href="inscripcion.html?prov=LaPampa" class="province-btn p-4 rounded-lg font-bold">La Pampa</a>
+                <a href="inscripcion.html?prov=LaRioja" class="province-btn p-4 rounded-lg font-bold">La Rioja</a>
+                <a href="inscripcion.html?prov=Mendoza" class="province-btn p-4 rounded-lg font-bold">Mendoza</a>
+                <a href="inscripcion.html?prov=Misiones" class="province-btn p-4 rounded-lg font-bold">Misiones</a>
+                <a href="inscripcion.html?prov=Neuquen" class="province-btn p-4 rounded-lg font-bold">Neuquén</a>
+                <a href="inscripcion.html?prov=RioNegro" class="province-btn p-4 rounded-lg font-bold">Río Negro</a>
+                <a href="inscripcion.html?prov=Salta" class="province-btn p-4 rounded-lg font-bold">Salta</a>
+                <a href="inscripcion.html?prov=SanJuan" class="province-btn p-4 rounded-lg font-bold">San Juan</a>
+                <a href="inscripcion.html?prov=SanLuis" class="province-btn p-4 rounded-lg font-bold">San Luis</a>
+                <a href="inscripcion.html?prov=SantaCruz" class="province-btn p-4 rounded-lg font-bold">Santa Cruz</a>
+                <a href="inscripcion.html?prov=SantaFe" class="province-btn p-4 rounded-lg font-bold">Santa Fe</a>
+                <a href="inscripcion.html?prov=SantiagodelEstero" class="province-btn p-4 rounded-lg font-bold">Santiago del Estero</a>
+                <a href="inscripcion.html?prov=TierradelFuego" class="province-btn p-4 rounded-lg font-bold">Tierra del Fuego</a>
+                <a href="inscripcion.html?prov=Tucuman" class="province-btn p-4 rounded-lg font-bold">Tucumán</a>
+                
+                <!-- Opción Internacional -->
+                <a href="inscripcion.html?prov=OtroPais" class="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 province-btn p-4 rounded-lg font-bold bg-sky-500/20 border-sky-500 text-sky-300">Otro País</a>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>
