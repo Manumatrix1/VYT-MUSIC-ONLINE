@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Inscripción Presencial Rosario</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+        }
+        .font-display { font-family: 'Montserrat', sans-serif; }
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #2bb7d1;
+            outline: none;
+        }
+        .btn-submit {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .btn-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Encabezado Fijo -->
+    <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
+        <div class="flex items-center space-x-4">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
+        </div>
+        <nav class="flex items-center space-x-4 text-sm">
+            <a href="presencial.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
+        </nav>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="w-full max-w-lg">
+            <div class="text-center mb-10">
+                <p class="font-display text-lg uppercase tracking-widest text-[#2bb7d1]">Inscripción Presencial</p>
+                <h1 class="font-display text-4xl md:text-5xl font-black">ROSARIO</h1>
+                <p class="text-gray-400 mt-2">Estás a un paso de subirte a nuestro escenario.</p>
+            </div>
+            
+            <form id="form-presencial" class="space-y-6">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-300 mb-1">Nombre y Apellido</label>
+                    <input type="text" id="nombre" name="nombre" class="w-full form-input p-3 rounded-lg" placeholder="Tu nombre completo" required>
+                </div>
+                <div>
+                    <label for="dni" class="block text-sm font-medium text-gray-300 mb-1">DNI</label>
+                    <input type="text" id="dni" name="dni" class="w-full form-input p-3 rounded-lg" placeholder="Tu número de documento" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email de Contacto</label>
+                    <input type="email" id="email" name="email" class="w-full form-input p-3 rounded-lg" placeholder="tu-correo@ejemplo.com" required>
+                </div>
+                 <div>
+                    <label for="telefono" class="block text-sm font-medium text-gray-300 mb-1">Teléfono (WhatsApp)</label>
+                    <input type="tel" id="telefono" name="telefono" class="w-full form-input p-3 rounded-lg" placeholder="Para mantenerte al tanto de todo" required>
+                </div>
+
+                <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
+                    Confirmar mi lugar
+                </button>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>
