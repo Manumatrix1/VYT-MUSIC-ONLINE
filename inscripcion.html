@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Inscripción Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #121212;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+        }
+        .font-display { font-family: 'Montserrat', sans-serif; }
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #2bb7d1;
+            outline: none;
+        }
+        .btn-submit {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .btn-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Encabezado Fijo -->
+    <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
+        <div class="flex items-center space-x-4">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
+        </div>
+        <nav class="flex items-center space-x-4 text-sm">
+            <a href="index.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
+        </nav>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="w-full max-w-lg">
+            <div class="text-center mb-10">
+                <h1 class="font-display text-4xl md:text-5xl font-black">Inscripción Online</h1>
+                <p class="text-gray-400 mt-2">Completá tus datos para unirte a la revolución musical.</p>
+            </div>
+            
+            <form id="form-online" class="space-y-6">
+                <div>
+                    <label for="nombre" class="block text-sm font-medium text-gray-300 mb-1">Nombre Artístico</label>
+                    <input type="text" id="nombre" name="nombre" class="w-full form-input p-3 rounded-lg" placeholder="Ej: Sol Frecuencia" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Tu Email</label>
+                    <input type="email" id="email" name="email" class="w-full form-input p-3 rounded-lg" placeholder="tu-correo@ejemplo.com" required>
+                </div>
+                 <div>
+                    <label for="provincia" class="block text-sm font-medium text-gray-300 mb-1">Provincia</label>
+                    <select id="provincia" name="provincia" class="w-full form-input p-3 rounded-lg" required>
+                        <option value="">Seleccioná tu provincia...</option>
+                        <option value="Buenos Aires">Buenos Aires</option>
+                        <option value="Catamarca">Catamarca</option>
+                        <option value="Chaco">Chaco</option>
+                        <option value="Chubut">Chubut</option>
+                        <option value="Córdoba">Córdoba</option>
+                        <option value="Corrientes">Corrientes</option>
+                        <option value="Entre Ríos">Entre Ríos</option>
+                        <option value="Formosa">Formosa</option>
+                        <option value="Jujuy">Jujuy</option>
+                        <option value="La Pampa">La Pampa</option>
+                        <option value="La Rioja">La Rioja</option>
+                        <option value="Mendoza">Mendoza</option>
+                        <option value="Misiones">Misiones</option>
+                        <option value="Neuquén">Neuquén</option>
+                        <option value="Río Negro">Río Negro</option>
+                        <option value="Salta">Salta</option>
+                        <option value="San Juan">San Juan</option>
+                        <option value="San Luis">San Luis</option>
+                        <option value="Santa Cruz">Santa Cruz</option>
+                        <option value="Santa Fe">Santa Fe</option>
+                        <option value="Santiago del Estero">Santiago del Estero</option>
+                        <option value="Tierra del Fuego">Tierra del Fuego</option>
+                        <option value="Tucumán">Tucumán</option>
+                        <option value="Otro País">Otro País</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="video" class="block text-sm font-medium text-gray-300 mb-1">Link a tu video</label>
+                    <input type="url" id="video" name="video" class="w-full form-input p-3 rounded-lg" placeholder="Pegá el link de YouTube, TikTok, etc." required>
+                </div>
+
+                <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
+                    Finalizar Inscripción
+                </button>
+            </form>
+        </div>
+    </main>
+
+</body>
+</html>
