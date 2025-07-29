@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenido a VYT MUSIC</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            /* Fondo oscuro y moderno */
+            background-color: #121212;
+            background-image: radial-gradient(circle at top, rgba(43, 183, 209, 0.2), transparent 50%);
+            font-family: 'Roboto', sans-serif;
+            overflow-x: hidden;
+        }
+        h1, .font-display {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .countdown-text {
+            font-family: 'Orbitron', sans-serif;
+            color: #2dd4bf; /* Un color turquesa brillante */
+            text-shadow:
+                0 0 5px rgba(45, 212, 191, 0.7),
+                0 0 15px rgba(45, 212, 191, 0.7);
+        }
+        .btn-choice {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .btn-choice:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(43, 183, 209, 0.5);
+        }
+    </style>
+</head>
+<body class="text-white">
+
+    <div class="min-h-screen flex flex-col items-center justify-center text-center p-6">
+        
+        <!-- Logo y Título del Certamen -->
+        <div class="mb-6 text-center">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-40 md:w-48 mx-auto">
+            <p class="text-gray-400 text-lg tracking-widest mt-2 font-display">CERTAMEN DE CANTO</p>
+        </div>
+
+        <!-- Título Principal -->
+        <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-4">La revolución musical ha comenzado.</h1>
+        <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
+            Este es el escenario para las voces que merecen ser escuchadas.
+        </p>
+
+        <!-- Cuenta Regresiva -->
+        <div class="mb-8 w-full max-w-lg">
+            <p class="font-display text-sm uppercase tracking-widest text-gray-400 mb-2">Las inscripciones cierran en:</p>
+            <div id="countdown" class="grid grid-cols-4 gap-2 text-center">
+                <div>
+                    <div id="days" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Días</div>
+                </div>
+                <div>
+                    <div id="hours" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Horas</div>
+                </div>
+                <div>
+                    <div id="minutes" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Minutos</div>
+                </div>
+                <div>
+                    <div id="seconds" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Segundos</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mensaje Inspirador para los que dudan -->
+        <div class="bg-sky-400/10 border border-sky-400/30 text-sky-300 text-md rounded-xl p-6 mb-10 max-w-lg">
+            <p class="font-bold text-lg mb-2">¿Te gusta cantar?</p>
+            <p class="text-sky-200">Entonces esto es para vos. No se trata de ser perfecto, se trata de ser real.</p>
+        </div>
+
+        <!-- Pregunta Clave -->
+        <h2 class="text-2xl font-bold mb-6 font-display">¿Desde dónde vas a brillar?</h2>
+
+        <!-- Opciones de Participación -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-lg">
+            <!-- Opción Rosario -->
+            <a href="presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
+                <span class="font-bold text-xl block">Soy de Rosario</span>
+                <span class="text-sm">(o alrededores)</span>
+            </a>
+            <!-- Opción Online -->
+            <a href="index.html" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
+                <span class="font-bold text-xl block">Otra Provincia</span>
+                <span class="text-sm">(100% Online)</span>
+            </a>
+        </div>
+
+        <!-- Aclaración de Flexibilidad -->
+        <p class="text-sm mt-8 text-gray-400 max-w-md">
+            (Si sos de Rosario, también podés participar de forma online. ¡Vos elegís cómo brillar!)
+        </p>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Fecha final: 7 días desde ahora.
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 7);
+
+            const countdownFunction = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    document.getElementById("countdown").innerHTML = "<div class='col-span-4 text-2xl font-bold'>INSCRIPCIONES CERRADAS</div>";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = String(days).padStart(2, '0');
+                document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+                document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+                document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+
+            }, 1000);
+        });
+    </script>
+
+</body>
+</html>
