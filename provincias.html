@@ -3,200 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Certamen Online</title>
+    <title>Bienvenido a VYT MUSIC</title>
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+
     <style>
-        /* Estilos generales del cuerpo y fuentes */
         body {
+            /* Fondo oscuro y moderno */
             background-color: #121212;
+            background-image: radial-gradient(circle at top, rgba(43, 183, 209, 0.2), transparent 50%);
             font-family: 'Roboto', sans-serif;
-            color: white;
+            overflow-x: hidden;
+            color: white; /* Asegura el color de texto principal */
         }
-        .font-display { font-family: 'Montserrat', sans-serif; }
-        .font-neon { font-family: 'Orbitron', sans-serif; }
-        .pozo-text {
-            color: #2dd4bf; /* Color turquesa del logo */
-            text-shadow: 0 0 5px #2dd4bf, 0 0 15px #2dd4bf; /* Efecto de neón */
+        h1, .font-display {
+            font-family: 'Montserrat', sans-serif;
+        }
+        .countdown-text {
+            font-family: 'Orbitron', sans-serif;
+            color: #2dd4bf; /* Un color turquesa brillante */
+            text-shadow:
+                0 0 5px rgba(45, 212, 191, 0.7),
+                0 0 15px rgba(45, 212, 191, 0.7);
+        }
+        .btn-choice {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .btn-choice:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(43, 183, 209, 0.5);
         }
 
-        /* Contenedor principal para centrar el contenido */
-        .main-content-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.3); /* Fondo sutil */
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        /* Estilos para el Modal de Bienvenida */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0s 0.3s;
+        }
+        .modal-backdrop.visible {
+            opacity: 1;
+            pointer-events: all;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: #161b22; /* Color de fondo secundario */
+            padding: 2rem;
+            border-radius: 15px;
             text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid #30363d; /* Borde sutil */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
         }
-
-        /* Contenedor del mapa/desplegable */
-        .map-selection-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .modal-backdrop.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-content h3 {
+            font-family: 'Montserrat', sans-serif; /* Usar font-display */
+            color: #58a6ff; /* Color primario */
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            color: #b0b8c4; /* Color texto secundario */
+        }
+        .modal-select {
             width: 100%;
-            padding: 20px; /* Añadido padding para que el mapa no se pegue a los bordes del contenedor principal */
-        }
-
-        /* Estilos para la imagen del mapa */
-        #mapImage {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 20px; /* Espacio entre el mapa y el desplegable */
-            /* Aplicamos el filtro drop-shadow para el efecto neón directamente a la imagen */
-            filter: drop-shadow(0 0 15px #00cfff); /* Color celeste neón de tu ejemplo */
-        }
-
-        /* Estilos para el desplegable de provincias */
-        .province-select {
-            width: 100%;
-            max-width: 300px;
-            padding: 12px 16px;
+            padding: 0.8rem;
+            background-color: #0d1117; /* Color de fondo */
+            border: 1px solid #30363d;
             border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid #2dd4bf; /* Borde neón */
             color: white;
             font-size: 1rem;
-            appearance: none; /* Elimina el estilo por defecto del sistema operativo */
+            appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
             cursor: pointer;
             outline: none;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 0 5px rgba(45, 212, 191, 0.5); /* Sombra neón */
-            text-align: center; /* Centrar el texto en el desplegable */
-            text-align-last: center; /* Para Edge/IE */
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-align-last: center;
         }
-
-        .province-select option {
-            background-color: #1a1a1a; /* Fondo oscuro para las opciones */
+        .modal-select option {
+            background-color: #1a1a1a;
             color: white;
         }
-
-        /* Estilos para los campos de datos personales */
-        .form-input-group {
-            width: 100%;
-            max-width: 300px;
-            margin-top: 20px; /* Espacio entre el desplegable y los datos */
+        .modal-buttons {
             display: flex;
-            flex-direction: column;
-            gap: 15px; /* Espacio entre los campos */
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
         }
-
-        .form-input {
-            padding: 12px 16px;
-            border-radius: 8px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: all 0.2s ease-in-out;
-            box-shadow: 0 0 5px rgba(45, 212, 191, 0.2);
-        }
-
-        .form-input:focus {
-            border-color: #2bb7d1;
-            box-shadow: 0 0 15px rgba(45, 212, 191, 0.8);
-        }
-
-        /* Estilos para los botones */
-        .btn-common {
-            padding: 12px 24px;
-            border-radius: 9999px; /* rounded-full */
-            font-weight: bold;
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        .modal-btn {
             display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
             cursor: pointer;
         }
-
-        .btn-inscribite-bottom {
-            background-color: #2bb7d1;
-            color: black;
-            box-shadow: 0 0 10px rgba(43, 183, 209, 0.7);
-            margin-top: 20px; /* Espacio con los datos */
+        .modal-btn-confirm {
+            background-color: #58a6ff; /* Color primario */
+            color: #0d1117; /* Color de fondo */
         }
-
-        .btn-inscribite-bottom:hover {
+        .modal-btn-confirm:hover {
+            background-color: transparent;
+            border-color: #58a6ff;
+            color: #58a6ff;
             transform: scale(1.05);
-            box-shadow: 0 0 25px rgba(43, 183, 209, 1);
         }
-
-        .province-btn {
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #2dd4bf;
-            box-shadow: 0 0 5px rgba(45, 212, 191, 0.5);
-            margin-top: 20px; /* Espacio con el botón de inscribite */
+        .modal-btn-other {
+            background-color: transparent;
+            color: #e6edf3; /* Color texto principal */
+            border-color: #8b949e;
         }
-        .province-btn:hover {
-            background-color: #2bb7d1;
-            color: #121212;
+        .modal-btn-other:hover {
+            border-color: #e6edf3;
+            color: #e6edf3;
             transform: scale(1.05);
-            border-color: #2bb7d1;
-            box-shadow: 0 0 15px #2bb7d1;
         }
     </style>
 </head>
 <body>
 
-    <!-- Encabezado Fijo -->
-    <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
-        <div class="flex items-center space-x-4">
-            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
-            <p class="text-gray-400 text-xs tracking-widest font-display hidden sm:block">CERTAMEN DE CANTO</p>
+    <div class="min-h-screen flex flex-col items-center justify-center text-center p-6">
+        
+        <!-- Logo y Título del Certamen -->
+        <div class="mb-6 text-center">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-40 md:w-48 mx-auto">
+            <p class="text-gray-400 text-lg tracking-widest mt-2 font-display">CERTAMEN DE CANTO</p>
         </div>
-        <nav class="flex items-center space-x-4 text-sm">
-            <a href="inscripcion.html" class="text-gray-300 hover:text-white">Inscripción</a>
-        </nav>
-    </header>
 
-    <main class="p-6 md:p-10">
-        <!-- Sección del Pozo -->
-        <section class="text-center my-10">
-            <h1 class="font-display text-lg uppercase tracking-widest text-gray-400">Pozo actual del certamen</h1>
-            <div class="font-neon pozo-text text-6xl md:text-8xl font-bold my-2">$512,450</div>
-            <p class="text-gray-400">El premio de la gente, para la gente.</p>
-        </section>
+        <!-- Título Principal -->
+        <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-4">La revolución musical ha comenzado.</h1>
+        <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
+            Este es el escenario para las voces que merecen ser escuchadas.
+        </p>
 
-        <!-- Sección de Selección de Provincia con Mapa Estático y Formulario -->
-        <section class="text-center my-16">
-            <h2 class="text-3xl font-display font-bold mb-2">Este es tu momento.</h2>
-            <p class="text-lg text-gray-300 mb-8">Elige tu provincia para empezar a competir.</p>
-            
-            <div class="main-content-container">
-                <div class="map-selection-container">
-                    <!-- Imagen del mapa proporcionada por el usuario -->
-                    <img id="mapImage" src="https://i.ibb.co/TMDKvhGx/assets-task-01k1dx0hj2fkes7xkney14qq1q-1753887385-img-0.webp" alt="Mapa de Argentina con contorno neón">
+        <!-- Cuenta Regresiva -->
+        <div class="mb-8 w-full max-w-lg">
+            <p class="font-display text-sm uppercase tracking-widest text-gray-400 mb-2">Las inscripciones cierran en:</p>
+            <div id="countdown" class="grid grid-cols-4 gap-2 text-center">
+                <div>
+                    <div id="days" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Días</div>
                 </div>
-
-                <select id="provinceSelect" class="province-select">
-                    <option value="" disabled selected>Elige una provincia</option>
-                    <!-- Las opciones se llenarán con JavaScript -->
-                </select>
-                
-                <!-- Campos de datos personales -->
-                <div class="form-input-group">
-                    <input type="text" id="nombreArtistico" class="form-input" placeholder="Nombre Artístico">
-                    <input type="email" id="email" class="form-input" placeholder="Tu Email">
-                    <input type="tel" id="telefono" class="form-input" placeholder="Teléfono (WhatsApp)">
-                    <input type="url" id="videoLink" class="form-input" placeholder="Link a tu video (YouTube, TikTok, etc.)">
+                <div>
+                    <div id="hours" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Horas</div>
                 </div>
-
-                <!-- Botones de acción -->
-                <a href="inscripcion.html" class="btn-common btn-inscribite-bottom">Inscribite Ahora</a>
-                <a href="inscripcion.html?prov=OtroPais" class="btn-common province-btn">Otro País</a>
+                <div>
+                    <div id="minutes" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Minutos</div>
+                </div>
+                <div>
+                    <div id="seconds" class="countdown-text text-4xl md:text-6xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase">Segundos</div>
+                </div>
             </div>
-        </section>
-    </main>
+        </div>
+        
+        <!-- Mensaje Inspirador para los que dudan -->
+        <div class="bg-sky-400/10 border border-sky-400/30 text-sky-300 text-md rounded-xl p-6 mb-10 max-w-lg">
+            <p class="font-bold text-lg mb-2">¿Te gusta cantar?</p>
+            <p class="text-sky-200">Entonces esto es para vos. No se trata de ser perfecto, se trata de ser real.</p>
+        </div>
+
+        <!-- Pregunta Clave -->
+        <h2 class="text-2xl font-bold mb-6 font-display">¿Desde dónde vas a brillar?</h2>
+
+        <!-- Opciones de Participación -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-lg">
+            <!-- Opción Rosario -->
+            <a href="presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
+                <span class="font-bold text-xl block">Soy de Rosario</span>
+                <span class="text-sm">(o alrededores)</span>
+            </a>
+            <!-- Opción Online -->
+            <a href="#" id="otra-provincia-btn" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
+                <span class="font-bold text-xl block">Otra Provincia</span>
+                <span class="text-sm">(100% Online)</span>
+            </a>
+        </div>
+
+        <!-- Aclaración de Flexibilidad -->
+        <p class="text-sm mt-8 text-gray-400 max-w-md">
+            (Si sos de Rosario, también podés participar de forma online. ¡Vos elegís cómo brillar!)
+        </p>
+
+    </div>
+
+    <!-- Modal de Bienvenida / Selección de Provincia -->
+    <div id="welcome-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <h3>¡Bienvenido a VYT MUSIC!</h3>
+            <p>Para ofrecerte la mejor experiencia, contanos desde dónde nos visitás.</p>
+            <select id="modal-provincia-select" class="modal-select">
+                <option value="" disabled selected>Seleccioná tu provincia...</option>
+                <!-- Opciones de provincia se llenarán con JS -->
+            </select>
+            <div class="modal-buttons">
+                <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Confirmar</button>
+                <button id="modal-otro-pais-btn" class="modal-btn modal-btn-other">Otro País</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Mapeo de códigos de provincia a nombres completos (usado para el desplegable)
+        // Mapeo de códigos de provincia a nombres completos
         const provinceMapping = {
             "ARA": "Salta", 
             "ARB": "Buenos Aires", 
@@ -225,57 +260,74 @@
         };
 
         document.addEventListener('DOMContentLoaded', () => {
-            const provinceSelect = document.getElementById('provinceSelect');
-            const nombreArtisticoInput = document.getElementById('nombreArtistico');
-            const emailInput = document.getElementById('email');
-            const telefonoInput = document.getElementById('telefono');
-            const videoLinkInput = document.getElementById('videoLink');
-            const inscribiteAhoraBtn = document.querySelector('.btn-inscribite-bottom');
+            const otraProvinciaBtn = document.getElementById('otra-provincia-btn');
+            const welcomeModal = document.getElementById('welcome-modal');
+            const modalProvinciaSelect = document.getElementById('modal-provincia-select');
+            const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+            const modalOtroPaisBtn = document.getElementById('modal-otro-pais-btn');
 
-            // Llenar el desplegable con las provincias
+            // Lógica del Contador (ya existente)
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 7); // 7 días desde ahora
+            const countdownFunction = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = targetDate - now;
+
+                if (distance < 0) {
+                    clearInterval(countdownFunction);
+                    document.getElementById("countdown").innerHTML = "<div class='col-span-4 text-2xl font-bold'>INSCRIPCIONES CERRADAS</div>";
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                document.getElementById("days").innerText = String(days).padStart(2, '0');
+                document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+                document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+                document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+            }, 1000);
+
+            // Llenar el desplegable del modal con las provincias
             for (const code in provinceMapping) {
                 if (provinceMapping.hasOwnProperty(code)) {
                     const provinceName = provinceMapping[code];
                     const option = document.createElement('option');
                     option.value = provinceName.replace(/\s/g, ''); // Eliminar espacios para el valor del URL
                     option.textContent = provinceName;
-                    provinceSelect.appendChild(option);
+                    modalProvinciaSelect.appendChild(option);
                 }
             }
 
-            // Manejar la redirección al hacer clic en "Inscribite Ahora"
-            inscribiteAhoraBtn.addEventListener('click', (event) => {
+            // Mostrar el modal cuando se hace clic en "Otra Provincia"
+            otraProvinciaBtn.addEventListener('click', (event) => {
                 event.preventDefault(); // Prevenir la redirección por defecto del <a>
-
-                const selectedProvince = provinceSelect.value;
-                const nombreArtistico = nombreArtisticoInput.value;
-                const email = emailInput.value;
-                const telefono = telefonoInput.value;
-                const videoLink = videoLinkInput.value;
-
-                // Validación básica de campos (puedes mejorarla)
-                if (!selectedProvince || !nombreArtistico || !email || !telefono || !videoLink) {
-                    alert('Por favor, completa todos los campos.'); // Usar un modal personalizado en producción
-                    return;
-                }
-
-                // Construir la URL con todos los datos
-                const params = new URLSearchParams();
-                params.append('prov', selectedProvince);
-                params.append('nombre', nombreArtistico);
-                params.append('email', email);
-                params.append('telefono', telefono);
-                params.append('video', videoLink);
-
-                window.location.href = `inscripcion.html?${params.toString()}`;
+                welcomeModal.classList.add('visible');
             });
 
-            // Opcional: Si quieres que la selección del desplegable también redirija inmediatamente (como antes)
-            // provinceSelect.addEventListener('change', (event) => {
-            //     const selectedProvince = event.target.value;
-            //     if (selectedProvince) {
-            //         // Aquí podrías decidir si redirigir inmediatamente o esperar el botón "Inscribite Ahora"
-            //         // window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`;
+            // Manejar la selección en el modal
+            modalConfirmBtn.addEventListener('click', () => {
+                const selectedProvince = modalProvinciaSelect.value;
+                if (selectedProvince) {
+                    // Redirigir a la página de inscripción con la provincia seleccionada
+                    window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`;
+                } else {
+                    alert('Por favor, selecciona una provincia.'); // Usar un modal personalizado en producción
+                }
+            });
+
+            // Manejar el botón "Otro País" en el modal
+            modalOtroPaisBtn.addEventListener('click', () => {
+                // Redirigir a la página de inscripción con "Otro País"
+                window.location.href = `inscripcion.html?prov=${encodeURIComponent('OtroPaís')}`;
+            });
+
+            // Cerrar modal si se hace clic fuera (opcional, puedes añadirlo si lo deseas)
+            // welcomeModal.addEventListener('click', (event) => {
+            //     if (event.target === welcomeModal) {
+            //         welcomeModal.classList.remove('visible');
             //     }
             // });
         });
