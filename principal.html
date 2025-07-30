@@ -566,6 +566,51 @@
         .social-icons a svg { width: 1.5rem; height: 1.5rem; color: var(--color-texto-secundario); transition: color 0.3s ease; }
         .social-icons a:hover svg { color: var(--color-primario); }
 
+        /* Estilos para los botones de elección de inscripción dentro de principal.html */
+        .inscripcion-choice-buttons {
+            display: grid;
+            grid-template-columns: 1fr; /* Una columna por defecto */
+            gap: 1.5rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        @media (min-width: 768px) { /* Para pantallas medianas y más grandes */
+            .inscripcion-choice-buttons {
+                grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+            }
+        }
+        .inscripcion-choice-buttons .btn {
+            padding: 1.5rem;
+            font-size: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .inscripcion-choice-buttons .btn-online {
+            background-color: #2bb7d1; /* Color turquesa */
+            color: black;
+        }
+        .inscripcion-choice-buttons .btn-online:hover {
+            background-color: transparent;
+            border-color: #2bb7d1;
+            color: #2bb7d1;
+        }
+        .inscripcion-choice-buttons .btn-presencial {
+            background-color: transparent;
+            border: 2px solid #2bb7d1;
+            color: #2bb7d1;
+        }
+        .inscripcion-choice-buttons .btn-presencial:hover {
+            background-color: #2bb7d1;
+            color: black;
+        }
+        .inscripcion-choice-buttons .btn-text-small {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: normal;
+            opacity: 0.8;
+            margin-top: 0.5rem;
+        }
+
     </style>
 </head>
 <body>
@@ -596,7 +641,7 @@
                             <li><a href="presencial.html">Presencial</a></li> <!-- Enlace a archivo externo -->
                         </ul>
                     </li>
-                    <li><a href="inscripcion_choice.html"> <!-- Enlace al nuevo archivo de elección de inscripción -->
+                    <li><a data-target="page-inscripcion"> <!-- Ahora es un data-target interno de nuevo -->
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         <span>Inscripción</span>
                     </a></li>
@@ -642,15 +687,7 @@
                         </div>
                     </section>
                     
-                    <section class="seccion-pozo-home container">
-                        <div class="pozo-wrapper">
-                             <h3 class="titulo-seccion-sm" style="text-align: center;">Pozo Acumulado</h3>
-                            <div class="pozo-texto-valor">$1.250.000 ARS</div>
-                            <div class="pozo-barra-dorada-container">
-                                <div class="pozo-barra-dorada"></div>
-                            </div>
-                        </div>
-                    </section>
+                    <!-- Sección del Pozo Acumulado eliminada de la página de inicio -->
 
                     <section class="seccion-ranking-home container">
                         <h3 class="titulo-seccion-sm">Ranking Top 5</h3>
@@ -769,9 +806,53 @@
                     </section>
                 </div>
                 
-                <!-- Las secciones 'page-concurso-presencial' y 'page-inscripcion' han sido eliminadas de aquí
-                     y ahora se manejan como archivos HTML separados para mantener este archivo más corto.
-                     Los enlaces en la barra lateral y en el hero ahora dirigen directamente a esos archivos. -->
+                <div id="page-concurso-presencial" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Concurso Presencial</h2>
+                            <p class="subtitulo-seccion">¡La emoción del escenario en vivo! Próximamente anunciaremos las fechas y sedes de nuestros eventos presenciales. ¡Preparate para cantar frente al público y un jurado de estrellas!</p>
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Gira Nacional VYT MUSIC</h3>
+                            <div class="gira-grid">
+                                <div class="gira-card">
+                                    <h4>Córdoba</h4>
+                                    <p>Fecha: Próximamente</p>
+                                    <span>Lugar: A confirmar</span>
+                                </div>
+                                <div class="gira-card">
+                                    <h4>Rosario</h4>
+                                    <p>Fecha: Próximamente</p>
+                                    <span>Lugar: A confirmar</span>
+                                </div>
+                                <div class="gira-card">
+                                    <h4>Buenos Aires</h4>
+                                    <p>Fecha: Próximamente</p>
+                                    <span>Lugar: A confirmar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Sección de Inscripción (ahora interna de nuevo) -->
+                <div id="page-inscripcion" class="page">
+                    <section class="seccion">
+                        <div class="container text-center">
+                            <h2 class="titulo-seccion">Inscripción al Certamen</h2>
+                            <p class="subtitulo-seccion">Elegí la modalidad que mejor se adapte a vos y comenzá tu camino hacia el estrellato.</p>
+                            
+                            <div class="inscripcion-choice-buttons">
+                                <a href="inscripcion.html" class="btn btn-online">
+                                    Inscripción Online
+                                    <span class="btn-text-small">(Desde cualquier lugar de Argentina o el mundo)</span>
+                                </a>
+                                <a href="inscripcion_presencial.html" class="btn btn-presencial">
+                                    Inscripción Presencial
+                                    <span class="btn-text-small">(Exclusivo para Rosario y alrededores)</span>
+                                </a>
+                            </div>
+                        </div>
+                    </section>
+                </div>
 
                 <!-- Sección para Comprar VYT (oculta por defecto) -->
                 <div id="page-comprar-vyt" class="page">
@@ -858,19 +939,19 @@
                             <p class="subtitulo-seccion">Agradecemos el apoyo de las empresas y organizaciones que hacen posible VYT MUSIC.</p>
                             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                                 <div class="bg-gray-800 p-6 rounded-lg text-center border border-gray-700">
-                                    <img src="https://placehold.co/150x80/333333/ffffff?text=LOGO+SPONSOR+1" alt="Sponsor 1" class="mx-auto mb-4">
+                                    <img src="https://placehold.co/150x80/333333/ffffff?text=LOGO+SPONSOR+1" alt="Sponsor 1">
                                     <h3 class="text-xl font-bold mb-2">Empresa X</h3>
                                     <p class="text-gray-400">Líder en tecnología de sonido.</p>
                                     <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Visitar sitio</a>
                                 </div>
                                 <div class="bg-gray-800 p-6 rounded-lg text-center border border-gray-700">
-                                    <img src="https://placehold.co/150x80/333333/ffffff?text=LOGO+SPONSOR+2" alt="Sponsor 2" class="mx-auto mb-4">
+                                    <img src="https://placehold.co/150x80/333333/ffffff?text=LOGO+SPONSOR+2" alt="Sponsor 2">
                                     <h3 class="text-xl font-bold mb-2">Estudios Y</h3>
                                     <p class="text-gray-400">Grabación y producción musical.</p>
                                     <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Visitar sitio</a>
                                 </div>
                                 <div class="bg-gray-800 p-6 rounded-lg text-center border border-gray-700">
-                                    <img src="https://placehold.co/150x80/333333/ffffff?text=LOGO+SPONSOR+3" alt="Sponsor 3" class="mx-auto mb-4">
+                                    <img src="https://placehold.co/150x80/333333/ffffff?text=LOGO+SPONSOR+3" alt="Sponsor 3">
                                     <h3 class="text-xl font-bold mb-2">Marca Z</h3>
                                     <p class="text-gray-400">Instrumentos y accesorios.</p>
                                     <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Visitar sitio</a>
