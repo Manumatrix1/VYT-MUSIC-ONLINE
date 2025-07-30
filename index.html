@@ -231,7 +231,7 @@
     </div>
 
     <script>
-        // Mapeo de códigos de provincia a nombres completos
+        // Mapeo de códigos de provincia a nombres completos (no se usa directamente para la redirección, pero es útil para el select)
         const provinceMapping = {
             "ARA": "Salta", 
             "ARB": "Buenos Aires", 
@@ -307,16 +307,15 @@
                 welcomeModal.classList.add('visible');
             });
 
-            // Manejar la selección en el modal
+            // Manejar la selección en el modal: Redirigir a principal.html para exploración
             modalConfirmBtn.addEventListener('click', () => {
                 const selectedProvince = modalProvinciaSelect.value;
                 if (selectedProvince) {
-                    // Redirigir a la página principal de la SPA (principal.html)
+                    // Redirigir a la página principal para que exploren
                     window.location.href = `principal.html`; 
-                    // Aquí podrías añadir un parámetro a la URL si principal.html necesita saber la provincia
-                    // window.location.href = `principal.html?prov=${encodeURIComponent(selectedProvince)}`;
                 } else {
-                    alert('Por favor, selecciona una provincia.'); // Usar un modal personalizado en producción
+                    // Usar un modal personalizado en producción en lugar de alert
+                    alert('Por favor, selecciona una provincia.'); 
                 }
             });
 
