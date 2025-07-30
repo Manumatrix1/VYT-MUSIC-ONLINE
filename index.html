@@ -20,6 +20,7 @@
             background-image: radial-gradient(circle at top, rgba(43, 183, 209, 0.2), transparent 50%);
             font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
+            color: white; /* Asegura el color de texto principal */
         }
         h1, .font-display {
             font-family: 'Montserrat', sans-serif;
@@ -38,9 +39,113 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.5);
         }
+
+        /* Estilos para el Modal de Bienvenida */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0s 0.3s;
+        }
+        .modal-backdrop.visible {
+            opacity: 1;
+            pointer-events: all;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: #161b22; /* Color de fondo secundario */
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid #30363d; /* Borde sutil */
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+        }
+        .modal-backdrop.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-content h3 {
+            font-family: 'Montserrat', sans-serif; /* Usar font-display */
+            color: #58a6ff; /* Color primario */
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            color: #b0b8c4; /* Color texto secundario */
+        }
+        .modal-select {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: #0d1117; /* Color de fondo */
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            outline: none;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-align-last: center;
+        }
+        .modal-select option {
+            background-color: #1a1a1a;
+            color: white;
+        }
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .modal-btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .modal-btn-confirm {
+            background-color: #58a6ff; /* Color primario */
+            color: #0d1117; /* Color de fondo */
+        }
+        .modal-btn-confirm:hover {
+            background-color: transparent;
+            border-color: #58a6ff;
+            color: #58a6ff;
+            transform: scale(1.05);
+        }
+        .modal-btn-other {
+            background-color: transparent;
+            color: #e6edf3; /* Color texto principal */
+            border-color: #8b949e;
+        }
+        .modal-btn-other:hover {
+            border-color: #e6edf3;
+            color: #e6edf3;
+            transform: scale(1.05);
+        }
     </style>
 </head>
-<body class="text-white">
+<body>
 
     <div class="min-h-screen flex flex-col items-center justify-center text-center p-6">
         
@@ -82,7 +187,7 @@
         <!-- Mensaje Inspirador para los que dudan -->
         <div class="bg-sky-400/10 border border-sky-400/30 text-sky-300 text-md rounded-xl p-6 mb-10 max-w-lg">
             <p class="font-bold text-lg mb-2">¿Te gusta cantar?</p>
-            <p class="text-sky-200">Entonces esto es para vos. No se trata de ser perfecto, se trata de ser real.</p>
+            <p class="text-sky-200">Sabemos que tenés talento y que solo necesitás una oportunidad.</p>
         </div>
 
         <!-- Pregunta Clave -->
@@ -96,8 +201,7 @@
                 <span class="text-sm">(o alrededores)</span>
             </a>
             <!-- Opción Online -->
-            <!-- AQUÍ ESTÁ LA CORRECCIÓN -->
-            <a href="provincias.html" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
+            <a href="#" id="otra-provincia-btn" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Otra Provincia</span>
                 <span class="text-sm">(100% Online)</span>
             </a>
@@ -110,12 +214,61 @@
 
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Fecha final: 7 días desde ahora.
-            const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7);
+    <!-- Modal de Bienvenida / Selección de Provincia -->
+    <div id="welcome-modal" class="modal-backdrop">
+        <div class="modal-content">
+            <h3>¡Bienvenido a VYT MUSIC!</h3>
+            <p>Para ofrecerte la mejor experiencia, contanos desde dónde nos visitás.</p>
+            <select id="modal-provincia-select" class="modal-select">
+                <option value="" disabled selected>Seleccioná tu provincia...</option>
+                <!-- Opciones de provincia se llenarán con JS -->
+            </select>
+            <div class="modal-buttons">
+                <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Confirmar</button>
+                <button id="modal-explore-btn" class="modal-btn modal-btn-other">Explorar el sitio</button>
+            </div>
+        </div>
+    </div>
 
+    <script>
+        // Mapeo de códigos de provincia a nombres completos
+        const provinceMapping = {
+            "ARA": "Salta", 
+            "ARB": "Buenos Aires", 
+            "ARC": "Ciudad de Buenos Aires", 
+            "ARD": "San Luis", 
+            "ARE": "Entre Ríos", 
+            "ARF": "La Rioja", 
+            "ARG": "Santiago del Estero", 
+            "ARH": "Chaco", 
+            "ARJ": "San Juan", 
+            "ARK": "Catamarca", 
+            "ARL": "La Pampa", 
+            "ARM": "Mendoza", 
+            "ARN": "Misiones", 
+            "ARP": "Formosa", 
+            "ARQ": "Neuquén", 
+            "ARR": "Río Negro", 
+            "ARS": "Santa Fe", 
+            "ART": "Tucumán", 
+            "ARU": "Chubut", 
+            "ARV": "Tierra del Fuego", 
+            "ARW": "Corrientes", 
+            "ARX": "Córdoba", 
+            "ARY": "Jujuy", 
+            "ARZ": "Santa Cruz"
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const otraProvinciaBtn = document.getElementById('otra-provincia-btn');
+            const welcomeModal = document.getElementById('welcome-modal');
+            const modalProvinciaSelect = document.getElementById('modal-provincia-select');
+            const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+            const modalExploreBtn = document.getElementById('modal-explore-btn');
+
+            // Lógica del Contador (ya existente)
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 7); // 7 días desde ahora
             const countdownFunction = setInterval(() => {
                 const now = new Date().getTime();
                 const distance = targetDate - now;
@@ -135,8 +288,50 @@
                 document.getElementById("hours").innerText = String(hours).padStart(2, '0');
                 document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
                 document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
-
             }, 1000);
+
+            // Llenar el desplegable del modal con las provincias
+            for (const code in provinceMapping) {
+                if (provinceMapping.hasOwnProperty(code)) {
+                    const provinceName = provinceMapping[code];
+                    const option = document.createElement('option');
+                    option.value = provinceName.replace(/\s/g, ''); // Eliminar espacios para el valor del URL
+                    option.textContent = provinceName;
+                    modalProvinciaSelect.appendChild(option);
+                }
+            }
+
+            // Mostrar el modal cuando se hace clic en "Otra Provincia"
+            otraProvinciaBtn.addEventListener('click', (event) => {
+                event.preventDefault(); // Prevenir la redirección por defecto del <a>
+                welcomeModal.classList.add('visible');
+            });
+
+            // Manejar la selección en el modal
+            modalConfirmBtn.addEventListener('click', () => {
+                const selectedProvince = modalProvinciaSelect.value;
+                if (selectedProvince) {
+                    // Redirigir a la página principal de la SPA (main.html)
+                    window.location.href = `main.html`; 
+                    // Aquí podrías añadir un parámetro a la URL si main.html necesita saber la provincia
+                    // window.location.href = `main.html?prov=${encodeURIComponent(selectedProvince)}`;
+                } else {
+                    alert('Por favor, selecciona una provincia.'); // Usar un modal personalizado en producción
+                }
+            });
+
+            // Manejar el botón "Explorar el sitio" en el modal
+            modalExploreBtn.addEventListener('click', () => {
+                // Redirigir a la página principal de la SPA (main.html) sin seleccionar provincia
+                window.location.href = `main.html`;
+            });
+
+            // Cerrar modal si se hace clic fuera (opcional, puedes añadirlo si lo deseas)
+            // welcomeModal.addEventListener('click', (event) => {
+            //     if (event.target === welcomeModal) {
+            //         welcomeModal.classList.remove('visible');
+            //     }
+            // });
         });
     </script>
 
