@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Panel de Administración</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-fondo: #0d1117;
+            --color-fondo-secundario: #161b22;
+            --color-card: #282828;
+            --color-texto-principal: #e6edf3;
+            --color-texto-secundario: #b0b8c4;
+            --color-primario: #58a6ff;
+            --color-secundario: #238636;
+            --color-error: #ff4d4d;
+            --fuente-titulos: 'Bebas Neue', sans-serif;
+            --fuente-cuerpo: 'Montserrat', sans-serif;
+        }
+        body {
+            font-family: var(--fuente-cuerpo);
+            background-color: var(--color-fondo);
+            color: var(--color-texto-principal);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .admin-container {
+            background-color: var(--color-fondo-secundario);
+            border-radius: 15px;
+            padding: 2.5rem;
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+            width: 100%;
+            max-width: 900px;
+        }
+        .form-grupo {
+            margin-bottom: 1.5rem;
+        }
+        .form-grupo label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            color: var(--color-texto-principal);
+        }
+        .form-input {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: var(--color-fondo);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: var(--color-texto-principal);
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primario);
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .btn-primario {
+            background-color: var(--color-primario);
+            color: var(--color-fondo);
+        }
+        .btn-primario:hover {
+            background-color: transparent;
+            border-color: var(--color-primario);
+            color: var(--color-primario);
+            transform: scale(1.05);
+        }
+        .btn-secundario {
+            background-color: transparent;
+            color: var(--color-texto-principal);
+            border-color: #8b949e;
+        }
+        .btn-secundario:hover {
+            border-color: var(--color-texto-principal);
+            color: var(--color-texto-principal);
+            transform: scale(1.05);
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+        .alert-error {
+            background-color: rgba(255, 77, 77, 0.2);
+            color: var(--color-error);
+            border: 1px solid var(--color-error);
+        }
+        .alert-success {
+            background-color: rgba(35, 134, 54, 0.2);
+            color: var(--color-secundario);
+            border: 1px solid var(--color-secundario);
+        }
+        .section-title {
+            font-family: var(--fuente-titulos);
+            font-size: 2.2rem;
+            color: var(--color-primario);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .subsection-title {
+            font-family: var(--fuente-titulos);
+            font-size: 1.5rem;
+            color: var(--color-texto-principal);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 0.5rem;
+        }
+        .uploaded-file-item {
+            background-color: var(--color-card);
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .uploaded-file-item .file-name {
+            font-weight: 700;
+            color: var(--color-texto-principal);
+        }
+        .uploaded-file-item .file-url {
+            color: var(--color-texto-secundario);
+            font-size: 0.85rem;
+            word-break: break-all;
+            flex-grow: 1;
+        }
+        .uploaded-file-item .copy-btn {
+            background-color: var(--color-secundario);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            margin-left: 1rem;
+        }
+        .uploaded-file-item .copy-btn:hover {
+            background-color: #36a447;
+        }
+        .artist-list-item {
+            background-color: var(--color-card);
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+            margin-bottom: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .artist-list-item strong {
+            color: var(--color-primario);
+        }
+        .artist-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .artist-actions .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+            border-radius: 5px;
+        }
+        .artist-actions .btn-delete {
+            background-color: var(--color-error);
+        }
+        .artist-actions .btn-delete:hover {
+            background-color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <div id="login-section" class="admin-container">
+        <h2 class="section-title">Acceso de Administrador</h2>
+        <div id="login-error" class="alert alert-error hidden"></div>
+        <div class="form-grupo">
+            <label for="admin-email">Email:</label>
+            <input type="email" id="admin-email" class="form-input" placeholder="admin@vytmusic.com">
+        </div>
+        <div class="form-grupo">
+            <label for="admin-password">Contraseña:</label>
+            <input type="password" id="admin-password" class="form-input" placeholder="********">
+        </div>
+        <button id="login-btn" class="btn btn-primario w-full">Iniciar Sesión</button>
+    </div>
+
+    <div id="admin-dashboard" class="admin-container hidden">
+        <h2 class="section-title">Panel de Administración VYT MUSIC</h2>
+        <p class="text-right text-sm text-gray-400 mb-4">Bienvenido, <span id="admin-user-email"></span> | <button id="logout-btn" class="text-red-400 hover:underline">Cerrar Sesión</button></p>
+
+        <div id="admin-messages" class="alert hidden"></div>
+
+        <h3 class="subsection-title">Cargar Archivos (Imágenes / Videos)</h3>
+        <div class="form-grupo">
+            <label for="file-upload">Seleccionar Archivo:</label>
+            <input type="file" id="file-upload" class="form-input">
+        </div>
+        <div class="form-grupo">
+            <label for="file-name">Nombre del archivo (opcional, para organizar):</label>
+            <input type="text" id="file-name" class="form-input" placeholder="ej: artista-juan-foto.jpg">
+        </div>
+        <button id="upload-btn" class="btn btn-primario w-full">Subir a Firebase Storage</button>
+        <p id="upload-status" class="text-sm mt-2 text-gray-400"></p>
+        <p id="uploaded-url-display" class="mt-2 text-sm text-green-400 break-all hidden">URL: <a href="#" target="_blank" class="text-blue-400 hover:underline"></a> <button class="copy-url-btn btn btn-secundario">Copiar</button></p>
+        
+        <h3 class="subsection-title">Gestionar Artistas</h3>
+        <form id="artist-form">
+            <input type="hidden" id="artist-id">
+            <div class="form-grupo">
+                <label for="artist-name">Nombre Artístico:</label>
+                <input type="text" id="artist-name" class="form-input" placeholder="Ej: Sol Frecuencia">
+            </div>
+            <div class="form-grupo">
+                <label for="artist-genre">Género Musical:</label>
+                <input type="text" id="artist-genre" class="form-input" placeholder="Ej: Pop, Rock, Folclore">
+            </div>
+            <div class="form-grupo">
+                <label for="artist-province">Provincia:</label>
+                <select id="artist-province" class="form-input">
+                    <option value="">Seleccioná la provincia...</option>
+                    <option value="Buenos Aires">Buenos Aires</option>
+                    <option value="Catamarca">Catamarca</option>
+                    <option value="Chaco">Chaco</option>
+                    <option value="Chubut">Chubut</option>
+                    <option value="Córdoba">Córdoba</option>
+                    <option value="Corrientes">Corrientes</option>
+                    <option value="Entre Ríos">Entre Ríos</option>
+                    <option value="Formosa">Formosa</option>
+                    <option value="Jujuy">Jujuy</option>
+                    <option value="La Pampa">La Pampa</option>
+                    <option value="La Rioja">La Rioja</option>
+                    <option value="Mendoza">Mendoza</option>
+                    <option value="Misiones">Misiones</option>
+                    <option value="Neuquén">Neuquén</option>
+                    <option value="Río Negro">Río Negro</option>
+                    <option value="Salta">Salta</option>
+                    <option value="San Juan">San Juan</option>
+                    <option value="San Luis">San Luis</option>
+                    <option value="Santa Cruz">Santa Cruz</option>
+                    <option value="Santa Fe">Santa Fe</option>
+                    <option value="Santiago del Estero">Santiago del Estero</option>
+                    <option value="Tierra del Fuego">Tierra del Fuego</option>
+                    <option value="Tucumán">Tucumán</option>
+                    <option value="Otro País">Otro País</option>
+                </select>
+            </div>
+            <div class="form-grupo">
+                <label for="artist-video-url">URL del Video (YouTube/TikTok/Drive):</label>
+                <input type="url" id="artist-video-url" class="form-input" placeholder="https://youtube.com/tu-video">
+            </div>
+            <div class="form-grupo">
+                <label for="artist-image-url">URL de la Imagen del Perfil:</label>
+                <input type="url" id="artist-image-url" class="form-input" placeholder="https://ejemplo.com/tu-imagen.jpg">
+            </div>
+            <div class="form-grupo">
+                <label for="artist-votes">Votos (solo números):</label>
+                <input type="number" id="artist-votes" class="form-input" value="0">
+            </div>
+            <button type="submit" id="save-artist-btn" class="btn btn-primario w-full">Guardar Artista</button>
+            <button type="button" id="clear-artist-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
+        </form>
+
+        <h3 class="subsection-title">Lista de Artistas</h3>
+        <div id="artists-list" class="space-y-4">
+            <!-- Los artistas se cargarán aquí desde Firestore -->
+            <p class="text-gray-500">Cargando artistas...</p>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+        // 🔥 TU CONFIGURACIÓN DE FIREBASE 🔥
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY",
+            authDomain: "TU_AUTH_DOMAIN",
+            projectId: "TU_PROJECT_ID",
+            storageBucket: "TU_STORAGE_BUCKET",
+            messagingSenderId: "TU_MESSAGING_SENDER_ID",
+            appId: "TU_APP_ID"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // --- Elementos del DOM ---
+        const loginSection = document.getElementById('login-section');
+        const adminDashboard = document.getElementById('admin-dashboard');
+        const adminEmailInput = document.getElementById('admin-email');
+        const adminPasswordInput = document.getElementById('admin-password');
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const loginError = document.getElementById('login-error');
+        const adminUserEmailSpan = document.getElementById('admin-user-email');
+        const adminMessages = document.getElementById('admin-messages');
+
+        const fileUploadInput = document.getElementById('file-upload');
+        const fileNameInput = document.getElementById('file-name');
+        const uploadBtn = document.getElementById('upload-btn');
+        const uploadStatus = document.getElementById('upload-status');
+        const uploadedUrlDisplay = document.getElementById('uploaded-url-display');
+        const uploadedUrlLink = uploadedUrlDisplay.querySelector('a');
+        const copyUrlBtn = uploadedUrlDisplay.querySelector('.copy-url-btn');
+
+        const artistForm = document.getElementById('artist-form');
+        const artistIdInput = document.getElementById('artist-id');
+        const artistNameInput = document.getElementById('artist-name');
+        const artistGenreInput = document.getElementById('artist-genre');
+        const artistProvinceSelect = document.getElementById('artist-province');
+        const artistVideoUrlInput = document.getElementById('artist-video-url');
+        const artistImageUrlInput = document.getElementById('artist-image-url');
+        const artistVotesInput = document.getElementById('artist-votes');
+        const saveArtistBtn = document.getElementById('save-artist-btn');
+        const clearArtistFormBtn = document.getElementById('clear-artist-form-btn');
+        const artistsListDiv = document.getElementById('artists-list');
+
+        // --- Funciones de Utilidad ---
+        function showMessage(element, message, type = 'success') {
+            element.textContent = message;
+            element.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
+            element.classList.remove('hidden');
+            setTimeout(() => {
+                element.classList.add('hidden');
+            }, 5000);
+        }
+
+        // --- Autenticación ---
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                loginSection.classList.add('hidden');
+                adminDashboard.classList.remove('hidden');
+                adminUserEmailSpan.textContent = user.email;
+                loadArtists(); // Cargar artistas al iniciar sesión
+            } else {
+                loginSection.classList.remove('hidden');
+                adminDashboard.classList.add('hidden');
+            }
+        });
+
+        loginBtn.addEventListener('click', async () => {
+            const email = adminEmailInput.value;
+            const password = adminPasswordInput.value;
+            if (!email || !password) {
+                showMessage(loginError, 'Por favor, ingresa email y contraseña.', 'error');
+                return;
+            }
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                showMessage(adminMessages, 'Sesión iniciada correctamente.', 'success');
+            } catch (error) {
+                console.error("Error de login:", error);
+                showMessage(loginError, `Error de login: ${error.message}`, 'error');
+            }
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                showMessage(adminMessages, 'Sesión cerrada correctamente.', 'success');
+                adminEmailInput.value = '';
+                adminPasswordInput.value = '';
+            } catch (error) {
+                console.error("Error al cerrar sesión:", error);
+                showMessage(adminMessages, `Error al cerrar sesión: ${error.message}`, 'error');
+            }
+        });
+
+        // --- Carga de Archivos a Firebase Storage ---
+        uploadBtn.addEventListener('click', async () => {
+            const file = fileUploadInput.files[0];
+            if (!file) {
+                showMessage(uploadStatus, 'Por favor, selecciona un archivo.', 'error');
+                return;
+            }
+
+            uploadStatus.textContent = 'Subiendo...';
+            uploadStatus.className = 'text-sm mt-2 text-yellow-400';
+            uploadedUrlDisplay.classList.add('hidden');
+
+            const customFileName = fileNameInput.value.trim();
+            const fileName = customFileName || file.name;
+            const storageRef = ref(storage, `uploads/${fileName}`);
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    uploadStatus.textContent = `Subiendo: ${progress.toFixed(0)}%`;
+                },
+                (error) => {
+                    console.error("Error al subir archivo:", error);
+                    showMessage(uploadStatus, `Error al subir: ${error.message}`, 'error');
+                },
+                () => {
+                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+                        showMessage(uploadStatus, '¡Subida completa!', 'success');
+                        uploadedUrlLink.href = downloadURL;
+                        uploadedUrlLink.textContent = downloadURL;
+                        uploadedUrlDisplay.classList.remove('hidden');
+                        fileNameInput.value = ''; // Limpiar campo de nombre
+                        fileUploadInput.value = ''; // Limpiar input de archivo
+                        // Opcional: añadir la URL a una lista visible en el admin
+                        const listItem = document.createElement('div');
+                        listItem.className = 'uploaded-file-item';
+                        listItem.innerHTML = `<span class="file-name">${fileName}</span><a href="${downloadURL}" target="_blank" class="file-url">${downloadURL}</a><button class="copy-url-btn btn btn-secundario">Copiar</button>`;
+                        uploadedFilesList.prepend(listItem); // Añadir al principio
+                        listItem.querySelector('.copy-url-btn').addEventListener('click', () => {
+                            navigator.clipboard.writeText(downloadURL)
+                                .then(() => alert('URL copiada al portapapeles'))
+                                .catch(err => console.error('Error al copiar:', err));
+                        });
+                    });
+                }
+            );
+        });
+
+        // --- Gestión de Artistas (Firestore) ---
+        // Llenar el select de provincias en el formulario de artista
+        const provinceOptions = Object.values({
+            "ARA": "Salta", "ARB": "Buenos Aires", "ARC": "Ciudad de Buenos Aires", "ARD": "San Luis", 
+            "ARE": "Entre Ríos", "ARF": "La Rioja", "ARG": "Santiago del Estero", "ARH": "Chaco", 
+            "ARJ": "San Juan", "ARK": "Catamarca", "ARL": "La Pampa", "ARM": "Mendoza", 
+            "ARN": "Misiones", "ARP": "Formosa", "ARQ": "Neuquén", "ARR": "Río Negro", 
+            "ARS": "Santa Fe", "ART": "Tucumán", "ARU": "Chubut", "ARV": "Tierra del Fuego", 
+            "ARW": "Corrientes", "ARX": "Córdoba", "ARY": "Jujuy", "ARZ": "Santa Cruz"
+        });
+        provinceOptions.forEach(prov => {
+            const option = document.createElement('option');
+            option.value = prov;
+            option.textContent = prov;
+            artistProvinceSelect.appendChild(option);
+        });
+
+        artistForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = artistIdInput.value;
+            const name = artistNameInput.value;
+            const genre = artistGenreInput.value;
+            const province = artistProvinceSelect.value;
+            const videoUrl = artistVideoUrlInput.value;
+            const imageUrl = artistImageUrlInput.value;
+            const votes = parseInt(artistVotesInput.value) || 0;
+
+            if (!name || !genre || !province || !videoUrl || !imageUrl) {
+                showMessage(adminMessages, 'Por favor, completa todos los campos del artista.', 'error');
+                return;
+            }
+
+            try {
+                if (id) {
+                    // Actualizar artista existente
+                    const artistRef = doc(db, "artistas", id);
+                    await updateDoc(artistRef, {
+                        name, genre, province, videoUrl, imageUrl, votes,
+                        updatedAt: serverTimestamp()
+                    });
+                    showMessage(adminMessages, 'Artista actualizado correctamente.', 'success');
+                } else {
+                    // Añadir nuevo artista
+                    await addDoc(collection(db, "artistas"), {
+                        name, genre, province, videoUrl, imageUrl, votes,
+                        createdAt: serverTimestamp()
+                    });
+                    showMessage(adminMessages, 'Artista añadido correctamente.', 'success');
+                }
+                artistForm.reset();
+                artistIdInput.value = ''; // Limpiar ID oculto
+                loadArtists(); // Recargar la lista de artistas
+            } catch (error) {
+                console.error("Error al guardar artista:", error);
+                showMessage(adminMessages, `Error al guardar artista: ${error.message}`, 'error');
+            }
+        });
+
+        clearArtistFormBtn.addEventListener('click', () => {
+            artistForm.reset();
+            artistIdInput.value = '';
+            saveArtistBtn.textContent = 'Guardar Artista';
+        });
+
+        async function loadArtists() {
+            artistsListDiv.innerHTML = '<p class="text-gray-500">Cargando artistas...</p>';
+            try {
+                const q = query(collection(db, "artistas"), orderBy("createdAt", "desc")); // Ordenar por fecha de creación
+                const querySnapshot = await getDocs(q);
+                artistsListDiv.innerHTML = ''; // Limpiar el mensaje de carga
+
+                if (querySnapshot.empty) {
+                    artistsListDiv.innerHTML = '<p class="text-gray-500">No hay artistas registrados.</p>';
+                    return;
+                }
+
+                querySnapshot.forEach((docItem) => {
+                    const artist = docItem.data();
+                    const artistItem = document.createElement('div');
+                    artistItem.className = 'artist-list-item';
+                    artistItem.innerHTML = `
+                        <p><strong>Nombre:</strong> ${artist.name}</p>
+                        <p><strong>Provincia:</strong> ${artist.province}</p>
+                        <p><strong>Género:</strong> ${artist.genre}</p>
+                        <p><strong>Votos:</strong> ${artist.votes}</p>
+                        <p><strong>Video URL:</strong> <a href="${artist.videoUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.videoUrl}</a></p>
+                        <p><strong>Imagen URL:</strong> <a href="${artist.imageUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.imageUrl}</a></p>
+                        <div class="artist-actions">
+                            <button class="btn btn-secundario edit-artist-btn" data-id="${docItem.id}">Editar</button>
+                            <button class="btn btn-delete delete-artist-btn" data-id="${docItem.id}">Eliminar</button>
+                        </div>
+                    `;
+                    artistsListDiv.appendChild(artistItem);
+                });
+
+                // Añadir event listeners a los botones de editar y eliminar
+                artistsListDiv.querySelectorAll('.edit-artist-btn').forEach(btn => {
+                    btn.addEventListener('click', () => editArtist(btn.dataset.id));
+                });
+                artistsListDiv.querySelectorAll('.delete-artist-btn').forEach(btn => {
+                    btn.addEventListener('click', () => deleteArtist(btn.dataset.id));
+                });
+
+            } catch (error) {
+                console.error("Error al cargar artistas:", error);
+                artistsListDiv.innerHTML = `<p class="text-red-400">Error al cargar artistas: ${error.message}</p>`;
+            }
+        }
+
+        async function editArtist(id) {
+            try {
+                const docRef = doc(db, "artistas", id);
+                const docSnap = await getDoc(docRef);
+                if (docSnap.exists()) {
+                    const artist = docSnap.data();
+                    artistIdInput.value = id;
+                    artistNameInput.value = artist.name;
+                    artistGenreInput.value = artist.genre;
+                    artistProvinceSelect.value = artist.province;
+                    artistVideoUrlInput.value = artist.videoUrl;
+                    artistImageUrlInput.value = artist.imageUrl;
+                    artistVotesInput.value = artist.votes;
+                    saveArtistBtn.textContent = 'Actualizar Artista';
+                    showMessage(adminMessages, 'Editando artista.', 'success');
+                } else {
+                    showMessage(adminMessages, 'Artista no encontrado.', 'error');
+                }
+            } catch (error) {
+                console.error("Error al editar artista:", error);
+                showMessage(adminMessages, `Error al cargar artista para edición: ${error.message}`, 'error');
+            }
+        }
+
+        async function deleteArtist(id) {
+            if (confirm('¿Estás seguro de que quieres eliminar este artista?')) { // Usar modal personalizado en producción
+                try {
+                    await deleteDoc(doc(db, "artistas", id));
+                    showMessage(adminMessages, 'Artista eliminado correctamente.', 'success');
+                    loadArtists(); // Recargar lista
+                } catch (error) {
+                    console.error("Error al eliminar artista:", error);
+                    showMessage(adminMessages, `Error al eliminar artista: ${error.message}`, 'error');
+                }
+            }
+        }
+
+        // --- Inicialización ---
+        // Simulación de autenticación (para desarrollo)
+        // En un entorno real, usarías un sistema de login más robusto
+        // Para probar, puedes crear un usuario en Firebase Authentication con email/password
+        // y usar esas credenciales aquí.
+        // O simplemente usa el login form que ya está.
+    });
+    </script>
+</body>
+</html>
