@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Concurso Nacional de Canto</title>
+    
+    <!-- SEO y Social Media (Open Graph) Tags -->
+    <meta name="description" content="Demostrá tu talento y competí con artistas de todo el país. ¡Sumate al certamen más grande de Argentina!">
+    <meta property="og:title" content="VYT MUSIC - Certamen de Canto">
+    <meta property="og:description" content="Demostrá tu talento y competí con artistas de todo el país. ¡Sumate al certamen más grande de Argentina!">
+    <meta property="og:image" content="https://i.ibb.co/Ldwq7cNx/logo-blanco.png">
+    <meta property="og:url" content="URL_DE_TU_SITIO_AQUI">
+    <meta property="og:type" content="website">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Variables de Color y Estilos Base --- */
+        :root {
+            --color-fondo: #0d1117;
+            --color-fondo-secundario: #161b22;
+            --color-card: #282828;
+            --color-texto-principal: #e6edf3;
+            --color-texto-secundario: #b0b8c4;
+            --color-primario: #58a6ff;
+            --color-secundario: #238636;
+            --color-oro: #FFD700;
+            --fuente-titulos: 'Bebas Neue', sans-serif;
+            --fuente-cuerpo: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--fuente-cuerpo);
+            background: radial-gradient(circle at top left, #58a6ff30, #121212 40%);
+            background-color: #121212;
+            color: var(--color-texto-principal);
+            overflow-x: hidden;
+        }
+
+        /* --- NUEVA ESTRUCTURA TIPO SPOTIFY --- */
+        .site-wrapper {
+            display: flex;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #000;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        /* Custom scrollbar styles */
+        .main-content::-webkit-scrollbar { width: 8px; }
+        .main-content::-webkit-scrollbar-track { background: #282828; }
+        .main-content::-webkit-scrollbar-thumb { background: #535353; border-radius: 10px; }
+        .main-content::-webkit-scrollbar-thumb:hover { background: #727272; }
+
+
+        /* --- Header y Navegación --- */
+        .header {
+            background-color: rgba(13, 17, 23, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .header-search {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .header-search input {
+             background-color: var(--color-card);
+             color: white;
+             border-radius: 9999px;
+             padding: 0.6rem 1rem 0.6rem 2.5rem;
+             border: 1px solid transparent;
+             width: 100%;
+             transition: all 0.3s ease;
+        }
+        .header-search input:focus {
+            outline: none;
+            border-color: var(--color-primario);
+            background-color: #333;
+        }
+        
+        .header-search svg {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--color-texto-secundario);
+            width: 1.25rem; /* FIX: Icon size */
+            height: 1.25rem; /* FIX: Icon size */
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .header-user svg {
+            color: var(--color-texto-secundario);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        .header-user svg:hover {
+            color: white;
+        }
+        .header-user .icon-bell {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+        .header-user .icon-profile {
+            width: 2rem;
+            height: 2rem;
+        }
+
+
+        /* --- Sidebar --- */
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            cursor: pointer;
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid #282828;
+        }
+        
+        .sidebar-logo img {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+        }
+
+        .sidebar-logo .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .sidebar-logo .logo-text span {
+            font-family: var(--fuente-titulos);
+            font-size: 1.8rem;
+            color: var(--color-texto-principal);
+        }
+
+        .sidebar-logo .logo-text small {
+            font-family: var(--fuente-cuerpo);
+            font-size: 0.75rem;
+            color: var(--color-texto-secundario);
+            font-weight: 700;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-menu a {
+            color: var(--color-texto-secundario);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+            cursor: pointer;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-menu a:hover,
+        .nav-menu a.active {
+            color: var(--color-texto-principal);
+            background-color: #282828;
+        }
+        
+        .nav-menu svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* --- Estilos para el Dropdown --- */
+        .dropdown-menu {
+            list-style: none;
+            padding-left: 1.5rem; /* Indentación */
+            margin-top: 0.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .dropdown.open .dropdown-menu {
+            max-height: 200px; /* Altura suficiente para mostrar items */
+        }
+
+        .dropdown-menu li a {
+            display: block;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .dropdown > a::after {
+            content: ' ▼';
+            font-size: 0.6em;
+            margin-left: auto;
+            transition: transform 0.3s ease;
+        }
+        .dropdown.open > a::after {
+            transform: rotate(180deg);
+        }
+
+
+        /* --- Estilos de Página y Contenido --- */
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .content-wrapper {
+            padding: 1.5rem;
+        }
+
+        .titulo-seccion {
+            font-family: var(--fuente-titulos);
+            font-size: 3.5rem;
+            color: var(--color-texto-principal);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .subtitulo-seccion {
+            text-align: center; 
+            max-width: 600px; 
+            margin: 0 auto 3rem auto; 
+            color: var(--color-texto-secundario);
+        }
+
+        /* --- Componentes Adaptados --- */
+        .ranking-card, .duelo-card, .gira-card, .formulario-container, .reglamento-content, .vyt-pack {
+            background-color: var(--color-card);
+            border: 1px solid #30363d;
+        }
+
+        /* --- Chat Flotante --- */
+        .chat-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+            background-color: #25D366; /* WhatsApp Green */
+            color: white;
+            border-radius: 9999px;
+            padding: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            transition: transform 0.2s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .chat-button:hover {
+            transform: scale(1.05);
+        }
+        .chat-button svg {
+            width: 2rem;
+            height: 2rem;
+        }
+        
+        /* --- Modal --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease, visibility 0s 0.3s;
+        }
+        .modal-backdrop.visible {
+            opacity: 1;
+            pointer-events: all;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: var(--color-fondo-secundario);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .modal-backdrop.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-content h3 {
+            font-family: var(--fuente-titulos);
+            color: var(--color-primario);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        .modal-content p {
+            margin-bottom: 1.5rem;
+            color: var(--color-texto-secundario);
+        }
+        
+        /* --- Estilos para Comprar VYT --- */
+        .vyt-pack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        .vyt-pack {
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .vyt-pack:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 20px var(--color-primario-transparente);
+        }
+        .vyt-pack .amount {
+            font-family: var(--fuente-titulos);
+            font-size: 3rem;
+            color: var(--color-primario);
+        }
+        .vyt-pack .price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0.5rem 0 1.5rem 0;
+        }
+        
+        /* Estilos para el Modal de Pago MODO */
+        #modo-payment-modal .payment-instructions {
+            text-align: left;
+            background-color: var(--color-fondo);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #30363d;
+        }
+        #modo-payment-modal .payment-instructions strong {
+            color: var(--color-primario);
+        }
+        #modo-payment-modal .payment-instructions .alias {
+            background-color: var(--color-fondo);
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            border: 1px dashed #30363d;
+            margin: 1rem 0;
+            user-select: all;
+        }
+        .upload-receipt-btn {
+            background-color: var(--color-secundario);
+            color: white;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        .upload-receipt-btn:hover {
+            background-color: #36a447;
+        }
+
+        /* --- NUEVOS ESTILOS PARA LA HOME --- */
+        .titulo-seccion-sm {
+            font-family: var(--fuente-titulos);
+            font-size: 2.5rem;
+            color: var(--color-texto-principal);
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        
+        .seccion-pozo-home {
+            text-align: center;
+            padding: 2rem 0;
+        }
+        .pozo-wrapper {
+            background-color: var(--color-card);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid #30363d;
+        }
+        .pozo-texto-valor {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-oro);
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px #ffb70088;
+        }
+        .pozo-barra-dorada-container {
+            width: 100%;
+            height: 25px;
+            background-color: #444;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 2px solid #111;
+        }
+        .pozo-barra-dorada {
+            width: 60%; /* Example percentage */
+            height: 100%;
+            background: linear-gradient(90deg, #F0A500, var(--color-oro));
+            border-radius: 8px;
+            box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4), 0 0 10px #FFD700;
+        }
+
+        .ranking-home-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+        }
+        .ranking-home-card {
+            background-color: var(--color-card);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: background-color 0.3s;
+            cursor: pointer;
+        }
+        .ranking-home-card:hover {
+            background-color: #3a3a3a;
+        }
+        .ranking-home-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+        .ranking-home-info {
+            padding: 1rem;
+        }
+        .ranking-home-info h4 {
+            font-weight: 700;
+            color: var(--color-texto-principal);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: text-shadow 0.3s ease;
+        }
+        .ranking-home-card:hover .ranking-home-info h4 {
+            text-shadow: 0 0 10px var(--color-primario);
+        }
+        .ranking-home-info p {
+            font-size: 0.9rem;
+            color: var(--color-texto-secundario);
+        }
+
+        /* --- Estilos para la generación de Bio con IA --- */
+        .ai-bio-generator {
+            position: relative;
+        }
+        #generate-bio-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+            background-color: var(--color-secundario);
+        }
+        #generate-bio-btn:hover {
+            background-color: #36a447;
+        }
+        .spinner {
+            display: inline-block;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+
+        /* Otros estilos heredados y adaptados */
+        .btn { display: inline-block; padding: 0.8rem 1.8rem; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s ease; border: 2px solid transparent; cursor: pointer; }
+        .btn-primario { background-color: var(--color-primario); color: var(--color-fondo); }
+        .btn-primario:hover { background-color: transparent; border-color: var(--color-primario); color: var(--color-primario); transform: scale(1.05); }
+        .btn-secundario { background-color: transparent; color: var(--color-texto-principal); border-color: #8b949e; }
+        .btn-secundario:hover { border-color: var(--color-texto-principal); color: var(--color-texto-principal); transform: scale(1.05); }
+        .hero { text-align: center; padding: 4rem 2rem; }
+        .hero h1 { font-family: var(--fuente-titulos); font-size: 5rem; line-height: 1.1; color: white; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; color: var(--color-texto-secundario); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; }
+        .hero-buttons { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+        #contador { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; margin-top: 3rem; }
+        .contador-bloque { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); backdrop-filter: blur(5px); padding: 1.5rem; border-radius: 15px; text-align: center; min-width: 100px; }
+        .contador-bloque span { display: block; font-size: 3rem; font-weight: 700; color: var(--color-primario); }
+        .contador-bloque p { font-size: 1rem; margin: 0; color: var(--color-texto-secundario); }
+        .formulario-container { max-width: 800px; margin: 0 auto; padding: 2.5rem; border-radius: 15px; }
+        .modalidad-selector { display: flex; justify-content: center; margin-bottom: 2rem; background-color: var(--color-fondo); border-radius: 50px; padding: 0.5rem; }
+        .modalidad-btn { flex: 1; padding: 0.75rem 1rem; border: none; background-color: transparent; color: var(--color-texto-secundario); font-weight: 700; cursor: pointer; border-radius: 50px; transition: all 0.3s ease; }
+        .modalidad-btn.active { background-color: var(--color-primario); color: var(--color-fondo); }
+        .form-grupo { margin-bottom: 1.5rem; }
+        .form-grupo label { display: block; margin-bottom: 0.5rem; font-weight: 700; }
+        .form-grupo input, .form-grupo select, .form-grupo textarea { width: 100%; padding: 0.8rem; background-color: var(--color-fondo); border: 1px solid #30363d; border-radius: 8px; color: var(--color-texto-principal); font-size: 1rem; }
+        .reglamento-content { padding: 2rem; border-radius: 10px; max-width: 900px; margin: 0 auto; }
+        .reglamento-content h3 { font-family: var(--fuente-titulos); color: var(--color-primario); margin-top: 1.5rem; font-size: 1.8rem; }
+        .reglamento-content p { color: var(--color-texto-secundario); }
+        .reglamento-seccion { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #30363d; }
+        .reglamento-seccion:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .pozo-container { background-color: var(--color-fondo-secundario); border-radius: 50px; width: 100%; height: 40px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 1rem; }
+        .pozo-bar { height: 100%; background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%); width: 75%; border-radius: 50px; transition: width 1.5s ease; }
+        .pozo-text { font-weight: 700; font-size: 1.5rem; color: var(--color-primario); text-align: center; }
+        .ranking-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+        .ranking-card { border-radius: 15px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
+        .ranking-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; }
+        .video-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .ranking-card .video-wrapper { border-radius: 0; }
+        .ranking-info { padding: 1rem; }
+        .ranking-info h4 { font-size: 1.2rem; color: var(--color-texto-principal); }
+        .ranking-info .vote-button { margin-top: 1rem; width: 100%; }
+        .duelo-container { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+        .duelo-card { width: 100%; max-width: 350px; padding: 1.5rem; border-radius: 15px; text-align: center; }
+        .duelo-card h4 { font-size: 1.3rem; margin-bottom: 1rem; }
+        .duelo-card .btn { width: 100%; }
+        .avatar-container { padding: 2rem; border-radius: 15px; text-align: center; background-color: var(--color-card); }
+        .avatar-placeholder { width: 120px; height: 120px; margin: 0 auto 1rem auto; background-color: var(--color-primario); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-fondo); font-size: 3rem; user-select: none; }
+        .gira-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+        .gira-card { padding: 2rem; border-radius: 15px; text-align: center; }
+        .gira-card h4 { font-family: var(--fuente-titulos); font-size: 2rem; color: var(--color-primario); }
+        .gira-card p { color: var(--color-texto-secundario); font-weight: 700; }
+        .gira-card span { color: var(--color-texto-secundario); }
+        .footer { background-color: #000; text-align: center; padding: 2rem; }
+        .social-icons { display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem; }
+        .social-icons a svg { width: 1.5rem; height: 1.5rem; color: var(--color-texto-secundario); transition: color 0.3s ease; }
+        .social-icons a:hover svg { color: var(--color-primario); }
+
+    </style>
+</head>
+<body>
+
+    <div class="site-wrapper">
+        <!-- BARRA LATERAL FIJA -->
+        <aside class="sidebar">
+            <a class="sidebar-logo" data-target="page-inicio">
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo">
+                <div class="logo-text">
+                    <span>VYT MUSIC</span>
+                    <small>Concurso de Canto</small>
+                </div>
+            </a>
+            <nav>
+                <ul class="nav-menu">
+                    <li><a data-target="page-inicio" class="active">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span>Inicio</span>
+                    </a></li>
+                    <li class="dropdown">
+                        <a href="#">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>Concursos</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a data-target="page-concurso-online">Online</a></li>
+                            <li><a data-target="page-concurso-presencial">Presencial</a></li>
+                        </ul>
+                    </li>
+                    <li><a data-target="page-inscripcion">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <span>Inscripción</span>
+                    </a></li>
+                    <li><a data-target="page-comprar-vyt">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        <span>Comprar VYT</span>
+                    </a></li>
+                    <li><a data-target="page-reglamento">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>Reglamento</span>
+                    </a></li>
+                    <li><a data-target="page-sponsors">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span>Sponsors</span>
+                    </a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <div class="main-content">
+            <header class="header">
+                <div class="header-search">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    <input type="text" placeholder="Buscar artistas, eventos...">
+                </div>
+                <div class="header-user">
+                    <svg class="icon-bell" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <svg class="icon-profile" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+            </header>
+            
+            <main class="content-wrapper">
+                <div id="page-inicio" class="page active">
+                    <section class="hero">
+                        <div class="container">
+                            <h1>Despegá tu voz. Hacé historia.</h1>
+                            <p>El escenario digital más grande del país te está esperando. Demostrá tu talento, conectá con miles de personas y competí por premios increíbles.</p>
+                            <div class="hero-buttons">
+                                <a class="btn btn-primario" data-target="page-concurso-online">Competir Online</a>
+                                <a class="btn btn-secundario" data-target="page-concurso-presencial">Eventos Presenciales</a>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <section class="seccion-pozo-home container">
+                        <div class="pozo-wrapper">
+                             <h3 class="titulo-seccion-sm" style="text-align: center;">Pozo Acumulado</h3>
+                            <div class="pozo-texto-valor">$1.250.000 ARS</div>
+                            <div class="pozo-barra-dorada-container">
+                                <div class="pozo-barra-dorada"></div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="seccion-ranking-home container">
+                        <h3 class="titulo-seccion-sm">Ranking Top 5</h3>
+                        <div class="ranking-home-grid">
+                            <div class="ranking-home-card">
+                                <img src="https://placehold.co/180x180/282828/ffffff?text=A1" alt="Artista 1">
+                                <div class="ranking-home-info">
+                                    <h4>1. Solista A</h4>
+                                    <p>Buenos Aires</p>
+                                </div>
+                            </div>
+                            <div class="ranking-home-card">
+                                <img src="https://placehold.co/180x180/282828/ffffff?text=B2" alt="Artista 2">
+                                <div class="ranking-home-info">
+                                    <h4>2. Banda B</h4>
+                                    <p>Córdoba</p>
+                                </div>
+                            </div>
+                            <div class="ranking-home-card">
+                                <img src="https://placehold.co/180x180/282828/ffffff?text=C3" alt="Artista 3">
+                                <div class="ranking-home-info">
+                                    <h4>3. Dúo C</h4>
+                                    <p>Santa Fe</p>
+                                </div>
+                            </div>
+                            <div class="ranking-home-card">
+                                <img src="https://placehold.co/180x180/282828/ffffff?text=D4" alt="Artista 4">
+                                <div class="ranking-home-info">
+                                    <h4>4. Artista D</h4>
+                                    <p>Mendoza</p>
+                                </div>
+                            </div>
+                             <div class="ranking-home-card">
+                                <img src="https://placehold.co/180x180/282828/ffffff?text=E5" alt="Artista 5">
+                                <div class="ranking-home-info">
+                                    <h4>5. Banda E</h4>
+                                    <p>Salta</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="page-concurso-online" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Concurso Online</h2>
+                            
+                            <div class="pozo-container">
+                                <div class="pozo-bar"></div>
+                            </div>
+                            <p class="pozo-text" id="pozoText">$ 750.000</p>
+                            
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Ranking de Artistas</h3>
+                            <div class="ranking-grid">
+                                <div class="ranking-card">
+                                    <div class="video-wrapper">
+                                        <iframe src="https://www.youtube.com/embed/3JZ4pnNtyxQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                    <div class="ranking-info">
+                                        <h4>Solista A (Buenos Aires)</h4>
+                                        <p>Votos: 12,450</p>
+                                        <button class="btn btn-primario vote-button">Apoyar con Regalo</button>
+                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/solista-a" target="_blank" class="btn btn-secundario" style="margin-top: 0.5rem; width: 100%;">Compartir</a>
+                                    </div>
+                                </div>
+                                <div class="ranking-card">
+                                    <div class="video-wrapper">
+                                        <iframe src="https://www.youtube.com/embed/hTWKbfoikeg" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                    <div class="ranking-info">
+                                        <h4>Banda B (Córdoba)</h4>
+                                        <p>Votos: 11,980</p>
+                                        <button class="btn btn-primario vote-button">Apoyar con Regalo</button>
+                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/banda-b" target="_blank" class="btn btn-secundario" style="margin-top: 0.5rem; width: 100%;">Compartir</a>
+                                    </div>
+                                </div>
+                                <div class="ranking-card">
+                                    <div class="video-wrapper">
+                                        <iframe src="https://www.youtube.com/embed/kXYiU_JCYtU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                    </div>
+                                    <div class="ranking-info">
+                                        <h4>Dúo C (Santa Fe)</h4>
+                                        <p>Votos: 10,500</p>
+                                        <button class="btn btn-primario vote-button">Apoyar con Regalo</button>
+                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/duo-c" target="_blank" class="btn btn-secundario" style="margin-top: 0.5rem; width: 100%;">Compartir</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Duelos de la Semana</h3>
+                             <div class="duelo-container">
+                                <div class="duelo-card">
+                                     <h4>Solista A vs. Banda B</h4>
+                                     <div class="video-wrapper" style="margin-bottom: 1rem;">
+                                        <iframe src="https://www.youtube.com/embed/3JZ4pnNtyxQ" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                                     </div>
+                                     <button class="btn btn-primario">Votar por Solista A</button>
+                                </div>
+                                <div class="duelo-card">
+                                     <h4>Duelo</h4>
+                                     <div class="video-wrapper" style="margin-bottom: 1rem;">
+                                        <iframe src="https://www.youtube.com/embed/hTWKbfoikeg" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
+                                     </div>
+                                     <button class="btn btn-primario">Votar por Banda B</button>
+                                </div>
+                             </div>
+
+                             <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Tu Avatar</h3>
+                             <div class="avatar-container">
+                                 <div class="avatar-placeholder">🎤</div>
+                                 <p>¡Próximamente podrás personalizar tu avatar con estilos únicos, micrófonos y más! <br>Gana o compra ítems exclusivos con VYT.</p>
+                             </div>
+                        </div>
+                    </section>
+                </div>
+                
+                <div id="page-concurso-presencial" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Concurso Presencial</h2>
+                            <p class="subtitulo-seccion">¡La emoción del escenario en vivo! Próximamente anunciaremos las fechas y sedes de nuestros eventos presenciales. ¡Preparate para cantar frente al público y un jurado de estrellas!</p>
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Gira Nacional VYT MUSIC</h3>
+                            <div class="gira-grid">
+                                <div class="gira-card">
+                                    <h4>Córdoba</h4>
+                                    <p>Fecha: Próximamente</p>
+                                    <span>Lugar: A confirmar</span>
+                                </div>
+                                <div class="gira-card">
+                                    <h4>Rosario</h4>
+                                    <p>Fecha: Próximamente</p>
+                                    <span>Lugar: A confirmar</span>
+                                </div>
+                                <div class="gira-card">
+                                    <h4>Buenos Aires</h4>
+                                    <p>Fecha: Próximamente</p>
+                                    <span>Lugar: A confirmar</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+
+                <div id="page-inscripcion" class="page">
+                     <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Formulario de Inscripción</h2>
+                            <div class="formulario-container">
+                                <div class="modalidad-selector">
+                                    <button class="modalidad-btn active" data-form="online">Online</button>
+                                    <button class="modalidad-btn" data-form="presencial">Presencial</button>
+                                </div>
+
+                                <form id="form-online">
+                                    <div class="form-grupo">
+                                        <label for="nombre">Nombre Completo del Artista o Banda</label>
+                                        <input type="text" id="nombre" name="nombre" required placeholder="Ej: Luna García">
+                                    </div>
+                                    <div class="form-grupo">
+                                        <label for="provincia">Provincia</label>
+                                        <select id="provincia" name="provincia" required>
+                                            <option value="">Seleccioná tu provincia...</option>
+                                            <option value="Buenos Aires">Buenos Aires</option>
+                                            <option value="Catamarca">Catamarca</option>
+                                            <option value="Chaco">Chaco</s
