@@ -311,10 +311,10 @@
             modalConfirmBtn.addEventListener('click', () => {
                 const selectedProvince = modalProvinciaSelect.value;
                 if (selectedProvince) {
-                    // Redirigir a la página principal de la SPA (main.html)
-                    window.location.href = `main.html`; 
-                    // Aquí podrías añadir un parámetro a la URL si main.html necesita saber la provincia
-                    // window.location.href = `main.html?prov=${encodeURIComponent(selectedProvince)}`;
+                    // Redirigir a la página principal de la SPA (principal.html)
+                    window.location.href = `principal.html`; 
+                    // Aquí podrías añadir un parámetro a la URL si principal.html necesita saber la provincia
+                    // window.location.href = `principal.html?prov=${encodeURIComponent(selectedProvince)}`;
                 } else {
                     alert('Por favor, selecciona una provincia.'); // Usar un modal personalizado en producción
                 }
@@ -322,8 +322,8 @@
 
             // Manejar el botón "Explorar el sitio" en el modal
             modalExploreBtn.addEventListener('click', () => {
-                // Redirigir a la página principal de la SPA (main.html) sin seleccionar provincia
-                window.location.href = `main.html`;
+                // Redirigir a la página principal de la SPA (principal.html) sin seleccionar provincia
+                window.location.href = `principal.html`;
             });
 
             // Cerrar modal si se hace clic fuera (opcional, puedes añadirlo si lo deseas)
