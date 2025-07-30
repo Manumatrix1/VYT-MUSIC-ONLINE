@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
     <style>
+        /* Estilos generales del cuerpo y fuentes */
         body {
             background-color: #121212;
             font-family: 'Roboto', sans-serif;
@@ -15,23 +16,93 @@
         .font-display { font-family: 'Montserrat', sans-serif; }
         .font-neon { font-family: 'Orbitron', sans-serif; }
         .pozo-text {
-            color: #2dd4bf;
-            text-shadow: 0 0 5px #2dd4bf, 0 0 15px #2dd4bf;
+            color: #2dd4bf; /* Color turquesa del logo */
+            text-shadow: 0 0 5px #2dd4bf, 0 0 15px #2dd4bf; /* Efecto de neón */
         }
+
+        /* Contenedor principal para centrar el contenido */
+        .main-content-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.3); /* Fondo sutil */
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Contenedor del mapa/desplegable */
+        .map-selection-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            padding: 20px; /* Añadido padding para que el mapa no se pegue a los bordes del contenedor principal */
+        }
+
+        /* Estilos para la imagen del mapa */
+        #mapImage {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px; /* Espacio entre el mapa y el desplegable */
+            /* Aplicamos el filtro drop-shadow para el efecto neón directamente a la imagen */
+            filter: drop-shadow(0 0 15px #00cfff); /* Color celeste neón de tu ejemplo */
+        }
+
+        /* Estilos para el desplegable de provincias */
+        .province-select {
+            width: 100%;
+            max-width: 300px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid #2dd4bf; /* Borde neón */
+            color: white;
+            font-size: 1rem;
+            appearance: none; /* Elimina el estilo por defecto del sistema operativo */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 0 5px rgba(45, 212, 191, 0.5); /* Sombra neón */
+        }
+
+        .province-select:focus {
+            box-shadow: 0 0 15px rgba(45, 212, 191, 0.8);
+            border-color: #2bb7d1;
+        }
+
+        .province-select option {
+            background-color: #1a1a1a; /* Fondo oscuro para las opciones */
+            color: white;
+        }
+
+        /* Para el botón "Otro País" */
         .province-btn {
             background-color: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.2s ease-in-out;
+            margin-top: 20px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            color: #2dd4bf;
+            box-shadow: 0 0 5px rgba(45, 212, 191, 0.5);
         }
         .province-btn:hover {
             background-color: #2bb7d1;
             color: #121212;
             transform: translateY(-4px);
             border-color: #2bb7d1;
+            box-shadow: 0 0 15px #2bb7d1;
         }
     </style>
 </head>
-<body class="min-h-screen">
+<body>
 
     <!-- Encabezado Fijo -->
     <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
@@ -54,42 +125,81 @@
             <p class="text-gray-400">El premio de la gente, para la gente.</p>
         </section>
 
-        <!-- Selección de Provincia -->
+        <!-- Sección de Selección de Provincia con Mapa Estático -->
         <section class="text-center my-16">
             <h2 class="text-3xl font-display font-bold mb-2">Este es tu momento.</h2>
-            <p class="text-lg text-gray-300 mb-8">Seleccioná tu provincia para empezar a competir.</p>
+            <p class="text-lg text-gray-300 mb-8">Elige tu provincia para empezar a competir.</p>
             
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 max-w-6xl mx-auto">
-                <!-- Provincias Argentinas -->
-                <a href="inscripcion.html?prov=BuenosAires" class="province-btn p-4 rounded-lg font-bold">Buenos Aires</a>
-                <a href="inscripcion.html?prov=Catamarca" class="province-btn p-4 rounded-lg font-bold">Catamarca</a>
-                <a href="inscripcion.html?prov=Chaco" class="province-btn p-4 rounded-lg font-bold">Chaco</a>
-                <a href="inscripcion.html?prov=Chubut" class="province-btn p-4 rounded-lg font-bold">Chubut</a>
-                <a href="inscripcion.html?prov=Cordoba" class="province-btn p-4 rounded-lg font-bold">Córdoba</a>
-                <a href="inscripcion.html?prov=Corrientes" class="province-btn p-4 rounded-lg font-bold">Corrientes</a>
-                <a href="inscripcion.html?prov=EntreRios" class="province-btn p-4 rounded-lg font-bold">Entre Ríos</a>
-                <a href="inscripcion.html?prov=Formosa" class="province-btn p-4 rounded-lg font-bold">Formosa</a>
-                <a href="inscripcion.html?prov=Jujuy" class="province-btn p-4 rounded-lg font-bold">Jujuy</a>
-                <a href="inscripcion.html?prov=LaPampa" class="province-btn p-4 rounded-lg font-bold">La Pampa</a>
-                <a href="inscripcion.html?prov=LaRioja" class="province-btn p-4 rounded-lg font-bold">La Rioja</a>
-                <a href="inscripcion.html?prov=Mendoza" class="province-btn p-4 rounded-lg font-bold">Mendoza</a>
-                <a href="inscripcion.html?prov=Misiones" class="province-btn p-4 rounded-lg font-bold">Misiones</a>
-                <a href="inscripcion.html?prov=Neuquen" class="province-btn p-4 rounded-lg font-bold">Neuquén</a>
-                <a href="inscripcion.html?prov=RioNegro" class="province-btn p-4 rounded-lg font-bold">Río Negro</a>
-                <a href="inscripcion.html?prov=Salta" class="province-btn p-4 rounded-lg font-bold">Salta</a>
-                <a href="inscripcion.html?prov=SanJuan" class="province-btn p-4 rounded-lg font-bold">San Juan</a>
-                <a href="inscripcion.html?prov=SanLuis" class="province-btn p-4 rounded-lg font-bold">San Luis</a>
-                <a href="inscripcion.html?prov=SantaCruz" class="province-btn p-4 rounded-lg font-bold">Santa Cruz</a>
-                <a href="inscripcion.html?prov=SantaFe" class="province-btn p-4 rounded-lg font-bold">Santa Fe</a>
-                <a href="inscripcion.html?prov=SantiagodelEstero" class="province-btn p-4 rounded-lg font-bold">Santiago del Estero</a>
-                <a href="inscripcion.html?prov=TierradelFuego" class="province-btn p-4 rounded-lg font-bold">Tierra del Fuego</a>
-                <a href="inscripcion.html?prov=Tucuman" class="province-btn p-4 rounded-lg font-bold">Tucumán</a>
-                
-                <!-- Opción Internacional -->
-                <a href="inscripcion.html?prov=OtroPais" class="col-span-2 sm:col-span-1 md:col-span-1 lg:col-span-1 province-btn p-4 rounded-lg font-bold bg-sky-500/20 border-sky-500 text-sky-300">Otro País</a>
+            <div class="main-content-container">
+                <div class="map-selection-container">
+                    <!-- Imagen del mapa proporcionada por el usuario -->
+                    <img id="mapImage" src="https://i.ibb.co/TMDKvhGx/assets-task-01k1dx0hj2fkes7xkney14qq1q-1753887385-img-0.webp" alt="Mapa de Argentina con contorno neón">
+                </div>
+
+                <select id="provinceSelect" class="province-select">
+                    <option value="" disabled selected>Elige una provincia</option>
+                    <!-- Las opciones se llenarán con JavaScript -->
+                </select>
+            </div>
+
+            <div class="mt-8">
+                 <a href="inscripcion.html?prov=OtroPais" class="province-btn">Otro País</a>
             </div>
         </section>
     </main>
+
+    <script>
+        // Mapeo de códigos de provincia a nombres completos (usado para el desplegable)
+        const provinceMapping = {
+            "ARA": "Salta", 
+            "ARB": "Buenos Aires", 
+            "ARC": "Ciudad de Buenos Aires", 
+            "ARD": "San Luis", 
+            "ARE": "Entre Ríos", 
+            "ARF": "La Rioja", 
+            "ARG": "Santiago del Estero", 
+            "ARH": "Chaco", 
+            "ARJ": "San Juan", 
+            "ARK": "Catamarca", 
+            "ARL": "La Pampa", 
+            "ARM": "Mendoza", 
+            "ARN": "Misiones", 
+            "ARP": "Formosa", 
+            "ARQ": "Neuquén", 
+            "ARR": "Río Negro", 
+            "ARS": "Santa Fe", 
+            "ART": "Tucumán", 
+            "ARU": "Chubut", 
+            "ARV": "Tierra del Fuego", 
+            "ARW": "Corrientes", 
+            "ARX": "Córdoba", 
+            "ARY": "Jujuy", 
+            "ARZ": "Santa Cruz"
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const provinceSelect = document.getElementById('provinceSelect');
+
+            // Llenar el desplegable con las provincias
+            for (const code in provinceMapping) {
+                if (provinceMapping.hasOwnProperty(code)) {
+                    const provinceName = provinceMapping[code];
+                    const option = document.createElement('option');
+                    option.value = provinceName.replace(/\s/g, ''); // Eliminar espacios para el valor del URL
+                    option.textContent = provinceName;
+                    provinceSelect.appendChild(option);
+                }
+            }
+
+            // Manejar la selección del desplegable
+            provinceSelect.addEventListener('change', (event) => {
+                const selectedProvince = event.target.value;
+                if (selectedProvince) {
+                    window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`;
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
