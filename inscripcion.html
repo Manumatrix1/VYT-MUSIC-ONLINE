@@ -40,7 +40,7 @@
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
         </div>
         <nav class="flex items-center space-x-4 text-sm">
-            <a href="index.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
+            <a href="principal.html" class="text-gray-300 hover:text-white">&larr; Volver a Principal</a>
         </nav>
     </header>
 
@@ -48,7 +48,7 @@
         <div class="w-full max-w-lg">
             <div class="text-center mb-10">
                 <h1 class="font-display text-4xl md:text-5xl font-black">Inscripción Online</h1>
-                <p class="text-gray-400 mt-2">Completá tus datos para unirte a la revolución musical.</p>
+                <p class="text-gray-400 mt-2">Completá tus datos para unirte a la revolución musical desde cualquier lugar.</p>
             </div>
             
             <form id="form-online" class="space-y-6">
@@ -101,6 +101,19 @@
             </form>
         </div>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formOnline = document.getElementById('form-online');
 
+            // Manejo de envío de formulario online (simulado, sin Firebase aquí)
+            formOnline.addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Aquí iría la lógica para enviar los datos del formulario online
+                // Por ejemplo, a Firebase Firestore o a un backend
+                alert('Inscripción Online enviada (simulado).'); // Usar modal personalizado en producción
+                formOnline.reset();
+            });
+        });
+    </script>
 </body>
 </html>
