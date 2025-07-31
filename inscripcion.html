@@ -104,6 +104,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const formOnline = document.getElementById('form-online');
+            const provinciaSelect = document.getElementById('provincia');
+
+            // 1. Obtener la provincia del parámetro de la URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const provinciaParam = urlParams.get('prov');
+
+            // 2. Si existe el parámetro, pre-seleccionar la provincia en el select
+            if (provinciaParam) {
+                // Es importante que el valor del <option> coincida con el valor del parámetro
+                // El parámetro lo generamos sin espacios, así que buscamos ese valor
+                // Por ejemplo, "BuenosAires"
+                provinciaSelect.value = decodeURIComponent(provinciaParam); 
+            }
 
             // Manejo de envío de formulario online (simulado, sin Firebase aquí)
             formOnline.addEventListener('submit', (e) => {
