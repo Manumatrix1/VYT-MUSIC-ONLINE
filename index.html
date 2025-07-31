@@ -307,15 +307,14 @@
                 welcomeModal.classList.add('visible');
             });
 
-            // Manejar la selección en el modal: Redirigir a principal.html para exploración
+            // Manejar la selección en el modal: Redirigir a `inscripcion.html` con el parámetro de provincia
             modalConfirmBtn.addEventListener('click', () => {
                 const selectedProvince = modalProvinciaSelect.value;
                 if (selectedProvince) {
-                    // Redirigir a la página principal para que exploren
-                    window.location.href = `principal.html`; 
+                    // Redirigir a la página de inscripción con la provincia seleccionada como parámetro
+                    window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`; 
                 } else {
-                    // Usar un modal personalizado en producción en lugar de alert
-                    alert('Por favor, selecciona una provincia.'); 
+                    alert('Por favor, selecciona una provincia.');
                 }
             });
 
@@ -324,13 +323,6 @@
                 // Redirigir a la página principal de la SPA (principal.html) sin seleccionar provincia
                 window.location.href = `principal.html`;
             });
-
-            // Cerrar modal si se hace clic fuera (opcional, puedes añadirlo si lo deseas)
-            // welcomeModal.addEventListener('click', (event) => {
-            //     if (event.target === welcomeModal) {
-            //         welcomeModal.classList.remove('visible');
-            //     }
-            // });
         });
     </script>
 
