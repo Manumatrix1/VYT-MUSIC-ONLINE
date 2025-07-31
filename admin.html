@@ -460,7 +460,7 @@
 
         // --- Autenticación ---
         // Solo intenta la autenticación de Firebase si está configurado
-        if (auth) {
+        if (auth) { // 'auth' será undefined si Firebase no se inicializó
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     loginSection.classList.add('hidden');
@@ -503,7 +503,7 @@
         } else {
             // Si Firebase no está configurado, siempre muestra la sección de login
             loginSection.classList.remove('hidden');
-            adminDashboard.classList.add('hidden');
+            adminDashboard.classList.add('hidden'); // Asegura que el dashboard esté oculto al inicio
             // Oculta el botón de login de Firebase si no está configurado
             loginBtn.classList.add('hidden'); 
         }
@@ -514,13 +514,13 @@
             adminDashboard.classList.remove('hidden');
             adminUserEmailSpan.textContent = 'creador@desarrollo.com'; // Email de ejemplo para el creador
             showMessage(adminMessages, 'Acceso de creador activado (solo para desarrollo).', 'success');
-            loadArtists(); // Cargar artistas incluso en modo creador
+            loadArtists(); // Cargar artistas incluso en modo creador (ahora maneja datos mock)
         });
 
 
         // --- Carga de Archivos a Firebase Storage ---
         // Solo permite la carga si Firebase Storage está configurado
-        if (storage) {
+        if (storage) { // 'storage' será undefined si Firebase no se inicializó
             uploadBtn.addEventListener('click', async () => {
                 const file = fileUploadInput.files[0];
                 if (!file) {
@@ -599,6 +599,8 @@
             // Solo permite guardar si Firestore está configurado
             if (!db) {
                 showMessage(adminMessages, 'Firestore no está configurado. No se puede guardar el artista.', 'error');
+                // Deshabilita el formulario para evitar intentos de guardado sin DB
+                artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = true);
                 return;
             }
 
@@ -645,16 +647,52 @@
             artistForm.reset();
             artistIdInput.value = '';
             saveArtistBtn.textContent = 'Guardar Artista';
+            // Vuelve a habilitar el formulario si se había deshabilitado por falta de DB
+            if (db) {
+                artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = false);
+            }
         });
 
         async function loadArtists() {
             artistsListDiv.innerHTML = '<p class="text-gray-500">Cargando artistas...</p>';
-            // Solo carga si Firestore está configurado
+            
+            // Si Firestore NO está configurado, carga datos de ejemplo
             if (!db) {
-                artistsListDiv.innerHTML = '<p class="text-red-400">Firestore no está configurado. No se pueden cargar artistas.</p>';
-                return;
+                console.warn("Firestore no configurado. Cargando artistas de ejemplo.");
+                const mockArtists = [
+                    { id: 'mock1', name: 'Sol Frecuencia', genre: 'Pop', province: 'Buenos Aires', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', imageUrl: 'https://placehold.co/180x180/282828/ffffff?text=Sol+Frecuencia', votes: 1500 },
+                    { id: 'mock2', name: 'Ritmo Urbano', genre: 'Urbano', province: 'Córdoba', videoUrl: 'https://www.youtube.com/embed/hTWKbfoikeg', imageUrl: 'https://placehold.co/180x180/282828/ffffff?text=Ritmo+Urbano', votes: 1200 },
+                    { id: 'mock3', name: 'Voz del Pueblo', genre: 'Folclore', province: 'Santa Fe', videoUrl: 'https://www.youtube.com/embed/kXYiU_JCYtU', imageUrl: 'https://placehold.co/180x180/282828/ffffff?text=Voz+del+Pueblo', votes: 800 }
+                ];
+                
+                artistsListDiv.innerHTML = ''; // Limpia el mensaje de carga
+                mockArtists.forEach((artist) => {
+                    const artistItem = document.createElement('div');
+                    artistItem.className = 'artist-list-item';
+                    artistItem.innerHTML = `
+                        <p><strong>Nombre:</strong> ${artist.name}</p>
+                        <p><strong>Provincia:</strong> ${artist.province}</p>
+                        <p><strong>Género:</strong> ${artist.genre}</p>
+                        <p><strong>Votos:</strong> ${artist.votes}</p>
+                        <p><strong>Video URL:</strong> <a href="${artist.videoUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.videoUrl}</a></p>
+                        <p><strong>Imagen URL:</strong> <a href="${artist.imageUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.imageUrl}</a></p>
+                        <div class="artist-actions">
+                            <button class="btn btn-secundario edit-artist-btn" data-id="${artist.id}">Editar</button>
+                            <button class="btn btn-delete delete-artist-btn" data-id="${artist.id}">Eliminar</button>
+                        </div>
+                    `;
+                    artistsListDiv.appendChild(artistItem);
+                });
+
+                // Deshabilita el formulario de artista y el botón de carga de archivos
+                // ya que no hay una DB real para guardar/subir
+                artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = true);
+                uploadBtn.disabled = true;
+                showMessage(adminMessages, 'Funcionalidades de base de datos y almacenamiento deshabilitadas. Configura Firebase para habilitarlas.', 'error');
+                return; // Sale de la función después de cargar los datos mock
             }
 
+            // Lógica original de carga de Firestore (solo se ejecuta si 'db' está configurado)
             try {
                 // Asegúrate de que `orderBy` esté disponible si lo usas, o quítalo si no es esencial
                 const q = query(collection(db, "artistas"), orderBy("createdAt", "desc")); 
@@ -685,7 +723,7 @@
                     artistsListDiv.appendChild(artistItem);
                 });
 
-                // Añadir event listeners a los botones de editar y eliminar
+                // Añadir event listeners a los botones de editar y eliminar (solo para datos reales)
                 artistsListDiv.querySelectorAll('.edit-artist-btn').forEach(btn => {
                     btn.addEventListener('click', () => editArtist(btn.dataset.id));
                 });
