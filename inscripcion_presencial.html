@@ -34,7 +34,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Encabezado Fijo -->
     <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
         <div class="flex items-center space-x-4">
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
@@ -77,5 +76,54 @@
         </div>
     </main>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        // 🔥 TU CONFIGURACIÓN DE FIREBASE 🔥
+        // Reemplaza esto con los datos de tu proyecto de pruebas
+        const firebaseConfig = {
+            apiKey: "TU_API_KEY_REAL",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
+        };
+        
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Referencia al formulario
+        const formPresencial = document.getElementById('form-presencial');
+
+        formPresencial.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const dni = document.getElementById('dni').value;
+            const email = document.getElementById('email').value;
+            const telefono = document.getElementById('telefono').value;
+
+            try {
+                // Guarda los datos en una nueva colección llamada 'participantes_presenciales'
+                const docRef = await addDoc(collection(db, "participantes_presenciales"), {
+                    nombre_completo: nombre,
+                    dni: dni,
+                    email: email,
+                    telefono: telefono,
+                    certamen: "Rosario (Presencial)",
+                    fecha_inscripcion: new Date()
+                });
+                alert("¡Inscripción presencial enviada con éxito!");
+                formPresencial.reset(); // Limpia el formulario
+            } catch (e) {
+                console.error("Error al añadir el documento: ", e);
+                alert("Ocurrió un error al enviar tu inscripción. Inténtalo de nuevo.");
+            }
+        });
+    </script>
 </body>
 </html>
