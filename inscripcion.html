@@ -34,7 +34,6 @@
 </head>
 <body class="min-h-screen flex flex-col">
 
-    <!-- Encabezado Fijo -->
     <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
         <div class="flex items-center space-x-4">
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
@@ -101,31 +100,61 @@
             </form>
         </div>
     </main>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const formOnline = document.getElementById('form-online');
-            const provinciaSelect = document.getElementById('provincia');
+    <script type="module">
+        // Importaciones de Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        // 🚀 CONFIGURACIÓN DE TU PROYECTO DE PRUEBAS 🚀
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
+        };
+        
+        // Inicializa Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
 
-            // 1. Obtener la provincia del parámetro de la URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const provinciaParam = urlParams.get('prov');
+        // Obtener la provincia del parámetro de la URL (si existe)
+        const urlParams = new URLSearchParams(window.location.search);
+        const provinciaParam = urlParams.get('prov');
+        const provinciaSelect = document.getElementById('provincia');
 
-            // 2. Si existe el parámetro, pre-seleccionar la provincia en el select
-            if (provinciaParam) {
-                // Es importante que el valor del <option> coincida con el valor del parámetro
-                // El parámetro lo generamos sin espacios, así que buscamos ese valor
-                // Por ejemplo, "BuenosAires"
-                provinciaSelect.value = decodeURIComponent(provinciaParam); 
+        if (provinciaParam) {
+            provinciaSelect.value = decodeURIComponent(provinciaParam); 
+        }
+
+        // Manejo de envío de formulario
+        const formOnline = document.getElementById('form-online');
+        formOnline.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const email = document.getElementById('email').value;
+            const provincia = provinciaSelect.value;
+            const video = document.getElementById('video').value;
+
+            try {
+                // Guarda los datos en la colección 'participantes' de Firestore
+                const docRef = await addDoc(collection(db, "participantes"), {
+                    nombre_artistico: nombre,
+                    email: email,
+                    provincia: provincia,
+                    link_video: video,
+                    estado: "en casting",
+                    fecha_inscripcion: new Date()
+                });
+                alert("¡Inscripción enviada con éxito!");
+                formOnline.reset(); // Limpia el formulario
+            } catch (e) {
+                console.error("Error al añadir el documento: ", e);
+                alert("Ocurrió un error al enviar tu inscripción. Inténtalo de nuevo.");
             }
-
-            // Manejo de envío de formulario online (simulado, sin Firebase aquí)
-            formOnline.addEventListener('submit', (e) => {
-                e.preventDefault();
-                // Aquí iría la lógica para enviar los datos del formulario online
-                // Por ejemplo, a Firebase Firestore o a un backend
-                alert('Inscripción Online enviada (simulado).'); // Usar modal personalizado en producción
-                formOnline.reset();
-            });
         });
     </script>
 </body>
