@@ -193,7 +193,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.7);
-            z-index: 9999; /* Asegura que esté por encima de todo */
+            z-index: 9999;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -334,12 +334,10 @@
 
         <h3 class="subsection-title">Lista de Artistas</h3>
         <div id="artists-list" class="space-y-4">
-            <!-- Los artistas se cargarán aquí desde Firestore -->
             <p class="text-gray-500">Cargando artistas...</p>
         </div>
     </div>
 
-    <!-- Modal de Confirmación Personalizado -->
     <div id="custom-confirm-modal" class="custom-modal-backdrop">
         <div class="custom-modal-content">
             <h3 id="custom-confirm-title">Confirmar Acción</h3>
@@ -351,16 +349,13 @@
         </div>
     </div>
 
-    <!-- Firebase SDKs -->
     <script type="module">
-        // Importaciones de Firebase (se mantienen para cuando decidas usarlas)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         // 🔥 TU CONFIGURACIÓN DE FIREBASE 🔥
-        // Reemplaza con tu configuración real de Firebase cuando la tengas.
         const firebaseConfig = {
             apiKey: "TU_API_KEY",
             authDomain: "TU_AUTH_DOMAIN",
@@ -370,7 +365,6 @@
             appId: "TU_APP_ID"
         };
 
-        // Inicializa Firebase solo si la API Key no es la de placeholder
         let app, auth, db, storage;
         if (firebaseConfig.apiKey !== "TU_API_KEY") {
             app = initializeApp(firebaseConfig);
@@ -382,13 +376,12 @@
         }
 
 
-        // --- Elementos del DOM ---
         const loginSection = document.getElementById('login-section');
         const adminDashboard = document.getElementById('admin-dashboard');
         const adminEmailInput = document.getElementById('admin-email');
         const adminPasswordInput = document.getElementById('admin-password');
         const loginBtn = document.getElementById('login-btn');
-        const creatorAccessBtn = document.getElementById('creator-access-btn'); // Nuevo botón
+        const creatorAccessBtn = document.getElementById('creator-access-btn');
         const logoutBtn = document.getElementById('logout-btn');
         const loginError = document.getElementById('login-error');
         const adminUserEmailSpan = document.getElementById('admin-user-email');
@@ -414,14 +407,12 @@
         const clearArtistFormBtn = document.getElementById('clear-artist-form-btn');
         const artistsListDiv = document.getElementById('artists-list');
 
-        // Elementos del modal de confirmación personalizado
         const customConfirmModal = document.getElementById('custom-confirm-modal');
         const customConfirmTitle = document.getElementById('custom-confirm-title');
         const customConfirmMessage = document.getElementById('custom-confirm-message');
         const customConfirmYesBtn = document.getElementById('custom-confirm-yes');
         const customConfirmNoBtn = document.getElementById('custom-confirm-no');
 
-        // --- Funciones de Utilidad ---
         function showMessage(element, message, type = 'success') {
             element.textContent = message;
             element.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
@@ -431,7 +422,6 @@
             }, 5000);
         }
 
-        // Función para mostrar el modal de confirmación personalizado
         function showCustomConfirm(title, message) {
             return new Promise((resolve) => {
                 customConfirmTitle.textContent = title;
@@ -458,15 +448,13 @@
         }
 
 
-        // --- Autenticación ---
-        // Solo intenta la autenticación de Firebase si está configurado
-        if (auth) { // 'auth' será undefined si Firebase no se inicializó
+        if (auth) {
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     loginSection.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
                     adminUserEmailSpan.textContent = user.email;
-                    loadArtists(); // Cargar artistas al iniciar sesión
+                    loadArtists();
                 } else {
                     loginSection.classList.remove('hidden');
                     adminDashboard.classList.add('hidden');
@@ -501,26 +489,21 @@
                 }
             });
         } else {
-            // Si Firebase no está configurado, siempre muestra la sección de login
             loginSection.classList.remove('hidden');
-            adminDashboard.classList.add('hidden'); // Asegura que el dashboard esté oculto al inicio
-            // Oculta el botón de login de Firebase si no está configurado
-            loginBtn.classList.add('hidden'); 
+            adminDashboard.classList.add('hidden');
+            loginBtn.classList.add('hidden');
         }
 
-        // --- Acceso de Creador (Solo Desarrollo) ---
         creatorAccessBtn.addEventListener('click', () => {
             loginSection.classList.add('hidden');
             adminDashboard.classList.remove('hidden');
-            adminUserEmailSpan.textContent = 'creador@desarrollo.com'; // Email de ejemplo para el creador
+            adminUserEmailSpan.textContent = 'creador@desarrollo.com';
             showMessage(adminMessages, 'Acceso de creador activado (solo para desarrollo).', 'success');
-            loadArtists(); // Cargar artistas incluso en modo creador (ahora maneja datos mock)
+            loadArtists();
         });
 
 
-        // --- Carga de Archivos a Firebase Storage ---
-        // Solo permite la carga si Firebase Storage está configurado
-        if (storage) { // 'storage' será undefined si Firebase no se inicializó
+        if (storage) {
             uploadBtn.addEventListener('click', async () => {
                 const file = fileUploadInput.files[0];
                 if (!file) {
@@ -552,14 +535,11 @@
                             uploadedUrlLink.href = downloadURL;
                             uploadedUrlLink.textContent = downloadURL;
                             uploadedUrlDisplay.classList.remove('hidden');
-                            fileNameInput.value = ''; // Limpiar campo de nombre
-                            fileUploadInput.value = ''; // Limpiar input de archivo
-                            // Opcional: añadir la URL a una lista visible en el admin
+                            fileNameInput.value = '';
+                            fileUploadInput.value = '';
                             const listItem = document.createElement('div');
                             listItem.className = 'uploaded-file-item';
                             listItem.innerHTML = `<span class="file-name">${fileName}</span><a href="${downloadURL}" target="_blank" class="file-url">${downloadURL}</a><button class="copy-url-btn btn btn-secundario">Copiar</button>`;
-                            // Si tienes una lista de archivos subidos, añádelo aquí
-                            // uploadedFilesList.prepend(listItem); 
                             listItem.querySelector('.copy-url-btn').addEventListener('click', () => {
                                 navigator.clipboard.writeText(downloadURL)
                                     .then(() => showMessage(adminMessages, 'URL copiada al portapapeles', 'success'))
@@ -570,21 +550,18 @@
                 );
             });
         } else {
-            // Deshabilita la carga de archivos si Firebase Storage no está configurado
             uploadBtn.disabled = true;
             uploadBtn.textContent = 'Subir a Firebase Storage (No disponible)';
             showMessage(uploadStatus, 'La carga de archivos no está disponible. Configura Firebase Storage.', 'error');
         }
 
 
-        // --- Gestión de Artistas (Firestore) ---
-        // Llenar el select de provincias en el formulario de artista
         const provinceOptions = Object.values({
-            "ARA": "Salta", "ARB": "Buenos Aires", "ARC": "Ciudad de Buenos Aires", "ARD": "San Luis", 
-            "ARE": "Entre Ríos", "ARF": "La Rioja", "ARG": "Santiago del Estero", "ARH": "Chaco", 
-            "ARJ": "San Juan", "ARK": "Catamarca", "ARL": "La Pampa", "ARM": "Mendoza", 
-            "ARN": "Misiones", "ARP": "Formosa", "ARQ": "Neuquén", "ARR": "Río Negro", 
-            "ARS": "Santa Fe", "ART": "Tucumán", "ARU": "Chubut", "ARV": "Tierra del Fuego", 
+            "ARA": "Salta", "ARB": "Buenos Aires", "ARC": "Ciudad de Buenos Aires", "ARD": "San Luis",
+            "ARE": "Entre Ríos", "ARF": "La Rioja", "ARG": "Santiago del Estero", "ARH": "Chaco",
+            "ARJ": "San Juan", "ARK": "Catamarca", "ARL": "La Pampa", "ARM": "Mendoza",
+            "ARN": "Misiones", "ARP": "Formosa", "ARQ": "Neuquén", "ARR": "Río Negro",
+            "ARS": "Santa Fe", "ART": "Tucumán", "ARU": "Chubut", "ARV": "Tierra del Fuego",
             "ARW": "Corrientes", "ARX": "Córdoba", "ARY": "Jujuy", "ARZ": "Santa Cruz"
         });
         provinceOptions.forEach(prov => {
@@ -596,10 +573,8 @@
 
         artistForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            // Solo permite guardar si Firestore está configurado
             if (!db) {
                 showMessage(adminMessages, 'Firestore no está configurado. No se puede guardar el artista.', 'error');
-                // Deshabilita el formulario para evitar intentos de guardado sin DB
                 artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = true);
                 return;
             }
@@ -619,7 +594,6 @@
 
             try {
                 if (id) {
-                    // Actualizar artista existente
                     const artistRef = doc(db, "artistas", id);
                     await updateDoc(artistRef, {
                         name, genre, province, videoUrl, imageUrl, votes,
@@ -627,7 +601,6 @@
                     });
                     showMessage(adminMessages, 'Artista actualizado correctamente.', 'success');
                 } else {
-                    // Añadir nuevo artista
                     await addDoc(collection(db, "artistas"), {
                         name, genre, province, videoUrl, imageUrl, votes,
                         createdAt: serverTimestamp()
@@ -635,8 +608,8 @@
                     showMessage(adminMessages, 'Artista añadido correctamente.', 'success');
                 }
                 artistForm.reset();
-                artistIdInput.value = ''; // Limpiar ID oculto
-                loadArtists(); // Recargar la lista de artistas
+                artistIdInput.value = '';
+                loadArtists();
             } catch (error) {
                 console.error("Error al guardar artista:", error);
                 showMessage(adminMessages, `Error al guardar artista: ${error.message}`, 'error');
@@ -647,7 +620,6 @@
             artistForm.reset();
             artistIdInput.value = '';
             saveArtistBtn.textContent = 'Guardar Artista';
-            // Vuelve a habilitar el formulario si se había deshabilitado por falta de DB
             if (db) {
                 artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = false);
             }
@@ -656,7 +628,6 @@
         async function loadArtists() {
             artistsListDiv.innerHTML = '<p class="text-gray-500">Cargando artistas...</p>';
             
-            // Si Firestore NO está configurado, carga datos de ejemplo
             if (!db) {
                 console.warn("Firestore no configurado. Cargando artistas de ejemplo.");
                 const mockArtists = [
@@ -665,7 +636,7 @@
                     { id: 'mock3', name: 'Voz del Pueblo', genre: 'Folclore', province: 'Santa Fe', videoUrl: 'https://www.youtube.com/embed/kXYiU_JCYtU', imageUrl: 'https://placehold.co/180x180/282828/ffffff?text=Voz+del+Pueblo', votes: 800 }
                 ];
                 
-                artistsListDiv.innerHTML = ''; // Limpia el mensaje de carga
+                artistsListDiv.innerHTML = '';
                 mockArtists.forEach((artist) => {
                     const artistItem = document.createElement('div');
                     artistItem.className = 'artist-list-item';
@@ -684,20 +655,37 @@
                     artistsListDiv.appendChild(artistItem);
                 });
 
-                // Deshabilita el formulario de artista y el botón de carga de archivos
-                // ya que no hay una DB real para guardar/subir
+                artistsListDiv.querySelectorAll('.edit-artist-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                         showMessage(adminMessages, `Modo de edición para el artista ${btn.dataset.id} activado.`, 'success');
+                         artistNameInput.value = mockArtists.find(a => a.id === btn.dataset.id)?.name || '';
+                         artistIdInput.value = btn.dataset.id;
+                         saveArtistBtn.textContent = 'Actualizar Artista';
+                    });
+                });
+                artistsListDiv.querySelectorAll('.delete-artist-btn').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        const confirmed = await showCustomConfirm(
+                            'Confirmar Eliminación (Modo de Desarrollo)',
+                            '¿Estás seguro de que quieres eliminar este artista de ejemplo? (No se borrará de una DB real)'
+                        );
+                        if(confirmed) {
+                             showMessage(adminMessages, 'Artista de ejemplo eliminado (simulado).', 'success');
+                             loadArtists();
+                        }
+                    });
+                });
+                
                 artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = true);
                 uploadBtn.disabled = true;
                 showMessage(adminMessages, 'Funcionalidades de base de datos y almacenamiento deshabilitadas. Configura Firebase para habilitarlas.', 'error');
-                return; // Sale de la función después de cargar los datos mock
+                return;
             }
 
-            // Lógica original de carga de Firestore (solo se ejecuta si 'db' está configurado)
             try {
-                // Asegúrate de que `orderBy` esté disponible si lo usas, o quítalo si no es esencial
                 const q = query(collection(db, "artistas"), orderBy("createdAt", "desc")); 
                 const querySnapshot = await getDocs(q);
-                artistsListDiv.innerHTML = ''; // Limpiar el mensaje de carga
+                artistsListDiv.innerHTML = '';
 
                 if (querySnapshot.empty) {
                     artistsListDiv.innerHTML = '<p class="text-gray-500">No hay artistas registrados.</p>';
@@ -723,7 +711,6 @@
                     artistsListDiv.appendChild(artistItem);
                 });
 
-                // Añadir event listeners a los botones de editar y eliminar (solo para datos reales)
                 artistsListDiv.querySelectorAll('.edit-artist-btn').forEach(btn => {
                     btn.addEventListener('click', () => editArtist(btn.dataset.id));
                 });
@@ -738,7 +725,6 @@
         }
 
         async function editArtist(id) {
-            // Solo permite editar si Firestore está configurado
             if (!db) {
                 showMessage(adminMessages, 'Firestore no está configurado. No se puede editar el artista.', 'error');
                 return;
@@ -767,7 +753,6 @@
         }
 
         async function deleteArtist(id) {
-            // Solo permite eliminar si Firestore está configurado
             if (!db) {
                 showMessage(adminMessages, 'Firestore no está configurado. No se puede eliminar el artista.', 'error');
                 return;
@@ -782,7 +767,7 @@
                 try {
                     await deleteDoc(doc(db, "artistas", id));
                     showMessage(adminMessages, 'Artista eliminado correctamente.', 'success');
-                    loadArtists(); // Recargar lista
+                    loadArtists();
                 } catch (error) {
                     console.error("Error al eliminar artista:", error);
                     showMessage(adminMessages, `Error al eliminar artista: ${error.message}`, 'error');
@@ -790,10 +775,6 @@
             }
         }
 
-        // --- Inicialización ---
-        // Si Firebase no está configurado, el dashboard se oculta y el botón de login de Firebase también.
-        // El botón de acceso de creador siempre está visible para desarrollo.
-    });
     </script>
 </body>
 </html>

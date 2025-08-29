@@ -5,29 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido a VYT MUSIC</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
 
     <style>
         body {
-            /* Fondo oscuro y moderno */
             background-color: #121212;
             background-image: radial-gradient(circle at top, rgba(43, 183, 209, 0.2), transparent 50%);
             font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
-            color: white; /* Asegura el color de texto principal */
+            color: white;
         }
         h1, .font-display {
             font-family: 'Montserrat', sans-serif;
         }
         .countdown-text {
             font-family: 'Orbitron', sans-serif;
-            color: #2dd4bf; /* Un color turquesa brillante */
+            color: #2dd4bf;
             text-shadow:
                 0 0 5px rgba(45, 212, 191, 0.7),
                 0 0 15px rgba(45, 212, 191, 0.7);
@@ -39,8 +36,6 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.5);
         }
-
-        /* Estilos para el Modal de Bienvenida */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -62,7 +57,7 @@
             transition: opacity 0.3s ease;
         }
         .modal-content {
-            background: #161b22; /* Color de fondo secundario */
+            background: #161b22;
             padding: 2rem;
             border-radius: 15px;
             text-align: center;
@@ -70,26 +65,26 @@
             width: 90%;
             transform: scale(0.9);
             transition: transform 0.3s ease;
-            border: 1px solid #30363d; /* Borde sutil */
+            border: 1px solid #30363d;
             box-shadow: 0 8px 16px rgba(0,0,0,0.4);
         }
         .modal-backdrop.visible .modal-content {
             transform: scale(1);
         }
         .modal-content h3 {
-            font-family: 'Montserrat', sans-serif; /* Usar font-display */
-            color: #58a6ff; /* Color primario */
+            font-family: 'Montserrat', sans-serif;
+            color: #58a6ff;
             font-size: 2rem;
             margin-bottom: 1rem;
         }
         .modal-content p {
             margin-bottom: 1.5rem;
-            color: #b0b8c4; /* Color texto secundario */
+            color: #b0b8c4;
         }
         .modal-select {
             width: 100%;
             padding: 0.8rem;
-            background-color: #0d1117; /* Color de fondo */
+            background-color: #0d1117;
             border: 1px solid #30363d;
             border-radius: 8px;
             color: white;
@@ -124,8 +119,8 @@
             cursor: pointer;
         }
         .modal-btn-confirm {
-            background-color: #58a6ff; /* Color primario */
-            color: #0d1117; /* Color de fondo */
+            background-color: #58a6ff;
+            color: #0d1117;
         }
         .modal-btn-confirm:hover {
             background-color: transparent;
@@ -135,7 +130,7 @@
         }
         .modal-btn-other {
             background-color: transparent;
-            color: #e6edf3; /* Color texto principal */
+            color: #e6edf3;
             border-color: #8b949e;
         }
         .modal-btn-other:hover {
@@ -149,19 +144,16 @@
 
     <div class="min-h-screen flex flex-col items-center justify-center text-center p-6">
         
-        <!-- Logo y Título del Certamen -->
         <div class="mb-6 text-center">
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-40 md:w-48 mx-auto">
             <p class="text-gray-400 text-lg tracking-widest mt-2 font-display">CERTAMEN DE CANTO</p>
         </div>
 
-        <!-- Título Principal -->
         <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-4">La revolución musical ha comenzado.</h1>
         <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
             Este es el escenario para las voces que merecen ser escuchadas.
         </p>
 
-        <!-- Cuenta Regresiva -->
         <div class="mb-8 w-full max-w-lg">
             <p class="font-display text-sm uppercase tracking-widest text-gray-400 mb-2">Las inscripciones cierran en:</p>
             <div id="countdown" class="grid grid-cols-4 gap-2 text-center">
@@ -184,44 +176,35 @@
             </div>
         </div>
         
-        <!-- Mensaje Inspirador para los que dudan -->
         <div class="bg-sky-400/10 border border-sky-400/30 text-sky-300 text-md rounded-xl p-6 mb-10 max-w-lg">
             <p class="font-bold text-lg mb-2">¿Te gusta cantar?</p>
             <p class="text-sky-200">Sabemos que tenés talento y que solo necesitás una oportunidad.</p>
         </div>
 
-        <!-- Pregunta Clave -->
         <h2 class="text-2xl font-bold mb-6 font-display">¿Desde dónde vas a brillar?</h2>
 
-        <!-- Opciones de Participación -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-lg">
-            <!-- Opción Rosario -->
             <a href="presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Soy de Rosario</span>
                 <span class="text-sm">(o alrededores)</span>
             </a>
-            <!-- Opción Online -->
             <a href="#" id="otra-provincia-btn" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Otra Provincia</span>
                 <span class="text-sm">(100% Online)</span>
             </a>
         </div>
 
-        <!-- Aclaración de Flexibilidad -->
         <p class="text-sm mt-8 text-gray-400 max-w-md">
             (Si sos de Rosario, también podés participar de forma online. ¡Vos elegís cómo brillar!)
         </p>
-
     </div>
 
-    <!-- Modal de Bienvenida / Selección de Provincia -->
     <div id="welcome-modal" class="modal-backdrop">
         <div class="modal-content">
             <h3>¡Bienvenido a VYT MUSIC!</h3>
             <p>Para ofrecerte la mejor experiencia, contanos desde dónde nos visitás.</p>
             <select id="modal-provincia-select" class="modal-select">
                 <option value="" disabled selected>Seleccioná tu provincia...</option>
-                <!-- Opciones de provincia se llenarán con JS -->
             </select>
             <div class="modal-buttons">
                 <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Confirmar</button>
@@ -231,31 +214,30 @@
     </div>
 
     <script>
-        // Mapeo de códigos de provincia a nombres completos (no se usa directamente para la redirección, pero es útil para el select)
         const provinceMapping = {
-            "ARA": "Salta", 
-            "ARB": "Buenos Aires", 
-            "ARC": "Ciudad de Buenos Aires", 
-            "ARD": "San Luis", 
-            "ARE": "Entre Ríos", 
-            "ARF": "La Rioja", 
-            "ARG": "Santiago del Estero", 
-            "ARH": "Chaco", 
-            "ARJ": "San Juan", 
-            "ARK": "Catamarca", 
-            "ARL": "La Pampa", 
-            "ARM": "Mendoza", 
-            "ARN": "Misiones", 
-            "ARP": "Formosa", 
-            "ARQ": "Neuquén", 
-            "ARR": "Río Negro", 
-            "ARS": "Santa Fe", 
-            "ART": "Tucumán", 
-            "ARU": "Chubut", 
-            "ARV": "Tierra del Fuego", 
-            "ARW": "Corrientes", 
-            "ARX": "Córdoba", 
-            "ARY": "Jujuy", 
+            "ARA": "Salta",
+            "ARB": "Buenos Aires",
+            "ARC": "Ciudad de Buenos Aires",
+            "ARD": "San Luis",
+            "ARE": "Entre Ríos",
+            "ARF": "La Rioja",
+            "ARG": "Santiago del Estero",
+            "ARH": "Chaco",
+            "ARJ": "San Juan",
+            "ARK": "Catamarca",
+            "ARL": "La Pampa",
+            "ARM": "Mendoza",
+            "ARN": "Misiones",
+            "ARP": "Formosa",
+            "ARQ": "Neuquén",
+            "ARR": "Río Negro",
+            "ARS": "Santa Fe",
+            "ART": "Tucumán",
+            "ARU": "Chubut",
+            "ARV": "Tierra del Fuego",
+            "ARW": "Corrientes",
+            "ARX": "Córdoba",
+            "ARY": "Jujuy",
             "ARZ": "Santa Cruz"
         };
 
@@ -266,9 +248,8 @@
             const modalConfirmBtn = document.getElementById('modal-confirm-btn');
             const modalExploreBtn = document.getElementById('modal-explore-btn');
 
-            // Lógica del Contador (ya existente)
             const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7); // 7 días desde ahora
+            targetDate.setDate(targetDate.getDate() + 7);
             const countdownFunction = setInterval(() => {
                 const now = new Date().getTime();
                 const distance = targetDate - now;
@@ -290,41 +271,34 @@
                 document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
             }, 1000);
 
-            // Llenar el desplegable del modal con las provincias
             for (const code in provinceMapping) {
                 if (provinceMapping.hasOwnProperty(code)) {
                     const provinceName = provinceMapping[code];
                     const option = document.createElement('option');
-                    option.value = provinceName.replace(/\s/g, ''); // Eliminar espacios para el valor del URL
+                    option.value = provinceName.replace(/\s/g, '');
                     option.textContent = provinceName;
                     modalProvinciaSelect.appendChild(option);
                 }
             }
 
-            // Mostrar el modal cuando se hace clic en "Otra Provincia"
             otraProvinciaBtn.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevenir la redirección por defecto del <a>
+                event.preventDefault();
                 welcomeModal.classList.add('visible');
             });
 
-            // Manejar la selección en el modal: Redirigir a `inscripcion.html` con el parámetro de provincia
             modalConfirmBtn.addEventListener('click', () => {
                 const selectedProvince = modalProvinciaSelect.value;
                 if (selectedProvince) {
-                    // Redirigir a la página de inscripción con la provincia seleccionada como parámetro
-                    window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`; 
+                    window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`;
                 } else {
                     alert('Por favor, selecciona una provincia.');
                 }
             });
 
-            // Manejar el botón "Explorar el sitio" en el modal
             modalExploreBtn.addEventListener('click', () => {
-                // Redirigir a la página principal de la SPA (principal.html) sin seleccionar provincia
                 window.location.href = `principal.html`;
             });
         });
     </script>
-
 </body>
 </html>
