@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Inscripción Presencial</title>
+    <title>VYT MUSIC - Inscripción Presencial Rosario</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <style>
@@ -39,133 +39,48 @@
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
         </div>
         <nav class="flex items-center space-x-4 text-sm">
-            <a href="principal.html" class="text-gray-300 hover:text-white">&larr; Volver a Principal</a>
+            <a href="presencial.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
         </nav>
     </header>
 
     <main class="flex-grow flex items-center justify-center p-6">
-        <div id="form-container" class="w-full max-w-lg">
+        <div class="w-full max-w-lg">
             <div class="text-center mb-10">
-                <h1 class="font-display text-4xl md:text-5xl font-black">Inscripción Presencial</h1>
-                <p class="text-gray-400 mt-2">Completá tus datos para unirte a la revolución musical desde cualquier lugar.</p>
+                <p class="font-display text-lg uppercase tracking-widest text-[#2bb7d1]">Inscripción Presencial</p>
+                <h1 class="font-display text-4xl md:text-5xl font-black">ROSARIO</h1>
+                <p class="text-gray-400 mt-2">Estás a un paso de subirte a nuestro escenario.</p>
             </div>
             
             <form id="form-presencial" class="space-y-6">
                 <div>
-                    <label for="nombre" class="block text-sm font-medium text-gray-300 mb-1">Nombre Artístico</label>
-                    <input type="text" id="nombre" name="nombre" class="w-full form-input p-3 rounded-lg" placeholder="Ej: Sol Frecuencia" required>
+                    <label for="nombre" class="block text-sm font-medium text-gray-300 mb-1">Nombre y Apellido</label>
+                    <input type="text" id="nombre" name="nombre" class="w-full form-input p-3 rounded-lg" placeholder="Tu nombre completo" required>
                 </div>
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Tu Email</label>
+                    <label for="dni" class="block text-sm font-medium text-gray-300 mb-1">DNI</label>
+                    <input type="text" id="dni" name="dni" class="w-full form-input p-3 rounded-lg" placeholder="Tu número de documento" required>
+                </div>
+                <div>
+                    <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email de Contacto</label>
                     <input type="email" id="email" name="email" class="w-full form-input p-3 rounded-lg" placeholder="tu-correo@ejemplo.com" required>
                 </div>
-                <div>
-                    <label for="edad" class="block text-sm font-medium text-gray-300 mb-1">Edad</label>
-                    <input type="number" id="edad" name="edad" class="w-full form-input p-3 rounded-lg" placeholder="Tu edad" required>
+                 <div>
+                    <label for="telefono" class="block text-sm font-medium text-gray-300 mb-1">Teléfono (WhatsApp)</label>
+                    <input type="tel" id="telefono" name="telefono" class="w-full form-input p-3 rounded-lg" placeholder="Para mantenerte al tanto de todo" required>
                 </div>
                 <div>
-                    <label for="provincia" class="block text-sm font-medium text-gray-300 mb-1">Provincia</label>
-                    <input type="text" id="provincia" name="provincia" class="w-full form-input p-3 rounded-lg" value="Rosario, Santa Fe" readonly>
+                    <label for="video-link" class="block text-sm font-medium text-gray-300 mb-1">Link a tu video de Casting</label>
+                    <input type="url" id="video-link" name="video-link" class="w-full form-input p-3 rounded-lg" placeholder="Pegá el link de YouTube, TikTok, etc." required>
+                    <p class="text-xs text-gray-500 mt-2">Si no tenés un link, contactanos por <a href="https://wa.me/5493417422062" class="text-blue-400 hover:underline">WhatsApp</a>.</p>
                 </div>
-                <div>
-                    <label for="foto-perfil" class="block text-sm font-medium text-gray-300 mb-1">Sube tu Foto de Perfil</label>
-                    <input type="file" id="foto-perfil" name="foto-perfil" accept="image/*" class="w-full form-input p-3 rounded-lg" required>
-                </div>
-                <div>
-                    <label for="video-casting" class="block text-sm font-medium text-gray-300 mb-1">Link de Video para Casting</label>
-                    <input type="url" id="video-casting" name="video-casting" class="w-full form-input p-3 rounded-lg" placeholder="Video para el primer filtro (YouTube, etc.)" required>
-                </div>
-                <p class="text-sm text-gray-400 mt-2">Instrucciones: El video debe ser un enlace de YouTube o de una plataforma similar, de buena calidad y donde demuestres tu talento.</p>
+                
 
-                <button id="btn-submit" type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
-                    Finalizar Inscripción
+                <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
+                    Confirmar mi lugar
                 </button>
             </form>
         </div>
     </main>
 
-    <div id="success-message" class="hidden flex-grow flex flex-col items-center justify-center p-6 text-center">
-        <svg class="h-16 w-16 text-[#2bb7d1] mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <h2 class="font-display text-3xl font-black mb-2">¡Inscripción Enviada!</h2>
-        <p class="text-gray-300 max-w-md">Nuestro equipo evaluará tu video. Pronto te contactaremos para informarte si pasaste el casting. Si es así, te enviaremos el link para que completes el pago de tu inscripción.</p>
-    </div>
-    
-    <script type="module">
-        // Importaciones de Firebase
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-        
-        // 🚀 CONFIGURACIÓN DE TU PROYECTO 🚀
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
-            authDomain: "vytonlineprueva.firebaseapp.com",
-            projectId: "vytonlineprueva",
-            storageBucket: "vytonlineprueva.appspot.com",
-            messagingSenderId: "175483939728",
-            appId: "1:175483939728:web:230294acca9221d1d1a115",
-            measurementId: "G-PWRTMBH631"
-        };
-        
-        // Inicializa Firebase
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-
-        // Referencias a elementos del DOM
-        const formPresencial = document.getElementById('form-presencial');
-        const formContainer = document.getElementById('form-container');
-        const successMessage = document.getElementById('success-message');
-        const submitButton = document.getElementById('btn-submit');
-
-        // Manejo del envío del formulario
-        formPresencial.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Deshabilitar botón y cambiar texto mientras carga
-            submitButton.disabled = true;
-            submitButton.textContent = "Enviando...";
-
-            const nombre = document.getElementById('nombre').value;
-            const email = document.getElementById('email').value;
-            const edad = document.getElementById('edad').value;
-            const provincia = document.getElementById('provincia').value;
-            const videoCasting = document.getElementById('video-casting').value;
-            const fotoFile = document.getElementById('foto-perfil').files[0];
-
-            try {
-                // 📸 PROCESO DE CARGA DE FOTO 📸
-                const storageRef = ref(storage, `fotos_perfil/${fotoFile.name}`);
-                await uploadBytes(storageRef, fotoFile);
-                const fotoURL = await getDownloadURL(storageRef);
-
-                // Guarda los datos en la colección 'participantes' de Firestore
-                const docRef = await addDoc(collection(db, "participantes"), {
-                    nombre_artistico: nombre,
-                    email: email,
-                    edad: edad,
-                    provincia: provincia,
-                    link_video_casting: videoCasting,
-                    foto_perfil: fotoURL,
-                    estado: "pendiente de aprobación", // <-- Estado pendiente de aprobación
-                    fecha_inscripcion: new Date()
-                });
-                
-                // Muestra el mensaje de éxito
-                formContainer.classList.add('hidden');
-                successMessage.classList.remove('hidden');
-
-            } catch (e) {
-                console.error("Error al añadir el documento: ", e);
-                alert("Ocurrió un error al enviar tu inscripción. Inténtalo de nuevo.");
-            } finally {
-                // Volver a habilitar el botón si hay error
-                submitButton.disabled = false;
-                submitButton.textContent = "Finalizar Inscripción";
-            }
-        });
-    </script>
 </body>
 </html>
