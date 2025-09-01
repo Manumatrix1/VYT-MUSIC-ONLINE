@@ -463,9 +463,6 @@
             height: 180px;
             object-fit: cover;
         }
-        .ranking-home-info {
-            padding: 1rem;
-        }
         .ranking-home-info h4 {
             font-weight: 700;
             color: var(--color-texto-principal);
@@ -482,7 +479,7 @@
             color: var(--color-texto-secundario);
         }
 
-        /* --- Estilos para la generación de Bio con IA --- */
+        /* Estilos para la generación de Bio con IA --- */
         .ai-bio-generator {
             position: relative;
         }
@@ -537,7 +534,7 @@
         .reglamento-seccion { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid #30363d; }
         .reglamento-seccion:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
         .pozo-container { background-color: var(--color-fondo-secundario); border-radius: 50px; width: 100%; height: 40px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 1rem; }
-        .pozo-bar { height: 100%; background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%); width: 75%; border-radius: 50px; transition: width 1.5s ease; }
+        .pozo-bar { height: 100%; background: linear-gradient(90deg, #F0A500, var(--color-oro)); width: 75%; border-radius: 50px; transition: width 1.5s ease; }
         .pozo-text { font-weight: 700; font-size: 1.5rem; color: var(--color-primario); text-align: center; }
         .ranking-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
         .ranking-card { border-radius: 15px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
@@ -548,7 +545,7 @@
         .ranking-info { padding: 1rem; }
         .ranking-info h4 { font-size: 1.2rem; color: var(--color-texto-principal); }
         .ranking-info .vote-button { margin-top: 1rem; width: 100%; }
-        .duelo-container { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+        .duelo-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 2rem; }
         .duelo-card { width: 100%; max-width: 350px; padding: 1.5rem; border-radius: 15px; text-align: center; }
         .duelo-card h4 { font-size: 1.3rem; margin-bottom: 1rem; }
         .duelo-card .btn { width: 100%; }
@@ -634,9 +631,11 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a data-target="page-concurso-online">Online</a></li>
-                            <li><a href="presencial.html">Presencial</a></li> </ul>
+                            <li><a href="inscripcion_presencial.html">Presencial</a></li>
+                        </ul>
                     </li>
-                    <li><a data-target="page-inscripcion"> <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <li><a data-target="page-inscripcion">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         <span>Inscripción</span>
                     </a></li>
                     <li><a data-target="page-comprar-vyt">
@@ -674,8 +673,9 @@
                             <h1>Despegá tu voz. Hacé historia.</h1>
                             <p>El escenario digital más grande del país te está esperando. Demostrá tu talento, conectá con miles de personas y competí por premios increíbles.</p>
                             <div class="hero-buttons">
-                                <a class="btn btn-primario" data-target="page-concurso-online">Competir Online</a>
-                                <a class="btn btn-secundario" href="presencial.html">Eventos Presenciales</a> </div>
+                                <a class="btn btn-primario" href="inscripcion_online.html">Competir Online</a>
+                                <a class="btn btn-secundario" href="inscripcion_presencial.html">Eventos Presenciales</a>
+                            </div>
                         </div>
                     </section>
                     
@@ -829,7 +829,7 @@
                             <p class="subtitulo-seccion">Elegí la modalidad que mejor se adapte a vos y comenzá tu camino hacia el estrellato.</p>
                             
                             <div class="inscripcion-choice-buttons">
-                                <a href="inscripcion.html" class="btn btn-online">
+                                <a href="inscripcion_online.html" class="btn btn-online">
                                     Inscripción Online
                                     <span class="btn-text-small">(Desde cualquier lugar de Argentina o el mundo)</span>
                                 </a>
@@ -983,83 +983,65 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // --- Manejo de la Navegación SPA ---
-            // Selecciona todos los enlaces de navegación que tienen un atributo data-target (para navegación interna)
             const navLinksInternal = document.querySelectorAll('.nav-menu a[data-target]');
-            // Selecciona todos los enlaces del menú desplegable
             const dropdownLinks = document.querySelectorAll('.dropdown > a');
-            // Selecciona todas las secciones de página que se gestionan internamente
             const pages = document.querySelectorAll('.page');
-            // Selecciona el logo de la barra lateral
             const sidebarLogo = document.querySelector('.sidebar-logo');
-            // Selecciona los botones del hero
             const heroButtons = document.querySelectorAll('.hero-buttons .btn');
+            const body = document.body;
 
-            // Función para mostrar una página interna y ocultar las demás
             function showPage(targetId) {
-                // Oculta todas las páginas internas
                 pages.forEach(page => {
                     page.classList.remove('active');
                 });
-                // Muestra la página interna objetivo
                 const targetPage = document.getElementById(targetId);
                 if (targetPage) {
                     targetPage.classList.add('active');
-                    // Desplaza el contenido principal al inicio
                     document.querySelector('.main-content').scrollTop = 0;
+                }
+                // Oculta el menú en móviles después de navegar
+                if (window.innerWidth <= 768) {
+                    sidebar.classList.remove('active');
                 }
             }
 
-            // Manejar clics en los enlaces de navegación de la barra lateral
-            document.querySelectorAll('.nav-menu a').forEach(link => { // Selecciona TODOS los enlaces del nav-menu
+            document.querySelectorAll('.nav-menu a').forEach(link => {
                 link.addEventListener('click', (e) => {
-                    // Si el enlace tiene un 'data-target', es una navegación interna (SPA)
                     if (link.dataset.target) {
-                        e.preventDefault(); // Previene la recarga de la página
+                        e.preventDefault();
                         const targetId = link.dataset.target;
 
-                        // Remover 'active' de todos los enlaces internos y añadirlo al clicado
                         navLinksInternal.forEach(nav => nav.classList.remove('active'));
                         link.classList.add('active');
 
-                        // Cerrar cualquier dropdown abierto
                         document.querySelectorAll('.dropdown.open').forEach(dropdown => {
                             dropdown.classList.remove('open');
                         });
 
                         showPage(targetId);
                     }
-                    // Si no tiene 'data-target', es un enlace 'href' y el navegador lo manejará normalmente (recarga la página)
                 });
             });
 
-            // Manejar el clic en el logo de la barra lateral para ir a Inicio
             sidebarLogo.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Desactiva el estado 'active' de todos los enlaces internos
                 navLinksInternal.forEach(nav => nav.classList.remove('active'));
-                // Activa el enlace de "Inicio"
                 document.querySelector('.nav-menu a[data-target="page-inicio"]').classList.add('active');
                 showPage('page-inicio');
             });
 
-            // Manejar clics en los botones del Hero para ir a secciones específicas
             heroButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
-                    // Si el botón tiene un 'data-target', es una navegación interna (SPA)
                     if (button.dataset.target) {
-                        e.preventDefault(); // Previene la recarga de la página
+                        e.preventDefault();
                         const targetId = button.dataset.target;
-                        // Desactiva el estado 'active' de todos los enlaces internos
                         navLinksInternal.forEach(nav => nav.classList.remove('active'));
-                        // Activa el enlace correspondiente en la barra lateral
                         document.querySelector(`.nav-menu a[data-target="${targetId}"]`).classList.add('active');
                         showPage(targetId);
                     }
-                    // Si no tiene 'data-target', es un enlace 'href' y el navegador lo manejará normalmente
                 });
             });
 
-            // Manejar dropdowns en la barra lateral
             dropdownLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1069,6 +1051,16 @@
                     }
                 });
             });
+            
+            // Lógica para el botón del menú responsive
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const sidebar = document.getElementById('sidebar');
+
+            if (menuToggleBtn) {
+                menuToggleBtn.addEventListener('click', () => {
+                    sidebar.classList.toggle('active');
+                });
+            }
 
             // --- Lógica para Comprar VYT (Modal de Pago MODO y Subida de Comprobante) ---
             const buyVytButtons = document.querySelectorAll('.buy-vyt-btn');
@@ -1076,7 +1068,7 @@
             const receiptUploadModal = document.getElementById('receipt-upload-modal');
             const modalVytAmount = document.getElementById('modal-vyt-amount');
             const modalPaymentAmount = document.getElementById('modal-payment-amount');
-            const modoAlias = document.getElementById('modo-alias'); // Alias fijo por ahora
+            const modoAlias = document.getElementById('modo-alias');
             const uploadReceiptBtn = document.getElementById('upload-receipt-btn');
             const closePaymentModalBtn = document.getElementById('close-payment-modal-btn');
             const receiptFileInput = document.getElementById('receipt-file-input');
@@ -1111,7 +1103,7 @@
 
             closeReceiptModalBtn.addEventListener('click', () => {
                 receiptUploadModal.classList.remove('visible');
-                receiptFileInput.value = ''; // Limpiar input de archivo
+                receiptFileInput.value = '';
                 receiptUploadStatus.classList.add('hidden');
             });
 
@@ -1128,73 +1120,16 @@
                 receiptUploadStatus.className = 'text-sm mt-2 text-yellow-400';
                 receiptUploadStatus.classList.remove('hidden');
 
-                // Simulación de subida de archivo (en un entorno real, usarías Firebase Storage)
                 setTimeout(() => {
                     receiptUploadStatus.textContent = 'Comprobante subido exitosamente. ¡Gracias por tu compra!';
                     receiptUploadStatus.className = 'text-sm mt-2 text-green-400';
-                    receiptFileInput.value = ''; // Limpiar input de archivo
-                    // Aquí podrías cerrar el modal después de un tiempo o redirigir
+                    receiptFileInput.value = '';
                     setTimeout(() => {
                         receiptUploadModal.classList.remove('visible');
                         receiptUploadStatus.classList.add('hidden');
                     }, 3000);
                 }, 2000);
             });
-
-            // --- Integración de Firebase (para la generación de bio con IA - FUTURO) ---
-            // NOTA: Esta sección está comentada y es solo un placeholder.
-            // Para que funcione, necesitarías configurar Firebase y la función de IA.
-            /*
-            import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
-            const functions = getFunctions(app); // 'app' de tu inicialización de Firebase
-
-            const generateBioBtn = document.getElementById('generate-bio-btn');
-            const artistNameInputBio = document.getElementById('artist-name-bio');
-            const artistGenreInputBio = document.getElementById('artist-genre-bio');
-            const bioOutput = document.getElementById('bio-output');
-            const bioStatus = document.getElementById('bio-status');
-
-            if (generateBioBtn) {
-                generateBioBtn.addEventListener('click', async () => {
-                    const artistName = artistNameInputBio.value;
-                    const artistGenre = artistGenreInputBio.value;
-
-                    if (!artistName || !artistGenre) {
-                        bioStatus.textContent = 'Por favor, ingresa el nombre y género del artista.';
-                        bioStatus.className = 'text-sm mt-2 text-red-400';
-                        return;
-                    }
-
-                    bioStatus.textContent = 'Generando biografía con IA...';
-                    bioStatus.className = 'text-sm mt-2 text-yellow-400';
-                    bioOutput.textContent = '';
-                    generateBioBtn.disabled = true;
-                    generateBioBtn.innerHTML = '<span class="spinner"></span> Generando...';
-
-                    try {
-                        // Simulación de llamada a función de IA (reemplazar con la llamada real a la API de Gemini)
-                        // const generateArtistBio = httpsCallable(functions, 'generateArtistBio');
-                        // const result = await generateArtistBio({ name: artistName, genre: artistGenre });
-                        // const generatedText = result.data.bio;
-
-                        // Simulación de respuesta de IA
-                        const simulatedBio = `[Bio generada por IA para ${artistName}, género ${artistGenre}] ${artistName} es un/a talentoso/a artista de ${artistGenre} que ha cautivado al público con su estilo único y letras profundas. Su música es una fusión de ritmos vibrantes y melodías pegadizas, creando una experiencia auditiva inolvidable.`;
-                        
-                        bioOutput.textContent = simulatedBio;
-                        bioStatus.textContent = 'Biografía generada.';
-                        bioStatus.className = 'text-sm mt-2 text-green-400';
-
-                    } catch (error) {
-                        console.error("Error al generar biografía:", error);
-                        bioStatus.textContent = `Error al generar biografía: ${error.message}`;
-                        bioStatus.className = 'text-sm mt-2 text-red-400';
-                    } finally {
-                        generateBioBtn.disabled = false;
-                        generateBioBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m7 0V5a2 2 0 012-2h2a2 2 0 012 2v6m-6 0V5a2 2 0 00-2-2H9a2 2 0 00-2 2v6"></path></svg> Generar Biografía';
-                    }
-                });
-            }
-            */
         });
     </script>
 

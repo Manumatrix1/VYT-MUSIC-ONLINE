@@ -13,18 +13,19 @@
 
     <style>
         body {
+            /* Fondo oscuro y moderno */
             background-color: #121212;
             background-image: radial-gradient(circle at top, rgba(43, 183, 209, 0.2), transparent 50%);
             font-family: 'Roboto', sans-serif;
             overflow-x: hidden;
-            color: white;
+            color: white; /* Asegura el color de texto principal */
         }
         h1, .font-display {
             font-family: 'Montserrat', sans-serif;
         }
         .countdown-text {
             font-family: 'Orbitron', sans-serif;
-            color: #2dd4bf;
+            color: #2dd4bf; /* Un color turquesa brillante */
             text-shadow:
                 0 0 5px rgba(45, 212, 191, 0.7),
                 0 0 15px rgba(45, 212, 191, 0.7);
@@ -36,6 +37,8 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.5);
         }
+
+        /* Estilos para el Modal de Bienvenida */
         .modal-backdrop {
             position: fixed;
             top: 0;
@@ -57,7 +60,7 @@
             transition: opacity 0.3s ease;
         }
         .modal-content {
-            background: #161b22;
+            background: #161b22; /* Color de fondo secundario */
             padding: 2rem;
             border-radius: 15px;
             text-align: center;
@@ -65,26 +68,26 @@
             width: 90%;
             transform: scale(0.9);
             transition: transform 0.3s ease;
-            border: 1px solid #30363d;
+            border: 1px solid #30363d; /* Borde sutil */
             box-shadow: 0 8px 16px rgba(0,0,0,0.4);
         }
         .modal-backdrop.visible .modal-content {
             transform: scale(1);
         }
         .modal-content h3 {
-            font-family: 'Montserrat', sans-serif;
-            color: #58a6ff;
+            font-family: 'Montserrat', sans-serif; /* Usar font-display */
+            color: #58a6ff; /* Color primario */
             font-size: 2rem;
             margin-bottom: 1rem;
         }
         .modal-content p {
             margin-bottom: 1.5rem;
-            color: #b0b8c4;
+            color: #b0b8c4; /* Color texto secundario */
         }
         .modal-select {
             width: 100%;
             padding: 0.8rem;
-            background-color: #0d1117;
+            background-color: #0d1117; /* Color de fondo */
             border: 1px solid #30363d;
             border-radius: 8px;
             color: white;
@@ -119,8 +122,8 @@
             cursor: pointer;
         }
         .modal-btn-confirm {
-            background-color: #58a6ff;
-            color: #0d1117;
+            background-color: #58a6ff; /* Color primario */
+            color: #0d1117; /* Color de fondo */
         }
         .modal-btn-confirm:hover {
             background-color: transparent;
@@ -130,13 +133,58 @@
         }
         .modal-btn-other {
             background-color: transparent;
-            color: #e6edf3;
+            color: #e6edf3; /* Color texto principal */
             border-color: #8b949e;
         }
         .modal-btn-other:hover {
             border-color: #e6edf3;
             color: #e6edf3;
             transform: scale(1.05);
+        }
+
+        /* Estilos para el modal de suscripción */
+        .subscribe-modal-content {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 600px;
+            width: 90%;
+            border: 1px solid #30363d;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+        .subscribe-modal-content h3 {
+            color: #2bb7d1;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .subscribe-modal-content p {
+            color: #b0b8c4;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+        .subscribe-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        .subscribe-form input, .subscribe-form select {
+            width: 100%;
+            max-width: 400px;
+            padding: 0.8rem;
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+        .subscribe-form button {
+            background-color: #2bb7d1;
+            color: black;
+            width: 100%;
+            max-width: 400px;
         }
     </style>
 </head>
@@ -184,7 +232,7 @@
         <h2 class="text-2xl font-bold mb-6 font-display">¿Desde dónde vas a brillar?</h2>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-lg">
-            <a href="presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
+            <a href="inscripcion_presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Soy de Rosario</span>
                 <span class="text-sm">(o alrededores)</span>
             </a>
@@ -197,6 +245,11 @@
         <p class="text-sm mt-8 text-gray-400 max-w-md">
             (Si sos de Rosario, también podés participar de forma online. ¡Vos elegís cómo brillar!)
         </p>
+        
+        <button id="explore-btn" class="btn-choice bg-gray-600 text-white py-4 px-6 rounded-xl mt-5">
+            <span class="font-bold text-xl block">Conoce nuestro certamen</span>
+        </button>
+
     </div>
 
     <div id="welcome-modal" class="modal-backdrop">
@@ -205,39 +258,60 @@
             <p>Para ofrecerte la mejor experiencia, contanos desde dónde nos visitás.</p>
             <select id="modal-provincia-select" class="modal-select">
                 <option value="" disabled selected>Seleccioná tu provincia...</option>
-            </select>
+                </select>
             <div class="modal-buttons">
                 <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Confirmar</button>
-                <button id="modal-explore-btn" class="modal-btn modal-btn-other">Explorar el sitio</button>
             </div>
         </div>
     </div>
+    
+    <div id="subscribe-modal" class="modal-backdrop">
+        <div class="modal-content subscribe-modal-content">
+            <h3>¡Suscripción Exclusiva!</h3>
+            <p class="text-base text-gray-300">
+                👉 Suscribite y accedé a talleres de canto, coaching, mentorías y clases exclusivas. ¡Tu camino artístico empieza acá!
+            </p>
+            <form id="subscribe-form" class="subscribe-form">
+                <input type="text" id="subscribe-name" placeholder="Tu nombre completo" required>
+                <input type="email" id="subscribe-email" placeholder="Tu correo electrónico" required>
+                <select id="subscribe-province" required>
+                    <option value="" disabled selected>Seleccioná tu provincia...</option>
+                </select>
+                <input type="number" id="subscribe-age" placeholder="Tu edad" required>
+                <button type="submit" class="btn-submit">¡Quiero ser parte!</button>
+            </form>
+            <p id="subscribe-status" class="text-sm mt-2 hidden"></p>
+            <button id="close-subscribe-modal" class="text-gray-400 hover:text-white mt-4">No, gracias. Solo quiero explorar.</button>
+        </div>
+    </div>
+
 
     <script>
+        // Mapeo de códigos de provincia a nombres completos
         const provinceMapping = {
-            "ARA": "Salta",
-            "ARB": "Buenos Aires",
-            "ARC": "Ciudad de Buenos Aires",
-            "ARD": "San Luis",
-            "ARE": "Entre Ríos",
-            "ARF": "La Rioja",
-            "ARG": "Santiago del Estero",
-            "ARH": "Chaco",
-            "ARJ": "San Juan",
-            "ARK": "Catamarca",
-            "ARL": "La Pampa",
-            "ARM": "Mendoza",
-            "ARN": "Misiones",
-            "ARP": "Formosa",
-            "ARQ": "Neuquén",
-            "ARR": "Río Negro",
-            "ARS": "Santa Fe",
-            "ART": "Tucumán",
-            "ARU": "Chubut",
-            "ARV": "Tierra del Fuego",
-            "ARW": "Corrientes",
-            "ARX": "Córdoba",
-            "ARY": "Jujuy",
+            "ARA": "Salta", 
+            "ARB": "Buenos Aires", 
+            "ARC": "Ciudad de Buenos Aires", 
+            "ARD": "San Luis", 
+            "ARE": "Entre Ríos", 
+            "ARF": "La Rioja", 
+            "ARG": "Santiago del Estero", 
+            "ARH": "Chaco", 
+            "ARJ": "San Juan", 
+            "ARK": "Catamarca", 
+            "ARL": "La Pampa", 
+            "ARM": "Mendoza", 
+            "ARN": "Misiones", 
+            "ARP": "Formosa", 
+            "ARQ": "Neuquén", 
+            "ARR": "Río Negro", 
+            "ARS": "Santa Fe", 
+            "ART": "Tucumán", 
+            "ARU": "Chubut", 
+            "ARV": "Tierra del Fuego", 
+            "ARW": "Corrientes", 
+            "ARX": "Córdoba", 
+            "ARY": "Jujuy", 
             "ARZ": "Santa Cruz"
         };
 
@@ -248,8 +322,17 @@
             const modalConfirmBtn = document.getElementById('modal-confirm-btn');
             const modalExploreBtn = document.getElementById('modal-explore-btn');
 
+            const subscribeModal = document.getElementById('subscribe-modal');
+            const subscribeBtn = document.getElementById('explore-btn');
+            const closeSubscribeModalBtn = document.getElementById('close-subscribe-modal');
+            const subscribeForm = document.getElementById('subscribe-form');
+            const subscribeProvinceSelect = document.getElementById('subscribe-province');
+            const subscribeStatus = document.getElementById('subscribe-status');
+
+
+            // Lógica del Contador (ya existente)
             const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7);
+            targetDate.setDate(targetDate.getDate() + 7); // 7 días desde ahora
             const countdownFunction = setInterval(() => {
                 const now = new Date().getTime();
                 const distance = targetDate - now;
@@ -271,34 +354,71 @@
                 document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
             }, 1000);
 
+            // Llenar el desplegable del modal de bienvenida con las provincias
             for (const code in provinceMapping) {
                 if (provinceMapping.hasOwnProperty(code)) {
                     const provinceName = provinceMapping[code];
                     const option = document.createElement('option');
-                    option.value = provinceName.replace(/\s/g, '');
+                    option.value = provinceName.replace(/\s/g, ''); // Eliminar espacios para el valor del URL
                     option.textContent = provinceName;
                     modalProvinciaSelect.appendChild(option);
+                    subscribeProvinceSelect.appendChild(option.cloneNode(true)); // Clona las opciones para el otro select
                 }
             }
 
+            // Mostrar el modal cuando se hace clic en "Otra Provincia"
             otraProvinciaBtn.addEventListener('click', (event) => {
-                event.preventDefault();
+                event.preventDefault(); // Prevenir la redirección por defecto del <a>
                 welcomeModal.classList.add('visible');
             });
 
+            // Manejar la selección en el modal: Redirigir a `inscripcion_online.html` con el parámetro de provincia
             modalConfirmBtn.addEventListener('click', () => {
                 const selectedProvince = modalProvinciaSelect.value;
                 if (selectedProvince) {
-                    window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`;
+                    window.location.href = `inscripcion_online.html?prov=${encodeURIComponent(selectedProvince)}`; 
                 } else {
                     alert('Por favor, selecciona una provincia.');
                 }
             });
 
-            modalExploreBtn.addEventListener('click', () => {
-                window.location.href = `principal.html`;
+            // Manejar el botón de "Conoce nuestro certamen"
+            if (subscribeBtn) {
+                subscribeBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    subscribeModal.classList.add('visible'); // Abre el modal de suscripción
+                });
+            }
+
+            // Manejar el cierre del modal de suscripción
+            if (closeSubscribeModalBtn) {
+                closeSubscribeModalBtn.addEventListener('click', () => {
+                    window.location.href = 'principal.html'; // Redirige a la página principal
+                });
+            }
+
+            // Manejar el envío del formulario de suscripción
+            subscribeForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('subscribe-name').value;
+                const email = document.getElementById('subscribe-email').value;
+                const province = document.getElementById('subscribe-province').value;
+                const age = document.getElementById('subscribe-age').value;
+
+                // Lógica para enviar los datos de suscripción a tu base de datos o servicio de email
+                console.log(`Datos de suscripción enviados: Nombre: ${name}, Email: ${email}, Provincia: ${province}, Edad: ${age}`);
+                
+                subscribeStatus.textContent = '¡Gracias por suscribirte! Redirigiendo...';
+                subscribeStatus.className = 'text-sm mt-2 text-green-400';
+                subscribeStatus.classList.remove('hidden');
+
+                setTimeout(() => {
+                    window.location.href = 'principal.html';
+                }, 2000);
             });
         });
     </script>
+
 </body>
 </html>

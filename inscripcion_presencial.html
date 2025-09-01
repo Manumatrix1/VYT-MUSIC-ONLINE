@@ -30,6 +30,22 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
         }
+        /* Estilos para el mensaje de éxito */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background-color: #161b22;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        /* Estilos para ocultar el formulario después de mostrar el mensaje */
+        .form-content {
+            display: block;
+        }
+        .form-content.hidden {
+            display: none;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col">
@@ -39,7 +55,7 @@
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
         </div>
         <nav class="flex items-center space-x-4 text-sm">
-            <a href="presencial.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
+            <a href="principal.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
         </nav>
     </header>
 
@@ -57,8 +73,8 @@
                     <input type="text" id="nombre" name="nombre" class="w-full form-input p-3 rounded-lg" placeholder="Tu nombre completo" required>
                 </div>
                 <div>
-                    <label for="dni" class="block text-sm font-medium text-gray-300 mb-1">DNI</label>
-                    <input type="text" id="dni" name="dni" class="w-full form-input p-3 rounded-lg" placeholder="Tu número de documento" required>
+                    <label for="edad" class="block text-sm font-medium text-gray-300 mb-1">Edad</label>
+                    <input type="number" id="edad" name="edad" class="w-full form-input p-3 rounded-lg" placeholder="Tu edad" required>
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email de Contacto</label>
@@ -79,8 +95,35 @@
                     Confirmar mi lugar
                 </button>
             </form>
+
+            <div id="success-message" class="success-message">
+                <h2 class="font-display text-3xl text-[#2bb7d1] font-black mb-4">¡Gracias por confiar en vos y animarte a participar!</h2>
+                <p class="text-gray-300">Tu video está en manos de nuestro equipo.</p>
+                <p class="text-gray-400 mt-4">No olvides: el arte siempre premia a quienes nunca se dan por vencidos.</p>
+                <p class="text-gray-400 mt-4">Redirigiendo a la página principal...</p>
+            </div>
         </div>
     </main>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('form-presencial');
+            const successMessage = document.getElementById('success-message');
+
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const formData = new FormData(form);
+                console.log("Datos del formulario enviados (simulado):", Object.fromEntries(formData.entries()));
+
+                form.style.display = 'none';
+                successMessage.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'principal.html';
+                }, 3000);
+            });
+        });
+    </script>
 </body>
 </html>
