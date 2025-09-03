@@ -542,7 +542,7 @@
 
                 try {
                     const statsDocRef = doc(db, "estadisticas_generales", pozoDocId);
-                    await updateDoc(statsDocRef, { pozo_total: nuevoPozo });
+                    await setDoc(statsDocRef, { pozo_total: nuevoPozo }, { merge: true });
                     pozoFormStatus.textContent = 'Pozo de premios actualizado correctamente.';
                     pozoFormStatus.className = 'alert alert-success';
                     pozoFormStatus.classList.remove('hidden');
