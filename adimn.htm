@@ -296,27 +296,13 @@
                     <div class="dashboard-card">
                         <h4 class="font-bold text-lg mb-2">Aprobaciones Pendientes</h4>
                         <div id="pending-artists-list">
-                            <div class="artist-list-item">
-                                <div><p class="font-semibold">Artista Pendiente</p><p class="text-xs text-gray-400">Categoría: Solista</p></div>
-                                <div class="flex gap-2">
-                                    <button class="btn btn-primario px-3 py-1 text-sm">Aprobar</button>
-                                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm">Rechazar</button>
-                                </div>
-                            </div>
+                            <p class="text-center text-gray-400" id="no-pending-artists">No hay artistas pendientes de aprobación.</p>
                         </div>
                     </div>
                     <div class="dashboard-card">
                         <h4 class="font-bold text-lg mb-2">Ranking Actual</h4>
                         <div id="ranking-list">
-                            <div class="artist-list-item">
-                                <p class="font-semibold">1. Artista B</p><p>5,200 votos</p>
-                            </div>
-                            <div class="artist-list-item">
-                                <p class="font-semibold">2. Artista A</p><p>4,800 votos</p>
-                            </div>
-                            <div class="artist-list-item">
-                                <p class="font-semibold">3. Artista C</p><p>3,500 votos</p>
-                            </div>
+                            <p class="text-center text-gray-400">Sin datos de ranking.</p>
                         </div>
                     </div>
                 </div>
@@ -343,10 +329,9 @@
     </div>
     
     <script type="module">
-        // Importa los SDKs de Firebase que necesitas
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         // Tu configuración de Firebase
         const firebaseConfig = {
@@ -362,21 +347,25 @@
         // Inicializa Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-
-        // Lógica del dashboard
+        
+        // Carga de la data de las estadisticas y participantes en el DOM
         document.addEventListener('DOMContentLoaded', () => {
             const loginSection = document.getElementById('login-section');
             const adminDashboard = document.getElementById('admin-dashboard');
             const creatorAccessBtn = document.getElementById('creator-access-btn');
             const navLinks = document.querySelectorAll('aside a[data-target]');
             const pages = document.querySelectorAll('.page');
+            const pendingArtistsList = document.getElementById('pending-artists-list');
+            const pozoTotal = document.getElementById('pozo-total');
+            const statsIngresos = document.getElementById('stats-ingresos');
+            const statsVotos = document.getElementById('stats-votos');
 
             creatorAccessBtn.addEventListener('click', () => {
                 loginSection.classList.add('hidden');
                 adminDashboard.classList.remove('hidden');
                 
-                // Llama a las funciones para cargar los datos de Firebase
                 loadDashboardData();
+                setupRealtimePendingArtistsListener();
             });
 
             function showPage(targetId) {
@@ -396,28 +385,70 @@
             // Función para cargar los datos del dashboard desde Firebase
             async function loadDashboardData() {
                 try {
-                    // Cargar el total de participantes
                     const participantesRef = collection(db, "participantes");
                     const participantesSnapshot = await getDocs(participantesRef);
                     const totalParticipantes = participantesSnapshot.docs.length;
                     document.getElementById('stats-participantes').innerText = totalParticipantes;
-                    
-                    // Aquí puedes agregar más lógica para cargar otros datos
-                    // const votosRef = collection(db, "votos");
-                    // const ingresosRef = collection(db, "ingresos");
-                    
-                    // Actualizar los demás elementos del dashboard con datos reales
-                    document.getElementById('pozo-total').innerText = '$ 150.000'; // Ejemplo
-                    document.getElementById('stats-ingresos').innerText = '$ 300.000'; // Ejemplo
-                    document.getElementById('stats-votos').innerText = '25.300'; // Ejemplo
+
+                    // Cargar estadísticas generales
+                    const statsRef = doc(db, "estadisticas_generales", "resumen_certamen");
+                    const statsDoc = await getDoc(statsRef);
+                    if (statsDoc.exists()) {
+                        const stats = statsDoc.data();
+                        pozoTotal.innerText = `$ ${stats.pozo_total}`;
+                        statsIngresos.innerText = `$ ${stats.ingresos_totales}`;
+                        statsVotos.innerText = stats.votos_totales;
+                    } else {
+                        // Si el documento no existe, mostrar 0
+                        pozoTotal.innerText = `$ 0`;
+                        statsIngresos.innerText = `$ 0`;
+                        statsVotos.innerText = '0';
+                    }
                     
                     initCharts(); // Inicializar los gráficos
                 } catch (error) {
                     console.error("Error al cargar los datos del dashboard: ", error);
-                    // Aquí puedes mostrar una alerta de error en el dashboard
                 }
             }
 
+            // FUNCIÓN para escuchar cambios en tiempo real
+            function setupRealtimePendingArtistsListener() {
+                const participantesRef = collection(db, "participantes");
+                
+                onSnapshot(participantesRef, (snapshot) => {
+                    let hasPending = false;
+                    pendingArtistsList.innerHTML = '';
+                    
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        // Filtramos solo los participantes no aprobados
+                        if (!data.aprobado) {
+                            hasPending = true;
+                            const artistItem = document.createElement('div');
+                            artistItem.className = 'artist-list-item';
+                            artistItem.innerHTML = `
+                                <div>
+                                    <p class="font-semibold">${data.nombre}</p>
+                                    <p class="text-xs text-gray-400">Modalidad: ${data.modalidad}</p>
+                                    <p class="text-xs text-blue-400 break-words"><a href="${data.youtubeLink}" target="_blank">Ver video</a></p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}">Aprobar</button>
+                                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}">Rechazar</button>
+                                </div>
+                            `;
+                            pendingArtistsList.appendChild(artistItem);
+                        }
+                    });
+
+                    if (!hasPending) {
+                        pendingArtistsList.innerHTML = `<p class="text-center text-gray-400" id="no-pending-artists">No hay artistas pendientes de aprobación.</p>`;
+                    }
+                    
+                    document.getElementById('stats-participantes').innerText = snapshot.docs.length;
+                });
+            }
+            
             // Función para inicializar los gráficos
             function initCharts() {
                 var votosChartCtx = document.getElementById('votosChart').getContext('2d');
@@ -444,6 +475,21 @@
                     options: { responsive: true, maintainAspectRatio: false }
                 });
             }
+
+            // Agregamos listeners a los botones de aprobación/rechazo
+            pendingArtistsList.addEventListener('click', async (e) => {
+                if (e.target.classList.contains('approve-btn')) {
+                    const docId = e.target.dataset.id;
+                    const artistRef = doc(db, "participantes", docId);
+                    await updateDoc(artistRef, { aprobado: true });
+                    console.log(`Artista con ID ${docId} aprobado.`);
+                } else if (e.target.classList.contains('reject-btn')) {
+                    const docId = e.target.dataset.id;
+                    const artistRef = doc(db, "participantes", docId);
+                    await updateDoc(artistRef, { aprobado: false, rechazado: true }); // O podrías eliminarlo
+                    console.log(`Artista con ID ${docId} rechazado.`);
+                }
+            });
         });
     </script>
 </body>
