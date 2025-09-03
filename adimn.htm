@@ -208,7 +208,6 @@
                 <input type="password" id="admin-password" class="form-input" placeholder="********">
             </div>
             <button id="login-btn" class="btn btn-primario w-full">Iniciar Sesión</button>
-            <button id="creator-access-btn" class="btn btn-secundario w-full mt-3">Acceso de Creador (Solo Desarrollo)</button>
         </div>
     </div>
 
@@ -260,8 +259,7 @@
                     <p class="text-sm text-gray-400">Visión general y control total.</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <span class="hidden md:inline-block text-sm text-gray-400">Bienvenido, Organizador</span>
-                    <img src="https://i.ibb.co/Xz9jXg7/user-placeholder.png" alt="Perfil" class="w-10 h-10 rounded-full">
+                    <span class="hidden md:inline-block text-sm text-gray-400" id="admin-user-email">Bienvenido, Organizador</span>
                 </div>
             </header>
 
@@ -289,6 +287,17 @@
                         <p>Ingresos totales: <span id="stats-ingresos" class="text-lg font-bold text-green-400">$ 0</span></p>
                         <p>Votos totales: <span id="stats-votos" class="text-lg font-bold text-purple-400">0</span></p>
                     </div>
+                </div>
+
+                <h3 class="subsection-title">Control de Premios</h3>
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-4">Actualizar Pozo de Premios</h4>
+                    <div id="pozo-form-status" class="alert hidden"></div>
+                    <div class="form-grupo">
+                        <label for="pozo-input">Nuevo valor del Pozo (en ARS):</label>
+                        <input type="number" id="pozo-input" class="form-input" placeholder="Ej: 1500000">
+                    </div>
+                    <button id="update-pozo-btn" class="btn btn-primario w-full">Actualizar Pozo de Premios</button>
                 </div>
 
                 <h3 class="subsection-title">Gestión Rápida</h3>
@@ -324,16 +333,14 @@
                 <h3 class="subsection-title">Estadísticas Detalladas</h3>
                 <p class="text-gray-400">Reportes avanzados sobre demografía, conversión y engagement.</p>
             </div>
-
         </main>
     </div>
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-        // Tu configuración de Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
             authDomain: "vytonlineprueva.firebaseapp.com",
@@ -344,28 +351,64 @@
             measurementId: "G-PWRTMBH631"
         };
         
-        // Inicializa Firebase
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
-        
-        // Carga de la data de las estadisticas y participantes en el DOM
+
         document.addEventListener('DOMContentLoaded', () => {
             const loginSection = document.getElementById('login-section');
             const adminDashboard = document.getElementById('admin-dashboard');
-            const creatorAccessBtn = document.getElementById('creator-access-btn');
             const navLinks = document.querySelectorAll('aside a[data-target]');
             const pages = document.querySelectorAll('.page');
             const pendingArtistsList = document.getElementById('pending-artists-list');
             const pozoTotal = document.getElementById('pozo-total');
             const statsIngresos = document.getElementById('stats-ingresos');
             const statsVotos = document.getElementById('stats-votos');
+            
+            const loginBtn = document.getElementById('login-btn');
+            const adminEmailInput = document.getElementById('admin-email');
+            const adminPasswordInput = document.getElementById('admin-password');
+            const loginError = document.getElementById('login-error');
+            const pozoInput = document.getElementById('pozo-input');
+            const updatePozoBtn = document.getElementById('update-pozo-btn');
+            const pozoFormStatus = document.getElementById('pozo-form-status');
 
-            creatorAccessBtn.addEventListener('click', () => {
-                loginSection.classList.add('hidden');
-                adminDashboard.classList.remove('hidden');
-                
-                loadDashboardData();
-                setupRealtimePendingArtistsListener();
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    loginSection.classList.add('hidden');
+                    adminDashboard.classList.remove('hidden');
+                    loadDashboardData();
+                    setupRealtimePendingArtistsListener();
+                } else {
+                    loginSection.classList.remove('hidden');
+                    adminDashboard.classList.add('hidden');
+                }
+            });
+
+            loginBtn.addEventListener('click', async () => {
+                const email = adminEmailInput.value;
+                const password = adminPasswordInput.value;
+                if (!email || !password) {
+                    loginError.textContent = 'Por favor, ingresa email y contraseña.';
+                    loginError.classList.remove('hidden');
+                    return;
+                }
+                try {
+                    await signInWithEmailAndPassword(auth, email, password);
+                    loginError.classList.add('hidden');
+                } catch (error) {
+                    console.error("Error de login:", error);
+                    loginError.textContent = `Error de login: ${error.message}`;
+                    loginError.classList.remove('hidden');
+                }
+            });
+
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    console.log("Sesión cerrada");
+                }).catch((error) => {
+                    console.error("Error al cerrar sesión:", error);
+                });
             });
 
             function showPage(targetId) {
@@ -382,7 +425,6 @@
                 });
             });
 
-            // Función para cargar los datos del dashboard desde Firebase
             async function loadDashboardData() {
                 try {
                     const participantesRef = collection(db, "participantes");
@@ -390,7 +432,6 @@
                     const totalParticipantes = participantesSnapshot.docs.length;
                     document.getElementById('stats-participantes').innerText = totalParticipantes;
 
-                    // Cargar estadísticas generales
                     const statsRef = doc(db, "estadisticas_generales", "resumen_certamen");
                     const statsDoc = await getDoc(statsRef);
                     if (statsDoc.exists()) {
@@ -399,19 +440,17 @@
                         statsIngresos.innerText = `$ ${stats.ingresos_totales}`;
                         statsVotos.innerText = stats.votos_totales;
                     } else {
-                        // Si el documento no existe, mostrar 0
                         pozoTotal.innerText = `$ 0`;
                         statsIngresos.innerText = `$ 0`;
                         statsVotos.innerText = '0';
                     }
                     
-                    initCharts(); // Inicializar los gráficos
+                    initCharts();
                 } catch (error) {
                     console.error("Error al cargar los datos del dashboard: ", error);
                 }
             }
 
-            // FUNCIÓN para escuchar cambios en tiempo real
             function setupRealtimePendingArtistsListener() {
                 const participantesRef = collection(db, "participantes");
                 
@@ -421,7 +460,6 @@
                     
                     snapshot.forEach(doc => {
                         const data = doc.data();
-                        // Filtramos solo los participantes no aprobados
                         if (!data.aprobado) {
                             hasPending = true;
                             const artistItem = document.createElement('div');
@@ -449,7 +487,6 @@
                 });
             }
             
-            // Función para inicializar los gráficos
             function initCharts() {
                 var votosChartCtx = document.getElementById('votosChart').getContext('2d');
                 new Chart(votosChartCtx, {
@@ -476,7 +513,6 @@
                 });
             }
 
-            // Agregamos listeners a los botones de aprobación/rechazo
             pendingArtistsList.addEventListener('click', async (e) => {
                 if (e.target.classList.contains('approve-btn')) {
                     const docId = e.target.dataset.id;
@@ -486,8 +522,34 @@
                 } else if (e.target.classList.contains('reject-btn')) {
                     const docId = e.target.dataset.id;
                     const artistRef = doc(db, "participantes", docId);
-                    await updateDoc(artistRef, { aprobado: false, rechazado: true }); // O podrías eliminarlo
+                    await updateDoc(artistRef, { aprobado: false, rechazado: true });
                     console.log(`Artista con ID ${docId} rechazado.`);
+                }
+            });
+
+            updatePozoBtn.addEventListener('click', async () => {
+                const nuevoPozo = parseInt(pozoInput.value);
+                const pozoDocId = "resumen_certamen";
+
+                if (isNaN(nuevoPozo) || nuevoPozo < 0) {
+                    pozoFormStatus.textContent = 'Por favor, ingresa un número válido y positivo.';
+                    pozoFormStatus.className = 'alert alert-error';
+                    pozoFormStatus.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const statsDocRef = doc(db, "estadisticas_generales", pozoDocId);
+                    await updateDoc(statsDocRef, { pozo_total: nuevoPozo });
+                    pozoFormStatus.textContent = 'Pozo de premios actualizado correctamente.';
+                    pozoFormStatus.className = 'alert alert-success';
+                    pozoFormStatus.classList.remove('hidden');
+                    pozoInput.value = '';
+                } catch (error) {
+                    console.error("Error al actualizar el pozo de premios:", error);
+                    pozoFormStatus.textContent = `Error: ${error.message}`;
+                    pozoFormStatus.className = 'alert alert-error';
+                    pozoFormStatus.classList.remove('hidden');
                 }
             });
         });
