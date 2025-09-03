@@ -52,18 +52,37 @@
         /* --- NUEVA ESTRUCTURA TIPO SPOTIFY --- */
         .site-wrapper {
             display: flex;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        .sidebar {
-            width: 250px;
-            background-color: #000;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
+        /* Ocultar sidebar en móviles */
+        @media (max-width: 767px) {
+            .sidebar {
+                display: none;
+            }
+            body {
+                padding-bottom: 70px;
+            }
         }
 
+        /* Mostrar sidebar en escritorio */
+        @media (min-width: 768px) {
+            .sidebar {
+                display: flex;
+                width: 250px;
+                background-color: #000;
+                padding: 1.5rem;
+                flex-direction: column;
+                flex-shrink: 0;
+            }
+            .bottom-nav {
+                display: none;
+            }
+            body {
+                padding-bottom: 0;
+            }
+        }
+        
         .main-content {
             flex-grow: 1;
             overflow-y: auto;
@@ -273,29 +292,51 @@
             background-color: var(--color-card);
             border: 1px solid #30363d;
         }
-
-        /* --- Chat Flotante --- */
-        .chat-button {
+        
+        /* --- Barra de navegación inferior para móvil (TIPO SPOTIFY) --- */
+        .bottom-nav {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.8); /* Fondo semi-transparente */
+            backdrop-filter: blur(10px); /* Efecto de blur */
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #282828;
             z-index: 1000;
-            background-color: #25D366; /* WhatsApp Green */
-            color: white;
-            border-radius: 9999px;
-            padding: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            transition: transform 0.2s ease-in-out;
+        }
+        
+        /* Mostrar solo en móvil */
+        @media (max-width: 767px) {
+            .bottom-nav {
+                display: flex;
+            }
+        }
+
+        .bottom-nav a {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            color: var(--color-texto-secundario);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: color 0.3s ease;
+            text-align: center;
         }
-        .chat-button:hover {
-            transform: scale(1.05);
+
+        .bottom-nav a.active, .bottom-nav a:hover {
+            color: var(--color-primario);
         }
-        .chat-button svg {
-            width: 2rem;
-            height: 2rem;
+
+        .bottom-nav svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-bottom: 2px;
         }
         
         /* --- Modal --- */
@@ -425,9 +466,7 @@
             font-weight: 700;
             color: var(--color-oro);
             margin-bottom: 1rem;
-            text-shadow:
-                0 0 5px rgba(255, 215, 0, 0.7),
-                0 0 15px rgba(255, 215, 0, 0.7);
+            text-shadow: 0 0 10px #ffb70088;
         }
         .pozo-barra-dorada-container {
             width: 100%;
@@ -653,6 +692,10 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         <span>Sponsors</span>
                     </a></li>
+                    <li><a data-target="page-blog">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+                        <span>Blog</span>
+                    </a></li>
                 </ul>
             </nav>
         </aside>
@@ -677,7 +720,8 @@
                             <p>El escenario digital más grande del país te está esperando. Demostrá tu talento, conectá con miles de personas y competí por premios increíbles.</p>
                             <div class="hero-buttons">
                                 <a class="btn btn-primario" data-target="page-concurso-online">Competir Online</a>
-                                <a class="btn btn-secundario" href="presencial.html">Eventos Presenciales</a> </div>
+                                <a class="btn btn-secundario" href="presencial.html">Eventos Presenciales</a>
+                            </div>
                         </div>
                     </section>
                     
@@ -712,7 +756,7 @@
                                     <p>Mendoza</p>
                                 </div>
                             </div>
-                             <div class="ranking-home-card">
+                            <div class="ranking-home-card">
                                 <img src="https://placehold.co/180x180/282828/ffffff?text=E5" alt="Artista 5">
                                 <div class="ranking-home-info">
                                     <h4>5. Banda E</h4>
@@ -771,28 +815,28 @@
                             </div>
 
                             <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Duelos de la Semana</h3>
-                             <div class="duelo-container">
+                            <div class="duelo-container">
                                 <div class="duelo-card">
-                                     <h4>Solista A vs. Banda B</h4>
-                                     <div class="video-wrapper" style="margin-bottom: 1rem;">
+                                    <h4>Solista A vs. Banda B</h4>
+                                    <div class="video-wrapper" style="margin-bottom: 1rem;">
                                         <iframe src="https://www.youtube.com/embed/DUELO_VIDEO_ID_1_EJEMPLO" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
-                                     </div>
-                                     <button class="btn btn-primario">Votar por Solista A</button>
+                                    </div>
+                                    <button class="btn btn-primario">Votar por Solista A</button>
                                 </div>
                                 <div class="duelo-card">
-                                     <h4>Duelo</h4>
-                                     <div class="video-wrapper" style="margin-bottom: 1rem;">
+                                    <h4>Duelo</h4>
+                                    <div class="video-wrapper" style="margin-bottom: 1rem;">
                                         <iframe src="https://www.youtube.com/embed/DUELO_VIDEO_ID_2_EJEMPLO" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
-                                     </div>
-                                     <button class="btn btn-primario">Votar por Banda B</button>
+                                    </div>
+                                    <button class="btn btn-primario">Votar por Banda B</button>
                                 </div>
-                             </div>
+                            </div>
 
-                             <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Tu Avatar</h3>
-                             <div class="avatar-container">
-                                 <div class="avatar-placeholder">🎤</div>
-                                 <p>¡Próximamente podrás personalizar tu avatar con estilos únicos, micrófonos y más! <br>Gana o compra ítems exclusivos con VYT.</p>
-                             </div>
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Tu Avatar</h3>
+                            <div class="avatar-container">
+                                <div class="avatar-placeholder">🎤</div>
+                                <p>¡Próximamente podrás personalizar tu avatar con estilos únicos, micrófonos y más! <br>Gana o compra ítems exclusivos con VYT.</p>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -831,7 +875,7 @@
                             <p class="subtitulo-seccion">Elegí la modalidad que mejor se adapte a vos y comenzá tu camino hacia el estrellato.</p>
                             
                             <div class="inscripcion-choice-buttons">
-                                <a href="inscripcion.html" class="btn btn-online">
+                                <a href="inscripcion_online.html" class="btn btn-online">
                                     Inscripción Online
                                     <span class="btn-text-small">(Desde cualquier lugar de Argentina o el mundo)</span>
                                 </a>
@@ -948,12 +992,20 @@
                     </section>
                 </div>
 
+                <div id="page-blog" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Nuestro Blog</h2>
+                            <p class="subtitulo-seccion">Mantente al tanto de las últimas noticias, ganadores y eventos del certamen.</p>
+                            
+                            <div id="blog-posts-container" class="blog-grid">
+                                <p class="text-center text-gray-500">Cargando posts del blog...</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </main>
             
-            <a href="https://wa.me/TUNUMERODEWHATSAPP" target="_blank" class="chat-button" title="Chatear por WhatsApp">
-                <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2.02c-5.47 0-9.91 4.44-9.91 9.91 0 1.75.46 3.44 1.34 4.95L2 22l5.24-1.39c1.45.79 3.09 1.25 4.79 1.25 5.47 0 9.91-4.44 9.91-9.91s-4.44-9.91-9.91-9.91zm.04 1.77c4.49 0 8.14 3.65 8.14 8.14s-3.65 8.14-8.14 8.14c-1.58 0-3.1-.45-4.41-1.22l-.31-.18-3.25.86.87-3.16-.2-.33c-.8-1.3-1.22-2.8-1.22-4.34 0-4.49 3.65-8.14 8.14-8.14zm4.58 11.75l-.3-.15c-.3-.15-.7-.34-.99-.34-.29 0-.58.15-.87.44s-.65.7-.79.84c-.15.15-.29.15-.58.05-.29-.15-1.21-.44-2.31-1.42-.85-.75-1.42-1.69-1.58-1.98-.15-.29 0-.44.1-.58s.22-.29.3-.44c.07-.15.15-.29.22-.44.07-.15.05-.29.05-.44s-.05-.29-.15-.44c-.1-.15-.58-1.39-.79-1.93-.22-.54-.44-.44-.58-.44h-.29c-.15 0-.44.05-.7.29-.26.29-1 .99-1 2.42s1.02 2.8 1.17 3c.15.29 1.93 2.96 4.67 4.16 2.74 1.2 2.74.87 3.25.84.51-.05 1.45-.58 1.65-1.17.2-.58.2-.99.15-1.07-.05-.15-.22-.24-.44-.39z"/></svg>
-            </a>
-
             <div id="modo-payment-modal" class="modal-backdrop">
                 <div class="modal-content">
                     <h3>Pago con MODO</h3>
@@ -981,11 +1033,29 @@
 
         </div>
     </div>
-
+    
+    <nav class="bottom-nav">
+        <a data-target="page-inicio" class="active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span>Inicio</span>
+        </a>
+        <a data-target="page-concurso-online">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            <span>Concursos</span>
+        </a>
+        <a data-target="page-inscripcion">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            <span>Inscripción</span>
+        </a>
+        <a data-target="page-blog">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+            <span>Blog</span>
+        </a>
+    </nav>
+    
     <script type="module">
-        // Importaciones de Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, onSnapshot, doc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
@@ -1001,8 +1071,8 @@
         const db = getFirestore(app);
 
         document.addEventListener('DOMContentLoaded', () => {
-            // --- CÓDIGO EXISTENTE DE NAVEGACIÓN SPA Y MODALES ---
-            const navLinksInternal = document.querySelectorAll('.nav-menu a[data-target]');
+            const sidebarLinks = document.querySelectorAll('.nav-menu a[data-target]');
+            const bottomNavLinks = document.querySelectorAll('.bottom-nav a[data-target]');
             const dropdownLinks = document.querySelectorAll('.dropdown > a');
             const pages = document.querySelectorAll('.page');
             const sidebarLogo = document.querySelector('.sidebar-logo');
@@ -1012,13 +1082,14 @@
             const receiptUploadModal = document.getElementById('receipt-upload-modal');
             const modalVytAmount = document.getElementById('modal-vyt-amount');
             const modalPaymentAmount = document.getElementById('modal-payment-amount');
-            const modoAlias = document.getElementById('modo-alias'); 
+            const modoAlias = document.getElementById('modo-alias');
             const uploadReceiptBtn = document.getElementById('upload-receipt-btn');
             const closePaymentModalBtn = document.getElementById('close-payment-modal-btn');
             const receiptFileInput = document.getElementById('receipt-file-input');
             const submitReceiptBtn = document.getElementById('submit-receipt-btn');
-            const receiptUploadStatus = document.getElementById('receipt-upload-status');
             const closeReceiptModalBtn = document.getElementById('close-receipt-modal-btn');
+            const blogPostsContainer = document.getElementById('blog-posts-container');
+            
             let currentPurchase = { vyt: 0, amount: 0 };
 
             function showPage(targetId) {
@@ -1030,25 +1101,40 @@
                 }
             }
 
-            document.querySelectorAll('.nav-menu a').forEach(link => {
+            const allInternalLinks = document.querySelectorAll('.nav-menu a[data-target], .bottom-nav a[data-target]');
+            allInternalLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    if (link.dataset.target) {
-                        e.preventDefault();
-                        const targetId = link.dataset.target;
-                        navLinksInternal.forEach(nav => nav.classList.remove('active'));
-                        link.classList.add('active');
-                        document.querySelectorAll('.dropdown.open').forEach(dropdown => {
-                            dropdown.classList.remove('open');
-                        });
-                        showPage(targetId);
-                    }
+                    e.preventDefault();
+                    const targetId = link.dataset.target;
+                    
+                    allInternalLinks.forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
+
+                    sidebarLinks.forEach(sl => {
+                        if (sl.dataset.target === targetId) {
+                            sl.classList.add('active');
+                        }
+                    });
+                    bottomNavLinks.forEach(bl => {
+                        if (bl.dataset.target === targetId) {
+                            bl.classList.add('active');
+                        }
+                    });
+
+                    document.querySelectorAll('.dropdown.open').forEach(dropdown => {
+                        dropdown.classList.remove('open');
+                    });
+
+                    showPage(targetId);
                 });
             });
 
             sidebarLogo.addEventListener('click', (e) => {
                 e.preventDefault();
-                navLinksInternal.forEach(nav => nav.classList.remove('active'));
+                allInternalLinks.forEach(nav => nav.classList.remove('active'));
                 document.querySelector('.nav-menu a[data-target="page-inicio"]').classList.add('active');
+                const bottomInicio = document.querySelector('.bottom-nav a[data-target="page-inicio"]');
+                if (bottomInicio) bottomInicio.classList.add('active');
                 showPage('page-inicio');
             });
 
@@ -1057,8 +1143,10 @@
                     if (button.dataset.target) {
                         e.preventDefault();
                         const targetId = button.dataset.target;
-                        navLinksInternal.forEach(nav => nav.classList.remove('active'));
+                        allInternalLinks.forEach(nav => nav.classList.remove('active'));
                         document.querySelector(`.nav-menu a[data-target="${targetId}"]`).classList.add('active');
+                        const bottomLink = document.querySelector(`.bottom-nav a[data-target="${targetId}"]`);
+                        if (bottomLink) bottomLink.classList.add('active');
                         showPage(targetId);
                     }
                 });
@@ -1078,6 +1166,7 @@
                 button.addEventListener('click', () => {
                     currentPurchase.vyt = button.dataset.vyt;
                     currentPurchase.amount = button.dataset.amount;
+
                     modalVytAmount.textContent = currentPurchase.vyt;
                     modalPaymentAmount.textContent = `$${currentPurchase.amount} ARS`;
                     modoPaymentModal.classList.add('visible');
@@ -1110,7 +1199,6 @@
                 receiptUploadStatus.textContent = 'Subiendo comprobante...';
                 receiptUploadStatus.className = 'text-sm mt-2 text-yellow-400';
                 receiptUploadStatus.classList.remove('hidden');
-
                 setTimeout(() => {
                     receiptUploadStatus.textContent = 'Comprobante subido exitosamente. ¡Gracias por tu compra!';
                     receiptUploadStatus.className = 'text-sm mt-2 text-green-400';
@@ -1122,28 +1210,76 @@
                 }, 2000);
             });
             
-            // --- CÓDIGO PARA OBTENER EL POZO DE PREMIOS DE FIREBASE ---
             const pozoTextElement = document.getElementById('pozoText');
             const pozoBarElement = document.querySelector('.pozo-bar');
-            
-            // Escuchar cambios en el documento del pozo en tiempo real
             const pozoDocRef = doc(db, "estadisticas_generales", "resumen_certamen");
             onSnapshot(pozoDocRef, (doc) => {
                 if (doc.exists()) {
                     const pozoActual = doc.data().pozo_total;
                     pozoTextElement.textContent = `$ ${pozoActual.toLocaleString('es-AR')}`;
-
-                    // Calcular el ancho de la barra (ej. basado en un objetivo de 2 millones)
                     const pozoObjetivo = 2000000;
                     const porcentaje = Math.min(100, (pozoActual / pozoObjetivo) * 100);
                     pozoBarElement.style.width = `${porcentaje}%`;
                 } else {
-                    // Si el documento no existe, inicializar el pozo en 0
                     pozoTextElement.textContent = `$ 0`;
                     pozoBarElement.style.width = `0%`;
                 }
             });
-            // --- FIN DEL CÓDIGO DE FIREBASE ---
+            
+            async function loadBlogPosts() {
+                blogPostsContainer.innerHTML = '<p class="text-center text-gray-500">Cargando posts del blog...</p>';
+                try {
+                    const q = query(collection(db, "blog"), orderBy("createdAt", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    
+                    if (querySnapshot.empty) {
+                        blogPostsContainer.innerHTML = '<p class="text-center text-gray-500">No hay posts de blog disponibles en este momento.</p>';
+                        return;
+                    }
+                    
+                    blogPostsContainer.innerHTML = '';
+                    querySnapshot.forEach((docItem) => {
+                        const post = docItem.data();
+                        const postElement = document.createElement('div');
+                        postElement.className = 'blog-post-card';
+                        
+                        let formattedDate = '';
+                        if (post.createdAt && post.createdAt.toDate) {
+                            formattedDate = new Date(post.createdAt.toDate()).toLocaleDateString('es-AR', {
+                                year: 'numeric', month: 'long', day: 'numeric'
+                            });
+                        }
+
+                        postElement.innerHTML = `
+                            ${post.imagenUrl ? `<img src="${post.imagenUrl}" alt="${post.titulo}" class="w-full h-48 object-cover">` : ''}
+                            <div class="blog-post-info">
+                                <h4>${post.titulo}</h4>
+                                <p class="date">${formattedDate}</p>
+                                <p class="snippet">${post.contenido.substring(0, 150)}...</p>
+                            </div>
+                        `;
+                        blogPostsContainer.appendChild(postElement);
+                    });
+                } catch (error) {
+                    console.error("Error al cargar los posts del blog:", error);
+                    blogPostsContainer.innerHTML = '<p class="text-center text-red-500">Error al cargar los posts. Por favor, inténtalo de nuevo más tarde.</p>';
+                }
+            }
+
+            const blogLink = document.querySelector('a[data-target="page-blog"]');
+            if (blogLink) {
+                blogLink.addEventListener('click', () => {
+                    if (blogPostsContainer.innerHTML.includes('Cargando')) {
+                        loadBlogPosts();
+                    }
+                });
+            }
+
+            if (window.location.hash === '#page-blog') {
+                showPage('page-blog');
+                loadBlogPosts();
+            }
+
         });
     </script>
 </body>

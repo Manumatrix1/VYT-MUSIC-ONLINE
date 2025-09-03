@@ -238,6 +238,14 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                         <span>Ingresos y Pagos</span>
                     </a></li>
+                    <li><a href="#" data-target="page-ciudades" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21c2.19 0 4.19-.89 5.66-2.34A8 8 0 0012 5a8 8 0 00-5.66 13.66A8 8 0 0012 21z"></path><path d="M12 13a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                        <span>Ciudades/Gira</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-blog" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+                        <span>Blog</span>
+                    </a></li>
                     <li><a href="#" data-target="page-estadisticas" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V3l-5 4V3L4 14h5l-1 7z"></path></svg>
                         <span>Estadísticas</span>
@@ -321,14 +329,72 @@
                 <h3 class="subsection-title">Gestión de Participantes</h3>
                 <p class="text-gray-400">Aquí se gestionan las inscripciones, videos, y la información de los participantes.</p>
             </div>
+            
             <div id="page-duelos" class="page hidden">
                 <h3 class="subsection-title">Gestión de Duelos y Rondas</h3>
                 <p class="text-gray-400">Interfaz para emparejar artistas, programar duelos y ver resultados.</p>
             </div>
+            
             <div id="page-ingresos" class="page hidden">
                 <h3 class="subsection-title">Ingresos y Pagos</h3>
                 <p class="text-gray-400">Detalles de ingresos por votos, tickets y donaciones.</p>
             </div>
+            
+            <div id="page-ciudades" class="page hidden">
+                <h3 class="subsection-title">Gestión de Ciudades de la Gira</h3>
+                <form id="ciudades-form" class="dashboard-card">
+                    <input type="hidden" id="ciudad-id">
+                    <div class="form-grupo">
+                        <label for="ciudad-nombre">Nombre de la Ciudad:</label>
+                        <input type="text" id="ciudad-nombre" class="form-input" placeholder="Ej: Córdoba" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="ciudad-fecha">Fecha del Evento:</label>
+                        <input type="date" id="ciudad-fecha" class="form-input" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="ciudad-lugar">Lugar del Evento:</label>
+                        <input type="text" id="ciudad-lugar" class="form-input" placeholder="Ej: Teatro Plaza" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="ciudad-url">URL de Inscripción:</label>
+                        <input type="url" id="ciudad-url" class="form-input" placeholder="https://vytmusic.com/inscripcion/cordoba" required>
+                    </div>
+                    <button type="submit" id="save-ciudad-btn" class="btn btn-primario w-full">Guardar Ciudad</button>
+                    <button type="button" id="clear-ciudad-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
+                </form>
+                <h3 class="subsection-title">Lista de Ciudades</h3>
+                <div id="ciudades-list" class="space-y-4">
+                    <p class="text-gray-500">Cargando ciudades...</p>
+                </div>
+            </div>
+
+            <div id="page-blog" class="page hidden">
+                <h3 class="subsection-title">Gestión del Blog</h3>
+                <form id="blog-form" class="dashboard-card">
+                    <input type="hidden" id="post-id">
+                    <div class="form-grupo">
+                        <label for="post-titulo">Título del Post:</label>
+                        <input type="text" id="post-titulo" class="form-input" placeholder="Ej: Ganadores de la Semana" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="post-contenido">Contenido:</label>
+                        <textarea id="post-contenido" class="form-input" rows="6" placeholder="Escribe el contenido del post aquí..."></textarea>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="post-image-file">Imagen Principal:</label>
+                        <input type="file" id="post-image-file" class="form-input" accept="image/png, image/jpeg">
+                        <p id="image-upload-status" class="text-sm mt-1 text-gray-400"></p>
+                    </div>
+                    <button type="submit" id="save-post-btn" class="btn btn-primario w-full">Guardar Post</button>
+                    <button type="button" id="clear-post-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
+                </form>
+                <h3 class="subsection-title">Últimos Posts Publicados</h3>
+                <div id="posts-list" class="space-y-4">
+                    <p class="text-gray-500">Cargando posts...</p>
+                </div>
+            </div>
+
             <div id="page-estadisticas" class="page hidden">
                 <h3 class="subsection-title">Estadísticas Detalladas</h3>
                 <p class="text-gray-400">Reportes avanzados sobre demografía, conversión y engagement.</p>
@@ -339,7 +405,8 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
         const firebaseConfig = {
@@ -355,6 +422,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app); // Inicializa Storage
         const analytics = getAnalytics(app);
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -375,12 +443,37 @@
             const updatePozoBtn = document.getElementById('update-pozo-btn');
             const pozoFormStatus = document.getElementById('pozo-form-status');
 
+            // Elementos del DOM para la gestión de ciudades
+            const ciudadesForm = document.getElementById('ciudades-form');
+            const ciudadIdInput = document.getElementById('ciudad-id');
+            const ciudadNombreInput = document.getElementById('ciudad-nombre');
+            const ciudadFechaInput = document.getElementById('ciudad-fecha');
+            const ciudadLugarInput = document.getElementById('ciudad-lugar');
+            const ciudadUrlInput = document.getElementById('ciudad-url');
+            const saveCiudadBtn = document.getElementById('save-ciudad-btn');
+            const clearCiudadFormBtn = document.getElementById('clear-ciudad-form-btn');
+            const ciudadesListDiv = document.getElementById('ciudades-list');
+
+            // Elementos del DOM para la gestión de blog
+            const blogForm = document.getElementById('blog-form');
+            const postIdInput = document.getElementById('post-id');
+            const postTituloInput = document.getElementById('post-titulo');
+            const postContenidoInput = document.getElementById('post-contenido');
+            const postImageFileInput = document.getElementById('post-image-file'); // Nuevo input de archivo
+            const imageUploadStatus = document.getElementById('image-upload-status'); // Nuevo estado
+            const savePostBtn = document.getElementById('save-post-btn');
+            const clearPostFormBtn = document.getElementById('clear-post-form-btn');
+            const postsListDiv = document.getElementById('posts-list');
+
+
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     loginSection.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
                     loadDashboardData();
                     setupRealtimePendingArtistsListener();
+                    loadCiudades(); // Cargar ciudades al iniciar sesión
+                    loadPosts(); // Cargar posts al iniciar sesión
                 } else {
                     loginSection.classList.remove('hidden');
                     adminDashboard.classList.add('hidden');
@@ -554,6 +647,160 @@
                     pozoFormStatus.classList.remove('hidden');
                 }
             });
+
+            // Lógica para Ciudades/Gira
+            ciudadesForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nombre = ciudadNombreInput.value;
+                const fecha = ciudadFechaInput.value;
+                const lugar = ciudadLugarInput.value;
+                const url = ciudadUrlInput.value;
+
+                if (!nombre || !fecha || !lugar || !url) {
+                    console.error("Todos los campos de la ciudad son obligatorios.");
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, "ciudades_presenciales"), {
+                        nombre,
+                        fecha,
+                        lugar,
+                        url,
+                        createdAt: serverTimestamp()
+                    });
+                    ciudadesForm.reset();
+                    loadCiudades();
+                } catch (error) {
+                    console.error("Error al guardar la ciudad:", error);
+                }
+            });
+
+            async function loadCiudades() {
+                ciudadesListDiv.innerHTML = '<p class="text-gray-500">Cargando ciudades...</p>';
+                try {
+                    const q = query(collection(db, "ciudades_presenciales"), orderBy("fecha", "asc"));
+                    const querySnapshot = await getDocs(q);
+                    ciudadesListDiv.innerHTML = '';
+                    querySnapshot.forEach((docItem) => {
+                        const ciudad = docItem.data();
+                        const ciudadItem = document.createElement('div');
+                        ciudadItem.className = 'artist-list-item';
+                        ciudadItem.innerHTML = `
+                            <div>
+                                <p class="font-semibold">${ciudad.nombre}</p>
+                                <p class="text-xs text-gray-400">${ciudad.lugar} - ${ciudad.fecha}</p>
+                                <a href="${ciudad.url}" target="_blank" class="text-xs text-blue-400 break-words">Enlace</a>
+                            </div>
+                            <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm" onclick="deleteCiudad('${docItem.id}')">Eliminar</button>
+                        `;
+                        ciudadesListDiv.appendChild(ciudadItem);
+                    });
+                } catch (error) {
+                    console.error("Error al cargar ciudades:", error);
+                }
+            }
+
+            window.deleteCiudad = async (id) => {
+                const confirmed = confirm("¿Estás seguro de que quieres eliminar esta ciudad?");
+                if (confirmed) {
+                    try {
+                        await deleteDoc(doc(db, "ciudades_presenciales", id));
+                        loadCiudades();
+                    } catch (error) {
+                        console.error("Error al eliminar la ciudad:", error);
+                    }
+                }
+            };
+
+            // Lógica para Blog (ahora con carga de imagen integrada)
+            blogForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const titulo = postTituloInput.value;
+                const contenido = postContenidoInput.value;
+                const imageFile = postImageFileInput.files[0];
+                let imagenUrl = '';
+
+                if (!titulo || !contenido) {
+                    alert("El título y el contenido del post son obligatorios.");
+                    return;
+                }
+
+                imageUploadStatus.textContent = 'Subiendo imagen...';
+                imageUploadStatus.className = 'text-sm mt-1 text-yellow-400';
+
+                try {
+                    // Si se seleccionó un archivo, subirlo a Storage
+                    if (imageFile) {
+                        const storageRef = ref(storage, `blog_images/${Date.now()}-${imageFile.name}`);
+                        const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+                        await uploadTask; // Esperar a que la subida termine
+                        imagenUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                        imageUploadStatus.textContent = 'Imagen subida exitosamente.';
+                        imageUploadStatus.className = 'text-sm mt-1 text-green-400';
+                    }
+
+                    // Guardar el post en Firestore con la URL de la imagen (o vacía si no se subió ninguna)
+                    await addDoc(collection(db, "blog"), {
+                        titulo,
+                        contenido,
+                        imagenUrl,
+                        createdAt: serverTimestamp()
+                    });
+                    
+                    alert('Post guardado correctamente.');
+                    blogForm.reset();
+                    imageUploadStatus.textContent = '';
+                    loadPosts();
+                } catch (error) {
+                    console.error("Error al guardar el post:", error);
+                    alert(`Error al guardar el post: ${error.message}`);
+                    imageUploadStatus.textContent = `Error al subir imagen: ${error.message}`;
+                    imageUploadStatus.className = 'alert alert-error';
+                }
+            });
+
+            clearPostFormBtn.addEventListener('click', () => {
+                blogForm.reset();
+                imageUploadStatus.textContent = '';
+            });
+
+            async function loadPosts() {
+                postsListDiv.innerHTML = '<p class="text-gray-500">Cargando posts...</p>';
+                try {
+                    const q = query(collection(db, "blog"), orderBy("createdAt", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    postsListDiv.innerHTML = '';
+                    querySnapshot.forEach((docItem) => {
+                        const post = docItem.data();
+                        const postItem = document.createElement('div');
+                        postItem.className = 'dashboard-card mb-4';
+                        postItem.innerHTML = `
+                            <h4 class="font-bold">${post.titulo}</h4>
+                            <p class="text-xs text-gray-400">${new Date(post.createdAt.toDate()).toLocaleDateString()}</p>
+                            ${post.imagenUrl ? `<img src="${post.imagenUrl}" alt="Imagen del post" class="w-24 h-24 object-cover mt-2 rounded-lg">` : ''}
+                            <p class="mt-2 text-sm">${post.contenido.substring(0, 100)}...</p>
+                            <button class="bg-red-600 text-white px-3 py-1 rounded-full text-xs mt-2" onclick="deletePost('${docItem.id}')">Eliminar</button>
+                        `;
+                        postsListDiv.appendChild(postItem);
+                    });
+                } catch (error) {
+                    console.error("Error al cargar posts:", error);
+                }
+            }
+
+            window.deletePost = async (id) => {
+                const confirmed = confirm("¿Estás seguro de que quieres eliminar este post?");
+                if (confirmed) {
+                    try {
+                        await deleteDoc(doc(db, "blog", id));
+                        loadPosts();
+                    } catch (error) {
+                        console.error("Error al eliminar el post:", error);
+                    }
+                }
+            };
         });
     </script>
 </body>
