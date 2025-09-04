@@ -30,21 +30,9 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
         }
-        /* Estilos para el mensaje de éxito */
-        .success-message {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-            background-color: #161b22;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-        }
-        /* Estilos para ocultar el formulario después de mostrar el mensaje */
-        .form-content {
-            display: block;
-        }
-        .form-content.hidden {
-            display: none;
+        /* Ocultar la burbuja de texto de Tawk.to */
+        .tawk-minimized-container .tawk-text-bubble {
+            display: none !important;
         }
     </style>
 </head>
@@ -73,8 +61,8 @@
                     <input type="text" id="nombre" name="nombre" class="w-full form-input p-3 rounded-lg" placeholder="Tu nombre completo" required>
                 </div>
                 <div>
-                    <label for="edad" class="block text-sm font-medium text-gray-300 mb-1">Edad</label>
-                    <input type="number" id="edad" name="edad" class="w-full form-input p-3 rounded-lg" placeholder="Tu edad" required>
+                    <label for="dni" class="block text-sm font-medium text-gray-300 mb-1">DNI</label>
+                    <input type="text" id="dni" name="dni" class="w-full form-input p-3 rounded-lg" placeholder="Tu número de documento" required>
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email de Contacto</label>
@@ -84,46 +72,24 @@
                     <label for="telefono" class="block text-sm font-medium text-gray-300 mb-1">Teléfono (WhatsApp)</label>
                     <input type="tel" id="telefono" name="telefono" class="w-full form-input p-3 rounded-lg" placeholder="Para mantenerte al tanto de todo" required>
                 </div>
-                <div>
-                    <label for="video-link" class="block text-sm font-medium text-gray-300 mb-1">Link a tu video de Casting</label>
-                    <input type="url" id="video-link" name="video-link" class="w-full form-input p-3 rounded-lg" placeholder="Pegá el link de YouTube, TikTok, etc." required>
-                    <p class="text-xs text-gray-500 mt-2">Si no tenés un link, contactanos por <a href="https://wa.me/5493417422062" class="text-blue-400 hover:underline">WhatsApp</a>.</p>
-                </div>
-                
 
                 <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
                     Confirmar mi lugar
                 </button>
             </form>
-
-            <div id="success-message" class="success-message">
-                <h2 class="font-display text-3xl text-[#2bb7d1] font-black mb-4">¡Gracias por confiar en vos y animarte a participar!</h2>
-                <p class="text-gray-300">Tu video está en manos de nuestro equipo.</p>
-                <p class="text-gray-400 mt-4">No olvides: el arte siempre premia a quienes nunca se dan por vencidos.</p>
-                <p class="text-gray-400 mt-4">Redirigiendo a la página principal...</p>
-            </div>
         </div>
     </main>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const form = document.getElementById('form-presencial');
-            const successMessage = document.getElementById('success-message');
-
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                const formData = new FormData(form);
-                console.log("Datos del formulario enviados (simulado):", Object.fromEntries(formData.entries()));
-
-                form.style.display = 'none';
-                successMessage.style.display = 'block';
-
-                setTimeout(() => {
-                    window.location.href = 'principal.html';
-                }, 3000);
-            });
-        });
+    
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
     </script>
 </body>
 </html>

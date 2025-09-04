@@ -675,7 +675,8 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a data-target="page-concurso-online">Online</a></li>
-                            <li><a href="presencial.html">Presencial</a></li> </ul>
+                            <li><a href="inscripcion_presencial.html">Presencial</a></li> 
+                        </ul>
                     </li>
                     <li><a data-target="page-inscripcion"> <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         <span>Inscripción</span>
@@ -692,7 +693,7 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         <span>Sponsors</span>
                     </a></li>
-                    <li><a data-target="page-blog">
+                    <li><a href="blog.html">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
                         <span>Blog</span>
                     </a></li>
@@ -952,6 +953,7 @@
                                 <div class="reglamento-seccion">
                                     <h3>5. Derechos de Imagen y Contenido</h3>
                                     <p>5.1. Al inscribirse, los participantes ceden a VYT MUSIC los derechos de uso de sus videos y material fotográfico para fines de difusión y promoción del certamen.</p>
+                                    <p>5.2. Los participantes garantizan que el contenido subido es de su autoría y no infringe derechos de terceros.</p>
                                 </div>
                                 <div class="reglamento-seccion">
                                     <h3>6. Disposiciones Generales</h3>
@@ -987,19 +989,6 @@
                                     <p class="text-gray-400">Instrumentos y accesorios.</p>
                                     <a href="#" class="text-blue-400 hover:underline mt-2 inline-block">Visitar sitio</a>
                                 </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-
-                <div id="page-blog" class="page">
-                    <section class="seccion">
-                        <div class="container">
-                            <h2 class="titulo-seccion">Nuestro Blog</h2>
-                            <p class="subtitulo-seccion">Mantente al tanto de las últimas noticias, ganadores y eventos del certamen.</p>
-                            
-                            <div id="blog-posts-container" class="blog-grid">
-                                <p class="text-center text-gray-500">Cargando posts del blog...</p>
                             </div>
                         </div>
                     </section>
@@ -1047,7 +1036,7 @@
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
             <span>Inscripción</span>
         </a>
-        <a data-target="page-blog">
+        <a href="blog.html">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
             <span>Blog</span>
         </a>
@@ -1055,7 +1044,7 @@
     
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, onSnapshot, doc, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
@@ -1088,7 +1077,6 @@
             const receiptFileInput = document.getElementById('receipt-file-input');
             const submitReceiptBtn = document.getElementById('submit-receipt-btn');
             const closeReceiptModalBtn = document.getElementById('close-receipt-modal-btn');
-            const blogPostsContainer = document.getElementById('blog-posts-container');
             
             let currentPurchase = { vyt: 0, amount: 0 };
 
@@ -1226,60 +1214,15 @@
                 }
             });
             
-            async function loadBlogPosts() {
-                blogPostsContainer.innerHTML = '<p class="text-center text-gray-500">Cargando posts del blog...</p>';
-                try {
-                    const q = query(collection(db, "blog"), orderBy("createdAt", "desc"));
-                    const querySnapshot = await getDocs(q);
-                    
-                    if (querySnapshot.empty) {
-                        blogPostsContainer.innerHTML = '<p class="text-center text-gray-500">No hay posts de blog disponibles en este momento.</p>';
-                        return;
-                    }
-                    
-                    blogPostsContainer.innerHTML = '';
-                    querySnapshot.forEach((docItem) => {
-                        const post = docItem.data();
-                        const postElement = document.createElement('div');
-                        postElement.className = 'blog-post-card';
-                        
-                        let formattedDate = '';
-                        if (post.createdAt && post.createdAt.toDate) {
-                            formattedDate = new Date(post.createdAt.toDate()).toLocaleDateString('es-AR', {
-                                year: 'numeric', month: 'long', day: 'numeric'
-                            });
-                        }
-
-                        postElement.innerHTML = `
-                            ${post.imagenUrl ? `<img src="${post.imagenUrl}" alt="${post.titulo}" class="w-full h-48 object-cover">` : ''}
-                            <div class="blog-post-info">
-                                <h4>${post.titulo}</h4>
-                                <p class="date">${formattedDate}</p>
-                                <p class="snippet">${post.contenido.substring(0, 150)}...</p>
-                            </div>
-                        `;
-                        blogPostsContainer.appendChild(postElement);
-                    });
-                } catch (error) {
-                    console.error("Error al cargar los posts del blog:", error);
-                    blogPostsContainer.innerHTML = '<p class="text-center text-red-500">Error al cargar los posts. Por favor, inténtalo de nuevo más tarde.</p>';
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                const targetLink = document.querySelector(`a[data-target="${targetId}"]`);
+                if (targetLink) {
+                    allInternalLinks.forEach(nav => nav.classList.remove('active'));
+                    targetLink.classList.add('active');
+                    showPage(targetId);
                 }
             }
-
-            const blogLink = document.querySelector('a[data-target="page-blog"]');
-            if (blogLink) {
-                blogLink.addEventListener('click', () => {
-                    if (blogPostsContainer.innerHTML.includes('Cargando')) {
-                        loadBlogPosts();
-                    }
-                });
-            }
-
-            if (window.location.hash === '#page-blog') {
-                showPage('page-blog');
-                loadBlogPosts();
-            }
-
         });
     </script>
 </body>
