@@ -11,6 +11,7 @@
             background-color: #121212;
             font-family: 'Roboto', sans-serif;
             color: white;
+            overflow-x: hidden;
         }
         .font-display { font-family: 'Montserrat', sans-serif; }
         .form-input {
@@ -33,6 +34,119 @@
         /* Ocultar la burbuja de texto de Tawk.to */
         .tawk-minimized-container .tawk-text-bubble {
             display: none !important;
+        }
+        /* --- Estilos para el Modal de Confirmación --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0s 0.3s;
+        }
+        .modal-backdrop.visible {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            background: #161b22;
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+            border: 1px solid #30363d;
+            position: relative;
+            overflow: hidden;
+        }
+        .modal-backdrop.visible .modal-content {
+            transform: scale(1);
+        }
+        .modal-title {
+            font-family: 'Montserrat', sans-serif;
+            color: #ffffff;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff;
+        }
+        .modal-text {
+            margin-bottom: 1.5rem;
+            color: #b0b8c4;
+            line-height: 1.6;
+        }
+        .modal-btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+            background-color: #58a6ff;
+            color: #121212;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+        }
+        .modal-btn:hover {
+            background-color: transparent;
+            border-color: #58a6ff;
+            color: #58a6ff;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.8);
+        }
+        @keyframes noteFall {
+            0% { transform: translate(0, -100%) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(0, 100vh) rotate(360deg); opacity: 0; }
+        }
+        .musical-note {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+            animation: noteFall linear infinite;
+        }
+        .note-delay-1 { animation-delay: 0s; left: 10%; animation-duration: 8s; }
+        .note-delay-2 { animation-delay: 1s; left: 30%; animation-duration: 7s; font-size: 1.5rem;}
+        .note-delay-3 { animation-delay: 2s; left: 50%; animation-duration: 9s; }
+        .note-delay-4 { animation-delay: 3s; left: 70%; animation-duration: 6s; font-size: 2.2rem;}
+        .note-delay-5 { animation-delay: 4s; left: 90%; animation-duration: 8.5s; font-size: 1.8rem;}
+        .bases-box {
+            background-color: #1a202c;
+            border: 1px solid #4a5568;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: scroll;
+            margin-bottom: 1rem;
+            color: #e2e8f0;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+        .bases-box p {
+            margin-bottom: 1rem;
+        }
+        .error-message {
+            color: #ff4d4d;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .small-text {
+            font-size: 0.85rem;
+            color: #9ca3af;
+            margin-top: 1rem;
         }
     </style>
 </head>
@@ -61,35 +175,168 @@
                     <input type="text" id="nombre" name="nombre" class="w-full form-input p-3 rounded-lg" placeholder="Tu nombre completo" required>
                 </div>
                 <div>
-                    <label for="dni" class="block text-sm font-medium text-gray-300 mb-1">DNI</label>
-                    <input type="text" id="dni" name="dni" class="w-full form-input p-3 rounded-lg" placeholder="Tu número de documento" required>
+                    <label for="edad" class="block text-sm font-medium text-gray-300 mb-1">Edad</label>
+                    <input type="number" id="edad" name="edad" class="w-full form-input p-3 rounded-lg" placeholder="Tu edad" required>
                 </div>
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-300 mb-1">Email de Contacto</label>
                     <input type="email" id="email" name="email" class="w-full form-input p-3 rounded-lg" placeholder="tu-correo@ejemplo.com" required>
                 </div>
-                 <div>
+                <div>
+                    <label for="confirm-email" class="block text-sm font-medium text-gray-300 mb-1">Confirma tu Email</label>
+                    <input type="email" id="confirm-email" name="confirm-email" class="w-full form-input p-3 rounded-lg" placeholder="Repite tu correo" required>
+                    <p id="email-error" class="error-message">Los emails no coinciden.</p>
+                </div>
+                <div>
                     <label for="telefono" class="block text-sm font-medium text-gray-300 mb-1">Teléfono (WhatsApp)</label>
                     <input type="tel" id="telefono" name="telefono" class="w-full form-input p-3 rounded-lg" placeholder="Para mantenerte al tanto de todo" required>
                 </div>
+                <div>
+                    <label for="video" class="block text-sm font-medium text-gray-300 mb-1">Link a tu video</label>
+                    <input type="url" id="video" name="video" class="w-full form-input p-3 rounded-lg" placeholder="Pegá el link de YouTube, TikTok, etc." required>
+                </div>
 
-                <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
+                <div class="mt-8">
+                    <h3 class="text-xl font-bold font-display text-gray-300 mb-2">Bases y Condiciones</h3>
+                    <div id="bases-text-container" class="bases-box">
+                        <p>Cargando bases y condiciones...</p>
+                    </div>
+                    <div class="flex items-center mt-4">
+                        <input type="checkbox" id="acepta-bases" class="form-checkbox" required>
+                        <label for="acepta-bases" class="ml-2 text-sm text-gray-300">Acepto los términos y condiciones del certamen.</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg mt-8">
                     Confirmar mi lugar
                 </button>
             </form>
         </div>
     </main>
     
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
+    <div id="confirm-modal" class="modal-backdrop">
+      <div class="modal-content">
+        <span class="musical-note note-delay-1">&#9835;</span>
+        <span class="musical-note note-delay-2">&#9833;</span>
+        <span class="musical-note note-delay-3">&#x266b;</span>
+        <span class="musical-note note-delay-4">&#x266a;</span>
+        <span class="musical-note note-delay-5">&#9835;</span>
+
+        <h2 class="modal-title">🎉 ¡Felicitaciones!</h2>
+        <p class="modal-text">
+          ¿Sabías que la música libera endorfinas y une corazones?
+          <br><br>
+          Tu video ya está siendo evaluado por nuestro equipo. Gracias por ser parte de VYT-MUSIC, donde tu voz se transforma en magia.
+        </p>
+        <div class="small-text">
+            Quedate atento, te enviaremos el resultado de tu casting y los próximos pasos por mail.
+        </div>
+        <a href="principal.html" id="close-modal-btn" class="modal-btn mt-4">
+          Volver a la página principal
+        </a>
+      </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const inscripcionForm = document.getElementById('form-presencial');
+            const emailInput = document.getElementById('email');
+            const confirmEmailInput = document.getElementById('confirm-email');
+            const emailError = document.getElementById('email-error');
+            const confirmModal = document.getElementById('confirm-modal');
+            const basesTextContainer = document.getElementById('bases-text-container');
+            const aceptaBasesCheckbox = document.getElementById('acepta-bases');
+            const edadInput = document.getElementById('edad');
+            const nombreInput = document.getElementById('nombre');
+            const telefonoInput = document.getElementById('telefono');
+            const videoInput = document.getElementById('video');
+            const closeModalBtn = document.getElementById('close-modal-btn');
+            
+            // Cargar las bases y condiciones desde Firebase
+            async function loadBasesPresenciales() {
+                try {
+                    const docRef = doc(db, "bases_y_condiciones_presenciales", "texto_presencial");
+                    const docSnap = await getDoc(docRef);
+                    if (docSnap.exists()) {
+                        basesTextContainer.innerHTML = docSnap.data().contenido.replace(/\n/g, '<br>');
+                    } else {
+                        basesTextContainer.innerHTML = '<p>No se encontraron las bases y condiciones. Por favor, inténtalo más tarde.</p>';
+                    }
+                } catch (error) {
+                    console.error("Error al cargar las bases y condiciones:", error);
+                    basesTextContainer.innerHTML = '<p>Error al cargar las bases y condiciones.</p>';
+                }
+            }
+            loadBasesPresenciales();
+
+            inscripcionForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                if (emailInput.value !== confirmEmailInput.value) {
+                    emailError.style.display = 'block';
+                    emailInput.focus();
+                    return;
+                } else {
+                    emailError.style.display = 'none';
+                }
+
+                // Validar que se acepte las bases y condiciones
+                if (!aceptaBasesCheckbox.checked) {
+                    alert('Debes aceptar las bases y condiciones para continuar.');
+                    return;
+                }
+
+                const nombre = nombreInput.value;
+                const edad = edadInput.value;
+                const email = emailInput.value;
+                const telefono = telefonoInput.value;
+                const video = videoInput.value;
+
+                try {
+                    await addDoc(collection(db, "participantes_presenciales"), {
+                        nombre_artista: nombre,
+                        edad: edad,
+                        email: email,
+                        telefono: telefono,
+                        video_link: video,
+                        aprobado: false,
+                        createdAt: serverTimestamp()
+                    });
+
+                    confirmModal.classList.add('visible');
+                    inscripcionForm.reset();
+                    console.log("Inscripción presencial guardada exitosamente.");
+                } catch (error) {
+                    console.error("Error al guardar la inscripción:", error);
+                    alert('Ocurrió un error al procesar tu inscripción. Por favor, inténtalo de nuevo.');
+                }
+            });
+        });
+
+        var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+        (function(){
+            var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+            s1.async=true;
+            s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
+            s1.charset='UTF-8';
+            s1.setAttribute('crossorigin','*');
+            s0.parentNode.insertBefore(s1,s0);
+        })();
     </script>
 </body>
 </html>

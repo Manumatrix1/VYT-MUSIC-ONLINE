@@ -192,6 +192,11 @@
             background-color: var(--color-card);
             color: var(--color-texto-principal);
         }
+        .ciudades-list-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
     </style>
 </head>
 <body class="bg-gray-900">
@@ -245,6 +250,14 @@
                     <li><a href="#" data-target="page-blog" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
                         <span>Blog</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-bases" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>Bases y Cond. Online</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-bases-presenciales" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>Bases y Cond. Presencial</span>
                     </a></li>
                     <li><a href="#" data-target="page-estadisticas" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V3l-5 4V3L4 14h5l-1 7z"></path></svg>
@@ -307,29 +320,25 @@
                     </div>
                     <button id="update-pozo-btn" class="btn btn-primario w-full">Actualizar Pozo de Premios</button>
                 </div>
-
-                <h3 class="subsection-title">Gestión Rápida</h3>
-                <div class="dashboard-grid">
-                    <div class="dashboard-card">
-                        <h4 class="font-bold text-lg mb-2">Aprobaciones Pendientes</h4>
-                        <div id="pending-artists-list">
-                            <p class="text-center text-gray-400" id="no-pending-artists">No hay artistas pendientes de aprobación.</p>
-                        </div>
-                    </div>
-                    <div class="dashboard-card">
-                        <h4 class="font-bold text-lg mb-2">Ranking Actual</h4>
-                        <div id="ranking-list">
-                            <p class="text-center text-gray-400">Sin datos de ranking.</p>
-                        </div>
-                    </div>
-                </div>
             </div>
 
             <div id="page-participantes" class="page hidden">
                 <h3 class="subsection-title">Gestión de Participantes</h3>
-                <p class="text-gray-400">Aquí se gestionan las inscripciones, videos, y la información de los participantes.</p>
+                <div id="participantes-online-section">
+                    <h4 class="font-bold text-lg mb-2">Inscripciones Online Pendientes</h4>
+                    <div id="participantes-online-list" class="space-y-4">
+                        <p class="text-gray-500">No hay inscripciones online pendientes.</p>
+                    </div>
+                </div>
+                <hr class="my-6 border-gray-700">
+                <div id="participantes-presenciales-section">
+                    <h4 class="font-bold text-lg mb-2">Inscripciones Presenciales Pendientes</h4>
+                    <div id="participantes-presenciales-list" class="space-y-4">
+                        <p class="text-gray-500">No hay inscripciones presenciales pendientes.</p>
+                    </div>
+                </div>
             </div>
-            
+
             <div id="page-duelos" class="page hidden">
                 <h3 class="subsection-title">Gestión de Duelos y Rondas</h3>
                 <p class="text-gray-400">Interfaz para emparejar artistas, programar duelos y ver resultados.</p>
@@ -394,7 +403,29 @@
                     <p class="text-gray-500">Cargando posts...</p>
                 </div>
             </div>
-
+            
+            <div id="page-bases" class="page hidden">
+                <h3 class="subsection-title">Bases y Condiciones del Concurso Online</h3>
+                <form id="bases-form-online" class="dashboard-card">
+                    <div class="form-grupo">
+                        <label for="bases-online-contenido">Contenido de Bases y Condiciones:</label>
+                        <textarea id="bases-online-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen online."></textarea>
+                    </div>
+                    <div id="bases-online-form-status" class="alert hidden"></div>
+                    <button type="submit" id="save-bases-online-btn" class="btn btn-primario w-full">Guardar Bases Online</button>
+                </form>
+            </div>
+            <div id="page-bases-presenciales" class="page hidden">
+                <h3 class="subsection-title">Bases y Condiciones del Concurso Presencial</h3>
+                <form id="bases-form-presenciales" class="dashboard-card">
+                    <div class="form-grupo">
+                        <label for="bases-presenciales-contenido">Contenido de Bases y Condiciones:</label>
+                        <textarea id="bases-presenciales-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen presencial."></textarea>
+                    </div>
+                    <div id="bases-presenciales-form-status" class="alert hidden"></div>
+                    <button type="submit" id="save-bases-presenciales-btn" class="btn btn-primario w-full">Guardar Bases Presenciales</button>
+                </form>
+            </div>
             <div id="page-estadisticas" class="page hidden">
                 <h3 class="subsection-title">Estadísticas Detalladas</h3>
                 <p class="text-gray-400">Reportes avanzados sobre demografía, conversión y engagement.</p>
@@ -405,7 +436,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
@@ -422,7 +453,7 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const storage = getStorage(app); // Inicializa Storage
+        const storage = getStorage(app);
         const analytics = getAnalytics(app);
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -430,11 +461,9 @@
             const adminDashboard = document.getElementById('admin-dashboard');
             const navLinks = document.querySelectorAll('aside a[data-target]');
             const pages = document.querySelectorAll('.page');
-            const pendingArtistsList = document.getElementById('pending-artists-list');
             const pozoTotal = document.getElementById('pozo-total');
             const statsIngresos = document.getElementById('stats-ingresos');
             const statsVotos = document.getElementById('stats-votos');
-            
             const loginBtn = document.getElementById('login-btn');
             const adminEmailInput = document.getElementById('admin-email');
             const adminPasswordInput = document.getElementById('admin-password');
@@ -459,21 +488,36 @@
             const postIdInput = document.getElementById('post-id');
             const postTituloInput = document.getElementById('post-titulo');
             const postContenidoInput = document.getElementById('post-contenido');
-            const postImageFileInput = document.getElementById('post-image-file'); // Nuevo input de archivo
-            const imageUploadStatus = document.getElementById('image-upload-status'); // Nuevo estado
+            const postImageFileInput = document.getElementById('post-image-file');
+            const imageUploadStatus = document.getElementById('image-upload-status');
             const savePostBtn = document.getElementById('save-post-btn');
             const clearPostFormBtn = document.getElementById('clear-post-form-btn');
             const postsListDiv = document.getElementById('posts-list');
 
+            // Elementos del DOM para la gestión de Bases y Condiciones Online
+            const basesFormOnline = document.getElementById('bases-form-online');
+            const basesOnlineContenidoInput = document.getElementById('bases-online-contenido');
+            const basesOnlineFormStatus = document.getElementById('bases-online-form-status');
+            
+            // Elementos del DOM para la gestión de Bases y Condiciones Presenciales
+            const basesFormPresenciales = document.getElementById('bases-form-presenciales');
+            const basesPresencialesContenidoInput = document.getElementById('bases-presenciales-contenido');
+            const basesPresencialesFormStatus = document.getElementById('bases-presenciales-form-status');
+
+            // Elementos del DOM para la gestión de participantes
+            const participantesOnlineList = document.getElementById('participantes-online-list');
+            const participantesPresencialesList = document.getElementById('participantes-presenciales-list');
 
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     loginSection.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
                     loadDashboardData();
-                    setupRealtimePendingArtistsListener();
-                    loadCiudades(); // Cargar ciudades al iniciar sesión
-                    loadPosts(); // Cargar posts al iniciar sesión
+                    setupRealtimeListeners();
+                    loadBasesOnline();
+                    loadBasesPresenciales();
+                    loadCiudades();
+                    loadPosts();
                 } else {
                     loginSection.classList.remove('hidden');
                     adminDashboard.classList.add('hidden');
@@ -522,7 +566,7 @@
 
             async function loadDashboardData() {
                 try {
-                    const participantesRef = collection(db, "participantes");
+                    const participantesRef = collection(db, "participantes_online");
                     const participantesSnapshot = await getDocs(participantesRef);
                     const totalParticipantes = participantesSnapshot.docs.length;
                     document.getElementById('stats-participantes').innerText = totalParticipantes;
@@ -546,42 +590,83 @@
                 }
             }
 
-            function setupRealtimePendingArtistsListener() {
-                const participantesRef = collection(db, "participantes");
-                
-                onSnapshot(participantesRef, (snapshot) => {
-                    let hasPending = false;
-                    pendingArtistsList.innerHTML = '';
-                    
-                    snapshot.forEach(doc => {
-                        const data = doc.data();
-                        if (!data.aprobado) {
-                            hasPending = true;
+            function setupRealtimeListeners() {
+                // Participantes Online
+                const onlineRef = query(collection(db, "participantes_online"), where("aprobado", "==", false));
+                onSnapshot(onlineRef, (snapshot) => {
+                    participantesOnlineList.innerHTML = '';
+                    if (snapshot.empty) {
+                        participantesOnlineList.innerHTML = `<p class="text-gray-500">No hay inscripciones online pendientes.</p>`;
+                    } else {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
                             const artistItem = document.createElement('div');
                             artistItem.className = 'artist-list-item';
                             artistItem.innerHTML = `
                                 <div>
-                                    <p class="font-semibold">${data.nombre}</p>
-                                    <p class="text-xs text-gray-400">Modalidad: ${data.modalidad}</p>
-                                    <p class="text-xs text-blue-400 break-words"><a href="${data.youtubeLink}" target="_blank">Ver video</a></p>
+                                    <p class="font-semibold">${data.nombre_artista}</p>
+                                    <p class="text-xs text-gray-400">Modalidad: Online</p>
+                                    <p class="text-xs text-blue-400 break-words"><a href="${data.video_link}" target="_blank">Ver video</a></p>
                                 </div>
                                 <div class="flex gap-2">
-                                    <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}">Aprobar</button>
-                                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}">Rechazar</button>
+                                    <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}" data-modalidad="online">Aprobar</button>
+                                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}" data-modalidad="online">Rechazar</button>
                                 </div>
                             `;
-                            pendingArtistsList.appendChild(artistItem);
-                        }
-                    });
-
-                    if (!hasPending) {
-                        pendingArtistsList.innerHTML = `<p class="text-center text-gray-400" id="no-pending-artists">No hay artistas pendientes de aprobación.</p>`;
+                            participantesOnlineList.appendChild(artistItem);
+                        });
                     }
-                    
-                    document.getElementById('stats-participantes').innerText = snapshot.docs.length;
+                });
+
+                // Participantes Presenciales
+                const presencialRef = query(collection(db, "participantes_presenciales"), where("aprobado", "==", false));
+                onSnapshot(presencialRef, (snapshot) => {
+                    participantesPresencialesList.innerHTML = '';
+                    if (snapshot.empty) {
+                        participantesPresencialesList.innerHTML = `<p class="text-gray-500">No hay inscripciones presenciales pendientes.</p>`;
+                    } else {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const artistItem = document.createElement('div');
+                            artistItem.className = 'artist-list-item';
+                            artistItem.innerHTML = `
+                                <div>
+                                    <p class="font-semibold">${data.nombre_artista}</p>
+                                    <p class="text-xs text-gray-400">Modalidad: Presencial</p>
+                                    <p class="text-xs text-blue-400 break-words"><a href="${data.video_link}" target="_blank">Ver video</a></p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}" data-modalidad="presencial">Aprobar</button>
+                                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}" data-modalidad="presencial">Rechazar</button>
+                                </div>
+                            `;
+                            participantesPresencialesList.appendChild(artistItem);
+                        });
+                    }
                 });
             }
             
+            document.addEventListener('click', async (e) => {
+                if (e.target.classList.contains('approve-btn') || e.target.classList.contains('reject-btn')) {
+                    const docId = e.target.dataset.id;
+                    const modalidad = e.target.dataset.modalidad;
+                    const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
+                    const isApproved = e.target.classList.contains('approve-btn');
+
+                    try {
+                        const artistRef = doc(db, coleccion, docId);
+                        await updateDoc(artistRef, { 
+                            aprobado: isApproved, 
+                            rechazado: !isApproved 
+                        });
+                        console.log(`Participante ${docId} de modalidad ${modalidad} fue ${isApproved ? 'aprobado' : 'rechazado'}.`);
+                    } catch (error) {
+                        console.error(`Error al actualizar el participante: ${error.message}`);
+                    }
+                }
+            });
+
+
             function initCharts() {
                 var votosChartCtx = document.getElementById('votosChart').getContext('2d');
                 new Chart(votosChartCtx, {
@@ -608,20 +693,6 @@
                 });
             }
 
-            pendingArtistsList.addEventListener('click', async (e) => {
-                if (e.target.classList.contains('approve-btn')) {
-                    const docId = e.target.dataset.id;
-                    const artistRef = doc(db, "participantes", docId);
-                    await updateDoc(artistRef, { aprobado: true });
-                    console.log(`Artista con ID ${docId} aprobado.`);
-                } else if (e.target.classList.contains('reject-btn')) {
-                    const docId = e.target.dataset.id;
-                    const artistRef = doc(db, "participantes", docId);
-                    await updateDoc(artistRef, { aprobado: false, rechazado: true });
-                    console.log(`Artista con ID ${docId} rechazado.`);
-                }
-            });
-
             updatePozoBtn.addEventListener('click', async () => {
                 const nuevoPozo = parseInt(pozoInput.value);
                 const pozoDocId = "resumen_certamen";
@@ -647,7 +718,7 @@
                     pozoFormStatus.classList.remove('hidden');
                 }
             });
-
+            
             // Lógica para Ciudades/Gira
             ciudadesForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -712,8 +783,8 @@
                     }
                 }
             };
-
-            // Lógica para Blog (ahora con carga de imagen integrada)
+            
+            // Lógica para Blog
             blogForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const titulo = postTituloInput.value;
@@ -730,18 +801,15 @@
                 imageUploadStatus.className = 'text-sm mt-1 text-yellow-400';
 
                 try {
-                    // Si se seleccionó un archivo, subirlo a Storage
                     if (imageFile) {
                         const storageRef = ref(storage, `blog_images/${Date.now()}-${imageFile.name}`);
                         const uploadTask = uploadBytesResumable(storageRef, imageFile);
-
-                        await uploadTask; // Esperar a que la subida termine
+                        await uploadTask;
                         imagenUrl = await getDownloadURL(uploadTask.snapshot.ref);
                         imageUploadStatus.textContent = 'Imagen subida exitosamente.';
                         imageUploadStatus.className = 'text-sm mt-1 text-green-400';
                     }
 
-                    // Guardar el post en Firestore con la URL de la imagen (o vacía si no se subió ninguna)
                     await addDoc(collection(db, "blog"), {
                         titulo,
                         contenido,
@@ -801,6 +869,84 @@
                     }
                 }
             };
+            
+            // Lógica para Bases y Condiciones Online
+            basesFormOnline.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const contenido = basesOnlineContenidoInput.value;
+                const basesDocId = "texto_online";
+
+                if (!contenido) {
+                    basesOnlineFormStatus.textContent = 'El contenido no puede estar vacío.';
+                    basesOnlineFormStatus.className = 'alert alert-error';
+                    basesOnlineFormStatus.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_online", basesDocId);
+                    await setDoc(basesDocRef, { contenido: contenido, updatedAt: serverTimestamp() });
+                    basesOnlineFormStatus.textContent = 'Bases y condiciones actualizadas correctamente.';
+                    basesOnlineFormStatus.className = 'alert alert-success';
+                    basesOnlineFormStatus.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error al guardar bases y condiciones:", error);
+                    basesOnlineFormStatus.textContent = `Error: ${error.message}`;
+                    basesOnlineFormStatus.className = 'alert alert-error';
+                    basesOnlineFormStatus.classList.remove('hidden');
+                }
+            });
+
+            async function loadBasesOnline() {
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_online", "texto_online");
+                    const basesDoc = await getDoc(basesDocRef);
+                    if (basesDoc.exists()) {
+                        basesOnlineContenidoInput.value = basesDoc.data().contenido;
+                    }
+                } catch (error) {
+                    console.error("Error al cargar bases y condiciones online:", error);
+                }
+            }
+
+            // Lógica para Bases y Condiciones Presenciales
+            basesFormPresenciales.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const contenido = basesPresencialesContenidoInput.value;
+                const basesDocId = "texto_presencial";
+
+                if (!contenido) {
+                    basesPresencialesFormStatus.textContent = 'El contenido no puede estar vacío.';
+                    basesPresencialesFormStatus.className = 'alert alert-error';
+                    basesPresencialesFormStatus.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_presenciales", basesDocId);
+                    await setDoc(basesDocRef, { contenido: contenido, updatedAt: serverTimestamp() });
+                    basesPresencialesFormStatus.textContent = 'Bases y condiciones actualizadas correctamente.';
+                    basesPresencialesFormStatus.className = 'alert alert-success';
+                    basesPresencialesFormStatus.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error al guardar bases y condiciones:", error);
+                    basesPresencialesFormStatus.textContent = `Error: ${error.message}`;
+                    basesPresencialesFormStatus.className = 'alert alert-error';
+                    basesPresencialesFormStatus.classList.remove('hidden');
+                }
+            });
+
+            async function loadBasesPresenciales() {
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_presenciales", "texto_presencial");
+                    const basesDoc = await getDoc(basesDocRef);
+                    if (basesDoc.exists()) {
+                        basesPresencialesContenidoInput.value = basesDoc.data().contenido;
+                    }
+                } catch (error) {
+                    console.error("Error al cargar bases y condiciones presenciales:", error);
+                }
+            }
         });
     </script>
 </body>
