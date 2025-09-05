@@ -187,6 +187,10 @@
                     <input type="tel" id="whatsapp" name="whatsapp" class="w-full form-input p-3 rounded-lg" placeholder="Ej: 5491112345678" required>
                 </div>
                 <div>
+                    <label for="foto" class="block text-sm font-medium text-gray-300 mb-1">Foto del Artista</label>
+                    <input type="file" id="foto" name="foto" class="w-full form-input p-3 rounded-lg" accept="image/png, image/jpeg" required>
+                </div>
+                <div>
                     <label for="provincia" class="block text-sm font-medium text-gray-300 mb-1">Provincia</label>
                     <select id="provincia" name="provincia" class="w-full form-input p-3 rounded-lg" required>
                         <option value="">Seleccioná tu provincia...</option>
@@ -251,7 +255,7 @@
         <p class="modal-text">
           ¿Sabías que la música libera endorfinas y une corazones?
           <br><br>
-          Nuestro equipo ya está evaluando tu video. Gracias por ser parte de VYT-MUSIC, donde tu voz se transforma en magia.
+          Tu video ya está siendo evaluado por nuestro equipo. Gracias por ser parte de VYT-MUSIC, donde tu voz se transforma en magia.
         </p>
         <div class="small-text">
             Quedate atento, te enviaremos el resultado de tu casting y los próximos pasos por mail.
@@ -265,6 +269,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
@@ -278,6 +283,7 @@
         
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         document.addEventListener('DOMContentLoaded', () => {
             const formOnline = document.getElementById('form-online');
@@ -292,43 +298,32 @@
             const closeModalBtn = document.getElementById('close-modal-btn');
             const basesTextContainer = document.getElementById('bases-text-container');
             const aceptaBasesCheckbox = document.getElementById('acepta-bases');
+            const fotoInput = document.getElementById('foto');
 
             if (provinciaParam) {
                 provinciaSelect.value = decodeURIComponent(provinciaParam); 
             }
 
-            // El botón de cierre del modal ahora es un enlace, por lo que no necesita un listener de click.
-            // Si el modal se cierra por otras razones (por ejemplo, si se vuelve a principal),
-            // el navegador lo gestionará de forma nativa.
-            
             // Cargar las bases y condiciones desde Firebase
-            async function loadBasesYCondiciones() {
+            async function loadBasesOnline() {
                 try {
-                    const docRef = doc(db, "bases_y_condiciones", "texto_bases");
+                    const docRef = doc(db, "bases_y_condiciones_online", "texto_online");
                     const docSnap = await getDoc(docRef);
                     if (docSnap.exists()) {
-                        // Reemplaza los saltos de línea con <br> para HTML
                         basesTextContainer.innerHTML = docSnap.data().contenido.replace(/\n/g, '<br>');
                     } else {
                         basesTextContainer.innerHTML = '<p>No se encontraron las bases y condiciones. Por favor, inténtalo más tarde.</p>';
                     }
                 } catch (error) {
-                    console.error("Error al cargar las bases y condiciones:", error);
+                    console.error("Error al cargar bases y condiciones online:", error);
                     basesTextContainer.innerHTML = '<p>Error al cargar las bases y condiciones.</p>';
                 }
             }
-            loadBasesYCondiciones();
+            loadBasesOnline();
 
             formOnline.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                // Validar que se acepte las bases y condiciones
-                if (!aceptaBasesCheckbox.checked) {
-                    alert('Debes aceptar las bases y condiciones para continuar.');
-                    return;
-                }
-                
-                // Validar que los emails coincidan
                 if (emailInput.value !== confirmEmailInput.value) {
                     emailError.style.display = 'block';
                     emailInput.focus();
@@ -337,19 +332,33 @@
                     emailError.style.display = 'none';
                 }
 
+                if (!aceptaBasesCheckbox.checked) {
+                    alert('Debes aceptar las bases y condiciones para continuar.');
+                    return;
+                }
+                
                 const nombre = document.getElementById('nombre').value;
                 const email = emailInput.value;
                 const whatsapp = whatsappInput.value;
                 const provincia = document.getElementById('provincia').value;
                 const video = document.getElementById('video').value;
+                const foto = fotoInput.files[0];
 
                 try {
+                    let fotoUrl = null;
+                    if (foto) {
+                        const storageRef = ref(storage, `fotos_online/${Date.now()}_${foto.name}`);
+                        await uploadBytes(storageRef, foto);
+                        fotoUrl = await getDownloadURL(storageRef);
+                    }
+                    
                     await addDoc(collection(db, "participantes_online"), {
                         nombre_artista: nombre,
                         email: email,
                         whatsapp: whatsapp,
                         provincia: provincia,
                         video_link: video,
+                        foto_url: fotoUrl, // Guardamos la URL de la foto
                         aprobado: false,
                         createdAt: serverTimestamp()
                     });
@@ -364,7 +373,6 @@
             });
         });
 
-        // Script de Tawk.to
         var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
         (function(){
             var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];

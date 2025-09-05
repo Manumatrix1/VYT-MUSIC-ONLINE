@@ -206,6 +206,7 @@
                         <label for="acepta-bases" class="ml-2 text-sm text-gray-300">Acepto los términos y condiciones del certamen.</label>
                     </div>
                 </div>
+
                 <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg mt-8">
                     Confirmar mi lugar
                 </button>
@@ -213,7 +214,7 @@
         </div>
     </main>
     
-    <div id="confirm-modal" class="modal-backdrop">
+    <div id="confirm-modal" class="modal-backdrop hidden">
       <div class="modal-content">
         <span class="musical-note note-delay-1">&#9835;</span>
         <span class="musical-note note-delay-2">&#9833;</span>
@@ -221,7 +222,7 @@
         <span class="musical-note note-delay-4">&#x266a;</span>
         <span class="musical-note note-delay-5">&#9835;</span>
 
-        <h2 class="modal-title">🎉 ¡Felicitaciones!</h2>
+        <h2 class="modal-title">🎉 ¡Felicidades!</h2>
         <p class="modal-text">
           ¿Sabías que la música libera endorfinas y une corazones?
           <br><br>
@@ -239,6 +240,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
         import { getFirestore, collection, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
@@ -252,6 +254,7 @@
         
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         document.addEventListener('DOMContentLoaded', () => {
             const inscripcionForm = document.getElementById('form-presencial');
@@ -259,15 +262,14 @@
             const confirmEmailInput = document.getElementById('confirm-email');
             const emailError = document.getElementById('email-error');
             const confirmModal = document.getElementById('confirm-modal');
+            const closeModalBtn = document.getElementById('close-modal-btn');
             const basesTextContainer = document.getElementById('bases-text-container');
             const aceptaBasesCheckbox = document.getElementById('acepta-bases');
             const edadInput = document.getElementById('edad');
             const nombreInput = document.getElementById('nombre');
             const telefonoInput = document.getElementById('telefono');
             const videoInput = document.getElementById('video');
-            const closeModalBtn = document.getElementById('close-modal-btn');
-            
-            // Cargar las bases y condiciones desde Firebase
+
             async function loadBasesPresenciales() {
                 try {
                     const docRef = doc(db, "bases_y_condiciones_presenciales", "texto_presencial");
@@ -295,7 +297,6 @@
                     emailError.style.display = 'none';
                 }
 
-                // Validar que se acepte las bases y condiciones
                 if (!aceptaBasesCheckbox.checked) {
                     alert('Debes aceptar las bases y condiciones para continuar.');
                     return;

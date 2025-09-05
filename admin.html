@@ -197,6 +197,98 @@
             flex-direction: column;
             gap: 0.5rem;
         }
+        
+        /* Responsive Styles */
+        @media (max-width: 767px) {
+            .sidebar { display: none; }
+            .bottom-nav { 
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: var(--color-fondo-secundario);
+                border-top: 1px solid #30363d;
+                display: flex;
+                justify-content: space-evenly;
+                z-index: 1000;
+                padding: 0;
+                height: 65px;
+            }
+            .bottom-nav a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                color: var(--color-texto-secundario);
+                font-size: 0.7rem;
+                padding: 0.7rem 0.2rem;
+                flex: 1;
+                min-width: 20%;
+                text-align: center;
+                line-height: 1.2;
+            }
+            .bottom-nav a.active { color: var(--color-primario); }
+            .bottom-nav svg { 
+                width: 1.5rem; 
+                height: 1.5rem; 
+                margin-bottom: 0.2rem;
+            }
+            .dashboard-container { flex-direction: column; }
+            .main-content { 
+                padding: 1rem; 
+                padding-bottom: 80px; 
+                display: flex;
+                flex-direction: column;
+                align-items: center; 
+            }
+            .header-dashboard { 
+                padding-top: 1.5rem; 
+                width: 100%; 
+                max-width: 600px;
+                justify-content: center;
+                text-align: center;
+                flex-wrap: wrap; 
+            }
+            .header-dashboard > div {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            .pozo-valor { font-size: 2.5rem; }
+            .dashboard-card { 
+                min-width: 100%; 
+                width: 100%;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                width: 100%;
+                max-width: 600px;
+            }
+            .subsection-title {
+                text-align: center;
+                width: 100%;
+                max-width: 600px;
+            }
+            .page {
+                width: 100%;
+                max-width: 600px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        @media (min-width: 768px) {
+            .bottom-nav { display: none; }
+            .main-content {
+                display: block;
+            }
+            .header-dashboard {
+                justify-content: space-between;
+                text-align: left;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-900">
@@ -253,15 +345,15 @@
                     </a></li>
                     <li><a href="#" data-target="page-bases" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span>Bases y Cond. Online</span>
-                    </a></li>
-                    <li><a href="#" data-target="page-bases-presenciales" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span>Bases y Cond. Presencial</span>
+                        <span>Bases y Cond.</span>
                     </a></li>
                     <li><a href="#" data-target="page-estadisticas" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V3l-5 4V3L4 14h5l-1 7z"></path></svg>
                         <span>Estadísticas</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-email-templates" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M22 6L12 13 2 6"></path></svg>
+                        <span>Plantillas de Email</span>
                     </a></li>
                 </ul>
             </nav>
@@ -324,14 +416,14 @@
 
             <div id="page-participantes" class="page hidden">
                 <h3 class="subsection-title">Gestión de Participantes</h3>
-                <div id="participantes-online-section">
+                <div id="participantes-online-section" class="dashboard-card mb-6">
                     <h4 class="font-bold text-lg mb-2">Inscripciones Online Pendientes</h4>
                     <div id="participantes-online-list" class="space-y-4">
                         <p class="text-gray-500">No hay inscripciones online pendientes.</p>
                     </div>
                 </div>
-                <hr class="my-6 border-gray-700">
-                <div id="participantes-presenciales-section">
+                
+                <div id="participantes-presenciales-section" class="dashboard-card">
                     <h4 class="font-bold text-lg mb-2">Inscripciones Presenciales Pendientes</h4>
                     <div id="participantes-presenciales-list" class="space-y-4">
                         <p class="text-gray-500">No hay inscripciones presenciales pendientes.</p>
@@ -355,7 +447,7 @@
                     <input type="hidden" id="ciudad-id">
                     <div class="form-grupo">
                         <label for="ciudad-nombre">Nombre de la Ciudad:</label>
-                        <input type="text" id="ciudad-nombre" class="form-input" placeholder="Ej: Córdoba" required>
+                        <input type="text" id="ciudad-nombre" class="form-input" placeholder="Ej: Rosario" required>
                     </div>
                     <div class="form-grupo">
                         <label for="ciudad-fecha">Fecha del Evento:</label>
@@ -363,11 +455,11 @@
                     </div>
                     <div class="form-grupo">
                         <label for="ciudad-lugar">Lugar del Evento:</label>
-                        <input type="text" id="ciudad-lugar" class="form-input" placeholder="Ej: Teatro Plaza" required>
+                        <input type="text" id="ciudad-lugar" class="form-input" placeholder="Ej: Metropolitano" required>
                     </div>
                     <div class="form-grupo">
                         <label for="ciudad-url">URL de Inscripción:</label>
-                        <input type="url" id="ciudad-url" class="form-input" placeholder="https://vytmusic.com/inscripcion/cordoba" required>
+                        <input type="url" id="ciudad-url" class="form-input" placeholder="https://vytmusic.com/inscripcion/rosario" required>
                     </div>
                     <button type="submit" id="save-ciudad-btn" class="btn btn-primario w-full">Guardar Ciudad</button>
                     <button type="button" id="clear-ciudad-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
@@ -405,32 +497,97 @@
             </div>
             
             <div id="page-bases" class="page hidden">
-                <h3 class="subsection-title">Bases y Condiciones del Concurso Online</h3>
-                <form id="bases-form-online" class="dashboard-card">
-                    <div class="form-grupo">
-                        <label for="bases-online-contenido">Contenido de Bases y Condiciones:</label>
-                        <textarea id="bases-online-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen online."></textarea>
-                    </div>
-                    <div id="bases-online-form-status" class="alert hidden"></div>
-                    <button type="submit" id="save-bases-online-btn" class="btn btn-primario w-full">Guardar Bases Online</button>
-                </form>
+                <h3 class="subsection-title">Gestión de Bases y Condiciones</h3>
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-4">Concurso Online</h4>
+                    <form id="bases-form-online">
+                        <div class="form-grupo">
+                            <label for="bases-online-contenido">Contenido de Bases y Condiciones Online:</label>
+                            <textarea id="bases-online-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen online."></textarea>
+                        </div>
+                        <div id="bases-online-form-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Bases Online</button>
+                    </form>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-2">Concurso Presencial</h4>
+                    <form id="bases-form-presenciales">
+                        <div class="form-grupo">
+                            <label for="bases-presenciales-contenido">Contenido de Bases y Condiciones Presenciales:</label>
+                            <textarea id="bases-presenciales-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen presencial."></textarea>
+                        </div>
+                        <div id="bases-presenciales-form-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Bases Presenciales</button>
+                    </form>
+                </div>
             </div>
-            <div id="page-bases-presenciales" class="page hidden">
-                <h3 class="subsection-title">Bases y Condiciones del Concurso Presencial</h3>
-                <form id="bases-form-presenciales" class="dashboard-card">
-                    <div class="form-grupo">
-                        <label for="bases-presenciales-contenido">Contenido de Bases y Condiciones:</label>
-                        <textarea id="bases-presenciales-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen presencial."></textarea>
-                    </div>
-                    <div id="bases-presenciales-form-status" class="alert hidden"></div>
-                    <button type="submit" id="save-bases-presenciales-btn" class="btn btn-primario w-full">Guardar Bases Presenciales</button>
-                </form>
+            
+            <div id="page-email-templates" class="page hidden">
+                <h3 class="subsection-title">Gestión de Plantillas de Correo</h3>
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-2">Plantilla de Aprobación</h4>
+                    <form id="aprobacion-email-form">
+                        <div class="form-grupo">
+                            <label for="aprobacion-email-asunto">Asunto del correo:</label>
+                            <input type="text" id="aprobacion-email-asunto" class="form-input" placeholder="Ej: ¡Felicidades, tu video ha sido aprobado!">
+                        </div>
+                        <div class="form-grupo">
+                            <label for="aprobacion-email-contenido">Contenido del correo:</label>
+                            <textarea id="aprobacion-email-contenido" class="form-input" rows="10" placeholder="Ej: Hola [nombre_artista], tu video ha sido aprobado. Paga tu inscripción aquí: [link_pago]"></textarea>
+                            <small class="text-gray-500">Usa **[nombre_artista]** y **[link_pago]** como variables.</small>
+                        </div>
+                        <div id="aprobacion-email-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Plantilla de Aprobación</button>
+                    </form>
+                </div>
+
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-2">Plantilla de Rechazo</h4>
+                    <form id="rechazo-email-form">
+                        <div class="form-grupo">
+                            <label for="rechazo-email-asunto">Asunto del correo:</label>
+                            <input type="text" id="rechazo-email-asunto" class="form-input" placeholder="Ej: Tu video no fue seleccionado esta vez...">
+                        </div>
+                        <div class="form-grupo">
+                            <label for="rechazo-email-contenido">Contenido del correo:</label>
+                            <textarea id="rechazo-email-contenido" class="form-input" rows="10" placeholder="Ej: Hola [nombre_artista], lamentamos informarte que tu video no ha sido seleccionado. Motivo: [motivo_rechazo]"></textarea>
+                            <small class="text-gray-500">Usa **[nombre_artista]** y **[motivo_rechazo]** como variables.</small>
+                        </div>
+                        <div id="rechazo-email-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Plantilla de Rechazo</button>
+                    </form>
+                </div>
             </div>
+            
             <div id="page-estadisticas" class="page hidden">
                 <h3 class="subsection-title">Estadísticas Detalladas</h3>
                 <p class="text-gray-400">Reportes avanzados sobre demografía, conversión y engagement.</p>
             </div>
         </main>
+
+        <nav class="bottom-nav">
+            <a href="#" data-target="page-dashboard">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <span>Dash.</span>
+            </a>
+            <a href="#" data-target="page-participantes">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span>Partic.</span>
+            </a>
+            <a href="#" data-target="page-blog">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+                <span>Blog</span>
+            </a>
+            <a href="#" data-target="page-bases">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>Bases</span>
+            </a>
+            <a href="#" data-target="page-ciudades">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21c2.19 0 4.19-.89 5.66-2.34A8 8 0 0012 5a8 8 0 00-5.66 13.66A8 8 0 0012 21z"></path><path d="M12 13a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                <span>Gira</span>
+            </a>
+        </nav>
     </div>
     
     <script type="module">
@@ -460,6 +617,7 @@
             const loginSection = document.getElementById('login-section');
             const adminDashboard = document.getElementById('admin-dashboard');
             const navLinks = document.querySelectorAll('aside a[data-target]');
+            const bottomNavLinks = document.querySelectorAll('.bottom-nav a');
             const pages = document.querySelectorAll('.page');
             const pozoTotal = document.getElementById('pozo-total');
             const statsIngresos = document.getElementById('stats-ingresos');
@@ -472,7 +630,6 @@
             const updatePozoBtn = document.getElementById('update-pozo-btn');
             const pozoFormStatus = document.getElementById('pozo-form-status');
 
-            // Elementos del DOM para la gestión de ciudades
             const ciudadesForm = document.getElementById('ciudades-form');
             const ciudadIdInput = document.getElementById('ciudad-id');
             const ciudadNombreInput = document.getElementById('ciudad-nombre');
@@ -483,7 +640,6 @@
             const clearCiudadFormBtn = document.getElementById('clear-ciudad-form-btn');
             const ciudadesListDiv = document.getElementById('ciudades-list');
 
-            // Elementos del DOM para la gestión de blog
             const blogForm = document.getElementById('blog-form');
             const postIdInput = document.getElementById('post-id');
             const postTituloInput = document.getElementById('post-titulo');
@@ -493,20 +649,36 @@
             const savePostBtn = document.getElementById('save-post-btn');
             const clearPostFormBtn = document.getElementById('clear-post-form-btn');
             const postsListDiv = document.getElementById('posts-list');
-
-            // Elementos del DOM para la gestión de Bases y Condiciones Online
-            const basesFormOnline = document.getElementById('bases-form-online');
+            
             const basesOnlineContenidoInput = document.getElementById('bases-online-contenido');
             const basesOnlineFormStatus = document.getElementById('bases-online-form-status');
+            const basesFormOnline = document.getElementById('bases-form-online');
             
-            // Elementos del DOM para la gestión de Bases y Condiciones Presenciales
-            const basesFormPresenciales = document.getElementById('bases-form-presenciales');
             const basesPresencialesContenidoInput = document.getElementById('bases-presenciales-contenido');
             const basesPresencialesFormStatus = document.getElementById('bases-presenciales-form-status');
+            const basesFormPresenciales = document.getElementById('bases-form-presenciales');
 
-            // Elementos del DOM para la gestión de participantes
             const participantesOnlineList = document.getElementById('participantes-online-list');
             const participantesPresencialesList = document.getElementById('participantes-presenciales-list');
+
+            const basesOnlineContent = document.getElementById('bases-online-content');
+            const basesPresencialContent = document.getElementById('bases-presencial-content');
+            const showBasesOnlineBtn = document.getElementById('show-bases-online-btn');
+            const showBasesPresencialBtn = document.getElementById('show-bases-presencial-btn');
+
+            function showPage(targetId) {
+                pages.forEach(page => page.classList.add('hidden'));
+                document.getElementById(targetId).classList.remove('hidden');
+                
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                bottomNavLinks.forEach(nav => nav.classList.remove('active'));
+
+                const sidebarLink = document.querySelector(`aside a[data-target="${targetId}"]`);
+                if(sidebarLink) sidebarLink.classList.add('active');
+
+                const bottomLink = document.querySelector(`.bottom-nav a[data-target="${targetId}"]`);
+                if(bottomLink) bottomLink.classList.add('active');
+            }
 
             onAuthStateChanged(auth, (user) => {
                 if (user) {
@@ -518,6 +690,7 @@
                     loadBasesPresenciales();
                     loadCiudades();
                     loadPosts();
+                    showPage('page-dashboard');
                 } else {
                     loginSection.classList.remove('hidden');
                     adminDashboard.classList.add('hidden');
@@ -550,16 +723,15 @@
                 });
             });
 
-            function showPage(targetId) {
-                pages.forEach(page => page.classList.add('hidden'));
-                document.getElementById(targetId).classList.remove('hidden');
-            }
-
             navLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
-                    navLinks.forEach(nav => nav.classList.remove('active'));
-                    link.classList.add('active');
+                    showPage(link.dataset.target);
+                });
+            });
+            bottomNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
                     showPage(link.dataset.target);
                 });
             });
@@ -591,7 +763,6 @@
             }
 
             function setupRealtimeListeners() {
-                // Participantes Online
                 const onlineRef = query(collection(db, "participantes_online"), where("aprobado", "==", false));
                 onSnapshot(onlineRef, (snapshot) => {
                     participantesOnlineList.innerHTML = '';
@@ -611,6 +782,7 @@
                                 <div class="flex gap-2">
                                     <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}" data-modalidad="online">Aprobar</button>
                                     <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}" data-modalidad="online">Rechazar</button>
+                                    <button class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm delete-btn" data-id="${doc.id}" data-modalidad="online">Eliminar</button>
                                 </div>
                             `;
                             participantesOnlineList.appendChild(artistItem);
@@ -618,7 +790,6 @@
                     }
                 });
 
-                // Participantes Presenciales
                 const presencialRef = query(collection(db, "participantes_presenciales"), where("aprobado", "==", false));
                 onSnapshot(presencialRef, (snapshot) => {
                     participantesPresencialesList.innerHTML = '';
@@ -638,6 +809,7 @@
                                 <div class="flex gap-2">
                                     <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}" data-modalidad="presencial">Aprobar</button>
                                     <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}" data-modalidad="presencial">Rechazar</button>
+                                    <button class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm delete-btn" data-id="${doc.id}" data-modalidad="presencial">Eliminar</button>
                                 </div>
                             `;
                             participantesPresencialesList.appendChild(artistItem);
@@ -647,21 +819,48 @@
             }
             
             document.addEventListener('click', async (e) => {
-                if (e.target.classList.contains('approve-btn') || e.target.classList.contains('reject-btn')) {
+                if (e.target.classList.contains('approve-btn')) {
                     const docId = e.target.dataset.id;
                     const modalidad = e.target.dataset.modalidad;
                     const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
-                    const isApproved = e.target.classList.contains('approve-btn');
-
+                    
                     try {
                         const artistRef = doc(db, coleccion, docId);
-                        await updateDoc(artistRef, { 
-                            aprobado: isApproved, 
-                            rechazado: !isApproved 
-                        });
-                        console.log(`Participante ${docId} de modalidad ${modalidad} fue ${isApproved ? 'aprobado' : 'rechazado'}.`);
+                        await updateDoc(artistRef, { aprobado: true, rechazado: false });
+                        alert(`El participante ha sido aprobado.`);
                     } catch (error) {
                         console.error(`Error al actualizar el participante: ${error.message}`);
+                    }
+                } else if (e.target.classList.contains('reject-btn')) {
+                    const docId = e.target.dataset.id;
+                    const modalidad = e.target.dataset.modalidad;
+                    const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
+                    
+                    const motivo = prompt("Por favor, introduce el motivo del rechazo:");
+                    if (motivo !== null && motivo.trim() !== "") {
+                        try {
+                            const artistRef = doc(db, coleccion, docId);
+                            await updateDoc(artistRef, { aprobado: false, rechazado: true, motivo_rechazo: motivo });
+                            alert(`El participante ha sido rechazado con el motivo: "${motivo}".`);
+                        } catch (error) {
+                            console.error(`Error al actualizar el participante: ${error.message}`);
+                        }
+                    } else {
+                        alert("El rechazo fue cancelado.");
+                    }
+                } else if (e.target.classList.contains('delete-btn')) {
+                    const docId = e.target.dataset.id;
+                    const modalidad = e.target.dataset.modalidad;
+                    const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
+
+                    const confirmed = confirm("¿Estás seguro de que quieres eliminar este participante? Esta acción no se puede deshacer.");
+                    if (confirmed) {
+                        try {
+                            await deleteDoc(doc(db, coleccion, docId));
+                            alert('Participante eliminado correctamente.');
+                        } catch (error) {
+                            console.error(`Error al eliminar el participante: ${error.message}`);
+                        }
                     }
                 }
             });
