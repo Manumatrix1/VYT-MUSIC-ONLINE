@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VYT MUSIC - Panel de Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Bebas+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --color-fondo: #0d1117;
@@ -25,19 +26,57 @@
             color: var(--color-texto-principal);
             min-height: 100vh;
             display: flex;
+        }
+        
+        .login-container {
+            display: flex;
             justify-content: center;
             align-items: center;
-            padding: 2rem;
+            flex-grow: 1;
+            background-color: var(--color-fondo);
         }
-        .admin-container {
+
+        .login-card {
             background-color: var(--color-fondo-secundario);
             border-radius: 15px;
             padding: 2.5rem;
             border: 1px solid #30363d;
             box-shadow: 0 8px 20px rgba(0,0,0,0.4);
             width: 100%;
-            max-width: 900px;
+            max-width: 400px;
         }
+
+        .dashboard-container {
+            display: flex;
+            flex-grow: 1;
+            background-color: var(--color-fondo);
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: var(--color-fondo-secundario);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            border-right: 1px solid #30363d;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 2.5rem;
+        }
+
+        .header-dashboard {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid #30363d;
+            padding-bottom: 1.5rem;
+        }
+
         .form-grupo {
             margin-bottom: 1.5rem;
         }
@@ -123,350 +162,535 @@
             border-bottom: 1px solid #30363d;
             padding-bottom: 0.5rem;
         }
-        .uploaded-file-item {
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        .dashboard-card {
             background-color: var(--color-card);
-            padding: 0.75rem;
-            border-radius: 8px;
+            border-radius: 15px;
+            padding: 1.5rem;
             border: 1px solid #30363d;
+        }
+        .pozo-valor {
+            font-family: var(--fuente-titulos);
+            font-size: 3rem;
+            color: var(--color-oro);
+        }
+        .artist-list-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+            padding: 1rem;
+            background-color: var(--color-fondo);
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #30363d;
         }
-        .uploaded-file-item .file-name {
-            font-weight: 700;
+        .nav-menu a.active {
+            background-color: var(--color-card);
             color: var(--color-texto-principal);
         }
-        .uploaded-file-item .file-url {
-            color: var(--color-texto-secundario);
-            font-size: 0.85rem;
-            word-break: break-all;
-            flex-grow: 1;
-        }
-        .uploaded-file-item .copy-btn {
-            background-color: var(--color-secundario);
-            color: white;
-            padding: 0.3rem 0.8rem;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            margin-left: 1rem;
-        }
-        .uploaded-file-item .copy-btn:hover {
-            background-color: #36a447;
-        }
-        .artist-list-item {
-            background-color: var(--color-card);
-            padding: 1rem;
-            border-radius: 8px;
-            border: 1px solid #30363d;
-            margin-bottom: 1rem;
+        .ciudades-list-item {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
-        .artist-list-item strong {
-            color: var(--color-primario);
+        
+        /* Responsive Styles */
+        @media (max-width: 767px) {
+            .sidebar { display: none; }
+            .bottom-nav { 
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: var(--color-fondo-secundario);
+                border-top: 1px solid #30363d;
+                display: flex;
+                justify-content: space-evenly;
+                z-index: 1000;
+                padding: 0;
+                height: 65px;
+            }
+            .bottom-nav a {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                color: var(--color-texto-secundario);
+                font-size: 0.7rem;
+                padding: 0.7rem 0.2rem;
+                flex: 1;
+                min-width: 20%;
+                text-align: center;
+                line-height: 1.2;
+            }
+            .bottom-nav a.active { color: var(--color-primario); }
+            .bottom-nav svg { 
+                width: 1.5rem; 
+                height: 1.5rem; 
+                margin-bottom: 0.2rem;
+            }
+            .dashboard-container { flex-direction: column; }
+            .main-content { 
+                padding: 1rem; 
+                padding-bottom: 80px; 
+                display: flex;
+                flex-direction: column;
+                align-items: center; 
+            }
+            .header-dashboard { 
+                padding-top: 1.5rem; 
+                width: 100%; 
+                max-width: 600px;
+                justify-content: center;
+                text-align: center;
+                flex-wrap: wrap; 
+            }
+            .header-dashboard > div {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            .pozo-valor { font-size: 2.5rem; }
+            .dashboard-card { 
+                min-width: 100%; 
+                width: 100%;
+                max-width: 600px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+                width: 100%;
+                max-width: 600px;
+            }
+            .subsection-title {
+                text-align: center;
+                width: 100%;
+                max-width: 600px;
+            }
+            .page {
+                width: 100%;
+                max-width: 600px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
         }
-        .artist-actions {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.5rem;
-        }
-        .artist-actions .btn {
-            padding: 0.5rem 1rem;
-            font-size: 0.9rem;
-            border-radius: 5px;
-        }
-        .artist-actions .btn-delete {
-            background-color: var(--color-error);
-        }
-        .artist-actions .btn-delete:hover {
-            background-color: #cc0000;
-        }
-
-        /* Estilos para el modal personalizado */
-        .custom-modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            z-index: 9999; /* Asegura que esté por encima de todo */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-        .custom-modal-backdrop.visible {
-            opacity: 1;
-            pointer-events: all;
-        }
-        .custom-modal-content {
-            background: var(--color-fondo-secundario);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 400px;
-            width: 90%;
-            border: 1px solid #30363d;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-        }
-        .custom-modal-backdrop.visible .custom-modal-content {
-            transform: scale(1);
-        }
-        .custom-modal-content h3 {
-            font-family: var(--fuente-titulos);
-            font-size: 1.8rem;
-            color: var(--color-primario);
-            margin-bottom: 1rem;
-        }
-        .custom-modal-content p {
-            color: var(--color-texto-secundario);
-            margin-bottom: 1.5rem;
-        }
-        .custom-modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-        }
-        .custom-modal-buttons .btn {
-            flex-grow: 1;
+        @media (min-width: 768px) {
+            .bottom-nav { display: none; }
+            .main-content {
+                display: block;
+            }
+            .header-dashboard {
+                justify-content: space-between;
+                text-align: left;
+            }
         }
     </style>
 </head>
-<body>
-    <div id="login-section" class="admin-container">
-        <h2 class="section-title">Acceso de Administrador</h2>
-        <div id="login-error" class="alert alert-error hidden"></div>
-        <div class="form-grupo">
-            <label for="admin-email">Email:</label>
-            <input type="email" id="admin-email" class="form-input" placeholder="admin@vytmusic.com">
-        </div>
-        <div class="form-grupo">
-            <label for="admin-password">Contraseña:</label>
-            <input type="password" id="admin-password" class="form-input" placeholder="********">
-        </div>
-        <button id="login-btn" class="btn btn-primario w-full">Iniciar Sesión</button>
-        <button id="creator-access-btn" class="btn btn-secundario w-full mt-3">Acceso de Creador (Solo Desarrollo)</button>
-    </div>
-
-    <div id="admin-dashboard" class="admin-container hidden">
-        <h2 class="section-title">Panel de Administración VYT MUSIC</h2>
-        <p class="text-right text-sm text-gray-400 mb-4">Bienvenido, <span id="admin-user-email"></span> | <button id="logout-btn" class="text-red-400 hover:underline">Cerrar Sesión</button></p>
-
-        <div id="admin-messages" class="alert hidden"></div>
-
-        <h3 class="subsection-title">Cargar Archivos (Imágenes / Videos)</h3>
-        <div class="form-grupo">
-            <label for="file-upload">Seleccionar Archivo:</label>
-            <input type="file" id="file-upload" class="form-input">
-        </div>
-        <div class="form-grupo">
-            <label for="file-name">Nombre del archivo (opcional, para organizar):</label>
-            <input type="text" id="file-name" class="form-input" placeholder="ej: artista-juan-foto.jpg">
-        </div>
-        <button id="upload-btn" class="btn btn-primario w-full">Subir a Firebase Storage</button>
-        <p id="upload-status" class="text-sm mt-2 text-gray-400"></p>
-        <p id="uploaded-url-display" class="mt-2 text-sm text-green-400 break-all hidden">URL: <a href="#" target="_blank" class="text-blue-400 hover:underline"></a> <button class="copy-url-btn btn btn-secundario">Copiar</button></p>
-        
-        <h3 class="subsection-title">Gestionar Artistas</h3>
-        <form id="artist-form">
-            <input type="hidden" id="artist-id">
+<body class="bg-gray-900">
+    <div id="login-section" class="login-container">
+        <div class="login-card">
+            <h2 class="section-title">Acceso de Administrador</h2>
+            <div id="login-error" class="alert alert-error hidden"></div>
             <div class="form-grupo">
-                <label for="artist-name">Nombre Artístico:</label>
-                <input type="text" id="artist-name" class="form-input" placeholder="Ej: Sol Frecuencia">
+                <label for="admin-email">Email:</label>
+                <input type="email" id="admin-email" class="form-input" placeholder="tu-correo@ejemplo.com">
             </div>
             <div class="form-grupo">
-                <label for="artist-genre">Género Musical:</label>
-                <input type="text" id="artist-genre" class="form-input" placeholder="Ej: Pop, Rock, Folclore">
+                <label for="admin-password">Contraseña:</label>
+                <input type="password" id="admin-password" class="form-input" placeholder="********">
             </div>
-            <div class="form-grupo">
-                <label for="artist-province">Provincia:</label>
-                <select id="artist-province" class="form-input">
-                    <option value="">Seleccioná la provincia...</option>
-                    <option value="Buenos Aires">Buenos Aires</option>
-                    <option value="Catamarca">Catamarca</option>
-                    <option value="Chaco">Chaco</option>
-                    <option value="Chubut">Chubut</option>
-                    <option value="Córdoba">Córdoba</option>
-                    <option value="Corrientes">Corrientes</option>
-                    <option value="Entre Ríos">Entre Ríos</option>
-                    <option value="Formosa">Formosa</option>
-                    <option value="Jujuy">Jujuy</option>
-                    <option value="La Pampa">La Pampa</option>
-                    <option value="La Rioja">La Rioja</option>
-                    <option value="Mendoza">Mendoza</option>
-                    <option value="Misiones">Misiones</option>
-                    <option value="Neuquén">Neuquén</option>
-                    <option value="Río Negro">Río Negro</option>
-                    <option value="Salta">Salta</option>
-                    <option value="San Juan">San Juan</option>
-                    <option value="San Luis">San Luis</option>
-                    <option value="Santa Cruz">Santa Cruz</option>
-                    <option value="Santa Fe">Santa Fe</option>
-                    <option value="Santiago del Estero">Santiago del Estero</option>
-                    <option value="Tierra del Fuego">Tierra del Fuego</option>
-                    <option value="Tucumán">Tucumán</option>
-                    <option value="Otro País">Otro País</option>
-                </select>
-            </div>
-            <div class="form-grupo">
-                <label for="artist-video-url">URL del Video (YouTube/TikTok/Drive):</label>
-                <input type="url" id="artist-video-url" class="form-input" placeholder="https://youtube.com/tu-video">
-            </div>
-            <div class="form-grupo">
-                <label for="artist-image-url">URL de la Imagen del Perfil:</label>
-                <input type="url" id="artist-image-url" class="form-input" placeholder="https://ejemplo.com/tu-imagen.jpg">
-            </div>
-            <div class="form-grupo">
-                <label for="artist-votes">Votos (solo números):</label>
-                <input type="number" id="artist-votes" class="form-input" value="0">
-            </div>
-            <button type="submit" id="save-artist-btn" class="btn btn-primario w-full">Guardar Artista</button>
-            <button type="button" id="clear-artist-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
-        </form>
-
-        <h3 class="subsection-title">Lista de Artistas</h3>
-        <div id="artists-list" class="space-y-4">
-            <!-- Los artistas se cargarán aquí desde Firestore -->
-            <p class="text-gray-500">Cargando artistas...</p>
+            <button id="login-btn" class="btn btn-primario w-full">Iniciar Sesión</button>
         </div>
     </div>
 
-    <!-- Modal de Confirmación Personalizado -->
-    <div id="custom-confirm-modal" class="custom-modal-backdrop">
-        <div class="custom-modal-content">
-            <h3 id="custom-confirm-title">Confirmar Acción</h3>
-            <p id="custom-confirm-message">¿Estás seguro de que quieres realizar esta acción?</p>
-            <div class="custom-modal-buttons">
-                <button id="custom-confirm-yes" class="btn btn-primario">Sí</button>
-                <button id="custom-confirm-no" class="btn btn-secundario">No</button>
+    <div id="admin-dashboard" class="dashboard-container hidden">
+        <aside class="sidebar">
+            <div class="flex items-center gap-4 mb-8">
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-12 h-12 rounded-full">
+                <div class="text-white">
+                    <h3 class="font-bold text-lg">VYT Music</h3>
+                    <p class="text-sm text-gray-400">Dashboard</p>
+                </div>
             </div>
-        </div>
-    </div>
+            <nav class="flex-grow">
+                <ul class="nav-menu space-y-2">
+                    <li><a href="#" data-target="page-dashboard" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700 active">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span>Dashboard</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-participantes" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span>Participantes</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-duelos" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        <span>Duelos y Rondas</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-ingresos" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        <span>Ingresos y Pagos</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-ciudades" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21c2.19 0 4.19-.89 5.66-2.34A8 8 0 0012 5a8 8 0 00-5.66 13.66A8 8 0 0012 21z"></path><path d="M12 13a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                        <span>Ciudades/Gira</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-blog" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+                        <span>Blog</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-bases" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>Bases y Cond.</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-estadisticas" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M16 11V3l-5 4V3L4 14h5l-1 7z"></path></svg>
+                        <span>Estadísticas</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-email-templates" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M22 6L12 13 2 6"></path></svg>
+                        <span>Plantillas de Email</span>
+                    </a></li>
+                </ul>
+            </nav>
+            <div class="mt-auto">
+                <a href="#" id="logout-btn" class="flex items-center gap-3 p-3 rounded-lg hover:bg-red-700 text-red-400 hover:text-white">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17 16l-4-4m0 0l-4 4m4-4V4m4 8h-4"></path></svg>
+                    <span>Cerrar Sesión</span>
+                </a>
+            </div>
+        </aside>
 
-    <!-- Firebase SDKs -->
+        <main class="main-content">
+            <header class="header-dashboard">
+                <div>
+                    <h1 class="text-3xl font-bold font-display">Dashboard del Certamen</h1>
+                    <p class="text-sm text-gray-400">Visión general y control total.</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <span class="hidden md:inline-block text-sm text-gray-400" id="admin-user-email">Bienvenido, Organizador</span>
+                </div>
+            </header>
+
+            <div id="page-dashboard" class="page active">
+                <h3 class="subsection-title">Análisis del Certamen</h3>
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-2">Pozo de Premios Acumulado</h4>
+                        <div class="text-center">
+                            <p class="pozo-valor" id="pozo-total">$ 0</p>
+                            <p class="text-gray-400">Total acumulado de todas las fuentes</p>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-2">Votos en Tiempo Real</h4>
+                        <div class="h-48 flex items-center justify-center">
+                            <canvas id="votosChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-2">Estadísticas Clave</h4>
+                        <p>Participantes inscritos: <span id="stats-participantes" class="text-lg font-bold text-blue-400">0</span></p>
+                        <p>Ingresos totales: <span id="stats-ingresos" class="text-lg font-bold text-green-400">$ 0</span></p>
+                        <p>Votos totales: <span id="stats-votos" class="text-lg font-bold text-purple-400">0</span></p>
+                    </div>
+                </div>
+
+                <h3 class="subsection-title">Control de Premios</h3>
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-4">Actualizar Pozo de Premios</h4>
+                    <div id="pozo-form-status" class="alert hidden"></div>
+                    <div class="form-grupo">
+                        <label for="pozo-input">Nuevo valor del Pozo (en ARS):</label>
+                        <input type="number" id="pozo-input" class="form-input" placeholder="Ej: 1500000">
+                    </div>
+                    <button id="update-pozo-btn" class="btn btn-primario w-full">Actualizar Pozo de Premios</button>
+                </div>
+            </div>
+
+            <div id="page-participantes" class="page hidden">
+                <h3 class="subsection-title">Gestión de Participantes</h3>
+                <div id="participantes-online-section" class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-2">Inscripciones Online Pendientes</h4>
+                    <div id="participantes-online-list" class="space-y-4">
+                        <p class="text-gray-500">No hay inscripciones online pendientes.</p>
+                    </div>
+                </div>
+                
+                <div id="participantes-presenciales-section" class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-2">Inscripciones Presenciales Pendientes</h4>
+                    <div id="participantes-presenciales-list" class="space-y-4">
+                        <p class="text-gray-500">No hay inscripciones presenciales pendientes.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-duelos" class="page hidden">
+                <h3 class="subsection-title">Gestión de Duelos y Rondas</h3>
+                <p class="text-gray-400">Interfaz para emparejar artistas, programar duelos y ver resultados.</p>
+            </div>
+            
+            <div id="page-ingresos" class="page hidden">
+                <h3 class="subsection-title">Ingresos y Pagos</h3>
+                <p class="text-gray-400">Detalles de ingresos por votos, tickets y donaciones.</p>
+            </div>
+            
+            <div id="page-ciudades" class="page hidden">
+                <h3 class="subsection-title">Gestión de Ciudades de la Gira</h3>
+                <form id="ciudades-form" class="dashboard-card">
+                    <input type="hidden" id="ciudad-id">
+                    <div class="form-grupo">
+                        <label for="ciudad-nombre">Nombre de la Ciudad:</label>
+                        <input type="text" id="ciudad-nombre" class="form-input" placeholder="Ej: Rosario" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="ciudad-fecha">Fecha del Evento:</label>
+                        <input type="date" id="ciudad-fecha" class="form-input" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="ciudad-lugar">Lugar del Evento:</label>
+                        <input type="text" id="ciudad-lugar" class="form-input" placeholder="Ej: Metropolitano" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="ciudad-url">URL de Inscripción:</label>
+                        <input type="url" id="ciudad-url" class="form-input" placeholder="https://vytmusic.com/inscripcion/rosario" required>
+                    </div>
+                    <button type="submit" id="save-ciudad-btn" class="btn btn-primario w-full">Guardar Ciudad</button>
+                    <button type="button" id="clear-ciudad-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
+                </form>
+                <h3 class="subsection-title">Lista de Ciudades</h3>
+                <div id="ciudades-list" class="space-y-4">
+                    <p class="text-gray-500">Cargando ciudades...</p>
+                </div>
+            </div>
+
+            <div id="page-blog" class="page hidden">
+                <h3 class="subsection-title">Gestión del Blog</h3>
+                <form id="blog-form" class="dashboard-card">
+                    <input type="hidden" id="post-id">
+                    <div class="form-grupo">
+                        <label for="post-titulo">Título del Post:</label>
+                        <input type="text" id="post-titulo" class="form-input" placeholder="Ej: Ganadores de la Semana" required>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="post-contenido">Contenido:</label>
+                        <textarea id="post-contenido" class="form-input" rows="6" placeholder="Escribe el contenido del post aquí..."></textarea>
+                    </div>
+                    <div class="form-grupo">
+                        <label for="post-image-file">Imagen Principal:</label>
+                        <input type="file" id="post-image-file" class="form-input" accept="image/png, image/jpeg">
+                        <p id="image-upload-status" class="text-sm mt-1 text-gray-400"></p>
+                    </div>
+                    <button type="submit" id="save-post-btn" class="btn btn-primario w-full">Guardar Post</button>
+                    <button type="button" id="clear-post-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
+                </form>
+                <h3 class="subsection-title">Últimos Posts Publicados</h3>
+                <div id="posts-list" class="space-y-4">
+                    <p class="text-gray-500">Cargando posts...</p>
+                </div>
+            </div>
+            
+            <div id="page-bases" class="page hidden">
+                <h3 class="subsection-title">Gestión de Bases y Condiciones</h3>
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-4">Concurso Online</h4>
+                    <form id="bases-form-online">
+                        <div class="form-grupo">
+                            <label for="bases-online-contenido">Contenido de Bases y Condiciones Online:</label>
+                            <textarea id="bases-online-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen online."></textarea>
+                        </div>
+                        <div id="bases-online-form-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Bases Online</button>
+                    </form>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-2">Concurso Presencial</h4>
+                    <form id="bases-form-presenciales">
+                        <div class="form-grupo">
+                            <label for="bases-presenciales-contenido">Contenido de Bases y Condiciones Presenciales:</label>
+                            <textarea id="bases-presenciales-contenido" class="form-input" rows="15" placeholder="Escribe aquí el texto completo de las bases y condiciones del certamen presencial."></textarea>
+                        </div>
+                        <div id="bases-presenciales-form-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Bases Presenciales</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="page-email-templates" class="page hidden">
+                <h3 class="subsection-title">Gestión de Plantillas de Correo</h3>
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-2">Plantilla de Aprobación</h4>
+                    <form id="aprobacion-email-form">
+                        <div class="form-grupo">
+                            <label for="aprobacion-email-asunto">Asunto del correo:</label>
+                            <input type="text" id="aprobacion-email-asunto" class="form-input" placeholder="Ej: ¡Felicidades, tu video ha sido aprobado!">
+                        </div>
+                        <div class="form-grupo">
+                            <label for="aprobacion-email-contenido">Contenido del correo:</label>
+                            <textarea id="aprobacion-email-contenido" class="form-input" rows="10" placeholder="Ej: Hola [nombre_artista], tu video ha sido aprobado. Paga tu inscripción aquí: [link_pago]"></textarea>
+                            <small class="text-gray-500">Usa **[nombre_artista]** y **[link_pago]** como variables.</small>
+                        </div>
+                        <div id="aprobacion-email-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Plantilla de Aprobación</button>
+                    </form>
+                </div>
+
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-2">Plantilla de Rechazo</h4>
+                    <form id="rechazo-email-form">
+                        <div class="form-grupo">
+                            <label for="rechazo-email-asunto">Asunto del correo:</label>
+                            <input type="text" id="rechazo-email-asunto" class="form-input" placeholder="Ej: Tu video no fue seleccionado esta vez...">
+                        </div>
+                        <div class="form-grupo">
+                            <label for="rechazo-email-contenido">Contenido del correo:</label>
+                            <textarea id="rechazo-email-contenido" class="form-input" rows="10" placeholder="Ej: Hola [nombre_artista], lamentamos informarte que tu video no ha sido seleccionado. Motivo: [motivo_rechazo]"></textarea>
+                            <small class="text-gray-500">Usa **[nombre_artista]** y **[motivo_rechazo]** como variables.</small>
+                        </div>
+                        <div id="rechazo-email-status" class="alert hidden"></div>
+                        <button type="submit" class="btn btn-primario w-full">Guardar Plantilla de Rechazo</button>
+                    </form>
+                </div>
+            </div>
+            
+            <div id="page-estadisticas" class="page hidden">
+                <h3 class="subsection-title">Estadísticas Detalladas</h3>
+                <p class="text-gray-400">Reportes avanzados sobre demografía, conversión y engagement.</p>
+            </div>
+        </main>
+
+        <nav class="bottom-nav">
+            <a href="#" data-target="page-dashboard">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                <span>Dash.</span>
+            </a>
+            <a href="#" data-target="page-participantes">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                <span>Partic.</span>
+            </a>
+            <a href="#" data-target="page-blog">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+                <span>Blog</span>
+            </a>
+            <a href="#" data-target="page-bases">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <span>Bases</span>
+            </a>
+            <a href="#" data-target="page-ciudades">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21c2.19 0 4.19-.89 5.66-2.34A8 8 0 0012 5a8 8 0 00-5.66 13.66A8 8 0 0012 21z"></path><path d="M12 13a4 4 0 100-8 4 4 0 000 8z"></path></svg>
+                <span>Gira</span>
+            </a>
+        </nav>
+    </div>
+    
     <script type="module">
-        // Importaciones de Firebase (se mantienen para cuando decidas usarlas)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
 
-        // 🔥 TU CONFIGURACIÓN DE FIREBASE 🔥
-        // Reemplaza con tu configuración real de Firebase cuando la tengas.
         const firebaseConfig = {
-            apiKey: "TU_API_KEY",
-            authDomain: "TU_AUTH_DOMAIN",
-            projectId: "TU_PROJECT_ID",
-            storageBucket: "TU_STORAGE_BUCKET",
-            messagingSenderId: "TU_MESSAGING_SENDER_ID",
-            appId: "TU_APP_ID"
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
         };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const analytics = getAnalytics(app);
 
-        // Inicializa Firebase solo si la API Key no es la de placeholder
-        let app, auth, db, storage;
-        if (firebaseConfig.apiKey !== "TU_API_KEY") {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-            storage = getStorage(app);
-        } else {
-            console.warn("Firebase no inicializado: Por favor, actualiza firebaseConfig con tus credenciales reales para usar las funcionalidades de Firebase.");
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginSection = document.getElementById('login-section');
+            const adminDashboard = document.getElementById('admin-dashboard');
+            const navLinks = document.querySelectorAll('aside a[data-target]');
+            const bottomNavLinks = document.querySelectorAll('.bottom-nav a');
+            const pages = document.querySelectorAll('.page');
+            const pozoTotal = document.getElementById('pozo-total');
+            const statsIngresos = document.getElementById('stats-ingresos');
+            const statsVotos = document.getElementById('stats-votos');
+            const loginBtn = document.getElementById('login-btn');
+            const adminEmailInput = document.getElementById('admin-email');
+            const adminPasswordInput = document.getElementById('admin-password');
+            const loginError = document.getElementById('login-error');
+            const pozoInput = document.getElementById('pozo-input');
+            const updatePozoBtn = document.getElementById('update-pozo-btn');
+            const pozoFormStatus = document.getElementById('pozo-form-status');
 
+            const ciudadesForm = document.getElementById('ciudades-form');
+            const ciudadIdInput = document.getElementById('ciudad-id');
+            const ciudadNombreInput = document.getElementById('ciudad-nombre');
+            const ciudadFechaInput = document.getElementById('ciudad-fecha');
+            const ciudadLugarInput = document.getElementById('ciudad-lugar');
+            const ciudadUrlInput = document.getElementById('ciudad-url');
+            const saveCiudadBtn = document.getElementById('save-ciudad-btn');
+            const clearCiudadFormBtn = document.getElementById('clear-ciudad-form-btn');
+            const ciudadesListDiv = document.getElementById('ciudades-list');
 
-        // --- Elementos del DOM ---
-        const loginSection = document.getElementById('login-section');
-        const adminDashboard = document.getElementById('admin-dashboard');
-        const adminEmailInput = document.getElementById('admin-email');
-        const adminPasswordInput = document.getElementById('admin-password');
-        const loginBtn = document.getElementById('login-btn');
-        const creatorAccessBtn = document.getElementById('creator-access-btn'); // Nuevo botón
-        const logoutBtn = document.getElementById('logout-btn');
-        const loginError = document.getElementById('login-error');
-        const adminUserEmailSpan = document.getElementById('admin-user-email');
-        const adminMessages = document.getElementById('admin-messages');
+            const blogForm = document.getElementById('blog-form');
+            const postIdInput = document.getElementById('post-id');
+            const postTituloInput = document.getElementById('post-titulo');
+            const postContenidoInput = document.getElementById('post-contenido');
+            const postImageFileInput = document.getElementById('post-image-file');
+            const imageUploadStatus = document.getElementById('image-upload-status');
+            const savePostBtn = document.getElementById('save-post-btn');
+            const clearPostFormBtn = document.getElementById('clear-post-form-btn');
+            const postsListDiv = document.getElementById('posts-list');
+            
+            const basesOnlineContenidoInput = document.getElementById('bases-online-contenido');
+            const basesOnlineFormStatus = document.getElementById('bases-online-form-status');
+            const basesFormOnline = document.getElementById('bases-form-online');
+            
+            const basesPresencialesContenidoInput = document.getElementById('bases-presenciales-contenido');
+            const basesPresencialesFormStatus = document.getElementById('bases-presenciales-form-status');
+            const basesFormPresenciales = document.getElementById('bases-form-presenciales');
 
-        const fileUploadInput = document.getElementById('file-upload');
-        const fileNameInput = document.getElementById('file-name');
-        const uploadBtn = document.getElementById('upload-btn');
-        const uploadStatus = document.getElementById('upload-status');
-        const uploadedUrlDisplay = document.getElementById('uploaded-url-display');
-        const uploadedUrlLink = uploadedUrlDisplay.querySelector('a');
-        const copyUrlBtn = uploadedUrlDisplay.querySelector('.copy-url-btn');
+            const participantesOnlineList = document.getElementById('participantes-online-list');
+            const participantesPresencialesList = document.getElementById('participantes-presenciales-list');
 
-        const artistForm = document.getElementById('artist-form');
-        const artistIdInput = document.getElementById('artist-id');
-        const artistNameInput = document.getElementById('artist-name');
-        const artistGenreInput = document.getElementById('artist-genre');
-        const artistProvinceSelect = document.getElementById('artist-province');
-        const artistVideoUrlInput = document.getElementById('artist-video-url');
-        const artistImageUrlInput = document.getElementById('artist-image-url');
-        const artistVotesInput = document.getElementById('artist-votes');
-        const saveArtistBtn = document.getElementById('save-artist-btn');
-        const clearArtistFormBtn = document.getElementById('clear-artist-form-btn');
-        const artistsListDiv = document.getElementById('artists-list');
+            const basesOnlineContent = document.getElementById('bases-online-content');
+            const basesPresencialContent = document.getElementById('bases-presencial-content');
+            const showBasesOnlineBtn = document.getElementById('show-bases-online-btn');
+            const showBasesPresencialBtn = document.getElementById('show-bases-presencial-btn');
 
-        // Elementos del modal de confirmación personalizado
-        const customConfirmModal = document.getElementById('custom-confirm-modal');
-        const customConfirmTitle = document.getElementById('custom-confirm-title');
-        const customConfirmMessage = document.getElementById('custom-confirm-message');
-        const customConfirmYesBtn = document.getElementById('custom-confirm-yes');
-        const customConfirmNoBtn = document.getElementById('custom-confirm-no');
+            function showPage(targetId) {
+                pages.forEach(page => page.classList.add('hidden'));
+                document.getElementById(targetId).classList.remove('hidden');
+                
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                bottomNavLinks.forEach(nav => nav.classList.remove('active'));
 
-        // --- Funciones de Utilidad ---
-        function showMessage(element, message, type = 'success') {
-            element.textContent = message;
-            element.className = `alert ${type === 'success' ? 'alert-success' : 'alert-error'}`;
-            element.classList.remove('hidden');
-            setTimeout(() => {
-                element.classList.add('hidden');
-            }, 5000);
-        }
+                const sidebarLink = document.querySelector(`aside a[data-target="${targetId}"]`);
+                if(sidebarLink) sidebarLink.classList.add('active');
 
-        // Función para mostrar el modal de confirmación personalizado
-        function showCustomConfirm(title, message) {
-            return new Promise((resolve) => {
-                customConfirmTitle.textContent = title;
-                customConfirmMessage.textContent = message;
-                customConfirmModal.classList.add('visible');
+                const bottomLink = document.querySelector(`.bottom-nav a[data-target="${targetId}"]`);
+                if(bottomLink) bottomLink.classList.add('active');
+            }
 
-                const onYes = () => {
-                    customConfirmModal.classList.remove('visible');
-                    customConfirmYesBtn.removeEventListener('click', onYes);
-                    customConfirmNoBtn.removeEventListener('click', onNo);
-                    resolve(true);
-                };
-
-                const onNo = () => {
-                    customConfirmModal.classList.remove('visible');
-                    customConfirmYesBtn.removeEventListener('click', onYes);
-                    customConfirmNoBtn.removeEventListener('click', onNo);
-                    resolve(false);
-                };
-
-                customConfirmYesBtn.addEventListener('click', onYes);
-                customConfirmNoBtn.addEventListener('click', onNo);
-            });
-        }
-
-
-        // --- Autenticación ---
-        // Solo intenta la autenticación de Firebase si está configurado
-        if (auth) { // 'auth' será undefined si Firebase no se inicializó
             onAuthStateChanged(auth, (user) => {
                 if (user) {
                     loginSection.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
-                    adminUserEmailSpan.textContent = user.email;
-                    loadArtists(); // Cargar artistas al iniciar sesión
+                    loadDashboardData();
+                    setupRealtimeListeners();
+                    loadBasesOnline();
+                    loadBasesPresenciales();
+                    loadCiudades();
+                    loadPosts();
+                    showPage('page-dashboard');
                 } else {
                     loginSection.classList.remove('hidden');
                     adminDashboard.classList.add('hidden');
@@ -477,323 +701,452 @@
                 const email = adminEmailInput.value;
                 const password = adminPasswordInput.value;
                 if (!email || !password) {
-                    showMessage(loginError, 'Por favor, ingresa email y contraseña.', 'error');
+                    loginError.textContent = 'Por favor, ingresa email y contraseña.';
+                    loginError.classList.remove('hidden');
                     return;
                 }
                 try {
                     await signInWithEmailAndPassword(auth, email, password);
-                    showMessage(adminMessages, 'Sesión iniciada correctamente.', 'success');
+                    loginError.classList.add('hidden');
                 } catch (error) {
                     console.error("Error de login:", error);
-                    showMessage(loginError, `Error de login: ${error.message}`, 'error');
+                    loginError.textContent = `Error de login: ${error.message}`;
+                    loginError.classList.remove('hidden');
                 }
             });
 
-            logoutBtn.addEventListener('click', async () => {
-                try {
-                    await signOut(auth);
-                    showMessage(adminMessages, 'Sesión cerrada correctamente.', 'success');
-                    adminEmailInput.value = '';
-                    adminPasswordInput.value = '';
-                } catch (error) {
+            document.getElementById('logout-btn').addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    console.log("Sesión cerrada");
+                }).catch((error) => {
                     console.error("Error al cerrar sesión:", error);
-                    showMessage(adminMessages, `Error al cerrar sesión: ${error.message}`, 'error');
-                }
+                });
             });
-        } else {
-            // Si Firebase no está configurado, siempre muestra la sección de login
-            loginSection.classList.remove('hidden');
-            adminDashboard.classList.add('hidden'); // Asegura que el dashboard esté oculto al inicio
-            // Oculta el botón de login de Firebase si no está configurado
-            loginBtn.classList.add('hidden'); 
-        }
 
-        // --- Acceso de Creador (Solo Desarrollo) ---
-        creatorAccessBtn.addEventListener('click', () => {
-            loginSection.classList.add('hidden');
-            adminDashboard.classList.remove('hidden');
-            adminUserEmailSpan.textContent = 'creador@desarrollo.com'; // Email de ejemplo para el creador
-            showMessage(adminMessages, 'Acceso de creador activado (solo para desarrollo).', 'success');
-            loadArtists(); // Cargar artistas incluso en modo creador (ahora maneja datos mock)
-        });
+            navLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(link.dataset.target);
+                });
+            });
+            bottomNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    showPage(link.dataset.target);
+                });
+            });
 
+            async function loadDashboardData() {
+                try {
+                    const participantesRef = collection(db, "participantes_online");
+                    const participantesSnapshot = await getDocs(participantesRef);
+                    const totalParticipantes = participantesSnapshot.docs.length;
+                    document.getElementById('stats-participantes').innerText = totalParticipantes;
 
-        // --- Carga de Archivos a Firebase Storage ---
-        // Solo permite la carga si Firebase Storage está configurado
-        if (storage) { // 'storage' será undefined si Firebase no se inicializó
-            uploadBtn.addEventListener('click', async () => {
-                const file = fileUploadInput.files[0];
-                if (!file) {
-                    showMessage(uploadStatus, 'Por favor, selecciona un archivo.', 'error');
-                    return;
+                    const statsRef = doc(db, "estadisticas_generales", "resumen_certamen");
+                    const statsDoc = await getDoc(statsRef);
+                    if (statsDoc.exists()) {
+                        const stats = statsDoc.data();
+                        pozoTotal.innerText = `$ ${stats.pozo_total}`;
+                        statsIngresos.innerText = `$ ${stats.ingresos_totales}`;
+                        statsVotos.innerText = stats.votos_totales;
+                    } else {
+                        pozoTotal.innerText = `$ 0`;
+                        statsIngresos.innerText = `$ 0`;
+                        statsVotos.innerText = '0';
+                    }
+                    
+                    initCharts();
+                } catch (error) {
+                    console.error("Error al cargar los datos del dashboard: ", error);
                 }
+            }
 
-                uploadStatus.textContent = 'Subiendo...';
-                uploadStatus.className = 'text-sm mt-2 text-yellow-400';
-                uploadedUrlDisplay.classList.add('hidden');
-
-                const customFileName = fileNameInput.value.trim();
-                const fileName = customFileName || file.name;
-                const storageRef = ref(storage, `uploads/${fileName}`);
-                const uploadTask = uploadBytesResumable(storageRef, file);
-
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        uploadStatus.textContent = `Subiendo: ${progress.toFixed(0)}%`;
-                    },
-                    (error) => {
-                        console.error("Error al subir archivo:", error);
-                        showMessage(uploadStatus, `Error al subir: ${error.message}`, 'error');
-                    },
-                    () => {
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            showMessage(uploadStatus, '¡Subida completa!', 'success');
-                            uploadedUrlLink.href = downloadURL;
-                            uploadedUrlLink.textContent = downloadURL;
-                            uploadedUrlDisplay.classList.remove('hidden');
-                            fileNameInput.value = ''; // Limpiar campo de nombre
-                            fileUploadInput.value = ''; // Limpiar input de archivo
-                            // Opcional: añadir la URL a una lista visible en el admin
-                            const listItem = document.createElement('div');
-                            listItem.className = 'uploaded-file-item';
-                            listItem.innerHTML = `<span class="file-name">${fileName}</span><a href="${downloadURL}" target="_blank" class="file-url">${downloadURL}</a><button class="copy-url-btn btn btn-secundario">Copiar</button>`;
-                            // Si tienes una lista de archivos subidos, añádelo aquí
-                            // uploadedFilesList.prepend(listItem); 
-                            listItem.querySelector('.copy-url-btn').addEventListener('click', () => {
-                                navigator.clipboard.writeText(downloadURL)
-                                    .then(() => showMessage(adminMessages, 'URL copiada al portapapeles', 'success'))
-                                    .catch(err => console.error('Error al copiar:', err));
-                            });
+            function setupRealtimeListeners() {
+                const onlineRef = query(collection(db, "participantes_online"), where("aprobado", "==", false));
+                onSnapshot(onlineRef, (snapshot) => {
+                    participantesOnlineList.innerHTML = '';
+                    if (snapshot.empty) {
+                        participantesOnlineList.innerHTML = `<p class="text-gray-500">No hay inscripciones online pendientes.</p>`;
+                    } else {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const artistItem = document.createElement('div');
+                            artistItem.className = 'artist-list-item';
+                            artistItem.innerHTML = `
+                                <div>
+                                    <p class="font-semibold">${data.nombre_artista}</p>
+                                    <p class="text-xs text-gray-400">Modalidad: Online</p>
+                                    <p class="text-xs text-blue-400 break-words"><a href="${data.video_link}" target="_blank">Ver video</a></p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}" data-modalidad="online">Aprobar</button>
+                                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}" data-modalidad="online">Rechazar</button>
+                                    <button class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm delete-btn" data-id="${doc.id}" data-modalidad="online">Eliminar</button>
+                                </div>
+                            `;
+                            participantesOnlineList.appendChild(artistItem);
                         });
                     }
-                );
-            });
-        } else {
-            // Deshabilita la carga de archivos si Firebase Storage no está configurado
-            uploadBtn.disabled = true;
-            uploadBtn.textContent = 'Subir a Firebase Storage (No disponible)';
-            showMessage(uploadStatus, 'La carga de archivos no está disponible. Configura Firebase Storage.', 'error');
-        }
-
-
-        // --- Gestión de Artistas (Firestore) ---
-        // Llenar el select de provincias en el formulario de artista
-        const provinceOptions = Object.values({
-            "ARA": "Salta", "ARB": "Buenos Aires", "ARC": "Ciudad de Buenos Aires", "ARD": "San Luis", 
-            "ARE": "Entre Ríos", "ARF": "La Rioja", "ARG": "Santiago del Estero", "ARH": "Chaco", 
-            "ARJ": "San Juan", "ARK": "Catamarca", "ARL": "La Pampa", "ARM": "Mendoza", 
-            "ARN": "Misiones", "ARP": "Formosa", "ARQ": "Neuquén", "ARR": "Río Negro", 
-            "ARS": "Santa Fe", "ART": "Tucumán", "ARU": "Chubut", "ARV": "Tierra del Fuego", 
-            "ARW": "Corrientes", "ARX": "Córdoba", "ARY": "Jujuy", "ARZ": "Santa Cruz"
-        });
-        provinceOptions.forEach(prov => {
-            const option = document.createElement('option');
-            option.value = prov;
-            option.textContent = prov;
-            artistProvinceSelect.appendChild(option);
-        });
-
-        artistForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            // Solo permite guardar si Firestore está configurado
-            if (!db) {
-                showMessage(adminMessages, 'Firestore no está configurado. No se puede guardar el artista.', 'error');
-                // Deshabilita el formulario para evitar intentos de guardado sin DB
-                artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = true);
-                return;
-            }
-
-            const id = artistIdInput.value;
-            const name = artistNameInput.value;
-            const genre = artistGenreInput.value;
-            const province = artistProvinceSelect.value;
-            const videoUrl = artistVideoUrlInput.value;
-            const imageUrl = artistImageUrlInput.value;
-            const votes = parseInt(artistVotesInput.value) || 0;
-
-            if (!name || !genre || !province || !videoUrl || !imageUrl) {
-                showMessage(adminMessages, 'Por favor, completa todos los campos del artista.', 'error');
-                return;
-            }
-
-            try {
-                if (id) {
-                    // Actualizar artista existente
-                    const artistRef = doc(db, "artistas", id);
-                    await updateDoc(artistRef, {
-                        name, genre, province, videoUrl, imageUrl, votes,
-                        updatedAt: serverTimestamp()
-                    });
-                    showMessage(adminMessages, 'Artista actualizado correctamente.', 'success');
-                } else {
-                    // Añadir nuevo artista
-                    await addDoc(collection(db, "artistas"), {
-                        name, genre, province, videoUrl, imageUrl, votes,
-                        createdAt: serverTimestamp()
-                    });
-                    showMessage(adminMessages, 'Artista añadido correctamente.', 'success');
-                }
-                artistForm.reset();
-                artistIdInput.value = ''; // Limpiar ID oculto
-                loadArtists(); // Recargar la lista de artistas
-            } catch (error) {
-                console.error("Error al guardar artista:", error);
-                showMessage(adminMessages, `Error al guardar artista: ${error.message}`, 'error');
-            }
-        });
-
-        clearArtistFormBtn.addEventListener('click', () => {
-            artistForm.reset();
-            artistIdInput.value = '';
-            saveArtistBtn.textContent = 'Guardar Artista';
-            // Vuelve a habilitar el formulario si se había deshabilitado por falta de DB
-            if (db) {
-                artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = false);
-            }
-        });
-
-        async function loadArtists() {
-            artistsListDiv.innerHTML = '<p class="text-gray-500">Cargando artistas...</p>';
-            
-            // Si Firestore NO está configurado, carga datos de ejemplo
-            if (!db) {
-                console.warn("Firestore no configurado. Cargando artistas de ejemplo.");
-                const mockArtists = [
-                    { id: 'mock1', name: 'Sol Frecuencia', genre: 'Pop', province: 'Buenos Aires', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ', imageUrl: 'https://placehold.co/180x180/282828/ffffff?text=Sol+Frecuencia', votes: 1500 },
-                    { id: 'mock2', name: 'Ritmo Urbano', genre: 'Urbano', province: 'Córdoba', videoUrl: 'https://www.youtube.com/embed/hTWKbfoikeg', imageUrl: 'https://placehold.co/180x180/282828/ffffff?text=Ritmo+Urbano', votes: 1200 },
-                    { id: 'mock3', name: 'Voz del Pueblo', genre: 'Folclore', province: 'Santa Fe', videoUrl: 'https://www.youtube.com/embed/kXYiU_JCYtU', imageUrl: 'https://placehold.co/180x180/282828/ffffff?text=Voz+del+Pueblo', votes: 800 }
-                ];
-                
-                artistsListDiv.innerHTML = ''; // Limpia el mensaje de carga
-                mockArtists.forEach((artist) => {
-                    const artistItem = document.createElement('div');
-                    artistItem.className = 'artist-list-item';
-                    artistItem.innerHTML = `
-                        <p><strong>Nombre:</strong> ${artist.name}</p>
-                        <p><strong>Provincia:</strong> ${artist.province}</p>
-                        <p><strong>Género:</strong> ${artist.genre}</p>
-                        <p><strong>Votos:</strong> ${artist.votes}</p>
-                        <p><strong>Video URL:</strong> <a href="${artist.videoUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.videoUrl}</a></p>
-                        <p><strong>Imagen URL:</strong> <a href="${artist.imageUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.imageUrl}</a></p>
-                        <div class="artist-actions">
-                            <button class="btn btn-secundario edit-artist-btn" data-id="${artist.id}">Editar</button>
-                            <button class="btn btn-delete delete-artist-btn" data-id="${artist.id}">Eliminar</button>
-                        </div>
-                    `;
-                    artistsListDiv.appendChild(artistItem);
                 });
 
-                // Deshabilita el formulario de artista y el botón de carga de archivos
-                // ya que no hay una DB real para guardar/subir
-                artistForm.querySelectorAll('input, select, button[type="submit"]').forEach(el => el.disabled = true);
-                uploadBtn.disabled = true;
-                showMessage(adminMessages, 'Funcionalidades de base de datos y almacenamiento deshabilitadas. Configura Firebase para habilitarlas.', 'error');
-                return; // Sale de la función después de cargar los datos mock
+                const presencialRef = query(collection(db, "participantes_presenciales"), where("aprobado", "==", false));
+                onSnapshot(presencialRef, (snapshot) => {
+                    participantesPresencialesList.innerHTML = '';
+                    if (snapshot.empty) {
+                        participantesPresencialesList.innerHTML = `<p class="text-gray-500">No hay inscripciones presenciales pendientes.</p>`;
+                    } else {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const artistItem = document.createElement('div');
+                            artistItem.className = 'artist-list-item';
+                            artistItem.innerHTML = `
+                                <div>
+                                    <p class="font-semibold">${data.nombre_artista}</p>
+                                    <p class="text-xs text-gray-400">Modalidad: Presencial</p>
+                                    <p class="text-xs text-blue-400 break-words"><a href="${data.video_link}" target="_blank">Ver video</a></p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="btn btn-primario px-3 py-1 text-sm approve-btn" data-id="${doc.id}" data-modalidad="presencial">Aprobar</button>
+                                    <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm reject-btn" data-id="${doc.id}" data-modalidad="presencial">Rechazar</button>
+                                    <button class="bg-gray-600 text-white px-3 py-1 rounded-full text-sm delete-btn" data-id="${doc.id}" data-modalidad="presencial">Eliminar</button>
+                                </div>
+                            `;
+                            participantesPresencialesList.appendChild(artistItem);
+                        });
+                    }
+                });
+            }
+            
+            document.addEventListener('click', async (e) => {
+                if (e.target.classList.contains('approve-btn')) {
+                    const docId = e.target.dataset.id;
+                    const modalidad = e.target.dataset.modalidad;
+                    const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
+                    
+                    try {
+                        const artistRef = doc(db, coleccion, docId);
+                        await updateDoc(artistRef, { aprobado: true, rechazado: false });
+                        alert(`El participante ha sido aprobado.`);
+                    } catch (error) {
+                        console.error(`Error al actualizar el participante: ${error.message}`);
+                    }
+                } else if (e.target.classList.contains('reject-btn')) {
+                    const docId = e.target.dataset.id;
+                    const modalidad = e.target.dataset.modalidad;
+                    const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
+                    
+                    const motivo = prompt("Por favor, introduce el motivo del rechazo:");
+                    if (motivo !== null && motivo.trim() !== "") {
+                        try {
+                            const artistRef = doc(db, coleccion, docId);
+                            await updateDoc(artistRef, { aprobado: false, rechazado: true, motivo_rechazo: motivo });
+                            alert(`El participante ha sido rechazado con el motivo: "${motivo}".`);
+                        } catch (error) {
+                            console.error(`Error al actualizar el participante: ${error.message}`);
+                        }
+                    } else {
+                        alert("El rechazo fue cancelado.");
+                    }
+                } else if (e.target.classList.contains('delete-btn')) {
+                    const docId = e.target.dataset.id;
+                    const modalidad = e.target.dataset.modalidad;
+                    const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
+
+                    const confirmed = confirm("¿Estás seguro de que quieres eliminar este participante? Esta acción no se puede deshacer.");
+                    if (confirmed) {
+                        try {
+                            await deleteDoc(doc(db, coleccion, docId));
+                            alert('Participante eliminado correctamente.');
+                        } catch (error) {
+                            console.error(`Error al eliminar el participante: ${error.message}`);
+                        }
+                    }
+                }
+            });
+
+
+            function initCharts() {
+                var votosChartCtx = document.getElementById('votosChart').getContext('2d');
+                new Chart(votosChartCtx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Participante A', 'Participante B', 'Participante C'],
+                        datasets: [{
+                            label: 'Votos Acumulados',
+                            data: [1200, 1900, 300],
+                            backgroundColor: [
+                                'rgba(88, 166, 255, 0.5)',
+                                'rgba(255, 159, 64, 0.5)',
+                                'rgba(255, 99, 132, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(88, 166, 255, 1)',
+                                'rgba(255, 159, 64, 1)',
+                                'rgba(255, 99, 132, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
             }
 
-            // Lógica original de carga de Firestore (solo se ejecuta si 'db' está configurado)
-            try {
-                // Asegúrate de que `orderBy` esté disponible si lo usas, o quítalo si no es esencial
-                const q = query(collection(db, "artistas"), orderBy("createdAt", "desc")); 
-                const querySnapshot = await getDocs(q);
-                artistsListDiv.innerHTML = ''; // Limpiar el mensaje de carga
+            updatePozoBtn.addEventListener('click', async () => {
+                const nuevoPozo = parseInt(pozoInput.value);
+                const pozoDocId = "resumen_certamen";
 
-                if (querySnapshot.empty) {
-                    artistsListDiv.innerHTML = '<p class="text-gray-500">No hay artistas registrados.</p>';
+                if (isNaN(nuevoPozo) || nuevoPozo < 0) {
+                    pozoFormStatus.textContent = 'Por favor, ingresa un número válido y positivo.';
+                    pozoFormStatus.className = 'alert alert-error';
+                    pozoFormStatus.classList.remove('hidden');
                     return;
                 }
 
-                querySnapshot.forEach((docItem) => {
-                    const artist = docItem.data();
-                    const artistItem = document.createElement('div');
-                    artistItem.className = 'artist-list-item';
-                    artistItem.innerHTML = `
-                        <p><strong>Nombre:</strong> ${artist.name}</p>
-                        <p><strong>Provincia:</strong> ${artist.province}</p>
-                        <p><strong>Género:</strong> ${artist.genre}</p>
-                        <p><strong>Votos:</strong> ${artist.votes}</p>
-                        <p><strong>Video URL:</strong> <a href="${artist.videoUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.videoUrl}</a></p>
-                        <p><strong>Imagen URL:</strong> <a href="${artist.imageUrl}" target="_blank" class="text-blue-400 hover:underline break-all">${artist.imageUrl}</a></p>
-                        <div class="artist-actions">
-                            <button class="btn btn-secundario edit-artist-btn" data-id="${docItem.id}">Editar</button>
-                            <button class="btn btn-delete delete-artist-btn" data-id="${docItem.id}">Eliminar</button>
-                        </div>
-                    `;
-                    artistsListDiv.appendChild(artistItem);
-                });
-
-                // Añadir event listeners a los botones de editar y eliminar (solo para datos reales)
-                artistsListDiv.querySelectorAll('.edit-artist-btn').forEach(btn => {
-                    btn.addEventListener('click', () => editArtist(btn.dataset.id));
-                });
-                artistsListDiv.querySelectorAll('.delete-artist-btn').forEach(btn => {
-                    btn.addEventListener('click', () => deleteArtist(btn.dataset.id));
-                });
-
-            } catch (error) {
-                console.error("Error al cargar artistas:", error);
-                artistsListDiv.innerHTML = `<p class="text-red-400">Error al cargar artistas: ${error.message}</p>`;
-            }
-        }
-
-        async function editArtist(id) {
-            // Solo permite editar si Firestore está configurado
-            if (!db) {
-                showMessage(adminMessages, 'Firestore no está configurado. No se puede editar el artista.', 'error');
-                return;
-            }
-            try {
-                const docRef = doc(db, "artistas", id);
-                const docSnap = await getDoc(docRef);
-                if (docSnap.exists()) {
-                    const artist = docSnap.data();
-                    artistIdInput.value = id;
-                    artistNameInput.value = artist.name;
-                    artistGenreInput.value = artist.genre;
-                    artistProvinceSelect.value = artist.province;
-                    artistVideoUrlInput.value = artist.videoUrl;
-                    artistImageUrlInput.value = artist.imageUrl;
-                    artistVotesInput.value = artist.votes;
-                    saveArtistBtn.textContent = 'Actualizar Artista';
-                    showMessage(adminMessages, 'Editando artista.', 'success');
-                } else {
-                    showMessage(adminMessages, 'Artista no encontrado.', 'error');
-                }
-            } catch (error) {
-                console.error("Error al editar artista:", error);
-                showMessage(adminMessages, `Error al cargar artista para edición: ${error.message}`, 'error');
-            }
-        }
-
-        async function deleteArtist(id) {
-            // Solo permite eliminar si Firestore está configurado
-            if (!db) {
-                showMessage(adminMessages, 'Firestore no está configurado. No se puede eliminar el artista.', 'error');
-                return;
-            }
-
-            const confirmed = await showCustomConfirm(
-                'Confirmar Eliminación',
-                '¿Estás seguro de que quieres eliminar este artista? Esta acción es irreversible.'
-            );
-            
-            if (confirmed) {
                 try {
-                    await deleteDoc(doc(db, "artistas", id));
-                    showMessage(adminMessages, 'Artista eliminado correctamente.', 'success');
-                    loadArtists(); // Recargar lista
+                    const statsDocRef = doc(db, "estadisticas_generales", pozoDocId);
+                    await setDoc(statsDocRef, { pozo_total: nuevoPozo }, { merge: true });
+                    pozoFormStatus.textContent = 'Pozo de premios actualizado correctamente.';
+                    pozoFormStatus.className = 'alert alert-success';
+                    pozoFormStatus.classList.remove('hidden');
+                    pozoInput.value = '';
                 } catch (error) {
-                    console.error("Error al eliminar artista:", error);
-                    showMessage(adminMessages, `Error al eliminar artista: ${error.message}`, 'error');
+                    console.error("Error al actualizar el pozo de premios:", error);
+                    pozoFormStatus.textContent = `Error: ${error.message}`;
+                    pozoFormStatus.className = 'alert alert-error';
+                    pozoFormStatus.classList.remove('hidden');
+                }
+            });
+            
+            // Lógica para Ciudades/Gira
+            ciudadesForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nombre = ciudadNombreInput.value;
+                const fecha = ciudadFechaInput.value;
+                const lugar = ciudadLugarInput.value;
+                const url = ciudadUrlInput.value;
+
+                if (!nombre || !fecha || !lugar || !url) {
+                    console.error("Todos los campos de la ciudad son obligatorios.");
+                    return;
+                }
+
+                try {
+                    await addDoc(collection(db, "ciudades_presenciales"), {
+                        nombre,
+                        fecha,
+                        lugar,
+                        url,
+                        createdAt: serverTimestamp()
+                    });
+                    ciudadesForm.reset();
+                    loadCiudades();
+                } catch (error) {
+                    console.error("Error al guardar la ciudad:", error);
+                }
+            });
+
+            async function loadCiudades() {
+                ciudadesListDiv.innerHTML = '<p class="text-gray-500">Cargando ciudades...</p>';
+                try {
+                    const q = query(collection(db, "ciudades_presenciales"), orderBy("fecha", "asc"));
+                    const querySnapshot = await getDocs(q);
+                    ciudadesListDiv.innerHTML = '';
+                    querySnapshot.forEach((docItem) => {
+                        const ciudad = docItem.data();
+                        const ciudadItem = document.createElement('div');
+                        ciudadItem.className = 'artist-list-item';
+                        ciudadItem.innerHTML = `
+                            <div>
+                                <p class="font-semibold">${ciudad.nombre}</p>
+                                <p class="text-xs text-gray-400">${ciudad.lugar} - ${ciudad.fecha}</p>
+                                <a href="${ciudad.url}" target="_blank" class="text-xs text-blue-400 break-words">Enlace</a>
+                            </div>
+                            <button class="bg-red-600 text-white px-3 py-1 rounded-full text-sm" onclick="deleteCiudad('${docItem.id}')">Eliminar</button>
+                        `;
+                        ciudadesListDiv.appendChild(ciudadItem);
+                    });
+                } catch (error) {
+                    console.error("Error al cargar ciudades:", error);
                 }
             }
-        }
 
-        // --- Inicialización ---
-        // Si Firebase no está configurado, el dashboard se oculta y el botón de login de Firebase también.
-        // El botón de acceso de creador siempre está visible para desarrollo.
-    });
+            window.deleteCiudad = async (id) => {
+                const confirmed = confirm("¿Estás seguro de que quieres eliminar esta ciudad?");
+                if (confirmed) {
+                    try {
+                        await deleteDoc(doc(db, "ciudades_presenciales", id));
+                        loadCiudades();
+                    } catch (error) {
+                        console.error("Error al eliminar la ciudad:", error);
+                    }
+                }
+            };
+            
+            // Lógica para Blog
+            blogForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const titulo = postTituloInput.value;
+                const contenido = postContenidoInput.value;
+                const imageFile = postImageFileInput.files[0];
+                let imagenUrl = '';
+
+                if (!titulo || !contenido) {
+                    alert("El título y el contenido del post son obligatorios.");
+                    return;
+                }
+
+                imageUploadStatus.textContent = 'Subiendo imagen...';
+                imageUploadStatus.className = 'text-sm mt-1 text-yellow-400';
+
+                try {
+                    if (imageFile) {
+                        const storageRef = ref(storage, `blog_images/${Date.now()}-${imageFile.name}`);
+                        const uploadTask = uploadBytesResumable(storageRef, imageFile);
+                        await uploadTask;
+                        imagenUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                        imageUploadStatus.textContent = 'Imagen subida exitosamente.';
+                        imageUploadStatus.className = 'text-sm mt-1 text-green-400';
+                    }
+
+                    await addDoc(collection(db, "blog"), {
+                        titulo,
+                        contenido,
+                        imagenUrl,
+                        createdAt: serverTimestamp()
+                    });
+                    
+                    alert('Post guardado correctamente.');
+                    blogForm.reset();
+                    imageUploadStatus.textContent = '';
+                    loadPosts();
+                } catch (error) {
+                    console.error("Error al guardar el post:", error);
+                    alert(`Error al guardar el post: ${error.message}`);
+                    imageUploadStatus.textContent = `Error al subir imagen: ${error.message}`;
+                    imageUploadStatus.className = 'alert alert-error';
+                }
+            });
+
+            clearPostFormBtn.addEventListener('click', () => {
+                blogForm.reset();
+                imageUploadStatus.textContent = '';
+            });
+
+            async function loadPosts() {
+                postsListDiv.innerHTML = '<p class="text-gray-500">Cargando posts...</p>';
+                try {
+                    const q = query(collection(db, "blog"), orderBy("createdAt", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    postsListDiv.innerHTML = '';
+                    querySnapshot.forEach((docItem) => {
+                        const post = docItem.data();
+                        const postItem = document.createElement('div');
+                        postItem.className = 'dashboard-card mb-4';
+                        postItem.innerHTML = `
+                            <h4 class="font-bold">${post.titulo}</h4>
+                            <p class="text-xs text-gray-400">${new Date(post.createdAt.toDate()).toLocaleDateString()}</p>
+                            ${post.imagenUrl ? `<img src="${post.imagenUrl}" alt="Imagen del post" class="w-24 h-24 object-cover mt-2 rounded-lg">` : ''}
+                            <p class="mt-2 text-sm">${post.contenido.substring(0, 100)}...</p>
+                            <button class="bg-red-600 text-white px-3 py-1 rounded-full text-xs mt-2" onclick="deletePost('${docItem.id}')">Eliminar</button>
+                        `;
+                        postsListDiv.appendChild(postItem);
+                    });
+                } catch (error) {
+                    console.error("Error al cargar posts:", error);
+                }
+            }
+
+            window.deletePost = async (id) => {
+                const confirmed = confirm("¿Estás seguro de que quieres eliminar este post?");
+                if (confirmed) {
+                    try {
+                        await deleteDoc(doc(db, "blog", id));
+                        loadPosts();
+                    } catch (error) {
+                        console.error("Error al eliminar el post:", error);
+                    }
+                }
+            };
+            
+            // Lógica para Bases y Condiciones Online
+            basesFormOnline.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const contenido = basesOnlineContenidoInput.value;
+                const basesDocId = "texto_online";
+
+                if (!contenido) {
+                    basesOnlineFormStatus.textContent = 'El contenido no puede estar vacío.';
+                    basesOnlineFormStatus.className = 'alert alert-error';
+                    basesOnlineFormStatus.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_online", basesDocId);
+                    await setDoc(basesDocRef, { contenido: contenido, updatedAt: serverTimestamp() });
+                    basesOnlineFormStatus.textContent = 'Bases y condiciones actualizadas correctamente.';
+                    basesOnlineFormStatus.className = 'alert alert-success';
+                    basesOnlineFormStatus.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error al guardar bases y condiciones:", error);
+                    basesOnlineFormStatus.textContent = `Error: ${error.message}`;
+                    basesOnlineFormStatus.className = 'alert alert-error';
+                    basesOnlineFormStatus.classList.remove('hidden');
+                }
+            });
+
+            async function loadBasesOnline() {
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_online", "texto_online");
+                    const basesDoc = await getDoc(basesDocRef);
+                    if (basesDoc.exists()) {
+                        basesOnlineContenidoInput.value = basesDoc.data().contenido;
+                    }
+                } catch (error) {
+                    console.error("Error al cargar bases y condiciones online:", error);
+                }
+            }
+
+            // Lógica para Bases y Condiciones Presenciales
+            basesFormPresenciales.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const contenido = basesPresencialesContenidoInput.value;
+                const basesDocId = "texto_presencial";
+
+                if (!contenido) {
+                    basesPresencialesFormStatus.textContent = 'El contenido no puede estar vacío.';
+                    basesPresencialesFormStatus.className = 'alert alert-error';
+                    basesPresencialesFormStatus.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_presenciales", basesDocId);
+                    await setDoc(basesDocRef, { contenido: contenido, updatedAt: serverTimestamp() });
+                    basesPresencialesFormStatus.textContent = 'Bases y condiciones actualizadas correctamente.';
+                    basesPresencialesFormStatus.className = 'alert alert-success';
+                    basesPresencialesFormStatus.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error al guardar bases y condiciones:", error);
+                    basesPresencialesFormStatus.textContent = `Error: ${error.message}`;
+                    basesPresencialesFormStatus.className = 'alert alert-error';
+                    basesPresencialesFormStatus.classList.remove('hidden');
+                }
+            });
+
+            async function loadBasesPresenciales() {
+                try {
+                    const basesDocRef = doc(db, "bases_y_condiciones_presenciales", "texto_presencial");
+                    const basesDoc = await getDoc(basesDocRef);
+                    if (basesDoc.exists()) {
+                        basesPresencialesContenidoInput.value = basesDoc.data().contenido;
+                    }
+                } catch (error) {
+                    console.error("Error al cargar bases y condiciones presenciales:", error);
+                }
+            }
+        });
     </script>
 </body>
 </html>

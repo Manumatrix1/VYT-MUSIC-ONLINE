@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VYT MUSIC - Concurso Nacional de Canto</title>
     
-    <!-- SEO y Social Media (Open Graph) Tags -->
     <meta name="description" content="Demostrá tu talento y competí con artistas de todo el país. ¡Sumate al certamen más grande de Argentina!">
     <meta property="og:title" content="VYT MUSIC - Certamen de Canto">
     <meta property="og:description" content="Demostrá tu talento y competí con artistas de todo el país. ¡Sumate al certamen más grande de Argentina!">
@@ -13,7 +12,6 @@
     <meta property="og:url" content="URL_DE_TU_SITIO_AQUI">
     <meta property="og:type" content="website">
 
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
@@ -54,18 +52,37 @@
         /* --- NUEVA ESTRUCTURA TIPO SPOTIFY --- */
         .site-wrapper {
             display: flex;
-            height: 100vh;
+            min-height: 100vh;
         }
 
-        .sidebar {
-            width: 250px;
-            background-color: #000;
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
+        /* Ocultar sidebar en móviles */
+        @media (max-width: 767px) {
+            .sidebar {
+                display: none;
+            }
+            body {
+                padding-bottom: 70px;
+            }
         }
 
+        /* Mostrar sidebar en escritorio */
+        @media (min-width: 768px) {
+            .sidebar {
+                display: flex;
+                width: 250px;
+                background-color: #000;
+                padding: 1.5rem;
+                flex-direction: column;
+                flex-shrink: 0;
+            }
+            .bottom-nav {
+                display: none;
+            }
+            body {
+                padding-bottom: 0;
+            }
+        }
+        
         .main-content {
             flex-grow: 1;
             overflow-y: auto;
@@ -275,29 +292,51 @@
             background-color: var(--color-card);
             border: 1px solid #30363d;
         }
-
-        /* --- Chat Flotante --- */
-        .chat-button {
+        
+        /* --- Barra de navegación inferior para móvil (TIPO SPOTIFY) --- */
+        .bottom-nav {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background-color: rgba(0, 0, 0, 0.8); /* Fondo semi-transparente */
+            backdrop-filter: blur(10px); /* Efecto de blur */
+            display: none;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #282828;
             z-index: 1000;
-            background-color: #25D366; /* WhatsApp Green */
-            color: white;
-            border-radius: 9999px;
-            padding: 1rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-            transition: transform 0.2s ease-in-out;
+        }
+        
+        /* Mostrar solo en móvil */
+        @media (max-width: 767px) {
+            .bottom-nav {
+                display: flex;
+            }
+        }
+
+        .bottom-nav a {
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
+            color: var(--color-texto-secundario);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 700;
+            transition: color 0.3s ease;
+            text-align: center;
         }
-        .chat-button:hover {
-            transform: scale(1.05);
+
+        .bottom-nav a.active, .bottom-nav a:hover {
+            color: var(--color-primario);
         }
-        .chat-button svg {
-            width: 2rem;
-            height: 2rem;
+
+        .bottom-nav svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin-bottom: 2px;
         }
         
         /* --- Modal --- */
@@ -615,7 +654,6 @@
 <body>
 
     <div class="site-wrapper">
-        <!-- BARRA LATERAL FIJA -->
         <aside class="sidebar">
             <a class="sidebar-logo" data-target="page-inicio">
                 <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo">
@@ -637,11 +675,10 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li><a data-target="page-concurso-online">Online</a></li>
-                            <li><a href="presencial.html">Presencial</a></li> <!-- Enlace a archivo externo -->
+                            <li><a href="inscripcion_presencial.html">Presencial</a></li> 
                         </ul>
                     </li>
-                    <li><a data-target="page-inscripcion"> <!-- Ahora es un data-target interno de nuevo -->
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                    <li><a data-target="page-inscripcion"> <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                         <span>Inscripción</span>
                     </a></li>
                     <li><a data-target="page-comprar-vyt">
@@ -655,6 +692,10 @@
                     <li><a data-target="page-sponsors">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                         <span>Sponsors</span>
+                    </a></li>
+                    <li><a href="blog.html">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+                        <span>Blog</span>
                     </a></li>
                 </ul>
             </nav>
@@ -673,7 +714,6 @@
             </header>
             
             <main class="content-wrapper">
-                <!-- Sección de Inicio (visible por defecto) -->
                 <div id="page-inicio" class="page active">
                     <section class="hero">
                         <div class="container">
@@ -681,13 +721,11 @@
                             <p>El escenario digital más grande del país te está esperando. Demostrá tu talento, conectá con miles de personas y competí por premios increíbles.</p>
                             <div class="hero-buttons">
                                 <a class="btn btn-primario" data-target="page-concurso-online">Competir Online</a>
-                                <a class="btn btn-secundario" href="presencial.html">Eventos Presenciales</a> <!-- Enlace a archivo externo -->
+                                <a class="btn btn-secundario" href="presencial.html">Eventos Presenciales</a>
                             </div>
                         </div>
                     </section>
                     
-                    <!-- Sección del Pozo Acumulado eliminada de la página de inicio -->
-
                     <section class="seccion-ranking-home container">
                         <h3 class="titulo-seccion-sm">Ranking Top 5</h3>
                         <div class="ranking-home-grid">
@@ -719,7 +757,7 @@
                                     <p>Mendoza</p>
                                 </div>
                             </div>
-                             <div class="ranking-home-card">
+                            <div class="ranking-home-card">
                                 <img src="https://placehold.co/180x180/282828/ffffff?text=E5" alt="Artista 5">
                                 <div class="ranking-home-info">
                                     <h4>5. Banda E</h4>
@@ -730,7 +768,6 @@
                     </section>
                 </div>
 
-                <!-- Sección de Concurso Online (oculta por defecto) -->
                 <div id="page-concurso-online" class="page">
                     <section class="seccion">
                         <div class="container">
@@ -745,7 +782,6 @@
                             <div class="ranking-grid">
                                 <div class="ranking-card">
                                     <div class="video-wrapper">
-                                        <!-- Reemplaza 'VIDEO_ID_1' con el ID de tu video de YouTube -->
                                         <iframe src="https://www.youtube.com/embed/VIDEO_ID_1_EJEMPLO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
                                     <div class="ranking-info">
@@ -757,7 +793,6 @@
                                 </div>
                                 <div class="ranking-card">
                                     <div class="video-wrapper">
-                                        <!-- Reemplaza 'VIDEO_ID_2' con el ID de tu video de YouTube -->
                                         <iframe src="https://www.youtube.com/embed/VIDEO_ID_2_EJEMPLO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
                                     <div class="ranking-info">
@@ -769,7 +804,6 @@
                                 </div>
                                 <div class="ranking-card">
                                     <div class="video-wrapper">
-                                        <!-- Reemplaza 'VIDEO_ID_3' con el ID de tu video de YouTube -->
                                         <iframe src="https://www.youtube.com/embed/VIDEO_ID_3_EJEMPLO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
                                     <div class="ranking-info">
@@ -782,30 +816,28 @@
                             </div>
 
                             <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Duelos de la Semana</h3>
-                             <div class="duelo-container">
+                            <div class="duelo-container">
                                 <div class="duelo-card">
-                                     <h4>Solista A vs. Banda B</h4>
-                                     <div class="video-wrapper" style="margin-bottom: 1rem;">
-                                        <!-- Reemplaza 'DUELO_VIDEO_ID_1' con el ID de tu video de YouTube para el duelo -->
+                                    <h4>Solista A vs. Banda B</h4>
+                                    <div class="video-wrapper" style="margin-bottom: 1rem;">
                                         <iframe src="https://www.youtube.com/embed/DUELO_VIDEO_ID_1_EJEMPLO" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
-                                     </div>
-                                     <button class="btn btn-primario">Votar por Solista A</button>
+                                    </div>
+                                    <button class="btn btn-primario">Votar por Solista A</button>
                                 </div>
                                 <div class="duelo-card">
-                                     <h4>Duelo</h4>
-                                     <div class="video-wrapper" style="margin-bottom: 1rem;">
-                                        <!-- Reemplaza 'DUELO_VIDEO_ID_2' con el ID de tu video de YouTube para el duelo -->
+                                    <h4>Duelo</h4>
+                                    <div class="video-wrapper" style="margin-bottom: 1rem;">
                                         <iframe src="https://www.youtube.com/embed/DUELO_VIDEO_ID_2_EJEMPLO" title="YouTube video player" frameborder="0" allowfullscreen></iframe>
-                                     </div>
-                                     <button class="btn btn-primario">Votar por Banda B</button>
+                                    </div>
+                                    <button class="btn btn-primario">Votar por Banda B</button>
                                 </div>
-                             </div>
+                            </div>
 
-                             <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Tu Avatar</h3>
-                             <div class="avatar-container">
-                                 <div class="avatar-placeholder">🎤</div>
-                                 <p>¡Próximamente podrás personalizar tu avatar con estilos únicos, micrófonos y más! <br>Gana o compra ítems exclusivos con VYT.</p>
-                             </div>
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Tu Avatar</h3>
+                            <div class="avatar-container">
+                                <div class="avatar-placeholder">🎤</div>
+                                <p>¡Próximamente podrás personalizar tu avatar con estilos únicos, micrófonos y más! <br>Gana o compra ítems exclusivos con VYT.</p>
+                            </div>
                         </div>
                     </section>
                 </div>
@@ -837,7 +869,6 @@
                     </section>
                 </div>
 
-                <!-- Sección de Inscripción (AHORA ENLAZA A ARCHIVOS EXTERNOS) -->
                 <div id="page-inscripcion" class="page">
                     <section class="seccion">
                         <div class="container text-center">
@@ -845,7 +876,7 @@
                             <p class="subtitulo-seccion">Elegí la modalidad que mejor se adapte a vos y comenzá tu camino hacia el estrellato.</p>
                             
                             <div class="inscripcion-choice-buttons">
-                                <a href="inscripcion.html" class="btn btn-online">
+                                <a href="inscripcion_online.html" class="btn btn-online">
                                     Inscripción Online
                                     <span class="btn-text-small">(Desde cualquier lugar de Argentina o el mundo)</span>
                                 </a>
@@ -858,7 +889,6 @@
                     </section>
                 </div>
 
-                <!-- Sección para Comprar VYT (oculta por defecto) -->
                 <div id="page-comprar-vyt" class="page">
                     <section class="seccion">
                         <div class="container">
@@ -891,7 +921,6 @@
                     </section>
                 </div>
 
-                <!-- Sección de Reglamento (oculta por defecto) -->
                 <div id="page-reglamento" class="page">
                     <section class="seccion">
                         <div class="container">
@@ -924,6 +953,7 @@
                                 <div class="reglamento-seccion">
                                     <h3>5. Derechos de Imagen y Contenido</h3>
                                     <p>5.1. Al inscribirse, los participantes ceden a VYT MUSIC los derechos de uso de sus videos y material fotográfico para fines de difusión y promoción del certamen.</p>
+                                    <p>5.2. Los participantes garantizan que el contenido subido es de su autoría y no infringe derechos de terceros.</p>
                                 </div>
                                 <div class="reglamento-seccion">
                                     <h3>6. Disposiciones Generales</h3>
@@ -935,7 +965,6 @@
                     </section>
                 </div>
 
-                <!-- Sección de Sponsors (oculta por defecto) -->
                 <div id="page-sponsors" class="page">
                     <section class="seccion">
                         <div class="container">
@@ -964,15 +993,8 @@
                         </div>
                     </section>
                 </div>
-
             </main>
             
-            <!-- Botón flotante de WhatsApp -->
-            <a href="https://wa.me/TUNUMERODEWHATSAPP" target="_blank" class="chat-button" title="Chatear por WhatsApp">
-                <svg fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12.04 2.02c-5.47 0-9.91 4.44-9.91 9.91 0 1.75.46 3.44 1.34 4.95L2 22l5.24-1.39c1.45.79 3.09 1.25 4.79 1.25 5.47 0 9.91-4.44 9.91-9.91s-4.44-9.91-9.91-9.91zm.04 1.77c4.49 0 8.14 3.65 8.14 8.14s-3.65 8.14-8.14 8.14c-1.58 0-3.1-.45-4.41-1.22l-.31-.18-3.25.86.87-3.16-.2-.33c-.8-1.3-1.22-2.8-1.22-4.34 0-4.49 3.65-8.14 8.14-8.14zm4.58 11.75l-.3-.15c-.3-.15-.7-.34-.99-.34-.29 0-.58.15-.87.44s-.65.7-.79.84c-.15.15-.29.15-.58.05-.29-.15-1.21-.44-2.31-1.42-.85-.75-1.42-1.69-1.58-1.98-.15-.29 0-.44.1-.58s.22-.29.3-.44c.07-.15.15-.29.22-.44.07-.15.05-.29.05-.44s-.05-.29-.15-.44c-.1-.15-.58-1.39-.79-1.93-.22-.54-.44-.44-.58-.44h-.29c-.15 0-.44.05-.7.29-.26.29-1 .99-1 2.42s1.02 2.8 1.17 3c.15.29 1.93 2.96 4.67 4.16 2.74 1.2 2.74.87 3.25.84.51-.05 1.45-.58 1.65-1.17.2-.58.2-.99.15-1.07-.05-.15-.22-.24-.44-.39z"/></svg>
-            </a>
-
-            <!-- Modal de Pago MODO (oculto por defecto) -->
             <div id="modo-payment-modal" class="modal-backdrop">
                 <div class="modal-content">
                     <h3>Pago con MODO</h3>
@@ -987,7 +1009,6 @@
                 </div>
             </div>
 
-            <!-- Modal para subir comprobante (oculto por defecto) -->
             <div id="receipt-upload-modal" class="modal-backdrop">
                 <div class="modal-content">
                     <h3>Subir Comprobante de Pago</h3>
@@ -1001,87 +1022,124 @@
 
         </div>
     </div>
+    
+    <nav class="bottom-nav">
+        <a data-target="page-inicio" class="active">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+            <span>Inicio</span>
+        </a>
+        <a data-target="page-concurso-online">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+            <span>Concursos</span>
+        </a>
+        <a data-target="page-inscripcion">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+            <span>Inscripción</span>
+        </a>
+        <a href="blog.html">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
+            <span>Blog</span>
+        </a>
+    </nav>
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
         document.addEventListener('DOMContentLoaded', () => {
-            // --- Manejo de la Navegación SPA ---
-            // Selecciona todos los enlaces de navegación que tienen un atributo data-target (para navegación interna)
-            const navLinksInternal = document.querySelectorAll('.nav-menu a[data-target]');
-            // Selecciona todos los enlaces del menú desplegable
+            const sidebarLinks = document.querySelectorAll('.nav-menu a[data-target]');
+            const bottomNavLinks = document.querySelectorAll('.bottom-nav a[data-target]');
             const dropdownLinks = document.querySelectorAll('.dropdown > a');
-            // Selecciona todas las secciones de página que se gestionan internamente
             const pages = document.querySelectorAll('.page');
-            // Selecciona el logo de la barra lateral
             const sidebarLogo = document.querySelector('.sidebar-logo');
-            // Selecciona los botones del hero
             const heroButtons = document.querySelectorAll('.hero-buttons .btn');
+            const buyVytButtons = document.querySelectorAll('.buy-vyt-btn');
+            const modoPaymentModal = document.getElementById('modo-payment-modal');
+            const receiptUploadModal = document.getElementById('receipt-upload-modal');
+            const modalVytAmount = document.getElementById('modal-vyt-amount');
+            const modalPaymentAmount = document.getElementById('modal-payment-amount');
+            const modoAlias = document.getElementById('modo-alias');
+            const uploadReceiptBtn = document.getElementById('upload-receipt-btn');
+            const closePaymentModalBtn = document.getElementById('close-payment-modal-btn');
+            const receiptFileInput = document.getElementById('receipt-file-input');
+            const submitReceiptBtn = document.getElementById('submit-receipt-btn');
+            const closeReceiptModalBtn = document.getElementById('close-receipt-modal-btn');
+            
+            let currentPurchase = { vyt: 0, amount: 0 };
 
-            // Función para mostrar una página interna y ocultar las demás
             function showPage(targetId) {
-                // Oculta todas las páginas internas
-                pages.forEach(page => {
-                    page.classList.remove('active');
-                });
-                // Muestra la página interna objetivo
+                pages.forEach(page => page.classList.remove('active'));
                 const targetPage = document.getElementById(targetId);
                 if (targetPage) {
                     targetPage.classList.add('active');
-                    // Desplaza el contenido principal al inicio
                     document.querySelector('.main-content').scrollTop = 0;
                 }
             }
 
-            // Manejar clics en los enlaces de navegación de la barra lateral
-            document.querySelectorAll('.nav-menu a').forEach(link => { // Selecciona TODOS los enlaces del nav-menu
+            const allInternalLinks = document.querySelectorAll('.nav-menu a[data-target], .bottom-nav a[data-target]');
+            allInternalLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
-                    // Si el enlace tiene un 'data-target', es una navegación interna (SPA)
-                    if (link.dataset.target) {
-                        e.preventDefault(); // Previene la recarga de la página
-                        const targetId = link.dataset.target;
+                    e.preventDefault();
+                    const targetId = link.dataset.target;
+                    
+                    allInternalLinks.forEach(nav => nav.classList.remove('active'));
+                    link.classList.add('active');
 
-                        // Remover 'active' de todos los enlaces internos y añadirlo al clicado
-                        navLinksInternal.forEach(nav => nav.classList.remove('active'));
-                        link.classList.add('active');
+                    sidebarLinks.forEach(sl => {
+                        if (sl.dataset.target === targetId) {
+                            sl.classList.add('active');
+                        }
+                    });
+                    bottomNavLinks.forEach(bl => {
+                        if (bl.dataset.target === targetId) {
+                            bl.classList.add('active');
+                        }
+                    });
 
-                        // Cerrar cualquier dropdown abierto
-                        document.querySelectorAll('.dropdown.open').forEach(dropdown => {
-                            dropdown.classList.remove('open');
-                        });
+                    document.querySelectorAll('.dropdown.open').forEach(dropdown => {
+                        dropdown.classList.remove('open');
+                    });
 
-                        showPage(targetId);
-                    }
-                    // Si no tiene 'data-target', es un enlace 'href' y el navegador lo manejará normalmente (recarga la página)
+                    showPage(targetId);
                 });
             });
 
-            // Manejar el clic en el logo de la barra lateral para ir a Inicio
             sidebarLogo.addEventListener('click', (e) => {
                 e.preventDefault();
-                // Desactiva el estado 'active' de todos los enlaces internos
-                navLinksInternal.forEach(nav => nav.classList.remove('active'));
-                // Activa el enlace de "Inicio"
+                allInternalLinks.forEach(nav => nav.classList.remove('active'));
                 document.querySelector('.nav-menu a[data-target="page-inicio"]').classList.add('active');
+                const bottomInicio = document.querySelector('.bottom-nav a[data-target="page-inicio"]');
+                if (bottomInicio) bottomInicio.classList.add('active');
                 showPage('page-inicio');
             });
 
-            // Manejar clics en los botones del Hero para ir a secciones específicas
             heroButtons.forEach(button => {
                 button.addEventListener('click', (e) => {
-                    // Si el botón tiene un 'data-target', es una navegación interna (SPA)
                     if (button.dataset.target) {
-                        e.preventDefault(); // Previene la recarga de la página
+                        e.preventDefault();
                         const targetId = button.dataset.target;
-                        // Desactiva el estado 'active' de todos los enlaces internos
-                        navLinksInternal.forEach(nav => nav.classList.remove('active'));
-                        // Activa el enlace correspondiente en la barra lateral
+                        allInternalLinks.forEach(nav => nav.classList.remove('active'));
                         document.querySelector(`.nav-menu a[data-target="${targetId}"]`).classList.add('active');
+                        const bottomLink = document.querySelector(`.bottom-nav a[data-target="${targetId}"]`);
+                        if (bottomLink) bottomLink.classList.add('active');
                         showPage(targetId);
                     }
-                    // Si no tiene 'data-target', es un enlace 'href' y el navegador lo manejará normalmente
                 });
             });
 
-            // Manejar dropdowns en la barra lateral
             dropdownLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -1091,25 +1149,6 @@
                     }
                 });
             });
-
-            // --- Lógica para Comprar VYT (Modal de Pago MODO y Subida de Comprobante) ---
-            const buyVytButtons = document.querySelectorAll('.buy-vyt-btn');
-            const modoPaymentModal = document.getElementById('modo-payment-modal');
-            const receiptUploadModal = document.getElementById('receipt-upload-modal');
-            const modalVytAmount = document.getElementById('modal-vyt-amount');
-            const modalPaymentAmount = document.getElementById('modal-payment-amount');
-            const modoAlias = document.getElementById('modo-alias'); // Alias fijo por ahora
-            const uploadReceiptBtn = document.getElementById('upload-receipt-btn');
-            const closePaymentModalBtn = document.getElementById('close-payment-modal-btn');
-            const receiptFileInput = document.getElementById('receipt-file-input');
-            const submitReceiptBtn = document.getElementById('submit-receipt-btn');
-            const receiptUploadStatus = document.getElementById('receipt-upload-status');
-            const closeReceiptModalBtn = document.getElementById('close-receipt-modal-btn');
-
-            let currentPurchase = {
-                vyt: 0,
-                amount: 0
-            };
 
             buyVytButtons.forEach(button => {
                 button.addEventListener('click', () => {
@@ -1133,7 +1172,7 @@
 
             closeReceiptModalBtn.addEventListener('click', () => {
                 receiptUploadModal.classList.remove('visible');
-                receiptFileInput.value = ''; // Limpiar input de archivo
+                receiptFileInput.value = '';
                 receiptUploadStatus.classList.add('hidden');
             });
 
@@ -1145,80 +1184,46 @@
                     receiptUploadStatus.classList.remove('hidden');
                     return;
                 }
-
                 receiptUploadStatus.textContent = 'Subiendo comprobante...';
                 receiptUploadStatus.className = 'text-sm mt-2 text-yellow-400';
                 receiptUploadStatus.classList.remove('hidden');
-
-                // Simulación de subida de archivo (en un entorno real, usarías Firebase Storage)
                 setTimeout(() => {
                     receiptUploadStatus.textContent = 'Comprobante subido exitosamente. ¡Gracias por tu compra!';
                     receiptUploadStatus.className = 'text-sm mt-2 text-green-400';
-                    receiptFileInput.value = ''; // Limpiar input de archivo
-                    // Aquí podrías cerrar el modal después de un tiempo o redirigir
+                    receiptFileInput.value = '';
                     setTimeout(() => {
                         receiptUploadModal.classList.remove('visible');
                         receiptUploadStatus.classList.add('hidden');
                     }, 3000);
                 }, 2000);
             });
-
-            // --- Integración de Firebase (para la generación de bio con IA - FUTURO) ---
-            // NOTA: Esta sección está comentada y es solo un placeholder.
-            // Para que funcione, necesitarías configurar Firebase y la función de IA.
-            /*
-            import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
-            const functions = getFunctions(app); // 'app' de tu inicialización de Firebase
-
-            const generateBioBtn = document.getElementById('generate-bio-btn');
-            const artistNameInputBio = document.getElementById('artist-name-bio');
-            const artistGenreInputBio = document.getElementById('artist-genre-bio');
-            const bioOutput = document.getElementById('bio-output');
-            const bioStatus = document.getElementById('bio-status');
-
-            if (generateBioBtn) {
-                generateBioBtn.addEventListener('click', async () => {
-                    const artistName = artistNameInputBio.value;
-                    const artistGenre = artistGenreInputBio.value;
-
-                    if (!artistName || !artistGenre) {
-                        bioStatus.textContent = 'Por favor, ingresa el nombre y género del artista.';
-                        bioStatus.className = 'text-sm mt-2 text-red-400';
-                        return;
-                    }
-
-                    bioStatus.textContent = 'Generando biografía con IA...';
-                    bioStatus.className = 'text-sm mt-2 text-yellow-400';
-                    bioOutput.textContent = '';
-                    generateBioBtn.disabled = true;
-                    generateBioBtn.innerHTML = '<span class="spinner"></span> Generando...';
-
-                    try {
-                        // Simulación de llamada a función de IA (reemplazar con la llamada real a la API de Gemini)
-                        // const generateArtistBio = httpsCallable(functions, 'generateArtistBio');
-                        // const result = await generateArtistBio({ name: artistName, genre: artistGenre });
-                        // const generatedText = result.data.bio;
-
-                        // Simulación de respuesta de IA
-                        const simulatedBio = `[Bio generada por IA para ${artistName}, género ${artistGenre}] ${artistName} es un/a talentoso/a artista de ${artistGenre} que ha cautivado al público con su estilo único y letras profundas. Su música es una fusión de ritmos vibrantes y melodías pegadizas, creando una experiencia auditiva inolvidable.`;
-                        
-                        bioOutput.textContent = simulatedBio;
-                        bioStatus.textContent = 'Biografía generada.';
-                        bioStatus.className = 'text-sm mt-2 text-green-400';
-
-                    } catch (error) {
-                        console.error("Error al generar biografía:", error);
-                        bioStatus.textContent = `Error al generar biografía: ${error.message}`;
-                        bioStatus.className = 'text-sm mt-2 text-red-400';
-                    } finally {
-                        generateBioBtn.disabled = false;
-                        generateBioBtn.innerHTML = '<svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m7 0V5a2 2 0 012-2h2a2 2 0 012 2v6m-6 0V5a2 2 0 00-2-2H9a2 2 0 00-2 2v6"></path></svg> Generar Biografía';
-                    }
-                });
+            
+            const pozoTextElement = document.getElementById('pozoText');
+            const pozoBarElement = document.querySelector('.pozo-bar');
+            const pozoDocRef = doc(db, "estadisticas_generales", "resumen_certamen");
+            onSnapshot(pozoDocRef, (doc) => {
+                if (doc.exists()) {
+                    const pozoActual = doc.data().pozo_total;
+                    pozoTextElement.textContent = `$ ${pozoActual.toLocaleString('es-AR')}`;
+                    const pozoObjetivo = 2000000;
+                    const porcentaje = Math.min(100, (pozoActual / pozoObjetivo) * 100);
+                    pozoBarElement.style.width = `${porcentaje}%`;
+                } else {
+                    pozoTextElement.textContent = `$ 0`;
+                    pozoBarElement.style.width = `0%`;
+                }
+            });
+            
+            if (window.location.hash) {
+                const targetId = window.location.hash.substring(1);
+                const targetLink = document.querySelector(`a[data-target="${targetId}"]`);
+                if (targetLink) {
+                    allInternalLinks.forEach(nav => nav.classList.remove('active'));
+                    targetLink.classList.add('active');
+                    showPage(targetId);
+                }
             }
-            */
         });
     </script>
-
 </body>
 </html>

@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenido a VYT MUSIC</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
@@ -143,25 +141,27 @@
             color: #e6edf3;
             transform: scale(1.05);
         }
+        
+        /* Regla CSS para ocultar la burbuja de texto de Tawk.to */
+        .tawk-minimized-container .tawk-text-bubble {
+            display: none !important;
+        }
     </style>
 </head>
 <body>
 
     <div class="min-h-screen flex flex-col items-center justify-center text-center p-6">
         
-        <!-- Logo y Título del Certamen -->
         <div class="mb-6 text-center">
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-40 md:w-48 mx-auto">
             <p class="text-gray-400 text-lg tracking-widest mt-2 font-display">CERTAMEN DE CANTO</p>
         </div>
 
-        <!-- Título Principal -->
         <h1 class="text-3xl md:text-5xl font-black tracking-tight mb-4">La revolución musical ha comenzado.</h1>
         <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">
             Este es el escenario para las voces que merecen ser escuchadas.
         </p>
 
-        <!-- Cuenta Regresiva -->
         <div class="mb-8 w-full max-w-lg">
             <p class="font-display text-sm uppercase tracking-widest text-gray-400 mb-2">Las inscripciones cierran en:</p>
             <div id="countdown" class="grid grid-cols-4 gap-2 text-center">
@@ -184,54 +184,56 @@
             </div>
         </div>
         
-        <!-- Mensaje Inspirador para los que dudan -->
         <div class="bg-sky-400/10 border border-sky-400/30 text-sky-300 text-md rounded-xl p-6 mb-10 max-w-lg">
             <p class="font-bold text-lg mb-2">¿Te gusta cantar?</p>
             <p class="text-sky-200">Sabemos que tenés talento y que solo necesitás una oportunidad.</p>
         </div>
 
-        <!-- Pregunta Clave -->
         <h2 class="text-2xl font-bold mb-6 font-display">¿Desde dónde vas a brillar?</h2>
 
-        <!-- Opciones de Participación -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-lg">
-            <!-- Opción Rosario -->
-            <a href="presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
+            <a href="inscripcion_presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Soy de Rosario</span>
                 <span class="text-sm">(o alrededores)</span>
             </a>
-            <!-- Opción Online -->
             <a href="#" id="otra-provincia-btn" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Otra Provincia</span>
                 <span class="text-sm">(100% Online)</span>
             </a>
         </div>
 
-        <!-- Aclaración de Flexibilidad -->
         <p class="text-sm mt-8 text-gray-400 max-w-md">
             (Si sos de Rosario, también podés participar de forma online. ¡Vos elegís cómo brillar!)
         </p>
 
     </div>
 
-    <!-- Modal de Bienvenida / Selección de Provincia -->
     <div id="welcome-modal" class="modal-backdrop">
         <div class="modal-content">
             <h3>¡Bienvenido a VYT MUSIC!</h3>
             <p>Para ofrecerte la mejor experiencia, contanos desde dónde nos visitás.</p>
             <select id="modal-provincia-select" class="modal-select">
                 <option value="" disabled selected>Seleccioná tu provincia...</option>
-                <!-- Opciones de provincia se llenarán con JS -->
-            </select>
+                </select>
             <div class="modal-buttons">
                 <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Confirmar</button>
                 <button id="modal-explore-btn" class="modal-btn modal-btn-other">Explorar el sitio</button>
             </div>
         </div>
     </div>
-
+    
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
     <script>
-        // Mapeo de códigos de provincia a nombres completos (no se usa directamente para la redirección, pero es útil para el select)
         const provinceMapping = {
             "ARA": "Salta", 
             "ARB": "Buenos Aires", 
@@ -266,9 +268,8 @@
             const modalConfirmBtn = document.getElementById('modal-confirm-btn');
             const modalExploreBtn = document.getElementById('modal-explore-btn');
 
-            // Lógica del Contador (ya existente)
             const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7); // 7 días desde ahora
+            targetDate.setDate(targetDate.getDate() + 7);
             const countdownFunction = setInterval(() => {
                 const now = new Date().getTime();
                 const distance = targetDate - now;
@@ -290,41 +291,34 @@
                 document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
             }, 1000);
 
-            // Llenar el desplegable del modal con las provincias
             for (const code in provinceMapping) {
                 if (provinceMapping.hasOwnProperty(code)) {
                     const provinceName = provinceMapping[code];
                     const option = document.createElement('option');
-                    option.value = provinceName.replace(/\s/g, ''); // Eliminar espacios para el valor del URL
+                    option.value = provinceName.replace(/\s/g, '');
                     option.textContent = provinceName;
                     modalProvinciaSelect.appendChild(option);
                 }
             }
 
-            // Mostrar el modal cuando se hace clic en "Otra Provincia"
             otraProvinciaBtn.addEventListener('click', (event) => {
-                event.preventDefault(); // Prevenir la redirección por defecto del <a>
+                event.preventDefault();
                 welcomeModal.classList.add('visible');
             });
 
-            // Manejar la selección en el modal: Redirigir a `inscripcion.html` con el parámetro de provincia
             modalConfirmBtn.addEventListener('click', () => {
                 const selectedProvince = modalProvinciaSelect.value;
                 if (selectedProvince) {
-                    // Redirigir a la página de inscripción con la provincia seleccionada como parámetro
-                    window.location.href = `inscripcion.html?prov=${encodeURIComponent(selectedProvince)}`; 
+                    window.location.href = `inscripcion_online.html?prov=${encodeURIComponent(selectedProvince)}`; 
                 } else {
                     alert('Por favor, selecciona una provincia.');
                 }
             });
 
-            // Manejar el botón "Explorar el sitio" en el modal
             modalExploreBtn.addEventListener('click', () => {
-                // Redirigir a la página principal de la SPA (principal.html) sin seleccionar provincia
                 window.location.href = `principal.html`;
             });
         });
     </script>
-
 </body>
 </html>

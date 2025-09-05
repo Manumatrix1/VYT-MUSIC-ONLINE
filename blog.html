@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Blog Oficial</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- Variables de Color y Estilos Base --- */
+        :root {
+            --color-fondo: #0d1117;
+            --color-fondo-secundario: #161b22;
+            --color-card: #282828;
+            --color-texto-principal: #e6edf3;
+            --color-texto-secundario: #b0b8c4;
+            --color-primario: #58a6ff;
+            --color-secundario: #238636;
+            --color-oro: #FFD700;
+            --fuente-titulos: 'Bebas Neue', sans-serif;
+            --fuente-cuerpo: 'Montserrat', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--fuente-cuerpo);
+            background: radial-gradient(circle at top left, #58a6ff30, #121212 40%);
+            background-color: #121212;
+            color: var(--color-texto-principal);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1.5rem;
+            padding-right: 1.5rem;
+        }
+
+        /* --- Header y Navegación --- */
+        .header {
+            background-color: rgba(13, 17, 23, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-logo img {
+            height: 50px;
+            width: auto;
+        }
+
+        /* --- Estilos para el Contenido del Blog --- */
+        .titulo-seccion {
+            font-family: var(--fuente-titulos);
+            font-size: 3.5rem;
+            color: var(--color-texto-principal);
+            text-align: center;
+            margin-bottom: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .subtitulo-seccion {
+            text-align: center; 
+            max-width: 600px; 
+            margin: 0 auto 3rem auto; 
+            color: var(--color-texto-secundario);
+        }
+
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .blog-post-card {
+            background-color: var(--color-card);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .blog-post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .blog-post-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .blog-post-info {
+            padding: 1.5rem;
+        }
+        
+        .blog-post-info h4 {
+            font-family: var(--fuente-titulos);
+            font-size: 1.8rem;
+            color: var(--color-primario);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .blog-post-info p.date {
+            font-size: 0.8rem;
+            color: var(--color-texto-secundario);
+            margin-bottom: 1rem;
+        }
+
+        .blog-post-info p.snippet {
+            font-size: 0.9rem;
+            color: var(--color-texto-secundario);
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-logo">
+            <a href="principal.html">
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music">
+            </a>
+        </div>
+        <nav>
+            <a href="principal.html" class="text-gray-300 hover:text-white font-bold">&larr; Volver a Principal</a>
+        </nav>
+    </header>
+
+    <main class="py-10">
+        <div class="container">
+            <h2 class="titulo-seccion">Nuestro Blog</h2>
+            <p class="subtitulo-seccion">Mantente al tanto de las últimas noticias, ganadores y eventos del certamen.</p>
+            
+            <div id="blog-posts-container" class="blog-grid">
+                <p class="text-center text-gray-500">Cargando posts del blog...</p>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const blogPostsContainer = document.getElementById('blog-posts-container');
+            
+            async function loadBlogPosts() {
+                blogPostsContainer.innerHTML = '<p class="text-center text-gray-500">Cargando posts del blog...</p>';
+                try {
+                    const q = query(collection(db, "blog"), orderBy("createdAt", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    
+                    if (querySnapshot.empty) {
+                        blogPostsContainer.innerHTML = '<p class="text-center text-gray-500">No hay posts de blog disponibles en este momento.</p>';
+                        return;
+                    }
+                    
+                    blogPostsContainer.innerHTML = '';
+                    querySnapshot.forEach((docItem) => {
+                        const post = docItem.data();
+                        const postElement = document.createElement('div');
+                        postElement.className = 'blog-post-card';
+                        
+                        let formattedDate = '';
+                        if (post.createdAt && post.createdAt.toDate) {
+                            formattedDate = new Date(post.createdAt.toDate()).toLocaleDateString('es-AR', {
+                                year: 'numeric', month: 'long', day: 'numeric'
+                            });
+                        }
+
+                        postElement.innerHTML = `
+                            ${post.imagenUrl ? `<img src="${post.imagenUrl}" alt="${post.titulo}" class="w-full h-48 object-cover">` : ''}
+                            <div class="blog-post-info">
+                                <h4>${post.titulo}</h4>
+                                <p class="date">${formattedDate}</p>
+                                <p class="snippet">${post.contenido.substring(0, 150)}...</p>
+                            </div>
+                        `;
+                        blogPostsContainer.appendChild(postElement);
+                    });
+                } catch (error) {
+                    console.error("Error al cargar los posts del blog:", error);
+                    blogPostsContainer.innerHTML = '<p class="text-center text-red-500">Error al cargar los posts. Por favor, inténtalo de nuevo más tarde.</p>';
+                }
+            }
+            loadBlogPosts();
+        });
+    </script>
+</body>
+</html>
