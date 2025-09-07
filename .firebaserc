@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "vytonlineprueva"
-  }
+    "default": "vyt-online"
+  },
+  "targets": {},
+  "etags": {}
 }

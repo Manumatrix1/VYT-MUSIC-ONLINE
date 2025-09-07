@@ -352,16 +352,18 @@
                         fotoUrl = await getDownloadURL(storageRef);
                     }
                     
-                    await addDoc(collection(db, "participantes_online"), {
+                    const inscripcionDoc = {
                         nombre_artista: nombre,
                         email: email,
                         whatsapp: whatsapp,
                         provincia: provincia,
                         video_link: video,
-                        foto_url: fotoUrl, // Guardamos la URL de la foto
+                        foto_url: fotoUrl,
                         aprobado: false,
                         createdAt: serverTimestamp()
-                    });
+                    };
+                    
+                    await addDoc(collection(db, "participantes_online"), inscripcionDoc);
                     
                     confirmModal.classList.add('visible');
                     formOnline.reset();
