@@ -7,301 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Bebas+Neue:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        :root {
-            --color-fondo: #0d1117;
-            --color-fondo-secundario: #161b22;
-            --color-card: #282828;
-            --color-texto-principal: #e6edf3;
-            --color-texto-secundario: #b0b8c4;
-            --color-primario: #58a6ff;
-            --color-secundario: #238636;
-            --color-error: #ff4d4d;
-            --fuente-titulos: 'Bebas Neue', sans-serif;
-            --fuente-cuerpo: 'Montserrat', sans-serif;
-        }
-        body {
-            font-family: var(--fuente-cuerpo);
-            background-color: var(--color-fondo);
-            color: var(--color-texto-principal);
-            min-height: 100vh;
-            display: flex;
-        }
-        
-        .login-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-grow: 1;
-            background-color: var(--color-fondo);
-        }
-
-        .login-card {
-            background-color: var(--color-fondo-secundario);
-            border-radius: 15px;
-            padding: 2.5rem;
-            border: 1px solid #30363d;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .dashboard-container {
-            display: flex;
-            flex-grow: 1;
-            background-color: var(--color-fondo);
-        }
-
-        .sidebar {
-            width: 280px;
-            background-color: var(--color-fondo-secundario);
-            padding: 1.5rem;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            border-right: 1px solid #30363d;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            overflow-y: auto;
-            padding: 2.5rem;
-        }
-
-        .header-dashboard {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 1.5rem;
-        }
-
-        .form-grupo {
-            margin-bottom: 1.5rem;
-        }
-        .form-grupo label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-            color: var(--color-texto-principal);
-        }
-        .form-input {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: var(--color-fondo);
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            color: var(--color-texto-principal);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-        .form-input:focus {
-            outline: none;
-            border-color: var(--color-primario);
-        }
-        .btn {
-            display: inline-block;
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-        .btn-primario {
-            background-color: var(--color-primario);
-            color: var(--color-fondo);
-        }
-        .btn-primario:hover {
-            background-color: transparent;
-            border-color: var(--color-primario);
-            color: var(--color-primario);
-            transform: scale(1.05);
-        }
-        .btn-secundario {
-            background-color: transparent;
-            color: var(--color-texto-principal);
-            border-color: #8b949e;
-        }
-        .btn-secundario:hover {
-            border-color: var(--color-texto-principal);
-            color: var(--color-texto-principal);
-            transform: scale(1.05);
-        }
-        .alert {
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            font-weight: 700;
-        }
-        .alert-error {
-            background-color: rgba(255, 77, 77, 0.2);
-            color: var(--color-error);
-            border: 1px solid var(--color-error);
-        }
-        .alert-success {
-            background-color: rgba(35, 134, 54, 0.2);
-            color: var(--color-secundario);
-            border: 1px solid var(--color-secundario);
-        }
-        .section-title {
-            font-family: var(--fuente-titulos);
-            font-size: 2.2rem;
-            color: var(--color-primario);
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .subsection-title {
-            font-family: var(--fuente-titulos);
-            font-size: 1.5rem;
-            color: var(--color-texto-principal);
-            margin-top: 2rem;
-            margin-bottom: 1rem;
-            border-bottom: 1px solid #30363d;
-            padding-bottom: 0.5rem;
-        }
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-        }
-        .dashboard-card {
-            background-color: var(--color-card);
-            border-radius: 15px;
-            padding: 1.5rem;
-            border: 1px solid #30363d;
-        }
-        .pozo-valor {
-            font-family: var(--fuente-titulos);
-            font-size: 3rem;
-            color: var(--color-oro);
-        }
-        .artist-list-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background-color: var(--color-fondo);
-            border-radius: 8px;
-            margin-bottom: 0.5rem;
-            border: 1px solid #30363d;
-        }
-        .nav-menu a.active {
-            background-color: var(--color-card);
-            color: var(--color-texto-principal);
-        }
-        .ciudades-list-item {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-        
-        /* Responsive Styles */
-        @media (max-width: 767px) {
-            .sidebar { display: none; }
-            .bottom-nav { 
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                width: 100%;
-                background-color: var(--color-fondo-secundario);
-                border-top: 1px solid #30363d;
-                display: flex;
-                justify-content: space-evenly;
-                z-index: 1000;
-                padding: 0;
-                height: 65px;
-            }
-            .bottom-nav a {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                text-decoration: none;
-                color: var(--color-texto-secundario);
-                font-size: 0.7rem;
-                padding: 0.7rem 0.2rem;
-                flex: 1;
-                min-width: 20%;
-                text-align: center;
-                line-height: 1.2;
-            }
-            .bottom-nav a.active { color: var(--color-primario); }
-            .bottom-nav svg { 
-                width: 1.5rem; 
-                height: 1.5rem; 
-                margin-bottom: 0.2rem;
-            }
-            .dashboard-container { flex-direction: column; }
-            .main-content { 
-                padding: 1rem; 
-                padding-bottom: 80px; 
-                display: flex;
-                flex-direction: column;
-                align-items: center; 
-            }
-            .header-dashboard { 
-                padding-top: 1.5rem; 
-                width: 100%; 
-                max-width: 600px;
-                justify-content: center;
-                text-align: center;
-                flex-wrap: wrap; 
-            }
-            .header-dashboard > div {
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-            .pozo-valor { font-size: 2.5rem; }
-            .dashboard-card { 
-                min-width: 100%; 
-                width: 100%;
-                max-width: 600px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-                width: 100%;
-                max-width: 600px;
-            }
-            .subsection-title {
-                text-align: center;
-                width: 100%;
-                max-width: 600px;
-            }
-            .page {
-                width: 100%;
-                max-width: 600px;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        @media (min-width: 768px) {
-            .bottom-nav { display: none; }
-            .main-content {
-                display: block;
-            }
-            .header-dashboard {
-                justify-content: space-between;
-                text-align: left;
-            }
-        }
-        /* Estilos para la foto del artista */
-        .artist-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 8px;
-            object-fit: cover;
-            margin-right: 1rem;
-        }
-        .artist-info {
-            display: flex;
-            align-items: center;
-        }
-    </style>
+    <link rel="stylesheet" href="admin-styles.css">
 </head>
 <body class="bg-gray-900">
     <div id="login-section" class="login-container">
@@ -434,11 +140,25 @@
                         <p class="text-gray-500">No hay inscripciones online pendientes.</p>
                     </div>
                 </div>
-                
-                <div id="participantes-presenciales-section" class="dashboard-card">
+
+                <div id="participantes-presenciales-section" class="dashboard-card mb-6">
                     <h4 class="font-bold text-lg mb-2">Inscripciones Presenciales Pendientes</h4>
                     <div id="participantes-presenciales-list" class="space-y-4">
                         <p class="text-gray-500">No hay inscripciones presenciales pendientes.</p>
+                    </div>
+                </div>
+
+                <div id="participantes-online-aprobados-section" class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-2">Inscripciones Online Aprobadas</h4>
+                    <div id="participantes-online-aprobados-list" class="space-y-4">
+                        <p class="text-gray-500">No hay inscripciones online aprobadas.</p>
+                    </div>
+                </div>
+
+                <div id="participantes-presenciales-aprobados-section" class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-2">Inscripciones Presenciales Aprobadas</h4>
+                    <div id="participantes-presenciales-aprobados-list" class="space-y-4">
+                        <p class="text-gray-500">No hay inscripciones presenciales aprobadas.</p>
                     </div>
                 </div>
             </div>
@@ -449,6 +169,18 @@
             </div>
             
             <div id="page-ingresos" class="page hidden">
+                <h3 class="subsection-title">Configuración de Pagos</h3>
+                
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-4">Precio de Inscripción</h4>
+                    <div id="inscripcion-price-form-status" class="alert hidden"></div>
+                    <div class="form-grupo">
+                        <label for="inscripcion-price-input">Precio de Inscripción (en ARS):</label>
+                        <input type="number" id="inscripcion-price-input" class="form-input" placeholder="Ej: 30000">
+                    </div>
+                    <button id="update-inscripcion-price-btn" class="btn btn-primario w-full">Actualizar Precio</button>
+                </div>
+
                 <h3 class="subsection-title">Ingresos y Pagos</h3>
                 <p class="text-gray-400">Detalles de ingresos por votos, tickets y donaciones.</p>
             </div>
@@ -603,30 +335,11 @@
     </div>
     
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-        import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
-
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
-            authDomain: "vytonlineprueva.firebaseapp.com",
-            projectId: "vytonlineprueva",
-            storageBucket: "vytonlineprueva.firebasestorage.app",
-            messagingSenderId: "175483939728",
-            appId: "1:175483939728:web:230294acca9221d1d1a115",
-            measurementId: "G-PWRTMBH631"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
-        const analytics = getAnalytics(app);
-        const functions = getFunctions(app);
+        import { auth, db, storage, functions } from './firebase-config.js';
+        import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             const loginSection = document.getElementById('login-section');
@@ -644,6 +357,10 @@
             const pozoInput = document.getElementById('pozo-input');
             const updatePozoBtn = document.getElementById('update-pozo-btn');
             const pozoFormStatus = document.getElementById('pozo-form-status');
+
+            const inscripcionPriceInput = document.getElementById('inscripcion-price-input');
+            const updateInscripcionPriceBtn = document.getElementById('update-inscripcion-price-btn');
+            const inscripcionPriceFormStatus = document.getElementById('inscripcion-price-form-status');
 
             const ciudadesForm = document.getElementById('ciudades-form');
             const ciudadIdInput = document.getElementById('ciudad-id');
@@ -673,8 +390,15 @@
             const basesPresencialesFormStatus = document.getElementById('bases-presenciales-form-status');
             const basesFormPresenciales = document.getElementById('bases-form-presenciales');
 
+            const rechazoEmailForm = document.getElementById('rechazo-email-form');
+            const rechazoEmailAsunto = document.getElementById('rechazo-email-asunto');
+            const rechazoEmailContenido = document.getElementById('rechazo-email-contenido');
+            const rechazoEmailStatus = document.getElementById('rechazo-email-status');
+
             const participantesOnlineList = document.getElementById('participantes-online-list');
             const participantesPresencialesList = document.getElementById('participantes-presenciales-list');
+            const participantesOnlineAprobadosList = document.getElementById('participantes-online-aprobados-list');
+            const participantesPresencialesAprobadosList = document.getElementById('participantes-presenciales-aprobados-list');
 
             const basesOnlineContent = document.getElementById('bases-online-content');
             const basesPresencialContent = document.getElementById('bases-presencial-content');
@@ -705,6 +429,8 @@
                     loadBasesPresenciales();
                     loadCiudades();
                     loadPosts();
+                    loadInscripcionPrice();
+                    loadRechazoTemplate();
                     showPage('page-dashboard');
                 } else {
                     loginSection.classList.remove('hidden');
@@ -778,6 +504,7 @@
             }
 
             function setupRealtimeListeners() {
+                // Listen for pending online participants
                 const onlineRef = query(collection(db, "participantes_online"), where("aprobado", "==", false));
                 onSnapshot(onlineRef, (snapshot) => {
                     participantesOnlineList.innerHTML = '';
@@ -808,6 +535,36 @@
                     }
                 });
 
+                // Listen for approved online participants
+                const onlineAprobadosRef = query(collection(db, "participantes_online"), where("aprobado", "==", true));
+                onSnapshot(onlineAprobadosRef, (snapshot) => {
+                    participantesOnlineAprobadosList.innerHTML = '';
+                    if (snapshot.empty) {
+                        participantesOnlineAprobadosList.innerHTML = `<p class="text-gray-500">No hay inscripciones online aprobadas.</p>`;
+                    } else {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const artistItem = document.createElement('div');
+                            artistItem.className = 'artist-list-item';
+                            artistItem.innerHTML = `
+                                <div class="artist-info">
+                                    ${data.foto_url ? `<img src="${data.foto_url}" alt="Foto de ${data.nombre_artista}" class="artist-photo">` : ''}
+                                    <div>
+                                        <p class="font-semibold">${data.nombre_artista}</p>
+                                        <p class="text-xs text-gray-400">Modalidad: Online</p>
+                                        <p class="text-xs text-blue-400 break-words"><a href="${data.video_link}" target="_blank">Ver video</a></p>
+                                    </div>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm disapprove-btn" data-id="${doc.id}" data-modalidad="online">Desaprobar</button>
+                                </div>
+                            `;
+                            participantesOnlineAprobadosList.appendChild(artistItem);
+                        });
+                    }
+                });
+
+                // Listen for pending presential participants
                 const presencialRef = query(collection(db, "participantes_presenciales"), where("aprobado", "==", false));
                 onSnapshot(presencialRef, (snapshot) => {
                     participantesPresencialesList.innerHTML = '';
@@ -834,6 +591,32 @@
                         });
                     }
                 });
+
+                // Listen for approved presential participants
+                const presencialAprobadosRef = query(collection(db, "participantes_presenciales"), where("aprobado", "==", true));
+                onSnapshot(presencialAprobadosRef, (snapshot) => {
+                    participantesPresencialesAprobadosList.innerHTML = '';
+                    if (snapshot.empty) {
+                        participantesPresencialesAprobadosList.innerHTML = `<p class="text-gray-500">No hay inscripciones presenciales aprobadas.</p>`;
+                    } else {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            const artistItem = document.createElement('div');
+                            artistItem.className = 'artist-list-item';
+                            artistItem.innerHTML = `
+                                <div class="artist-info">
+                                    <p class="font-semibold">${data.nombre_artista}</p>
+                                    <p class="text-xs text-gray-400">Modalidad: Presencial</p>
+                                    <p class="text-xs text-blue-400 break-words"><a href="${data.video_link}" target="_blank">Ver video</a></p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button class="bg-yellow-600 text-white px-3 py-1 rounded-full text-sm disapprove-btn" data-id="${doc.id}" data-modalidad="presencial">Desaprobar</button>
+                                </div>
+                            `;
+                            participantesPresencialesAprobadosList.appendChild(artistItem);
+                        });
+                    }
+                });
             }
             
             document.addEventListener('click', async (e) => {
@@ -847,8 +630,6 @@
                         const artistDoc = await getDoc(artistRef);
                         
                         if (artistDoc.exists()) {
-                            // Actualiza el estado del participante en Firestore
-                            // La Cloud Function 'enviarCorreoEstado' se disparará automáticamente.
                             await updateDoc(artistRef, { aprobado: true, rechazado: false });
                             alert(`El participante ha sido aprobado. El sistema enviará el correo de notificación.`);
                         } else {
@@ -857,6 +638,19 @@
 
                     } catch (error) {
                         console.error(`Error al aprobar el participante: ${error.message}`);
+                        alert(`Ocurrió un error: ${error.message}`);
+                    }
+                } else if (e.target.classList.contains('disapprove-btn')) {
+                    const docId = e.target.dataset.id;
+                    const modalidad = e.target.dataset.modalidad;
+                    const coleccion = modalidad === 'online' ? "participantes_online" : "participantes_presenciales";
+                    
+                    try {
+                        const artistRef = doc(db, coleccion, docId);
+                        await updateDoc(artistRef, { aprobado: false });
+                        alert('El participante ha sido desaprobado.');
+                    } catch (error) {
+                        console.error(`Error al desaprobar el participante: ${error.message}`);
                         alert(`Ocurrió un error: ${error.message}`);
                     }
                 } else if (e.target.classList.contains('reject-btn')) {
@@ -869,9 +663,10 @@
                         try {
                             const artistRef = doc(db, coleccion, docId);
                             await updateDoc(artistRef, { aprobado: false, rechazado: true, motivo_rechazo: motivo });
-                            alert(`El participante ha sido rechazado con el motivo: "${motivo}".`);
+                            alert(`El participante ha sido rechazado. El sistema enviará el correo de notificación.`);
                         } catch (error) {
-                            console.error(`Error al actualizar el participante: ${error.message}`);
+                            console.error(`Error al rechazar el participante: ${error.message}`);
+                            alert(`Ocurrió un error al rechazar: ${error.message}`);
                         }
                     } else {
                         alert("El rechazo fue cancelado.");
@@ -945,6 +740,43 @@
                     pozoFormStatus.classList.remove('hidden');
                 }
             });
+
+            updateInscripcionPriceBtn.addEventListener('click', async () => {
+                const nuevoPrecio = parseInt(inscripcionPriceInput.value);
+                if (isNaN(nuevoPrecio) || nuevoPrecio < 0) {
+                    inscripcionPriceFormStatus.textContent = 'Por favor, ingresa un número válido y positivo.';
+                    inscripcionPriceFormStatus.className = 'alert alert-error';
+                    inscripcionPriceFormStatus.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const configRef = doc(db, "configuracion", "precios");
+                    await setDoc(configRef, { inscripcion: nuevoPrecio }, { merge: true });
+                    inscripcionPriceFormStatus.textContent = 'Precio de inscripción actualizado correctamente.';
+                    inscripcionPriceFormStatus.className = 'alert alert-success';
+                    inscripcionPriceFormStatus.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error al actualizar el precio de inscripción:", error);
+                    inscripcionPriceFormStatus.textContent = `Error: ${error.message}`;
+                    inscripcionPriceFormStatus.className = 'alert alert-error';
+                    inscripcionPriceFormStatus.classList.remove('hidden');
+                }
+            });
+
+            async function loadInscripcionPrice() {
+                try {
+                    const configRef = doc(db, "configuracion", "precios");
+                    const configDoc = await getDoc(configRef);
+                    if (configDoc.exists() && configDoc.data().inscripcion) {
+                        inscripcionPriceInput.value = configDoc.data().inscripcion;
+                    } else {
+                        inscripcionPriceInput.value = 30000; 
+                    }
+                } catch (error) {
+                    console.error("Error al cargar el precio de inscripción:", error);
+                }
+            }
             
             // Lógica para Ciudades/Gira
             ciudadesForm.addEventListener('submit', async (e) => {
@@ -1172,6 +1004,47 @@
                     }
                 } catch (error) {
                     console.error("Error al cargar bases y condiciones presenciales:", error);
+                }
+            }
+
+            // Lógica para Plantilla de Rechazo
+            rechazoEmailForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const asunto = rechazoEmailAsunto.value;
+                const contenido = rechazoEmailContenido.value;
+
+                if (!asunto || !contenido) {
+                    rechazoEmailStatus.textContent = 'El asunto y el contenido no pueden estar vacíos.';
+                    rechazoEmailStatus.className = 'alert alert-error';
+                    rechazoEmailStatus.classList.remove('hidden');
+                    return;
+                }
+
+                try {
+                    const templateRef = doc(db, "configuracion", "plantilla_rechazo");
+                    await setDoc(templateRef, { asunto, contenido });
+                    rechazoEmailStatus.textContent = 'Plantilla de rechazo guardada correctamente.';
+                    rechazoEmailStatus.className = 'alert alert-success';
+                    rechazoEmailStatus.classList.remove('hidden');
+                } catch (error) {
+                    console.error("Error al guardar la plantilla de rechazo:", error);
+                    rechazoEmailStatus.textContent = `Error: ${error.message}`;
+                    rechazoEmailStatus.className = 'alert alert-error';
+                    rechazoEmailStatus.classList.remove('hidden');
+                }
+            });
+
+            async function loadRechazoTemplate() {
+                try {
+                    const templateRef = doc(db, "configuracion", "plantilla_rechazo");
+                    const templateDoc = await getDoc(templateRef);
+                    if (templateDoc.exists()) {
+                        const data = templateDoc.data();
+                        rechazoEmailAsunto.value = data.asunto;
+                        rechazoEmailContenido.value = data.contenido;
+                    }
+                } catch (error) {
+                    console.error("Error al cargar la plantilla de rechazo:", error);
                 }
             }
         });

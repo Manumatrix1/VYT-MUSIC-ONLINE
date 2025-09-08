@@ -267,23 +267,9 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
-            authDomain: "vytonlineprueva.firebaseapp.com",
-            projectId: "vytonlineprueva",
-            storageBucket: "vytonlineprueva.firebasestorage.app",
-            messagingSenderId: "175483939728",
-            appId: "1:175483939728:web:230294acca9221d1d1a115",
-            measurementId: "G-PWRTMBH631"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
+        import { db, storage } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
         document.addEventListener('DOMContentLoaded', () => {
             const formOnline = document.getElementById('form-online');
@@ -352,6 +338,11 @@
                         fotoUrl = await getDownloadURL(storageRef);
                     }
                     
+                    // Function to generate a simple unique code
+                    function generateUniqueCode() {
+                        return Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+                    }
+
                     const inscripcionDoc = {
                         nombre_artista: nombre,
                         email: email,
@@ -360,6 +351,9 @@
                         video_link: video,
                         foto_url: fotoUrl,
                         aprobado: false,
+                        votos_gratuitos: 0, // New field
+                        descuento_aplicado: false, // New field
+                        codigo_invitacion: generateUniqueCode(), // New field
                         createdAt: serverTimestamp()
                     };
                     
