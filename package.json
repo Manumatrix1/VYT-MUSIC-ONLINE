@@ -1,0 +1,23 @@
+{
+  "name": "vyt-music-online",
+  "version": "1.0.0",
+  "description": "CERTAMEN DE CANTO ONLINE",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Manumatrix1/VYT-MUSIC-ONLINE.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manumatrix1/VYT-MUSIC-ONLINE/issues"
+  },
+  "homepage": "https://github.com/Manumatrix1/VYT-MUSIC-ONLINE#readme",
+  "devDependencies": {
+    "tailwindcss": "^4.1.13"
+  }
+}

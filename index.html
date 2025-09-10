@@ -191,7 +191,7 @@
 
         <h2 class="text-2xl font-bold mb-6 font-display">¿Desde dónde vas a brillar?</h2>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 w-full max-w-lg">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-3xl mx-auto">
             <a href="inscripcion_presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Soy de Rosario</span>
                 <span class="text-sm">(o alrededores)</span>
@@ -199,6 +199,10 @@
             <a href="#" id="otra-provincia-btn" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
                 <span class="font-bold text-xl block">Otra Provincia</span>
                 <span class="text-sm">(100% Online)</span>
+            </a>
+            <a href="principal.html" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
+                <span class="font-bold text-xl block">Modo Fan</span>
+                <span class="text-sm">(Ver sin participar)</span>
             </a>
         </div>
 
@@ -233,92 +237,6 @@
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    <script>
-        const provinceMapping = {
-            "ARA": "Salta", 
-            "ARB": "Buenos Aires", 
-            "ARC": "Ciudad de Buenos Aires", 
-            "ARD": "San Luis", 
-            "ARE": "Entre Ríos", 
-            "ARF": "La Rioja", 
-            "ARG": "Santiago del Estero", 
-            "ARH": "Chaco", 
-            "ARJ": "San Juan", 
-            "ARK": "Catamarca", 
-            "ARL": "La Pampa", 
-            "ARM": "Mendoza", 
-            "ARN": "Misiones", 
-            "ARP": "Formosa", 
-            "ARQ": "Neuquén", 
-            "ARR": "Río Negro", 
-            "ARS": "Santa Fe", 
-            "ART": "Tucumán", 
-            "ARU": "Chubut", 
-            "ARV": "Tierra del Fuego", 
-            "ARW": "Corrientes", 
-            "ARX": "Córdoba", 
-            "ARY": "Jujuy", 
-            "ARZ": "Santa Cruz"
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const otraProvinciaBtn = document.getElementById('otra-provincia-btn');
-            const welcomeModal = document.getElementById('welcome-modal');
-            const modalProvinciaSelect = document.getElementById('modal-provincia-select');
-            const modalConfirmBtn = document.getElementById('modal-confirm-btn');
-            const modalExploreBtn = document.getElementById('modal-explore-btn');
-
-            const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7);
-            const countdownFunction = setInterval(() => {
-                const now = new Date().getTime();
-                const distance = targetDate - now;
-
-                if (distance < 0) {
-                    clearInterval(countdownFunction);
-                    document.getElementById("countdown").innerHTML = "<div class='col-span-4 text-2xl font-bold'>INSCRIPCIONES CERRADAS</div>";
-                    return;
-                }
-
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById("days").innerText = String(days).padStart(2, '0');
-                document.getElementById("hours").innerText = String(hours).padStart(2, '0');
-                document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
-                document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
-            }, 1000);
-
-            for (const code in provinceMapping) {
-                if (provinceMapping.hasOwnProperty(code)) {
-                    const provinceName = provinceMapping[code];
-                    const option = document.createElement('option');
-                    option.value = provinceName.replace(/\s/g, '');
-                    option.textContent = provinceName;
-                    modalProvinciaSelect.appendChild(option);
-                }
-            }
-
-            otraProvinciaBtn.addEventListener('click', (event) => {
-                event.preventDefault();
-                welcomeModal.classList.add('visible');
-            });
-
-            modalConfirmBtn.addEventListener('click', () => {
-                const selectedProvince = modalProvinciaSelect.value;
-                if (selectedProvince) {
-                    window.location.href = `inscripcion_online.html?prov=${encodeURIComponent(selectedProvince)}`; 
-                } else {
-                    alert('Por favor, selecciona una provincia.');
-                }
-            });
-
-            modalExploreBtn.addEventListener('click', () => {
-                window.location.href = `principal.html`;
-            });
-        });
-    </script>
+    <script type="module" src="main.js" defer></script>
 </body>
 </html>

@@ -31,6 +31,23 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
         }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
         /* Ocultar la burbuja de texto de Tawk.to */
         .tawk-minimized-container .tawk-text-bubble {
             display: none !important;
@@ -163,6 +180,7 @@
 
     <main class="flex-grow flex items-center justify-center p-6">
         <div class="w-full max-w-lg">
+            <div id="promo-video-container" class="video-container"></div>
             <div class="text-center mb-10">
                 <h1 class="font-display text-4xl md:text-5xl font-black">Inscripción Online</h1>
                 <p class="text-gray-400 mt-2">Completá tus datos para unirte a la revolución musical desde cualquier lugar.</p>
@@ -225,6 +243,13 @@
                     <input type="url" id="video" name="video" class="w-full form-input p-3 rounded-lg" placeholder="Pegá el link de YouTube, TikTok, etc." required>
                 </div>
 
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="inscripcion-prueba" name="inscripcion-prueba" class="form-checkbox h-5 w-5 text-cyan-400 bg-gray-700 border-gray-600 focus:ring-cyan-500">
+                        <label for="inscripcion-prueba" class="ml-3 text-sm font-medium text-gray-300">Quiero participar gratis (versión de prueba para obtener descuento)</label>
+                    </div>
+                </div>
+
                 <div class="mt-8">
                     <h3 class="text-xl font-bold font-display text-gray-300 mb-2">Bases y Condiciones</h3>
                     <div id="bases-text-container" class="bases-box">
@@ -268,8 +293,11 @@
 
     <script type="module">
         import { db, storage } from './firebase-config.js';
-        import { collection, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { collection, addDoc, serverTimestamp, getDoc, getDocs, doc, query, where, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const auth = getAuth();
 
         document.addEventListener('DOMContentLoaded', () => {
             const formOnline = document.getElementById('form-online');
@@ -283,11 +311,40 @@
             const confirmModal = document.getElementById('confirm-modal');
             const closeModalBtn = document.getElementById('close-modal-btn');
             const basesTextContainer = document.getElementById('bases-text-container');
-            const aceptaBasesCheckbox = document.getElementById('acepta-bases');
+            const acceptsBasesCheckbox = document.getElementById('acepta-bases');
             const fotoInput = document.getElementById('foto');
+            const promoVideoContainer = document.getElementById('promo-video-container');
+            const pruebaCheckbox = document.getElementById('inscripcion-prueba');
 
             if (provinciaParam) {
                 provinciaSelect.value = decodeURIComponent(provinciaParam); 
+            }
+
+            async function loadPromotionalVideo() {
+                try {
+                    const q = query(
+                        collection(db, "videos_inscripcion"), 
+                        where("tipo_certamen", "==", "online"), 
+                        where("activo", "==", true), 
+                        limit(1)
+                    );
+                    const querySnapshot = await getDocs(q);
+                    if (!querySnapshot.empty) {
+                        const videoData = querySnapshot.docs[0].data();
+                        const url = new URL(videoData.url_youtube);
+                        const videoId = url.searchParams.get("v");
+                        if (videoId) {
+                            promoVideoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" title="Video promocional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                        } else {
+                           promoVideoContainer.style.display = 'none';
+                        }
+                    } else {
+                        promoVideoContainer.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error("Error loading promotional video:", error);
+                    promoVideoContainer.style.display = 'none';
+                }
             }
 
             // Cargar las bases y condiciones desde Firebase
@@ -306,6 +363,7 @@
                 }
             }
             loadBasesOnline();
+            loadPromotionalVideo();
 
             formOnline.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -318,7 +376,7 @@
                     emailError.style.display = 'none';
                 }
 
-                if (!aceptaBasesCheckbox.checked) {
+                if (!acceptsBasesCheckbox.checked) {
                     alert('Debes aceptar las bases y condiciones para continuar.');
                     return;
                 }
@@ -329,6 +387,7 @@
                 const provincia = document.getElementById('provincia').value;
                 const video = document.getElementById('video').value;
                 const foto = fotoInput.files[0];
+                const esPrueba = pruebaCheckbox.checked;
 
                 try {
                     let fotoUrl = null;
@@ -338,7 +397,6 @@
                         fotoUrl = await getDownloadURL(storageRef);
                     }
                     
-                    // Function to generate a simple unique code
                     function generateUniqueCode() {
                         return Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
                     }
@@ -351,11 +409,16 @@
                         video_link: video,
                         foto_url: fotoUrl,
                         aprobado: false,
-                        votos_gratuitos: 0, // New field
-                        descuento_aplicado: false, // New field
-                        codigo_invitacion: generateUniqueCode(), // New field
+                        tipo_inscripcion: esPrueba ? 'prueba' : 'completa',
+                        votos_gratuitos: 0,
+                        descuento_aplicado: false,
+                        codigo_invitacion: generateUniqueCode(),
                         createdAt: serverTimestamp()
                     };
+
+                    if (auth.currentUser) {
+                        inscripcionDoc.uid = auth.currentUser.uid;
+                    }
                     
                     await addDoc(collection(db, "participantes_online"), inscripcionDoc);
                     

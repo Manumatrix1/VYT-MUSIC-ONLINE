@@ -18,120 +18,78 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="style.css">
+</head>
+    </style>
 </head>
 <body>
 
     <div class="site-wrapper">
-        <aside class="sidebar">
-            <a class="sidebar-logo" data-target="page-inicio">
-                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo">
-                <div class="logo-text">
-                    <span>VYT MUSIC</span>
-                    <small>Concurso de Canto</small>
-                </div>
-            </a>
-            <nav>
-                <ul class="nav-menu">
-                    <li><a data-target="page-inicio" class="active">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                        <span>Inicio</span>
-                    </a></li>
-                    <li class="dropdown">
-                        <a href="#">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span>Concursos</span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a data-target="page-concurso-online">Online</a></li>
-                            <li><a href="inscripcion_presencial.html">Presencial</a></li> 
-                        </ul>
-                    </li>
-                    <li><a data-target="page-inscripcion"> <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                        <span>Inscripción</span>
-                    </a></li>
-                    <li><a data-target="page-comprar-vyt">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                        <span>Comprar VYT</span>
-                    </a></li>
-                    <li><a data-target="page-reglamento">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span>Reglamento</span>
-                    </a></li>
-                    <li><a data-target="page-sponsors">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        <span>Sponsors</span>
-                    </a></li>
-                    <li><a href="blog.html">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
-                        <span>Blog</span>
-                    </a></li>
-                </ul>
-            </nav>
-        </aside>
-
         <div class="main-content">
             <header class="header">
-                <div class="header-search">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-                    <input type="text" placeholder="Buscar artistas, eventos...">
-                </div>
+                <a class="header-logo" data-target="page-inicio">
+                    <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo">
+                </a>
+
+                <nav class="header-nav">
+                    <a data-target="page-inicio" class="header-nav-link active">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span>Inicio</span>
+                    </a>
+                    <a data-target="page-concurso-online" class="header-nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span>Concursos</span>
+                    </a>
+                    <a data-target="page-comunidad" class="header-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+                        <span>Comunidad</span>
+                    </a>
+                    <a data-target="page-inscripcion" class="header-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+                        <span>Inscribite</span>
+                    </a>
+                    <a data-target="page-nosotros" class="header-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+                        <span>Nosotros</span>
+                    </a>
+                    <a data-target="page-comprar-vyt" class="header-nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        <span>Comprar VYT</span>
+                    </a>
+                    <a data-target="page-reglamento" class="header-nav-link">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span>Reglamento</span>
+                    </a>
+                    <a data-target="page-sponsors" class="header-nav-link">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
+                        <span>Sponsors</span>
+                    </a>
+                </nav>
+
                 <div class="header-user">
-                    <svg class="icon-bell" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                    <svg class="icon-profile" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <a href="login.html" id="profile-link" class="text-gray-300 hover:text-white flex items-center space-x-2">
+                        <svg class="icon-profile" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <span id="profile-text">Iniciar Sesión</span>
+                    </a>
+                    <button id="logout-button" class="hidden ml-4 px-3 py-1 bg-red-600 text-white rounded-full text-sm hover:bg-red-700 transition-colors duration-200">Cerrar Sesión</button>
                 </div>
             </header>
             
             <main class="content-wrapper">
                 <div id="page-inicio" class="page active">
-                    <section class="hero">
+                    <div class="container">
+                        <h2 class="titulo-seccion">Novedades</h2>
+                        <p class="subtitulo-seccion">Las últimas noticias, ganadores y eventos del certamen.</p>
+                        <div id="blog-posts-container" class="blog-grid"></div>
+                    </div>
+                </div>
+
+                <div id="page-comunidad" class="page">
+                    <section class="seccion">
                         <div class="container">
-                            <h1>Despegá tu voz. Hacé historia.</h1>
-                            <p>El escenario digital más grande del país te está esperando. Demostrá tu talento, conectá con miles de personas y competí por premios increíbles.</p>
-                            <div class="hero-buttons">
-                                <a class="btn btn-primario" data-target="page-concurso-online">Competir Online</a>
-                                <a class="btn btn-secundario" href="presencial.html">Eventos Presenciales</a>
-                            </div>
-                        </div>
-                    </section>
-                    
-                    <section class="seccion-ranking-home container">
-                        <h3 class="titulo-seccion-sm">Ranking Top 5</h3>
-                        <div class="ranking-home-grid">
-                            <div class="ranking-home-card">
-                                <img src="https://placehold.co/180x180/282828/ffffff?text=A1" alt="Artista 1">
-                                <div class="ranking-home-info">
-                                    <h4>1. Solista A</h4>
-                                    <p>Buenos Aires</p>
-                                </div>
-                            </div>
-                            <div class="ranking-home-card">
-                                <img src="https://placehold.co/180x180/282828/ffffff?text=B2" alt="Artista 2">
-                                <div class="ranking-home-info">
-                                    <h4>2. Banda B</h4>
-                                    <p>Córdoba</p>
-                                </div>
-                            </div>
-                            <div class="ranking-home-card">
-                                <img src="https://placehold.co/180x180/282828/ffffff?text=C3" alt="Artista 3">
-                                <div class="ranking-home-info">
-                                    <h4>3. Dúo C</h4>
-                                    <p>Santa Fe</p>
-                                </div>
-                            </div>
-                            <div class="ranking-home-card">
-                                <img src="https://placehold.co/180x180/282828/ffffff?text=D4" alt="Artista 4">
-                                <div class="ranking-home-info">
-                                    <h4>4. Artista D</h4>
-                                    <p>Mendoza</p>
-                                </div>
-                            </div>
-                            <div class="ranking-home-card">
-                                <img src="https://placehold.co/180x180/282828/ffffff?text=E5" alt="Artista 5">
-                                <div class="ranking-home-info">
-                                    <h4>5. Banda E</h4>
-                                    <p>Salta</p>
-                                </div>
+                            <h2 class="titulo-seccion">Feed de la Comunidad</h2>
+                            <div id="community-feed-list" class="space-y-6">
+                                <!-- Los posts del feed se cargarán aquí -->
                             </div>
                         </div>
                     </section>
@@ -147,6 +105,17 @@
                             </div>
                             <p class="pozo-text" id="pozoText">$ 750.000</p>
                             
+                            <div class="inscripcion-choice-buttons mt-8">
+                                <a href="inscripcion_online.html" class="btn btn-online">
+                                    Inscripción Online
+                                    <span class="btn-text-small">(Desde cualquier lugar)</span>
+                                </a>
+                                <a href="inscripcion_presencial.html" class="btn btn-presencial">
+                                    Inscripción Presencial
+                                    <span class="btn-text-small">(Rosario y alrededores)</span>
+                                </a>
+                            </div>
+
                             <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Ranking de Artistas</h3>
                             <div class="ranking-grid">
                                 <div class="ranking-card">
@@ -291,44 +260,18 @@
                 </div>
 
                 <div id="page-reglamento" class="page">
-                    <section class="seccion">
-                        <div class="container">
-                            <h2 class="titulo-seccion">Reglamento del Certamen</h2>
-                            <div class="reglamento-content">
-                                <div class="reglamento-seccion">
-                                    <h3>1. Participación y Requisitos</h3>
-                                    <p>1.1. Podrán participar personas de cualquier nacionalidad, mayores de 16 años, que residan en Argentina o en el extranjero. Los menores de 18 años deberán contar con la autorización de un padre o tutor legal.</p>
-                                    <p>1.2. El certamen está abierto a solistas, dúos y bandas de cualquier género musical.</p>
-                                    <p>1.3. Cada participante (o grupo) solo podrá inscribirse una vez.</p>
-                                </div>
-                                <div class="reglamento-seccion">
-                                    <h3>2. Inscripción</h3>
-                                    <p>2.1. La inscripción se realizará exclusivamente a través del formulario online disponible en este sitio web.</p>
-                                    <p>2.2. Se deberá completar toda la información solicitada de manera veraz y adjuntar un enlace a un video de calidad (YouTube, TikTok, Google Drive, etc.) donde el participante demuestre su talento vocal.</p>
-                                    <p>2.3. La fecha límite de inscripción se anunciará en la página principal del certamen.</p>
-                                </div>
-                                <div class="reglamento-seccion">
-                                    <h3>3. Proceso de Selección y Votación</h3>
-                                    <p>3.1. Fase de Clasificación: Un jurado interno pre-seleccionará a los participantes basándose en la calidad vocal, originalidad y presencia escénica mostrada en el video de inscripción.</p>
-                                    <p>3.2. Fase de Votación Pública: Los videos de los participantes seleccionados serán publicados en la sección "Concurso Online" para ser votados por el público.</p>
-                                    <p>3.3. Votación: Los votos se realizarán a través de la plataforma VYT MUSIC utilizando "VYT Coins". Cada VYT Coin equivale a un voto. Los VYT Coins podrán ser adquiridos en la sección "Comprar VYT".</p>
-                                    <p>3.4. Duelos Semanales: Semanalmente se realizarán duelos entre artistas. El artista con más votos en el duelo avanzará a la siguiente etapa.</p>
-                                </div>
-                                <div class="reglamento-seccion">
-                                    <h3>4. Premios</h3>
-                                    <p>4.1. El ganador del certamen online recibirá un premio en efectivo (el "Pozo Acumulado") y la oportunidad de grabar un single profesional.</p>
-                                    <p>4.2. Se otorgarán premios adicionales a los finalistas y menciones especiales, que serán anunciados oportunamente.</p>
-                                </div>
-                                <div class="reglamento-seccion">
-                                    <h3>5. Derechos de Imagen y Contenido</h3>
-                                    <p>5.1. Al inscribirse, los participantes ceden a VYT MUSIC los derechos de uso de sus videos y material fotográfico para fines de difusión y promoción del certamen.</p>
-                                    <p>5.2. Los participantes garantizan que el contenido subido es de su autoría y no infringe derechos de terceros.</p>
-                                </div>
-                                <div class="reglamento-seccion">
-                                    <h3>6. Disposiciones Generales</h3>
-                                    <p>6.1. VYT MUSIC se reserva el derecho de modificar el presente reglamento en cualquier momento, informando a los participantes con antelación.</p>
-                                    <p>6.2. Cualquier situación no prevista en este reglamento será resuelta por la organización del certamen.</p>
-                                </div>
+                    <section class="seccion container text-center">
+                        <h2 class="titulo-seccion">Reglamento del Certamen</h2>
+                        <p class="subtitulo-seccion">Consulta las bases y condiciones para la modalidad que te interese.</p>
+                        
+                        <div class="inscripcion-choice-buttons">
+                            <a href="#" data-target="page-bases-online" class="btn btn-online">
+                                Bases Online
+                                <span class="btn-text-small">(Para participantes de todo el mundo)</span>
+                            </a>
+                            <a href="#" data-target="page-bases-presencial" class="btn btn-presencial">
+                                Bases Presenciales
+                                <span class="btn-text-small">(Para eventos en Rosario)</span>
                             </div>
                         </div>
                     </section>
@@ -362,6 +305,42 @@
                         </div>
                     </section>
                 </div>
+
+                <div id="page-bases-online" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Bases y Condiciones - Online</h2>
+                            <div id="bases-online-content" class="reglamento-content"><p>Cargando...</p></div>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="page-bases-presencial" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Bases y Condiciones - Presencial</h2>
+                            <div id="bases-presencial-content" class="reglamento-content"><p>Cargando...</p></div>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="page-nosotros" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Sobre Nosotros</h2>
+                            <p class="subtitulo-seccion">Aquí puedes poner la información sobre los organizadores de VYT MUSIC.</p>
+                        </div>
+                    </section>
+                </div>
+
+                <div id="page-tienda" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">Tienda Oficial</h2>
+                            <p class="subtitulo-seccion">Próximamente: Pistas, merchandising, micrófonos y más.</p>
+                        </div>
+                    </section>
+                </div>
             </main>
             
             <div id="modo-payment-modal" class="modal-backdrop">
@@ -392,31 +371,89 @@
         </div>
     </div>
     
+    <!-- Menú Hamburguesa (Slide-out) -->
+    <div id="mobile-menu" class="mobile-menu">
+        <a href="#" data-target="page-nosotros" class="mobile-menu-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
+            <span>Nosotros</span>
+        </a>
+        <a href="#" data-target="page-inscripcion" class="mobile-menu-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+            <span>Inscribite</span>
+        </a>
+        <a href="#" data-target="page-reglamento" class="mobile-menu-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
+            <span>Reglamento</span>
+        </a>
+        <a href="#" data-target="page-comunidad" class="mobile-menu-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
+            <span>Comunidad</span>
+        </a>
+        <a href="#" data-target="page-comprar-vyt" class="mobile-menu-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" /></svg>
+            <span>VYTMoney</span>
+        </a>
+        <a href="#" data-target="page-sponsors" class="mobile-menu-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
+            <span>Sponsors</span>
+        </a>
+    </div>
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+
     <nav class="bottom-nav">
-        <a data-target="page-inicio" class="active">
+        <a data-target="page-inicio" class="bottom-nav-link active">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span>Inicio</span>
         </a>
-        <a data-target="page-concurso-online">
+        <a data-target="page-concurso-online" class="bottom-nav-link">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-            <span>Concursos</span>
+            <span>Certamen</span>
         </a>
-        <a data-target="page-inscripcion">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-            <span>Inscripción</span>
-        </a>
-        <a href="blog.html">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-4a2 2 0 00-2 2v10a2 2 0 002 2h4a2 2 0 002-2V6a2 2 0 00-2-2zM5 4h4a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"></path></svg>
-            <span>Blog</span>
+        <a href="#" id="hamburger-menu-trigger" class="bottom-nav-link">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+            <span>Más</span>
         </a>
     </nav>
     
+    
+    <script type="module" src="principal-dynamic.js"></script>
     <script type="module">
         import { db } from './firebase-config.js';
-        import { onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { collection, getDocs, query, orderBy, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+        const auth = getAuth();
 
         document.addEventListener('DOMContentLoaded', () => {
-            const sidebarLinks = document.querySelectorAll('.nav-menu a[data-target]');
+            const profileLink = document.getElementById('profile-link');
+            const logoutButton = document.getElementById('logout-button');
+
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
+
+            onAuthStateChanged(auth, (user) => {
+                if (user) {
+                    // User is signed in
+                    profileLink.classList.add('hidden');
+                    logoutButton.classList.remove('hidden');
+                } else {
+                    // User is signed out
+                    profileLink.classList.remove('hidden');
+                    logoutButton.classList.add('hidden');
+                }
+            });
+
+            logoutButton.addEventListener('click', () => {
+                signOut(auth).then(() => {
+                    // Sign-out successful.
+                    window.location.reload();
+                }).catch((error) => {
+                    // An error happened.
+                    console.error('Sign out error', error);
+                });
+            });
+            
             const bottomNavLinks = document.querySelectorAll('.bottom-nav a[data-target]');
             const dropdownLinks = document.querySelectorAll('.dropdown > a');
             const pages = document.querySelectorAll('.page');
@@ -433,6 +470,8 @@
             const receiptFileInput = document.getElementById('receipt-file-input');
             const submitReceiptBtn = document.getElementById('submit-receipt-btn');
             const closeReceiptModalBtn = document.getElementById('close-receipt-modal-btn');
+            const communityFeedList = document.getElementById('community-feed-list');
+            const mobileMenuLinks = document.querySelectorAll('.mobile-menu-link');
             
             let currentPurchase = { vyt: 0, amount: 0 };
 
@@ -445,7 +484,7 @@
                 }
             }
 
-            const allInternalLinks = document.querySelectorAll('.nav-menu a[data-target], .bottom-nav a[data-target]');
+            const allInternalLinks = document.querySelectorAll('.header-nav a[data-target], .bottom-nav a[data-target], .mobile-menu-link');
             allInternalLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -454,7 +493,7 @@
                     allInternalLinks.forEach(nav => nav.classList.remove('active'));
                     link.classList.add('active');
 
-                    sidebarLinks.forEach(sl => {
+                    document.querySelectorAll('.header-nav-link').forEach(sl => {
                         if (sl.dataset.target === targetId) {
                             sl.classList.add('active');
                         }
@@ -469,17 +508,13 @@
                         dropdown.classList.remove('open');
                     });
 
+                    // Close mobile menu if a link is clicked
+                    if (mobileMenu.classList.contains('open')) {
+                        toggleMobileMenu();
+                    }
+
                     showPage(targetId);
                 });
-            });
-
-            sidebarLogo.addEventListener('click', (e) => {
-                e.preventDefault();
-                allInternalLinks.forEach(nav => nav.classList.remove('active'));
-                document.querySelector('.nav-menu a[data-target="page-inicio"]').classList.add('active');
-                const bottomInicio = document.querySelector('.bottom-nav a[data-target="page-inicio"]');
-                if (bottomInicio) bottomInicio.classList.add('active');
-                showPage('page-inicio');
             });
 
             heroButtons.forEach(button => {
@@ -512,7 +547,7 @@
                     currentPurchase.amount = button.dataset.amount;
 
                     modalVytAmount.textContent = currentPurchase.vyt;
-                    modalPaymentAmount.textContent = `$${currentPurchase.amount} ARS`;
+                    modalPaymentAmount.textContent = `${currentPurchase.amount} ARS`;
                     modoPaymentModal.classList.add('visible');
                 });
             });
@@ -553,6 +588,20 @@
                     }, 3000);
                 }, 2000);
             });
+
+            // Hamburger Menu Logic
+            function toggleMobileMenu() {
+                mobileMenu.classList.toggle('open');
+                mobileMenuOverlay.classList.toggle('open');
+            }
+
+            document.getElementById('hamburger-menu-trigger').addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleMobileMenu();
+            });
+            mobileMenuOverlay.addEventListener('click', () => {
+                toggleMobileMenu();
+            });
             
             const pozoTextElement = document.getElementById('pozoText');
             const pozoBarElement = document.querySelector('.pozo-bar');
@@ -569,6 +618,34 @@
                     pozoBarElement.style.width = `0%`;
                 }
             });
+
+            async function loadCommunityFeed() {
+                communityFeedList.innerHTML = '<p class="text-gray-400">Cargando feed...</p>';
+                try {
+                    const q = query(collection(db, "feed_comunitario"), orderBy("createdAt", "desc"));
+                    const querySnapshot = await getDocs(q);
+                    communityFeedList.innerHTML = '';
+                    if (querySnapshot.empty) {
+                        communityFeedList.innerHTML = '<p class="text-gray-500">Aún no hay nada en el feed. ¡Sé el primero en publicar!</p>';
+                        return;
+                    }
+                    querySnapshot.forEach((doc) => {
+                        const post = doc.data();
+                        const postElement = document.createElement('div');
+                        postElement.className = 'bg-gray-800 p-6 rounded-lg border border-gray-700';
+                        postElement.innerHTML = `
+                            <h3 class="text-xl font-bold mb-2">${post.titulo}</h3>
+                            ${post.imagenUrl ? `<img src="${post.imagenUrl}" alt="Imagen del post" class="w-full h-auto object-cover rounded-lg mb-4">` : ''}
+                            <p class="text-gray-300">${post.contenido}</p>
+                            <p class="text-xs text-gray-500 mt-4">${new Date(post.createdAt.toDate()).toLocaleString()}</p>
+                        `;
+                        communityFeedList.appendChild(postElement);
+                    });
+                } catch (error) {
+                    console.error("Error loading community feed:", error);
+                    communityFeedList.innerHTML = '<p class="text-red-500">Error al cargar el feed.</p>';
+                }
+            }
             
             if (window.location.hash) {
                 const targetId = window.location.hash.substring(1);
@@ -579,6 +656,9 @@
                     showPage(targetId);
                 }
             }
+
+            loadCommunityFeed();
+            loadCertamenesOnline();
         });
     </script>
 </body>
