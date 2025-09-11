@@ -474,8 +474,13 @@ body {
 /* --- Estilos para Comprar VYT --- */
 .vyt-pack-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1.5rem;
+}
+@media (min-width: 600px) {
+    .vyt-pack-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    }
 }
 .vyt-pack {
     padding: 2rem;
@@ -573,8 +578,13 @@ body {
 
 .ranking-home-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: 1fr;
     gap: 1.5rem;
+}
+@media (min-width: 420px) {
+    .ranking-home-grid {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    }
 }
 .ranking-home-card {
     background-color: var(--color-card);
@@ -667,7 +677,16 @@ body {
 .pozo-container { background-color: var(--color-fondo-secundario); border-radius: 50px; width: 100%; height: 40px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 1rem; }
 .pozo-bar { height: 100%; background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%); width: 75%; border-radius: 50px; transition: width 1.5s ease; }
 .pozo-text { font-weight: 700; font-size: 1.5rem; color: var(--color-primario); text-align: center; }
-.ranking-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+.ranking-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+@media (min-width: 640px) {
+    .ranking-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
 .ranking-card { border-radius: 15px; overflow: hidden; transition: transform 0.3s, box-shadow 0.3s; }
 .ranking-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
 .video-wrapper { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; }
@@ -682,7 +701,16 @@ body {
 .duelo-card .btn { width: 100%; }
 .avatar-container { padding: 2rem; border-radius: 15px; text-align: center; background-color: var(--color-card); }
 .avatar-placeholder { width: 120px; height: 120px; margin: 0 auto 1rem auto; background-color: var(--color-primario); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-fondo); font-size: 3rem; user-select: none; }
-.gira-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; }
+.gira-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+@media (min-width: 640px) {
+    .gira-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
 .gira-card { padding: 2rem; border-radius: 15px; text-align: center; }
 .gira-card h4 { font-family: var(--fuente-titulos); font-size: 2rem; color: var(--color-primario); }
 .gira-card p { color: var(--color-texto-secundario); font-weight: 700; }
@@ -862,10 +890,39 @@ body {
 /* Responsive adjustments */
 @media (max-width: 767px) {
     .header-nav, .header-logo { display: none; }
-    .header { justify-content: center; padding: 1rem; } /* Alinea el contenido del header a la derecha */
-    .main-content { padding-bottom: 80px; }
+    .header { justify-content: center; padding: 1rem; }
+
+    .main-content { 
+        padding-bottom: 80px; /* Espacio para el bottom-nav */
+    }
+
+    .content-wrapper {
+        /* Aplicamos un padding general como en admin-styles.css para unificar el espacio lateral */
+        padding: 1rem; 
+        padding-top: 80px; /* Mantenemos el espacio para el header fijo */
+    }
+
+    .container {
+        /* Neutralizamos el container en móvil para que no interfiera, aplicando el método del admin */
+        width: 100% !important;
+        max-width: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .titulo-seccion {
+        font-size: 2.2rem; /* Reducimos un poco más los títulos */
+        margin-bottom: 1.5rem;
+    }
+
+    .subtitulo-seccion {
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+    }
 }
 
 @media (min-width: 768px) {
     .bottom-nav { display: none; }
 }
+
+
