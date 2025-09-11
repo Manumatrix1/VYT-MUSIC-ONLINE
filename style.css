@@ -255,8 +255,19 @@ body {
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .content-wrapper {
-    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding-top: 80px; /* Espacio para el header fijo. Ajusta este valor si la altura del header cambia. */
+    width: 100%;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px; /* O el ancho máximo que prefieras para PC */
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1.5rem; /* Padding general para que el contenido no toque los bordes */
 }
 
 .titulo-seccion {
@@ -357,9 +368,14 @@ body {
     border-radius: 8px;
     transition: background-color 0.2s, color 0.2s;
 }
+.mobile-menu-link span {
+    flex-grow: 1;
+    text-align: center;
+}
 .mobile-menu-link svg {
     width: 1.5rem;
     height: 1.5rem;
+    flex-shrink: 0; /* Evita que el ícono se encoja */
 }
 .mobile-menu-link:hover, .mobile-menu-link.active {
     background-color: #333;
@@ -846,7 +862,7 @@ body {
 /* Responsive adjustments */
 @media (max-width: 767px) {
     .header-nav, .header-logo { display: none; }
-    .header { justify-content: flex-end; } /* Alinea el contenido del header a la derecha */
+    .header { justify-content: center; padding: 1rem; } /* Alinea el contenido del header a la derecha */
     .main-content { padding-bottom: 80px; }
 }
 
