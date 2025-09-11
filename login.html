@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Iniciar Sesión / Registrarse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #121212;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+        .font-display { font-family: 'Montserrat', sans-serif; }
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease-in-out;
+        }
+        .form-input:focus {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: #2bb7d1;
+            outline: none;
+        }
+        .btn-submit {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .btn-submit:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
+        }
+        .error-message {
+            color: #ff4d4d;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .password-input-container {
+            position: relative;
+        }
+        .toggle-password-visibility {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9ca3af; /* text-gray-400 */
+        }
+        .toggle-password-visibility:hover {
+            color: white;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <header class="bg-black/50 backdrop-blur-sm p-4 flex items-center justify-between shadow-lg sticky top-0 z-50">
+        <div class="flex items-center space-x-4">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
+        </div>
+        <nav class="flex items-center space-x-4 text-sm">
+            <a href="principal.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
+        </nav>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center p-6">
+        <div class="w-full max-w-md">
+            <div class="text-center mb-10">
+                <h1 class="font-display text-4xl md:text-5xl font-black">Acceso Artistas</h1>
+                <p class="text-gray-400 mt-2">Inicia sesión o regístrate para gestionar tus participaciones.</p>
+            </div>
+            
+            <div class="bg-gray-800 p-8 rounded-lg shadow-lg">
+                <div class="flex justify-center mb-6">
+                    <button id="show-login" class="px-4 py-2 rounded-l-lg font-bold text-lg transition-colors duration-200 bg-[#2bb7d1] text-black">Iniciar Sesión</button>
+                    <button id="show-register" class="px-4 py-2 rounded-r-lg font-bold text-lg transition-colors duration-200 bg-gray-700 text-gray-300">Registrarse</button>
+                </div>
+
+                <!-- Login Form -->
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="login-email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                        <input type="email" id="login-email" name="email" class="w-full form-input p-3 rounded-lg" placeholder="tu-correo@ejemplo.com" required>
+                    </div>
+                    <div>
+                        <label for="login-password" class="block text-sm font-medium text-gray-300 mb-1">Contraseña</label>
+                        <div class="password-input-container">
+                            <input type="password" id="login-password" name="password" class="w-full form-input p-3 rounded-lg pr-10" placeholder="Tu contraseña" required>
+                            <span class="toggle-password-visibility" data-target="login-password">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </span>
+                        </div>
+                        <a href="#" id="forgot-password-link" class="text-sm text-gray-400 hover:text-[#2bb7d1] mt-2 block text-right">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    <p id="login-error" class="error-message">Error al iniciar sesión.</p>
+                    <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
+                        Iniciar Sesión
+                    </button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="register-form" class="space-y-6 hidden">
+                    <div>
+                        <label for="register-email" class="block text-sm font-medium text-gray-300 mb-1">Email</label>
+                        <input type="email" id="register-email" name="email" class="w-full form-input p-3 rounded-lg" placeholder="tu-correo@ejemplo.com" required>
+                    </div>
+                    <div>
+                        <label for="register-password" class="block text-sm font-medium text-gray-300 mb-1">Contraseña</label>
+                        <input type="password" id="register-password" name="password" class="w-full form-input p-3 rounded-lg" placeholder="Mínimo 6 caracteres" required minlength="6">
+                    </div>
+                    <div>
+                        <label for="confirm-password" class="block text-sm font-medium text-gray-300 mb-1">Confirmar Contraseña</label>
+                        <input type="password" id="confirm-password" name="confirm-password" class="w-full form-input p-3 rounded-lg" placeholder="Repite tu contraseña" required minlength="6">
+                    </div>
+                    <p id="register-error" class="error-message">Error al registrarse.</p>
+                    <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
+                        Registrarse
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgot-password-modal" class="modal-backdrop">
+        <div class="modal-content bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-md">
+            <h3 class="font-display text-3xl font-bold text-white mb-4">Restablecer Contraseña</h3>
+            <p class="text-gray-400 mb-6">Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña.</p>
+            <div class="space-y-4">
+                <div>
+                    <label for="forgot-password-email-input" class="block text-sm font-medium text-gray-300 mb-1 text-left">Email</label>
+                    <input type="email" id="forgot-password-email-input" class="w-full form-input p-3 rounded-lg" placeholder="tu-correo@ejemplo.com">
+                </div>
+                <p id="forgot-password-modal-message" class="error-message text-center" style="display: none;"></p>
+                <button id="forgot-password-modal-submit-btn" class="btn-submit w-full bg-[#2bb7d1] text-black py-3 rounded-full font-bold text-lg">
+                    Enviar Enlace
+                </button>
+                <button id="forgot-password-modal-close-btn" class="w-full text-gray-400 hover:text-white py-2 rounded-full font-bold text-sm">
+                    Cancelar
+                </button>
+            </div>
+        </div>
+    </div>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

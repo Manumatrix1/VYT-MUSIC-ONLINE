@@ -31,6 +31,23 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
         }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            background: #000;
+            border-radius: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
         /* Ocultar la burbuja de texto de Tawk.to */
         .tawk-minimized-container .tawk-text-bubble {
             display: none !important;
@@ -157,12 +174,13 @@
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-28">
         </div>
         <nav class="flex items-center space-x-4 text-sm">
-            <a href="principal.html" class="text-gray-300 hover:text-white">&larr; Volver</a>
+            <a href="principal.html#page-concurso-online" class="text-gray-300 hover:text-white">&larr; Volver</a>
         </nav>
     </header>
 
     <main class="flex-grow flex items-center justify-center p-6">
         <div class="w-full max-w-lg">
+            <div id="promo-video-container" class="video-container"></div>
             <div class="text-center mb-10">
                 <p class="font-display text-lg uppercase tracking-widest text-[#2bb7d1]">Inscripción Presencial</p>
                 <h1 class="font-display text-4xl md:text-5xl font-black">ROSARIO</h1>
@@ -196,6 +214,13 @@
                     <input type="url" id="video" name="video" class="w-full form-input p-3 rounded-lg" placeholder="Pegá el link de YouTube, TikTok, etc." required>
                 </div>
 
+                <div class="bg-gray-800 p-4 rounded-lg">
+                    <div class="flex items-center">
+                        <input type="checkbox" id="inscripcion-prueba" name="inscripcion-prueba" class="form-checkbox h-5 w-5 text-cyan-400 bg-gray-700 border-gray-600 focus:ring-cyan-500">
+                        <label for="inscripcion-prueba" class="ml-3 text-sm font-medium text-gray-300">Quiero participar gratis (versión de prueba para obtener descuento)</label>
+                    </div>
+                </div>
+
                 <div class="mt-8">
                     <h3 class="text-xl font-bold font-display text-gray-300 mb-2">Bases y Condiciones</h3>
                     <div id="bases-text-container" class="bases-box">
@@ -214,7 +239,7 @@
         </div>
     </main>
     
-    <div id="confirm-modal" class="modal-backdrop hidden">
+    <div id="confirm-modal" class="modal-backdrop">
       <div class="modal-content">
         <span class="musical-note note-delay-1">&#9835;</span>
         <span class="musical-note note-delay-2">&#9833;</span>
@@ -231,30 +256,18 @@
         <div class="small-text">
             Quedate atento, te enviaremos el resultado de tu casting y los próximos pasos por mail.
         </div>
-        <a href="principal.html" id="close-modal-btn" class="modal-btn mt-4">
-          Volver a la página principal
+        <a href="principal.html#page-concurso-online" id="close-modal-btn" class="modal-btn mt-4">
+          Volver a Certamen
         </a>
       </div>
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp, getDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+                import { db } from './firebase-config.js';
+        import { collection, addDoc, serverTimestamp, getDoc, getDocs, doc, query, where, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
-            authDomain: "vytonlineprueva.firebaseapp.com",
-            projectId: "vytonlineprueva",
-            storageBucket: "vytonlineprueva.firebasestorage.app",
-            messagingSenderId: "175483939728",
-            appId: "1:175483939728:web:230294acca9221d1d1a115",
-            measurementId: "G-PWRTMBH631"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const storage = getStorage(app);
+        const auth = getAuth();
 
         document.addEventListener('DOMContentLoaded', () => {
             const inscripcionForm = document.getElementById('form-presencial');
@@ -264,11 +277,40 @@
             const confirmModal = document.getElementById('confirm-modal');
             const closeModalBtn = document.getElementById('close-modal-btn');
             const basesTextContainer = document.getElementById('bases-text-container');
-            const aceptaBasesCheckbox = document.getElementById('acepta-bases');
+            const acceptsBasesCheckbox = document.getElementById('acepta-bases');
             const edadInput = document.getElementById('edad');
             const nombreInput = document.getElementById('nombre');
             const telefonoInput = document.getElementById('telefono');
             const videoInput = document.getElementById('video');
+            const promoVideoContainer = document.getElementById('promo-video-container');
+            const pruebaCheckbox = document.getElementById('inscripcion-prueba');
+
+            async function loadPromotionalVideo() {
+                try {
+                    const q = query(
+                        collection(db, "videos_inscripcion"), 
+                        where("tipo_certamen", "==", "presencial"), 
+                        where("activo", "==", true), 
+                        limit(1)
+                    );
+                    const querySnapshot = await getDocs(q);
+                    if (!querySnapshot.empty) {
+                        const videoData = querySnapshot.docs[0].data();
+                        const url = new URL(videoData.url_youtube);
+                        const videoId = url.searchParams.get("v");
+                        if (videoId) {
+                            promoVideoContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" title="Video promocional" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                        } else {
+                           promoVideoContainer.style.display = 'none';
+                        }
+                    } else {
+                        promoVideoContainer.style.display = 'none';
+                    }
+                } catch (error) {
+                    console.error("Error loading promotional video:", error);
+                    promoVideoContainer.style.display = 'none';
+                }
+            }
 
             async function loadBasesPresenciales() {
                 try {
@@ -285,6 +327,7 @@
                 }
             }
             loadBasesPresenciales();
+            loadPromotionalVideo();
 
             inscripcionForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
@@ -297,7 +340,7 @@
                     emailError.style.display = 'none';
                 }
 
-                if (!aceptaBasesCheckbox.checked) {
+                if (!acceptsBasesCheckbox.checked) {
                     alert('Debes aceptar las bases y condiciones para continuar.');
                     return;
                 }
@@ -307,17 +350,32 @@
                 const email = emailInput.value;
                 const telefono = telefonoInput.value;
                 const video = videoInput.value;
+                const esPrueba = pruebaCheckbox.checked;
 
                 try {
-                    await addDoc(collection(db, "participantes_presenciales"), {
+                    function generateUniqueCode() {
+                        return Math.random().toString(36).substring(2, 10) + Date.now().toString(36);
+                    }
+
+                    const inscripcionDoc = {
                         nombre_artista: nombre,
                         edad: edad,
                         email: email,
                         telefono: telefono,
                         video_link: video,
                         aprobado: false,
+                        tipo_inscripcion: esPrueba ? 'prueba' : 'completa',
+                        votos_gratuitos: 0,
+                        descuento_aplicado: false,
+                        codigo_invitacion: generateUniqueCode(),
                         createdAt: serverTimestamp()
-                    });
+                    };
+
+                    if (auth.currentUser) {
+                        inscripcionDoc.uid = auth.currentUser.uid;
+                    }
+
+                    await addDoc(collection(db, "participantes_presenciales"), inscripcionDoc);
 
                     confirmModal.classList.add('visible');
                     inscripcionForm.reset();
