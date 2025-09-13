@@ -6,6 +6,15 @@ const { onRequest } = require("firebase-functions/v2/https");
 const { setGlobalOptions } = require("firebase-functions/v2");
 const { defineString } = require("firebase-functions/params");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
+// --- Backup / Export utilities ---
+const EXPORT_COLLECTIONS = [
+  'participantes_online',
+  'participantes_presenciales',
+  'configuracion',
+  'contenido_home',
+  'contenido_dinamico',
+  'certamenes_online'
+];
 
 // Define environment variables
 const gmailEmail = defineString("GMAIL_EMAIL");
@@ -215,3 +224,32 @@ exports.enviarCorreoRechazo = onDocumentUpdated(
     return null;
   }
 );
+
+// --- HTTP Function: Export Firestore data as JSON ---
+exports.exportarBackup = onRequest({ cors: true }, async (req, res) => {
+  try {
+    // Optional: Simple token auth via query ?token=... (add environment rule in production)
+    const token = req.query.token;
+    const expected = process.env.EXPORT_TOKEN || undefined;
+    if (expected && token !== expected) {
+      res.status(401).json({ error: 'No autorizado' });
+      return;
+    }
+
+    const db = admin.firestore();
+    const resultado = {};
+    for (const col of EXPORT_COLLECTIONS) {
+      const snap = await db.collection(col).get();
+      resultado[col] = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    }
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    res.status(200).send(JSON.stringify({
+      exportedAt: new Date().toISOString(),
+      project: process.env.GCLOUD_PROJECT,
+      collections: resultado
+    }, null, 2));
+  } catch (err) {
+    console.error('Error exportando backup:', err);
+    res.status(500).json({ error: 'Error exportando backup', detalle: String(err) });
+  }
+});

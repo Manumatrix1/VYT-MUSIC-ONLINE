@@ -1,0 +1,12 @@
+{
+  "exportedAt": "2025-09-12T00:00:00.000Z",
+  "project": "vyt-online",
+  "collections": {
+    "participantes_online": [],
+    "participantes_presenciales": [],
+    "configuracion": [],
+    "contenido_home": [],
+    "contenido_dinamico": [],
+    "certamenes_online": []
+  }
+}

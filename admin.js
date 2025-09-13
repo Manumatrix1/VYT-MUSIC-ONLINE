@@ -27,13 +27,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
                         <textarea data-edit="contenido" data-idx="${idx}" class="form-input w-full mb-2" rows="3" placeholder="Escribe tu texto aquí...">${bloque.contenido||'Texto de ejemplo'}</textarea>
                         <input type="color" value="${bloque.color || '#e6edf3'}" data-edit="color" data-idx="${idx}" title="Color">
-                        <select data-edit="fuente" data-idx="${idx}"><option>Montserrat</option><option>Bebas Neue</option></select>
+                        <select data-edit="fuente" data-idx="${idx}"><option${bloque.fuente==='Montserrat'?' selected':''}>Montserrat</option><option${bloque.fuente==='Bebas Neue'?' selected':''}>Bebas Neue</option></select>
                         <input type="number" min="10" max="72" value="${parseInt(bloque.tamano)||16}" data-edit="tamano" data-idx="${idx}" style="width:60px" title="Tamaño">
-                        <select data-edit="alineacion" data-idx="${idx}"><option value="left">Izq</option><option value="center">Centro</option><option value="right">Der</option></select>
+                        <select data-edit="alineacion" data-idx="${idx}">
+                            <option value="left"${bloque.alineacion==='left'?' selected':''}>Izq</option>
+                            <option value="center"${bloque.alineacion==='center'?' selected':''}>Centro</option>
+                            <option value="right"${bloque.alineacion==='right'?' selected':''}>Der</option>
+                        </select>
                         <label><input type="checkbox" data-edit="negrita" data-idx="${idx}" ${bloque.negrita?'checked':''}>Negrita</label>
                         <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
                     </div>`;
-                    bloqueHTML = `<div class="p-2"><span style="color:${bloque.color||'#e6edf3'};font-size:${bloque.tamano||'16'}px;font-family:${bloque.fuente||'Montserrat'};text-align:${bloque.alineacion||'left'};font-weight:${bloque.negrita?'bold':'normal'};">${bloque.contenido||'Texto de ejemplo'}</span></div>`;
+                    bloqueHTML = `<div class="p-2"><span style="color:${bloque.color||'#e6edf3'};font-size:${bloque.tamano||'16'}px;font-family:${bloque.fuente||'Montserrat'};text-align:${bloque.alineacion||'left'};font-weight:${bloque.negrita?'bold':'normal'};display:block;">${bloque.contenido||'Texto de ejemplo'}</span></div>`;
                     break;
                 case 'imagen':
                     menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
@@ -85,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             designArea.innerHTML += `<div class="bloque-contenedor mb-4" draggable="true" data-idx="${idx}">${menuEdicion}${bloqueHTML}</div>`;
         });
 
-        // Drag & Drop listeners (una vez renderizado)
+        // Drag & Drop listeners simplificados y robustos
         const contenedores = designArea.querySelectorAll('.bloque-contenedor');
         let dragSrcIdx = null;
         contenedores.forEach(el => {
@@ -95,20 +99,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 el.classList.add('dragging');
             });
             el.addEventListener('dragend', () => {
+                contenedores.forEach(c => c.classList.remove('drag-over'));
                 el.classList.remove('dragging');
+                dragSrcIdx = null;
             });
             el.addEventListener('dragover', (e) => {
                 e.preventDefault();
-                e.dataTransfer.dropEffect = 'move';
+                el.classList.add('drag-over');
+            });
+            el.addEventListener('dragleave', () => {
+                el.classList.remove('drag-over');
             });
             el.addEventListener('drop', async (e) => {
                 e.preventDefault();
+                el.classList.remove('drag-over');
                 const targetIdx = Number(el.dataset.idx);
                 if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+                // Mover el bloque en el array local
                 const moved = bloquesActuales.splice(dragSrcIdx, 1)[0];
                 bloquesActuales.splice(targetIdx, 0, moved);
+                // Actualizar el orden en todos los bloques
+                bloquesActuales.forEach((bloque, i) => {
+                    bloque.orden = i;
+                });
+                // Actualizar Firestore solo si el bloque tiene id
                 for (let i = 0; i < bloquesActuales.length; i++) {
-                    bloquesActuales[i].orden = i;
                     const bloqueDocId = bloquesActuales[i].id || bloquesActuales[i].docId;
                     if (bloqueDocId) {
                         try {
@@ -121,6 +136,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderVistaPrevia(bloquesActuales);
             });
         });
+        // Estilos visuales para feedback drag & drop
+        const style = document.getElementById('dragdrop-style') || document.createElement('style');
+        style.id = 'dragdrop-style';
+        style.innerHTML = `
+            .bloque-contenedor.dragging { opacity: 0.5; box-shadow: 0 0 10px #38bdf8; }
+            .bloque-contenedor.drag-over { border: 2px dashed #38bdf8; }
+        `;
+        if (!document.getElementById('dragdrop-style')) document.head.appendChild(style);
     }
  // Evento para agregar bloque al hacer clic en icono
     blockBtns.forEach(btn => {
