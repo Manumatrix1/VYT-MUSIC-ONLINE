@@ -1,5 +1,5 @@
 import { db } from './firebase-config.js';
-import { collection, getDocs, query, orderBy, onSnapshot, doc, getDoc, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { collection, getDocs, query, orderBy, onSnapshot, doc, getDoc, limit, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const auth = getAuth();
@@ -203,7 +203,63 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Iniciar carga de contenido
+
     loadBlogPosts();
     loadBasesYCondiciones();
     loadCommunityFeed();
+
+    // --- Carga de bloques dinámicos para la página principal ---
+    async function loadDynamicBlocks() {
+        const blocksContainer = document.getElementById('dynamic-blocks-container');
+        if (!blocksContainer) return;
+        blocksContainer.innerHTML = '<p class="text-gray-500">Cargando contenido...</p>';
+        try {
+            const q = query(collection(db, "contenido_dinamico"), where("page_id", "==", "principal"), orderBy("orden", "asc"));
+            const querySnapshot = await getDocs(q);
+            blocksContainer.innerHTML = '';
+            if (querySnapshot.empty) {
+                blocksContainer.innerHTML = '<p class="text-gray-500">No hay bloques creados.</p>';
+                return;
+            }
+            querySnapshot.forEach((doc) => {
+                const block = doc.data();
+                let blockHTML = '';
+                switch (block.tipo) {
+                    case 'titulo':
+                        blockHTML = `<h2 class='titulo-seccion'>${block.contenido.texto || ''}</h2>`;
+                        break;
+                    case 'parrafo':
+                        blockHTML = `<p class='subtitulo-seccion'>${block.contenido.texto || ''}</p>`;
+                        break;
+                    case 'banner':
+                        blockHTML = `<img src='${block.contenido.url}' alt='Banner' class='w-full rounded-lg mb-4' />`;
+                        break;
+                    case 'video':
+                        blockHTML = `<div class='video-wrapper mb-4'><iframe width='100%' height='320' src='${block.contenido.url}' frameborder='0' allowfullscreen></iframe></div>`;
+                        break;
+                    case 'pdf':
+                        blockHTML = `<embed src='${block.contenido.url}' type='application/pdf' width='100%' height='400px' />`;
+                        break;
+                    case 'blog':
+                        blockHTML = `<div id='blog-posts-container'></div>`;
+                        break;
+                    case 'certamenes':
+                        blockHTML = `<div id='certamenes-grid'></div>`;
+                        break;
+                    default:
+                        blockHTML = `<div class='p-2'>Bloque desconocido</div>`;
+                }
+                const blockDiv = document.createElement('div');
+                blockDiv.className = 'dynamic-block mb-6';
+                blockDiv.innerHTML = blockHTML;
+                blocksContainer.appendChild(blockDiv);
+            });
+        } catch (error) {
+            console.error('Error al cargar bloques dinámicos:', error);
+            blocksContainer.innerHTML = '<p class="text-red-500">Error al cargar el contenido dinámico.</p>';
+        }
+    }
+
+    // Ejecutar la carga de bloques dinámicos al iniciar
+    loadDynamicBlocks();
 });

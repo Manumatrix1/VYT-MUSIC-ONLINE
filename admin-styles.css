@@ -1,3 +1,11 @@
+        /* Universal Box-Sizing */
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
         :root {
             --color-fondo: #0d1117;
             --color-fondo-secundario: #161b22;
@@ -43,13 +51,15 @@
         }
 
         .sidebar {
-            width: 280px;
-            background-color: var(--color-fondo-secundario);
+            width: auto;
+            min-width: fit-content;
+            background-color: rgba(13, 17, 23, 0.8);
+            backdrop-filter: blur(10px);
             padding: 1.5rem;
             display: flex;
             flex-direction: column;
             flex-shrink: 0;
-            border-right: 1px solid #30363d;
+            border-left: 1px solid #30363d;
         }
 
         .main-content {
@@ -185,18 +195,49 @@
             border: 1px solid #30363d;
         }
         .nav-menu a.active {
-            background-color: var(--color-card);
-            color: var(--color-texto-principal);
+            background-color: var(--color-primario);
+            color: var(--color-fondo-secundario);
         }
         .ciudades-list-item {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
         }
+
+        #sidebar-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+
+        #sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
         
         /* Responsive Styles */
         @media (max-width: 767px) {
-            .sidebar { display: none; }
+            .sidebar {
+                position: fixed;
+                top: 0;
+                right: 0;
+                height: 100%;
+                z-index: 1001; /* Above other content */
+                transform: translateX(100%);
+                transition: transform 0.3s ease-in-out;
+                display: flex; /* Ensure it's a flex container */
+            }
+
+            .sidebar.active-sidebar {
+                transform: translateX(0);
+            }
             .bottom-nav { 
                 position: fixed;
                 bottom: 0;
@@ -205,7 +246,6 @@
                 background-color: var(--color-fondo-secundario);
                 border-top: 1px solid #30363d;
                 display: flex;
-                justify-content: space-evenly;
                 z-index: 1000;
                 padding: 0;
                 height: 65px;
@@ -219,7 +259,6 @@
                 font-size: 0.7rem;
                 padding: 0.7rem 0.2rem;
                 flex: 1;
-                min-width: 20%;
                 text-align: center;
                 line-height: 1.2;
             }
@@ -229,10 +268,15 @@
                 height: 1.5rem; 
                 margin-bottom: 0.2rem;
             }
-            .dashboard-container { flex-direction: column; }
-            .main-content { 
-                padding: 1rem; 
-                padding-bottom: 80px; 
+            .dashboard-container {
+                flex-direction: column;
+                width: 100%;
+                /* Removed flex-grow: 1; */
+            }
+            .main-content {
+                padding: 1rem;
+                padding-bottom: 80px;
+                width: 100%;
                 /* Removed align-items: center; to allow content to stretch */
             }
             .header-dashboard { 
@@ -268,7 +312,26 @@
             .page {
                 width: 100%;
                 max-width: 100%;
+                margin: 0 auto; /* Centrar las páginas */
                 /* Removed display: flex; flex-direction: column; align-items: center; to allow content to stretch */
+            }
+            .hamburger-icon {
+                /* Inherit styles from bottom-nav a */
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-decoration: none;
+                color: var(--color-texto-secundario);
+                font-size: 0.7rem;
+                padding: 0.7rem 0.2rem;
+                flex: 1;
+                text-align: center;
+                line-height: 1.2;
+            }
+            .hamburger-icon svg {
+                width: 1.5rem;
+                height: 1.5rem;
+                margin-bottom: 0.2rem;
             }
         }
         @media (min-width: 768px) {

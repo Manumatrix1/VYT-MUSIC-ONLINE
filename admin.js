@@ -1,11 +1,177 @@
-import { auth, db, storage, functions } from './firebase-config.js';
+import { auth, db } from './firebase-config.js';
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, where, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-import { httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
+import { query, collection, where, orderBy, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Elementos para el constructor visual
+    const designArea = document.getElementById('constructor-design-area');
+    const constructorPageSelect = document.getElementById('constructor-page-select');
+    const blockBtns = document.querySelectorAll('.block-btn');
+    let bloquesActuales = [];
+    let bloqueIdCounter = 1;
+
+    // Renderiza los bloques en el área de diseño con menú de edición y drag & drop
+    function renderVistaPrevia(bloques) {
+        if (!designArea) return;
+        designArea.innerHTML = '';
+        if (!bloques || bloques.length === 0) {
+            designArea.innerHTML = '<p class="text-gray-500">Haz clic en un icono para agregar bloques al lienzo.</p>';
+            return;
+        }
+        bloques.sort((a, b) => a.orden - b.orden);
+        bloques.forEach((bloque, idx) => {
+            let bloqueHTML = '';
+            let menuEdicion = '';
+            switch (bloque.tipo) {
+                case 'texto':
+                    menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
+                        <textarea data-edit="contenido" data-idx="${idx}" class="form-input w-full mb-2" rows="3" placeholder="Escribe tu texto aquí...">${bloque.contenido||'Texto de ejemplo'}</textarea>
+                        <input type="color" value="${bloque.color || '#e6edf3'}" data-edit="color" data-idx="${idx}" title="Color">
+                        <select data-edit="fuente" data-idx="${idx}"><option>Montserrat</option><option>Bebas Neue</option></select>
+                        <input type="number" min="10" max="72" value="${parseInt(bloque.tamano)||16}" data-edit="tamano" data-idx="${idx}" style="width:60px" title="Tamaño">
+                        <select data-edit="alineacion" data-idx="${idx}"><option value="left">Izq</option><option value="center">Centro</option><option value="right">Der</option></select>
+                        <label><input type="checkbox" data-edit="negrita" data-idx="${idx}" ${bloque.negrita?'checked':''}>Negrita</label>
+                        <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
+                    </div>`;
+                    bloqueHTML = `<div class="p-2"><span style="color:${bloque.color||'#e6edf3'};font-size:${bloque.tamano||'16'}px;font-family:${bloque.fuente||'Montserrat'};text-align:${bloque.alineacion||'left'};font-weight:${bloque.negrita?'bold':'normal'};">${bloque.contenido||'Texto de ejemplo'}</span></div>`;
+                    break;
+                case 'imagen':
+                    menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
+                        <input type="text" value="${bloque.url||''}" data-edit="url" data-idx="${idx}" placeholder="URL imagen">
+                        <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
+                    </div>`;
+                    bloqueHTML = `<div class="p-2"><img src="${bloque.url||''}" alt="Imagen" class="w-full rounded-lg" /></div>`;
+                    break;
+                case 'video':
+                    menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
+                        <input type="text" value="${bloque.url||''}" data-edit="url" data-idx="${idx}" placeholder="URL video">
+                        <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
+                    </div>`;
+                    bloqueHTML = `<div class="p-2"><iframe width="100%" height="220" src="${bloque.url||''}" frameborder="0" allowfullscreen></iframe></div>`;
+                    break;
+                case 'pdf':
+                    menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
+                        <input type="text" value="${bloque.url||''}" data-edit="url" data-idx="${idx}" placeholder="URL PDF">
+                        <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
+                    </div>`;
+                    bloqueHTML = `<div class="p-2"><embed src="${bloque.url||''}" type="application/pdf" width="100%" height="400px" /></div>`;
+                    break;
+                case 'banner':
+                    menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
+                        <input type="text" value="${bloque.contenido||''}" data-edit="contenido" data-idx="${idx}" placeholder="Texto banner">
+                        <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
+                    </div>`;
+                    bloqueHTML = `<div class="p-2 bg-blue-900 text-white rounded-lg"><h2 class="font-bold text-xl">${bloque.contenido||'Banner'}</h2></div>`;
+                    break;
+                case 'boton':
+                    menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
+                        <input type="text" value="${bloque.texto||'Botón'}" data-edit="texto" data-idx="${idx}" placeholder="Texto botón">
+                        <input type="text" value="${bloque.url||''}" data-edit="url" data-idx="${idx}" placeholder="URL destino">
+                        <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
+                    </div>`;
+                    bloqueHTML = `<div class="p-2"><a href="${bloque.url||'#'}" class="btn btn-primario">${bloque.texto||'Botón'}</a></div>`;
+                    break;
+                case 'fondo':
+                    menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
+                        <input type="color" value="${bloque.color||'#282828'}" data-edit="color" data-idx="${idx}" title="Color fondo">
+                        <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
+                    </div>`;
+                    bloqueHTML = `<div class="p-2" style="background:${bloque.color||'#282828'};height:60px;"></div>`;
+                    break;
+                default:
+                    menuEdicion = '';
+                    bloqueHTML = `<div class="p-2">Bloque desconocido</div>`;
+            }
+            designArea.innerHTML += `<div class="bloque-contenedor mb-4" draggable="true" data-idx="${idx}">${menuEdicion}${bloqueHTML}</div>`;
+        });
+
+        // Drag & Drop listeners (una vez renderizado)
+        const contenedores = designArea.querySelectorAll('.bloque-contenedor');
+        let dragSrcIdx = null;
+        contenedores.forEach(el => {
+            el.addEventListener('dragstart', (e) => {
+                dragSrcIdx = Number(el.dataset.idx);
+                e.dataTransfer.effectAllowed = 'move';
+                el.classList.add('dragging');
+            });
+            el.addEventListener('dragend', () => {
+                el.classList.remove('dragging');
+            });
+            el.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                e.dataTransfer.dropEffect = 'move';
+            });
+            el.addEventListener('drop', async (e) => {
+                e.preventDefault();
+                const targetIdx = Number(el.dataset.idx);
+                if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
+                const moved = bloquesActuales.splice(dragSrcIdx, 1)[0];
+                bloquesActuales.splice(targetIdx, 0, moved);
+                for (let i = 0; i < bloquesActuales.length; i++) {
+                    bloquesActuales[i].orden = i;
+                    const bloqueDocId = bloquesActuales[i].id || bloquesActuales[i].docId;
+                    if (bloqueDocId) {
+                        try {
+                            await updateDoc(doc(db, 'contenido_dinamico', String(bloqueDocId)), { orden: i });
+                        } catch (err) {
+                            console.error('Error actualizando orden:', err);
+                        }
+                    }
+                }
+                renderVistaPrevia(bloquesActuales);
+            });
+        });
+    }
+ // Evento para agregar bloque al hacer clic en icono
+    blockBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tipo = btn.dataset.block;
+            const nuevoBloque = {
+                id: bloqueIdCounter++,
+                tipo,
+                orden: bloquesActuales.length,
+                contenido: tipo==='texto'?'Texto de ejemplo':'',
+                color: tipo==='fondo'? '#282828' : (tipo==='texto'? '#e6edf3' : undefined),
+                fuente: 'Montserrat',
+                tamano: 16,
+                alineacion: 'left',
+                negrita: false
+            };
+            bloquesActuales.push(nuevoBloque);
+            renderVistaPrevia(bloquesActuales);
+        });
+    });
+
+    // Evento para editar/eliminar bloque desde menú de edición
+    if (designArea) {
+        designArea.addEventListener('input', (e) => {
+            const editType = e.target.dataset.edit;
+            const idx = e.target.dataset.idx;
+            if (editType && idx !== undefined) {
+                const bloque = bloquesActuales[idx];
+                if (!bloque) return;
+                if (editType === 'color') bloque.color = e.target.value;
+                if (editType === 'fuente') bloque.fuente = e.target.value;
+                if (editType === 'tamano') bloque.tamano = e.target.value;
+                if (editType === 'alineacion') bloque.alineacion = e.target.value;
+                if (editType === 'negrita') bloque.negrita = e.target.checked;
+                if (editType === 'contenido') bloque.contenido = e.target.value;
+                if (editType === 'url') bloque.url = e.target.value;
+                if (editType === 'texto') bloque.texto = e.target.value;
+                renderVistaPrevia(bloquesActuales);
+            }
+        });
+
+        designArea.addEventListener('click', (e) => {
+            if (e.target.classList.contains('delete-block-btn')) {
+                const idx = e.target.dataset.idx;
+                bloquesActuales.splice(idx, 1);
+                renderVistaPrevia(bloquesActuales);
+            }
+        });
+    }
     // ... (all existing element gets)
+    const loginErrorDiv = document.getElementById('login-error');
 
     // New elements for Visual Content
     const mainBannerForm = document.getElementById('main-banner-form');
@@ -41,6 +207,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const blockFileInput = document.getElementById('block-file-input');
 
 
+    // Función para cargar bloques desde Firestore según la página seleccionada
+    async function cargarBloquesDePagina(pagina) {
+        const coleccion = `contenido_${pagina}`;
+        const bloques = [];
+        try {
+            const q = query(collection(db, coleccion), orderBy('orden'));
+            const snapshot = await getDocs(q);
+            snapshot.forEach(docSnap => {
+                bloques.push(docSnap.data());
+            });
+        } catch (err) {
+            console.error('Error cargando bloques:', err);
+        }
+        bloquesActuales = bloques;
+        renderVistaPrevia(bloquesActuales);
+    }
+
+    // Evento: cambiar página en el constructor
+    if (constructorPageSelect) {
+        constructorPageSelect.addEventListener('change', (e) => {
+            const pagina = e.target.value;
+            cargarBloquesDePagina(pagina);
+        });
+        // Cargar la página por defecto al iniciar
+        cargarBloquesDePagina(constructorPageSelect.value);
+    }
+
+    // (Espacio reservado para futura lógica visual adicional)
+
+
     const homeVideoForm = document.getElementById('home-video-form');
     const homeVideoIdInput = document.getElementById('home-video-id');
     const homeVideoUrlInput = document.getElementById('home-video-url');
@@ -50,10 +246,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const homeVideoOrdenInput = document.getElementById('home-video-orden');
     const homeVideosListDiv = document.getElementById('home-videos-list');
 
-    const inscVideoForm = document.getElementById('insc-video-form');
-    const inscVideoUrlInput = document.getElementById('insc-video-url');
-    const inscVideoTipoInput = document.getElementById('insc-video-tipo');
-    const inscVideosListDiv = document.getElementById('insc-videos-list');
+
+    const hamburgerBtnBottom = document.getElementById('hamburger-btn-bottom');
+    const sidebar = document.querySelector('.sidebar'); // Get the sidebar element
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+
+    if (hamburgerBtnBottom && sidebar && sidebarOverlay) {
+        hamburgerBtnBottom.addEventListener('click', () => {
+            sidebar.classList.toggle('active-sidebar');
+            sidebarOverlay.classList.toggle('active');
+        });
+
+        sidebarOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('active-sidebar');
+            sidebarOverlay.classList.remove('active');
+        });
+
+        const navMenu = document.querySelector('.nav-menu');
+        if (navMenu) {
+            navMenu.addEventListener('click', (e) => {
+                // Check if a link inside the menu was clicked
+                if (e.target.closest('a')) {
+                    sidebar.classList.remove('active-sidebar');
+                    sidebarOverlay.classList.remove('active');
+                }
+            });
+        }
+    }
 
     // Existing element gets (added for clarity and use in showPage)
     const loginSection = document.getElementById('login-section');
@@ -61,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginBtn = document.getElementById('login-btn');
     const adminEmailInput = document.getElementById('admin-email');
     const adminPasswordInput = document.getElementById('admin-password');
-    const loginErrorDiv = document.getElementById('login-error');
+    // Eliminada declaración duplicada de loginErrorDiv
     const logoutBtn = document.getElementById('logout-btn');
     const adminUserEmailSpan = document.getElementById('admin-user-email');
 
@@ -76,10 +295,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show/hide pages and manage active navigation links
     function showPage(pageId) {
+        console.log('Attempting to show page:', pageId);
         document.querySelectorAll('.page').forEach(page => {
             page.classList.add('hidden');
         });
-        document.getElementById(pageId).classList.remove('hidden');
+        const targetElement = document.getElementById(pageId);
+        if (targetElement) {
+            targetElement.classList.remove('hidden');
+        } else {
+            console.error('Element with ID', pageId, 'not found.');
+        }
 
         document.querySelectorAll('.nav-menu a, .bottom-nav a').forEach(link => {
             link.classList.remove('active');
@@ -89,37 +314,6 @@ document.addEventListener('DOMContentLoaded', () => {
             activeLink.classList.add('active');
         }
     }
-
-    // --- Prize Pool Logic ---
-    // (Duplicate declaration removed. The function 'loadPozoAcumulado' is already defined above.)
-
-    updatePozoBtn.addEventListener('click', async () => {
-        const newPozo = parseFloat(pozoInput.value);
-        if (isNaN(newPozo) || newPozo < 0) {
-            pozoFormStatusDiv.textContent = 'Por favor, ingresa un valor numérico válido para el pozo.';
-            pozoFormStatusDiv.classList.remove('hidden');
-            pozoFormStatusDiv.classList.add('alert-error');
-            return;
-        }
-
-        try {
-            const docRef = doc(db, "admin_settings", "settings");
-            await setDoc(docRef, { pozoAcumulado: newPozo }, { merge: true });
-            pozoFormStatusDiv.textContent = 'Pozo de premios actualizado correctamente.';
-            pozoFormStatusDiv.classList.remove('hidden');
-            pozoFormStatusDiv.classList.remove('alert-error');
-            pozoFormStatusDiv.classList.add('alert-success');
-            loadPozoAcumulado(); // Refresh display
-        } catch (error) {
-            console.error("Error updating prize pool:", error);
-            pozoFormStatusDiv.textContent = `Error al actualizar el pozo: ${error.message}`;
-            pozoFormStatusDiv.classList.remove('hidden');
-            pozoFormStatusDiv.classList.add('alert-error');
-            pozoFormStatusDiv.classList.remove('alert-success');
-        }
-    });
-
-    // --- (existing showPage, onAuthStateChanged, login, logout, etc. functions) ---
 
     // --- Prize Pool Logic ---
     const loadPozoAcumulado = async () => {
@@ -168,8 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- (existing showPage, onAuthStateChanged, login, logout, etc. functions) ---
-
     onAuthStateChanged(auth, (user) => {
         if (user) {
             loginSection.classList.add('hidden');
@@ -187,45 +379,54 @@ document.addEventListener('DOMContentLoaded', () => {
             loadPozoAcumulado(); // Load prize pool on login
             initializeVotosChart(); // Initialize votes chart
             setupVotosRealtimeListener(); // Setup real-time votes listener
-            // ... (rest of the setup)
+            updatePageDisplays(); // Initial call for page constructor
         } else {
             loginSection.classList.remove('hidden');
             adminDashboard.classList.add('hidden');
         }
-    });
+    }); // <-- Close onAuthStateChanged callback
 
     // Login Function
-    loginBtn.addEventListener('click', async () => {
-        const email = adminEmailInput.value;
-        const password = adminPasswordInput.value;
-        try {
-            await signInWithEmailAndPassword(auth, email, password);
-            loginErrorDiv.classList.add('hidden');
-        } catch (error) {
-            loginErrorDiv.textContent = `Error de inicio de sesión: ${error.message}`;
-            loginErrorDiv.classList.remove('hidden');
-            console.error("Login error:", error);
-        }
-    });
+    if (loginBtn) {
+        loginBtn.addEventListener('click', async () => {
+            const email = adminEmailInput.value;
+            const password = adminPasswordInput.value;
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                loginErrorDiv.classList.add('hidden');
+                // Mostrar dashboard tras login exitoso
+                loginSection.classList.add('hidden');
+                adminDashboard.classList.remove('hidden');
+            } catch (error) {
+                loginErrorDiv.textContent = `Error de inicio de sesión: ${error.message}`;
+                loginErrorDiv.classList.remove('hidden');
+                console.error("Login error:", error);
+            }
+        });
+    }
 
     // Logout Function
-    logoutBtn.addEventListener('click', async () => {
-        try {
-            await signOut(auth);
-            // onAuthStateChanged will handle showing login section
-        } catch (error) {
-            console.error("Logout error:", error);
-            alert("Error al cerrar sesión.");
-        }
-    });
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                // onAuthStateChanged will handle showing login section
+            } catch (error) {
+                console.error("Logout error:", error);
+                alert("Error al cerrar sesión.");
+            }
+        });
+    }
 
     // Navigation links
-    document.querySelectorAll('.nav-menu a, .bottom-nav a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetPage = e.currentTarget.dataset.target;
-            showPage(targetPage);
-        });
+    document.querySelectorAll('.nav-menu a[data-target], .bottom-nav a[data-target]').forEach(link => {
+        if (link) {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetPage = e.currentTarget.dataset.target;
+                showPage(targetPage);
+            });
+        }
     });
 
     // --- Votes Chart Logic ---
@@ -484,9 +685,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             if (coverFile) {
-                const storageRef = ref(storage, `certamen_covers/${certamenId}_${Date.now()}_${coverFile.name}`);
+                const storageRef = ref(storage, `certamenes/portadas/${Date.now()}_${coverFile.name}`);
                 await uploadBytesResumable(storageRef, coverFile);
-                updates.imageUrl = await getDownloadURL(storageRef);
+                const imageUrl = await getDownloadURL(storageRef);
+                updates.imageUrl = imageUrl;
             }
 
             const docRef = doc(db, "certamenes_online", certamenId);
@@ -494,36 +696,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             alert("Certamen actualizado correctamente.");
             editCertamenModal.classList.add('hidden');
-            editCertamenForm.reset();
-            loadCertamenes(); // Refresh the list to show new image
+            loadCertamenes();
         } catch (error) {
-            console.error("Error updating certamen:", error);
-            alert("Error al actualizar el certamen.");
+            console.error("Error al actualizar certamen:", error);
+            alert("Error al actualizar certamen.");
         }
-    });
-
-    // --- Home Video Logic ---
-    const saveHomeVideo = async (e) => {
-        e.preventDefault();
-        const videoData = {
-            url_youtube: homeVideoUrlInput.value,
-            titulo: homeVideoTituloInput.value,
-            descripcion: homeVideoDescInput.value,
-            categoria: homeVideoCategoriaInput.value,
-            orden: Number(homeVideoOrdenInput.value) || 0,
-            createdAt: serverTimestamp()
-        };
-
-        try {
-            await addDoc(collection(db, "videos_home"), videoData);
-            alert('Video de inicio guardado correctamente');
-            homeVideoForm.reset();
-            loadHomeVideos();
-        } catch (error) {
-            console.error("Error saving home video: ", error);
-            alert("Error al guardar el video.");
-        }
-    };
+    }); // <-- cierre del event listener
 
     const loadHomeVideos = async () => {
         homeVideosListDiv.innerHTML = '<p class="text-gray-500">Cargando videos...</p>';
@@ -555,6 +733,33 @@ document.addEventListener('DOMContentLoaded', () => {
             homeVideosListDiv.innerHTML = '<p class="text-red-500">Error al cargar los videos.</p>';
         }
     };
+
+    // Función para guardar video de inicio
+    async function saveHomeVideo(e) {
+        e.preventDefault();
+        const videoData = {
+            url_youtube: homeVideoUrlInput.value,
+            titulo: homeVideoTituloInput.value,
+            descripcion: homeVideoDescInput.value,
+            categoria: homeVideoCategoriaInput.value,
+            orden: Number(homeVideoOrdenInput.value) || 0,
+            createdAt: serverTimestamp()
+        };
+        try {
+            await addDoc(collection(db, "videos_home"), videoData);
+            alert('Video de inicio guardado correctamente');
+            homeVideoForm.reset();
+            loadHomeVideos();
+        } catch (error) {
+            console.error("Error saving home video: ", error);
+            alert("Error al guardar el video.");
+        }
+    }
+
+    const inscVideoForm = document.getElementById('insc-video-form');
+    const inscVideoUrlInput = document.getElementById('insc-video-url');
+    const inscVideoTipoInput = document.getElementById('insc-video-tipo');
+    const inscVideosListDiv = document.getElementById('insc-videos-list');
 
     const deleteHomeVideo = async (id) => {
         if (confirm("¿Estás seguro de que quieres eliminar este video?")) {
@@ -733,7 +938,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 blocksListContainer.innerHTML = '<p class="text-gray-500">No hay bloques creados. ¡Añade el primero!</p>';
                 return;
             }
-
             let blockElements = [];
             querySnapshot.forEach((doc) => {
                 const block = doc.data();
@@ -741,7 +945,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 blockDiv.className = 'artist-list-item';
                 blockDiv.dataset.id = doc.id;
                 blockDiv.dataset.order = block.orden;
-
                 let contentPreview = '';
                 switch (block.tipo) {
                     case 'titulo': contentPreview = `<p class="font-bold text-lg">${block.contenido.texto}</p>`; break;
@@ -752,7 +955,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     case 'blog': contentPreview = `<p class="text-sm text-gray-300">Carrusel de Novedades del Blog</p>`; break;
                     case 'certamenes': contentPreview = `<p class="text-sm text-gray-300">Grilla de Certámenes</p>`; break;
                 }
-
                 blockDiv.innerHTML = `
                     <div class="flex items-center gap-4">
                         <div class="flex flex-col gap-1">
@@ -771,10 +973,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 blockElements.push(blockDiv);
             });
             blockElements.forEach(el => blocksListContainer.appendChild(el));
-
         } catch (error) {
-            console.error("Error loading blocks:", error);
-            blocksListContainer.innerHTML = '<p class="text-red-500">Error al cargar los bloques.</p>';
+            // Solo mostrar el mensaje de error si realmente ocurre un fallo
+            console.error("Error al cargar los bloques:", error);
+            blocksListContainer.innerHTML = '<p class="text-red-500">Error al cargar los bloques.<br><span class="text-xs">' + (error.message || error) + '</span></p>';
         }
     };
 
@@ -935,7 +1137,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             });
         });
-    }
-
-    // ... (rest of the script)
+    } // <-- cierre de setupRealtimeListeners
+    // Llamar a los listeners en el flujo principal
+    setupRealtimeListeners();
+    // Aquí puedes agregar lógica adicional si es necesario
 });
+
