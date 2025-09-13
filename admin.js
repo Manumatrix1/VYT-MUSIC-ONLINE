@@ -4,8 +4,8 @@ import { query, collection, where, orderBy, getDocs, doc, addDoc, updateDoc, del
 
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos para el constructor visual
-    const designArea = document.getElementById('constructor-design-area');
-    const constructorPageSelect = document.getElementById('constructor-page-select');
+    const designArea = document.getElementById('blocks-list-container');
+    const constructorPageSelect = document.getElementById('page-selector');
     const blockBtns = document.querySelectorAll('.block-btn');
     let bloquesActuales = [];
     let bloqueIdCounter = 1;
@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
         bloques.forEach((bloque, idx) => {
             let bloqueHTML = '';
             let menuEdicion = '';
+            let flechas = `<div class='flex gap-1 mb-2'>
+                <button class='move-up-btn bg-blue-600 text-white px-2 rounded' data-idx='${idx}' title='Subir'>▲</button>
+                <button class='move-down-btn bg-blue-600 text-white px-2 rounded' data-idx='${idx}' title='Bajar'>▼</button>
+            </div>`;
             switch (bloque.tipo) {
                 case 'texto':
                     menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
@@ -86,64 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     menuEdicion = '';
                     bloqueHTML = `<div class="p-2">Bloque desconocido</div>`;
             }
-            designArea.innerHTML += `<div class="bloque-contenedor mb-4" draggable="true" data-idx="${idx}">${menuEdicion}${bloqueHTML}</div>`;
+            designArea.innerHTML += `<div class="bloque-contenedor mb-4" data-idx="${idx}">${flechas}${menuEdicion}${bloqueHTML}</div>`;
         });
 
-        // Drag & Drop listeners simplificados y robustos
-        const contenedores = designArea.querySelectorAll('.bloque-contenedor');
-        let dragSrcIdx = null;
-        contenedores.forEach(el => {
-            el.addEventListener('dragstart', (e) => {
-                dragSrcIdx = Number(el.dataset.idx);
-                e.dataTransfer.effectAllowed = 'move';
-                el.classList.add('dragging');
-            });
-            el.addEventListener('dragend', () => {
-                contenedores.forEach(c => c.classList.remove('drag-over'));
-                el.classList.remove('dragging');
-                dragSrcIdx = null;
-            });
-            el.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                el.classList.add('drag-over');
-            });
-            el.addEventListener('dragleave', () => {
-                el.classList.remove('drag-over');
-            });
-            el.addEventListener('drop', async (e) => {
-                e.preventDefault();
-                el.classList.remove('drag-over');
-                const targetIdx = Number(el.dataset.idx);
-                if (dragSrcIdx === null || dragSrcIdx === targetIdx) return;
-                // Mover el bloque en el array local
-                const moved = bloquesActuales.splice(dragSrcIdx, 1)[0];
-                bloquesActuales.splice(targetIdx, 0, moved);
-                // Actualizar el orden en todos los bloques
-                bloquesActuales.forEach((bloque, i) => {
-                    bloque.orden = i;
-                });
-                // Actualizar Firestore solo si el bloque tiene id
-                for (let i = 0; i < bloquesActuales.length; i++) {
-                    const bloqueDocId = bloquesActuales[i].id || bloquesActuales[i].docId;
-                    if (bloqueDocId) {
-                        try {
-                            await updateDoc(doc(db, 'contenido_dinamico', String(bloqueDocId)), { orden: i });
-                        } catch (err) {
-                            console.error('Error actualizando orden:', err);
-                        }
-                    }
-                }
-                renderVistaPrevia(bloquesActuales);
-            });
-        });
-        // Estilos visuales para feedback drag & drop
-        const style = document.getElementById('dragdrop-style') || document.createElement('style');
-        style.id = 'dragdrop-style';
-        style.innerHTML = `
-            .bloque-contenedor.dragging { opacity: 0.5; box-shadow: 0 0 10px #38bdf8; }
-            .bloque-contenedor.drag-over { border: 2px dashed #38bdf8; }
-        `;
-        if (!document.getElementById('dragdrop-style')) document.head.appendChild(style);
+        // Listeners para flechas de movimiento (delegación de eventos)
+        // Se mueven fuera de renderVistaPrevia para evitar duplicados y asegurar funcionamiento
     }
  // Evento para agregar bloque al hacer clic en icono
     blockBtns.forEach(btn => {
@@ -238,7 +189,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const q = query(collection(db, coleccion), orderBy('orden'));
             const snapshot = await getDocs(q);
             snapshot.forEach(docSnap => {
-                bloques.push(docSnap.data());
+                const data = docSnap.data();
+                // Guardar el id del documento para futuras actualizaciones
+                data.id = docSnap.id;
+                bloques.push(data);
             });
         } catch (err) {
             console.error('Error cargando bloques:', err);
@@ -398,7 +352,6 @@ document.addEventListener('DOMContentLoaded', () => {
             loadBuilderBlocks(); // Changed to a more generic name
             loadInscVideos();
             setupRealtimeListeners(); // Assuming this is part of existing setup
-            loadBasesYCondiciones();
             loadPozoAcumulado(); // Load prize pool on login
             initializeVotosChart(); // Initialize votes chart
             setupVotosRealtimeListener(); // Setup real-time votes listener
