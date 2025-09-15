@@ -235,7 +235,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         blockHTML = `<img src='${block.contenido.url}' alt='Banner' class='w-full rounded-lg mb-4' />`;
                         break;
                     case 'video':
-                        blockHTML = `<div class='video-wrapper mb-4'><iframe width='100%' height='320' src='${block.contenido.url}' frameborder='0' allowfullscreen></iframe></div>`;
+                        const embedVideoUrl = getYouTubeEmbedUrl(block.contenido.url);
+                        blockHTML = `<div class='video-wrapper mb-4'>${embedVideoUrl ? `<iframe width='100%' height='320' src='${embedVideoUrl}' frameborder='0' allowfullscreen></iframe>` : `<p class='text-red-500'>URL de YouTube no válida.</p>`}</div>`;
                         break;
                     case 'pdf':
                         blockHTML = `<embed src='${block.contenido.url}' type='application/pdf' width='100%' height='400px' />`;
@@ -258,6 +259,18 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Error al cargar bloques dinámicos:', error);
             blocksContainer.innerHTML = '<p class="text-red-500">Error al cargar el contenido dinámico.</p>';
         }
+    }
+
+    // Helper function to get YouTube embed URL
+    function getYouTubeEmbedUrl(url) {
+        if (!url) return '';
+        let videoId = '';
+        const regExp = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/s]{11})/i;
+        const match = url.match(regExp);
+        if (match && match[1]) {
+            videoId = match[1];
+        }
+        return videoId ? `https://www.youtube.com/embed/${videoId}` : '';
     }
 
     // Ejecutar la carga de bloques dinámicos al iniciar

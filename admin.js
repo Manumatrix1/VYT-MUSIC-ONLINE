@@ -1,6 +1,9 @@
-import { auth, db } from './firebase-config.js';
+import { auth, db, storage } from './firebase-config.js';
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { query, collection, where, orderBy, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { query, collection, where, orderBy, getDocs, doc, addDoc, updateDoc, deleteDoc, serverTimestamp, onSnapshot, getDoc, writeBatch, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
 
 document.addEventListener('DOMContentLoaded', () => {
     // Elementos para el constructor visual
@@ -13,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Renderiza los bloques en el área de diseño con menú de edición y drag & drop
     function renderVistaPrevia(bloques) {
         if (!designArea) return;
+        console.log('[renderVistaPrevia] bloques recibidos:', bloques);
         designArea.innerHTML = '';
         if (!bloques || bloques.length === 0) {
             designArea.innerHTML = '<p class="text-gray-500">Haz clic en un icono para agregar bloques al lienzo.</p>';
@@ -20,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         bloques.sort((a, b) => a.orden - b.orden);
         bloques.forEach((bloque, idx) => {
+            console.log(`[renderVistaPrevia] Renderizando bloque #${idx}:`, bloque);
             let bloqueHTML = '';
             let menuEdicion = '';
             let flechas = `<div class='flex gap-1 mb-2'>
@@ -52,14 +57,52 @@ document.addEventListener('DOMContentLoaded', () => {
                     break;
                 case 'video':
                     menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
-                        <input type="text" value="${bloque.url||''}" data-edit="url" data-idx="${idx}" placeholder="URL video">
+                        <input type="text" value="${bloque.url || bloque.contenido?.url || ''}" data-edit="url" data-idx="${idx}" placeholder="Pegar URL de 'embed' de YouTube">
                         <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
                     </div>`;
-                    bloqueHTML = `<div class="p-2"><iframe width="100%" height="220" src="${bloque.url||''}" frameborder="0" allowfullscreen></iframe></div>`;
+                    
+                    const videoUrl = bloque.url || bloque.contenido?.url || '';
+                    let embedUrl = '';
+                    function getYouTubeId(url) {
+                        // youtu.be/VIDEO_ID (compartir)
+                        let match = url.match(/youtu\.be\/([a-zA-Z0-9_-]{11})/);
+                        if (match) return match[1];
+                        // youtube.com/embed/VIDEO_ID
+                        match = url.match(/embed\/([a-zA-Z0-9_-]{11})/);
+                        if (match) return match[1];
+                        // youtube.com/watch?v=VIDEO_ID
+                        match = url.match(/[?&]v=([a-zA-Z0-9_-]{11})/);
+                        if (match) return match[1];
+                        // youtube.com/shorts/VIDEO_ID
+                        match = url.match(/shorts\/([a-zA-Z0-9_-]{11})/);
+                        if (match) return match[1];
+                        // Si solo es el ID (por error de usuario)
+                        match = url.match(/^([a-zA-Z0-9_-]{11})$/);
+                        if (match) return match[1];
+                        return null;
+                    }
+                    const videoId = getYouTubeId(videoUrl);
+                    if (videoId) {
+                        embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                    }
+                    let fallbackMsg = '';
+                    if (!embedUrl) {
+                        fallbackMsg = `<span class='text-red-500 text-xs'>URL de YouTube no válida. Por favor, usa cualquier URL de YouTube (video, embed, shorts, etc).</span>`;
+                    } else {
+                        // Enlace directo al video
+                        fallbackMsg = `<div class='mt-2'><a href='${videoUrl}' target='_blank' class='text-blue-500 underline'>Ver en YouTube</a></div>`;
+                    }
+                    bloqueHTML = `<div class="p-2">
+                        ${embedUrl ? `<iframe width="100%" height="220" src="${embedUrl}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen onerror="this.style.display='none';this.parentNode.querySelector('.fallback-msg').style.display='block';"></iframe>` : ''}
+                        <div class="fallback-msg" style="display:${embedUrl ? 'none' : 'block'};">
+                            ${fallbackMsg}
+                        </div>
+                    </div>`;
                     break;
                 case 'pdf':
                     menuEdicion = `<div class="menu-edicion p-2 bg-gray-800 rounded mb-2 flex flex-wrap gap-2">
-                        <input type="text" value="${bloque.url||''}" data-edit="url" data-idx="${idx}" placeholder="URL PDF">
+                        <input type="text" value="${bloque.url||''}" data-edit="url" data-idx="${idx}" placeholder="URL PDF" readonly>
+                        <input type="file" data-edit="pdf-file" data-idx="${idx}" accept=".pdf" class="form-input">
                         <button class="delete-block-btn bg-red-600 text-white px-2 rounded" data-idx="${idx}">Eliminar</button>
                     </div>`;
                     bloqueHTML = `<div class="p-2"><embed src="${bloque.url||''}" type="application/pdf" width="100%" height="400px" /></div>`;
@@ -124,23 +167,52 @@ document.addEventListener('DOMContentLoaded', () => {
             if (editType && idx !== undefined) {
                 const bloque = bloquesActuales[idx];
                 if (!bloque) return;
-                if (editType === 'color') bloque.color = e.target.value;
-                if (editType === 'fuente') bloque.fuente = e.target.value;
-                if (editType === 'tamano') bloque.tamano = e.target.value;
-                if (editType === 'alineacion') bloque.alineacion = e.target.value;
-                if (editType === 'negrita') bloque.negrita = e.target.checked;
-                if (editType === 'contenido') bloque.contenido = e.target.value;
-                if (editType === 'url') bloque.url = e.target.value;
-                if (editType === 'texto') bloque.texto = e.target.value;
+                switch (editType) {
+                    case 'color': bloque.color = e.target.value; break;
+                    case 'fuente': bloque.fuente = e.target.value; break;
+                    case 'tamano': bloque.tamano = e.target.value; break;
+                    case 'alineacion': bloque.alineacion = e.target.value; break;
+                    case 'negrita': bloque.negrita = e.target.checked; break;
+                    case 'contenido': bloque.contenido = e.target.value; break;
+                    case 'url': bloque.url = e.target.value; break;
+                    case 'texto': bloque.texto = e.target.value; break;
+                    case 'pdf-file':
+                        const file = e.target.files?.[0];
+                        if (file && file.type === 'application/pdf') {
+                            const storageRef = ref(storage, `home_builder/pdfs/${Date.now()}_${file.name}`);
+                            uploadBytesResumable(storageRef, file).then(() => {
+                                getDownloadURL(storageRef).then(url => {
+                                    bloque.url = url;
+                                    renderVistaPrevia(bloquesActuales);
+                                });
+                            }).catch(err => console.error('Error subiendo PDF:', err));
+                        }
+                        break;
+                }
                 renderVistaPrevia(bloquesActuales);
             }
         });
 
         designArea.addEventListener('click', (e) => {
-            if (e.target.classList.contains('delete-block-btn')) {
-                const idx = e.target.dataset.idx;
+            const target = e.target;
+            if (!target.dataset.idx) return;
+            const idx = parseInt(target.dataset.idx);
+            if (isNaN(idx) || idx < 0 || idx >= bloquesActuales.length) return;
+
+            if (target.classList.contains('delete-block-btn')) {
                 bloquesActuales.splice(idx, 1);
-                renderVistaPrevia(bloquesActuales);
+                bloquesActuales.forEach((b, i) => b.orden = i);
+                return renderVistaPrevia(bloquesActuales);
+            }
+            if (target.classList.contains('move-up-btn') && idx > 0) {
+                [bloquesActuales[idx - 1], bloquesActuales[idx]] = [bloquesActuales[idx], bloquesActuales[idx - 1]];
+                bloquesActuales.forEach((b, i) => b.orden = i);
+                return renderVistaPrevia(bloquesActuales);
+            }
+            if (target.classList.contains('move-down-btn') && idx < bloquesActuales.length - 1) {
+                [bloquesActuales[idx + 1], bloquesActuales[idx]] = [bloquesActuales[idx], bloquesActuales[idx + 1]];
+                bloquesActuales.forEach((b, i) => b.orden = i);
+                return renderVistaPrevia(bloquesActuales);
             }
         });
     }
@@ -188,12 +260,14 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const q = query(collection(db, coleccion), orderBy('orden'));
             const snapshot = await getDocs(q);
+            console.log('[cargarBloquesDePagina] página:', pagina, 'docs:', snapshot.size);
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
                 // Guardar el id del documento para futuras actualizaciones
                 data.id = docSnap.id;
                 bloques.push(data);
             });
+            console.log('[cargarBloquesDePagina] bloques:', bloques);
         } catch (err) {
             console.error('Error cargando bloques:', err);
         }
@@ -206,6 +280,8 @@ document.addEventListener('DOMContentLoaded', () => {
         constructorPageSelect.addEventListener('change', (e) => {
             const pagina = e.target.value;
             cargarBloquesDePagina(pagina);
+            document.getElementById('current-page-display').textContent = pagina;
+            document.getElementById('current-page-blocks-display').textContent = pagina;
         });
         // Cargar la página por defecto al iniciar
         cargarBloquesDePagina(constructorPageSelect.value);
@@ -394,51 +470,14 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Navigation links
+    // Navigation links: mostrar la página correspondiente al hacer clic
     document.querySelectorAll('.nav-menu a[data-target], .bottom-nav a[data-target]').forEach(link => {
-        if (link) {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetPage = e.currentTarget.dataset.target;
-                showPage(targetPage);
-            });
-        }
-    });
-
-    // --- Votes Chart Logic ---
-    let votosChart; // Declare chart variable globally within DOMContentLoaded scope
-
-    const initializeVotosChart = () => {
-        const ctx = votosChartCanvas.getContext('2d');
-        votosChart = new Chart(ctx, {
-            type: 'bar', // Or 'pie', 'doughnut', etc. based on preference
-            data: {
-                labels: ['Total Votos'], // Example label
-                datasets: [{
-                    label: 'Votos',
-                    data: [0], // Initial data
-                    backgroundColor: 'rgba(75, 192, 192, 0.6)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
-                    }
-                }
-            }
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const pageId = link.getAttribute('data-target');
+            showPage(pageId);
         });
-    };
-
+    });
     const setupVotosRealtimeListener = () => {
         const docRef = doc(db, "admin_settings", "settings"); // Assuming total votes are here
         onSnapshot(docRef, (docSnap) => {
@@ -852,8 +891,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (selectedType === 'titulo') {
             document.querySelector('.block-field[data-type="titulo"]').classList.remove('hidden');
+            document.querySelector('.block-field[data-type="font-size"]').classList.remove('hidden');
+            document.querySelector('.block-field[data-type="align"]').classList.remove('hidden');
         } else if (selectedType === 'parrafo') {
             document.querySelector('.block-field[data-type="parrafo"]').classList.remove('hidden');
+            document.querySelector('.block-field[data-type="font-size"]').classList.remove('hidden');
+            document.querySelector('.block-field[data-type="align"]').classList.remove('hidden');
         } else if (selectedType === 'banner' || selectedType === 'pdf') {
             document.querySelector('.block-field[data-type="file-upload"]').classList.remove('hidden');
             blockFileInput.accept = selectedType === 'pdf' ? '.pdf' : 'image/*';
@@ -875,8 +918,16 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             if (type === 'titulo') {
                 blockData.contenido.texto = document.getElementById('block-titulo-texto').value;
+                blockData.estilos = {
+                    fontSize: document.getElementById('block-font-size').value || '24',
+                    align: document.getElementById('block-align').value || 'left'
+                };
             } else if (type === 'parrafo') {
                 blockData.contenido.texto = document.getElementById('block-parrafo-texto').value;
+                blockData.estilos = {
+                    fontSize: document.getElementById('block-font-size').value || '16',
+                    align: document.getElementById('block-align').value || 'left'
+                };
             } else if (type === 'video') {
                 blockData.contenido.url = document.getElementById('block-video-url').value;
             } else if (type === 'banner' || type === 'pdf') {
@@ -923,8 +974,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 blockDiv.dataset.order = block.orden;
                 let contentPreview = '';
                 switch (block.tipo) {
-                    case 'titulo': contentPreview = `<p class="font-bold text-lg">${block.contenido.texto}</p>`; break;
-                    case 'parrafo': contentPreview = `<p class="text-sm text-gray-400 truncate">${block.contenido.texto}</p>`; break;
+                    case 'titulo':
+                        contentPreview = `<p class="font-bold" style="font-size:${block.estilos?.fontSize || 24}px;text-align:${block.estilos?.align || 'left'};">${block.contenido.texto}</p>`;
+                        break;
+                    case 'parrafo':
+                        contentPreview = `<p class="text-gray-400 truncate" style="font-size:${block.estilos?.fontSize || 16}px;text-align:${block.estilos?.align || 'left'};">${block.contenido.texto}</p>`;
+                        break;
                     case 'banner': contentPreview = `<img src="${block.contenido.url}" class="w-24 h-12 object-cover rounded-md">`; break;
                     case 'video': contentPreview = `<p class="text-xs text-blue-400 break-all">${block.contenido.url}</p>`; break;
                     case 'pdf': contentPreview = `<p class="text-xs text-red-400 break-all">${block.contenido.url}</p>`; break;
@@ -961,16 +1016,55 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!target) return;
 
         const id = target.dataset.id;
+        const order = Number(target.dataset.order);
 
+        // Eliminar bloque
         if (target.classList.contains('delete-block-btn')) {
             if (confirm('¿Estás seguro de que quieres eliminar este bloque?')) {
                 await deleteDoc(doc(db, "contenido_dinamico", id));
                 loadBuilderBlocks(); // Re-render and re-calculate order
             }
+            return;
         }
-        // Note: Reordering logic will be more complex, involving swapping 'orden' fields.
-        // For simplicity in this implementation, reordering is not fully implemented with arrows.
-        // A drag-and-drop library would be ideal here.
+
+        // Mover bloque hacia arriba
+        if (target.classList.contains('move-up')) {
+            // Buscar el bloque anterior
+            const blocks = Array.from(blocksListContainer.querySelectorAll('.artist-list-item'));
+            if (order === 0) return; // Ya está arriba
+            // Buscar el bloque anterior en la lista
+            const prevBlock = blocks.find(b => Number(b.dataset.order) === order - 1);
+            if (!prevBlock) return;
+            const prevId = prevBlock.dataset.id;
+            // Intercambiar orden en Firestore
+            try {
+                await updateDoc(doc(db, "contenido_dinamico", id), { orden: order - 1 });
+                await updateDoc(doc(db, "contenido_dinamico", prevId), { orden: order });
+                loadBuilderBlocks();
+            } catch (error) {
+                alert('Error al mover el bloque.');
+                console.error(error);
+            }
+            return;
+        }
+
+        // Mover bloque hacia abajo
+        if (target.classList.contains('move-down')) {
+            const blocks = Array.from(blocksListContainer.querySelectorAll('.artist-list-item'));
+            if (order === blocks.length - 1) return; // Ya está abajo
+            const nextBlock = blocks.find(b => Number(b.dataset.order) === order + 1);
+            if (!nextBlock) return;
+            const nextId = nextBlock.dataset.id;
+            try {
+                await updateDoc(doc(db, "contenido_dinamico", id), { orden: order + 1 });
+                await updateDoc(doc(db, "contenido_dinamico", nextId), { orden: order });
+                loadBuilderBlocks();
+            } catch (error) {
+                alert('Error al mover el bloque.');
+                console.error(error);
+            }
+            return;
+        }
     });
 
 
@@ -1118,4 +1212,3 @@ document.addEventListener('DOMContentLoaded', () => {
     setupRealtimeListeners();
     // Aquí puedes agregar lógica adicional si es necesario
 });
-

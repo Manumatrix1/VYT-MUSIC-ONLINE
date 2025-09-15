@@ -354,12 +354,14 @@
 
                 <!-- Selector de página -->
                 <div class="dashboard-card mb-6">
-                    <h4 class="font-bold text-lg mb-4">Seleccionar Página a Editar</h4>
-                    <select id="page-selector" class="form-input w-full">
-                        <option value="principal">Principal</option>
-                        <option value="inscripcion_online">Inscripción Online</option>
-                        <option value="inscripcion_presencial">Inscripción Presencial</option>
-                    </select>
+                    <div class="form-grupo">
+                        <label for="page-selector">Seleccionar Página:</label>
+                        <select id="page-selector" class="form-input">
+                            <option value="principal">Página Principal</option>
+                            <!-- Add other pages here if they exist in Firestore for dynamic content -->
+                        </select>
+                    </div>
+                    <button id="save-page-btn" class="btn btn-primario w-full">Guardar Cambios en la Página</button>
                 </div>
 
                 <!-- Formulario para añadir nuevos bloques -->
@@ -391,10 +393,24 @@
                                 <label for="block-parrafo-texto">Contenido del Párrafo:</label>
                                 <textarea id="block-parrafo-texto" class="form-input" rows="4" placeholder="Escribe tu texto aquí..."></textarea>
                             </div>
+                            <!-- Tamaño de letra (título y párrafo) -->
+                            <div class="form-grupo block-field hidden" data-type="font-size">
+                                <label for="block-font-size">Tamaño de letra:</label>
+                                <input type="number" id="block-font-size" class="form-input w-24" min="10" max="72" value="16">
+                            </div>
+                            <!-- Alineación (título y párrafo) -->
+                            <div class="form-grupo block-field hidden" data-type="align">
+                                <label for="block-align">Alineación:</label>
+                                <select id="block-align" class="form-select">
+                                    <option value="left">Izquierda</option>
+                                    <option value="center">Centro</option>
+                                    <option value="right">Derecha</option>
+                                </select>
+                            </div>
                             <!-- Archivo (Banner, PDF) -->
                             <div class="form-grupo block-field hidden" data-type="file-upload">
                                 <label for="block-file-input">Subir Archivo:</label>
-                                <input type="file" id="block-file-input" class="form-input">
+                                <input type="file" id="block-file-input" class="form-input" accept=".pdf,image/*">
                             </div>
                             <!-- URL (Video) -->
                             <div class="form-grupo block-field hidden" data-type="video">
