@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -18,6 +18,71 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
+    <!-- Loading Screen CSS -->
+    <style id="loading-styles">
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #121212 0%, #1a1a1a 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 0.5s ease-out;
+        }
+        
+        #loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loading-logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 2rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .loading-bar {
+            width: 300px;
+            height: 4px;
+            background-color: #333;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #58a6ff, #1db954);
+            border-radius: 2px;
+            transform: translateX(-100%);
+            animation: loading 3s ease-out forwards;
+        }
+        
+        .loading-text {
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+        
+        @keyframes loading {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(0%); }
+        }
+    </style>
+    
         <style>
     /* --- Variables de Color y Estilos Base --- */
     :root {
@@ -28,7 +93,7 @@
         --color-texto-secundario: #b0b8c4;
         --color-primario: #58a6ff;
         --color-secundario: #238636;
-        --color-oro: #FFD700;
+        --color-oro: #00d9ff; /* Verde azulado fosforescente/neon */
         --fuente-titulos: 'Bebas Neue', sans-serif;
         --fuente-cuerpo: 'Montserrat', sans-serif;
     }
@@ -77,14 +142,33 @@
         display: none; /* Oculto por defecto */
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 768px) {
         .header-logo {
             display: block;
             flex-shrink: 0;
         }
         .header-logo img {
-            height: 40px;
+            height: 45px;
             width: auto;
+        }
+        
+        /* Mejora de navegación desktop */
+        .header {
+            padding: 0.8rem 2rem;
+        }
+        
+        .desktop-nav {
+            gap: 2rem;
+        }
+        
+        .desktop-nav a {
+            padding: 0.6rem 1.2rem;
+            font-size: 1rem;
+        }
+        
+        /* Mobile menu hidden en desktop */
+        .mobile-menu-toggle {
+            display: none;
         }
     }
 
@@ -139,7 +223,7 @@
         display: none; /* Oculto en móvil por defecto */
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 768px) {
         .header-nav {
             display: flex;
             gap: 1rem;
@@ -423,18 +507,19 @@
     .mobile-menu {
         position: fixed;
         top: 0;
-        right: 0; /* Empieza fuera de la pantalla */
+        right: 0;
         width: auto;
         min-width: fit-content;
         height: 100%;
-        background-color: rgba(13, 17, 23, 0.8);
-        backdrop-filter: blur(10px);
+        background: rgba(0, 0, 0, 0.85); /* Negro transparente estilo Spotify */
+        backdrop-filter: blur(15px);
+        border-left: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
         z-index: 3000;
         transition: transform 0.3s ease-in-out;
-        padding: 4rem 2rem 2rem 2rem;
+        padding: 3rem 1.5rem 2rem 1.5rem;
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
         transform: translateX(100%);
     }
     .mobile-menu.open {
@@ -462,8 +547,10 @@
         flex-shrink: 0; /* Evita que el ícono se encoja */
     }
     .mobile-menu-link:hover, .mobile-menu-link.active {
-        background-color: #5aeef4;
-        color: #0d1117;
+        background: rgba(29, 78, 216, 0.2); /* Azul selección estilo Spotify */
+        color: #ffffff;
+        border-radius: 4px;
+        border-left: 2px solid #3b82f6; /* Borde azul sutil */
     }
 
     .mobile-menu-overlay {
@@ -664,7 +751,7 @@
     }
     
     .vyt-pack.vip .pack-badge {
-        background: linear-gradient(135deg, #dc2626, #fbbf24);
+        background: linear-gradient(135deg, #dc2626, #4682b4); /* Azul gastado en lugar de verde */
     }
     
     .vyt-pack .amount {
@@ -844,9 +931,9 @@
     .pozo-barra-dorada {
         width: 60%;
         height: 100%;
-        background: linear-gradient(90deg, #F0A500, var(--color-oro));
+        background: linear-gradient(90deg, #5b7c99, var(--color-oro)); /* Azul gastado */
         border-radius: 8px;
-        box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4), 0 0 10px #FFD700;
+        box-shadow: inset 0 -2px 4px rgba(0,0,0,0.4), 0 0 10px #00d9ff; /* Glow verde azulado fosforescente */
     }
 
     .ranking-home-grid {
@@ -1110,7 +1197,7 @@
     }
     
     .pool-progress-fill {
-        background: linear-gradient(90deg, var(--color-oro), #ffed4e, var(--color-oro));
+        background: linear-gradient(90deg, var(--color-oro), #4682b4, var(--color-oro)); /* Azul gastado en el centro */
         height: 100%;
         border-radius: 10px;
         transition: width 2s ease;
@@ -1458,6 +1545,56 @@
         .subtitulo-seccion {
             font-size: 0.95rem;
             margin-bottom: 2rem;
+        }
+        
+        /* Fix para grids que causan desbordamiento horizontal */
+        .certamenes-grid {
+            grid-template-columns: 1fr !important;
+        }
+        
+        /* Override para certámenes especiales en móvil */
+        .special-certamenes-grid {
+            grid-template-columns: 1fr !important;
+        }
+        
+        /* Responsive para el nuevo Certamen Santa Fe */
+        .certamen-card-main {
+            margin-bottom: 1.5rem !important;
+            padding: 1.5rem !important;
+        }
+        
+        .certamen-card-main h3 {
+            font-size: 1.5rem !important;
+        }
+        
+        /* Mejorar botones en móvil */
+        .btn {
+            padding: 0.8rem 1rem !important;
+            font-size: 0.9rem !important;
+        }
+        
+        /* Grid de información de Santa Fe responsive */
+        div[style*="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr))"] {
+            grid-template-columns: 1fr !important;
+            gap: 1rem !important;
+        }
+        
+        /* Cronograma responsive */
+        div[style*="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr))"] {
+            grid-template-columns: 1fr !important;
+        }
+        
+        /* Prevenir overflow horizontal general */
+        * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        
+        /* Asegurar que contenedores no excedan viewport */
+        .formulario-container,
+        .reglamento-content {
+            max-width: 100% !important;
+            padding: 1rem !important;
         }
     }
 
@@ -1832,6 +1969,90 @@
         .vote-stats {
             grid-template-columns: 1fr;
         }
+    }
+
+    /* Mejoras para Desktop */
+    @media (min-width: 1200px) {
+        .container {
+            max-width: 1400px;
+            padding: 2rem;
+        }
+        
+        .hero-section {
+            padding: 4rem 0;
+        }
+        
+        .titulo-principal {
+            font-size: 3.5rem;
+        }
+        
+        .subtitulo-principal {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+        }
+        
+        .video-wrapper {
+            max-width: 1000px !important;
+        }
+        
+        .hero-buttons {
+            gap: 2rem;
+        }
+        
+        .hero-buttons .btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+    }
+
+    /* Mejoras adicionales para pantallas grandes */
+    @media (min-width: 1600px) {
+        .container {
+            max-width: 1600px;
+        }
+        
+        .video-wrapper {
+            max-width: 1200px !important;
+        }
+        
+        .titulo-principal {
+            font-size: 4rem;
+        }
+    }
+
+    /* Mejoras específicas para grids en desktop */
+    @media (min-width: 1024px) {
+        .certamenes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)) !important;
+            gap: 2rem !important;
+        }
+        
+        .special-certamenes-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+            gap: 1.5rem !important;
+        }
+        
+        .gira-grid {
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+            gap: 2rem !important;
+        }
+        
+        /* Mejorar cards en desktop */
+        .certamen-card-main {
+            padding: 2.5rem !important;
+        }
+        
+        .certamen-card-main h3 {
+            font-size: 2.2rem !important;
+        }
+    }
+
+    /* Continuación de estilos responsive para móviles */
+    @media (max-width: 768px) {
+        .vote-stats {
+            grid-template-columns: 1fr;
+        }
         
         .vote-amount-selector {
             gap: 0.3rem;
@@ -1846,10 +2067,143 @@
             justify-content: flex-start;
         }
     }
+
+    /* Mobile Menu Sections - MEJORADO PARA MEJOR ALINEACIÓN */
+    .mobile-menu-section {
+        margin-bottom: 1rem;
+        border-bottom: 1px solid #333;
+        padding-bottom: 1rem;
+    }
+
+    .mobile-menu-section:last-child {
+        border-bottom: none;
+    }
+
+    .mobile-menu-title {
+        padding: 0.8rem 1rem;
+        color: var(--color-oro);
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: rgba(255, 215, 0, 0.1);
+        border-radius: 8px;
+        border: 1px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .mobile-menu-title:hover {
+        background: rgba(255, 215, 0, 0.2);
+        transform: translateX(4px);
+    }
+
+    .accordion-trigger {
+        border-left: 3px solid transparent;
+    }
+
+    .accordion-trigger.active {
+        border-left-color: var(--color-oro);
+        background: rgba(255, 215, 0, 0.2);
+    }
+
+    .accordion-arrow {
+        font-size: 0.8rem;
+        transition: transform 0.3s ease;
+        color: var(--color-oro);
+    }
+
+    .accordion-trigger.active .accordion-arrow {
+        transform: rotate(180deg);
+    }
+
+    .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 0 0 10px 10px;
+        margin-top: 0.5rem;
+        opacity: 0;
+    }
+
+    .accordion-content.open {
+        max-height: 400px;
+        padding: 0.75rem;
+        opacity: 1;
+    }
+
+    .mobile-menu-link {
+        display: grid;
+        grid-template-columns: 32px 1fr; /* Grid: 32px para ícono, resto para texto */
+        align-items: center;
+        gap: 8px; /* Espaciado fijo entre columnas */
+        padding: 0.7rem 1rem;
+        color: #e5e5e5;
+        text-decoration: none;
+        font-size: 0.72rem; /* Más pequeño para mejor ajuste */
+        line-height: 1.3;
+        transition: all 0.2s ease;
+        border-left: 2px solid transparent;
+        border-radius: 4px;
+        margin: 0.1rem 0;
+        min-height: 40px; /* Altura consistente */
+        font-weight: 400;
+    }
+
+    .mobile-menu-link:hover {
+        background: rgba(29, 78, 216, 0.15); /* Azul sutil estilo Spotify en lugar de amarillo */
+        color: #3b82f6; /* Azul en lugar de amarillo */
+        border-left-color: #3b82f6;
+        border-radius: 4px; /* Bordes más sutiles */
+        transform: translateX(2px); /* Movimiento más sutil */
+    }
+
+    .menu-icon {
+        color: #9ca3af;
+        font-size: 1.1rem; /* Ligeramente más grande */
+        width: 28px; /* Tamaño fijo más grande */
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        background: none;
+        border-radius: 4px;
+        margin: 0; /* Sin margin - el grid maneja el espaciado */
+        transition: color 0.2s ease;
+        text-align: center;
+    }
+
+    .mobile-menu-link:hover .menu-icon {
+        color: #3b82f6; /* Azul al hacer hover */
+    }
+
+    /* Texto alineado perfectamente en grid */
+    .mobile-menu-link span:not(.menu-icon) {
+        display: flex;
+        align-items: center;
+        font-weight: 400;
+        line-height: 1.3;
+        font-size: 0.8rem;
+        margin: 0;
+        text-align: left;
+        white-space: nowrap; /* Evitar que el texto se corte */
+    }
     </style>
 ```
 </head>
 <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="loading-logo">
+        <div class="loading-bar">
+            <div class="loading-progress"></div>
+        </div>
+        <div class="loading-text">Cargando VYT Music...</div>
+    </div>
 
     <div class="site-wrapper">
         <div class="main-content">
@@ -1866,39 +2220,50 @@
                     <div class="dropdown-menu">
                         <a href="#" class="header-nav-link dropdown-toggle">
                             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span>Concursos</span>
+                            <span>Certámenes</span>
                             <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
                         <div class="dropdown-content">
-                            <a data-target="page-certamenes">🏆 Ver Todos los Certámenes</a>
-                            <a data-target="page-concurso-online">Certamen Principal</a>
-                            <a href="inscripcion_online.html">Inscribirme</a>
+                            <a href="#" data-target="page-certamenes">🎨 Galería de Certámenes</a>
+                            <a href="#" data-target="page-concurso-online">🏆 Concurso Online</a>
+                            <a href="#" data-target="page-concurso-presencial">🎪 Presencial - Rosario</a>
+                            <a href="#" data-target="page-bases-online">📖 Bases Online</a>
+                            <a href="#" data-target="page-bases-presencial">📝 Bases Presencial</a>
                         </div>
                     </div>
-                    <a data-target="page-comunidad" class="header-nav-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-                        <span>Comunidad</span>
-                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="header-nav-link dropdown-toggle">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                            <span>Artistas</span>
+                            <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="#" data-target="page-comunidad">👥 Comunidad</a>
+                            <a href="#" data-target="page-inscripcion">�️ Inscripción</a>
+                            <a href="#" data-target="page-nosotros">� Nosotros</a>
+                        </div>
+                    </div>
                     <a data-target="page-inscripcion" class="header-nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
-                        <span>Inscribite</span>
-                    </a>
-                    <a data-target="page-nosotros" class="header-nav-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
-                        <span>Nosotros</span>
+                        <span>Inscripción</span>
                     </a>
                     <a data-target="page-comprar-vyt" class="header-nav-link">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
                         <span>VYT-MONEY</span>
                     </a>
-                    <a data-target="page-reglamento" class="header-nav-link">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span>Reglamento</span>
-                    </a>
-                    <a data-target="page-sponsors" class="header-nav-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
-                        <span>Sponsors</span>
-                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="header-nav-link dropdown-toggle">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <span>Información</span>
+                            <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="#" data-target="page-nosotros">🏢 Nosotros</a>
+                            <a href="#" data-target="page-reglamento">📋 Reglamento</a>
+                            <a href="#" data-target="page-sponsors">⭐ Sponsors</a>
+                            <a href="#" data-target="page-tienda">📝 Tienda</a>
+                        </div>
+                    </div>
                 </nav>
 
                 <div class="header-user">
@@ -1913,18 +2278,277 @@
             <main class="content-wrapper">
                 <div id="page-inicio" class="page active">
                     <div class="container">
-                        <!-- Bloques dinámicos generados desde el constructor visual -->
-                        <div id="dynamic-blocks-container"></div>
+                        <!-- Contenido principal temporal hasta integrar con Firebase -->
+                        <div id="dynamic-blocks-container">
+                            <!-- Hero Section -->
+                            <section class="hero-section text-center py-16">
+                                <h1 class="titulo-principal mb-6">🎤 VYT MUSIC - Concurso Nacional</h1>
+                                <p class="subtitulo-principal mb-8">La plataforma oficial del certamen de canto más importante del país</p>
+                                
+                                <!-- Video principal -->
+                                <div class="video-wrapper mb-8" style="max-width: 900px; margin: 0 auto; position: relative;">
+                                    <div style="position: relative; width: 100%; height: 0; padding-bottom: 56.25%; /* 16:9 aspect ratio */">
+                                        <iframe 
+                                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 12px;" 
+                                            src="https://www.youtube.com/embed/nfWlot6h_JM" 
+                                            title="VYT MUSIC - Concurso Nacional de Canto" 
+                                            frameborder="0" 
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                            allowfullscreen>
+                                        </iframe>
+                                    </div>
+                                </div>
+                                
+                                <!-- Botones principales -->
+                                <div class="hero-buttons flex flex-wrap justify-center gap-4 mb-12">
+                                    <a href="inscripcion_online.html" class="btn btn-primario">
+                                        ✍️ Inscribirme Ahora
+                                    </a>
+                                    <button onclick="showPage('page-certamenes')" class="btn btn-secundario">
+                                        🏆 Ver Certámenes
+                                    </button>
+                                </div>
+                            </section>
+                            
+                            <!-- Galería de imágenes -->
+                            <section class="gallery-section py-12">
+                                <h2 class="titulo-seccion text-center mb-8">📸 Galería del Certamen</h2>
+                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                    <div class="gallery-item">
+                                        <img src="https://via.placeholder.com/400x300/1e3a8a/ffffff?text=Presentación+1" alt="Presentación 1" class="w-full h-64 object-cover rounded-lg">
+                                    </div>
+                                    <div class="gallery-item">
+                                        <img src="https://via.placeholder.com/400x300/1e3a8a/ffffff?text=Presentación+2" alt="Presentación 2" class="w-full h-64 object-cover rounded-lg">
+                                    </div>
+                                    <div class="gallery-item">
+                                        <img src="https://via.placeholder.com/400x300/1e3a8a/ffffff?text=Presentación+3" alt="Presentación 3" class="w-full h-64 object-cover rounded-lg">
+                                    </div>
+                                </div>
+                            </section>
+                            
+                            <!-- Información importante -->
+                            <section class="info-section py-12 bg-gradient-to-r from-blue-900/20 to-yellow-600/20 rounded-lg">
+                                <div class="text-center">
+                                    <h2 class="titulo-seccion mb-6">🌟 ¿Por qué participar?</h2>
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                        <div class="feature-card">
+                                            <div class="text-4xl mb-4">💰</div>
+                                            <h3 class="text-xl font-bold mb-2">Premios Increíbles</h3>
+                                            <p>Pozo actual de $125,000 y premios adicionales</p>
+                                        </div>
+                                        <div class="feature-card">
+                                            <div class="text-4xl mb-4">🎤</div>
+                                            <h3 class="text-xl font-bold mb-2">Plataforma Nacional</h3>
+                                            <p>Exposición en todo el país y oportunidades únicas</p>
+                                        </div>
+                                        <div class="feature-card">
+                                            <div class="text-4xl mb-4">👥</div>
+                                            <h3 class="text-xl font-bold mb-2">Comunidad</h3>
+                                            <p>Conecta con otros artistas y forma parte del movimiento</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
                     </div>
                 </div>
 
                 <div id="page-comunidad" class="page">
                     <section class="seccion">
                         <div class="container">
-                            <h2 class="titulo-seccion">Feed de la Comunidad</h2>
-                            <div id="community-feed-list" class="space-y-6">
-                                <!-- Los posts del feed se cargarán aquí -->
+                            <h2 class="titulo-seccion">🗣️ Foro de la Comunidad VYT</h2>
+                            <p class="subtitulo-seccion">Conectá con otros artistas, compartí experiencias y aprendé juntos</p>
+                            
+                            <!-- Estadísticas del Foro -->
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin: 2rem 0; text-align: center;">
+                                <div style="background: var(--color-card); padding: 1rem; border-radius: 10px;">
+                                    <div style="font-size: 1.5rem; color: var(--color-oro);">👥</div>
+                                    <div style="font-weight: bold; color: var(--color-texto-principal);">1,247</div>
+                                    <div style="font-size: 0.8rem; color: var(--color-texto-secundario);">Miembros</div>
+                                </div>
+                                <div style="background: var(--color-card); padding: 1rem; border-radius: 10px;">
+                                    <div style="font-size: 1.5rem; color: var(--color-oro);">📝</div>
+                                    <div style="font-weight: bold; color: var(--color-texto-principal);">3,891</div>
+                                    <div style="font-size: 0.8rem; color: var(--color-texto-secundario);">Posts</div>
+                                </div>
+                                <div style="background: var(--color-card); padding: 1rem; border-radius: 10px;">
+                                    <div style="font-size: 1.5rem; color: var(--color-oro);">💬</div>
+                                    <div style="font-weight: bold; color: var(--color-texto-principal);">12,045</div>
+                                    <div style="font-size: 0.8rem; color: var(--color-texto-secundario);">Respuestas</div>
+                                </div>
+                                <div style="background: var(--color-card); padding: 1rem; border-radius: 10px;">
+                                    <div style="font-size: 1.5rem; color: var(--color-oro);">🔥</div>
+                                    <div style="font-weight: bold; color: var(--color-texto-principal);">89</div>
+                                    <div style="font-size: 0.8rem; color: var(--color-texto-secundario);">Activos hoy</div>
+                                </div>
                             </div>
+
+                            <!-- Categorías del Foro -->
+                            <div class="forum-categories" style="margin-top: 2rem;">
+                                
+                                <!-- Categoría: Presentaciones -->
+                                <div class="forum-category" style="background: var(--color-card); border-radius: 15px; margin-bottom: 1rem; overflow: hidden; border-left: 4px solid #4CAF50;">
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="font-size: 2rem;">👋</div>
+                                            <div style="flex: 1;">
+                                                <h3 style="color: var(--color-texto-principal); margin: 0; font-size: 1.3rem;">Presentaciones</h3>
+                                                <p style="color: var(--color-texto-secundario); margin: 0; font-size: 0.9rem;">¡Contanos quién sos y de dónde venís!</p>
+                                            </div>
+                                            <div style="text-align: center; font-size: 0.8rem; color: var(--color-texto-secundario);">
+                                                <div style="font-weight: bold; color: var(--color-texto-principal);">127</div>
+                                                <div>Temas</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Últimos posts -->
+                                        <div class="recent-posts" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                                            <div style="font-size: 0.8rem; color: var(--color-texto-secundario); margin-bottom: 0.5rem;">💬 Último post:</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="color: var(--color-texto-principal); font-size: 0.9rem;">"¡Hola desde Córdoba! 🎤" por <strong>@MariaVoz</strong></span>
+                                                <span style="color: var(--color-texto-secundario); font-size: 0.8rem;">hace 2h</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Categoría: Consejos y Técnicas -->
+                                <div class="forum-category" style="background: var(--color-card); border-radius: 15px; margin-bottom: 1rem; overflow: hidden; border-left: 4px solid var(--color-oro);">
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="font-size: 2rem;">🎯</div>
+                                            <div style="flex: 1;">
+                                                <h3 style="color: var(--color-texto-principal); margin: 0; font-size: 1.3rem;">Consejos y Técnicas</h3>
+                                                <p style="color: var(--color-texto-secundario); margin: 0; font-size: 0.9rem;">Compartí y recibí consejos sobre técnica vocal, interpretación y más</p>
+                                            </div>
+                                            <div style="text-align: center; font-size: 0.8rem; color: var(--color-texto-secundario);">
+                                                <div style="font-weight: bold; color: var(--color-texto-principal);">892</div>
+                                                <div>Temas</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="recent-posts" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                                            <div style="font-size: 0.8rem; color: var(--color-texto-secundario); margin-bottom: 0.5rem;">🔥 Trending:</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="color: var(--color-texto-principal); font-size: 0.9rem;">"Ejercicios de respiración para principiantes" por <strong>@VocalCoach_Pro</strong></span>
+                                                <span style="color: var(--color-texto-secundario); font-size: 0.8rem;">45 ❤️</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Categoría: Feedback y Críticas -->
+                                <div class="forum-category" style="background: var(--color-card); border-radius: 15px; margin-bottom: 1rem; overflow: hidden; border-left: 4px solid #FF5722;">
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="font-size: 2rem;">🎤</div>
+                                            <div style="flex: 1;">
+                                                <h3 style="color: var(--color-texto-principal); margin: 0; font-size: 1.3rem;">Feedback y Críticas</h3>
+                                                <p style="color: var(--color-texto-secundario); margin: 0; font-size: 0.9rem;">Compartí tus covers y recibí feedback constructivo de la comunidad</p>
+                                            </div>
+                                            <div style="text-align: center; font-size: 0.8rem; color: var(--color-texto-secundario);">
+                                                <div style="font-weight: bold; color: var(--color-texto-principal);">654</div>
+                                                <div>Temas</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="recent-posts" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                                            <div style="font-size: 0.8rem; color: var(--color-texto-secundario); margin-bottom: 0.5rem;">🎵 Nuevo:</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="color: var(--color-texto-principal); font-size: 0.9rem;">"Mi cover de 'Bohemian Rhapsody' - ¿qué opinan?" por <strong>@RockStar_Arg</strong></span>
+                                                <span style="color: var(--color-texto-secundario); font-size: 0.8rem;">12 respuestas</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Categoría: Competencias y Eventos -->
+                                <div class="forum-category" style="background: var(--color-card); border-radius: 15px; margin-bottom: 1rem; overflow: hidden; border-left: 4px solid #9C27B0;">
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="font-size: 2rem;">🏆</div>
+                                            <div style="flex: 1;">
+                                                <h3 style="color: var(--color-texto-principal); margin: 0; font-size: 1.3rem;">Competencias y Eventos</h3>
+                                                <p style="color: var(--color-texto-secundario); margin: 0; font-size: 0.9rem;">Discusiones sobre certámenes, rankings y eventos especiales</p>
+                                            </div>
+                                            <div style="text-align: center; font-size: 0.8rem; color: var(--color-texto-secundario);">
+                                                <div style="font-weight: bold; color: var(--color-texto-principal);">423</div>
+                                                <div>Temas</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="recent-posts" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                                            <div style="font-size: 0.8rem; color: var(--color-texto-secundario); margin-bottom: 0.5rem;">🔥 Hot:</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="color: var(--color-texto-principal); font-size: 0.9rem;">"Estrategias para el Certamen Santa Fe 2024" por <strong>@Moderador_VYT</strong></span>
+                                                <span style="color: var(--color-texto-secundario); font-size: 0.8rem;">📌</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Categoría: Off-Topic -->
+                                <div class="forum-category" style="background: var(--color-card); border-radius: 15px; margin-bottom: 1rem; overflow: hidden; border-left: 4px solid #607D8B;">
+                                    <div style="padding: 1.5rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                            <div style="font-size: 2rem;">💭</div>
+                                            <div style="flex: 1;">
+                                                <h3 style="color: var(--color-texto-principal); margin: 0; font-size: 1.3rem;">Charla General</h3>
+                                                <p style="color: var(--color-texto-secundario); margin: 0; font-size: 0.9rem;">Conversaciones casuales sobre música, vida artística y más</p>
+                                            </div>
+                                            <div style="text-align: center; font-size: 0.8rem; color: var(--color-texto-secundario);">
+                                                <div style="font-weight: bold; color: var(--color-texto-principal);">1,234</div>
+                                                <div>Temas</div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="recent-posts" style="background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 8px;">
+                                            <div style="font-size: 0.8rem; color: var(--color-texto-secundario); margin-bottom: 0.5rem;">😄 Activo:</div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="color: var(--color-texto-principal); font-size: 0.9rem;">"¿Cuál fue su canción más difícil de aprender?" por <strong>@MelodyMaker</strong></span>
+                                                <span style="color: var(--color-texto-secundario); font-size: 0.8rem;">78 respuestas</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <!-- Botón para crear nuevo tema -->
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button class="btn btn-primario" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                                    ✏️ Crear Nuevo Tema
+                                </button>
+                            </div>
+
+                            <!-- Miembros Activos -->
+                            <div style="margin-top: 3rem; background: var(--color-card); padding: 1.5rem; border-radius: 15px;">
+                                <h3 style="color: var(--color-texto-principal); margin-bottom: 1rem;">🌟 Miembros Más Activos</h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                        <div style="width: 40px; height: 40px; background: linear-gradient(45deg, var(--color-oro), var(--color-primario)); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">M</div>
+                                        <div>
+                                            <div style="font-weight: bold; color: var(--color-texto-principal); font-size: 0.9rem;">@VocalCoach_Pro</div>
+                                            <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">2,341 posts • ⭐⭐⭐</div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                        <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #4CAF50, #2196F3); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">A</div>
+                                        <div>
+                                            <div style="font-weight: bold; color: var(--color-texto-principal); font-size: 0.9rem;">@ArtistaRosario</div>
+                                            <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">1,876 posts • ⭐⭐</div>
+                                        </div>
+                                    </div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: rgba(255,255,255,0.03); border-radius: 8px;">
+                                        <div style="width: 40px; height: 40px; background: linear-gradient(45deg, #FF5722, #FF9800); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: white;">S</div>
+                                        <div>
+                                            <div style="font-weight: bold; color: var(--color-texto-principal); font-size: 0.9rem;">@SingerBsAs</div>
+                                            <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">1,432 posts • ⭐⭐</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </section>
                 </div>
@@ -1935,7 +2559,7 @@
                             <h2 class="titulo-seccion">🏆 Todos los Certámenes</h2>
                             <p class="subtitulo-seccion">Descubrí todos los certámenes disponibles, rankings provinciales y competencias especiales</p>
                             
-                            <div class="certamenes-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                            <div class="certamenes-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
                                 
                                 <!-- Certamen Principal Nacional -->
                                 <div class="certamen-card-main" style="background: linear-gradient(135deg, var(--color-primario)30, var(--color-oro)20); border-radius: 20px; padding: 2rem; text-align: center; border: 2px solid var(--color-oro);">
@@ -1952,6 +2576,44 @@
                                     <a href="inscripcion_online.html" class="btn btn-secundario" style="width: 100%; text-decoration: none;">
                                         ✍️ Inscribirme
                                     </a>
+                                </div>
+
+                                <!-- NUEVO: Certamen Santa Fe - DESTACADO -->
+                                <div class="certamen-card-main" style="background: linear-gradient(135deg, #ff6b6b30, #feca5720); border-radius: 20px; padding: 2rem; text-align: center; border: 2px solid #feca57; position: relative;">
+                                    <div style="position: absolute; top: -10px; right: -10px; background: #ff6b6b; color: white; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold;">¡NUEVO!</div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🏟️</div>
+                                    <h3 style="font-family: var(--fuente-titulos); font-size: 2rem; color: #feca57; margin-bottom: 1rem;">Certamen Santa Fe</h3>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1.5rem;">¡Lanzamiento oficial! Cantantes y bandas de Santa Fe</p>
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <div style="color: var(--color-texto-principal); font-weight: bold; font-size: 1.2rem;">💰 Pozo: $50,000</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.9rem;">🎤 Inscripciones abiertas</div>
+                                        <div style="color: #feca57; font-size: 0.8rem; margin-top: 0.5rem;">📅 Inicio: Octubre 2025</div>
+                                    </div>
+                                    <a href="inscripcion_online.html" class="btn btn-primario" style="width: 100%; margin-bottom: 0.5rem; background: #feca57; color: #000;">
+                                        ✍️ ¡Inscribirme Ahora!
+                                    </a>
+                                    <button class="btn btn-secundario" onclick="showPage('page-santa-fe')" style="width: 100%;">
+                                        📊 Ver Detalles
+                                    </button>
+                                </div>
+
+                                <!-- CERTAMEN DE PRUEBA FUNCIONAL -->
+                                <div class="certamen-card" style="background: linear-gradient(135deg, #e74c3c20, #f39c1220); border-radius: 15px; padding: 1.5rem; text-align: center; border: 2px solid #e74c3c;">
+                                    <div style="background: #e74c3c; color: white; display: inline-block; padding: 3px 10px; border-radius: 15px; font-size: 0.7rem; font-weight: bold; margin-bottom: 1rem;">PRUEBA BETA</div>
+                                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🧪</div>
+                                    <h4 style="color: #e74c3c; margin-bottom: 1rem; font-size: 1.3rem;">Certamen de Prueba</h4>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1rem; font-size: 0.9rem;">Prueba real del sistema - 2 semanas</p>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: #e74c3c; font-weight: bold;">💰 $5,000</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">🎤 Solo 20 lugares</div>
+                                        <div style="color: #f39c12; font-size: 0.8rem;">⏰ Duración: 14 días</div>
+                                    </div>
+                                    <a href="inscripcion_online.html" class="btn" style="width: 100%; background: #e74c3c; color: white; margin-bottom: 0.5rem;">
+                                        🚀 Participar en Beta
+                                    </a>
+                                    <div style="font-size: 0.7rem; color: var(--color-texto-secundario); margin-top: 0.5rem;">
+                                        💳 Inscripción: $2,000 (mínimo para pruebas reales)
+                                    </div>
                                 </div>
 
                                 <!-- Certamenes Provinciales -->
@@ -2024,7 +2686,7 @@
                             <!-- Certámenes Especiales -->
                             <h3 class="titulo-seccion" style="font-size: 2rem; margin-top: 3rem; margin-bottom: 1.5rem;">🌟 Certámenes Especiales</h3>
                             
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                            <div class="special-certamenes-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                                 <div class="special-certamen" style="background: linear-gradient(135deg, #ff6b35, #f7931e); border-radius: 15px; padding: 1.5rem; text-align: center; color: white;">
                                     <div style="font-size: 2rem; margin-bottom: 1rem;">🔥</div>
                                     <h4 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Duelos Semanales</h4>
@@ -2146,13 +2808,17 @@
                             </div>
                             
                             <div class="inscripcion-choice-buttons mt-8">
+                                <a href="guia-sistema-jerarquico.html" class="btn btn-info" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin-bottom: 15px; display: block; text-align: center;">
+                                    📋 ¿Cómo Funciona el Sistema?
+                                    <span class="btn-text-small">(Nueva modalidad por regiones)</span>
+                                </a>
                                 <a href="inscripcion_online.html" class="btn btn-online">
                                     Inscripción Online
                                     <span class="btn-text-small">(Desde cualquier lugar)</span>
                                 </a>
                                 <a href="inscripcion_presencial.html" class="btn btn-presencial">
                                     Inscripción Presencial
-                                    <span class="btn-text-small">(Rosario y alrededores)</span>
+                                    <span class="btn-text-small">(Solo Rosario y alrededores)</span>
                                 </a>
                             </div>
 
@@ -2369,24 +3035,112 @@
                 <div id="page-concurso-presencial" class="page">
                     <section class="seccion">
                         <div class="container">
-                            <h2 class="titulo-seccion">Concurso Presencial</h2>
-                            <p class="subtitulo-seccion">¡La emoción del escenario en vivo! Próximamente anunciaremos las fechas y sedes de nuestros eventos presenciales. ¡Preparate para cantar frente al público y un jurado de estrellas!</p>
-                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Gira Nacional VYT MUSIC</h3>
+                            <h2 class="titulo-seccion">Concurso Presencial - Rosario</h2>
+                            <p class="subtitulo-seccion">¡La emoción del escenario en vivo, exclusivamente en Rosario! La modalidad presencial se realiza únicamente en Rosario y alrededores. El resto del país participa online. ¡Preparate para cantar frente al público y un jurado de estrellas!</p>
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Evento Presencial VYT MUSIC</h3>
                             <div class="gira-grid">
-                                <div class="gira-card">
-                                    <h4>Córdoba</h4>
-                                    <p>Fecha: Próximamente</p>
-                                    <span>Lugar: A confirmar</span>
+                                <div class="gira-card" style="max-width: 400px; margin: 0 auto;">
+                                    <h4>🎤 Rosario</h4>
+                                    <p><strong>Fecha:</strong> Próximamente</p>
+                                    <p><strong>Lugar:</strong> A confirmar</p>
+                                    <div style="background: var(--color-oro); color: #000; padding: 0.5rem 1rem; border-radius: 20px; margin-top: 1rem; font-weight: bold; text-align: center;">
+                                        ✨ ÚNICA SEDE PRESENCIAL
+                                    </div>
+                                    <p style="margin-top: 1rem; font-size: 0.9rem; color: var(--color-texto-secundario);">
+                                        <strong>Importante:</strong> El resto del país participa de forma online
+                                    </p>
                                 </div>
-                                <div class="gira-card">
-                                    <h4>Rosario</h4>
-                                    <p>Fecha: Próximamente</p>
-                                    <span>Lugar: A confirmar</span>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- NUEVA PÁGINA: Certamen Santa Fe -->
+                <div id="page-santa-fe" class="page">
+                    <section class="seccion" style="background: linear-gradient(135deg, #667eea20, #764ba220);">
+                        <div class="container">
+                            <div style="text-align: center; margin-bottom: 3rem;">
+                                <div style="font-size: 4rem; margin-bottom: 1rem;">🏟️</div>
+                                <h2 class="titulo-seccion" style="color: #feca57;">Certamen Santa Fe</h2>
+                                <p class="subtitulo-seccion">El primer certamen provincial oficial de VYT-MUSIC</p>
+                                <div style="background: #feca57; color: #000; display: inline-block; padding: 0.5rem 1.5rem; border-radius: 25px; font-weight: bold; margin-top: 1rem;">
+                                    🚀 ¡YA DISPONIBLE!
                                 </div>
-                                <div class="gira-card">
-                                    <h4>Buenos Aires</h4>
-                                    <p>Fecha: Próximamente</p>
-                                    <span>Lugar: A confirmar</span>
+                            </div>
+
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-bottom: 3rem;">
+                                <!-- Info del Certamen -->
+                                <div style="background: var(--color-card); padding: 2rem; border-radius: 15px; border: 2px solid #feca57;">
+                                    <h3 style="color: #feca57; margin-bottom: 1.5rem;">📊 Información del Certamen</h3>
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: var(--color-texto-principal);">💰 Premio Total:</strong>
+                                        <span style="color: #feca57; font-size: 1.2rem; font-weight: bold;"> $50,000</span>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: var(--color-texto-principal);">📅 Fechas:</strong>
+                                        <span style="color: var(--color-texto-secundario);"> Octubre - Diciembre 2025</span>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: var(--color-texto-principal);">🎯 Modalidad:</strong>
+                                        <span style="color: var(--color-texto-secundario);"> Online + Final Presencial</span>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <strong style="color: var(--color-texto-principal);">👥 Participantes:</strong>
+                                        <span style="color: var(--color-texto-secundario);"> Cantantes y Bandas de Santa Fe</span>
+                                    </div>
+                                    <div>
+                                        <strong style="color: var(--color-texto-principal);">💳 Inscripción:</strong>
+                                        <span style="color: #feca57; font-weight: bold;"> $15,000</span>
+                                    </div>
+                                </div>
+
+                                <!-- Categorías -->
+                                <div style="background: var(--color-card); padding: 2rem; border-radius: 15px;">
+                                    <h3 style="color: #feca57; margin-bottom: 1.5rem;">🎤 Categorías</h3>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: var(--color-texto-principal); font-weight: bold;">🎵 Solista</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.9rem;">Cantantes individuales</div>
+                                    </div>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: var(--color-texto-principal); font-weight: bold;">🎸 Banda</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.9rem;">Grupos musicales (2-6 integrantes)</div>
+                                    </div>
+                                    <div>
+                                        <div style="color: var(--color-texto-principal); font-weight: bold;">🎭 Emergente</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.9rem;">Nuevos talentos (menores de 25 años)</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Botones de Acción -->
+                            <div style="text-align: center; margin-bottom: 2rem;">
+                                <a href="inscripcion_online.html" class="btn btn-primario" style="background: #feca57; color: #000; margin: 0.5rem; font-size: 1.1rem; padding: 1rem 2rem;">
+                                    ✍️ Inscribirme al Certamen
+                                </a>
+                                <button class="btn btn-secundario" onclick="showPage('page-inscripcion')" style="margin: 0.5rem; padding: 1rem 2rem;">
+                                    📋 Ver Más Opciones
+                                </button>
+                            </div>
+
+                            <!-- Cronograma -->
+                            <div style="background: var(--color-card); padding: 2rem; border-radius: 15px; margin-bottom: 2rem;">
+                                <h3 style="color: #feca57; text-align: center; margin-bottom: 2rem;">📅 Cronograma del Certamen</h3>
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+                                    <div style="text-align: center; padding: 1rem;">
+                                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">📝</div>
+                                        <h4 style="color: var(--color-texto-principal);">Inscripciones</h4>
+                                        <p style="color: var(--color-texto-secundario);">Sept - Oct 2025</p>
+                                    </div>
+                                    <div style="text-align: center; padding: 1rem;">
+                                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎵</div>
+                                        <h4 style="color: var(--color-texto-principal);">Fase Online</h4>
+                                        <p style="color: var(--color-texto-secundario);">Oct - Nov 2025</p>
+                                    </div>
+                                    <div style="text-align: center; padding: 1rem;">
+                                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏆</div>
+                                        <h4 style="color: var(--color-texto-principal);">Final Presencial</h4>
+                                        <p style="color: var(--color-texto-secundario);">Dic 2025 - Santa Fe</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -2399,6 +3153,17 @@
                             <h2 class="titulo-seccion">Inscripción al Certamen</h2>
                             <p class="subtitulo-seccion">Elegí la modalidad que mejor se adapte a vos y comenzá tu camino hacia el estrellato.</p>
                             
+                            <!-- Enlace explicativo -->
+                            <div style="margin-bottom: 30px;">
+                                <a href="guia-sistema-jerarquico.html" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; border-radius: 10px; text-decoration: none; display: inline-block; margin-bottom: 20px; font-weight: bold;">
+                                    📋 ¿Cómo Funciona el Nuevo Sistema Jerárquico?
+                                    <br><span style="font-size: 0.9em; opacity: 0.9;">(Regional → Provincial → Nacional)</span>
+                                </a>
+                                <p style="color: #b0b8c4; font-size: 0.9em; margin-top: 10px;">
+                                    🆕 <strong>Nuevo sistema más justo:</strong> Ahora compites primero en tu región, luego provincia, y finalmente a nivel nacional
+                                </p>
+                            </div>
+                            
                             <div class="inscripcion-choice-buttons">
                                 <a href="inscripcion_online.html" class="btn btn-online">
                                     Inscripción Online
@@ -2406,7 +3171,7 @@
                                 </a>
                                 <a href="inscripcion_presencial.html" class="btn btn-presencial">
                                     Inscripción Presencial
-                                    <span class="btn-text-small">(Exclusivo para Rosario y alrededores)</span>
+                                    <span class="btn-text-small">(Solo para Rosario y alrededores)</span>
                                 </a>
                             </div>
                         </div>
@@ -2526,6 +3291,17 @@
                         <h2 class="titulo-seccion">Reglamento del Certamen</h2>
                         <p class="subtitulo-seccion">Consulta las bases y condiciones para la modalidad que te interese.</p>
                         
+                        <!-- Enlace al sistema jerárquico -->
+                        <div style="margin-bottom: 30px;">
+                            <a href="guia-sistema-jerarquico.html" class="btn" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; border-radius: 10px; text-decoration: none; display: inline-block; margin-bottom: 15px; font-weight: bold;">
+                                🏆 Guía del Sistema Jerárquico
+                            </a>
+                            <br>
+                            <span style="color: #b0b8c4; font-size: 0.9em;">
+                                Entendé cómo funciona el nuevo sistema de competencias por regiones
+                            </span>
+                        </div>
+                        
                         <div class="inscripcion-choice-buttons">
                             <a href="#" data-target="page-bases-online" class="btn btn-online">
                                 Bases Online
@@ -2595,6 +3371,105 @@
                     </section>
                 </div>
 
+                <!-- Dashboard Artista -->
+                <div id="page-dashboard-artista" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">📊 Dashboard del Artista</h2>
+                            <p class="subtitulo-seccion">Panel de control para gestionar tu participación en VYT MUSIC</p>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                                <!-- Estadísticas del Artista -->
+                                <div style="background: var(--color-card); padding: 2rem; border-radius: 15px;">
+                                    <h3 style="color: var(--color-oro); margin-bottom: 1rem;">🎤 Mis Estadísticas</h3>
+                                    <div style="display: grid; gap: 1rem;">
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span>Votos recibidos:</span>
+                                            <span style="color: var(--color-oro); font-weight: bold;">1,247</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span>VYT-MONEY recibidos:</span>
+                                            <span style="color: var(--color-oro); font-weight: bold;">3,580</span>
+                                        </div>
+                                        <div style="display: flex; justify-content: space-between;">
+                                            <span>Ranking actual:</span>
+                                            <span style="color: var(--color-oro); font-weight: bold;">#24</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Mis Participaciones -->
+                                <div style="background: var(--color-card); padding: 2rem; border-radius: 15px;">
+                                    <h3 style="color: var(--color-oro); margin-bottom: 1rem;">🏆 Mis Participaciones</h3>
+                                    <div style="display: grid; gap: 1rem;">
+                                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+                                            <div style="font-weight: bold;">Certamen Nacional</div>
+                                            <div style="color: var(--color-texto-secundario); font-size: 0.9rem;">Estado: Participando</div>
+                                        </div>
+                                        <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px;">
+                                            <div style="font-weight: bold;">Certamen Santa Fe</div>
+                                            <div style="color: var(--color-texto-secundario); font-size: 0.9rem;">Estado: Finalizado</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div style="text-align: center; margin-top: 2rem;">
+                                <button class="btn btn-primario" onclick="showPage('page-crear-perfil')">
+                                    🛠️ Editar Mi Perfil
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Crear Perfil -->
+                <div id="page-crear-perfil" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">🛠️ Crear/Editar Perfil de Artista</h2>
+                            <p class="subtitulo-seccion">Completa tu perfil para participar en los certámenes</p>
+                            
+                            <div style="max-width: 600px; margin: 0 auto;">
+                                <form style="background: var(--color-card); padding: 2rem; border-radius: 15px;">
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--color-texto-principal);">Nombre Artístico</label>
+                                        <input type="text" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;" placeholder="Tu nombre artístico">
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--color-texto-principal);">Género Musical</label>
+                                        <select style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                                            <option>Pop</option>
+                                            <option>Rock</option>
+                                            <option>Balada</option>
+                                            <option>Reggaeton</option>
+                                            <option>Folclore</option>
+                                            <option>Otro</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--color-texto-principal);">Biografía</label>
+                                        <textarea style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; height: 100px;" placeholder="Contanos sobre tu carrera musical..."></textarea>
+                                    </div>
+                                    
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <label style="display: block; margin-bottom: 0.5rem; color: var(--color-texto-principal);">Foto de Perfil</label>
+                                        <input type="file" style="width: 100%; padding: 0.8rem; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white;">
+                                    </div>
+                                    
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-primario">
+                                            💾 Guardar Perfil
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
                 <div id="page-tienda" class="page">
                     <section class="seccion">
                         <div class="container">
@@ -2635,30 +3510,120 @@
     
     <!-- Menú Hamburguesa (Slide-out) -->
     <div id="mobile-menu" class="mobile-menu">
-        <a href="#" data-target="page-nosotros" class="mobile-menu-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244" /></svg>
-            <span>Nosotros</span>
-        </a>
-        <a href="#" data-target="page-inscripcion" class="mobile-menu-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
-            <span>Inscribite</span>
-        </a>
-        <a href="#" data-target="page-reglamento" class="mobile-menu-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" /></svg>
-            <span>Reglamento</span>
-        </a>
-        <a href="#" data-target="page-comunidad" class="mobile-menu-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
-            <span>Comunidad</span>
-        </a>
-        <a href="#" data-target="page-comprar-vyt" class="mobile-menu-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" /></svg>
-            <span>VYT-MONEY</span>
-        </a>
-        <a href="#" data-target="page-sponsors" class="mobile-menu-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
-            <span>Sponsors</span>
-        </a>
+        <div class="mobile-menu-header" style="padding: 1rem; border-bottom: 1px solid #333; margin-bottom: 1rem; text-align: center; position: relative;">
+            <!-- Botón de cierre -->
+            <button id="close-mobile-menu" style="position: absolute; top: 0.5rem; right: 0.5rem; background: none; border: none; color: #00d9ff; font-size: 1.5rem; cursor: pointer; padding: 0.25rem; border-radius: 4px; transition: all 0.2s ease;">
+                ✕
+            </button>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 0.7rem;">
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" style="width: 40px; height: auto;">
+                <h3 style="color: white; margin: 0; font-size: 1.1rem; font-weight: 500;">VYT-MUSIC</h3>
+            </div>
+        </div>
+        
+        <!-- Sección Certámenes -->
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title accordion-trigger" data-section="certamenes">
+                🏆 Certámenes
+                <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-content" id="certamenes-content">
+                <a href="#" data-target="page-certamenes" class="mobile-menu-link">
+                    <span class="menu-icon">🎨</span>
+                    <span>G. Certámenes</span>
+                </a>
+                <a href="#" data-target="page-concurso-online" class="mobile-menu-link">
+                    <span class="menu-icon">📋</span>
+                    <span>Concurso Online</span>
+                </a>
+                <a href="#" data-target="page-concurso-presencial" class="mobile-menu-link">
+                    <span class="menu-icon">📖</span>
+                    <span>Concurso Presencial</span>
+                </a>
+                <a href="#" data-target="page-bases-online" class="mobile-menu-link">
+                    <span class="menu-icon">📄</span>
+                    <span>Bases Online</span>
+                </a>
+                <a href="#" data-target="page-bases-presencial" class="mobile-menu-link">
+                    <span class="menu-icon">📋</span>
+                    <span>Bases Presencial</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sección Artistas -->
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title accordion-trigger" data-section="artistas">
+                🎤 Artistas
+                <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-content" id="artistas-content">
+                <a href="#" data-target="page-comunidad" class="mobile-menu-link">
+                    <span class="menu-icon">👥</span>
+                    <span>Comunidad</span>
+                </a>
+                <a href="#" data-target="page-inscripcion" class="mobile-menu-link">
+                    <span class="menu-icon">✍️</span>
+                    <span>Inscripción</span>
+                </a>
+                <a href="#" data-target="page-nosotros" class="mobile-menu-link">
+                    <span class="menu-icon">🏢</span>
+                    <span>Nosotros</span>
+                </a>
+                <a href="perfil-artista-demo.html" class="mobile-menu-link">
+                    <span class="menu-icon">👤</span>
+                    <span>Perfil Demo</span>
+                </a>
+                <a href="#" data-target="page-dashboard-artista" class="mobile-menu-link">
+                    <span class="menu-icon">📊</span>
+                    <span>Dashboard Artista</span>
+                </a>
+                <a href="#" data-target="page-crear-perfil" class="mobile-menu-link">
+                    <span class="menu-icon">🛠️</span>
+                    <span>Crear Perfil</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sección Servicios -->
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title accordion-trigger" data-section="servicios">
+                💎 Servicios
+                <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-content" id="servicios-content">
+                <a data-target="page-comprar-vyt" class="mobile-menu-link">
+                    <span class="menu-icon">💰</span>
+                    <span>VYT-MONEY</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sección Información -->
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title accordion-trigger" data-section="informacion">
+                ℹ️ Información
+                <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-content" id="informacion-content">
+                <a href="nosotros.html" class="mobile-menu-link">
+                    <span class="menu-icon">🏢</span>
+                    <span>Nosotros</span>
+                </a>
+                <a href="reglamento.html" class="mobile-menu-link">
+                    <span class="menu-icon">📋</span>
+                    <span>Reglamento</span>
+                </a>
+                <a href="sponsors.html" class="mobile-menu-link">
+                    <span class="menu-icon">⭐</span>
+                    <span>Sponsors</span>
+                </a>
+                <a href="blog.html" class="mobile-menu-link">
+                    <span class="menu-icon">📝</span>
+                    <span>Blog</span>
+                </a>
+            </div>
+        </div>
     </div>
     <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
 
@@ -2672,28 +3637,229 @@
             <span>Certámenes</span>
         </a>
         <a href="#" id="hamburger-menu-trigger" class="bottom-nav-link">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
             <span>Más</span>
         </a>
     </nav>
     
     <script>
-        // Manejar clicks en el dropdown
-        document.addEventListener('DOMContentLoaded', function() {
-            const dropdownLinks = document.querySelectorAll('.dropdown-content a[data-target]');
+        // ===== SISTEMA DE NAVEGACIÓN UNIFICADO =====
+        console.log('🚀 Iniciando sistema de navegación unificado...');
+        
+        // Variables globales
+        let isMenuOpen = false;
+        
+        // FUNCIÓN PRINCIPAL DE NAVEGACIÓN
+        function showPage(targetId) {
+            console.log('📄 Navegando a:', targetId);
             
-            dropdownLinks.forEach(link => {
+            // Cerrar el menú móvil si está abierto
+            if (isMenuOpen) {
+                console.log('📱 Cerrando menú móvil antes de navegación');
+                toggleMobileMenu();
+            }
+            
+            // Ocultar todas las páginas
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Mostrar página objetivo
+            const targetPage = document.getElementById(targetId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                
+                // Scroll al top
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) mainContent.scrollTop = 0;
+                
+                console.log('✅ Página mostrada:', targetId);
+                return true;
+            } else {
+                console.log('❌ Página no encontrada:', targetId);
+                return false;
+            }
+        }
+        
+        // FUNCIÓN DEL MENÚ HAMBURGUESA
+        function toggleMobileMenu() {
+            console.log('🍔 Toggle menú móvil - Estado actual:', isMenuOpen);
+            console.log('🐛 DEBUG: toggleMobileMenu llamada!');
+            
+            const mobileMenu = document.getElementById('mobile-menu');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            
+            console.log('🐛 DEBUG: Elementos encontrados:', {
+                mobileMenu: !!mobileMenu,
+                overlay: !!overlay
+            });
+            
+            if (!mobileMenu) {
+                console.log('❌ Menú móvil no encontrado');
+                return;
+            }
+            
+            isMenuOpen = !isMenuOpen;
+            console.log('🐛 DEBUG: Nuevo estado isMenuOpen:', isMenuOpen);
+            
+            if (isMenuOpen) {
+                mobileMenu.classList.add('open');
+                if (overlay) overlay.classList.add('open');
+                document.body.style.overflow = 'hidden';
+                console.log('✅ Menú abierto');
+                console.log('🐛 DEBUG: Clases del menú después de abrir:', mobileMenu.className);
+            } else {
+                mobileMenu.classList.remove('open');
+                if (overlay) overlay.classList.remove('open');
+                document.body.style.overflow = '';
+                console.log('✅ Menú cerrado');
+                console.log('🐛 DEBUG: Clases del menú después de cerrar:', mobileMenu.className);
+            }
+        }
+        
+        // INICIALIZACIÓN
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎯 DOM listo - Configurando navegación...');
+            
+            // === MENÚ HAMBURGUESA ===
+            const hamburgerBtn = document.getElementById('hamburger-menu-trigger');
+            const overlay = document.getElementById('mobile-menu-overlay');
+            const closeMobileMenuBtn = document.getElementById('close-mobile-menu');
+            
+            console.log('🔍 Elementos encontrados:', {
+                hamburger: !!hamburgerBtn,
+                overlay: !!overlay,
+                closeBtn: !!closeMobileMenuBtn,
+                mobileMenu: !!document.getElementById('mobile-menu')
+            });
+            
+            // Botón hamburguesa
+            if (hamburgerBtn) {
+                hamburgerBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🍔 Click en hamburger detectado!');
+                    toggleMobileMenu();
+                });
+                console.log('✅ Event listener agregado al hamburger');
+            } else {
+                console.log('❌ Hamburger button no encontrado');
+            }
+            
+            // Botón de cierre (X)
+            if (closeMobileMenuBtn) {
+                closeMobileMenuBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('❌ Click en botón de cierre detectado');
+                    if (isMenuOpen) {
+                        toggleMobileMenu();
+                    }
+                });
+                console.log('✅ Event listener agregado al botón de cierre');
+            }
+            
+            if (overlay) {
+                overlay.addEventListener('click', toggleMobileMenu);
+            }
+            
+            // === NAVEGACIÓN ===
+            const navLinks = document.querySelectorAll('[data-target]');
+            console.log('🔗 Enlaces de navegación encontrados:', navLinks.length);
+            
+            navLinks.forEach((link, index) => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
-                    const targetPage = this.getAttribute('data-target');
-                    if (targetPage) {
-                        // Usa la función existente para cambiar de página
-                        if (window.switchToPage) {
-                            window.switchToPage(targetPage);
+                    const targetId = this.getAttribute('data-target');
+                    
+                    console.log(`🔗 Click en enlace ${index + 1}:`, {
+                        text: this.textContent?.trim(),
+                        target: targetId
+                    });
+                    
+                    if (targetId && showPage(targetId)) {
+                        // Cerrar menú móvil si está abierto
+                        if (isMenuOpen) toggleMobileMenu();
+                        
+                        // Actualizar estado activo
+                        navLinks.forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                });
+            });
+            
+            // === DROPDOWNS ===
+            const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+            
+            dropdownToggles.forEach(toggle => {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const dropdownMenu = this.closest('.dropdown-menu');
+                    const dropdownContent = dropdownMenu?.querySelector('.dropdown-content');
+                    
+                    if (dropdownContent) {
+                        const isOpen = dropdownContent.style.display === 'block';
+                        
+                        // Cerrar todos
+                        document.querySelectorAll('.dropdown-content').forEach(content => {
+                            content.style.display = 'none';
+                        });
+                        
+                        // Abrir este si estaba cerrado
+                        if (!isOpen) {
+                            dropdownContent.style.display = 'block';
                         }
                     }
                 });
             });
+            
+            // Cerrar dropdowns al hacer click fuera
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.dropdown-menu')) {
+                    document.querySelectorAll('.dropdown-content').forEach(content => {
+                        content.style.display = 'none';
+                    });
+                }
+            });
+            
+            // === ACCORDION MÓVIL ===
+            const accordionTriggers = document.querySelectorAll('.accordion-trigger');
+            console.log('🪗 Accordions encontrados:', accordionTriggers.length);
+            
+            accordionTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const section = this.getAttribute('data-section');
+                    const content = document.getElementById(section + '-content');
+                    const arrow = this.querySelector('.accordion-arrow');
+                    
+                    console.log('🪗 Click en accordion:', section);
+                    
+                    if (content) {
+                        const isOpen = content.style.display === 'block';
+                        
+                        // Cerrar todos los accordions
+                        document.querySelectorAll('.accordion-content').forEach(acc => {
+                            acc.style.display = 'none';
+                        });
+                        document.querySelectorAll('.accordion-arrow').forEach(arr => {
+                            arr.textContent = '▼';
+                        });
+                        
+                        // Abrir este si estaba cerrado
+                        if (!isOpen) {
+                            content.style.display = 'block';
+                            if (arrow) arrow.textContent = '▲';
+                            console.log('✅ Accordion abierto:', section);
+                        } else {
+                            console.log('✅ Accordion cerrado:', section);
+                        }
+                    }
+                });
+            });
+            
+            // === FUNCIONES GLOBALES ===
+            window.showPage = showPage;
+            window.toggleMobileMenu = toggleMobileMenu;
+            
+            console.log('✅ Sistema de navegación configurado exitosamente');
             
             // Inicializar sistema de votación gamificada
             initGamifiedVoting();
@@ -3352,9 +4518,351 @@
             setTimeout(() => {
                 window.dynamicPrizePool = new DynamicPrizePool();
             }, 1000);
+            
+            // Inicializar acordeón del menú móvil
+            initMobileMenuAccordion();
         });
+        
+        // Función para manejar el acordeón del menú móvil
+        function initMobileMenuAccordion() {
+            const accordionTriggers = document.querySelectorAll('.accordion-trigger');
+            
+            accordionTriggers.forEach(trigger => {
+                trigger.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    const content = document.getElementById(section + '-content');
+                    const isActive = this.classList.contains('active');
+                    
+                    // Cerrar todas las secciones
+                    accordionTriggers.forEach(t => {
+                        t.classList.remove('active');
+                        const targetContent = document.getElementById(t.getAttribute('data-section') + '-content');
+                        if (targetContent) {
+                            targetContent.classList.remove('open');
+                        }
+                    });
+                    
+                    // Si no estaba activa, abrirla
+                    if (!isActive && content) {
+                        this.classList.add('active');
+                        content.classList.add('open');
+                    }
+                });
+            });
+            
+            // Abrir la primera sección por defecto
+            const firstTrigger = accordionTriggers[0];
+            if (firstTrigger) {
+                firstTrigger.click();
+            }
+        }
+        
+
     </script>
     
-    <script type="module" src="principal-dynamic.js"></script>
+    <!-- Script de optimización y loading -->
+    <script>
+        // OPTIMIZACIÓN DE CARGA Y NAVEGACIÓN RÁPIDA
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Iniciando optimización de carga...');
+            
+            // Simular carga y ocultar loading screen
+            setTimeout(() => {
+                const loadingScreen = document.getElementById('loading-screen');
+                const loadingStyles = document.getElementById('loading-styles');
+                
+                if (loadingScreen) {
+                    loadingScreen.classList.add('fade-out');
+                    
+                    // Remover completamente después de la animación
+                    setTimeout(() => {
+                        loadingScreen.remove();
+                        if (loadingStyles) loadingStyles.remove();
+                        console.log('✅ Loading screen removido');
+                    }, 500);
+                }
+            }, 2000);
+            
+            // NAVEGACIÓN RÁPIDA - Precargar contenido común
+            const preloadedContent = {};
+            
+            // Función para precarga inteligente
+            function preloadPage(pageId) {
+                if (!preloadedContent[pageId]) {
+                    console.log('📦 Precargando:', pageId);
+                    preloadedContent[pageId] = true;
+                    
+                    // Aquí podrías cargar contenido dinámico si fuera necesario
+                    // Por ahora las páginas ya están en el DOM
+                }
+            }
+            
+            // Precargar páginas más comunes al inicio
+            setTimeout(() => {
+                preloadPage('page-certamenes');
+                preloadPage('page-inscripcion');
+                preloadPage('page-comprar-vyt');
+            }, 3000);
+            
+            // Optimizar links para navegación instantánea
+            const allInternalLinks = document.querySelectorAll('a[data-target]');
+            
+            allInternalLinks.forEach(link => {
+                // Precargar al hover (desktop)
+                link.addEventListener('mouseenter', function() {
+                    const target = this.getAttribute('data-target');
+                    if (target) preloadPage(target);
+                });
+                
+                // Precargar al touch start (móvil)
+                link.addEventListener('touchstart', function() {
+                    const target = this.getAttribute('data-target');
+                    if (target) preloadPage(target);
+                });
+            });
+            
+            // CACHE DE NAVEGACIÓN RÁPIDA
+            let navigationHistory = [];
+            const maxHistorySize = 5;
+            
+            // Función optimizada para cambio de página
+            function fastPageSwitch(targetId) {
+                console.log('⚡ Cambio rápido de página:', targetId);
+                
+                // Agregar a historial
+                navigationHistory.push(targetId);
+                if (navigationHistory.length > maxHistorySize) {
+                    navigationHistory.shift();
+                }
+                
+                // Cambio instantáneo
+                const pages = document.querySelectorAll('.page');
+                pages.forEach(page => {
+                    page.classList.remove('active');
+                });
+                
+                const targetPage = document.getElementById(targetId);
+                if (targetPage) {
+                    targetPage.classList.add('active');
+                    
+                    // Scroll suave al top
+                    const mainContent = document.querySelector('.main-content');
+                    if (mainContent) {
+                        mainContent.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                }
+            }
+            
+            // Reemplazar la función showPage existente con la optimizada
+            if (window.showPage) {
+                window.showPage = fastPageSwitch;
+            }
+            
+            console.log('✅ Optimización de navegación activada');
+        });
+        
+        // OPTIMIZACIÓN DE RENDIMIENTO
+        // Lazy loading para imágenes
+        if ('IntersectionObserver' in window) {
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        if (img.dataset.src) {
+                            img.src = img.dataset.src;
+                            img.removeAttribute('data-src');
+                            observer.unobserve(img);
+                        }
+                    }
+                });
+            });
+            
+            // Observar imágenes con data-src
+            document.querySelectorAll('img[data-src]').forEach(img => {
+                imageObserver.observe(img);
+            });
+        }
+        
+        // Precargar recursos críticos
+        function preloadCriticalResources() {
+            const criticalImages = [
+                'https://i.ibb.co/Ldwq7cNx/logo-blanco.png'
+            ];
+            
+            criticalImages.forEach(src => {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'image';
+                link.href = src;
+                document.head.appendChild(link);
+            });
+        }
+        
+        preloadCriticalResources();
+    </script>
+    
+    <!-- DEBUG EN VIVO -->
+    <script>
+        // SISTEMA DE DEBUG EN VIVO
+        let debugMode = false;
+        
+        // Activar debug con ?debug=true en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('debug') === 'true') {
+            debugMode = true;
+            
+            // Crear panel de debug flotante
+            const debugPanel = document.createElement('div');
+            debugPanel.id = 'debug-panel';
+            debugPanel.style.cssText = `
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                width: 300px;
+                max-height: 80vh;
+                background: rgba(0,0,0,0.9);
+                color: white;
+                padding: 1rem;
+                border-radius: 8px;
+                border: 2px solid #ff6b35;
+                z-index: 10000;
+                font-size: 12px;
+                overflow-y: auto;
+                font-family: monospace;
+            `;
+            
+            debugPanel.innerHTML = `
+                <div style="font-weight: bold; color: #ff6b35; margin-bottom: 10px;">
+                    🐛 VYT DEBUG PANEL
+                    <button onclick="document.getElementById('debug-panel').remove()" style="float: right; background: #ff6b35; border: none; color: white; padding: 2px 6px; border-radius: 3px; cursor: pointer;">×</button>
+                </div>
+                <div id="debug-content">Iniciando debug...</div>
+                <div style="margin-top: 10px;">
+                    <button onclick="runDebugTests()" style="background: #ff6b35; border: none; color: white; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 11px;">🔄 Test</button>
+                    <button onclick="testHamburgerDebug()" style="background: #4caf50; border: none; color: white; padding: 5px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; margin-left: 5px;">🍔 Hamburger</button>
+                </div>
+            `;
+            
+            document.body.appendChild(debugPanel);
+            
+            // Función de debug
+            window.runDebugTests = function() {
+                const content = document.getElementById('debug-content');
+                let results = [];
+                
+                // Test elementos
+                const tests = [
+                    { id: 'hamburger-menu-trigger', name: 'Hamburger Btn' },
+                    { id: 'mobile-menu', name: 'Mobile Menu' },
+                    { id: 'mobile-menu-overlay', name: 'Overlay' },
+                    { class: 'header-nav', name: 'Header Nav' },
+                    { class: 'page', name: 'Pages' },
+                    { class: 'accordion-trigger', name: 'Accordions' },
+                    { class: 'dropdown-toggle', name: 'Dropdowns' }
+                ];
+                
+                tests.forEach(test => {
+                    let element;
+                    if (test.id) {
+                        element = document.getElementById(test.id);
+                    } else if (test.class) {
+                        element = document.querySelector('.' + test.class);
+                    }
+                    
+                    const status = element ? '✅' : '❌';
+                    results.push(`${status} ${test.name}`);
+                });
+                
+                // Test funciones
+                results.push(`${window.showPage ? '✅' : '❌'} showPage()`);
+                results.push(`${window.toggleMobileMenu ? '✅' : '❌'} toggleMobileMenu()`);
+                
+                // Info dispositivo
+                results.push(`📱 ${window.innerWidth}x${window.innerHeight}`);
+                results.push(`📱 ${window.innerWidth >= 768 ? 'Desktop' : 'Mobile'}`);
+                
+                content.innerHTML = results.join('<br>');
+            };
+            
+            window.testHamburgerDebug = function() {
+                console.log('🐛 DEBUG: Probando hamburger...');
+                const hamburger = document.getElementById('hamburger-menu-trigger');
+                const menu = document.getElementById('mobile-menu');
+                
+                if (hamburger && menu) {
+                    console.log('🐛 DEBUG: Elementos encontrados, simulando click...');
+                    console.log('🐛 DEBUG: Estado antes del click - isMenuOpen:', window.isMenuOpen || 'undefined');
+                    console.log('🐛 DEBUG: Clases del menú antes:', menu.className);
+                    console.log('🐛 DEBUG: Transform antes:', getComputedStyle(menu).transform);
+                    
+                    // Llamar directamente la función
+                    if (window.toggleMobileMenu) {
+                        console.log('🐛 DEBUG: Llamando toggleMobileMenu directamente...');
+                        window.toggleMobileMenu();
+                    } else {
+                        console.log('🐛 DEBUG: toggleMobileMenu no disponible, simulando click...');
+                        hamburger.click();
+                    }
+                    
+                    setTimeout(() => {
+                        const isOpen = menu.classList.contains('open');
+                        console.log('🐛 DEBUG: Menú abierto:', isOpen);
+                        console.log('🐛 DEBUG: Clases del menú después:', menu.className);
+                        console.log('🐛 DEBUG: Transform después:', getComputedStyle(menu).transform);
+                        console.log('🐛 DEBUG: Estado después - isMenuOpen:', window.isMenuOpen || 'undefined');
+                        
+                        // Agregar indicador visual temporal
+                        if (isOpen) {
+                            menu.style.border = '5px solid red';
+                            menu.style.boxShadow = '0 0 20px red';
+                            console.log('🐛 DEBUG: Añadido borde rojo para visibilidad');
+                            
+                            // Probar accordion
+                            const accordion = document.querySelector('.accordion-trigger');
+                            if (accordion) {
+                                console.log('🐛 DEBUG: Probando accordion...');
+                                accordion.click();
+                                setTimeout(() => {
+                                    const section = accordion.getAttribute('data-section');
+                                    const content = document.getElementById(section + '-content');
+                                    console.log('🐛 DEBUG: Accordion:', section, content ? content.style.display : 'no content');
+                                }, 100);
+                            }
+                        } else {
+                            menu.style.border = '';
+                            menu.style.boxShadow = '';
+                            // Debug por qué no se abrió
+                            console.log('🐛 DEBUG: PROBLEMA - Menú no se abrió');
+                            console.log('🐛 DEBUG: Event listeners en hamburger:', getEventListeners ? getEventListeners(hamburger) : 'N/A');
+                        }
+                    }, 100);
+                } else {
+                    console.log('🐛 DEBUG: Elementos no encontrados - Hamburger:', !!hamburger, 'Menu:', !!menu);
+                }
+            };
+            
+            // Auto-ejecutar test inicial
+            setTimeout(() => {
+                runDebugTests();
+            }, 1000);
+        }
+        
+        // Console override para debug
+        if (debugMode) {
+            const originalLog = console.log;
+            console.log = function(...args) {
+                originalLog.apply(console, args);
+                
+                // Mostrar en panel si existe
+                const panel = document.getElementById('debug-content');
+                if (panel && args[0] && typeof args[0] === 'string' && args[0].includes('🐛')) {
+                    panel.innerHTML += '<br><span style="color: #4caf50;">' + args.join(' ') + '</span>';
+                }
+            };
+        }
+    </script>
+    
+    <!-- TEMPORAL: Comentado para que funcione la navegación unificada -->
+    <!-- <script type="module" src="principal-dynamic.js"></script> -->
 </body>
 </html>

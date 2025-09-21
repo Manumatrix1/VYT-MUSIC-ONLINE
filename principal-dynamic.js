@@ -5,6 +5,8 @@ import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/fi
 const auth = getAuth();
 
 document.addEventListener('DOMContentLoaded', () => {
+    console.log('🔥 principal-dynamic.js cargado correctamente');
+    
     // Elementos
     const blogPostsContainer = document.getElementById('blog-posts-container');
     const profileLink = document.getElementById('profile-link');
@@ -12,8 +14,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.getElementById('mobile-menu');
     const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
     const hamburgerTrigger = document.getElementById('hamburger-menu-trigger');
+    
+    console.log('📱 Elementos del menú:', {
+        mobileMenu: !!mobileMenu,
+        mobileMenuOverlay: !!mobileMenuOverlay,
+        hamburgerTrigger: !!hamburgerTrigger
+    });
     const allInternalLinks = document.querySelectorAll('.header-nav a[data-target], .bottom-nav a[data-target], .mobile-menu-link');
     const pages = document.querySelectorAll('.page');
+    
+    console.log('🔗 Enlaces encontrados:', allInternalLinks.length);
+    console.log('📄 Páginas encontradas:', pages.length);
+    
     const pozoTextElement = document.getElementById('pozoText');
     const pozoBarElement = document.querySelector('.pozo-bar');
     const communityFeedList = document.getElementById('community-feed-list');
@@ -54,18 +66,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica de Navegación ---
     function showPage(targetId) {
+        console.log('📄 showPage llamado con targetId:', targetId);
+        console.log('📄 Páginas disponibles:', pages.length);
         pages.forEach(page => page.classList.remove('active'));
         const targetPage = document.getElementById(targetId);
+        console.log('📄 Página objetivo encontrada:', !!targetPage);
         if (targetPage) {
             targetPage.classList.add('active');
             document.querySelector('.main-content').scrollTop = 0;
+            console.log('✅ Página activada:', targetId);
+        } else {
+            console.log('❌ No se encontró la página:', targetId);
         }
     }
 
+    // Hacer showPage disponible globalmente
+    window.showPage = showPage;
+
     allInternalLinks.forEach(link => {
         link.addEventListener('click', (e) => {
+            console.log('🔗 Click en enlace detectado:', link.textContent);
             e.preventDefault();
             const targetId = link.dataset.target;
+            console.log('🎯 Target ID:', targetId);
             
             allInternalLinks.forEach(nav => nav.classList.remove('active'));
             link.classList.add('active');
@@ -74,6 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll(`.bottom-nav-link[data-target="${targetId}"]`).forEach(l => l.classList.add('active'));
 
             if (mobileMenu.classList.contains('open')) {
+                console.log('📱 Cerrando menú móvil...');
                 toggleMobileMenu();
             }
             showPage(targetId);
@@ -92,15 +116,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Lógica del Menú Hamburguesa ---
     function toggleMobileMenu() {
+        console.log('🍔 toggleMobileMenu ejecutado');
+        console.log('Menu actual:', mobileMenu?.classList.contains('open'));
         mobileMenu.classList.toggle('open');
         mobileMenuOverlay.classList.toggle('open');
+        console.log('Menu después:', mobileMenu?.classList.contains('open'));
     }
 
-    hamburgerTrigger.addEventListener('click', (e) => {
-        e.preventDefault();
-        toggleMobileMenu();
-    });
-    mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+    if (hamburgerTrigger) {
+        hamburgerTrigger.addEventListener('click', (e) => {
+            console.log('🔥 Click en hamburger detectado');
+            e.preventDefault();
+            toggleMobileMenu();
+        });
+        console.log('✅ Event listener agregado al hamburger');
+    } else {
+        console.log('❌ No se encontró hamburger-menu-trigger');
+    }
+    
+    if (mobileMenuOverlay) {
+        mobileMenuOverlay.addEventListener('click', toggleMobileMenu);
+        console.log('✅ Event listener agregado al overlay');
+    } else {
+        console.log('❌ No se encontró mobile-menu-overlay');
+    }
 
     // --- Carga de Contenido Dinámico ---
     async function loadBlogPosts() {
