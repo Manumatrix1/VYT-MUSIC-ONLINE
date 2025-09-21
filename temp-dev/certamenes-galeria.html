@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certámenes Activos | VYT-MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-functions-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <link rel="icon" type="image/png" href="https://vytmusic.com/favicon.png">
+    <style>
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        
+        /* Estilo Netflix/Rocola moderno */
+        .certamen-card {
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .certamen-card:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .certamen-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .certamen-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+            
+            .hero-section {
+                padding: 2rem 0;
+                text-align: center;
+            }
+            
+            .hero-section h1 {
+                font-size: 2rem;
+                line-height: 1.2;
+            }
+            
+            .hero-section p {
+                font-size: 1rem;
+                margin: 1rem 0;
+            }
+            
+            .certamen-card {
+                margin-bottom: 1rem;
+            }
+            
+            .certamen-card h3 {
+                font-size: 1.25rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+        
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.6));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .video-thumbnail:hover .play-overlay {
+            opacity: 1;
+        }
+        
+        .play-button {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
+            font-size: 24px;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .video-thumbnail:hover .play-button {
+            transform: scale(1);
+        }
+        
+        .status-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .status-live { background: #ef4444; color: white; animation: pulse 2s infinite; }
+        .status-voting { background: #f59e0b; color: white; }
+        .status-finished { background: #10b981; color: white; }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .section-header {
+            margin: 3rem 0 1.5rem 0;
+            padding: 0 1rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-subtitle {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+        
+        .certamen-info {
+            padding: 1rem;
+        }
+        
+        .certamen-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        
+        .certamen-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 0.75rem;
+        }
+        
+        .certamen-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            text-transform: uppercase;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        
+        /* Efecto parallax sutil */
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-pattern {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+        
+        /* Scroll suave estilo Netflix */
+        .scroll-container {
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .scroll-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+            border-radius: 3px;
+        }
+        
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(102, 126, 234, 0.6);
+            border-radius: 3px;
+        }
+        
+        .horizontal-scroll {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1rem;
+            min-width: min-content;
+        }
+        
+        .horizontal-card {
+            flex: 0 0 300px;
+        }
+        
+        /* Animaciones de entrada */
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.8s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <header class="gradient-bg text-white shadow-lg relative">
+        <div class="hero-pattern"></div>
+        <div class="container mx-auto px-6 py-4 relative z-10">
+            <div class="flex items-center justify-between">
+                <!-- Logo y título -->
+                <div class="flex items-center gap-3">
+                    <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-8 h-auto">
+                    <h1 class="text-xl font-bold">
+                        <a href="principal.html" class="hover:opacity-80">🎵 VYT-MUSIC</a>
+                    </h1>
+                </div>
+                
+                <!-- Navegación desktop -->
+                <nav class="hidden md:flex space-x-6">
+                    <a href="principal.html" class="hover:text-blue-200">🏠 Inicio</a>
+                    <a href="#" class="hover:text-blue-200 font-semibold">🏆 Certámenes</a>
+                    <a href="perfil-artista-demo.html" class="hover:text-blue-200">👤 Artistas</a>
+                    <a href="inscripcion_online.html" class="hover:text-blue-200">📝 Participar</a>
+                </nav>
+                
+                <!-- Controles móviles -->
+                <div class="md:hidden flex items-center gap-3">
+                    <!-- Flecha de retorno -->
+                    <button onclick="window.location.href='principal.html'" class="text-white hover:text-blue-200 text-xl">
+                        ← 
+                    </button>
+                    <!-- Menú hamburguesa -->
+                    <button class="text-white hover:text-blue-200" onclick="window.location.href='principal.html'">
+                        ☰
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-white py-16 relative">
+        <div class="hero-pattern"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 fade-in">
+                🎤 Certámenes en Vivo
+            </h1>
+            <p class="text-xl md:text-2xl mb-8 opacity-90 fade-in">
+                Descubre talentos emergentes y vota por tus favoritos
+            </p>
+            <div class="flex flex-wrap justify-center gap-4 fade-in">
+                <a href="#certamenes-live" class="cta-button">
+                    🔴 Ver en Vivo
+                </a>
+                <a href="#votacion-activa" class="cta-button">
+                    🗳️ Votar Ahora
+                </a>
+                <a href="inscripcion_online.html" class="cta-button">
+                    ⭐ Participar
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container mx-auto px-6 py-8">
+        <!-- Certámenes EN VIVO -->
+        <section id="certamenes-live" class="slide-in">
+            <div class="section-header">
+                <h2 class="section-title">🔴 EN VIVO AHORA</h2>
+                <p class="section-subtitle">Certámenes activos con transmisión en tiempo real</p>
+            </div>
+            
+            <div class="certamen-grid">
+                <!-- Certamen Live 1 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Certamen Live" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">▶️</div>
+                        </div>
+                        <div class="status-badge status-live">🔴 EN VIVO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Regional Sur Buenos Aires 2024</h3>
+                        <div class="certamen-meta">
+                            <span>🎸 Solistas</span>
+                            <span>📍 Tandil</span>
+                            <span>👥 847 viendo</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">12</div>
+                                <div class="stat-label">Participantes</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">3.2K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">$245K</div>
+                                <div class="stat-label">Pozo</div>
+                            </div>
+                            <a href="#" class="cta-button">🎥 Ver Live</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certamen Live 2 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Certamen Live" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">▶️</div>
+                        </div>
+                        <div class="status-badge status-live">🔴 EN VIVO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Copa Nacional de Bandas</h3>
+                        <div class="certamen-meta">
+                            <span>🎵 Bandas</span>
+                            <span>📍 CABA</span>
+                            <span>👥 1.2K viendo</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">8</div>
+                                <div class="stat-label">Bandas</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">5.7K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">$890K</div>
+                                <div class="stat-label">Pozo</div>
+                            </div>
+                            <a href="#" class="cta-button">🎥 Ver Live</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certamen Live 3 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1571974599782-87624638275c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Certamen Live" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">▶️</div>
+                        </div>
+                        <div class="status-badge status-live">🔴 EN VIVO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Festival Folklórico Norte</h3>
+                        <div class="certamen-meta">
+                            <span>🪕 Folk</span>
+                            <span>📍 Salta</span>
+                            <span>👥 523 viendo</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">15</div>
+                                <div class="stat-label">Artistas</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">1.8K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">$340K</div>
+                                <div class="stat-label">Pozo</div>
+                            </div>
+                            <a href="#" class="cta-button">🎥 Ver Live</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Votación Activa -->
+        <section id="votacion-activa" class="slide-in">
+            <div class="section-header">
+                <h2 class="section-title">🗳️ VOTACIÓN ACTIVA</h2>
+                <p class="section-subtitle">Participa votando por tus artistas favoritos</p>
+            </div>
+            
+            <div class="certamen-grid">
+                <!-- Certamen Votación 1 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Votación" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">🗳️</div>
+                        </div>
+                        <div class="status-badge status-voting">🗳️ VOTANDO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Semifinal Regional Centro</h3>
+                        <div class="certamen-meta">
+                            <span>🎤 Pop/Rock</span>
+                            <span>📍 Córdoba</span>
+                            <span>⏰ 2 días restantes</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">20</div>
+                                <div class="stat-label">Finalistas</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">8.4K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">$1.2M</div>
+                                <div class="stat-label">Pozo</div>
+                            </div>
+                            <a href="#" class="cta-button">🗳️ Votar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certamen Votación 2 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Votación" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">🗳️</div>
+                        </div>
+                        <div class="status-badge status-voting">🗳️ VOTANDO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Cumbia Nacional Championship</h3>
+                        <div class="certamen-meta">
+                            <span>💃 Cumbia</span>
+                            <span>📍 Nacional</span>
+                            <span>⏰ 5 días restantes</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">32</div>
+                                <div class="stat-label">Artistas</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">15.7K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">$2.8M</div>
+                                <div class="stat-label">Pozo</div>
+                            </div>
+                            <a href="#" class="cta-button">🗳️ Votar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certamen Votación 3 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1571974599782-87624638275c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Votación" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">🗳️</div>
+                        </div>
+                        <div class="status-badge status-voting">🗳️ VOTANDO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Nuevos Talentos Buenos Aires</h3>
+                        <div class="certamen-meta">
+                            <span>⭐ Emergentes</span>
+                            <span>📍 Buenos Aires</span>
+                            <span>⏰ 1 día restante</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">45</div>
+                                <div class="stat-label">Nuevos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">6.2K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">$450K</div>
+                                <div class="stat-label">Pozo</div>
+                            </div>
+                            <a href="#" class="cta-button">🗳️ Votar</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Próximamente -->
+        <section class="slide-in">
+            <div class="section-header">
+                <h2 class="section-title">🔜 PRÓXIMAMENTE</h2>
+                <p class="section-subtitle">Inscríbete ahora para los próximos certámenes</p>
+            </div>
+            
+            <!-- Scroll horizontal estilo Netflix -->
+            <div class="scroll-container">
+                <div class="horizontal-scroll">
+                    <div class="horizontal-card certamen-card rounded-xl overflow-hidden">
+                        <div class="video-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" 
+                                 alt="Próximo" class="w-full h-full object-cover">
+                            <div class="play-overlay">
+                                <div class="play-button">📅</div>
+                            </div>
+                            <div class="status-badge" style="background: #6366f1; color: white;">📅 15 ENE</div>
+                        </div>
+                        <div class="certamen-info">
+                            <h3 class="certamen-title">Copa Nacional de Jazz</h3>
+                            <div class="certamen-meta">
+                                <span>🎺 Jazz</span>
+                                <span>📍 Nacional</span>
+                            </div>
+                            <a href="inscripcion_online.html" class="cta-button w-full text-center">📝 Inscribirse</a>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-card certamen-card rounded-xl overflow-hidden">
+                        <div class="video-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" 
+                                 alt="Próximo" class="w-full h-full object-cover">
+                            <div class="play-overlay">
+                                <div class="play-button">📅</div>
+                            </div>
+                            <div class="status-badge" style="background: #6366f1; color: white;">📅 22 ENE</div>
+                        </div>
+                        <div class="certamen-info">
+                            <h3 class="certamen-title">Rock Emergente Rosario</h3>
+                            <div class="certamen-meta">
+                                <span>🎸 Rock</span>
+                                <span>📍 Santa Fe</span>
+                            </div>
+                            <a href="inscripcion_online.html" class="cta-button w-full text-center">📝 Inscribirse</a>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-card certamen-card rounded-xl overflow-hidden">
+                        <div class="video-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1571974599782-87624638275c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" 
+                                 alt="Próximo" class="w-full h-full object-cover">
+                            <div class="play-overlay">
+                                <div class="play-button">📅</div>
+                            </div>
+                            <div class="status-badge" style="background: #6366f1; color: white;">📅 01 FEB</div>
+                        </div>
+                        <div class="certamen-info">
+                            <h3 class="certamen-title">Tango Moderno CABA</h3>
+                            <div class="certamen-meta">
+                                <span>🎭 Tango</span>
+                                <span>📍 Buenos Aires</span>
+                            </div>
+                            <a href="inscripcion_online.html" class="cta-button w-full text-center">📝 Inscribirse</a>
+                        </div>
+                    </div>
+
+                    <div class="horizontal-card certamen-card rounded-xl overflow-hidden">
+                        <div class="video-thumbnail">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=250&q=80" 
+                                 alt="Próximo" class="w-full h-full object-cover">
+                            <div class="play-overlay">
+                                <div class="play-button">📅</div>
+                            </div>
+                            <div class="status-badge" style="background: #6366f1; color: white;">📅 08 FEB</div>
+                        </div>
+                        <div class="certamen-info">
+                            <h3 class="certamen-title">Electrónica Nacional</h3>
+                            <div class="certamen-meta">
+                                <span>🎛️ Electrónica</span>
+                                <span>📍 Nacional</span>
+                            </div>
+                            <a href="inscripcion_online.html" class="cta-button w-full text-center">📝 Inscribirse</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Finalizados -->
+        <section class="slide-in">
+            <div class="section-header">
+                <h2 class="section-title">🏆 GANADORES RECIENTES</h2>
+                <p class="section-subtitle">Celebra con los artistas que han triunfado</p>
+            </div>
+            
+            <div class="certamen-grid">
+                <!-- Ganador 1 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Ganador" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">🏆</div>
+                        </div>
+                        <div class="status-badge status-finished">🏆 FINALIZADO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Festival Regional Cuyo</h3>
+                        <div class="certamen-meta">
+                            <span>🥇 Juan Martínez</span>
+                            <span>📍 Mendoza</span>
+                            <span>💰 $850K ganado</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">24</div>
+                                <div class="stat-label">Participantes</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">12.5K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">⭐⭐⭐⭐⭐</div>
+                                <div class="stat-label">Calificación</div>
+                            </div>
+                            <a href="perfil-artista-demo.html" class="cta-button">👤 Ver Ganador</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ganador 2 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Ganador" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">🏆</div>
+                        </div>
+                        <div class="status-badge status-finished">🏆 FINALIZADO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Copa Litoral Folk</h3>
+                        <div class="certamen-meta">
+                            <span>🥇 Los Hermanos del Norte</span>
+                            <span>📍 Corrientes</span>
+                            <span>💰 $1.2M ganado</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">18</div>
+                                <div class="stat-label">Grupos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">9.8K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">⭐⭐⭐⭐⭐</div>
+                                <div class="stat-label">Calificación</div>
+                            </div>
+                            <a href="#" class="cta-button">👤 Ver Ganador</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ganador 3 -->
+                <div class="certamen-card rounded-xl overflow-hidden">
+                    <div class="video-thumbnail">
+                        <img src="https://images.unsplash.com/photo-1571974599782-87624638275c?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=400&q=80" 
+                             alt="Ganador" class="w-full h-full object-cover">
+                        <div class="play-overlay">
+                            <div class="play-button">🏆</div>
+                        </div>
+                        <div class="status-badge status-finished">🏆 FINALIZADO</div>
+                    </div>
+                    <div class="certamen-info">
+                        <h3 class="certamen-title">Rap Battle Patagonia</h3>
+                        <div class="certamen-meta">
+                            <span>🥇 MC Fuego</span>
+                            <span>📍 Neuquén</span>
+                            <span>💰 $670K ganado</span>
+                        </div>
+                        <div class="certamen-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">16</div>
+                                <div class="stat-label">Raperos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">7.2K</div>
+                                <div class="stat-label">Votos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">⭐⭐⭐⭐⭐</div>
+                                <div class="stat-label">Calificación</div>
+                            </div>
+                            <a href="#" class="cta-button">👤 Ver Ganador</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Call to Action Final -->
+    <section class="gradient-bg text-white py-16 relative">
+        <div class="hero-pattern"></div>
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+                ¿Listo para Brillar? ✨
+            </h2>
+            <p class="text-xl mb-8 opacity-90">
+                Únete a la comunidad musical más grande de Argentina
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <a href="inscripcion_online.html" class="cta-button text-lg px-8 py-4">
+                    🎤 Inscribirme Ahora
+                </a>
+                <a href="guia-sistema-jerarquico.html" class="cta-button text-lg px-8 py-4" style="background: rgba(255,255,255,0.2);">
+                    📖 Cómo Funciona
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">🎵 VYT-MUSIC</h3>
+                    <p class="text-gray-400">La plataforma musical que conecta talentos con el mundo</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Certámenes</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">En Vivo</a></li>
+                        <li><a href="#" class="hover:text-white">Votación Activa</a></li>
+                        <li><a href="#" class="hover:text-white">Próximamente</a></li>
+                        <li><a href="#" class="hover:text-white">Ganadores</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Participar</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="inscripcion_online.html" class="hover:text-white">Inscripción Online</a></li>
+                        <li><a href="guia-sistema-jerarquico.html" class="hover:text-white">Guía del Sistema</a></li>
+                        <li><a href="#" class="hover:text-white">Reglamento</a></li>
+                        <li><a href="#" class="hover:text-white">Preguntas Frecuentes</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-semibold mb-4">Soporte</h4>
+                    <ul class="space-y-2 text-gray-400">
+                        <li><a href="#" class="hover:text-white">Centro de Ayuda</a></li>
+                        <li><a href="#" class="hover:text-white">Contacto</a></li>
+                        <li><a href="#" class="hover:text-white">Estado del Sistema</a></li>
+                        <li><a href="#" class="hover:text-white">Reportar Problema</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 VYT-MUSIC. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Animaciones de entrada
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animación de fade-in para elementos
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            // Observar todas las cards
+            document.querySelectorAll('.certamen-card').forEach(card => {
+                observer.observe(card);
+            });
+
+            // Efecto hover mejorado
+            document.querySelectorAll('.certamen-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05) translateY(-10px)';
+                });
+
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1) translateY(0)';
+                });
+            });
+
+            // Scroll suave para navegación
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Auto-scroll horizontal para móviles
+            const scrollContainers = document.querySelectorAll('.scroll-container');
+            scrollContainers.forEach(container => {
+                let isScrolling = false;
+                
+                container.addEventListener('touchstart', () => {
+                    isScrolling = true;
+                });
+                
+                container.addEventListener('touchend', () => {
+                    isScrolling = false;
+                });
+            });
+        });
+    </script>
+</body>
+</html>
