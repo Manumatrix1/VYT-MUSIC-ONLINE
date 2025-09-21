@@ -67,3 +67,36 @@ node_modules/
 
 # dataconnect generated files
 .dataconnect
+
+# ===== ARCHIVOS ESPECÍFICOS VYT MUSIC =====
+# Backups y archivos temporales
+backup-*.json
+*-backup.json
+*-backup-*.json
+*.backup
+test-*.html
+*-test.html
+
+# Archivos de debug y logs específicos
+firebase-debug.log
+firebase-debug.*.log
+
+# Archivos de desarrollo temporal
+*-demo.html
+*-example.html
+*-temp.html
+
+# Archivos de configuración local
+.vscode/settings.json
+.vscode/launch.json
+
+# Archivos de datos temporales
+data-temp/
+backups/
+
+# Scripts de desarrollo
+*.bat
+*.ps1
+crear-*.ps1
+ABRIR-*.bat
+SERVIDOR-*.bat

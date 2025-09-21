@@ -209,6 +209,21 @@
                     <input type="file" id="foto" name="foto" class="w-full form-input p-3 rounded-lg" accept="image/png, image/jpeg" required>
                 </div>
                 <div>
+                    <label for="certamen" class="block text-sm font-medium text-gray-300 mb-1">Certamen Provincial</label>
+                    <select id="certamen" name="certamen" class="w-full form-input p-3 rounded-lg" required>
+                        <option value="">Seleccioná el certamen de tu provincia...</option>
+                    </select>
+                    <div id="certamen-info" class="mt-2 p-3 bg-gray-800 rounded-lg hidden">
+                        <div class="flex items-center space-x-3">
+                            <img id="certamen-imagen" src="" alt="" class="w-12 h-12 rounded-lg object-cover">
+                            <div>
+                                <h4 id="certamen-nombre" class="font-semibold text-white"></h4>
+                                <p id="certamen-precio" class="text-sm text-gray-300"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
                     <label for="provincia" class="block text-sm font-medium text-gray-300 mb-1">Provincia</label>
                     <select id="provincia" name="provincia" class="w-full form-input p-3 rounded-lg" required>
                         <option value="">Seleccioná tu provincia...</option>
@@ -299,13 +314,73 @@
 
         const auth = getAuth();
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if online registration is enabled
+            const checkSessionEnabled = async () => {
+                try {
+                    const sessionDoc = await getDoc(doc(db, "admin_settings", "sessions"));
+                    if (sessionDoc.exists()) {
+                        const sessionData = sessionDoc.data();
+                        return sessionData.inscripcion_online_enabled || false;
+                    }
+                    return false; // Default to disabled if no configuration exists
+                } catch (error) {
+                    console.error("Error checking session status:", error);
+                    return false; // Default to disabled on error
+                }
+            };
+
+            const isOnlineEnabled = await checkSessionEnabled();
+            
+            if (!isOnlineEnabled) {
+                // Hide the main content and show disabled message
+                document.getElementById('form-online').style.display = 'none';
+                
+                // Create and show disabled message
+                const disabledMessage = document.createElement('div');
+                disabledMessage.className = 'text-center py-16 px-8';
+                disabledMessage.innerHTML = `
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-orange-900 bg-opacity-30 border border-orange-600 rounded-lg p-8 mb-8">
+                            <svg class="w-16 h-16 text-orange-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            <h2 class="text-3xl font-bold text-orange-400 mb-4">Inscripciones Online Temporalmente Cerradas</h2>
+                            <p class="text-xl text-orange-300 mb-6">
+                                Las inscripciones para el certamen online no están disponibles en este momento.
+                            </p>
+                            <p class="text-gray-300 mb-8">
+                                Estamos preparando todo para ofrecerte la mejor experiencia. 
+                                Te recomendamos seguir nuestras redes sociales para estar al tanto de cuando se abran nuevamente las inscripciones.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="./index.html" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                                    Volver al Inicio
+                                </a>
+                                <a href="./inscripcion_presencial.html" class="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                                    Ver Inscripción Presencial
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Find the main container and replace content
+                const mainContainer = document.querySelector('body > div');
+                mainContainer.innerHTML = '';
+                mainContainer.appendChild(disabledMessage);
+                return; // Stop execution here
+            }
+
+            // Original code continues only if online registration is enabled
             const formOnline = document.getElementById('form-online');
             const emailInput = document.getElementById('email');
             const confirmEmailInput = document.getElementById('confirm-email');
             const emailError = document.getElementById('email-error');
             const whatsappInput = document.getElementById('whatsapp');
             const provinciaSelect = document.getElementById('provincia');
+            const certamenSelect = document.getElementById('certamen');
+            const certamenInfo = document.getElementById('certamen-info');
             const urlParams = new URLSearchParams(window.location.search);
             const provinciaParam = urlParams.get('prov');
             const confirmModal = document.getElementById('confirm-modal');
@@ -316,9 +391,81 @@
             const promoVideoContainer = document.getElementById('promo-video-container');
             const pruebaCheckbox = document.getElementById('inscripcion-prueba');
 
+            let certamenesData = [];
+            let selectedCertamen = null;
+
             if (provinciaParam) {
                 provinciaSelect.value = decodeURIComponent(provinciaParam); 
             }
+
+            // Cargar certámenes desde Firebase
+            async function loadCertamenes() {
+                try {
+                    const querySnapshot = await getDocs(collection(db, "certamenes_provincias"));
+                    certamenesData = [];
+                    querySnapshot.forEach((doc) => {
+                        certamenesData.push({
+                            id: doc.id,
+                            ...doc.data()
+                        });
+                    });
+                    updateCertamenOptions();
+                } catch (error) {
+                    console.error("Error loading certamenes:", error);
+                }
+            }
+
+            // Actualizar opciones de certamen basado en provincia seleccionada
+            function updateCertamenOptions() {
+                const selectedProvincia = provinciaSelect.value;
+                certamenSelect.innerHTML = '<option value="">Seleccioná el certamen de tu provincia...</option>';
+                
+                if (selectedProvincia) {
+                    const certamenesFiltrados = certamenesData.filter(cert => 
+                        cert.provincia === selectedProvincia && cert.activo
+                    );
+                    
+                    certamenesFiltrados.forEach(certamen => {
+                        const option = document.createElement('option');
+                        option.value = certamen.id;
+                        option.textContent = certamen.nombre;
+                        certamenSelect.appendChild(option);
+                    });
+                }
+                
+                // Reset certamen info
+                certamenInfo.classList.add('hidden');
+                selectedCertamen = null;
+            }
+
+            // Mostrar información del certamen seleccionado
+            function showCertamenInfo(certamenId) {
+                const certamen = certamenesData.find(c => c.id === certamenId);
+                if (certamen) {
+                    selectedCertamen = certamen;
+                    document.getElementById('certamen-imagen').src = certamen.imagen || '';
+                    document.getElementById('certamen-nombre').textContent = certamen.nombre;
+                    document.getElementById('certamen-precio').textContent = `Precio: $${certamen.precio}`;
+                    certamenInfo.classList.remove('hidden');
+                } else {
+                    certamenInfo.classList.add('hidden');
+                    selectedCertamen = null;
+                }
+            }
+
+            // Event listeners
+            provinciaSelect.addEventListener('change', updateCertamenOptions);
+            certamenSelect.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    showCertamenInfo(e.target.value);
+                } else {
+                    certamenInfo.classList.add('hidden');
+                    selectedCertamen = null;
+                }
+            });
+
+            // Cargar certámenes al inicio
+            loadCertamenes();
 
             async function loadPromotionalVideo() {
                 try {
@@ -380,6 +527,11 @@
                     alert('Debes aceptar las bases y condiciones para continuar.');
                     return;
                 }
+
+                if (!selectedCertamen) {
+                    alert('Debes seleccionar un certamen para continuar.');
+                    return;
+                }
                 
                 const nombre = document.getElementById('nombre').value;
                 const email = emailInput.value;
@@ -408,11 +560,18 @@
                         provincia: provincia,
                         video_link: video,
                         foto_url: fotoUrl,
+                        certamen_id: selectedCertamen.id,
+                        certamen_nombre: selectedCertamen.nombre,
+                        precio_certamen: selectedCertamen.precio,
                         aprobado: false,
+                        pago_completado: esPrueba,
                         tipo_inscripcion: esPrueba ? 'prueba' : 'completa',
                         votos_gratuitos: 0,
                         descuento_aplicado: false,
                         codigo_invitacion: generateUniqueCode(),
+                        reproducciones_youtube: 0,
+                        ranking_provincial: 0,
+                        ranking_general: 0,
                         createdAt: serverTimestamp()
                     };
 
@@ -420,10 +579,35 @@
                         inscripcionDoc.uid = auth.currentUser.uid;
                     }
                     
-                    await addDoc(collection(db, "participantes_online"), inscripcionDoc);
+                    const docRef = await addDoc(collection(db, "participantes_online"), inscripcionDoc);
                     
-                    confirmModal.classList.add('visible');
-                    formOnline.reset();
+                    // Si no es inscripción de prueba, redirigir a MercadoPago
+                    if (!esPrueba) {
+                        // Crear preferencia de pago
+                        const paymentData = {
+                            title: `VYT Music - ${selectedCertamen.nombre}`,
+                            quantity: 1,
+                            price: selectedCertamen.precio,
+                            currency_id: 'ARS',
+                            description: `Inscripción al certamen ${selectedCertamen.nombre} - ${provincia}`,
+                            external_reference: docRef.id,
+                            payer_email: email,
+                            back_urls: {
+                                success: `${window.location.origin}/pago/pago_exitoso.html?ref=${docRef.id}`,
+                                failure: `${window.location.origin}/pago/pago_fallido.html?ref=${docRef.id}`,
+                                pending: `${window.location.origin}/pago/pago_pendiente.html?ref=${docRef.id}`
+                            }
+                        };
+
+                        // Aquí deberías llamar a tu función de backend para crear la preferencia
+                        // Por ahora, simularemos el proceso
+                        window.location.href = `./pago/pago_pendiente.html?ref=${docRef.id}&precio=${selectedCertamen.precio}&certamen=${encodeURIComponent(selectedCertamen.nombre)}`;
+                    } else {
+                        // Inscripción de prueba completada
+                        confirmModal.classList.add('visible');
+                        formOnline.reset();
+                    }
+                    
                     console.log("Inscripción online guardada exitosamente.");
                 } catch (error) {
                     console.error("Error al guardar la inscripción:", error);

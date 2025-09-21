@@ -168,6 +168,66 @@
         .header-nav-link svg {
             display: none;
         }
+        
+        /* --- Dropdown Menu Styles --- */
+        .dropdown-menu {
+            position: relative;
+        }
+        
+        .dropdown-toggle {
+            cursor: pointer;
+        }
+        
+        .dropdown-arrow {
+            width: 1rem !important;
+            height: 1rem !important;
+            margin-left: 0.25rem;
+            transition: transform 0.2s ease;
+            display: block !important;
+        }
+        
+        .dropdown-content {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--color-fondo-secundario);
+            border: 1px solid #30363d;
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            margin-top: 0.5rem;
+        }
+        
+        .dropdown-menu:hover .dropdown-content {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-menu:hover .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+        
+        .dropdown-content a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--color-texto-secundario);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+            border-radius: 6px;
+            margin: 0.25rem;
+        }
+        
+        .dropdown-content a:hover {
+            background: var(--color-primario);
+            color: var(--color-fondo);
+        }
     }
 
     /* --- Sidebar --- */
@@ -495,36 +555,225 @@
         color: var(--color-texto-secundario);
     }
 
-    /* --- Estilos para Comprar VYT --- */
+    /* --- Estilos para Comprar VYT-MONEY --- */
+    .balance-display {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .balance-card {
+        background: linear-gradient(135deg, var(--color-primario), var(--color-oro));
+        color: var(--color-fondo);
+        padding: 2rem;
+        border-radius: 20px;
+        max-width: 400px;
+        margin: 0 auto;
+        box-shadow: 0 10px 30px rgba(88, 166, 255, 0.3);
+    }
+    
+    .balance-card h3 {
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+    }
+    
+    .balance-amount {
+        font-family: var(--fuente-titulos);
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+    
+    .balance-info {
+        opacity: 0.8;
+        font-size: 0.9rem;
+    }
+    
     .vyt-pack-grid {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 1.5rem;
+        gap: 2rem;
+        margin-bottom: 3rem;
     }
+    
     @media (min-width: 600px) {
         .vyt-pack-grid {
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(2, 1fr);
         }
     }
+    
+    @media (min-width: 1024px) {
+        .vyt-pack-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+    
     .vyt-pack {
+        background: var(--color-card);
         padding: 2rem;
-        border-radius: 15px;
+        border-radius: 20px;
         text-align: center;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        position: relative;
+        overflow: hidden;
     }
+    
+    .vyt-pack::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--color-primario), var(--color-oro));
+    }
+    
     .vyt-pack:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0 20px var(--color-primario-transparente);
+        transform: translateY(-8px);
+        border-color: var(--color-primario);
+        box-shadow: 0 20px 40px rgba(88, 166, 255, 0.2);
     }
+    
+    .vyt-pack.popular {
+        border-color: var(--color-oro);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+    }
+    
+    .vyt-pack.popular::before {
+        background: var(--color-oro);
+    }
+    
+    .pack-badge {
+        display: inline-block;
+        background: var(--color-primario);
+        color: var(--color-fondo);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+    
+    .vyt-pack.popular .pack-badge {
+        background: var(--color-oro);
+        color: var(--color-fondo);
+    }
+    
+    .vyt-pack.premium .pack-badge {
+        background: linear-gradient(135deg, #9333ea, #c084fc);
+    }
+    
+    .vyt-pack.vip .pack-badge {
+        background: linear-gradient(135deg, #dc2626, #fbbf24);
+    }
+    
     .vyt-pack .amount {
         font-family: var(--fuente-titulos);
-        font-size: 3rem;
+        font-size: 2.5rem;
+        color: var(--color-primario);
+        margin-bottom: 0.5rem;
+    }
+    
+    .vyt-pack .price {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--color-texto-principal);
+    }
+    
+    .savings {
+        background: var(--color-secundario);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+    
+    .pack-benefits {
+        text-align: left;
+        margin: 1.5rem 0;
+        min-height: 120px;
+    }
+    
+    .pack-benefits p {
+        margin: 0.5rem 0;
+        color: var(--color-texto-secundario);
+        font-size: 0.9rem;
+    }
+    
+    .buy-vyt-btn {
+        width: 100%;
+        padding: 1rem;
+        font-size: 1.1rem;
+        font-weight: bold;
+        background: linear-gradient(135deg, var(--color-primario), var(--color-oro));
+        border: none;
+        border-radius: 15px;
+        color: var(--color-fondo);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .buy-vyt-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(88, 166, 255, 0.4);
+    }
+    
+    .vyt-money-info {
+        background: var(--color-fondo-secundario);
+        padding: 3rem 2rem;
+        border-radius: 20px;
+        border: 1px solid #30363d;
+    }
+    
+    .vyt-money-info h3 {
+        text-align: center;
+        font-size: 2rem;
+        margin-bottom: 2rem;
         color: var(--color-primario);
     }
-    .vyt-pack .price {
-        font-size: 1.5rem;
-        font-weight: 700;
-        margin: 0.5rem 0 1.5rem 0;
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    @media (min-width: 768px) {
+        .info-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    .info-item {
+        text-align: center;
+        padding: 1.5rem;
+        background: var(--color-card);
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+    
+    .info-item:hover {
+        transform: translateY(-3px);
+    }
+    
+    .info-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .info-item h4 {
+        font-size: 1.3rem;
+        margin-bottom: 1rem;
+        color: var(--color-texto-principal);
+    }
+    
+    .info-item p {
+        color: var(--color-texto-secundario);
+        line-height: 1.6;
     }
 
     /* Estilos para el Modal de Pago MODO */
@@ -701,6 +950,273 @@
     .pozo-container { background-color: var(--color-fondo-secundario); border-radius: 50px; width: 100%; height: 40px; overflow: hidden; border: 1px solid #30363d; margin-bottom: 1rem; }
     .pozo-bar { height: 100%; background: linear-gradient(90deg, var(--color-secundario) 0%, var(--color-primario) 100%); width: 75%; border-radius: 50px; transition: width 1.5s ease; }
     .pozo-text { font-weight: 700; font-size: 1.5rem; color: var(--color-primario); text-align: center; }
+    
+    /* ===== POZO DE PREMIOS DINÁMICO ===== */
+    .dynamic-prize-pool {
+        background: linear-gradient(135deg, #0d1b2a, #1b263b, #415a77);
+        border-radius: 25px;
+        padding: 2rem;
+        margin: 2rem 0;
+        border: 2px solid var(--color-oro);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .dynamic-prize-pool::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(circle, rgba(255, 215, 0, 0.1), transparent 50%);
+        animation: poolGlow 4s ease-in-out infinite alternate;
+    }
+    
+    @keyframes poolGlow {
+        0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+        100% { transform: scale(1.1) rotate(360deg); opacity: 0.6; }
+    }
+    
+    .pool-header {
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .pool-title {
+        font-family: var(--fuente-titulos);
+        font-size: 2.5rem;
+        color: var(--color-oro);
+        margin-bottom: 0.5rem;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        animation: titlePulse 3s ease-in-out infinite;
+    }
+    
+    @keyframes titlePulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    .pool-subtitle {
+        color: var(--color-texto-secundario);
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .pool-main-counter {
+        text-align: center;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .pool-amount {
+        font-size: 4rem;
+        font-weight: 900;
+        color: var(--color-oro);
+        text-shadow: 
+            0 0 10px rgba(255, 215, 0, 0.8),
+            0 0 20px rgba(255, 215, 0, 0.6),
+            0 0 30px rgba(255, 215, 0, 0.4);
+        animation: amountGlow 2s ease-in-out infinite alternate;
+        transition: all 0.5s ease;
+    }
+    
+    @keyframes amountGlow {
+        0% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.6); }
+        100% { text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 30px rgba(255, 215, 0, 0.8), 0 0 40px rgba(255, 215, 0, 0.6); }
+    }
+    
+    .pool-increment {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background: linear-gradient(45deg, #00ff88, #00cc6a);
+        color: white;
+        padding: 0.3rem 0.8rem;
+        border-radius: 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        animation: incrementPop 0.6s ease-out;
+        opacity: 0;
+        pointer-events: none;
+    }
+    
+    @keyframes incrementPop {
+        0% { opacity: 0; transform: translateY(-50%) scale(0.5); }
+        20% { opacity: 1; transform: translateY(-50%) scale(1.2); }
+        100% { opacity: 0; transform: translateY(-80%) scale(1); }
+    }
+    
+    .pool-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .pool-stat {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 15px;
+        padding: 1rem;
+        text-align: center;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+    
+    .pool-stat:hover {
+        border-color: var(--color-oro);
+        background: rgba(255, 215, 0, 0.1);
+        transform: translateY(-3px);
+    }
+    
+    .pool-stat-label {
+        color: var(--color-texto-secundario);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .pool-stat-value {
+        color: var(--color-oro);
+        font-size: 1.8rem;
+        font-weight: bold;
+    }
+    
+    .pool-progress {
+        margin: 2rem 0;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .pool-progress-label {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5rem;
+        color: var(--color-texto-secundario);
+        font-size: 0.9rem;
+    }
+    
+    .pool-progress-bar {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        height: 20px;
+        overflow: hidden;
+        position: relative;
+    }
+    
+    .pool-progress-fill {
+        background: linear-gradient(90deg, var(--color-oro), #ffed4e, var(--color-oro));
+        height: 100%;
+        border-radius: 10px;
+        transition: width 2s ease;
+        position: relative;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+    
+    .pool-progress-fill::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+        animation: progressShine 3s infinite;
+    }
+    
+    @keyframes progressShine {
+        0% { left: -100%; }
+        100% { left: 100%; }
+    }
+    
+    .pool-contributions {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        padding: 1.5rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .pool-contributions h4 {
+        color: var(--color-oro);
+        margin-bottom: 1rem;
+        font-size: 1.3rem;
+    }
+    
+    .contribution-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    .contribution-item:last-child {
+        border-bottom: none;
+    }
+    
+    .contribution-source {
+        color: var(--color-texto-principal);
+        font-weight: 500;
+    }
+    
+    .contribution-amount {
+        color: var(--color-oro);
+        font-weight: bold;
+    }
+    
+    .pool-effects {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+    
+    .money-particle {
+        position: absolute;
+        color: var(--color-oro);
+        font-size: 1.5rem;
+        animation: moneyFloat 3s ease-out forwards;
+        opacity: 0;
+    }
+    
+    @keyframes moneyFloat {
+        0% { 
+            opacity: 1; 
+            transform: translateY(0) rotate(0deg) scale(1); 
+        }
+        50% { 
+            opacity: 1; 
+            transform: translateY(-50px) rotate(180deg) scale(1.2); 
+        }
+        100% { 
+            opacity: 0; 
+            transform: translateY(-100px) rotate(360deg) scale(0.5); 
+        }
+    }
+    
+    /* Responsive design para el pozo */
+    @media (max-width: 768px) {
+        .pool-amount {
+            font-size: 2.5rem;
+        }
+        
+        .pool-title {
+            font-size: 2rem;
+        }
+        
+        .pool-stats {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
     .ranking-grid {
         display: grid;
         grid-template-columns: 1fr;
@@ -948,7 +1464,390 @@
     @media (min-width: 768px) {
         .bottom-nav { display: none; }
     }
+    
+    /* ===== VOTACIÓN GAMIFICADA ===== */
+    
+    /* Stats del usuario */
+    .user-stats-container {
+        margin-bottom: 2rem;
+        padding: 1.5rem;
+        background: linear-gradient(135deg, var(--color-primario)20, var(--color-oro)10);
+        border-radius: 20px;
+        border: 1px solid #30363d;
+    }
+    
+    .user-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+    }
+    
+    .user-stats .stat-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem;
+        background: var(--color-card);
+        border-radius: 15px;
+        transition: transform 0.3s ease;
+    }
+    
+    .user-stats .stat-item:hover {
+        transform: translateY(-2px);
+    }
+    
+    .stat-icon {
+        font-size: 2rem;
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, var(--color-primario), var(--color-oro));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .stat-info {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .stat-label {
+        color: var(--color-texto-secundario);
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
+    
+    .stat-value {
+        color: var(--color-texto-principal);
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    
+    /* Ranking cards gamificadas */
+    .ranking-card.gamified {
+        position: relative;
+        background: var(--color-card);
+        border-radius: 20px;
+        overflow: hidden;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .ranking-card.gamified:hover {
+        border-color: var(--color-primario);
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(88, 166, 255, 0.2);
+    }
+    
+    .ranking-position {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background: linear-gradient(135deg, var(--color-oro), #ffed4e);
+        color: var(--color-fondo);
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9rem;
+        z-index: 2;
+        box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+    }
+    
+    .vote-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+    
+    .vote-count, .vote-value {
+        text-align: center;
+        padding: 0.8rem;
+        background: var(--color-fondo-secundario);
+        border-radius: 10px;
+        border: 1px solid #30363d;
+    }
+    
+    .vote-number, .value-number {
+        display: block;
+        font-size: 1.4rem;
+        font-weight: bold;
+        color: var(--color-primario);
+        margin-bottom: 0.25rem;
+    }
+    
+    .vote-label, .value-label {
+        font-size: 0.8rem;
+        color: var(--color-texto-secundario);
+    }
+    
+    /* Controles de votación */
+    .vote-controls {
+        margin: 1.5rem 0;
+    }
+    
+    .vote-amount-selector {
+        display: flex;
+        gap: 0.5rem;
+        margin-bottom: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .amount-btn {
+        padding: 0.5rem 1rem;
+        border: 2px solid #30363d;
+        background: transparent;
+        color: var(--color-texto-secundario);
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: bold;
+        min-width: 50px;
+    }
+    
+    .amount-btn:hover, .amount-btn.active {
+        border-color: var(--color-primario);
+        background: var(--color-primario);
+        color: var(--color-fondo);
+        transform: scale(1.05);
+    }
+    
+    .custom-amount {
+        padding: 0.5rem;
+        border: 2px solid #30363d;
+        background: var(--color-fondo-secundario);
+        color: var(--color-texto-principal);
+        border-radius: 20px;
+        width: 80px;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .custom-amount:focus {
+        border-color: var(--color-primario);
+        outline: none;
+    }
+    
+    /* Botón de voto principal */
+    .vote-button-gamified {
+        width: 100%;
+        padding: 1.2rem;
+        background: linear-gradient(135deg, var(--color-primario), var(--color-oro));
+        border: none;
+        border-radius: 20px;
+        color: var(--color-fondo);
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 1.1rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+    
+    .vote-button-gamified:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 30px rgba(88, 166, 255, 0.4);
+    }
+    
+    .vote-button-gamified:active {
+        transform: scale(0.95);
+    }
+    
+    .vote-icon {
+        font-size: 1.5rem;
+        animation: pulse 2s infinite;
+    }
+    
+    .vote-text {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .vote-action {
+        font-size: 1.1rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .vote-amount {
+        font-size: 0.9rem;
+        opacity: 0.9;
+    }
+    
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+    
+    /* Efectos visuales de voto */
+    .vote-effect {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, transparent 70%);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+        pointer-events: none;
+    }
+    
+    .vote-button-gamified.voting .vote-effect {
+        animation: voteRipple 0.6s ease-out;
+    }
+    
+    @keyframes voteRipple {
+        0% {
+            width: 0;
+            height: 0;
+            opacity: 1;
+        }
+        100% {
+            width: 200px;
+            height: 200px;
+            opacity: 0;
+        }
+    }
+    
+    /* Bonuses y multiplicadores */
+    .vote-bonuses {
+        display: flex;
+        gap: 0.5rem;
+        justify-content: center;
+        margin: 1rem 0;
+        flex-wrap: wrap;
+    }
+    
+    .bonus-item {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.3rem 0.8rem;
+        background: var(--color-fondo-secundario);
+        border: 1px solid var(--color-secundario);
+        border-radius: 15px;
+        font-size: 0.8rem;
+        color: var(--color-secundario);
+        cursor: help;
+    }
+    
+    .bonus-item span {
+        font-weight: bold;
+    }
+    
+    /* Botón de compartir mejorado */
+    .share-btn {
+        margin-top: 1rem;
+        width: 100%;
+        background: linear-gradient(135deg, #25d366, #128c7e);
+        border-color: transparent;
+        transition: all 0.3s ease;
+    }
+    
+    .share-btn:hover {
+        background: linear-gradient(135deg, #128c7e, #25d366);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(37, 211, 102, 0.3);
+    }
+    
+    /* Animaciones de feedback */
+    @keyframes votingSuccess {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    @keyframes balanceUpdate {
+        0% { color: var(--color-texto-principal); }
+        50% { color: var(--color-oro); transform: scale(1.1); }
+        100% { color: var(--color-texto-principal); transform: scale(1); }
+    }
+    
+    .voting-success {
+        animation: votingSuccess 0.5s ease-out;
+    }
+    
+    .balance-update {
+        animation: balanceUpdate 0.8s ease-out;
+    }
+    
+    /* Partículas de celebración */
+    .celebration-particle {
+        position: absolute;
+        width: 8px;
+        height: 8px;
+        background: var(--color-oro);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 1000;
+    }
+    
+    /* Tooltip de información */
+    .vote-tooltip {
+        position: absolute;
+        bottom: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        background: var(--color-fondo);
+        color: var(--color-texto-principal);
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid #30363d;
+        z-index: 100;
+    }
+    
+    .vote-tooltip::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        transform: translateX(-50%);
+        border: 5px solid transparent;
+        border-top-color: var(--color-fondo);
+    }
+    
+    .vote-button-gamified:hover .vote-tooltip {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(-50%) translateY(-5px);
+    }
+    
+    /* Responsive para votación gamificada */
+    @media (max-width: 768px) {
+        .user-stats {
+            grid-template-columns: 1fr;
+        }
+        
+        .vote-stats {
+            grid-template-columns: 1fr;
+        }
+        
+        .vote-amount-selector {
+            gap: 0.3rem;
+        }
+        
+        .amount-btn {
+            padding: 0.4rem 0.8rem;
+            min-width: 45px;
+        }
+        
+        .vote-bonuses {
+            justify-content: flex-start;
+        }
+    }
     </style>
+```
 </head>
 <body>
 
@@ -964,10 +1863,18 @@
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                         <span>Inicio</span>
                     </a>
-                    <a data-target="page-concurso-online" class="header-nav-link">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        <span>Concursos</span>
-                    </a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="header-nav-link dropdown-toggle">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <span>Concursos</span>
+                            <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <div class="dropdown-content">
+                            <a data-target="page-certamenes">🏆 Ver Todos los Certámenes</a>
+                            <a data-target="page-concurso-online">Certamen Principal</a>
+                            <a href="inscripcion_online.html">Inscribirme</a>
+                        </div>
+                    </div>
                     <a data-target="page-comunidad" class="header-nav-link">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z" /></svg>
                         <span>Comunidad</span>
@@ -982,7 +1889,7 @@
                     </a>
                     <a data-target="page-comprar-vyt" class="header-nav-link">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                        <span>Comprar VYT</span>
+                        <span>VYT-MONEY</span>
                     </a>
                     <a data-target="page-reglamento" class="header-nav-link">
                         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
@@ -1022,15 +1929,221 @@
                     </section>
                 </div>
 
+                <div id="page-certamenes" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">🏆 Todos los Certámenes</h2>
+                            <p class="subtitulo-seccion">Descubrí todos los certámenes disponibles, rankings provinciales y competencias especiales</p>
+                            
+                            <div class="certamenes-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2rem;">
+                                
+                                <!-- Certamen Principal Nacional -->
+                                <div class="certamen-card-main" style="background: linear-gradient(135deg, var(--color-primario)30, var(--color-oro)20); border-radius: 20px; padding: 2rem; text-align: center; border: 2px solid var(--color-oro);">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🇦🇷</div>
+                                    <h3 style="font-family: var(--fuente-titulos); font-size: 2rem; color: var(--color-oro); margin-bottom: 1rem;">Certamen Nacional</h3>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1.5rem;">El certamen principal donde compiten artistas de todo el país</p>
+                                    <div style="margin-bottom: 1.5rem;">
+                                        <div style="color: var(--color-texto-principal); font-weight: bold; font-size: 1.2rem;">💰 Pozo: $125,000</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.9rem;">🎤 485 participantes</div>
+                                    </div>
+                                    <button class="btn btn-primario" onclick="showPage('page-concurso-online')" style="width: 100%; margin-bottom: 0.5rem;">
+                                        🎵 Ver Ranking
+                                    </button>
+                                    <a href="inscripcion_online.html" class="btn btn-secundario" style="width: 100%; text-decoration: none;">
+                                        ✍️ Inscribirme
+                                    </a>
+                                </div>
+
+                                <!-- Certamenes Provinciales -->
+                                <div class="certamen-card" style="background: var(--color-card); border-radius: 15px; padding: 1.5rem; text-align: center; border: 1px solid #30363d;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏛️</div>
+                                    <h4 style="color: var(--color-texto-principal); margin-bottom: 1rem; font-size: 1.3rem;">Buenos Aires</h4>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1rem; font-size: 0.9rem;">Certamen provincial con artistas de la región</p>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: var(--color-primario); font-weight: bold;">💰 $45,000</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">🎤 156 participantes</div>
+                                    </div>
+                                    <button class="btn btn-secundario" style="width: 100%;">
+                                        🎵 Ver Ranking
+                                    </button>
+                                </div>
+
+                                <div class="certamen-card" style="background: var(--color-card); border-radius: 15px; padding: 1.5rem; text-align: center; border: 1px solid #30363d;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌾</div>
+                                    <h4 style="color: var(--color-texto-principal); margin-bottom: 1rem; font-size: 1.3rem;">Córdoba</h4>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1rem; font-size: 0.9rem;">Talento cordobés en competencia</p>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: var(--color-primario); font-weight: bold;">💰 $38,500</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">🎤 124 participantes</div>
+                                    </div>
+                                    <button class="btn btn-secundario" style="width: 100%;">
+                                        🎵 Ver Ranking
+                                    </button>
+                                </div>
+
+                                <div class="certamen-card" style="background: var(--color-card); border-radius: 15px; padding: 1.5rem; text-align: center; border: 1px solid #30363d;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌊</div>
+                                    <h4 style="color: var(--color-texto-principal); margin-bottom: 1rem; font-size: 1.3rem;">Santa Fe</h4>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1rem; font-size: 0.9rem;">Voces santafesinas destacadas</p>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: var(--color-primario); font-weight: bold;">💰 $32,000</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">🎤 98 participantes</div>
+                                    </div>
+                                    <button class="btn btn-secundario" style="width: 100%;">
+                                        🎵 Ver Ranking
+                                    </button>
+                                </div>
+
+                                <div class="certamen-card" style="background: var(--color-card); border-radius: 15px; padding: 1.5rem; text-align: center; border: 1px solid #30363d;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🏔️</div>
+                                    <h4 style="color: var(--color-texto-principal); margin-bottom: 1rem; font-size: 1.3rem;">Mendoza</h4>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1rem; font-size: 0.9rem;">Artistas de la región cuyana</p>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: var(--color-primario); font-weight: bold;">💰 $28,800</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">🎤 87 participantes</div>
+                                    </div>
+                                    <button class="btn btn-secundario" style="width: 100%;">
+                                        🎵 Ver Ranking
+                                    </button>
+                                </div>
+
+                                <div class="certamen-card" style="background: var(--color-card); border-radius: 15px; padding: 1.5rem; text-align: center; border: 1px solid #30363d;">
+                                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🦎</div>
+                                    <h4 style="color: var(--color-texto-principal); margin-bottom: 1rem; font-size: 1.3rem;">Más Provincias</h4>
+                                    <p style="color: var(--color-texto-secundario); margin-bottom: 1rem; font-size: 0.9rem;">Tucumán, Salta, Entre Ríos y más</p>
+                                    <div style="margin-bottom: 1rem;">
+                                        <div style="color: var(--color-primario); font-weight: bold;">💰 +$85,000</div>
+                                        <div style="color: var(--color-texto-secundario); font-size: 0.8rem;">🎤 +200 participantes</div>
+                                    </div>
+                                    <button class="btn btn-secundario" style="width: 100%;">
+                                        🗺️ Ver Todas
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Certámenes Especiales -->
+                            <h3 class="titulo-seccion" style="font-size: 2rem; margin-top: 3rem; margin-bottom: 1.5rem;">🌟 Certámenes Especiales</h3>
+                            
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                <div class="special-certamen" style="background: linear-gradient(135deg, #ff6b35, #f7931e); border-radius: 15px; padding: 1.5rem; text-align: center; color: white;">
+                                    <div style="font-size: 2rem; margin-bottom: 1rem;">🔥</div>
+                                    <h4 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Duelos Semanales</h4>
+                                    <p style="font-size: 0.9rem; opacity: 0.9;">Batallas directas entre artistas</p>
+                                    <button class="btn" style="background: rgba(255,255,255,0.2); color: white; margin-top: 1rem; width: 100%; border: 1px solid rgba(255,255,255,0.3);">
+                                        ⚔️ Ver Duelos
+                                    </button>
+                                </div>
+
+                                <div class="special-certamen" style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 15px; padding: 1.5rem; text-align: center; color: white;">
+                                    <div style="font-size: 2rem; margin-bottom: 1rem;">👑</div>
+                                    <h4 style="font-size: 1.2rem; margin-bottom: 0.5rem;">VIP Premium</h4>
+                                    <p style="font-size: 0.9rem; opacity: 0.9;">Certamen exclusivo para miembros</p>
+                                    <button class="btn" style="background: rgba(255,255,255,0.2); color: white; margin-top: 1rem; width: 100%; border: 1px solid rgba(255,255,255,0.3);">
+                                        💎 Ver VIP
+                                    </button>
+                                </div>
+
+                                <div class="special-certamen" style="background: linear-gradient(135deg, #fa709a, #fee140); border-radius: 15px; padding: 1.5rem; text-align: center; color: white;">
+                                    <div style="font-size: 2rem; margin-bottom: 1rem;">🎭</div>
+                                    <h4 style="font-size: 1.2rem; margin-bottom: 0.5rem;">Covers & Originales</h4>
+                                    <p style="font-size: 0.9rem; opacity: 0.9;">Categorías diferenciadas</p>
+                                    <button class="btn" style="background: rgba(255,255,255,0.2); color: white; margin-top: 1rem; width: 100%; border: 1px solid rgba(255,255,255,0.3);">
+                                        🎵 Ver Categorías
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Call to Action -->
+                            <div style="text-align: center; margin-top: 3rem; padding: 2rem; background: linear-gradient(135deg, var(--color-card), var(--color-fondo-secundario)); border-radius: 20px; border: 1px solid #30363d;">
+                                <h3 style="color: var(--color-oro); font-family: var(--fuente-titulos); font-size: 2rem; margin-bottom: 1rem;">¿Listo para brillar?</h3>
+                                <p style="color: var(--color-texto-secundario); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+                                    Unite a miles de artistas que ya están demostrando su talento en VYT MUSIC. Tu voz merece ser escuchada.
+                                </p>
+                                <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+                                    <a href="inscripcion_online.html" class="btn btn-primario" style="text-decoration: none;">
+                                        🎤 Inscribirme Ahora
+                                    </a>
+                                    <button class="btn btn-secundario" onclick="showPage('page-comprar-vyt')">
+                                        💰 Comprar VYT-MONEY
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
                 <div id="page-concurso-online" class="page">
                     <section class="seccion">
                         <div class="container">
                             <h2 class="titulo-seccion">Concurso Online</h2>
                             
-                            <div class="pozo-container">
-                                <div class="pozo-bar"></div>
+                            <!-- POZO DINÁMICO DE PREMIOS -->
+                            <div class="dynamic-prize-pool" id="dynamicPrizePool">
+                                <div class="pool-effects" id="poolEffects"></div>
+                                
+                                <div class="pool-header">
+                                    <h3 class="pool-title">💰 POZO DE PREMIOS</h3>
+                                    <p class="pool-subtitle">Creciendo en tiempo real con cada voto</p>
+                                </div>
+                                
+                                <div class="pool-main-counter">
+                                    <div style="position: relative; display: inline-block;">
+                                        <span class="pool-amount" id="poolAmount">$750,000</span>
+                                        <div class="pool-increment" id="poolIncrement">+$500</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="pool-progress">
+                                    <div class="pool-progress-label">
+                                        <span>Meta inicial: $500,000</span>
+                                        <span id="poolPercentage">150%</span>
+                                    </div>
+                                    <div class="pool-progress-bar">
+                                        <div class="pool-progress-fill" id="poolProgressFill" style="width: 75%;"></div>
+                                    </div>
+                                </div>
+                                
+                                <div class="pool-stats">
+                                    <div class="pool-stat">
+                                        <div class="pool-stat-label">🎤 Participantes</div>
+                                        <div class="pool-stat-value" id="participantCount">485</div>
+                                    </div>
+                                    <div class="pool-stat">
+                                        <div class="pool-stat-label">🗳️ Total Votos</div>
+                                        <div class="pool-stat-value" id="totalVotes">127,346</div>
+                                    </div>
+                                    <div class="pool-stat">
+                                        <div class="pool-stat-label">💎 VYT-MONEY Gastado</div>
+                                        <div class="pool-stat-value" id="vytMoneySpent">1,247,890</div>
+                                    </div>
+                                    <div class="pool-stat">
+                                        <div class="pool-stat-label">🏆 Ganador Actual</div>
+                                        <div class="pool-stat-value" style="font-size: 1.2rem; color: var(--color-oro);">Solista A</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="pool-contributions">
+                                    <h4>📊 Últimas Contribuciones</h4>
+                                    <div id="contributionsList">
+                                        <div class="contribution-item">
+                                            <span class="contribution-source">💰 Compras VYT-MONEY</span>
+                                            <span class="contribution-amount">+$2,450</span>
+                                        </div>
+                                        <div class="contribution-item">
+                                            <span class="contribution-source">🗳️ Votos (10% del total)</span>
+                                            <span class="contribution-amount">+$1,830</span>
+                                        </div>
+                                        <div class="contribution-item">
+                                            <span class="contribution-source">📱 Compartir en redes</span>
+                                            <span class="contribution-amount">+$675</span>
+                                        </div>
+                                        <div class="contribution-item">
+                                            <span class="contribution-source">🎁 Sponsor VIP</span>
+                                            <span class="contribution-amount">+$5,000</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="pozo-text" id="pozoText">$ 750.000</p>
                             
                             <div class="inscripcion-choice-buttons mt-8">
                                 <a href="inscripcion_online.html" class="btn btn-online">
@@ -1043,39 +2156,185 @@
                                 </a>
                             </div>
 
-                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">Ranking de Artistas</h3>
+                            <h3 class="titulo-seccion" style="font-size: 2.5rem; margin-top: 4rem;">🏆 Ranking de Artistas</h3>
+                            
+                            <!-- Balance del usuario y stats -->
+                            <div class="user-stats-container" id="userStatsContainer" style="display: none;">
+                                <div class="user-stats">
+                                    <div class="stat-item">
+                                        <div class="stat-icon">💰</div>
+                                        <div class="stat-info">
+                                            <span class="stat-label">Tu VYT-MONEY</span>
+                                            <span class="stat-value" id="userBalance">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-icon">🗳️</div>
+                                        <div class="stat-info">
+                                            <span class="stat-label">Votos Realizados</span>
+                                            <span class="stat-value" id="userVotes">0</span>
+                                        </div>
+                                    </div>
+                                    <div class="stat-item">
+                                        <div class="stat-icon">🏆</div>
+                                        <div class="stat-info">
+                                            <span class="stat-label">Nivel</span>
+                                            <span class="stat-value" id="userLevel">1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             <div class="ranking-grid">
-                                <div class="ranking-card">
+                                <div class="ranking-card gamified" data-artista-id="artista-1">
+                                    <div class="ranking-position">🥇 #1</div>
                                     <div class="video-wrapper">
-                                        <iframe src="https://www.youtube.com/embed/VIDEO_ID_1_EJEMPLO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
                                     <div class="ranking-info">
-                                        <h4>Solista A (Buenos Aires)</h4>
-                                        <p>Votos: 12,450</p>
-                                        <button class="btn btn-primario vote-button">Apoyar con Regalo</button>
-                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/solista-a" target="_blank" class="btn btn-secundario" style="margin-top: 0.5rem; width: 100%;">Compartir</a>
+                                        <h4>🎤 Solista A (Buenos Aires)</h4>
+                                        <div class="vote-stats">
+                                            <div class="vote-count">
+                                                <span class="vote-number" id="votes-artista-1">12,450</span>
+                                                <span class="vote-label">VYT-MONEY recibidos</span>
+                                            </div>
+                                            <div class="vote-value">
+                                                <span class="value-number">$6,225</span>
+                                                <span class="value-label">Valor total</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Sistema de votación gamificado -->
+                                        <div class="vote-controls">
+                                            <div class="vote-amount-selector">
+                                                <button class="amount-btn" data-amount="10">10</button>
+                                                <button class="amount-btn active" data-amount="25">25</button>
+                                                <button class="amount-btn" data-amount="50">50</button>
+                                                <button class="amount-btn" data-amount="100">100</button>
+                                                <input type="number" class="custom-amount" placeholder="Otro" min="1" max="1000">
+                                            </div>
+                                            
+                                            <button class="vote-button-gamified" data-artista-id="artista-1">
+                                                <div class="vote-icon">🚀</div>
+                                                <div class="vote-text">
+                                                    <span class="vote-action">APOYAR</span>
+                                                    <span class="vote-amount">25 VYT-MONEY</span>
+                                                </div>
+                                                <div class="vote-effect"></div>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Indicador de streak y multiplicadores -->
+                                        <div class="vote-bonuses">
+                                            <div class="bonus-item" title="Voto consecutivo">
+                                                🔥 <span>x1.2</span>
+                                            </div>
+                                            <div class="bonus-item" title="Usuario VIP">
+                                                👑 <span>x1.5</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/solista-a" target="_blank" class="btn btn-secundario share-btn">
+                                            📱 Compartir (+10 VYT-MONEY)
+                                        </a>
                                     </div>
                                 </div>
-                                <div class="ranking-card">
+                                
+                                <div class="ranking-card gamified" data-artista-id="artista-2">
+                                    <div class="ranking-position">🥈 #2</div>
                                     <div class="video-wrapper">
-                                        <iframe src="https://www.youtube.com/embed/VIDEO_ID_2_EJEMPLO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                        <iframe src="https://www.youtube.com/embed/9bZkp7q19f0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
                                     <div class="ranking-info">
-                                        <h4>Banda B (Córdoba)</h4>
-                                        <p>Votos: 11,980</p>
-                                        <button class="btn btn-primario vote-button">Apoyar con Regalo</button>
-                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/banda-b" target="_blank" class="btn btn-secundario" style="margin-top: 0.5rem; width: 100%;">Compartir</a>
+                                        <h4>🎸 Banda B (Córdoba)</h4>
+                                        <div class="vote-stats">
+                                            <div class="vote-count">
+                                                <span class="vote-number" id="votes-artista-2">11,980</span>
+                                                <span class="vote-label">VYT-MONEY recibidos</span>
+                                            </div>
+                                            <div class="vote-value">
+                                                <span class="value-number">$5,990</span>
+                                                <span class="value-label">Valor total</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="vote-controls">
+                                            <div class="vote-amount-selector">
+                                                <button class="amount-btn" data-amount="10">10</button>
+                                                <button class="amount-btn active" data-amount="25">25</button>
+                                                <button class="amount-btn" data-amount="50">50</button>
+                                                <button class="amount-btn" data-amount="100">100</button>
+                                                <input type="number" class="custom-amount" placeholder="Otro" min="1" max="1000">
+                                            </div>
+                                            
+                                            <button class="vote-button-gamified" data-artista-id="artista-2">
+                                                <div class="vote-icon">🚀</div>
+                                                <div class="vote-text">
+                                                    <span class="vote-action">APOYAR</span>
+                                                    <span class="vote-amount">25 VYT-MONEY</span>
+                                                </div>
+                                                <div class="vote-effect"></div>
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="vote-bonuses">
+                                            <div class="bonus-item" title="Primera vez votando por este artista">
+                                                ✨ <span>+5 bonus</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/banda-b" target="_blank" class="btn btn-secundario share-btn">
+                                            📱 Compartir (+10 VYT-MONEY)
+                                        </a>
                                     </div>
                                 </div>
-                                <div class="ranking-card">
+                                
+                                <div class="ranking-card gamified" data-artista-id="artista-3">
+                                    <div class="ranking-position">🥉 #3</div>
                                     <div class="video-wrapper">
-                                        <iframe src="https://www.youtube.com/embed/VIDEO_ID_3_EJEMPLO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                        <iframe src="https://www.youtube.com/embed/L_jWHffIx5E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                                     </div>
                                     <div class="ranking-info">
-                                        <h4>Dúo C (Santa Fe)</h4>
-                                        <p>Votos: 10,500</p>
-                                        <button class="btn btn-primario vote-button">Apoyar con Regalo</button>
-                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/duo-c" target="_blank" class="btn btn-secundario" style="margin-top: 0.5rem; width: 100%;">Compartir</a>
+                                        <h4>🎵 Dúo C (Santa Fe)</h4>
+                                        <div class="vote-stats">
+                                            <div class="vote-count">
+                                                <span class="vote-number" id="votes-artista-3">10,500</span>
+                                                <span class="vote-label">VYT-MONEY recibidos</span>
+                                            </div>
+                                            <div class="vote-value">
+                                                <span class="value-number">$5,250</span>
+                                                <span class="value-label">Valor total</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="vote-controls">
+                                            <div class="vote-amount-selector">
+                                                <button class="amount-btn" data-amount="10">10</button>
+                                                <button class="amount-btn active" data-amount="25">25</button>
+                                                <button class="amount-btn" data-amount="50">50</button>
+                                                <button class="amount-btn" data-amount="100">100</button>
+                                                <input type="number" class="custom-amount" placeholder="Otro" min="1" max="1000">
+                                            </div>
+                                            
+                                            <button class="vote-button-gamified" data-artista-id="artista-3">
+                                                <div class="vote-icon">🚀</div>
+                                                <div class="vote-text">
+                                                    <span class="vote-action">APOYAR</span>
+                                                    <span class="vote-amount">25 VYT-MONEY</span>
+                                                </div>
+                                                <div class="vote-effect"></div>
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="vote-bonuses">
+                                            <div class="bonus-item" title="Artista de tu región">
+                                                🏠 <span>x1.1</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <a href="https://wa.me/?text=¡Mirá este artista en VYT MUSIC! https://vytmusic.com/artista/duo-c" target="_blank" class="btn btn-secundario share-btn">
+                                            📱 Compartir (+10 VYT-MONEY)
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -1157,29 +2416,105 @@
                 <div id="page-comprar-vyt" class="page">
                     <section class="seccion">
                         <div class="container">
-                            <h2 class="titulo-seccion">Comprar VYT</h2>
-                            <p class="subtitulo-seccion">Adquiere VYT Coins para apoyar a tus artistas favoritos, desbloquear contenido exclusivo y personalizar tu experiencia.</p>
+                            <h2 class="titulo-seccion">💰 Comprar VYT-MONEY</h2>
+                            <p class="subtitulo-seccion">Adquiere VYT-MONEY para votar por tus artistas favoritos y contribuir al pozo de premios</p>
+                            
+                            <!-- Balance actual del usuario -->
+                            <div class="balance-display" id="balanceDisplay" style="display: none;">
+                                <div class="balance-card">
+                                    <h3>📊 Tu Balance Actual</h3>
+                                    <div class="balance-amount" id="currentBalance">0 VYT-MONEY</div>
+                                    <p class="balance-info">Disponible para votar</p>
+                                </div>
+                            </div>
                             
                             <div class="vyt-pack-grid">
-                                <div class="vyt-pack">
-                                    <div class="amount">100 VYT</div>
-                                    <div class="price">$1.000 ARS</div>
-                                    <button class="btn btn-primario buy-vyt-btn" data-amount="1000" data-vyt="100">Comprar</button>
+                                <div class="vyt-pack starter">
+                                    <div class="pack-badge">🌟 STARTER</div>
+                                    <div class="amount">100 VYT-MONEY</div>
+                                    <div class="price">$50 ARS</div>
+                                    <div class="pack-benefits">
+                                        <p>✓ 100 votos para tus artistas</p>
+                                        <p>✓ $5 contribución al pozo</p>
+                                    </div>
+                                    <button class="btn btn-primario buy-vyt-btn" data-amount="50" data-vyt="100">
+                                        🛒 Comprar Ahora
+                                    </button>
                                 </div>
-                                <div class="vyt-pack">
-                                    <div class="amount">500 VYT</div>
-                                    <div class="price">$4.500 ARS</div>
-                                    <button class="btn btn-primario buy-vyt-btn" data-amount="4500" data-vyt="500">Comprar</button>
+                                
+                                <div class="vyt-pack popular">
+                                    <div class="pack-badge">🔥 POPULAR</div>
+                                    <div class="amount">500 VYT-MONEY</div>
+                                    <div class="price">$225 ARS</div>
+                                    <div class="savings">¡Ahorrás $25!</div>
+                                    <div class="pack-benefits">
+                                        <p>✓ 500 votos poderosos</p>
+                                        <p>✓ $22.50 al pozo de premios</p>
+                                        <p>✓ 10% de descuento</p>
+                                    </div>
+                                    <button class="btn btn-primario buy-vyt-btn" data-amount="225" data-vyt="500">
+                                        🚀 Comprar Ahora
+                                    </button>
                                 </div>
-                                <div class="vyt-pack">
-                                    <div class="amount">1200 VYT</div>
-                                    <div class="price">$10.000 ARS</div>
-                                    <button class="btn btn-primario buy-vyt-btn" data-amount="10000" data-vyt="1200">Comprar</button>
+                                
+                                <div class="vyt-pack premium">
+                                    <div class="pack-badge">💎 PREMIUM</div>
+                                    <div class="amount">1200 VYT-MONEY</div>
+                                    <div class="price">$480 ARS</div>
+                                    <div class="savings">¡Ahorrás $120!</div>
+                                    <div class="pack-benefits">
+                                        <p>✓ 1200 votos súper efectivos</p>
+                                        <p>✓ $48 al pozo de premios</p>
+                                        <p>✓ 20% de descuento</p>
+                                        <p>✓ Badge especial</p>
+                                    </div>
+                                    <button class="btn btn-primario buy-vyt-btn" data-amount="480" data-vyt="1200">
+                                        💎 Comprar Ahora
+                                    </button>
                                 </div>
-                                <div class="vyt-pack">
-                                    <div class="amount">3000 VYT</div>
-                                    <div class="price">$22.000 ARS</div>
-                                    <button class="btn btn-primario buy-vyt-btn" data-amount="22000" data-vyt="3000">Comprar</button>
+                                
+                                <div class="vyt-pack vip">
+                                    <div class="pack-badge">👑 VIP</div>
+                                    <div class="amount">3000 VYT-MONEY</div>
+                                    <div class="price">$975 ARS</div>
+                                    <div class="savings">¡Ahorrás $525!</div>
+                                    <div class="pack-benefits">
+                                        <p>✓ 3000 votos mega poderosos</p>
+                                        <p>✓ $97.50 al pozo de premios</p>
+                                        <p>✓ 35% de descuento</p>
+                                        <p>✓ Badge VIP exclusivo</p>
+                                        <p>✓ Multiplicador de votos x1.5</p>
+                                    </div>
+                                    <button class="btn btn-primario buy-vyt-btn" data-amount="975" data-vyt="3000">
+                                        👑 Comprar VIP
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Información sobre el sistema -->
+                            <div class="vyt-money-info">
+                                <h3>🤔 ¿Cómo funciona VYT-MONEY?</h3>
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-icon">🗳️</div>
+                                        <h4>Vota con Peso Real</h4>
+                                        <p>Cada VYT-MONEY que uses para votar tiene un valor monetario real que se suma al pozo de premios.</p>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon">💰</div>
+                                        <h4>Contribuye al Pozo</h4>
+                                        <p>El 10% del valor de tus votos se suma directamente al pozo de premios del certamen.</p>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon">🏆</div>
+                                        <h4>Apoya el Talento</h4>
+                                        <p>Tu apoyo ayuda a que los artistas tengan mayores premios y más motivación para dar lo mejor.</p>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-icon">🔒</div>
+                                        <h4>100% Seguro</h4>
+                                        <p>Pagos procesados por MercadoPago. Tus datos están protegidos y el sistema es completamente transparente.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -1318,7 +2653,7 @@
         </a>
         <a href="#" data-target="page-comprar-vyt" class="mobile-menu-link">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125" /></svg>
-            <span>VYTMoney</span>
+            <span>VYT-MONEY</span>
         </a>
         <a href="#" data-target="page-sponsors" class="mobile-menu-link">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
@@ -1332,9 +2667,9 @@
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
             <span>Inicio</span>
         </a>
-        <a data-target="page-concurso-online" class="bottom-nav-link">
+        <a data-target="page-certamenes" class="bottom-nav-link">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-            <span>Certamen</span>
+            <span>Certámenes</span>
         </a>
         <a href="#" id="hamburger-menu-trigger" class="bottom-nav-link">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
@@ -1342,6 +2677,683 @@
         </a>
     </nav>
     
+    <script>
+        // Manejar clicks en el dropdown
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownLinks = document.querySelectorAll('.dropdown-content a[data-target]');
+            
+            dropdownLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetPage = this.getAttribute('data-target');
+                    if (targetPage) {
+                        // Usa la función existente para cambiar de página
+                        if (window.switchToPage) {
+                            window.switchToPage(targetPage);
+                        }
+                    }
+                });
+            });
+            
+            // Inicializar sistema de votación gamificada
+            initGamifiedVoting();
+        });
+        
+        // ===== SISTEMA DE VOTACIÓN GAMIFICADA =====
+        function initGamifiedVoting() {
+            console.log('🎮 Inicializando sistema de votación gamificada...');
+            
+            // Datos simulados del usuario (luego vendrán de Firebase)
+            const userData = {
+                balance: 250,
+                votes: 12,
+                level: 3,
+                streak: 5,
+                isVIP: false
+            };
+            
+            // Actualizar UI con datos del usuario
+            updateUserStats(userData);
+            
+            // Configurar controles de cantidad
+            setupAmountControls();
+            
+            // Configurar botones de voto
+            setupVoteButtons();
+            
+            // Configurar efectos de sonido
+            setupSoundEffects();
+        }
+        
+        function updateUserStats(userData) {
+            const balanceEl = document.getElementById('userBalance');
+            const votesEl = document.getElementById('userVotes');
+            const levelEl = document.getElementById('userLevel');
+            const statsContainer = document.getElementById('userStatsContainer');
+            
+            if (balanceEl) balanceEl.textContent = userData.balance;
+            if (votesEl) votesEl.textContent = userData.votes;
+            if (levelEl) levelEl.textContent = userData.level;
+            if (statsContainer) statsContainer.style.display = 'block';
+        }
+        
+        function setupAmountControls() {
+            document.querySelectorAll('.vote-amount-selector').forEach(container => {
+                const amountBtns = container.querySelectorAll('.amount-btn');
+                const customInput = container.querySelector('.custom-amount');
+                const voteButton = container.closest('.ranking-card').querySelector('.vote-button-gamified');
+                
+                // Manejar clicks en botones de cantidad
+                amountBtns.forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        // Remover active de otros botones
+                        amountBtns.forEach(b => b.classList.remove('active'));
+                        // Activar este botón
+                        this.classList.add('active');
+                        // Limpiar input personalizado
+                        if (customInput) customInput.value = '';
+                        // Actualizar botón de voto
+                        updateVoteButton(voteButton, this.dataset.amount);
+                    });
+                });
+                
+                // Manejar input personalizado
+                if (customInput) {
+                    customInput.addEventListener('input', function() {
+                        const value = parseInt(this.value);
+                        if (value && value > 0) {
+                            // Remover active de botones
+                            amountBtns.forEach(btn => btn.classList.remove('active'));
+                            // Actualizar botón de voto
+                            updateVoteButton(voteButton, value);
+                        }
+                    });
+                }
+            });
+        }
+        
+        function updateVoteButton(button, amount) {
+            const amountSpan = button.querySelector('.vote-amount');
+            if (amountSpan) {
+                amountSpan.textContent = `${amount} VYT-MONEY`;
+            }
+            button.dataset.amount = amount;
+        }
+        
+        function setupVoteButtons() {
+            document.querySelectorAll('.vote-button-gamified').forEach(button => {
+                button.addEventListener('click', function() {
+                    const artistaId = this.dataset.artistaId;
+                    const amount = parseInt(this.dataset.amount) || 25;
+                    
+                    // Verificar si el usuario está logueado (simulado)
+                    if (!isUserLoggedIn()) {
+                        showLoginModal();
+                        return;
+                    }
+                    
+                    // Procesar voto
+                    processVote(artistaId, amount, this);
+                });
+            });
+        }
+        
+        async function processVote(artistaId, amount, buttonElement) {
+            // Deshabilitar botón durante el proceso
+            buttonElement.disabled = true;
+            buttonElement.classList.add('voting');
+            
+            try {
+                // Mostrar efectos visuales
+                showVoteEffects(buttonElement);
+                
+                // Simular llamada a Firebase (reemplazar con llamada real)
+                const result = await simulateVoteCall(artistaId, amount);
+                
+                if (result.success) {
+                    // Actualizar UI con éxito
+                    showVoteSuccess(buttonElement, result);
+                    updateVoteCount(artistaId, amount);
+                    updateUserBalance(-amount);
+                    createCelebrationParticles(buttonElement);
+                    
+                    // Disparar evento para actualizar el pozo dinámico
+                    const voteEvent = new CustomEvent('voteSubmitted', {
+                        detail: { artistaId, amount, contribution: result.contribution }
+                    });
+                    document.dispatchEvent(voteEvent);
+                    
+                    // Reproducir sonido de éxito
+                    playSound('vote_success');
+                    
+                    // Mostrar notificación
+                    showNotification(`¡Voto exitoso! ${amount} VYT-MONEY para ${getArtistName(artistaId)}`, 'success');
+                } else {
+                    throw new Error(result.message || 'Error al procesar voto');
+                }
+                
+            } catch (error) {
+                console.error('Error voting:', error);
+                showVoteError(buttonElement, error.message);
+                playSound('vote_error');
+                showNotification('Error al votar: ' + error.message, 'error');
+            } finally {
+                // Re-habilitar botón
+                setTimeout(() => {
+                    buttonElement.disabled = false;
+                    buttonElement.classList.remove('voting');
+                }, 1000);
+            }
+        }
+        
+        function showVoteEffects(buttonElement) {
+            // Agregar clase de animación
+            buttonElement.classList.add('voting-success');
+            
+            // Remover clase después de la animación
+            setTimeout(() => {
+                buttonElement.classList.remove('voting-success');
+            }, 500);
+        }
+        
+        function createCelebrationParticles(buttonElement) {
+            const rect = buttonElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            // Crear múltiples partículas
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    createParticle(centerX, centerY);
+                }, i * 100);
+            }
+        }
+        
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'celebration-particle';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            
+            document.body.appendChild(particle);
+            
+            // Animar partícula
+            const angle = Math.random() * Math.PI * 2;
+            const velocity = 2 + Math.random() * 3;
+            const lifetime = 1000 + Math.random() * 500;
+            
+            let progress = 0;
+            const animate = () => {
+                progress += 16; // ~60fps
+                const ratio = progress / lifetime;
+                
+                if (ratio >= 1) {
+                    particle.remove();
+                    return;
+                }
+                
+                const distance = velocity * progress;
+                const newX = x + Math.cos(angle) * distance;
+                const newY = y + Math.sin(angle) * distance - (progress * 0.5); // Gravity effect
+                
+                particle.style.left = newX + 'px';
+                particle.style.top = newY + 'px';
+                particle.style.opacity = 1 - ratio;
+                
+                requestAnimationFrame(animate);
+            };
+            
+            requestAnimationFrame(animate);
+        }
+        
+        function updateVoteCount(artistaId, amount) {
+            const voteElement = document.getElementById(`votes-${artistaId}`);
+            if (voteElement) {
+                const currentVotes = parseInt(voteElement.textContent.replace(/,/g, ''));
+                const newVotes = currentVotes + amount;
+                
+                // Animar el cambio
+                voteElement.classList.add('balance-update');
+                voteElement.textContent = newVotes.toLocaleString();
+                
+                setTimeout(() => {
+                    voteElement.classList.remove('balance-update');
+                }, 800);
+            }
+        }
+        
+        function updateUserBalance(change) {
+            const balanceElement = document.getElementById('userBalance');
+            if (balanceElement) {
+                const currentBalance = parseInt(balanceElement.textContent);
+                const newBalance = currentBalance + change;
+                
+                balanceElement.classList.add('balance-update');
+                balanceElement.textContent = newBalance;
+                
+                setTimeout(() => {
+                    balanceElement.classList.remove('balance-update');
+                }, 800);
+            }
+        }
+        
+        function setupSoundEffects() {
+            // Crear contexto de audio si no existe
+            if (!window.audioContext) {
+                window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                window.sounds = {};
+            }
+        }
+        
+        function playSound(type) {
+            if (!window.audioContext) return;
+            
+            try {
+                const oscillator = window.audioContext.createOscillator();
+                const gainNode = window.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(window.audioContext.destination);
+                
+                // Configurar sonido según el tipo
+                switch (type) {
+                    case 'vote_success':
+                        oscillator.frequency.setValueAtTime(440, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(880, window.audioContext.currentTime + 0.1);
+                        gainNode.gain.setValueAtTime(0.1, window.audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioContext.currentTime + 0.3);
+                        oscillator.start(window.audioContext.currentTime);
+                        oscillator.stop(window.audioContext.currentTime + 0.3);
+                        break;
+                        
+                    case 'vote_error':
+                        oscillator.frequency.setValueAtTime(200, window.audioContext.currentTime);
+                        gainNode.gain.setValueAtTime(0.1, window.audioContext.currentTime);
+                        gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioContext.currentTime + 0.2);
+                        oscillator.start(window.audioContext.currentTime);
+                        oscillator.stop(window.audioContext.currentTime + 0.2);
+                        break;
+                }
+            } catch (error) {
+                console.log('Audio not available:', error);
+            }
+        }
+        
+        function showNotification(message, type = 'info') {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="notification-content">
+                    <span class="notification-icon">${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                    <span class="notification-message">${message}</span>
+                </div>
+            `;
+            
+            // Estilos inline para la notificación
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                transform: translateX(400px);
+                transition: transform 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Mostrar notificación
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                notification.style.transform = 'translateX(400px)';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+        
+        // Funciones auxiliares
+        function isUserLoggedIn() {
+            // Simular verificación de login
+            return true; // Cambiar por verificación real
+        }
+        
+        function showLoginModal() {
+            showNotification('Debes iniciar sesión para votar', 'info');
+        }
+        
+        function getArtistName(artistaId) {
+            const names = {
+                'artista-1': 'Solista A',
+                'artista-2': 'Banda B',
+                'artista-3': 'Dúo C'
+            };
+            return names[artistaId] || 'Artista';
+        }
+        
+        function showVoteSuccess(buttonElement, result) {
+            const originalText = buttonElement.querySelector('.vote-action').textContent;
+            buttonElement.querySelector('.vote-action').textContent = '¡VOTADO!';
+            
+            setTimeout(() => {
+                buttonElement.querySelector('.vote-action').textContent = originalText;
+            }, 2000);
+        }
+        
+        function showVoteError(buttonElement, message) {
+            const originalText = buttonElement.querySelector('.vote-action').textContent;
+            buttonElement.querySelector('.vote-action').textContent = 'ERROR';
+            
+            setTimeout(() => {
+                buttonElement.querySelector('.vote-action').textContent = originalText;
+            }, 2000);
+        }
+        
+        // Simular llamada a Firebase (reemplazar con función real)
+        async function simulateVoteCall(artistaId, amount) {
+            return new Promise((resolve) => {
+                setTimeout(() => {
+                    // Simular éxito (90% del tiempo)
+                    if (Math.random() > 0.1) {
+                        resolve({
+                            success: true,
+                            newBalance: 225, // Balance actualizado
+                            contribution: amount * 0.1, // Contribución al pozo
+                            message: 'Voto registrado exitosamente'
+                        });
+                    } else {
+                        resolve({
+                            success: false,
+                            message: 'Saldo insuficiente de VYT-MONEY'
+                        });
+                    }
+                }, 800 + Math.random() * 400); // Simular latencia de red
+            });
+        }
+
+        // ===== SISTEMA DE POZO DINÁMICO =====
+        class DynamicPrizePool {
+            constructor() {
+                this.currentAmount = 750000;
+                this.goalAmount = 1000000;
+                this.participantCount = 485;
+                this.totalVotes = 127346;
+                this.vytMoneySpent = 1247890;
+                this.lastUpdate = Date.now();
+                
+                this.contributionSources = [
+                    { name: '💰 Compras VYT-MONEY', rate: 0.4, color: '#FFD700' },
+                    { name: '🗳️ Votos (10% del total)', rate: 0.3, color: '#58a6ff' },
+                    { name: '📱 Compartir en redes', rate: 0.2, color: '#00ff88' },
+                    { name: '🎁 Sponsors VIP', rate: 0.1, color: '#ff6b35' }
+                ];
+                
+                this.init();
+            }
+            
+            init() {
+                console.log('💰 Inicializando Pozo Dinámico de Premios...');
+                this.updateDisplay();
+                this.startRealTimeUpdates();
+                this.setupEventListeners();
+                this.createParticleSystem();
+            }
+            
+            updateDisplay() {
+                // Actualizar monto principal
+                const poolAmountEl = document.getElementById('poolAmount');
+                if (poolAmountEl) {
+                    poolAmountEl.textContent = this.formatCurrency(this.currentAmount);
+                }
+                
+                // Actualizar porcentaje y progreso
+                const percentage = Math.min((this.currentAmount / this.goalAmount) * 100, 150);
+                const poolPercentageEl = document.getElementById('poolPercentage');
+                const poolProgressFillEl = document.getElementById('poolProgressFill');
+                
+                if (poolPercentageEl) {
+                    poolPercentageEl.textContent = `${Math.round(percentage)}%`;
+                }
+                
+                if (poolProgressFillEl) {
+                    poolProgressFillEl.style.width = `${Math.min(percentage, 100)}%`;
+                }
+                
+                // Actualizar estadísticas
+                this.updateStats();
+                
+                // Actualizar contribuciones
+                this.updateContributions();
+            }
+            
+            updateStats() {
+                const participantCountEl = document.getElementById('participantCount');
+                const totalVotesEl = document.getElementById('totalVotes');
+                const vytMoneySpentEl = document.getElementById('vytMoneySpent');
+                
+                if (participantCountEl) {
+                    participantCountEl.textContent = this.participantCount.toLocaleString();
+                }
+                
+                if (totalVotesEl) {
+                    totalVotesEl.textContent = this.totalVotes.toLocaleString();
+                }
+                
+                if (vytMoneySpentEl) {
+                    vytMoneySpentEl.textContent = this.vytMoneySpent.toLocaleString();
+                }
+            }
+            
+            updateContributions() {
+                const contributionsListEl = document.getElementById('contributionsList');
+                if (!contributionsListEl) return;
+                
+                // Generar contribuciones recientes simuladas
+                const recentContributions = this.generateRecentContributions();
+                
+                contributionsListEl.innerHTML = recentContributions.map(contribution => `
+                    <div class="contribution-item" style="animation: slideInFromRight 0.5s ease-out;">
+                        <span class="contribution-source">${contribution.source}</span>
+                        <span class="contribution-amount" style="color: ${contribution.color};">+${contribution.amount}</span>
+                    </div>
+                `).join('');
+            }
+            
+            generateRecentContributions() {
+                const now = Date.now();
+                const timeSinceUpdate = now - this.lastUpdate;
+                const contributions = [];
+                
+                this.contributionSources.forEach(source => {
+                    if (Math.random() < 0.7) { // 70% chance de contribución
+                        const baseAmount = Math.random() * 2000 + 500;
+                        const amount = Math.round(baseAmount * source.rate);
+                        contributions.push({
+                            source: source.name,
+                            amount: this.formatCurrency(amount),
+                            color: source.color,
+                            timestamp: now
+                        });
+                    }
+                });
+                
+                return contributions.slice(0, 4); // Mostrar últimas 4
+            }
+            
+            addContribution(amount, source = 'Voto VYT-MONEY') {
+                const increment = Math.round(amount * 0.1); // 10% del voto va al pozo
+                this.currentAmount += increment;
+                this.totalVotes += amount;
+                this.vytMoneySpent += amount;
+                
+                // Mostrar incremento visual
+                this.showIncrement(increment);
+                
+                // Actualizar display
+                this.updateDisplay();
+                
+                // Crear partículas de dinero
+                this.createMoneyParticles(increment);
+                
+                // Trigger pulse effect
+                this.triggerPulseEffect();
+                
+                console.log(`💰 Pozo actualizado: +$${increment} (Total: $${this.currentAmount})`);
+            }
+            
+            showIncrement(amount) {
+                const incrementEl = document.getElementById('poolIncrement');
+                if (!incrementEl) return;
+                
+                incrementEl.textContent = `+${this.formatCurrency(amount)}`;
+                incrementEl.style.opacity = '1';
+                incrementEl.style.animation = 'incrementPop 0.6s ease-out';
+                
+                setTimeout(() => {
+                    incrementEl.style.opacity = '0';
+                }, 600);
+            }
+            
+            createMoneyParticles(amount) {
+                const poolEffectsEl = document.getElementById('poolEffects');
+                if (!poolEffectsEl) return;
+                
+                const particleCount = Math.min(Math.floor(amount / 100), 10);
+                
+                for (let i = 0; i < particleCount; i++) {
+                    setTimeout(() => {
+                        const particle = document.createElement('div');
+                        particle.className = 'money-particle';
+                        particle.textContent = ['💰', '💵', '💸', '🪙'][Math.floor(Math.random() * 4)];
+                        
+                        // Posición aleatoria
+                        particle.style.left = Math.random() * 100 + '%';
+                        particle.style.top = Math.random() * 50 + 50 + '%';
+                        
+                        poolEffectsEl.appendChild(particle);
+                        
+                        // Remover después de la animación
+                        setTimeout(() => {
+                            particle.remove();
+                        }, 3000);
+                    }, i * 200);
+                }
+            }
+            
+            triggerPulseEffect() {
+                const poolAmountEl = document.getElementById('poolAmount');
+                if (!poolAmountEl) return;
+                
+                poolAmountEl.style.animation = 'none';
+                setTimeout(() => {
+                    poolAmountEl.style.animation = 'amountGlow 2s ease-in-out infinite alternate';
+                }, 10);
+            }
+            
+            startRealTimeUpdates() {
+                // Simular actualizaciones automáticas cada 15-30 segundos
+                setInterval(() => {
+                    const randomIncrease = Math.random() * 1000 + 200;
+                    this.addContribution(randomIncrease, 'Actividad automática');
+                }, 15000 + Math.random() * 15000);
+                
+                // Actualizar participantes ocasionalmente
+                setInterval(() => {
+                    if (Math.random() < 0.3) {
+                        this.participantCount += Math.floor(Math.random() * 3) + 1;
+                        this.updateStats();
+                    }
+                }, 45000);
+            }
+            
+            setupEventListeners() {
+                // Escuchar eventos de voto para actualizar el pozo
+                document.addEventListener('voteSubmitted', (event) => {
+                    const { amount } = event.detail;
+                    this.addContribution(amount, 'Voto de usuario');
+                });
+                
+                // Escuchar compras de VYT-MONEY
+                document.addEventListener('vytMoneyPurchased', (event) => {
+                    const { amount } = event.detail;
+                    this.addContribution(amount * 0.4, 'Compra VYT-MONEY');
+                });
+            }
+            
+            createParticleSystem() {
+                // Sistema de partículas de fondo para el pozo
+                const poolEl = document.getElementById('dynamicPrizePool');
+                if (!poolEl) return;
+                
+                setInterval(() => {
+                    if (Math.random() < 0.3) {
+                        const spark = document.createElement('div');
+                        spark.style.cssText = `
+                            position: absolute;
+                            width: 3px;
+                            height: 3px;
+                            background: var(--color-oro);
+                            border-radius: 50%;
+                            opacity: 0.8;
+                            animation: sparkFloat 2s ease-out forwards;
+                            left: ${Math.random() * 100}%;
+                            top: ${Math.random() * 100}%;
+                            pointer-events: none;
+                            z-index: 1;
+                        `;
+                        
+                        poolEl.appendChild(spark);
+                        
+                        setTimeout(() => spark.remove(), 2000);
+                    }
+                }, 1000);
+            }
+            
+            formatCurrency(amount) {
+                return new Intl.NumberFormat('es-AR', {
+                    style: 'currency',
+                    currency: 'ARS',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                }).format(amount);
+            }
+        }
+        
+        // Agregar estilos adicionales para efectos
+        const additionalStyles = `
+            @keyframes slideInFromRight {
+                0% { transform: translateX(100%); opacity: 0; }
+                100% { transform: translateX(0); opacity: 1; }
+            }
+            
+            @keyframes sparkFloat {
+                0% { opacity: 0.8; transform: translateY(0) scale(1); }
+                100% { opacity: 0; transform: translateY(-30px) scale(0.5); }
+            }
+        `;
+        
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = additionalStyles;
+        document.head.appendChild(styleSheet);
+        
+        // Inicializar el pozo dinámico cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar después de que otros sistemas estén listos
+            setTimeout(() => {
+                window.dynamicPrizePool = new DynamicPrizePool();
+            }, 1000);
+        });
+    </script>
     
     <script type="module" src="principal-dynamic.js"></script>
 </body>

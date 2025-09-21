@@ -8,6 +8,18 @@
     ],
     "rewrites": [
       {
+        "source": "/admin",
+        "destination": "/admin.html"
+      },
+      {
+        "source": "/administrador",
+        "destination": "/admin.html"
+      },
+      {
+        "source": "/panel",
+        "destination": "/admin.html"
+      },
+      {
         "source": "/recibirPago",
         "function": "recibirNotificacionPago"
       }

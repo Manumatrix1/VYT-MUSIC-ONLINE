@@ -13,7 +13,6 @@
     <div id="login-section" class="login-container">
         <div class="login-card">
             <h2 class="section-title">Acceso de Administrador</h2>
-            <div id="login-error" class="alert alert-error hidden"></div>
             <div class="form-grupo">
                 <label for="admin-email">Email:</label>
                 <input type="email" id="admin-email" class="form-input" placeholder="tu-correo@ejemplo.com">
@@ -49,6 +48,22 @@
                     <li><a href="#" data-target="page-certamenes" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-6.75c-.621 0-1.125.504-1.125 1.125v3.375m9 0h-9" /></svg>
                         <span>Certámenes</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-rankings" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 0 1 3 3h-15a3 3 0 0 1 3-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-6.75c-.621 0-1.125.504-1.125 1.125v3.375m9 0h-9" /></svg>
+                        <span>Rankings</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-certamenes" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <i class="fas fa-microphone text-purple-400 w-5 h-5"></i>
+                        <span>Gestión Certámenes</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-youtube" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <i class="fab fa-youtube text-red-500 w-5 h-5"></i>
+                        <span>YouTube Manager</span>
+                    </a></li>
+                    <li><a href="#" data-target="page-workflow" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                        <span>Flujo por Etapas</span>
                     </a></li>
                     <li><a href="#" data-target="page-participantes" class="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
@@ -204,39 +219,204 @@
                 </div>
             </div>
 
+            <!-- YouTube Management Page -->
+            <div id="page-youtube" class="page hidden">
+                <h3 class="subsection-title">🎬 YouTube Manager</h3>
+                <p class="text-gray-400 mb-6">Gestiona todos los videos subidos automáticamente a tu canal de YouTube.</p>
+                
+                <!-- Configuration Status -->
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-4 text-red-500">⚙️ Estado de Configuración</h4>
+                    <div id="youtube-config-status" class="space-y-3">
+                        <p class="text-gray-400 text-center py-4">Verificando configuración...</p>
+                    </div>
+                    <div class="mt-4">
+                        <button onclick="testYouTubeConnection()" class="btn bg-red-600 hover:bg-red-700 text-white">
+                            🔗 Probar Conexión
+                        </button>
+                        <a href="/YOUTUBE_SETUP.md" target="_blank" class="btn bg-blue-600 hover:bg-blue-700 text-white ml-2">
+                            📖 Guía de Configuración
+                        </a>
+                    </div>
+                </div>
+
+                <!-- YouTube Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-2 text-red-500">📊 Total Videos</h4>
+                        <div class="text-center">
+                            <span id="youtube-total-videos" class="text-3xl font-bold text-red-400">0</span>
+                            <p class="text-gray-400 text-sm">Videos subidos</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-2 text-green-500">👁️ Visualizaciones</h4>
+                        <div class="text-center">
+                            <span id="youtube-total-views" class="text-3xl font-bold text-green-400">0</span>
+                            <p class="text-gray-400 text-sm">Vistas totales</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-2 text-blue-500">👍 Me Gusta</h4>
+                        <div class="text-center">
+                            <span id="youtube-total-likes" class="text-3xl font-bold text-blue-400">0</span>
+                            <p class="text-gray-400 text-sm">Likes acumulados</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-2 text-purple-500">💬 Comentarios</h4>
+                        <div class="text-center">
+                            <span id="youtube-total-comments" class="text-3xl font-bold text-purple-400">0</span>
+                            <p class="text-gray-400 text-sm">Total comentarios</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <button onclick="loadYouTubeVideos()" class="btn bg-red-600 hover:bg-red-700 text-white">
+                        🔄 Actualizar Lista
+                    </button>
+                    <button onclick="syncYouTubeData()" class="btn bg-blue-600 hover:bg-blue-700 text-white">
+                        🔗 Sincronizar Datos
+                    </button>
+                    <button onclick="bulkUpdateTitles()" class="btn bg-green-600 hover:bg-green-700 text-white">
+                        ✏️ Editar en Lote
+                    </button>
+                    <button onclick="exportYouTubeReport()" class="btn bg-purple-600 hover:bg-purple-700 text-white">
+                        📊 Exportar Reporte
+                    </button>
+                </div>
+
+                <!-- Videos List -->
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-4 text-red-500">🎥 Videos en YouTube</h4>
+                    <div id="youtube-videos-list" class="space-y-4">
+                        <p class="text-gray-400 text-center py-8">Cargando videos de YouTube...</p>
+                    </div>
+                </div>
+            </div>
+
             <div id="page-duelos" class="page hidden">
                 <h3 class="subsection-title">Gestión de Duelos y Rondas</h3>
                 <p class="text-gray-400">Interfaz para emparejar artistas, programar duelos y ver resultados.</p>
             </div>
             
             <div id="page-ciudades" class="page hidden">
-                <h3 class="subsection-title">Gestión de Ciudades de la Gira</h3>
-                <form id="ciudades-form" class="dashboard-card">
-                    <input type="hidden" id="ciudad-id">
-                    <div class="form-grupo">
-                        <label for="ciudad-nombre">Nombre de la Ciudad:</label>
-                        <input type="text" id="ciudad-nombre" class="form-input" placeholder="Ej: Rosario" required>
+                <h3 class="subsection-title">Gestión de Certámenes Provinciales</h3>
+                <p class="text-gray-400 mb-6">Configura certámenes por provincia con ranking basado en reproducciones de YouTube.</p>
+
+                <!-- Certamen Form -->
+                <form id="certamenes-form" class="dashboard-card mb-6">
+                    <input type="hidden" id="certamen-id">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="form-grupo">
+                            <label for="certamen-nombre">Nombre del Certamen:</label>
+                            <input type="text" id="certamen-nombre" class="form-input" placeholder="Ej: VYT Buenos Aires 2025" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="certamen-provincia">Provincia:</label>
+                            <select id="certamen-provincia" class="form-input" required>
+                                <option value="">Seleccionar provincia</option>
+                                <option value="Buenos Aires">Buenos Aires</option>
+                                <option value="Catamarca">Catamarca</option>
+                                <option value="Chaco">Chaco</option>
+                                <option value="Chubut">Chubut</option>
+                                <option value="Córdoba">Córdoba</option>
+                                <option value="Corrientes">Corrientes</option>
+                                <option value="Entre Ríos">Entre Ríos</option>
+                                <option value="Formosa">Formosa</option>
+                                <option value="Jujuy">Jujuy</option>
+                                <option value="La Pampa">La Pampa</option>
+                                <option value="La Rioja">La Rioja</option>
+                                <option value="Mendoza">Mendoza</option>
+                                <option value="Misiones">Misiones</option>
+                                <option value="Neuquén">Neuquén</option>
+                                <option value="Río Negro">Río Negro</option>
+                                <option value="Salta">Salta</option>
+                                <option value="San Juan">San Juan</option>
+                                <option value="San Luis">San Luis</option>
+                                <option value="Santa Cruz">Santa Cruz</option>
+                                <option value="Santa Fe">Santa Fe</option>
+                                <option value="Santiago del Estero">Santiago del Estero</option>
+                                <option value="Tierra del Fuego">Tierra del Fuego</option>
+                                <option value="Tucumán">Tucumán</option>
+                            </select>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="certamen-fecha-inicio">Fecha de Inicio:</label>
+                            <input type="date" id="certamen-fecha-inicio" class="form-input" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="certamen-fecha-fin">Fecha de Fin:</label>
+                            <input type="date" id="certamen-fecha-fin" class="form-input" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="certamen-precio">Precio de Inscripción (ARS):</label>
+                            <input type="number" id="certamen-precio" class="form-input" placeholder="30000" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="certamen-orden">Orden de Visualización:</label>
+                            <input type="number" id="certamen-orden" class="form-input" placeholder="1" required>
+                        </div>
                     </div>
                     <div class="form-grupo">
-                        <label for="ciudad-fecha">Fecha del Evento:</label>
-                        <input type="date" id="ciudad-fecha" class="form-input" required>
+                        <label for="certamen-descripcion">Descripción:</label>
+                        <textarea id="certamen-descripcion" class="form-input" rows="3" placeholder="Descripción del certamen..."></textarea>
                     </div>
                     <div class="form-grupo">
-                        <label for="ciudad-lugar">Lugar del Evento:</label>
-                        <input type="text" id="ciudad-lugar" class="form-input" placeholder="Ej: Metropolitano" required>
+                        <label for="certamen-imagen">Imagen del Certamen:</label>
+                        <input type="file" id="certamen-imagen" class="form-input" accept="image/*">
+                        <div id="certamen-imagen-preview" class="mt-2"></div>
                     </div>
                     <div class="form-grupo">
-                        <label for="ciudad-url">URL de Inscripción:</label>
-                        <input type="url" id="ciudad-url" class="form-input" placeholder="https://vytmusic.com/inscripcion/rosario" required>
+                        <label for="certamen-url-inscripcion">URL de Inscripción (opcional):</label>
+                        <input type="url" id="certamen-url-inscripcion" class="form-input" placeholder="https://vytmusic.com/inscripcion/provincia">
                     </div>
-                    <button type="submit" id="save-ciudad-btn" class="btn btn-primario w-full">Guardar Ciudad</button>
-                    <button type="button" id="clear-ciudad-form-btn" class="btn btn-secundario w-full mt-2">Limpiar Formulario</button>
+                    <div class="flex items-center space-x-4 mb-4">
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" id="certamen-activo" class="form-checkbox">
+                            <span>Certamen Activo</span>
+                        </label>
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" id="certamen-ranking-habilitado" class="form-checkbox">
+                            <span>Ranking Habilitado</span>
+                        </label>
+                    </div>
+                    <div class="flex gap-2">
+                        <button type="submit" id="save-certamen-btn" class="btn btn-primario flex-1">Guardar Certamen</button>
+                        <button type="button" id="clear-certamen-form-btn" class="btn btn-secundario">Limpiar</button>
+                    </div>
                 </form>
-                <h3 class="subsection-title">Lista de Ciudades</h3>
-                <div id="ciudades-list" class="space-y-4">
-                    <p class="text-gray-500">Cargando ciudades...</p>
+
+                <!-- Bulk Actions -->
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-4 text-cyan-400">Acciones Masivas</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <button id="enable-all-certamenes" class="btn btn-primario">Habilitar Todos</button>
+                        <button id="disable-all-certamenes" class="btn btn-secundario">Deshabilitar Todos</button>
+                        <button id="update-rankings" class="btn bg-green-600 hover:bg-green-700 text-white">Actualizar Rankings</button>
+                    </div>
+                    <div id="bulk-actions-status" class="alert hidden mt-4"></div>
                 </div>
 
+                <!-- Certámenes List -->
+                <div class="dashboard-card">
+                    <div class="flex items-center justify-between mb-4">
+                        <h4 class="font-bold text-lg">Certámenes Configurados</h4>
+                        <button id="reload-certamenes-list" class="text-cyan-400 hover:text-cyan-300 transition-colors">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div id="certamenes-list" class="space-y-4">
+                        <p class="text-gray-500">Cargando certámenes...</p>
+                    </div>
+                </div>
             </div>
 
             <div id="page-blog" class="page hidden">
@@ -429,6 +609,86 @@
                 </div>
             </div>
 
+            <div id="page-workflow" class="page hidden">
+                <h3 class="subsection-title">🔄 Gestión por Etapas - Flujo de Participantes</h3>
+                
+                <!-- Resumen del estado general -->
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                    <div class="dashboard-card text-center">
+                        <div class="text-2xl font-bold text-yellow-500" id="workflow-pending-count">0</div>
+                        <div class="text-sm text-gray-400">Pendientes Revisión</div>
+                    </div>
+                    <div class="dashboard-card text-center">
+                        <div class="text-2xl font-bold text-blue-500" id="workflow-payment-count">0</div>
+                        <div class="text-sm text-gray-400">Esperando Pago</div>
+                    </div>
+                    <div class="dashboard-card text-center">
+                        <div class="text-2xl font-bold text-purple-500" id="workflow-final-count">0</div>
+                        <div class="text-sm text-gray-400">Video Final</div>
+                    </div>
+                    <div class="dashboard-card text-center">
+                        <div class="text-2xl font-bold text-green-500" id="workflow-published-count">0</div>
+                        <div class="text-sm text-gray-400">Publicados</div>
+                    </div>
+                </div>
+
+                <!-- Filtros -->
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-4">🔍 Filtros</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="form-grupo">
+                            <label for="workflow-status-filter">Estado:</label>
+                            <select id="workflow-status-filter" class="form-input">
+                                <option value="">Todos los estados</option>
+                                <option value="pending_initial_review">Pendiente revisión inicial</option>
+                                <option value="initial_approved">Video inicial aprobado</option>
+                                <option value="initial_rejected">Video inicial rechazado</option>
+                                <option value="payment_pending">Pago pendiente</option>
+                                <option value="payment_confirmed">Pago confirmado</option>
+                                <option value="final_video_received">Video final recibido</option>
+                                <option value="final_approved">Video final aprobado</option>
+                                <option value="final_rejected">Video final rechazado</option>
+                                <option value="published">Publicado</option>
+                                <option value="cancelled">Cancelado</option>
+                            </select>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="workflow-search">Buscar:</label>
+                            <input type="text" id="workflow-search" class="form-input" placeholder="Nombre, email, artista...">
+                        </div>
+                        <div class="form-grupo">
+                            <label for="workflow-date-filter">Fecha:</label>
+                            <select id="workflow-date-filter" class="form-input">
+                                <option value="">Todas las fechas</option>
+                                <option value="today">Hoy</option>
+                                <option value="week">Última semana</option>
+                                <option value="month">Último mes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex gap-4 mt-4">
+                        <button id="workflow-filter-btn" class="btn btn-secundario">🔍 Aplicar Filtros</button>
+                        <button id="workflow-clear-filters" class="btn btn-terciario">🗑️ Limpiar</button>
+                        <button id="workflow-refresh-btn" class="btn btn-primario">🔄 Actualizar</button>
+                    </div>
+                </div>
+
+                <!-- Lista de participantes -->
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-4">📋 Participantes en el Flujo</h4>
+                    <div id="workflow-loading" class="text-center py-8 hidden">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+                        <p class="mt-2 text-gray-400">Cargando participantes...</p>
+                    </div>
+                    <div id="workflow-participants-list" class="space-y-4">
+                        <!-- Los participantes se cargarán aquí dinámicamente -->
+                    </div>
+                    <div id="workflow-no-results" class="text-center py-8 text-gray-400 hidden">
+                        <p>No se encontraron participantes con los filtros aplicados</p>
+                    </div>
+                </div>
+            </div>
+
             <div id="page-bases" class="page hidden">
                 <h3 class="subsection-title">Gestión de Bases y Condiciones</h3>
                 <div class="dashboard-card mb-6">
@@ -544,8 +804,181 @@
                     <button id="update-inscripcion-price-btn" class="btn btn-primario w-full">Actualizar Precio</button>
                 </div>
 
+                <div class="dashboard-card mb-6">
+                    <h4 class="font-bold text-lg mb-4 text-cyan-400">Control de Sesiones de Inscripción</h4>
+                    <div id="sessions-form-status" class="alert hidden"></div>
+                    <p class="text-gray-400 mb-4">Habilita o deshabilita las inscripciones para cada modalidad de certamen.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Certamen Online -->
+                        <div class="border border-gray-600 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h5 class="font-semibold text-blue-400">Certamen Online</h5>
+                                    <p class="text-sm text-gray-400">Participación virtual desde casa</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="toggle-online" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="text-xs">
+                                <span id="status-online" class="px-2 py-1 rounded-full bg-red-600 text-white">DESHABILITADO</span>
+                            </div>
+                        </div>
+
+                        <!-- Certamen Presencial -->
+                        <div class="border border-gray-600 rounded-lg p-4">
+                            <div class="flex items-center justify-between mb-4">
+                                <div>
+                                    <h5 class="font-semibold text-green-400">Certamen Presencial</h5>
+                                    <p class="text-sm text-gray-400">Participación en vivo en el evento</p>
+                                </div>
+                                <div class="flex items-center">
+                                    <label class="relative inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" id="toggle-presencial" class="sr-only peer">
+                                        <div class="w-11 h-6 bg-gray-700 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-green-800 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="text-xs">
+                                <span id="status-presencial" class="px-2 py-1 rounded-full bg-red-600 text-white">DESHABILITADO</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-yellow-900 bg-opacity-30 border border-yellow-600 rounded-lg">
+                        <div class="flex items-center gap-2 mb-2">
+                            <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <h6 class="font-semibold text-yellow-400">Importante</h6>
+                        </div>
+                        <p class="text-sm text-yellow-300">
+                            Cuando deshabilites una sesión, los usuarios no podrán acceder al formulario de inscripción correspondiente. 
+                            Los cambios se aplican inmediatamente en el sitio web.
+                        </p>
+                    </div>
+                    
+                    <button id="save-sessions-btn" class="btn btn-primario w-full mt-4">Guardar Configuración de Sesiones</button>
+                </div>
+
                 <!-- Aquí podemos mover las plantillas de email en el siguiente paso -->
 
+            </div>
+
+            <!-- Gestión de Rankings -->
+            <div id="page-rankings" class="page hidden">
+                <h3 class="subsection-title">🏆 Gestión de Rankings y YouTube</h3>
+                <p class="text-gray-400 mb-6">Administra los rankings provinciales y generales basados en reproducciones de YouTube.</p>
+                
+                <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <button id="update-rankings-btn" class="btn btn-primario">
+                        🔄 Actualizar Rankings
+                    </button>
+                    <button id="sync-youtube-btn" class="btn bg-red-600 hover:bg-red-700 text-white">
+                        📹 Sincronizar YouTube
+                    </button>
+                    <button id="export-rankings-btn" class="btn bg-green-600 hover:bg-green-700 text-white">
+                        📊 Exportar Rankings
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                    <!-- Ranking Provincial -->
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-4 text-yellow-400">🏅 Rankings por Provincia</h4>
+                        <div class="mb-4">
+                            <select id="provincia-filter" class="form-input w-full">
+                                <option value="">Seleccionar provincia</option>
+                            </select>
+                        </div>
+                        <div id="provincial-rankings" class="space-y-3 max-h-64 overflow-y-auto">
+                            <p class="text-gray-400 text-center py-4">Selecciona una provincia para ver el ranking</p>
+                        </div>
+                    </div>
+
+                    <!-- Ranking General -->
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-4 text-purple-400">👑 Ranking General</h4>
+                        <div id="general-rankings" class="space-y-3 max-h-64 overflow-y-auto">
+                            <p class="text-gray-400 text-center py-4">Cargando ranking general...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Participantes con Pago Confirmado -->
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-4 text-blue-400">💰 Participantes con Pago Confirmado</h4>
+                    <div class="mb-4 flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-400">Total confirmados:</span>
+                            <span id="total-paid" class="text-green-400 font-bold">0</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-400">Ingresos totales:</span>
+                            <span id="total-revenue" class="text-cyan-400 font-bold">$0</span>
+                        </div>
+                    </div>
+                    <div id="paid-participants" class="space-y-3 max-h-64 overflow-y-auto">
+                        <p class="text-gray-400 text-center py-4">Cargando participantes...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestión de Certámenes -->
+            <div id="page-certamenes" class="page hidden">
+                <h3 class="subsection-title">🎤 Gestión de Certámenes</h3>
+                <p class="text-gray-400 mb-6">Administra los certámenes provinciales, precios, premios y designa ganadores.</p>
+                
+                <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <button onclick="createCertamen()" class="btn btn-primario">
+                        ➕ Crear Certamen
+                    </button>
+                    <button onclick="loadCertamenesList()" class="btn bg-blue-600 hover:bg-blue-700 text-white">
+                        🔄 Actualizar Lista
+                    </button>
+                    <button onclick="exportAllCertamenes()" class="btn bg-green-600 hover:bg-green-700 text-white">
+                        📊 Exportar Todo
+                    </button>
+                    <button onclick="showStatsModal()" class="btn bg-purple-600 hover:bg-purple-700 text-white">
+                        📈 Estadísticas
+                    </button>
+                </div>
+
+                <!-- Lista de Certámenes -->
+                <div class="dashboard-card">
+                    <h4 class="font-bold text-lg mb-4 text-purple-400">🏆 Certámenes Activos</h4>
+                    <div id="certamenes-list" class="space-y-4">
+                        <p class="text-gray-400 text-center py-8">Cargando certámenes...</p>
+                    </div>
+                </div>
+
+                <!-- Estadísticas Generales -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-4 text-green-400">💰 Ingresos por Certamen</h4>
+                        <div id="ingresos-certamenes" class="space-y-3 max-h-64 overflow-y-auto">
+                            <p class="text-gray-400 text-center py-4">Calculando ingresos...</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-4 text-blue-400">📊 Participación por Provincia</h4>
+                        <div id="participacion-provincias" class="space-y-3 max-h-64 overflow-y-auto">
+                            <p class="text-gray-400 text-center py-4">Cargando estadísticas...</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <h4 class="font-bold text-lg mb-4 text-yellow-400">🏅 Ganadores Designados</h4>
+                        <div id="ganadores-list" class="space-y-3 max-h-64 overflow-y-auto">
+                            <p class="text-gray-400 text-center py-4">Cargando ganadores...</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </main>
 
@@ -564,13 +997,250 @@
             </a>
             <a href="#" data-target="page-ciudades">
                 <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21c2.19 0 4.19-.89 5.66-2.34A8 8 0 0012 5a8 8 0 00-5.66 13.66A8 8 0 0012 21z"></path><path d="M12 13a4 4 0 100-8 4 4 0 000 8z"></path></svg>
-                <span>Gira</span>
+                <span>Certámenes</span>
             </a>
             <a href="#" id="hamburger-btn-bottom" class="hamburger-icon md:hidden">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
                 <span>Menú</span>
             </a>
         </nav>
+    </div>
+    
+    <!-- Modal para crear/editar certamen -->
+    <div id="certamen-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-6 rounded-lg max-w-md w-full mx-4 border border-purple-500/30">
+            <h3 class="text-xl font-bold mb-4 text-white">✨ Crear Nuevo Certamen</h3>
+            <form id="certamen-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Provincia</label>
+                    <select id="certamen-provincia" class="input-field" required>
+                        <option value="">Seleccionar provincia...</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Precio de Inscripción ($)</label>
+                    <input type="number" id="certamen-precio" class="input-field" min="0" step="100" placeholder="5000" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Premio Principal ($)</label>
+                    <input type="number" id="certamen-premio" class="input-field" min="0" step="1000" placeholder="50000">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Fecha de Inicio</label>
+                    <input type="date" id="certamen-fecha-inicio" class="input-field" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-2">Fecha de Fin</label>
+                    <input type="date" id="certamen-fecha-fin" class="input-field" required>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input type="checkbox" id="certamen-activo" class="text-purple-500">
+                    <label for="certamen-activo" class="text-sm text-gray-300">Certamen activo</label>
+                </div>
+                <div class="flex gap-3 pt-4">
+                    <button type="button" onclick="closeCertamenModal()" class="btn bg-gray-600 hover:bg-gray-700 text-white flex-1">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-primario flex-1">
+                        Crear Certamen
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para designar ganadores -->
+    <div id="ganadores-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-6 rounded-lg max-w-2xl w-full mx-4 border border-purple-500/30 max-h-screen overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4 text-white">🏆 Designar Ganadores</h3>
+            <div id="ganadores-content">
+                <p class="text-gray-400">Cargando participantes...</p>
+            </div>
+            <div class="flex gap-3 pt-4">
+                <button onclick="closeGanadoresModal()" class="btn bg-gray-600 hover:bg-gray-700 text-white flex-1">
+                    Cerrar
+                </button>
+                <button onclick="saveWinners()" class="btn btn-primario flex-1">
+                    Guardar Ganadores
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de estadísticas -->
+    <div id="stats-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 p-6 rounded-lg max-w-4xl w-full mx-4 border border-purple-500/30 max-h-screen overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4 text-white">📈 Estadísticas Generales</h3>
+            <div id="stats-content" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <p class="text-gray-400">Cargando estadísticas...</p>
+            </div>
+            <div class="flex justify-end pt-4">
+                <button onclick="closeStatsModal()" class="btn bg-gray-600 hover:bg-gray-700 text-white">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales para Gestión por Etapas -->
+    
+    <!-- Modal para revisar video inicial -->
+    <div id="initial-review-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">🎬 Revisar Video Inicial</h3>
+                <button id="close-initial-review" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div id="initial-review-content">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+            
+            <div class="flex gap-4 mt-6">
+                <button id="approve-initial-btn" class="btn btn-primario flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    ✅ Aprobar Video
+                </button>
+                <button id="reject-initial-btn" class="btn btn-danger flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                    ❌ Rechazar Video
+                </button>
+                <button id="cancel-initial-review" class="btn btn-terciario">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para rechazar video inicial -->
+    <div id="reject-initial-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">❌ Rechazar Video Inicial</h3>
+                <button id="close-reject-initial" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <form id="reject-initial-form">
+                <div class="form-grupo">
+                    <label for="rejection-reason">Motivo de Rechazo:</label>
+                    <select id="rejection-reason" class="form-input" required>
+                        <option value="">Seleccionar motivo</option>
+                        <option value="poor_audio_quality">Calidad de audio insuficiente</option>
+                        <option value="poor_video_quality">Calidad de video insuficiente</option>
+                        <option value="low_production">Necesita mejor producción</option>
+                        <option value="inappropriate_content">Contenido inapropiado</option>
+                        <option value="technical_issues">Problemas técnicos</option>
+                        <option value="does_not_meet_requirements">No cumple con los requisitos</option>
+                        <option value="other">Otros motivos</option>
+                    </select>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="rejection-comment">Comentario adicional:</label>
+                    <textarea id="rejection-comment" class="form-input" rows="4" placeholder="Explica qué puede mejorar el participante..."></textarea>
+                </div>
+                
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="btn btn-danger">❌ Confirmar Rechazo</button>
+                    <button type="button" id="cancel-reject-initial" class="btn btn-terciario">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para gestionar pago y video final -->
+    <div id="payment-final-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">💰 Gestionar Pago y Video Final</h3>
+                <button id="close-payment-final" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div id="payment-final-content">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+            
+            <div class="flex gap-4 mt-6">
+                <button id="confirm-payment-btn" class="btn btn-primario">✅ Confirmar Pago</button>
+                <button id="mark-final-received-btn" class="btn btn-secundario">📹 Marcar Video Final Recibido</button>
+                <button id="cancel-payment-final" class="btn btn-terciario">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para revisar video final -->
+    <div id="final-review-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-2xl w-full mx-4 max-h-screen overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">🌟 Revisar Video Final</h3>
+                <button id="close-final-review" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <div id="final-review-content">
+                <!-- El contenido se cargará dinámicamente -->
+            </div>
+            
+            <div class="flex gap-4 mt-6">
+                <button id="approve-final-btn" class="btn btn-success flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    🌟 Aprobar y Publicar
+                </button>
+                <button id="reject-final-btn" class="btn btn-danger flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+                    ❌ Rechazar Video
+                </button>
+                <button id="cancel-final-review" class="btn btn-terciario">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para rechazar video final -->
+    <div id="reject-final-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-gray-800 p-6 rounded-lg max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-white">❌ Rechazar Video Final</h3>
+                <button id="close-reject-final" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            
+            <form id="reject-final-form">
+                <div class="form-grupo">
+                    <label for="final-rejection-reason">Motivo de Rechazo:</label>
+                    <select id="final-rejection-reason" class="form-input" required>
+                        <option value="">Seleccionar motivo</option>
+                        <option value="poor_audio_quality">Calidad de audio insuficiente</option>
+                        <option value="poor_video_quality">Calidad de video insuficiente</option>
+                        <option value="low_production">Necesita mejor producción</option>
+                        <option value="inappropriate_content">Contenido inapropiado</option>
+                        <option value="technical_issues">Problemas técnicos</option>
+                        <option value="does_not_meet_requirements">No cumple con los requisitos finales</option>
+                        <option value="other">Otros motivos</option>
+                    </select>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="final-rejection-comment">Comentario adicional:</label>
+                    <textarea id="final-rejection-comment" class="form-input" rows="4" placeholder="Explica el motivo del rechazo..."></textarea>
+                </div>
+                
+                <div class="form-grupo">
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 rounded">
+                        <p class="font-bold">⚠️ Importante:</p>
+                        <p class="text-sm">El participante ya realizó el pago. Considera las implicaciones antes de rechazar el video final.</p>
+                    </div>
+                </div>
+                
+                <div class="flex gap-4 mt-6">
+                    <button type="submit" class="btn btn-danger">❌ Confirmar Rechazo</button>
+                    <button type="button" id="cancel-reject-final" class="btn btn-terciario">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </div>
     
     <script type="module" src="admin.js"></script>

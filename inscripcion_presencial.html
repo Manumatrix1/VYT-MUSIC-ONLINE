@@ -269,7 +269,65 @@
 
         const auth = getAuth();
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if presencial registration is enabled
+            const checkSessionEnabled = async () => {
+                try {
+                    const sessionDoc = await getDoc(doc(db, "admin_settings", "sessions"));
+                    if (sessionDoc.exists()) {
+                        const sessionData = sessionDoc.data();
+                        return sessionData.inscripcion_presencial_enabled || false;
+                    }
+                    return false; // Default to disabled if no configuration exists
+                } catch (error) {
+                    console.error("Error checking session status:", error);
+                    return false; // Default to disabled on error
+                }
+            };
+
+            const isPresencialEnabled = await checkSessionEnabled();
+            
+            if (!isPresencialEnabled) {
+                // Hide the main content and show disabled message
+                document.getElementById('form-presencial').style.display = 'none';
+                
+                // Create and show disabled message
+                const disabledMessage = document.createElement('div');
+                disabledMessage.className = 'text-center py-16 px-8';
+                disabledMessage.innerHTML = `
+                    <div class="max-w-2xl mx-auto">
+                        <div class="bg-orange-900 bg-opacity-30 border border-orange-600 rounded-lg p-8 mb-8">
+                            <svg class="w-16 h-16 text-orange-400 mx-auto mb-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                            </svg>
+                            <h2 class="text-3xl font-bold text-orange-400 mb-4">Inscripciones Presenciales Temporalmente Cerradas</h2>
+                            <p class="text-xl text-orange-300 mb-6">
+                                Las inscripciones para el certamen presencial no están disponibles en este momento.
+                            </p>
+                            <p class="text-gray-300 mb-8">
+                                Estamos organizando las fechas y ubicaciones para el evento presencial. 
+                                Te recomendamos seguir nuestras redes sociales para estar al tanto de cuando se abran las inscripciones.
+                            </p>
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                                <a href="./index.html" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                                    Volver al Inicio
+                                </a>
+                                <a href="./inscripcion_online.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors">
+                                    Ver Inscripción Online
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Find the main container and replace content
+                const mainContainer = document.querySelector('body > div');
+                mainContainer.innerHTML = '';
+                mainContainer.appendChild(disabledMessage);
+                return; // Stop execution here
+            }
+
+            // Original code continues only if presencial registration is enabled
             const inscripcionForm = document.getElementById('form-presencial');
             const emailInput = document.getElementById('email');
             const confirmEmailInput = document.getElementById('confirm-email');

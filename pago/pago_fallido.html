@@ -80,11 +80,44 @@
     <main class="container py-10">
         <div class="modal-content">
             <h2 class="modal-title" style="color: var(--color-error);">❌ Pago Fallido</h2>
+            <div id="certamen-info" class="mb-6 p-4 bg-gray-800 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Inscripción Pendiente</h3>
+                <p id="certamen-nombre" class="text-gray-300"></p>
+                <p id="monto-pago" class="text-red-400 font-bold"></p>
+            </div>
+            <div class="mb-6 p-4 bg-red-900 bg-opacity-30 border border-red-600 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2 text-red-400">⚠️ ¿Qué puedes hacer?</h3>
+                <div class="text-left space-y-2 text-sm text-gray-300">
+                    <p>• Intenta nuevamente con otro método de pago</p>
+                    <p>• Verifica que tu tarjeta tenga fondos suficientes</p>
+                    <p>• Realiza una transferencia bancaria directa</p>
+                    <p>• Contacta a nuestro soporte para asistencia</p>
+                </div>
+            </div>
             <p class="modal-text">
-                Ocurrió un error al procesar tu pago. Por favor, intenta de nuevo o contacta a soporte técnico.
+                No te preocupes, tu inscripción está guardada. Solo necesitas completar el pago para activar tu participación en el certamen.
             </p>
-            <a href="/inscripcion_online.html" class="btn btn-secundario" style="border-color: var(--color-error); color: var(--color-error);">Volver a intentar</a>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                <a href="../inscripcion_online.html" class="btn btn-primario">Reintentar Pago</a>
+                <a href="https://wa.me/5491169876543" target="_blank" class="btn btn-secundario">Contactar Soporte</a>
+            </div>
         </div>
     </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const precio = urlParams.get('precio');
+            const certamen = urlParams.get('certamen');
+
+            // Mostrar información del certamen
+            if (certamen) {
+                document.getElementById('certamen-nombre').textContent = `Certamen: ${decodeURIComponent(certamen)}`;
+            }
+            if (precio) {
+                document.getElementById('monto-pago').textContent = `Monto: $${precio}`;
+            }
+        });
+    </script>
 </body>
 </html>

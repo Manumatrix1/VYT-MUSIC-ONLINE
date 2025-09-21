@@ -4,7 +4,13 @@
   "description": "CERTAMEN DE CANTO ONLINE",
   "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "deploy:dev": "firebase deploy --project desarrollo",
+    "deploy:prod": "firebase deploy --project produccion",
+    "deploy:functions:dev": "firebase deploy --only functions --project desarrollo",
+    "deploy:functions:prod": "firebase deploy --only functions --project produccion",
+    "deploy:hosting:dev": "firebase deploy --only hosting --project desarrollo",
+    "deploy:hosting:prod": "firebase deploy --only hosting --project produccion"
   },
   "repository": {
     "type": "git",

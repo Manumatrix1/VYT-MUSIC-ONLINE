@@ -356,3 +356,239 @@
             display: flex;
             align-items: center;
         }
+
+        /* Block Movement Arrows */
+        .arrow-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            background-color: var(--color-fondo-secundario);
+            color: var(--color-primario);
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .arrow-btn:hover {
+            background-color: var(--color-primario);
+            color: white;
+            border-color: var(--color-primario);
+            transform: scale(1.1);
+        }
+
+        .arrow-btn:active {
+            transform: scale(0.95);
+        }
+
+        .arrow-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .arrow-btn:disabled:hover {
+            background-color: var(--color-fondo-secundario);
+            color: var(--color-primario);
+            border-color: #30363d;
+            transform: none;
+        }
+
+        /* Block item improvements */
+        .artist-list-item {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: move;
+        }
+
+        .artist-list-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 166, 255, 0.2);
+        }
+
+        /* Drag & Drop styles */
+        .drag-handle {
+            color: var(--color-texto-secundario);
+            font-size: 20px;
+            cursor: grab;
+            padding: 0 8px;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+
+        .drag-handle:hover {
+            color: var(--color-primario);
+        }
+
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+
+        .artist-list-item.drag-over {
+            border: 2px dashed var(--color-primario);
+            background-color: rgba(88, 166, 255, 0.1);
+            transform: scale(1.02);
+        }
+
+        .artist-list-item[draggable="true"] {
+            transition: opacity 0.2s ease;
+        }
+
+        .artist-list-item[draggable="true"]:hover .drag-handle {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* Estilos para botones pequeños en certámenes */
+        .btn-small {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border-radius: 0.375rem;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: white;
+        }
+
+        .btn-small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        /* Estilos para campos de formulario en modales */
+        .input-field {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #374151;
+            border: 1px solid #4b5563;
+            border-radius: 0.5rem;
+            color: white;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .input-field::placeholder {
+            color: #9ca3af;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+
+        /* Animaciones para modales */
+        .modal-enter {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        .modal-exit {
+            animation: modalFadeOut 0.2s ease-in;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes modalFadeOut {
+            from {
+                opacity: 1;
+                transform: scale(1);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+        }
+
+        /* Mejoras para la navegación de certámenes */
+        .nav-link.active[data-target="page-certamenes"] {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            color: white;
+        }
+
+        /* Estilos para estadísticas en tiempo real */
+        .stat-card {
+            background-color: #1f2937;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #374151;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            animation: countUp 0.8s ease-out;
+        }
+
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive para modales */
+        @media (max-width: 640px) {
+            .modal-content {
+                margin: 0.5rem;
+                max-width: none;
+            }
+            
+            .btn-small {
+                padding: 0.125rem 0.5rem;
+                font-size: 0.75rem;
+            }
+        }
+
+        /* Estilos específicos para certámenes */
+        #page-certamenes .dashboard-card {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+
+        #page-certamenes .subsection-title {
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Efectos hover para las cards de certámenes */
+        .certamen-card {
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+        }
+
+        .certamen-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.15);
+            border-color: rgba(139, 92, 246, 0.5);
+        }

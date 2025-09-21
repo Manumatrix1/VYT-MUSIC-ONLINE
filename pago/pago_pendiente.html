@@ -79,13 +79,51 @@
     <main class="container py-10">
         <div class="modal-content">
             <h2 class="modal-title" style="color: var(--color-oro);">⏳ Pago Pendiente</h2>
+            <div id="certamen-info" class="mb-6 p-4 bg-gray-800 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Detalles de la Inscripción</h3>
+                <p id="certamen-nombre" class="text-gray-300"></p>
+                <p id="monto-pago" class="text-yellow-400 font-bold"></p>
+            </div>
+            <div class="mb-6 p-4 bg-blue-900 bg-opacity-30 border border-blue-600 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2 text-blue-400">💳 Opciones de Pago</h3>
+                <p class="text-sm text-gray-300 mb-4">
+                    Para completar tu inscripción, puedes realizar el pago por transferencia bancaria o MercadoPago:
+                </p>
+                <div class="space-y-2 text-left">
+                    <p class="text-sm"><strong>Alias:</strong> vyt.music.online</p>
+                    <p class="text-sm"><strong>CBU:</strong> 0000003100010917355001</p>
+                    <p class="text-sm"><strong>Titular:</strong> VYT MUSIC</p>
+                </div>
+                <p class="text-xs text-gray-400 mt-3">
+                    Una vez realizado el pago, envía el comprobante por WhatsApp para activar tu participación.
+                </p>
+            </div>
             <p class="modal-text">
-                Tu pago está en proceso de confirmación. Te notificaremos por correo electrónico una vez que se complete.
+                Tu inscripción está registrada y será activada una vez que confirmemos tu pago.
                 <br>
                 ¡Gracias por tu paciencia!
             </p>
-            <a href="/principal.html" class="btn btn-secundario">Volver a la página principal</a>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                <a href="https://wa.me/5491169876543" target="_blank" class="btn btn-primario">Enviar Comprobante</a>
+                <a href="../principal.html" class="btn btn-secundario">Volver al Inicio</a>
+            </div>
         </div>
     </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const precio = urlParams.get('precio');
+            const certamen = urlParams.get('certamen');
+
+            // Mostrar información del certamen
+            if (certamen) {
+                document.getElementById('certamen-nombre').textContent = `Certamen: ${decodeURIComponent(certamen)}`;
+            }
+            if (precio) {
+                document.getElementById('monto-pago').textContent = `Monto a pagar: $${precio}`;
+            }
+        });
+    </script>
 </body>
 </html>

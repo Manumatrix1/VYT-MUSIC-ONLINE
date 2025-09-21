@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certámenes - VYT Music Online</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --spotify-green: #1db954;
+            --spotify-black: #191414;
+            --spotify-dark-gray: #121212;
+            --spotify-gray: #535353;
+            --spotify-light-gray: #b3b3b3;
+        }
+        
+        body {
+            background: linear-gradient(180deg, var(--spotify-dark-gray) 0%, var(--spotify-black) 100%);
+            color: white;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        .spotify-sidebar {
+            background: var(--spotify-black);
+            width: 280px;
+            min-height: 100vh;
+            border-right: 1px solid #2a2a2a;
+        }
+        
+        .spotify-main {
+            background: linear-gradient(180deg, #2a2a2a 0%, var(--spotify-dark-gray) 300px);
+            flex: 1;
+            min-height: 100vh;
+        }
+        
+        .certamen-card {
+            background: linear-gradient(135deg, #3b3b3b 0%, #2a2a2a 100%);
+            border: 1px solid #404040;
+            transition: all 0.3s ease;
+        }
+        
+        .certamen-card:hover {
+            background: linear-gradient(135deg, #4a4a4a 0%, #3a3a3a 100%);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
+        }
+        
+        .participant-row {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.2s ease;
+        }
+        
+        .participant-row:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: var(--spotify-green);
+        }
+        
+        .vote-btn {
+            background: linear-gradient(135deg, var(--spotify-green) 0%, #1ed760 100%);
+            transition: all 0.2s ease;
+        }
+        
+        .vote-btn:hover {
+            background: linear-gradient(135deg, #1ed760 0%, var(--spotify-green) 100%);
+            transform: scale(1.05);
+        }
+        
+        .vote-btn:disabled {
+            background: #535353;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .play-btn {
+            background: var(--spotify-green);
+            color: white;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+        
+        .play-btn:hover {
+            background: #1ed760;
+            transform: scale(1.1);
+        }
+        
+        .ranking-badge {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .share-btn {
+            background: linear-gradient(135deg, #1877f2 0%, #42a5f5 100%);
+            transition: all 0.2s ease;
+        }
+        
+        .share-btn:hover {
+            background: linear-gradient(135deg, #42a5f5 0%, #1877f2 100%);
+            transform: scale(1.05);
+        }
+        
+        .nav-item {
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background: rgba(29, 185, 84, 0.1);
+            border-left-color: var(--spotify-green);
+        }
+        
+        .search-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .search-input:focus {
+            border-color: var(--spotify-green);
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(29, 185, 84, 0.2);
+        }
+        
+        .loading {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, var(--spotify-green) 0%, #1ed760 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body>
+    <div class="flex min-h-screen">
+        <!-- Sidebar estilo Spotify -->
+        <div class="spotify-sidebar p-6">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold gradient-text">VYT Certámenes</h1>
+                <p class="text-spotify-light-gray text-sm mt-1">Tu plataforma de talentos</p>
+            </div>
+            
+            <nav class="space-y-2">
+                <div class="nav-item active p-3 rounded cursor-pointer" data-section="home">
+                    <i class="fas fa-home mr-3"></i>
+                    Inicio
+                </div>
+                <div class="nav-item p-3 rounded cursor-pointer" data-section="rankings">
+                    <i class="fas fa-trophy mr-3"></i>
+                    Rankings
+                </div>
+                <div class="nav-item p-3 rounded cursor-pointer" data-section="certamenes">
+                    <i class="fas fa-microphone mr-3"></i>
+                    Certámenes
+                </div>
+                <div class="nav-item p-3 rounded cursor-pointer" data-section="provincial">
+                    <i class="fas fa-map-marker-alt mr-3"></i>
+                    Rankings Provinciales
+                </div>
+                <div class="nav-item p-3 rounded cursor-pointer" data-section="nacional">
+                    <i class="fas fa-star mr-3"></i>
+                    Ranking Nacional
+                </div>
+            </nav>
+            
+            <div class="mt-8">
+                <h3 class="text-sm font-semibold text-spotify-light-gray mb-3">FILTROS RÁPIDOS</h3>
+                <div class="space-y-2 text-sm">
+                    <div class="cursor-pointer hover:text-white text-spotify-light-gray" data-filter="activos">
+                        <i class="fas fa-circle text-green-500 mr-2"></i>
+                        Certámenes Activos
+                    </div>
+                    <div class="cursor-pointer hover:text-white text-spotify-light-gray" data-filter="votacion">
+                        <i class="fas fa-vote-yea mr-2"></i>
+                        En Votación
+                    </div>
+                    <div class="cursor-pointer hover:text-white text-spotify-light-gray" data-filter="finalizados">
+                        <i class="fas fa-trophy mr-2"></i>
+                        Finalizados
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-8 p-4 bg-gradient-to-r from-spotify-green to-green-600 rounded-lg">
+                <h4 class="font-bold text-white mb-2">🏆 Premio Nacional</h4>
+                <p class="text-sm text-white opacity-90">El ganador se lleva el gran premio acumulado</p>
+                <div class="mt-2 text-lg font-bold text-yellow-300" id="sidebarPozo">
+                    $0
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenido Principal -->
+        <div class="spotify-main">
+            <!-- Header con búsqueda -->
+            <div class="p-6 pb-4">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-center space-x-4">
+                        <button id="backBtn" class="w-8 h-8 bg-black bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-70">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button id="forwardBtn" class="w-8 h-8 bg-black bg-opacity-50 rounded-full flex items-center justify-center hover:bg-opacity-70">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <input 
+                                type="text" 
+                                id="searchInput"
+                                placeholder="Buscar participantes, certámenes..." 
+                                class="search-input pl-10 pr-4 py-2 rounded-full w-80"
+                            >
+                            <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-spotify-light-gray"></i>
+                        </div>
+                        
+                        <select id="provinciaFilter" class="search-input px-3 py-2 rounded">
+                            <option value="">Todas las Provincias</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección Home -->
+            <div id="homeSection" class="section p-6">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-bold mb-2">Certámenes Destacados</h2>
+                    <p class="text-spotify-light-gray">Descubre los talentos más votados</p>
+                </div>
+                
+                <div id="featuredCertamenes" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    <!-- Certámenes destacados se cargarán aquí -->
+                    <div class="certamen-card rounded-lg p-6 animate-pulse">
+                        <div class="w-full h-40 bg-gray-700 rounded-lg mb-4"></div>
+                        <div class="h-4 bg-gray-700 rounded mb-2"></div>
+                        <div class="h-3 bg-gray-700 rounded w-3/4"></div>
+                    </div>
+                </div>
+                
+                <div class="mb-8">
+                    <h3 class="text-2xl font-bold mb-4">Top Participantes</h3>
+                    <div id="topParticipants" class="space-y-3">
+                        <!-- Top participantes se cargarán aquí -->
+                        <div class="participant-row rounded-lg p-4 animate-pulse">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-8 h-8 bg-gray-700 rounded"></div>
+                                <div class="w-16 h-12 bg-gray-700 rounded"></div>
+                                <div class="flex-1">
+                                    <div class="h-4 bg-gray-700 rounded mb-2"></div>
+                                    <div class="h-3 bg-gray-700 rounded w-2/3"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección Rankings -->
+            <div id="rankingsSection" class="section hidden p-6">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold mb-2">Rankings de Certámenes</h2>
+                    <p class="text-spotify-light-gray">Consulta las posiciones en tiempo real</p>
+                </div>
+                
+                <div class="bg-spotify-black rounded-lg p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-xl font-semibold">Ranking General</h3>
+                        <button id="refreshRankings" class="vote-btn px-4 py-2 rounded-full text-sm">
+                            <i class="fas fa-sync-alt mr-2"></i>
+                            Actualizar
+                        </button>
+                    </div>
+                    
+                    <div id="generalRanking" class="space-y-3">
+                        <!-- Ranking general se cargará aquí -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Sección Certámenes Individuales -->
+            <div id="certamenesSection" class="section hidden p-6">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold mb-2">Certámenes por Categoría</h2>
+                    <p class="text-spotify-light-gray">Explora los certámenes disponibles</p>
+                </div>
+                
+                <div id="certamenesList" class="space-y-6">
+                    <!-- Lista de certámenes se cargará aquí -->
+                </div>
+            </div>
+            
+            <!-- Sección Rankings Provinciales -->
+            <div id="provincialSection" class="section hidden p-6">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold mb-2">Rankings Provinciales</h2>
+                    <p class="text-spotify-light-gray">Consulta los mejores de cada provincia</p>
+                </div>
+                
+                <div id="provincialRankings" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Rankings provinciales se cargarán aquí -->
+                </div>
+            </div>
+            
+            <!-- Sección Ranking Nacional -->
+            <div id="nacionalSection" class="section hidden p-6">
+                <div class="mb-6">
+                    <h2 class="text-3xl font-bold mb-2">Ranking Nacional</h2>
+                    <p class="text-spotify-light-gray">Los mejores talentos de Argentina</p>
+                </div>
+                
+                <div class="bg-spotify-black rounded-lg p-6">
+                    <div id="nacionalRanking" class="space-y-4">
+                        <!-- Ranking nacional se cargará aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para reproducir video -->
+    <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-spotify-black rounded-lg p-6 max-w-4xl w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="videoTitle" class="text-xl font-bold"></h3>
+                <button id="closeModal" class="text-spotify-light-gray hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div id="videoContainer" class="aspect-video bg-black rounded">
+                <!-- Video se cargará aquí -->
+            </div>
+            <div class="mt-4 flex items-center justify-between">
+                <div id="participantInfo" class="flex items-center space-x-4">
+                    <!-- Información del participante -->
+                </div>
+                <div class="flex space-x-2">
+                    <button id="modalVoteBtn" class="vote-btn px-4 py-2 rounded-full">
+                        <i class="fas fa-heart mr-2"></i>
+                        Votar
+                    </button>
+                    <button id="modalShareBtn" class="share-btn px-4 py-2 rounded-full">
+                        <i class="fas fa-share-alt mr-2"></i>
+                        Compartir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de compartir -->
+    <div id="shareModal" class="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 hidden">
+        <div class="bg-spotify-black rounded-lg p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold">Compartir Participante</h3>
+                <button id="closeShareModal" class="text-spotify-light-gray hover:text-white">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <button class="share-option w-full flex items-center p-3 rounded hover:bg-gray-700" data-platform="facebook">
+                    <i class="fab fa-facebook text-blue-500 mr-3 text-xl"></i>
+                    Compartir en Facebook
+                </button>
+                <button class="share-option w-full flex items-center p-3 rounded hover:bg-gray-700" data-platform="twitter">
+                    <i class="fab fa-twitter text-blue-400 mr-3 text-xl"></i>
+                    Compartir en Twitter
+                </button>
+                <button class="share-option w-full flex items-center p-3 rounded hover:bg-gray-700" data-platform="whatsapp">
+                    <i class="fab fa-whatsapp text-green-500 mr-3 text-xl"></i>
+                    Compartir en WhatsApp
+                </button>
+                <button class="share-option w-full flex items-center p-3 rounded hover:bg-gray-700" data-platform="copy">
+                    <i class="fas fa-link text-gray-400 mr-3 text-xl"></i>
+                    Copiar enlace
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading global -->
+    <div id="globalLoader" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-spotify-black rounded-lg p-8 flex items-center space-x-4">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-spotify-green"></div>
+            <span class="text-white">Cargando...</span>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script type="module" src="firebase-config.js"></script>
+    <script type="module" src="certamenes.js"></script>
+</body>
+</html>
