@@ -1,12 +1,11 @@
 // payment-config.js - Configuración centralizada del sistema de pagos
-const { onCall, onRequest } = require("firebase-functions/v2/https");
+const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const { defineString } = require("firebase-functions/params");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 
 // Variables de entorno
-const mercadopagoToken = defineString("MERCADOPAGO_TOKEN");
-const siteUrl = defineString("SITE_URL", { default: "https://vytonlineprueva.web.app" });
+const mercadopagoToken = functions.config().mercadopago?.token || process.env.MERCADOPAGO_TOKEN;
+const siteUrl = functions.config().site?.url || process.env.SITE_URL || "https://vytonlineprueva.web.app";
 
 /**
  * Configuración de precios por defecto para el sistema

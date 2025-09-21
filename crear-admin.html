@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Admin - VYT Music Online</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            width: 100%;
+            margin: 10px 0;
+        }
+        button:hover {
+            background: #3367d6;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .success { background: #e8f5e8; color: #2e7d32; }
+        .error { background: #ffebee; color: #c62828; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👑 Crear Usuario Administrador</h1>
+        
+        <input type="email" id="adminEmail" placeholder="Email del administrador" value="luciano21martinez@gmail.com">
+        <input type="text" id="adminName" placeholder="Nombre del administrador" value="Luciano Martinez">
+        
+        <button onclick="createAdmin()">👑 Crear Administrador</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script type="module">
+        import { functions } from './firebase-config.js';
+        import { httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
+
+        function showResult(message, type = 'success') {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result ${type}`;
+            resultDiv.textContent = message;
+        }
+
+        window.createAdmin = async function() {
+            const email = document.getElementById('adminEmail').value;
+            const displayName = document.getElementById('adminName').value;
+            
+            if (!email || !displayName) {
+                showResult('Por favor completa todos los campos', 'error');
+                return;
+            }
+            
+            try {
+                showResult('Creando usuario administrador...', 'success');
+                
+                const createAdminUser = httpsCallable(functions, 'createAdminUser');
+                const result = await createAdminUser({ 
+                    email: email, 
+                    displayName: displayName 
+                });
+                
+                showResult(`✅ Usuario administrador creado exitosamente!
+
+Email: ${email}
+Nombre: ${displayName}
+UID: ${result.data.uid}
+
+Ya puedes usar este email para acceder al panel de administración.`, 'success');
+                
+            } catch (error) {
+                console.error('Error:', error);
+                showResult(`❌ Error creando administrador:
+
+${error.message}
+
+Detalles: ${JSON.stringify(error, null, 2)}`, 'error');
+            }
+        };
+
+        console.log('🚀 Página de creación de admin lista!');
+    </script>
+</body>
+</html>
