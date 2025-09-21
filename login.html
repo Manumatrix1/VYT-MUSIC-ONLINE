@@ -3,31 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Iniciar Sesión / Registrarse</title>
+    <title>Iniciar Sesión - VYT MUSIC</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    
     <style>
+        :root {
+            --color-primario: #58a6ff;
+            --color-secundario: #2bb7d1;
+            --color-oro: #FFD700;
+            --color-fondo: #0d1117;
+            --color-fondo-secundario: #161b22;
+            --color-card: #21262d;
+            --color-texto-principal: #f0f6fc;
+            --color-texto-secundario: #8b949e;
+            --color-error: #ff6b6b;
+            --color-success: #40c057;
+        }
+
         body {
-            background-color: #121212;
+            background: linear-gradient(135deg, var(--color-fondo) 0%, var(--color-fondo-secundario) 100%);
             font-family: 'Roboto', sans-serif;
-            color: white;
-            overflow-x: hidden;
+            min-height: 100vh;
+            color: var(--color-texto-principal);
         }
-        .font-display { font-family: 'Montserrat', sans-serif; }
+
+        .login-container {
+            background: var(--color-card);
+            border: 1px solid #30363d;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
         .form-input {
-            background-color: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease-in-out;
+            background: var(--color-fondo-secundario);
+            border: 2px solid #30363d;
+            color: var(--color-texto-principal);
+            transition: all 0.3s ease;
         }
+
         .form-input:focus {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-color: #2bb7d1;
+            border-color: var(--color-primario);
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
             outline: none;
         }
-        .btn-submit {
-            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primario), var(--color-oro));
+            color: var(--color-fondo);
+            border: none;
+            transition: all 0.3s ease;
         }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--color-secundario);
+            color: var(--color-secundario);
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-secundario);
+            color: var(--color-fondo);
+        }
+
+        .error-message {
+            background: rgba(255, 107, 107, 0.1);
+            border: 1px solid var(--color-error);
+            color: var(--color-error);
+        }
+
+        .success-message {
+            background: rgba(64, 192, 87, 0.1);
+            border: 1px solid var(--color-success);
+            color: var(--color-success);
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .social-btn {
+            background: var(--color-fondo-secundario);
+            border: 1px solid #30363d;
+            transition: all 0.3s ease;
+        }
+
+        .social-btn:hover {
+            border-color: var(--color-primario);
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
         .btn-submit:hover {
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.7);
