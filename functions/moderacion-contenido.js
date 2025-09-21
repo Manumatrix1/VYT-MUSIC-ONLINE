@@ -445,7 +445,10 @@ async function notificarArtista(userId, decision, comentarios) {
     await admin.firestore().collection('notificaciones').add(notificacion);
 }
 
-// Función programada para limpiar strikes antiguos
+// Función programada para limpiar strikes antiguos (DISABLED for now)
+// TODO: Implementar con Scheduler v2 cuando sea necesario
+/* 
+/* 
 exports.limpiarStrikesAntiaguos = functions.pubsub.schedule('0 0 * * 0') // Cada domingo
     .onRun(async (context) => {
         const fechaLimite = new Date();
@@ -465,6 +468,7 @@ exports.limpiarStrikesAntiaguos = functions.pubsub.schedule('0 0 * * 0') // Cada
         await batch.commit();
         console.log(`${strikesAntiguos.size} strikes antiguos marcados como inactivos`);
     });
+*/
 
 module.exports = {
     validarContenidoVideo: exports.validarContenidoVideo,
