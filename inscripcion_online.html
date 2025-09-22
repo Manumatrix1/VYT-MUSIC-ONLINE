@@ -315,10 +315,11 @@
     </div>
 
     <script type="module">
-        import { db, storage } from './firebase-config.js';
+        import { db, storage, app } from './firebase-config.js';
         import { collection, addDoc, serverTimestamp, getDoc, getDocs, doc, query, where, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
         import { ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
         import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
 
         const auth = getAuth();
 
@@ -588,6 +589,20 @@
                     }
                     
                     const docRef = await addDoc(collection(db, "participantes_online"), inscripcionDoc);
+                    
+                    // 📧 ENVIAR EMAIL DE CONFIRMACIÓN
+                    try {
+                        const emailFunction = getFunctions(app);
+                        const enviarEmail = httpsCallable(emailFunction, 'enviarEmailInscripcionOnline');
+                        await enviarEmail({
+                            email: email,
+                            nombre: `${nombre} ${apellido}`
+                        });
+                        console.log('📧 Email de confirmación enviado');
+                    } catch (emailError) {
+                        console.warn('⚠️ Error enviando email:', emailError);
+                        // No detener el proceso si falla el email
+                    }
                     
                     // Si no es inscripción de prueba, redirigir a MercadoPago
                     if (!esPrueba) {

@@ -1,6 +1,6 @@
 /**
  * VYT MUSIC ONLINE - FIREBASE FUNCTIONS INDEX - VERSIÓN MÍNIMA V1
- * Solo funciones básicas para que el sistema funcione
+ * Solo funciones básicas para que el sistema funcione + EMAILS
  */
 
 const functions = require('firebase-functions');
@@ -12,6 +12,9 @@ if (!admin.apps.length) {
 }
 
 const db = admin.firestore();
+
+// ===== IMPORTAR SISTEMA DE EMAILS =====
+const emails = require('./emails');
 
 // ===== FUNCIONES BÁSICAS MÍNIMAS =====
 
@@ -359,4 +362,11 @@ exports.createAdminUser = functions.https.onCall(async (data, context) => {
   }
 });
 
-console.log('🚀 VYT Music Online - Funciones básicas v1 cargadas');
+// ===== EXPORTAR FUNCIONES DE EMAIL =====
+exports.enviarEmailInscripcionOnline = emails.enviarEmailInscripcionOnline;
+exports.enviarEmailInscripcionPresencial = emails.enviarEmailInscripcionPresencial;
+exports.enviarCorreoPagoExitoso = emails.enviarCorreoPagoExitoso;
+exports.enviarCorreoPagoFallido = emails.enviarCorreoPagoFallido;
+exports.enviarCorreoGeneral = emails.enviarCorreoGeneral;
+
+console.log('🚀 VYT Music Online - Funciones básicas v1 + EMAILS cargadas');
