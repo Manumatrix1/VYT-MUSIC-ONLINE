@@ -1,58 +1,112 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Admin Panel</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        }
+<!DOCTYPE html><!DOCTYPE html>
+
+<html lang="es"><html lang="es">
+
+<head><head>
+
+    <meta charset="UTF-8">    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Redirigiendo... - VYT MUSIC Admin</title>    <title>VYT MUSIC - Admin Panel</title>
+
+    <style>    <script src="https://cdn.tailwindcss.com"></script>
+
+        body {    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+            display: flex;    <style>
+
+            justify-content: center;        * {
+
+            align-items: center;            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+            min-height: 100vh;        }
+
+            margin: 0;        
+
+            font-family: Arial, sans-serif;        .card {
+
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);            background: white;
+
+            color: white;            border-radius: 8px;
+
+        }            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+        .redirect-container {            border: 1px solid #e5e7eb;
+
+            text-align: center;        }
+
+            padding: 2rem;        
+
+            background: rgba(255,255,255,0.1);        .card-header {
+
+            border-radius: 10px;            padding: 16px 20px;
+
+            backdrop-filter: blur(10px);            border-bottom: 1px solid #e5e7eb;
+
+        }            font-weight: 600;
+
+        .spinner {            font-size: 16px;
+
+            border: 4px solid rgba(255,255,255,0.3);            color: #1f2937;
+
+            border-top: 4px solid white;        }
+
+            border-radius: 50%;        
+
+            width: 40px;        .card-content {
+
+            height: 40px;            padding: 20px;
+
+            animation: spin 1s linear infinite;        }
+
+            margin: 0 auto 1rem;        
+
+        }        .btn-primary {
+
+        @keyframes spin {            background: #1877f2;
+
+            0% { transform: rotate(0deg); }            color: white;
+
+            100% { transform: rotate(360deg); }            padding: 8px 16px;
+
+        }            border-radius: 6px;
+
+    </style>            border: none;
+
+</head>            cursor: pointer;
+
+<body>            font-weight: 500;
+
+    <div class="redirect-container">            transition: all 0.2s;
+
+        <div class="spinner"></div>        }
+
+        <h2>🔄 Redirigiendo al Admin Principal</h2>        
+
+        <p>Este panel ha sido consolidado. Serás redirigido automáticamente...</p>        .btn-primary:hover {
+
+        <p><a href="admin.html" style="color: #ffffff; text-decoration: underline;">Haz clic aquí si no eres redirigido automáticamente</a></p>            background: #166fe5;
+
+    </div>        }
+
         
-        .card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-        }
-        
-        .card-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid #e5e7eb;
-            font-weight: 600;
-            font-size: 16px;
-            color: #1f2937;
-        }
-        
-        .card-content {
-            padding: 20px;
-        }
-        
-        .btn-primary {
-            background: #1877f2;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: none;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-        
-        .btn-primary:hover {
-            background: #166fe5;
-        }
-        
-        .btn-secondary {
-            background: #f3f4f6;
-            color: #374151;
-            padding: 8px 16px;
-            border-radius: 6px;
-            border: 1px solid #d1d5db;
-            cursor: pointer;
-            font-weight: 500;
+
+    <script>        .btn-secondary {
+
+        // Redirigir automáticamente después de 2 segundos            background: #f3f4f6;
+
+        setTimeout(() => {            color: #374151;
+
+            window.location.href = 'admin.html';            padding: 8px 16px;
+
+        }, 2000);            border-radius: 6px;
+
+    </script>            border: 1px solid #d1d5db;
+
+</body>            cursor: pointer;
+
+</html>            font-weight: 500;
             transition: all 0.2s;
         }
         

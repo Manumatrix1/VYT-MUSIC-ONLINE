@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Admin Debug</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" src="./firebase-config.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">🔍 Debug Admin - Participantes</h1>
+        
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-lg font-bold mb-4">🔑 Login Admin</h2>
+            <input type="email" id="debug-email" placeholder="Email" class="p-2 border rounded mr-2">
+            <input type="password" id="debug-password" placeholder="Password" class="p-2 border rounded mr-2">
+            <button id="debug-login" class="bg-blue-600 text-white px-4 py-2 rounded">Login</button>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow mb-6">
+            <h2 class="text-lg font-bold mb-4">🔄 Cargar Participantes</h2>
+            <button id="load-online" class="bg-green-600 text-white px-4 py-2 rounded mr-2">Cargar Online</button>
+            <button id="load-presencial" class="bg-blue-600 text-white px-4 py-2 rounded">Cargar Presencial</button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="font-bold mb-2">🌐 Participantes Online</h3>
+                <div id="debug-online-list">
+                    <p class="text-gray-500">Haz clic en "Cargar Online"</p>
+                </div>
+            </div>
+            
+            <div class="bg-white p-4 rounded-lg shadow">
+                <h3 class="font-bold mb-2">🎪 Participantes Presenciales</h3>
+                <div id="debug-presencial-list">
+                    <p class="text-gray-500">Haz clic en "Cargar Presencial"</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow mt-6">
+            <h2 class="text-lg font-bold mb-4">📊 Info Debug</h2>
+            <div id="debug-info" class="text-sm text-gray-600"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { collection, getDocs, query, where, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+        const debugInfo = document.getElementById('debug-info');
+        
+        function log(message) {
+            debugInfo.innerHTML += `<p>${new Date().toLocaleTimeString()}: ${message}</p>`;
+            console.log(message);
+        }
+
+        // Login
+        document.getElementById('debug-login').addEventListener('click', async () => {
+            const email = document.getElementById('debug-email').value;
+            const password = document.getElementById('debug-password').value;
+            
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                log(`✅ Login exitoso: ${email}`);
+            } catch (error) {
+                log(`❌ Error login: ${error.message}`);
+            }
+        });
+
+        // Cargar Online
+        document.getElementById('load-online').addEventListener('click', async () => {
+            log('🔄 Buscando participantes online...');
+            const listElement = document.getElementById('debug-online-list');
+            listElement.innerHTML = '<p class="text-blue-500">Buscando...</p>';
+            
+            const collections = ['participantes_online', 'inscripciones_online', 'inscripciones'];
+            let total = 0;
+            
+            for (const colName of collections) {
+                try {
+                    log(`Buscando en colección: ${colName}`);
+                    const snapshot = await getDocs(collection(db, colName));
+                    log(`📊 ${colName}: ${snapshot.size} documentos`);
+                    
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        log(`📄 ${doc.id}: ${JSON.stringify(data, null, 2)}`);
+                        
+                        const participantDiv = document.createElement('div');
+                        participantDiv.className = 'border p-2 mb-2 rounded';
+                        participantDiv.innerHTML = `
+                            <strong>${data.nombre_artista || data.nombreArtista || 'Sin nombre'}</strong><br>
+                            <small>Email: ${data.email || 'N/A'}</small><br>
+                            <small>Aprobado: ${data.aprobado || 'N/A'}</small><br>
+                            <small>Colección: ${colName}</small>
+                        `;
+                        listElement.appendChild(participantDiv);
+                        total++;
+                    });
+                } catch (error) {
+                    log(`❌ Error en ${colName}: ${error.message}`);
+                }
+            }
+            
+            if (total === 0) {
+                listElement.innerHTML = '<p class="text-red-500">No se encontraron participantes online</p>';
+            }
+            
+            log(`✅ Total participantes online encontrados: ${total}`);
+        });
+
+        // Cargar Presencial  
+        document.getElementById('load-presencial').addEventListener('click', async () => {
+            log('🔄 Buscando participantes presenciales...');
+            const listElement = document.getElementById('debug-presencial-list');
+            listElement.innerHTML = '<p class="text-blue-500">Buscando...</p>';
+            
+            const collections = ['participantes_presenciales', 'inscripciones_presenciales', 'inscripciones'];
+            let total = 0;
+            
+            for (const colName of collections) {
+                try {
+                    log(`Buscando en colección: ${colName}`);
+                    const snapshot = await getDocs(collection(db, colName));
+                    log(`📊 ${colName}: ${snapshot.size} documentos`);
+                    
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        log(`📄 ${doc.id}: ${JSON.stringify(data, null, 2)}`);
+                        
+                        const participantDiv = document.createElement('div');
+                        participantDiv.className = 'border p-2 mb-2 rounded';
+                        participantDiv.innerHTML = `
+                            <strong>${data.nombre_artista || data.nombreArtista || 'Sin nombre'}</strong><br>
+                            <small>Email: ${data.email || 'N/A'}</small><br>
+                            <small>Aprobado: ${data.aprobado || 'N/A'}</small><br>
+                            <small>Colección: ${colName}</small>
+                        `;
+                        listElement.appendChild(participantDiv);
+                        total++;
+                    });
+                } catch (error) {
+                    log(`❌ Error en ${colName}: ${error.message}`);
+                }
+            }
+            
+            if (total === 0) {
+                listElement.innerHTML = '<p class="text-red-500">No se encontraron participantes presenciales</p>';
+            }
+            
+            log(`✅ Total participantes presenciales encontrados: ${total}`);
+        });
+    </script>
+</body>
+</html>

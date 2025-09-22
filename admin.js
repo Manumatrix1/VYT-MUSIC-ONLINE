@@ -103,12 +103,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to show/hide pages and manage active navigation links
     function showPage(pageId) {
+        // Para el admin, usar admin-section
+        document.querySelectorAll('.admin-section').forEach(section => {
+            section.classList.remove('active');
+        });
+        const targetSection = document.getElementById(pageId + '-section');
+        if (targetSection) {
+            targetSection.classList.add('active');
+        }
+
+        // Para la página principal (si existe)
         document.querySelectorAll('.page').forEach(page => {
             page.classList.add('hidden');
         });
-        document.getElementById(pageId).classList.remove('hidden');
+        const targetPage = document.getElementById(pageId);
+        if (targetPage) {
+            targetPage.classList.remove('hidden');
+        }
 
-        document.querySelectorAll('.nav-menu a, .bottom-nav a').forEach(link => {
+        // Manejar navegación activa
+        document.querySelectorAll('.nav-menu a, .bottom-nav a, .nav-btn').forEach(link => {
             link.classList.remove('active');
         });
         const activeLink = document.querySelector(`[data-target="${pageId}"]`);
@@ -289,21 +303,33 @@ document.addEventListener('DOMContentLoaded', () => {
             loginSection.classList.add('hidden');
             adminDashboard.classList.remove('hidden');
             adminUserEmailSpan.textContent = `Bienvenido, ${user.email}`;
-            showPage('page-dashboard'); // Show dashboard after login
-            loadMainBanner();
-            loadCarouselItems();
-            loadCertamenes();
-            loadHomeVideos();
-            loadBuilderBlocks(); // Changed to a more generic name
-            loadInscVideos();
-            setupRealtimeListeners(); // Assuming this is part of existing setup
-            loadBasesYCondiciones();
-            loadPozoAcumulado(); // Load prize pool on login
-            loadSessionsConfig(); // Load sessions configuration
-            loadCertamenesProvinciales(); // Load certámenes provinciales
-            initializeVotosChart(); // Initialize votes chart
-            setupVotosRealtimeListener(); // Setup real-time votes listener
-            // ... (rest of the setup)
+            
+            // Mostrar la sección de participantes por defecto
+            showPage('participantes');
+            
+            // Cargar solo las funciones que existen
+            try {
+                loadMainBanner();
+            } catch (e) { console.log('loadMainBanner no disponible'); }
+            
+            try {
+                loadCarouselItems();
+            } catch (e) { console.log('loadCarouselItems no disponible'); }
+            
+            try {
+                loadCertamenes();
+            } catch (e) { console.log('loadCertamenes no disponible'); }
+            
+            try {
+                loadHomeVideos();
+            } catch (e) { console.log('loadHomeVideos no disponible'); }
+            
+            // *** CARGAR PARTICIPANTES AUTOMÁTICAMENTE ***
+            setTimeout(() => {
+                loadParticipantesOnline();     // Carga automática participantes online
+                loadParticipantesPresenciales(); // Carga automática participantes presenciales
+            }, 1000); // Pequeño delay para asegurar que el DOM esté listo
+            
         } else {
             loginSection.classList.remove('hidden');
             adminDashboard.classList.add('hidden');
@@ -561,7 +587,7 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error("Error adding to carousel:", error);
             alert("Error al añadir el ítem al carrusel.");
         }
-    });
+    }); // <-- This closing brace and parenthesis was missing
 
     carouselItemsListDiv.addEventListener('click', async (e) => {
         if (e.target.classList.contains('delete-carousel-item-btn')) {
@@ -571,11 +597,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadCarouselItems(); // Refresh the list
             }
         }
-    });
+    }); // <-- Close carouselItemsListDiv event listener
 
     // --- Certamenes Logic ---
     const loadCertamenes = async () => {
-        certamenesListDiv.innerHTML = '<p class="text-gray-500">Cargando certámenes...</p>';;
+        certamenesListDiv.innerHTML = '<p class="text-gray-500">Cargando certámenes...</p>';
         try {
             const q = query(collection(db, "certamenes_online"), orderBy("orden", "asc"));
             const querySnapshot = await getDocs(q);
@@ -603,6 +629,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `;
                 certamenesListDiv.appendChild(item);
             });
+            // End of loadCertamenes function
         } catch (error) {
             console.error("Error loading certamenes:", error);
             certamenesListDiv.innerHTML = '<p class="text-red-500">Error al cargar los certámenes.</p>';
@@ -3681,5 +3708,462 @@ document.addEventListener('DOMContentLoaded', () => {
     window.loadWorkflowParticipants = loadWorkflowParticipants;
     window.applyWorkflowFilters = applyWorkflowFilters;
     window.clearWorkflowFilters = clearWorkflowFilters;
+
+    // === FUNCIONES GLOBALES PARA EL HTML ADMIN ===
+    
+    // Función para cargar participantes online
+    window.loadParticipantesOnline = function() {
+        console.log('Cargando participantes online automáticamente...');
+        const listElement = document.getElementById('participantes-online-list');
+        if (!listElement) {
+            console.error('Elemento participantes-online-list no encontrado');
+            return;
+        }
+        
+        // Buscar en múltiples colecciones posibles
+        const possibleCollections = ['participantes_online', 'inscripciones_online', 'inscripciones'];
+        let totalEncontrados = 0;
+        
+        possibleCollections.forEach(collectionName => {
+            try {
+                // Buscar participantes NO aprobados (pendientes de revisión)
+                const pendingRef = query(
+                    collection(db, collectionName), 
+                    where("aprobado", "==", false)
+                );
+                
+                onSnapshot(pendingRef, snapshot => {
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        
+                        // Verificar que sea un participante online
+                        const esOnline = data.modalidad === 'online' || 
+                                        collectionName.includes('online') ||
+                                        data.tipo_inscripcion === 'online';
+                        
+                        if (esOnline || collectionName === 'participantes_online') {
+                            const participantDiv = document.createElement('div');
+                            participantDiv.className = 'bg-white border border-gray-200 p-4 rounded-lg shadow-sm';
+                            participantDiv.innerHTML = `
+                                <div class="flex items-center gap-4">
+                                    ${data.foto_url || data.fotoUrl ? 
+                                        `<img src="${data.foto_url || data.fotoUrl}" alt="Foto" class="w-14 h-14 rounded-full object-cover border-2 border-gray-200">` : 
+                                        '<div class="w-14 h-14 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-white font-bold">👤</div>'
+                                    }
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-lg text-gray-800">${data.nombre_artista || data.nombreArtista || 'Sin nombre'}</h4>
+                                        <p class="text-sm text-gray-600">${data.email || data.correo || 'Sin email'}</p>
+                                        <p class="text-xs text-blue-600 font-medium">Modalidad: Online</p>
+                                        ${data.video_link || data.videoLink ? 
+                                            `<p class="text-xs mt-2">
+                                                <a href="${data.video_link || data.videoLink}" target="_blank" class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs hover:bg-red-200 transition-colors">
+                                                    🎥 Ver Video de Casting
+                                                </a>
+                                            </p>` : 
+                                            '<p class="text-xs text-red-500 mt-2">⚠️ Sin video</p>'
+                                        }
+                                        <p class="text-xs text-gray-400 mt-1">Colección: ${collectionName}</p>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2" 
+                                                onclick="aprobarParticipante('${doc.id}', '${collectionName}')" title="Aprobar participante">
+                                            ✓ Aprobar
+                                        </button>
+                                        <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2" 
+                                                onclick="rechazarParticipante('${doc.id}', '${collectionName}')" title="Rechazar participante">
+                                            ✗ Rechazar
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Solo agregar si es la primera vez que encontramos participantes
+                            if (totalEncontrados === 0) {
+                                listElement.innerHTML = '';
+                            }
+                            
+                            listElement.appendChild(participantDiv);
+                            totalEncontrados++;
+                        }
+                    });
+                    
+                    // Si no hay participantes después de revisar todo
+                    setTimeout(() => {
+                        if (totalEncontrados === 0) {
+                            listElement.innerHTML = `
+                                <div class="text-center py-8 text-gray-500">
+                                    <div class="text-4xl mb-2">📝</div>
+                                    <p class="font-medium">No hay participantes online pendientes</p>
+                                    <p class="text-sm">Los participantes aparecerán aquí cuando se inscriban desde la web</p>
+                                </div>
+                            `;
+                        }
+                    }, 2000);
+                });
+                
+            } catch (error) {
+                console.log(`No se pudo acceder a la colección ${collectionName}:`, error.message);
+            }
+        });
+    };
+
+    // Función para cargar participantes presenciales
+    window.loadParticipantesPresenciales = function() {
+        console.log('Cargando participantes presenciales automáticamente...');
+        const listElement = document.getElementById('participantes-presenciales-list');
+        if (!listElement) {
+            console.error('Elemento participantes-presenciales-list no encontrado');
+            return;
+        }
+        
+        // Buscar en múltiples colecciones posibles
+        const possibleCollections = ['participantes_presenciales', 'inscripciones_presenciales', 'inscripciones'];
+        let totalEncontrados = 0;
+        
+        possibleCollections.forEach(collectionName => {
+            try {
+                // Buscar participantes NO aprobados (pendientes de revisión)
+                const pendingRef = query(
+                    collection(db, collectionName), 
+                    where("aprobado", "==", false)
+                );
+                
+                onSnapshot(pendingRef, snapshot => {
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        
+                        // Verificar que sea un participante presencial
+                        const esPresencial = data.modalidad === 'presencial' || 
+                                           collectionName.includes('presencial') ||
+                                           data.tipo_inscripcion === 'presencial';
+                        
+                        if (esPresencial || collectionName === 'participantes_presenciales') {
+                            const participantDiv = document.createElement('div');
+                            participantDiv.className = 'bg-white border border-gray-200 p-4 rounded-lg shadow-sm';
+                            participantDiv.innerHTML = `
+                                <div class="flex items-center gap-4">
+                                    ${data.foto_url || data.fotoUrl ? 
+                                        `<img src="${data.foto_url || data.fotoUrl}" alt="Foto" class="w-14 h-14 rounded-full object-cover border-2 border-gray-200">` : 
+                                        '<div class="w-14 h-14 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">👤</div>'
+                                    }
+                                    <div class="flex-1">
+                                        <h4 class="font-semibold text-lg text-gray-800">${data.nombre_artista || data.nombreArtista || 'Sin nombre'}</h4>
+                                        <p class="text-sm text-gray-600">${data.email || data.correo || 'Sin email'}</p>
+                                        <p class="text-xs text-green-600 font-medium">Modalidad: Presencial</p>
+                                        ${data.video_link || data.videoLink ? 
+                                            `<p class="text-xs mt-2">
+                                                <a href="${data.video_link || data.videoLink}" target="_blank" class="bg-red-100 text-red-700 px-2 py-1 rounded text-xs hover:bg-red-200 transition-colors">
+                                                    🎥 Ver Video de Casting
+                                                </a>
+                                            </p>` : 
+                                            '<p class="text-xs text-red-500 mt-2">⚠️ Sin video</p>'
+                                        }
+                                        <p class="text-xs text-gray-400 mt-1">Colección: ${collectionName}</p>
+                                    </div>
+                                    <div class="flex flex-col gap-2">
+                                        <button class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2" 
+                                                onclick="aprobarParticipante('${doc.id}', '${collectionName}')" title="Aprobar participante">
+                                            ✓ Aprobar
+                                        </button>
+                                        <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-medium transition-colors flex items-center gap-2" 
+                                                onclick="rechazarParticipante('${doc.id}', '${collectionName}')" title="Rechazar participante">
+                                            ✗ Rechazar
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                            
+                            // Solo agregar si es la primera vez que encontramos participantes
+                            if (totalEncontrados === 0) {
+                                listElement.innerHTML = '';
+                            }
+                            
+                            listElement.appendChild(participantDiv);
+                            totalEncontrados++;
+                        }
+                    });
+                    
+                    // Si no hay participantes después de revisar todo
+                    setTimeout(() => {
+                        if (totalEncontrados === 0) {
+                            listElement.innerHTML = `
+                                <div class="text-center py-8 text-gray-500">
+                                    <div class="text-4xl mb-2">🎪</div>
+                                    <p class="font-medium">No hay participantes presenciales pendientes</p>
+                                    <p class="text-sm">Los participantes aparecerán aquí cuando se inscriban desde la web</p>
+                                </div>
+                            `;
+                        }
+                    }, 2000);
+                });
+                
+            } catch (error) {
+                console.log(`No se pudo acceder a la colección ${collectionName}:`, error.message);
+            }
+        });
+    };
+
+    // Función para cargar artistas (perfiles de artistas aprobados)
+    window.loadArtistas = function() {
+        console.log('Cargando artistas de todas las colecciones...');
+        const listElement = document.getElementById('artistas-list');
+        if (!listElement) {
+            console.error('Elemento artistas-list no encontrado');
+            return;
+        }
+        
+        // Limpiar lista primero
+        listElement.innerHTML = '<p class="text-gray-500">Buscando artistas en la base de datos...</p>';
+        
+        // Lista de posibles colecciones donde podrían estar los artistas
+        const possibleCollections = [
+            'participantes_online',
+            'participantes_presenciales', 
+            'artistas',
+            'perfiles_artistas',
+            'usuarios',
+            'inscripciones',
+            'inscripciones_online',
+            'inscripciones_presenciales'
+        ];
+        
+        let totalArtistasEncontrados = 0;
+        let collectionesRevisadas = 0;
+        
+        // Función para renderizar un artista
+        const renderArtista = (doc, data, collectionName) => {
+            const artistDiv = document.createElement('div');
+            artistDiv.className = 'bg-white p-4 rounded border shadow-sm mb-3';
+            artistDiv.innerHTML = `
+                <div class="flex items-center gap-4">
+                    ${data.foto_url || data.fotoUrl ? 
+                        `<img src="${data.foto_url || data.fotoUrl}" alt="Foto" class="w-16 h-16 rounded-full object-cover">` : 
+                        '<div class="w-16 h-16 bg-gray-300 rounded-full flex items-center justify-center text-gray-600">👤</div>'
+                    }
+                    <div class="flex-1">
+                        <h4 class="font-semibold text-lg">${data.nombre_artista || data.nombreArtista || data.nombre || 'Sin nombre'}</h4>
+                        <p class="text-sm text-gray-600">${data.email || data.correo || 'Sin email'}</p>
+                        <p class="text-xs text-purple-600">Colección: ${collectionName}</p>
+                        <p class="text-xs text-green-600">Aprobado: ${data.aprobado ? '✅ Sí' : '❌ No'}</p>
+                        ${data.video_link || data.videoLink ? 
+                            `<p class="text-xs text-blue-600"><a href="${data.video_link || data.videoLink}" target="_blank">🎥 Ver video</a></p>` : 
+                            '<p class="text-xs text-gray-400">Sin video</p>'
+                        }
+                        ${data.fecha_inscripcion ? 
+                            `<p class="text-xs text-gray-500">Inscrito: ${data.fecha_inscripcion.toDate ? data.fecha_inscripcion.toDate().toLocaleDateString() : data.fecha_inscripcion}</p>` : 
+                            ''
+                        }
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        ${data.aprobado ? 
+                            `<button class="bg-yellow-600 text-white px-3 py-1 rounded text-sm" onclick="desaprobarParticipante('${doc.id}', '${collectionName}')" title="Desaprobar">
+                                🚫 Desaprobar
+                            </button>` :
+                            `<button class="bg-green-600 text-white px-3 py-1 rounded text-sm" onclick="aprobarParticipante('${doc.id}', '${collectionName}')" title="Aprobar">
+                                ✅ Aprobar
+                            </button>`
+                        }
+                        <button class="bg-blue-600 text-white px-3 py-1 rounded text-sm" onclick="verDetallesArtista('${doc.id}', '${collectionName}')" title="Ver detalles">
+                            👁️ Detalles
+                        </button>
+                    </div>
+                </div>
+            `;
+            return artistDiv;
+        };
+        
+        // Función para buscar en una colección
+        const searchInCollection = async (collectionName) => {
+            try {
+                console.log(`Buscando en colección: ${collectionName}`);
+                const snapshot = await getDocs(collection(db, collectionName));
+                
+                if (!snapshot.empty) {
+                    console.log(`Encontrados ${snapshot.size} documentos en ${collectionName}`);
+                    
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        
+                        // Buscar campos que indiquen que es un artista/participante
+                        const esArtista = data.nombre_artista || data.nombreArtista || 
+                                         data.video_link || data.videoLink || 
+                                         data.foto_url || data.fotoUrl ||
+                                         data.email || data.correo;
+                        
+                        if (esArtista) {
+                            const artistDiv = renderArtista(doc, data, collectionName);
+                            
+                            // Si es la primera vez que encontramos artistas, limpiar el mensaje de "Buscando..."
+                            if (totalArtistasEncontrados === 0) {
+                                listElement.innerHTML = '';
+                            }
+                            
+                            listElement.appendChild(artistDiv);
+                            totalArtistasEncontrados++;
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log(`Colección ${collectionName} no existe o no accesible:`, error.message);
+            }
+            
+            collectionesRevisadas++;
+            
+            // Si ya revisamos todas las colecciones
+            if (collectionesRevisadas === possibleCollections.length) {
+                if (totalArtistasEncontrados === 0) {
+                    listElement.innerHTML = `
+                        <div class="bg-yellow-50 border border-yellow-200 rounded p-4">
+                            <h3 class="font-semibold text-yellow-800">No se encontraron artistas</h3>
+                            <p class="text-yellow-700 text-sm mt-2">Se revisaron ${possibleCollections.length} colecciones posibles.</p>
+                            <p class="text-yellow-700 text-sm">Colecciones revisadas: ${possibleCollections.join(', ')}</p>
+                            <button onclick="window.open('consultar-datos.html', '_blank')" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded text-sm">
+                                🔍 Abrir Inspector de Base de Datos
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // Agregar resumen al final
+                    const resumenDiv = document.createElement('div');
+                    resumenDiv.className = 'bg-green-50 border border-green-200 rounded p-4 mt-4';
+                    resumenDiv.innerHTML = `
+                        <h3 class="font-semibold text-green-800">✅ Búsqueda completada</h3>
+                        <p class="text-green-700 text-sm">Se encontraron <strong>${totalArtistasEncontrados} artistas</strong> en la base de datos.</p>
+                    `;
+                    listElement.appendChild(resumenDiv);
+                }
+            }
+        };
+        
+        // Buscar en todas las colecciones posibles
+        possibleCollections.forEach(collectionName => {
+            searchInCollection(collectionName);
+        });
+    };
+    
+    // Función para ver detalles de un artista
+    window.verDetallesArtista = async function(artistaId, collectionName) {
+        try {
+            const docRef = doc(db, collectionName, artistaId);
+            const docSnap = await getDoc(docRef);
+            
+            if (docSnap.exists()) {
+                const data = docSnap.data();
+                const detalles = JSON.stringify(data, null, 2);
+                
+                // Crear modal o alert con los detalles
+                const modalContent = `
+                    DETALLES DEL ARTISTA
+                    ===================
+                    ID: ${artistaId}
+                    Colección: ${collectionName}
+                    
+                    Datos:
+                    ${detalles}
+                `;
+                
+                alert(modalContent);
+            } else {
+                alert('No se encontró el documento');
+            }
+        } catch (error) {
+            console.error('Error al obtener detalles:', error);
+            alert('Error al obtener detalles del artista');
+        }
+    };
+    };
+
+    // Función para aprobar participante
+    window.aprobarParticipante = async function(participantId, collectionName) {
+        if (!confirm('¿Estás seguro de que quieres aprobar este participante?')) return;
+        
+        try {
+            // Usar el nombre de la colección directamente
+            await updateDoc(doc(db, collectionName, participantId), { 
+                aprobado: true,
+                fecha_aprobacion: serverTimestamp()
+            });
+            console.log('Participante aprobado exitosamente');
+            alert('Participante aprobado. Se enviará email automáticamente.');
+            
+            // Recargar la lista
+            window.loadArtistas();
+        } catch (error) {
+            console.error('Error al aprobar participante:', error);
+            alert('Error al aprobar participante');
+        }
+    };
+
+    // Función para rechazar participante
+    window.rechazarParticipante = async function(participantId, collectionName) {
+        const motivo = prompt('Motivo del rechazo (opcional):');
+        if (!confirm('¿Estás seguro de que quieres rechazar este participante?')) return;
+        
+        try {
+            await updateDoc(doc(db, collectionName, participantId), { 
+                aprobado: false,
+                rechazado: true,
+                motivo_rechazo: motivo || 'Sin motivo especificado',
+                fecha_rechazo: serverTimestamp()
+            });
+            console.log('Participante rechazado');
+            alert('Participante rechazado');
+            
+            // Recargar la lista
+            window.loadArtistas();
+        } catch (error) {
+            console.error('Error al rechazar participante:', error);
+            alert('Error al rechazar participante');
+        }
+    };
+
+    // Función para desaprobar participante ya aprobado
+    window.desaprobarParticipante = async function(participantId, collectionName) {
+        if (!confirm('¿Estás seguro de que quieres desaprobar este artista?')) return;
+        
+        try {
+            await updateDoc(doc(db, collectionName, participantId), { 
+                aprobado: false,
+                fecha_desaprobacion: serverTimestamp()
+            });
+            console.log('Artista desaprobado');
+            alert('Artista desaprobado exitosamente');
+            
+            // Recargar la lista
+            window.loadArtistas();
+        } catch (error) {
+            console.error('Error al desaprobar artista:', error);
+            alert('Error al desaprobar artista');
+        }
+    };
+
+    // Función para cargar estadísticas
+    window.loadEstadisticas = async function() {
+        console.log('Cargando estadísticas...');
+        try {
+            // Contar participantes
+            const onlineSnapshot = await getDocs(collection(db, 'participantes_online'));
+            const presencialSnapshot = await getDocs(collection(db, 'participantes_presenciales'));
+            const totalParticipantes = onlineSnapshot.size + presencialSnapshot.size;
+            
+            // Contar artistas aprobados
+            const onlineAprobadosSnapshot = await getDocs(query(collection(db, 'participantes_online'), where("aprobado", "==", true)));
+            const presencialAprobadosSnapshot = await getDocs(query(collection(db, 'participantes_presenciales'), where("aprobado", "==", true)));
+            const totalArtistas = onlineAprobadosSnapshot.size + presencialAprobadosSnapshot.size;
+            
+            // Contar certámenes
+            const certamenesSnapshot = await getDocs(collection(db, 'certamenes'));
+            const totalCertamenes = certamenesSnapshot.size;
+            
+            // Actualizar UI
+            document.getElementById('stat-participantes').textContent = totalParticipantes;
+            document.getElementById('stat-artistas').textContent = totalArtistas;
+            document.getElementById('stat-certamenes').textContent = totalCertamenes;
+            
+        } catch (error) {
+            console.error('Error al cargar estadísticas:', error);
+            alert('Error al cargar estadísticas');
+        }
+    };
 
 });

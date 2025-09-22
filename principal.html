@@ -220,7 +220,33 @@
 
     /* --- Header Nav (Desktop) --- */
     .header-nav {
-        display: none; /* Oculto en móvil por defecto */
+        display: flex; /* Visible por defecto en desktop */
+        gap: 1rem;
+        align-items: center;
+    }
+    
+    .header-nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: var(--color-texto-secundario);
+        font-weight: 700;
+        font-size: 0.9rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 9999px; /* Hacemos los botones redondeados como el buscador */
+        transition: all 0.2s ease;
+    }
+    .header-nav-link:hover, .header-nav-link.active {
+        background-color: #5aeef4;
+        color: #0d1117; /* Texto oscuro para contraste */
+    }
+    .header-nav-link svg {
+        width: 1.25rem;
+        height: 1.25rem;
+    }
+    /* En PC, ocultamos los íconos y mostramos solo el texto */
+    .header-nav-link svg {
+        display: none;
     }
 
     @media (min-width: 768px) {
@@ -228,29 +254,6 @@
             display: flex;
             gap: 1rem;
             align-items: center;
-        }
-        .header-nav-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--color-texto-secundario);
-            font-weight: 700;
-            font-size: 0.9rem;
-            padding: 0.5rem 0.75rem;
-            border-radius: 9999px; /* Hacemos los botones redondeados como el buscador */
-            transition: all 0.2s ease;
-        }
-        .header-nav-link:hover, .header-nav-link.active {
-            background-color: #5aeef4;
-            color: #0d1117; /* Texto oscuro para contraste */
-        }
-        .header-nav-link svg {
-            width: 1.25rem;
-            height: 1.25rem;
-        }
-        /* En PC, ocultamos los íconos y mostramos solo el texto */
-        .header-nav-link svg {
-            display: none;
         }
         
         /* --- Dropdown Menu Styles --- */
@@ -1516,7 +1519,7 @@
 
     /* Responsive adjustments */
     @media (max-width: 767px) {
-        .header-nav, .header-logo { display: none; }
+        .header-nav, .header-logo { display: none !important; }
         .header { justify-content: center; padding: 1rem; }
 
         .main-content { 
