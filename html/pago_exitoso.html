@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>¡Pago Exitoso! - VYT MUSIC</title>
+	<script src="https://cdn.tailwindcss.com"></script>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			--color-fondo-secundario: #161b22;
+			--color-texto-principal: #e6edf3;
+			--color-texto-secundario: #b0b8c4;
+			--color-primario: #58a6ff;
+			--color-secundario: #238636;
+			--color-oro: #FFD700;
+			--fuente-titulos: 'Bebas Neue', sans-serif;
+			--fuente-cuerpo: 'Montserrat', sans-serif;
+		}
+		body {
+			background-color: #121212;
+			font-family: var(--fuente-cuerpo);
+			color: var(--color-texto-principal);
+		}
+		.modal-content {
+			background: var(--color-fondo-secundario);
+			padding: 2.5rem;
+			border-radius: 15px;
+			text-align: center;
+			max-width: 500px;
+			width: 90%;
+			border: 1px solid #30363d;
+			box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+			margin: auto;
+		}
+		.modal-title {
+			font-family: var(--fuente-titulos);
+			font-size: 2.5rem;
+			margin-bottom: 1rem;
+		}
+		.modal-text {
+			margin-bottom: 1.5rem;
+			color: var(--color-texto-secundario);
+			line-height: 1.6;
+		}
+		.btn {
+			display: inline-block;
+			padding: 0.8rem 1.8rem;
+			border-radius: 50px;
+			text-decoration: none;
+			font-weight: 700;
+			transition: all 0.3s ease;
+			border: 2px solid transparent;
+			cursor: pointer;
+		}
+		.btn-primario {
+			background-color: var(--color-primario);
+			color: #121212;
+		}
+	</style>
+</head>
+<body>
+	<div class="min-h-screen flex items-center justify-center bg-black/80">
+		<div class="modal-content">
+			<div class="text-6xl mb-4">✅</div>
+			<h1 class="modal-title text-yellow-400">¡Pago Exitoso!</h1>
+			<p class="modal-text">Tu pago fue procesado correctamente.<br>Gracias por apoyar a los artistas y al certamen VYT MUSIC.</p>
+			<a href="/principal.html" class="btn btn-primario">Volver al inicio</a>
+		</div>
+	</div>
+</body>
+</html>
