@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Fallido - VYT MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-fondo-secundario: #161b22;
+            --color-texto-principal: #e6edf3;
+            --color-texto-secundario: #b0b8c4;
+            --color-primario: #58a6ff;
+            --color-secundario: #238636;
+            --color-oro: #FFD700;
+            --color-error: #ff4d4d;
+            --fuente-titulos: 'Bebas Neue', sans-serif;
+            --fuente-cuerpo: 'Montserrat', sans-serif;
+        }
+        body {
+            background-color: #121212;
+            font-family: var(--fuente-cuerpo);
+            color: var(--color-texto-principal);
+        }
+        .modal-content {
+            background: var(--color-fondo-secundario);
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid #30363d;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+            margin: auto;
+        }
+        .modal-title {
+            font-family: var(--fuente-titulos);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .modal-text {
+            margin-bottom: 1.5rem;
+            color: var(--color-texto-secundario);
+            line-height: 1.6;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+        .btn-primario {
+            background-color: var(--color-primario);
+            color: #121212;
+        }
+        .btn-primario:hover {
+            background-color: transparent;
+            border-color: var(--color-primario);
+            color: var(--color-primario);
+        }
+        .btn-secundario {
+            background-color: transparent;
+            color: var(--color-texto-principal);
+            border-color: #8b949e;
+        }
+        .btn-secundario:hover {
+            border-color: var(--color-texto-principal);
+            color: var(--color-texto-principal);
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen p-6">
+    <main class="container py-10">
+        <div class="modal-content">
+            <h2 class="modal-title" style="color: var(--color-error);">❌ Pago Fallido</h2>
+            <div id="certamen-info" class="mb-6 p-4 bg-gray-800 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2">Inscripción Pendiente</h3>
+                <p id="certamen-nombre" class="text-gray-300"></p>
+                <p id="monto-pago" class="text-red-400 font-bold"></p>
+            </div>
+            <div class="mb-6 p-4 bg-red-900 bg-opacity-30 border border-red-600 rounded-lg">
+                <h3 class="text-lg font-semibold mb-2 text-red-400">⚠️ ¿Qué puedes hacer?</h3>
+                <div class="text-left space-y-2 text-sm text-gray-300">
+                    <p>• Intenta nuevamente con otro método de pago</p>
+                    <p>• Verifica que tu tarjeta tenga fondos suficientes</p>
+                    <p>• Realiza una transferencia bancaria directa</p>
+                    <p>• Contacta a nuestro soporte para asistencia</p>
+                </div>
+            </div>
+            <p class="modal-text">
+                No te preocupes, tu inscripción está guardada. Solo necesitas completar el pago para activar tu participación en el certamen.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mt-6">
+                <a href="../inscripcion_online.html" class="btn btn-primario">Reintentar Pago</a>
+                <a href="https://wa.me/5491169876543" target="_blank" class="btn btn-secundario">Contactar Soporte</a>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const precio = urlParams.get('precio');
+            const certamen = urlParams.get('certamen');
+
+            // Mostrar información del certamen
+            if (certamen) {
+                document.getElementById('certamen-nombre').textContent = `Certamen: ${decodeURIComponent(certamen)}`;
+            }
+            if (precio) {
+                document.getElementById('monto-pago').textContent = `Monto: $${precio}`;
+            }
+        });
+    </script>
+</body>
+</html>

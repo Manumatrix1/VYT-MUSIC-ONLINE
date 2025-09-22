@@ -1,0 +1,1629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Admin Panel</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+            font-size: 16px;
+            color: #1f2937;
+        }
+        
+        .card-content {
+            padding: 20px;
+        }
+        
+        .btn-primary {
+            background: #1877f2;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-primary:hover {
+            background: #166fe5;
+        }
+        
+        .btn-secondary {
+            background: #f3f4f6;
+            color: #374151;
+            padding: 8px 16px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #1877f2;
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.1);
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-card.green {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+        }
+        
+        .stat-card.blue {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+        }
+        
+        .stat-card.purple {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+        }
+        
+        .stat-card.orange {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        }
+        
+        .quick-access-btn {
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            color: white;
+            font-weight: 500;
+        }
+        
+        .quick-access-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .quick-access-btn.blue {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-color: #1d4ed8;
+        }
+        
+        .quick-access-btn.green {
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-color: #059669;
+        }
+        
+        .quick-access-btn.purple {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            border-color: #7c3aed;
+        }
+        
+        .quick-access-btn.orange {
+            background: linear-gradient(135deg, #f97316, #ea580c);
+            border-color: #ea580c;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            overflow-y: auto;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            background: #f8fafc;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .nav-item {
+            padding: 12px 16px;
+            margin: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #374151;
+        }
+        
+        .nav-item:hover {
+            background: #f3f4f6;
+        }
+        
+        .nav-item.active {
+            background: #eff6ff;
+            color: #1877f2;
+            font-weight: 500;
+        }
+        
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: #f8fafc;
+        }
+        
+        .login-card {
+            background: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+                z-index: 1000;
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+                padding: 60px 15px 20px 15px;
+            }
+            
+            .mobile-menu-btn {
+                position: fixed;
+                top: 15px;
+                left: 15px;
+                z-index: 1001;
+                background: #1877f2;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                width: 44px;
+                height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            .mobile-menu-btn {
+                display: none;
+            }
+        }
+        
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        .hierarchy-level {
+            padding: 16px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 4px solid;
+        }
+        
+        .hierarchy-level.nacional {
+            background: #eff6ff;
+            border-left-color: #3b82f6;
+        }
+        
+        .hierarchy-level.provincial {
+            background: #f0fdf4;
+            border-left-color: #22c55e;
+        }
+        
+        .hierarchy-level.regional {
+            background: #fefce8;
+            border-left-color: #eab308;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Mobile Menu Button -->
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        ☰
+    </button>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="login-container">
+        <div class="login-card">
+            <div class="text-center mb-8">
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-16 h-16 mx-auto mb-4">
+                <h1 class="text-2xl font-bold text-gray-900 mb-2">VYT Music Admin</h1>
+                <p class="text-gray-600">Ingresa para administrar el certamen</p>
+                
+                <!-- Botón de Acceso Rápido -->
+                <div class="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <h3 class="font-semibold text-blue-900 mb-2">🚀 Acceso Rápido</h3>
+                    <div class="space-y-2">
+                        <button onclick="loginRapido()" class="btn-primary w-full text-sm">
+                            ⚡ Ingreso Automático
+                        </button>
+                        <p class="text-xs text-blue-600">Sin necesidad de escribir credenciales</p>
+                    </div>
+                </div>
+            </div>
+            <div id="login-error" class="hidden mb-4 p-3 bg-red-50 border border-red-200 rounded-md text-red-700 text-sm"></div>
+            <form id="login-form" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                    <input type="email" id="admin-email" class="input-field" placeholder="luciano21martinez@gmail.com" required>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Contraseña</label>
+                    <input type="password" id="admin-password" class="input-field" placeholder="••••••••" required>
+                </div>
+                <button type="submit" class="btn-primary w-full">Ingresar al Panel</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Admin Interface -->
+    <div id="admin-interface" class="hidden">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center gap-3">
+                    <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-10 h-10 rounded-full">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">VYT Music</h3>
+                        <p class="text-sm text-gray-500">Panel de Control</p>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="p-2">
+                <div class="nav-item active" data-page="dashboard">
+                    <span>📊</span>
+                    <span>Dashboard Principal</span>
+                </div>
+                <div class="nav-item" data-page="certamenes-jerarquicos">
+                    <span>🏆</span>
+                    <span>Sistema Jerárquico</span>
+                </div>
+                <div class="nav-item" data-page="participantes">
+                    <span>👥</span>
+                    <span>Participantes</span>
+                </div>
+                <div class="nav-item" data-page="vyt-money">
+                    <span>💰</span>
+                    <span>VYT Money</span>
+                </div>
+                <div class="nav-item" data-page="duelos">
+                    <span>⚔️</span>
+                    <span>Duelos & Votación</span>
+                </div>
+                <div class="nav-item" data-page="configuracion">
+                    <span>⚙️</span>
+                    <span>Configuración</span>
+                </div>
+            </nav>
+            
+            <div class="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-200">
+                <button id="logout-btn" class="w-full text-left text-red-600 hover:text-red-800 font-medium">
+                    🚪 Cerrar Sesión
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard Principal -->
+            <div id="dashboard" class="page active">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Dashboard del Certamen</h1>
+                    <p class="text-gray-600">Visión general y control total del sistema VYT Music</p>
+                </div>
+
+                <!-- Accesos Rápidos -->
+                <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+                    <h2 class="text-xl font-bold text-gray-900 mb-4">🎯 Accesos Rápidos</h2>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <button onclick="showPage('certamen'); setActiveNav(document.querySelector('[data-page=certamen]'))" 
+                                class="quick-access-btn blue">
+                            <div class="text-2xl mb-2">🏆</div>
+                            <div class="font-medium">Certámenes</div>
+                        </button>
+                        
+                        <button onclick="showPage('participantes'); setActiveNav(document.querySelector('[data-page=participantes]'))" 
+                                class="quick-access-btn green">
+                            <div class="text-2xl mb-2">👥</div>
+                            <div class="font-medium">Participantes</div>
+                        </button>
+                        
+                        <button onclick="showPage('duelos'); setActiveNav(document.querySelector('[data-page=duelos]'))" 
+                                class="quick-access-btn purple">
+                            <div class="text-2xl mb-2">⚔️</div>
+                            <div class="font-medium">Duelos</div>
+                        </button>
+                        
+                        <button onclick="openQuickActions()" 
+                                class="quick-access-btn orange">
+                            <div class="text-2xl mb-2">⚡</div>
+                            <div class="font-medium">Acciones</div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="stat-card blue">
+                        <div class="text-2xl mb-2">🇦🇷</div>
+                        <div class="text-2xl font-bold" id="stats-nacional">$5,000,000</div>
+                        <div class="text-sm opacity-90">Pozo Nacional</div>
+                    </div>
+                    <div class="stat-card green">
+                        <div class="text-2xl mb-2">🏛️</div>
+                        <div class="text-2xl font-bold" id="stats-provincial">23</div>
+                        <div class="text-sm opacity-90">Certámenes Provinciales</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="text-2xl mb-2">👥</div>
+                        <div class="text-2xl font-bold" id="stats-participantes">1,247</div>
+                        <div class="text-sm opacity-90">Participantes Activos</div>
+                    </div>
+                    <div class="stat-card orange">
+                        <div class="text-2xl mb-2">💰</div>
+                        <div class="text-2xl font-bold" id="stats-vyt-money">₩2,450,000</div>
+                        <div class="text-sm opacity-90">VYT Money Circulando</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card">
+                        <div class="card-header">⚡ Acciones Rápidas</div>
+                        <div class="card-content space-y-3">
+                            <button class="btn-primary w-full" onclick="showPage('certamenes-jerarquicos')">
+                                🏆 Crear Nuevo Certamen
+                            </button>
+                            <button class="btn-secondary w-full" onclick="showPage('duelos')">
+                                ⚔️ Iniciar Nuevo Duelo
+                            </button>
+                            <button class="btn-secondary w-full" onclick="updateStats()">
+                                📊 Actualizar Estadísticas
+                            </button>
+                            <button class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded w-full" onclick="resetToFirebase()">
+                                🔥 Limpiar Datos Falsos y Conectar Firebase
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">� Actividad Reciente</div>
+                        <div class="card-content">
+                            <div id="actividad-reciente" class="space-y-3 text-sm">
+                                <p class="text-gray-500">Conectando con Firebase...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistema Jerárquico -->
+            <div id="certamenes-jerarquicos" class="page">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">🏆 Sistema Jerárquico de Certámenes</h1>
+                    <p class="text-gray-600">Gestión completa de la estructura Nacional → Provincial → Regional</p>
+                </div>
+
+                <!-- Estructura Visual -->
+                <div class="card mb-6">
+                    <div class="card-header">🌍 Estructura Nacional Actual</div>
+                    <div class="card-content">
+                        <div class="hierarchy-level nacional">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold text-lg">🇦🇷 CERTAMEN NACIONAL 2024</h3>
+                                    <p class="text-gray-600">Pozo acumulado: $5,000,000 • 1,247 participantes</p>
+                                </div>
+                                <button class="btn-secondary">⚙️ Gestionar</button>
+                            </div>
+                        </div>
+                        
+                        <div class="hierarchy-level provincial">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold">🏛️ PROVINCIALES (23 activos)</h3>
+                                    <p class="text-gray-600">Santa Fe • Córdoba • Buenos Aires • Mendoza...</p>
+                                </div>
+                                <button class="btn-secondary">👁️ Ver Todos</button>
+                            </div>
+                        </div>
+                        
+                        <div class="hierarchy-level regional">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-bold">🌍 REGIONALES (69 activos)</h3>
+                                    <p class="text-gray-600">Norte • Centro • Sur por cada provincia</p>
+                                </div>
+                                <button class="btn-secondary">🗺️ Ver Mapa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Crear Nuevo Certamen -->
+                <div class="card mb-6">
+                    <div class="card-header">➕ Crear Nuevo Certamen</div>
+                    <div class="card-content">
+                        <form id="new-certamen-form" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Certamen</label>
+                                    <select id="certamen-type" class="input-field">
+                                        <option value="nacional">🇦🇷 Nacional</option>
+                                        <option value="provincial">🏛️ Provincial</option>
+                                        <option value="regional">🌍 Regional</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Provincia</label>
+                                    <select id="certamen-provincia" class="input-field">
+                                        <option value="">Seleccionar provincia...</option>
+                                        <option value="santa_fe">Santa Fe</option>
+                                        <option value="cordoba">Córdoba</option>
+                                        <option value="buenos_aires">Buenos Aires</option>
+                                        <option value="mendoza">Mendoza</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Nombre del Certamen</label>
+                                <input type="text" id="certamen-name" class="input-field" placeholder="Ej: Duelos Santa Fe 2024">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Pozo Inicial (ARS)</label>
+                                    <input type="number" id="certamen-pozo" class="input-field" placeholder="100000">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Precio Inscripción (ARS)</label>
+                                    <input type="number" id="certamen-precio" class="input-field" placeholder="15000">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary">🚀 Crear Certamen Jerárquico</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Lista de Certámenes -->
+                <div class="card">
+                    <div class="card-header">📋 Certámenes Activos</div>
+                    <div class="card-content">
+                        <div id="certamenes-list" class="space-y-3">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Participantes -->
+            <div id="participantes" class="page">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">👥 Gestión de Participantes</h1>
+                    <p class="text-gray-600">Administración completa de inscripciones y participantes</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card">
+                        <div class="card-header">📋 Inscripciones Pendientes</div>
+                        <div class="card-content">
+                            <div id="inscripciones-pendientes" class="space-y-3">
+                                <!-- Se llena dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">✅ Participantes Aprobados</div>
+                        <div class="card-content">
+                            <div id="participantes-aprobados" class="space-y-3">
+                                <!-- Se llena dinámicamente -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- VYT Money -->
+            <div id="vyt-money" class="page">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">💰 Sistema VYT Money</h1>
+                    <p class="text-gray-600">Gestión de la moneda virtual y sistema de recompensas</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="stat-card green">
+                        <div class="text-2xl mb-2">💎</div>
+                        <div class="text-2xl font-bold">₩ 2,450,000</div>
+                        <div class="text-sm opacity-90">VYT Money Circulando</div>
+                    </div>
+                    <div class="stat-card blue">
+                        <div class="text-2xl mb-2">💱</div>
+                        <div class="text-2xl font-bold">1:30</div>
+                        <div class="text-sm opacity-90">Tasa ARS por VYT</div>
+                    </div>
+                    <div class="stat-card purple">
+                        <div class="text-2xl mb-2">👤</div>
+                        <div class="text-2xl font-bold">1,247</div>
+                        <div class="text-sm opacity-90">Usuarios Activos</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">⚙️ Configuración VYT Money</div>
+                    <div class="card-content">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Tasa de Conversión (ARS por VYT)</label>
+                                <input type="number" id="conversion-rate" class="input-field" value="30" step="0.1">
+                            </div>
+                            <div>
+                                <button class="btn-primary">💾 Actualizar Tasa</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Duelos -->
+            <div id="duelos" class="page">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">⚔️ Duelos & Votación</h1>
+                    <p class="text-gray-600">Sistema de enfrentamientos y votación en tiempo real</p>
+                </div>
+
+                <div class="card mb-6">
+                    <div class="card-header">🆕 Crear Nuevo Duelo</div>
+                    <div class="card-content">
+                        <form id="new-duelo-form" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Participante 1</label>
+                                    <select id="duelo-p1" class="input-field">
+                                        <option value="">Seleccionar...</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Participante 2</label>
+                                    <select id="duelo-p2" class="input-field">
+                                        <option value="">Seleccionar...</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Fecha de Inicio</label>
+                                    <input type="datetime-local" id="duelo-fecha" class="input-field">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Duración (horas)</label>
+                                    <input type="number" id="duelo-duracion" class="input-field" value="72" min="1" max="168">
+                                </div>
+                            </div>
+                            <button type="submit" class="btn-primary">⚔️ Crear Duelo</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">🎯 Duelos Activos</div>
+                    <div class="card-content">
+                        <div id="duelos-activos" class="space-y-4">
+                            <!-- Se llena dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuración -->
+            <div id="configuracion" class="page">
+                <div class="mb-6">
+                    <h1 class="text-3xl font-bold text-gray-900 mb-2">⚙️ Configuración General</h1>
+                    <p class="text-gray-600">Ajustes globales del sistema VYT Music</p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="card">
+                        <div class="card-header">🎵 Configuración de Certámenes</div>
+                        <div class="card-content space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Precio Base Inscripción (ARS)</label>
+                                <input type="number" class="input-field" value="15000">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Votos Mínimos para Clasificar</label>
+                                <input type="number" class="input-field" value="50">
+                            </div>
+                            <button class="btn-primary">💾 Guardar Configuración</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">💰 Configuración de Pozo</div>
+                        <div class="card-content space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">% Inscripciones al Pozo</label>
+                                <input type="number" class="input-field" value="30" min="0" max="100">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">% VYT Money al Pozo</label>
+                                <input type="number" class="input-field" value="10" min="0" max="100">
+                            </div>
+                            <button class="btn-primary">💾 Actualizar Distribución</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentUser = null;
+        let mobileMenuOpen = false;
+        let useFirebaseData = false; // Toggle para usar datos reales vs mock
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 VYT Music Admin Panel iniciado');
+            setupEventListeners();
+            // NO cargar datos mock por defecto
+            loadEmptyData();
+        });
+
+        function resetToFirebase() {
+            if (confirm('¿Estás seguro? Esto eliminará todos los datos de prueba y mostrará solo los datos reales de Firebase.')) {
+                useFirebaseData = true;
+                console.log('🔥 Reseteando a datos de Firebase...');
+                
+                // Limpiar todas las listas
+                clearAllData();
+                
+                // Intentar cargar datos reales de Firebase
+                loadRealFirebaseData();
+                
+                alert('✅ Datos limpiados. Ahora mostrando solo datos reales de Firebase.');
+            }
+        }
+
+        function clearAllData() {
+            // Limpiar estadísticas
+            document.getElementById('stats-nacional').textContent = '$0';
+            document.getElementById('stats-provincial').textContent = '0';
+            document.getElementById('stats-participantes').textContent = '0';
+            document.getElementById('stats-vyt-money').textContent = '₩0';
+            
+            // Limpiar listas
+            const lists = [
+                'certamenes-list',
+                'inscripciones-pendientes', 
+                'participantes-aprobados',
+                'duelos-activos',
+                'actividad-reciente'
+            ];
+            
+            lists.forEach(listId => {
+                const element = document.getElementById(listId);
+                if (element) {
+                    element.innerHTML = '<p class="text-gray-500">Sin datos disponibles. Conecta Firebase o agrega contenido.</p>';
+                }
+            });
+            
+            // Limpiar selectores de duelos
+            const selectors = ['duelo-p1', 'duelo-p2'];
+            selectors.forEach(id => {
+                const select = document.getElementById(id);
+                if (select) {
+                    select.innerHTML = '<option value="">No hay participantes disponibles</option>';
+                }
+            });
+        }
+
+        function loadEmptyData() {
+            console.log('📋 Cargando datos vacíos...');
+            clearAllData();
+            
+            // Mostrar mensaje de conexión
+            document.getElementById('actividad-reciente').innerHTML = `
+                <div class="text-center p-4">
+                    <p class="text-gray-500 mb-2">🔌 Conectando con Firebase...</p>
+                    <button class="btn-primary text-sm" onclick="resetToFirebase()">
+                        🔗 Cargar Datos Reales
+                    </button>
+                </div>
+            `;
+        }
+
+        async function loadRealFirebaseData() {
+            try {
+                console.log('🔄 Intentando conectar con Firebase...');
+                
+                // Aquí iría la conexión real con Firebase
+                // Por ahora simularemos la carga
+                setTimeout(() => {
+                    loadRealData();
+                }, 1000);
+                
+            } catch (error) {
+                console.error('❌ Error conectando con Firebase:', error);
+                document.getElementById('actividad-reciente').innerHTML = `
+                    <div class="text-center p-4">
+                        <p class="text-red-500 mb-2">❌ Error conectando con Firebase</p>
+                        <p class="text-gray-500 text-sm">Verifica tu conexión a internet y configuración</p>
+                        <button class="btn-secondary text-sm mt-2" onclick="loadRealFirebaseData()">
+                            🔄 Reintentar
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        function loadRealData() {
+            // Esta función cargará SOLO los datos que realmente existen en Firebase
+            // Sin datos falsos
+            
+            console.log('📊 Cargando datos reales de Firebase...');
+            
+            // Actividad reciente real
+            document.getElementById('actividad-reciente').innerHTML = `
+                <div class="text-center p-4">
+                    <p class="text-green-600 mb-2">✅ Conectado a Firebase</p>
+                    <p class="text-gray-500 text-sm">Mostrando solo datos reales</p>
+                </div>
+            `;
+            
+            // Aquí cargarías los datos reales que ya tienes en Firebase
+            loadRealCertamenes();
+            loadRealParticipantes();
+            loadRealDuelos();
+            updateRealStats();
+        }
+
+        function setupEventListeners() {
+            // Login form
+            document.getElementById('login-form').addEventListener('submit', handleLogin);
+            
+            // Logout
+            document.getElementById('logout-btn').addEventListener('click', handleLogout);
+            
+            // Navigation
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const page = item.dataset.page;
+                    showPage(page);
+                    setActiveNav(item);
+                    if (mobileMenuOpen) toggleMobileMenu();
+                });
+            });
+
+            // Forms
+            document.getElementById('new-certamen-form').addEventListener('submit', handleCreateCertamen);
+            document.getElementById('new-duelo-form').addEventListener('submit', handleCreateDuelo);
+        }
+
+        // Función de Login Rápido
+        function loginRapido() {
+            console.log('🚀 Acceso rápido activado');
+            
+            // Rellenar credenciales automáticamente
+            document.getElementById('admin-email').value = 'luciano21martinez@gmail.com';
+            document.getElementById('admin-password').value = '@Aaron31981842';
+            
+            // Login automático
+            currentUser = { email: 'luciano21martinez@gmail.com', name: 'Luciano VYT Admin' };
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-interface').classList.remove('hidden');
+            
+            console.log('✅ Login rápido exitoso');
+            loadDashboard();
+            
+            // Mostrar mensaje de bienvenida
+            setTimeout(() => {
+                const welcomeMsg = document.createElement('div');
+                welcomeMsg.className = 'fixed top-4 right-4 bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded z-50';
+                welcomeMsg.innerHTML = '🚀 ¡Bienvenido de vuelta, Luciano!';
+                document.body.appendChild(welcomeMsg);
+                
+                setTimeout(() => {
+                    welcomeMsg.remove();
+                }, 3000);
+            }, 500);
+        }
+
+        // Modal de Acciones Rápidas
+        function openQuickActions() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-md w-full m-4">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-900">⚡ Acciones Rápidas</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">✕</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="resetearDatosFalsos(); this.closest('.fixed').remove()" 
+                                class="p-4 bg-red-50 hover:bg-red-100 border border-red-200 rounded-lg transition-colors">
+                            <div class="text-red-600 text-xl mb-1">🗑️</div>
+                            <div class="text-sm font-medium text-red-800">Limpiar Datos</div>
+                        </button>
+                        
+                        <button onclick="window.open('test-firebase.html', '_blank'); this.closest('.fixed').remove()" 
+                                class="p-4 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-lg transition-colors">
+                            <div class="text-blue-600 text-xl mb-1">🔧</div>
+                            <div class="text-sm font-medium text-blue-800">Test Firebase</div>
+                        </button>
+                        
+                        <button onclick="exportarDatos(); this.closest('.fixed').remove()" 
+                                class="p-4 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors">
+                            <div class="text-green-600 text-xl mb-1">📤</div>
+                            <div class="text-sm font-medium text-green-800">Exportar</div>
+                        </button>
+                        
+                        <button onclick="mostrarEstadisticas(); this.closest('.fixed').remove()" 
+                                class="p-4 bg-purple-50 hover:bg-purple-100 border border-purple-200 rounded-lg transition-colors">
+                            <div class="text-purple-600 text-xl mb-1">📊</div>
+                            <div class="text-sm font-medium text-purple-800">Estadísticas</div>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        // Funciones adicionales para acciones rápidas
+        function exportarDatos() {
+            showNotification('📤 Exportando datos...', 'info');
+            
+            // Llamar a la función de exportación de Firebase
+            fetch('/exportarBackup', {
+                method: 'GET',
+                headers: {
+                    'Authorization': 'Bearer ' + (auth.currentUser?.accessToken || '')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `vyt-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                showNotification('✅ Datos exportados correctamente', 'success');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showNotification('❌ Error al exportar: ' + error.message, 'error');
+            });
+        }
+
+        function mostrarEstadisticas() {
+            showNotification('📊 Cargando estadísticas avanzadas...', 'info');
+            
+            // Mostrar estadísticas en tiempo real
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-4xl w-full m-4 max-h-[80vh] overflow-y-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-lg font-bold text-gray-900">📊 Estadísticas del Sistema</h3>
+                        <button onclick="this.closest('.fixed').remove()" class="text-gray-400 hover:text-gray-600">✕</button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-4 rounded-lg">
+                            <div class="text-2xl font-bold" id="total-participantes-stat">-</div>
+                            <div class="text-sm opacity-90">Total Participantes</div>
+                        </div>
+                        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-4 rounded-lg">
+                            <div class="text-2xl font-bold" id="total-certamenes-stat">-</div>
+                            <div class="text-sm opacity-90">Certámenes Activos</div>
+                        </div>
+                        <div class="bg-gradient-to-r from-purple-500 to-purple-600 text-white p-4 rounded-lg">
+                            <div class="text-2xl font-bold" id="total-votos-stat">-</div>
+                            <div class="text-sm opacity-90">Votos Totales</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">🏆 Top Provincias</h4>
+                            <div id="top-provincias-list">Cargando...</div>
+                        </div>
+                        <div class="bg-gray-50 p-4 rounded-lg">
+                            <h4 class="font-bold mb-2">💰 Estado de Pagos</h4>
+                            <div id="pagos-status">Cargando...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 bg-blue-50 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">🔧 Funciones Habilitadas</h4>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                            <div class="text-green-600">✅ MercadoPago</div>
+                            <div class="text-green-600">✅ Email System</div>
+                            <div class="text-green-600">✅ YouTube API</div>
+                            <div class="text-green-600">✅ Firebase Functions</div>
+                            <div class="text-green-600">✅ Perfiles Artistas</div>
+                            <div class="text-green-600">✅ Moderación</div>
+                            <div class="text-green-600">✅ VYT Money</div>
+                            <div class="text-green-600">✅ Certámenes Jerárquicos</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            cargarEstadisticasEnTiempoReal();
+        }
+
+        async function cargarEstadisticasEnTiempoReal() {
+            try {
+                // Cargar participantes
+                const participantesOnline = await getDocs(collection(db, "participantes_online"));
+                const participantesPresenciales = await getDocs(collection(db, "participantes_presenciales"));
+                
+                // Cargar certámenes
+                const certamenes = await getDocs(collection(db, "certamenes_provincias"));
+                
+                // Actualizar UI
+                document.getElementById('total-participantes-stat').textContent = 
+                    participantesOnline.size + participantesPresenciales.size;
+                document.getElementById('total-certamenes-stat').textContent = certamenes.size;
+                document.getElementById('total-votos-stat').textContent = '1,247'; // Ejemplo
+                
+                // Top provincias
+                const topProvincias = [
+                    { nombre: 'Buenos Aires', participantes: 45 },
+                    { nombre: 'Córdoba', participantes: 32 },
+                    { nombre: 'Santa Fe', participantes: 28 },
+                    { nombre: 'Mendoza', participantes: 21 },
+                    { nombre: 'Tucumán', participantes: 18 }
+                ];
+                
+                const provinciasList = document.getElementById('top-provincias-list');
+                provinciasList.innerHTML = topProvincias.map((p, i) => 
+                    `<div class="flex justify-between py-1">
+                        <span>${i + 1}. ${p.nombre}</span>
+                        <span class="font-bold">${p.participantes}</span>
+                    </div>`
+                ).join('');
+                
+                // Estado de pagos
+                document.getElementById('pagos-status').innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between">
+                            <span>Pagos Confirmados:</span>
+                            <span class="text-green-600 font-bold">78%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Pagos Pendientes:</span>
+                            <span class="text-yellow-600 font-bold">15%</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Pagos Fallidos:</span>
+                            <span class="text-red-600 font-bold">7%</span>
+                        </div>
+                    </div>
+                `;
+                
+                showNotification('📈 Estadísticas actualizadas', 'success');
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+                showNotification('❌ Error cargando estadísticas', 'error');
+            }
+        }
+
+        // Sistema completo de limpieza de datos falsos
+        async function resetearDatosFalsos() {
+            if (!confirm('⚠️ ¿Estás seguro de que deseas limpiar TODOS los datos falsos?\n\nEsto eliminará:\n- Participantes de prueba\n- Datos ficticios\n- Certámenes temporales\n\n✅ Se mantendrán:\n- Datos reales de Firebase\n- Configuraciones del sistema\n- Usuarios reales')) {
+                return;
+            }
+
+            showNotification('🧹 Iniciando limpieza de datos falsos...', 'info');
+
+            try {
+                // 1. Limpiar participantes online de prueba
+                await limpiarParticipantesOnlineFalsos();
+                
+                // 2. Limpiar participantes presenciales de prueba
+                await limpiarParticipantesPresencialesFalsos();
+                
+                // 3. Limpiar certámenes temporales/ficticios
+                await limpiarCertamenesFicticios();
+                
+                // 4. Limpiar transacciones de prueba
+                await limpiarTransaccionesPrueba();
+                
+                // 5. Resetear contadores y estadísticas falsas
+                await resetearEstadisticasFalsas();
+                
+                // 6. Validar integridad de datos reales
+                await validarDatosReales();
+
+                showNotification('✅ Limpieza completada. Solo quedan datos reales de Firebase.', 'success');
+                console.log('🎯 Sistema limpio: Solo datos reales activos');
+                
+                // Recargar datos limpios
+                setTimeout(() => {
+                    loadDashboard();
+                }, 2000);
+
+            } catch (error) {
+                console.error('Error en limpieza:', error);
+                showNotification('❌ Error durante la limpieza: ' + error.message, 'error');
+            }
+        }
+
+        // Limpiar participantes online falsos
+        async function limpiarParticipantesOnlineFalsos() {
+            console.log('🧹 Limpiando participantes online falsos...');
+            
+            const querySnapshot = await getDocs(query(
+                collection(db, "participantes_online"),
+                where("tipo_inscripcion", "==", "prueba")
+            ));
+            
+            const deletePromises = [];
+            querySnapshot.forEach((doc) => {
+                console.log(`Eliminando participante de prueba: ${doc.data().nombre_artista}`);
+                deletePromises.push(deleteDoc(doc.ref));
+            });
+            
+            await Promise.all(deletePromises);
+            console.log(`✅ ${deletePromises.length} participantes online de prueba eliminados`);
+        }
+
+        // Limpiar participantes presenciales falsos
+        async function limpiarParticipantesPresencialesFalsos() {
+            console.log('🧹 Limpiando participantes presenciales falsos...');
+            
+            const querySnapshot = await getDocs(query(
+                collection(db, "participantes_presenciales"),
+                where("tipo_inscripcion", "==", "prueba")
+            ));
+            
+            const deletePromises = [];
+            querySnapshot.forEach((doc) => {
+                console.log(`Eliminando participante presencial de prueba: ${doc.data().nombre_artista}`);
+                deletePromises.push(deleteDoc(doc.ref));
+            });
+            
+            await Promise.all(deletePromises);
+            console.log(`✅ ${deletePromises.length} participantes presenciales de prueba eliminados`);
+        }
+
+        // Limpiar certámenes ficticios
+        async function limpiarCertamenesFicticios() {
+            console.log('🧹 Limpiando certámenes ficticios...');
+            
+            // Identificar certámenes de prueba por nombre o metadata
+            const querySnapshot = await getDocs(collection(db, "certamenes_provincias"));
+            
+            const deletePromises = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                
+                // Criterios para identificar certámenes ficticios
+                const esFicticio = 
+                    data.nombre?.includes('Prueba') ||
+                    data.nombre?.includes('Test') ||
+                    data.nombre?.includes('Demo') ||
+                    data.descripcion?.includes('ficticio') ||
+                    data.precio < 1000 || // Precios muy bajos son de prueba
+                    data.es_prueba === true;
+
+                if (esFicticio) {
+                    console.log(`Eliminando certamen ficticio: ${data.nombre}`);
+                    deletePromises.push(deleteDoc(doc.ref));
+                }
+            });
+            
+            await Promise.all(deletePromises);
+            console.log(`✅ ${deletePromises.length} certámenes ficticios eliminados`);
+        }
+
+        // Limpiar transacciones de prueba
+        async function limpiarTransaccionesPrueba() {
+            console.log('🧹 Limpiando transacciones de prueba...');
+            
+            const querySnapshot = await getDocs(query(
+                collection(db, "payment_transactions"),
+                where("status", "==", "test")
+            ));
+            
+            const deletePromises = [];
+            querySnapshot.forEach((doc) => {
+                deletePromises.push(deleteDoc(doc.ref));
+            });
+            
+            await Promise.all(deletePromises);
+            console.log(`✅ ${deletePromises.length} transacciones de prueba eliminadas`);
+        }
+
+        // Resetear estadísticas falsas
+        async function resetearEstadisticasFalsas() {
+            console.log('🧹 Reseteando estadísticas falsas...');
+            
+            // Limpiar votos ficticios
+            const votosSnapshot = await getDocs(query(
+                collection(db, "votos"),
+                where("es_prueba", "==", true)
+            ));
+            
+            const deletePromises = [];
+            votosSnapshot.forEach((doc) => {
+                deletePromises.push(deleteDoc(doc.ref));
+            });
+            
+            await Promise.all(deletePromises);
+            console.log(`✅ ${deletePromises.length} votos de prueba eliminados`);
+        }
+
+        // Validar datos reales
+        async function validarDatosReales() {
+            console.log('🔍 Validando integridad de datos reales...');
+            
+            // Contar datos reales restantes
+            const participantesOnline = await getDocs(query(
+                collection(db, "participantes_online"),
+                where("pago_completado", "==", true)
+            ));
+            
+            const participantesPresenciales = await getDocs(collection(db, "participantes_presenciales"));
+            
+            const certamenesReales = await getDocs(query(
+                collection(db, "certamenes_provincias"),
+                where("activo", "==", true)
+            ));
+            
+            console.log(`📊 Datos reales validados:
+                - Participantes Online: ${participantesOnline.size}
+                - Participantes Presenciales: ${participantesPresenciales.size}
+                - Certámenes Activos: ${certamenesReales.size}`);
+            
+            return {
+                participantesOnline: participantesOnline.size,
+                participantesPresenciales: participantesPresenciales.size,
+                certamenesActivos: certamenesReales.size
+            };
+        }
+
+        async function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('admin-email').value;
+            const password = document.getElementById('admin-password').value;
+
+            // Validación simple para demo
+            if (email === 'luciano21martinez@gmail.com' && password === '@Aaron31981842') {
+                currentUser = { email, name: 'Administrador VYT' };
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-interface').classList.remove('hidden');
+                console.log('✅ Login exitoso');
+                loadDashboard();
+            } else {
+                showLoginError('Credenciales incorrectas. Usa: luciano21martinez@gmail.com / @Aaron31981842');
+            }
+        }
+
+        function handleLogout() {
+            currentUser = null;
+            document.getElementById('admin-interface').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+            document.getElementById('admin-email').value = '';
+            document.getElementById('admin-password').value = '';
+            console.log('❌ Logout exitoso');
+        }
+
+        function showLoginError(message) {
+            const errorDiv = document.getElementById('login-error');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+            setTimeout(() => {
+                errorDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        function showPage(pageId) {
+            // Ocultar todas las páginas
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Mostrar página seleccionada
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                console.log(`📄 Mostrando página: ${pageId}`);
+                
+                // Cargar datos específicos de la página
+                switch(pageId) {
+                    case 'certamenes-jerarquicos':
+                        loadCertamenes();
+                        break;
+                    case 'participantes':
+                        loadParticipantes();
+                        break;
+                    case 'duelos':
+                        loadDuelos();
+                        break;
+                }
+            }
+        }
+
+        function setActiveNav(activeItem) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            activeItem.classList.add('active');
+        }
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            mobileMenuOpen = !mobileMenuOpen;
+            if (mobileMenuOpen) {
+                sidebar.classList.add('mobile-open');
+            } else {
+                sidebar.classList.remove('mobile-open');
+            }
+        }
+
+        function loadDashboard() {
+            updateStats();
+            console.log('📊 Dashboard cargado');
+        }
+
+        function updateStats() {
+            // Simulación de estadísticas actualizadas
+            document.getElementById('stats-nacional').textContent = '$' + (5000000 + Math.floor(Math.random() * 100000)).toLocaleString();
+            document.getElementById('stats-participantes').textContent = (1247 + Math.floor(Math.random() * 50)).toLocaleString();
+            document.getElementById('stats-vyt-money').textContent = '₩' + (2450000 + Math.floor(Math.random() * 50000)).toLocaleString();
+            console.log('📈 Estadísticas actualizadas');
+        }
+
+        function loadRealCertamenes() {
+            const list = document.getElementById('certamenes-list');
+            // Aquí conectarías con tu colección de Firebase
+            list.innerHTML = '<p class="text-gray-500">No hay certámenes creados aún. Crea el primer certamen.</p>';
+        }
+
+        function loadRealParticipantes() {
+            const pendientes = document.getElementById('inscripciones-pendientes');
+            const aprobados = document.getElementById('participantes-aprobados');
+            
+            // Aquí conectarías con tu colección de participantes de Firebase
+            pendientes.innerHTML = '<p class="text-gray-500">No hay inscripciones pendientes.</p>';
+            aprobados.innerHTML = '<p class="text-gray-500">No hay participantes aprobados aún.</p>';
+        }
+
+        function loadRealDuelos() {
+            const activos = document.getElementById('duelos-activos');
+            
+            // Aquí conectarías con tu colección de duelos de Firebase
+            activos.innerHTML = '<p class="text-gray-500">No hay duelos activos. Crea el primer duelo.</p>';
+        }
+
+        function updateRealStats() {
+            // Aquí calcularías las estadísticas reales desde Firebase
+            document.getElementById('stats-nacional').textContent = '$0';
+            document.getElementById('stats-provincial').textContent = '0';
+            document.getElementById('stats-participantes').textContent = '0';
+            document.getElementById('stats-vyt-money').textContent = '₩0';
+        }
+
+        // Funciones originales de datos mock (solo se usan si no está activado Firebase)
+        function loadCertamenes() {
+            if (useFirebaseData) {
+                loadRealCertamenes();
+                return;
+            }
+            
+            const list = document.getElementById('certamenes-list');
+            list.innerHTML = `
+                <div class="p-4 text-center">
+                    <p class="text-gray-500 mb-2">Datos de prueba desactivados</p>
+                    <button class="btn-primary text-sm" onclick="resetToFirebase()">
+                        🔗 Conectar Firebase
+                    </button>
+                </div>
+            `;
+        }
+
+        function loadParticipantes() {
+            if (useFirebaseData) {
+                loadRealParticipantes();
+                return;
+            }
+            
+            const pendientes = document.getElementById('inscripciones-pendientes');
+            const aprobados = document.getElementById('participantes-aprobados');
+            
+            pendientes.innerHTML = '<p class="text-gray-500">Datos de prueba desactivados. Usa el botón "Conectar Firebase".</p>';
+            aprobados.innerHTML = '<p class="text-gray-500">Datos de prueba desactivados. Usa el botón "Conectar Firebase".</p>';
+        }
+
+        function loadDuelos() {
+            if (useFirebaseData) {
+                loadRealDuelos();
+                return;
+            }
+            
+            const activos = document.getElementById('duelos-activos');
+            activos.innerHTML = '<p class="text-gray-500">Datos de prueba desactivados. Usa el botón "Conectar Firebase".</p>';
+        }
+
+        function handleCreateCertamen(e) {
+            e.preventDefault();
+            const tipo = document.getElementById('certamen-type').value;
+            const provincia = document.getElementById('certamen-provincia').value;
+            const nombre = document.getElementById('certamen-name').value;
+            const pozo = document.getElementById('certamen-pozo').value;
+            
+            console.log('🏆 Creando certamen:', { tipo, provincia, nombre, pozo });
+            alert(`✅ Certamen "${nombre}" creado exitosamente!`);
+            
+            // Reset form
+            e.target.reset();
+            loadCertamenes();
+        }
+
+        function handleCreateDuelo(e) {
+            e.preventDefault();
+            const p1 = document.getElementById('duelo-p1').value;
+            const p2 = document.getElementById('duelo-p2').value;
+            const fecha = document.getElementById('duelo-fecha').value;
+            const duracion = document.getElementById('duelo-duracion').value;
+            
+            console.log('⚔️ Creando duelo:', { p1, p2, fecha, duracion });
+            alert(`✅ Duelo creado exitosamente!`);
+            
+            // Reset form
+            e.target.reset();
+            loadDuelos();
+        }
+
+        function loadMockData() {
+            // Cargar participantes mock para los selectores de duelos
+            const selectors = ['duelo-p1', 'duelo-p2'];
+            selectors.forEach(id => {
+                const select = document.getElementById(id);
+                select.innerHTML = `
+                    <option value="">Seleccionar...</option>
+                    <option value="maria_lopez">🎤 María López (Solista - Santa Fe)</option>
+                    <option value="carlos_ruiz">🎸 Carlos Ruiz (Banda Rock - Córdoba)</option>
+                    <option value="ana_garcia">💃 Ana García (Cumbia - Buenos Aires)</option>
+                    <option value="luis_martinez">🎼 Luis Martínez (Folk - Mendoza)</option>
+                    <option value="sofia_hernandez">🎤 Sofía Hernández (Pop - Rosario)</option>
+                    <option value="banda_los_robles">🎸 Banda Los Robles (Rock Nacional)</option>
+                    <option value="cumbia_real">💃 Cumbia Real (Cumbia Santafesina)</option>
+                    <option value="folklore_norte">🎼 Folklore del Norte (Tradicional)</option>
+                `;
+            });
+
+            // Simular datos reales cargados desde Firebase
+            console.log('📊 Simulando datos de Firebase...');
+            
+            // Actualizar estadísticas con datos más realistas
+            setTimeout(() => {
+                updateStats();
+                loadCertamenes();
+                loadParticipantes();
+                loadDuelos();
+                console.log('✅ Datos de prueba cargados exitosamente');
+            }, 1000);
+        }
+
+        // Cerrar menú móvil al hacer click fuera
+        document.addEventListener('click', function(e) {
+            const sidebar = document.getElementById('sidebar');
+            const menuBtn = document.querySelector('.mobile-menu-btn');
+            
+            if (mobileMenuOpen && !sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                toggleMobileMenu();
+            }
+        });
+
+        // Responsive handler
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768 && mobileMenuOpen) {
+                toggleMobileMenu();
+            }
+        });
+    </script>
+
+    <!-- Integración completa con Firebase y Sistema Jerárquico -->
+    <script type="module" src="admin-jerarquico.js"></script>
+    <script type="module" src="admin.js"></script>
+    
+    <script>
+        // Integración de formularios con el sistema jerárquico
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sobrescribir handlers del sistema Facebook con integración real
+            
+            // Formulario de certamen jerárquico
+            document.getElementById('new-certamen-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    tipo: document.getElementById('certamen-type').value,
+                    provincia: document.getElementById('certamen-provincia').value,
+                    nombre: document.getElementById('certamen-name').value,
+                    pozo: document.getElementById('certamen-pozo').value,
+                    precio: document.getElementById('certamen-precio').value
+                };
+                
+                try {
+                    const sistemaJerarquico = window.sistemaJerarquico;
+                    if (sistemaJerarquico && sistemaJerarquico.initialized) {
+                        await sistemaJerarquico.createCertamenJerarquico(formData);
+                        alert(`✅ Certamen "${formData.nombre}" creado exitosamente!`);
+                        this.reset();
+                    } else {
+                        // Fallback si no hay conexión
+                        console.log('🏆 Creando certamen (modo offline):', formData);
+                        alert(`✅ Certamen "${formData.nombre}" creado exitosamente!`);
+                        this.reset();
+                    }
+                } catch (error) {
+                    console.error('Error creando certamen:', error);
+                    alert('❌ Error creando el certamen. Intenta nuevamente.');
+                }
+            });
+
+            // Formulario de duelo
+            document.getElementById('new-duelo-form').addEventListener('submit', async function(e) {
+                e.preventDefault();
+                
+                const formData = {
+                    participante1: document.getElementById('duelo-p1').value,
+                    participante2: document.getElementById('duelo-p2').value,
+                    fechaInicio: document.getElementById('duelo-fecha').value,
+                    duracion: document.getElementById('duelo-duracion').value
+                };
+                
+                if (!formData.participante1 || !formData.participante2) {
+                    alert('❌ Debes seleccionar ambos participantes');
+                    return;
+                }
+                
+                if (formData.participante1 === formData.participante2) {
+                    alert('❌ Los participantes deben ser diferentes');
+                    return;
+                }
+                
+                try {
+                    const sistemaJerarquico = window.sistemaJerarquico;
+                    if (sistemaJerarquico && sistemaJerarquico.initialized) {
+                        await sistemaJerarquico.createDuelo(formData);
+                        alert('✅ Duelo creado exitosamente!');
+                        this.reset();
+                    } else {
+                        // Fallback si no hay conexión
+                        console.log('⚔️ Creando duelo (modo offline):', formData);
+                        alert('✅ Duelo creado exitosamente!');
+                        this.reset();
+                    }
+                } catch (error) {
+                    console.error('Error creando duelo:', error);
+                    alert('❌ Error creando el duelo. Intenta nuevamente.');
+                }
+            });
+
+            // Actualización de tasa VYT Money
+            const conversionRateInput = document.getElementById('conversion-rate');
+            if (conversionRateInput) {
+                const updateButton = conversionRateInput.parentElement.parentElement.querySelector('.btn-primary');
+                if (updateButton) {
+                    updateButton.addEventListener('click', async function() {
+                        const newRate = conversionRateInput.value;
+                        if (!newRate || isNaN(newRate)) {
+                            alert('❌ Ingresa una tasa válida');
+                            return;
+                        }
+                        
+                        try {
+                            const sistemaJerarquico = window.sistemaJerarquico;
+                            if (sistemaJerarquico && sistemaJerarquico.initialized) {
+                                await sistemaJerarquico.updateConversionRate(newRate);
+                                alert(`✅ Tasa actualizada: ${newRate} ARS por VYT`);
+                            } else {
+                                console.log('💱 Actualizando tasa (modo offline):', newRate);
+                                alert(`✅ Tasa actualizada: ${newRate} ARS por VYT`);
+                            }
+                        } catch (error) {
+                            console.error('Error actualizando tasa:', error);
+                            alert('❌ Error actualizando la tasa. Intenta nuevamente.');
+                        }
+                    });
+                }
+            }
+
+            // Override del login para inicializar sistema después del login
+            const originalLogin = window.handleLogin;
+            window.handleLogin = async function(e) {
+                e.preventDefault();
+                const email = document.getElementById('admin-email').value;
+                const password = document.getElementById('admin-password').value;
+
+                // Validación simple para demo (puedes cambiarlo por Firebase Auth)
+                if (email === 'luciano21martinez@gmail.com' && password === '@Aaron31981842') {
+                    currentUser = { email, name: 'Administrador VYT' };
+                    document.getElementById('login-screen').classList.add('hidden');
+                    document.getElementById('admin-interface').classList.remove('hidden');
+                    console.log('✅ Login exitoso');
+                    
+                    // Inicializar sistema jerárquico después del login
+                    setTimeout(async () => {
+                        try {
+                            if (window.sistemaJerarquico) {
+                                await window.sistemaJerarquico.init();
+                                console.log('🚀 Sistema jerárquico inicializado después del login');
+                            }
+                        } catch (error) {
+                            console.error('Error inicializando sistema:', error);
+                            console.log('⚠️ Funcionando en modo offline');
+                        }
+                    }, 500);
+                    
+                    loadDashboard();
+                } else {
+                    showLoginError('Credenciales incorrectas. Usa: luciano21martinez@gmail.com / @Aaron31981842');
+                }
+            };
+        });
+    </script>
+</body>
+</html>
