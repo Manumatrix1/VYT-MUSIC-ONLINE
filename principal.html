@@ -16,10 +16,16 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     
+    <!-- Font Awesome para iconos más bonitos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Gamification Styles -->
     <link rel="stylesheet" href="gamification-styles.css">
+    
+    <!-- Desktop Styles -->
+    <link rel="stylesheet" href="desktop-styles.css">
     
     <!-- Loading Screen CSS -->
     <style id="loading-styles">
@@ -2195,6 +2201,419 @@
         text-align: left;
         white-space: nowrap; /* Evitar que el texto se corte */
     }
+
+    /* ===== MEJORAS ESPECÍFICAS PARA DESKTOP ===== */
+    @media (min-width: 1024px) {
+        /* Hacer que los iconos SVG se vean más grandes y claros */
+        .header-user .icon-profile,
+        .header-user .icon-bell {
+            width: 2.5rem !important;
+            height: 2.5rem !important;
+            stroke-width: 1.5;
+        }
+        
+        /* Mejorar iconos Font Awesome */
+        .header-nav .fas,
+        .header-nav .far,
+        .header-nav .fab {
+            font-size: 1.3rem;
+            margin-right: 0.5rem;
+            color: currentColor;
+        }
+        
+        /* Mejorar botón de perfil */
+        .header-user a {
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .header-user a:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .header-user .icon-profile {
+            font-size: 2rem !important;
+            transition: transform 0.3s ease;
+        }
+        
+        .header-user a:hover .icon-profile {
+            transform: scale(1.1);
+        }
+        
+        /* Mejorar dropdown arrows */
+        .dropdown-arrow {
+            width: 1.5rem !important;
+            height: 1.5rem !important;
+            stroke-width: 2;
+        }
+        
+        /* Hacer el header más alto */
+        .header {
+            padding: 1.5rem 0;
+            min-height: 80px;
+        }
+        
+        /* Hacer el logo más grande */
+        .header-logo img {
+            height: 60px !important;
+            width: auto;
+        }
+        
+        /* Mejorar navegación desktop */
+        .header-nav nav a {
+            font-size: 1.1rem;
+            padding: 0.8rem 1.2rem;
+            margin: 0 0.3rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        /* Mejorar efectos hover en navegación */
+        .header-nav-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            transform: translateY(-2px);
+        }
+        
+        .header-nav-link:hover .fas {
+            transform: scale(1.1);
+        }
+        
+        /* Hacer dropdowns más grandes */
+        .dropdown-content {
+            min-width: 200px;
+            padding: 1rem 0;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .dropdown-content a {
+            padding: 0.8rem 1.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .dropdown-content a:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+            padding-left: 2rem;
+        }
+        
+        /* Mejorar títulos y textos principales */
+        .titulo-seccion {
+            font-size: 3.5rem !important;
+            margin-bottom: 2rem;
+        }
+        
+        .subtitulo-seccion {
+            font-size: 1.3rem !important;
+            margin-bottom: 3rem;
+        }
+        
+        /* Mejorar carrusel para desktop */
+        .carousel-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .carousel-slide img {
+            height: 500px;
+            object-fit: cover;
+        }
+        
+        /* Botones de carrusel más grandes */
+        .carousel-btn {
+            width: 60px !important;
+            height: 60px !important;
+            font-size: 1.8rem !important;
+        }
+        
+        /* Mejorar cards de ranking */
+        .ranking-card {
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+        
+        .ranking-card h3 {
+            font-size: 2rem;
+        }
+        
+        .ranking-card p {
+            font-size: 1.1rem;
+        }
+        
+        /* Mejorar botones */
+        .btn,
+        .vote-button-gamified,
+        button {
+            font-size: 1.1rem;
+            padding: 0.9rem 2rem;
+            min-height: 50px;
+        }
+        
+        /* Mejorar estilos musicales */
+        .musical-style-card {
+            padding: 2rem;
+        }
+        
+        .musical-style-card h3 {
+            font-size: 1.8rem;
+        }
+        
+        /* Mejorar sección de datos del usuario */
+        .user-stats {
+            font-size: 1.2rem;
+        }
+        
+        /* Hacer avatares más grandes */
+        .user-avatar {
+            font-size: 3rem !important;
+        }
+        
+        /* Mejorar pozo de premios */
+        .prize-pool-amount {
+            font-size: 4rem !important;
+        }
+        
+        .prize-pool-stats {
+            font-size: 1.3rem;
+        }
+        
+        /* Mejorar páginas sociales para desktop */
+        .artist-profile-header {
+            padding: 3rem !important;
+        }
+        
+        .artist-avatar {
+            width: 150px !important;
+            height: 150px !important;
+            font-size: 5rem !important;
+        }
+        
+        .artist-profile-header h1 {
+            font-size: 3.5rem !important;
+        }
+        
+        .artist-profile-header p {
+            font-size: 1.4rem !important;
+        }
+        
+        /* Mejorar tabs de artistas */
+        .artist-tab {
+            font-size: 1.2rem !important;
+            padding: 1.2rem 2.5rem !important;
+        }
+        
+        /* Mejorar modal de login social */
+        .modal-content {
+            max-width: 500px !important;
+            padding: 3rem !important;
+        }
+        
+        .modal-content h2 {
+            font-size: 2.5rem !important;
+        }
+        
+        .modal-content button {
+            font-size: 1.2rem !important;
+            padding: 1.2rem 2rem !important;
+        }
+        
+        /* Mejorar batallas para desktop */
+        .featured-battle {
+            padding: 3rem !important;
+        }
+        
+        .featured-battle h3 {
+            font-size: 3.5rem !important;
+        }
+        
+        .featured-battle h4 {
+            font-size: 2.5rem !important;
+        }
+        
+        /* Mejorar layout general */
+        .container {
+            max-width: 1400px;
+            padding: 0 2rem;
+        }
+        
+        .seccion {
+            padding: 4rem 0;
+        }
+        
+        /* Hacer el contenido principal más espacioso */
+        .main-content {
+            min-height: calc(100vh - 80px);
+        }
+        
+        /* Mejorar espaciado entre elementos */
+        .page > * + * {
+            margin-top: 3rem;
+        }
+        
+        /* Iconos de redes sociales más grandes */
+        .social-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1.5rem;
+        }
+        
+        /* Mejorar notificaciones */
+        .notification {
+            font-size: 1.1rem;
+            padding: 1.5rem 2rem;
+            max-width: 400px;
+        }
+    }
+    
+    /* Extra Large Screens */
+    @media (min-width: 1440px) {
+        .titulo-seccion {
+            font-size: 4.5rem !important;
+        }
+        
+        .header-logo img {
+            height: 70px !important;
+        }
+        
+        .artist-avatar {
+            width: 180px !important;
+            height: 180px !important;
+            font-size: 6rem !important;
+        }
+        
+        .container {
+            max-width: 1600px;
+        }
+    }
+    
+    /* Ultra Wide Screens */
+    @media (min-width: 1920px) {
+        .titulo-seccion {
+            font-size: 5rem !important;
+        }
+        
+        .container {
+            max-width: 1800px;
+        }
+        
+        .carousel-slide img {
+            height: 600px;
+        }
+    }
+
+    /* === ESTILOS CRÍTICOS PARA DESKTOP === */
+    @media screen and (min-width: 1024px) {
+        /* Header y navegación más grandes */
+        .header {
+            padding: 1.5rem 0 !important;
+            min-height: 80px !important;
+        }
+        
+        .header-logo img {
+            height: 60px !important;
+            width: auto !important;
+        }
+        
+        /* Iconos más grandes y visibles */
+        .header-nav a i,
+        .header-nav a .fas,
+        .header-nav a .far {
+            font-size: 1.4rem !important;
+            margin-right: 0.6rem !important;
+        }
+        
+        .header-user .icon-profile {
+            font-size: 2.2rem !important;
+        }
+        
+        /* Títulos principales más grandes */
+        .titulo-seccion {
+            font-size: 3.5rem !important;
+        }
+        
+        .subtitulo-seccion {
+            font-size: 1.4rem !important;
+        }
+        
+        /* Navegación más espaciosa */
+        .header-nav a {
+            padding: 1rem 1.5rem !important;
+            font-size: 1.1rem !important;
+        }
+        
+        /* Dropdowns más grandes */
+        .dropdown-content {
+            min-width: 220px !important;
+            padding: 1rem 0 !important;
+        }
+        
+        .dropdown-content a {
+            padding: 0.8rem 1.5rem !important;
+            font-size: 1rem !important;
+        }
+        
+        /* Contenedor principal más amplio */
+        .container {
+            max-width: 1400px !important;
+            padding: 0 2rem !important;
+        }
+        
+        /* Botones más grandes */
+        .btn, button {
+            font-size: 1.1rem !important;
+            padding: 1rem 2rem !important;
+            min-height: 50px !important;
+        }
+        
+        /* Cards de ranking más espaciosas */
+        .ranking-card {
+            padding: 2rem !important;
+            margin: 1.5rem 0 !important;
+        }
+        
+        .ranking-card h3 {
+            font-size: 2rem !important;
+        }
+        
+        /* Efectos hover mejorados */
+        .header-nav a:hover {
+            background: rgba(59, 130, 246, 0.1) !important;
+            color: #3b82f6 !important;
+            transform: translateY(-2px) !important;
+            transition: all 0.3s ease !important;
+        }
+        
+        /* Carrusel optimizado para desktop */
+        .carousel-slide img {
+            height: 500px !important;
+        }
+        
+        .carousel-btn {
+            width: 60px !important;
+            height: 60px !important;
+            font-size: 1.8rem !important;
+        }
+    }
+
+    /* Para pantallas extra grandes */
+    @media screen and (min-width: 1440px) {
+        .header-logo img {
+            height: 70px !important;
+        }
+        
+        .titulo-seccion {
+            font-size: 4.5rem !important;
+        }
+        
+        .container {
+            max-width: 1600px !important;
+        }
+    }
     </style>
 ```
 </head>
@@ -2217,12 +2636,12 @@
 
                 <nav class="header-nav">
                     <a data-target="page-inicio" class="header-nav-link active">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <i class="fas fa-home"></i>
                         <span>Inicio</span>
                     </a>
                     <div class="dropdown-menu">
                         <a href="#" class="header-nav-link dropdown-toggle">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                            <i class="fas fa-trophy"></i>
                             <span>Certámenes</span>
                             <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
@@ -2236,28 +2655,31 @@
                     </div>
                     <div class="dropdown-menu">
                         <a href="#" class="header-nav-link dropdown-toggle">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" /></svg>
+                            <i class="fas fa-users"></i>
                             <span>Artistas</span>
                             <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
                         <div class="dropdown-content">
                             <a href="#" data-target="page-comunidad">👥 Comunidad</a>
                             <a href="#" data-target="page-inscripcion">📝 Inscripción</a>
+                            <a href="perfil-artista-demo.html">👤 Perfil Demo</a>
+                            <a href="#" data-target="page-dashboard-artista">📊 Dashboard Artista</a>
+                            <a href="#" data-target="page-crear-perfil">🛠️ Crear Perfil</a>
                             <a href="nosotros.html">🏢 Nosotros</a>
                             <a href="reglamento.html">📜 Reglamento Jerárquico</a>
                         </div>
                     </div>
                     <a data-target="page-inscripcion" class="header-nav-link">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" /></svg>
+                        <i class="fas fa-edit"></i>
                         <span>Inscripción</span>
                     </a>
                     <a data-target="page-comprar-vyt" class="header-nav-link">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
+                        <i class="fas fa-coins"></i>
                         <span>VYT-MONEY</span>
                     </a>
                     <div class="dropdown-menu">
                         <a href="#" class="header-nav-link dropdown-toggle">
-                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            <i class="fas fa-info-circle"></i>
                             <span>Información</span>
                             <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                         </a>
@@ -2265,14 +2687,34 @@
                             <a href="#" data-target="page-nosotros">🏢 Nosotros</a>
                             <a href="#" data-target="page-reglamento">📋 Reglamento</a>
                             <a href="#" data-target="page-sponsors">⭐ Sponsors</a>
-                            <a href="#" data-target="page-tienda">📝 Tienda</a>
+                            <a href="blog.html">📝 Blog</a>
+                            <a href="#" data-target="page-tienda">� Tienda</a>
+                        </div>
+                    </div>
+                    
+                    <!-- Nuevas secciones sociales -->
+                    <div class="nav-item dropdown-menu">
+                        <a href="#" class="dropdown-toggle">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            <span>Artistas</span>
+                            <svg class="dropdown-arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </a>
+                        <div class="dropdown-content">
+                            <a href="#" data-target="page-perfil-artista">👤 Mi Perfil</a>
+                            <a href="#" data-target="page-batallas">⚔️ Batallas</a>
+                            <a href="#" onclick="openSocialLogin()">🔗 Conectar Redes</a>
                         </div>
                     </div>
                 </nav>
 
                 <div class="header-user">
-                    <a href="login.html" id="profile-link" class="text-gray-300 hover:text-white flex items-center space-x-2">
-                        <svg class="icon-profile" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <!-- Botón de Avatar (visible cuando hay usuario logueado) -->
+                    <button id="avatar-button" onclick="openAvatarSelector()" class="hidden mr-3 p-2 bg-gray-700 hover:bg-gray-600 rounded-full transition-colors duration-200" title="Cambiar Avatar">
+                        <span class="user-avatar text-2xl">😊</span>
+                    </button>
+                    
+                    <a href="#" onclick="openSocialLogin()" id="profile-link" class="text-gray-300 hover:text-white flex items-center space-x-2">
+                        <i class="fas fa-user-circle icon-profile" style="font-size: 2rem;"></i>
                         <span id="profile-text">Iniciar Sesión</span>
                     </a>
                     <button id="logout-button" class="hidden ml-4 px-3 py-1 bg-red-600 text-white rounded-full text-sm hover:bg-red-700 transition-colors duration-200">Cerrar Sesión</button>
@@ -2314,18 +2756,198 @@
                                 </div>
                             </section>
                             
-                            <!-- Galería de imágenes -->
+                            <!-- Sistema de Igualdad Regional -->
+                            <section class="equality-system-section py-16" style="background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%); border-radius: 20px; margin: 2rem 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                                <div class="text-center">
+                                    <h2 class="text-4xl font-bold mb-6" style="color: #1e40af; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+                                        ⚖️ Sistema de Igualdad de Condiciones
+                                    </h2>
+                                    <p class="text-xl mb-8" style="color: #374151; max-width: 800px; margin: 0 auto; line-height: 1.6;">
+                                        <strong>Cada participante compite con gente de su región</strong> - Todos están en igualdad de condiciones
+                                    </p>
+                                    
+                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                                        <!-- Lado izquierdo: Como funciona -->
+                                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); border-radius: 16px; padding: 2rem; color: white; text-align: left;">
+                                            <h3 class="text-2xl font-bold mb-4">🎯 ¿Cómo funciona?</h3>
+                                            <ul class="space-y-3 text-lg">
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-300">✓</span>
+                                                    Competís solo con artistas de tu región
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-300">✓</span>
+                                                    Mismas oportunidades para todos
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-300">✓</span>
+                                                    No importa si vivís en Buenos Aires o Jujuy
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-300">✓</span>
+                                                    Progreso: Local → Provincial → Regional → Nacional
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        
+                                        <!-- Lado derecho: Beneficios -->
+                                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 16px; padding: 2rem; color: white; text-align: left;">
+                                            <h3 class="text-2xl font-bold mb-4">🌟 Beneficios del Sistema</h3>
+                                            <ul class="space-y-3 text-lg">
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-100">🎤</span>
+                                                    Competencia justa y equilibrada
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-100">🏆</span>
+                                                    Más chances de destacar
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-100">🌍</span>
+                                                    Representación de todo el país
+                                                </li>
+                                                <li class="flex items-center">
+                                                    <span class="mr-3 text-yellow-100">💰</span>
+                                                    Premios en todas las etapas
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Mapa visual de regiones -->
+                                    <div style="background: #f8fafc; border-radius: 16px; padding: 2rem; border: 2px solid #e5e7eb;">
+                                        <h3 class="text-2xl font-bold mb-6" style="color: #1e40af;">🗺️ Las 6 Regiones de Argentina</h3>
+                                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 text-center">
+                                            <div style="background: #dbeafe; border-radius: 12px; padding: 1rem; border: 2px solid #3b82f6;">
+                                                <div class="text-2xl mb-2">🏔️</div>
+                                                <h4 class="font-bold" style="color: #1e40af;">NOA</h4>
+                                                <p class="text-sm" style="color: #374151;">Norte</p>
+                                            </div>
+                                            <div style="background: #dcfce7; border-radius: 12px; padding: 1rem; border: 2px solid #22c55e;">
+                                                <div class="text-2xl mb-2">🌿</div>
+                                                <h4 class="font-bold" style="color: #15803d;">NEA</h4>
+                                                <p class="text-sm" style="color: #374151;">Noreste</p>
+                                            </div>
+                                            <div style="background: #fef3c7; border-radius: 12px; padding: 1rem; border: 2px solid #f59e0b;">
+                                                <div class="text-2xl mb-2">🏛️</div>
+                                                <h4 class="font-bold" style="color: #d97706;">Centro</h4>
+                                                <p class="text-sm" style="color: #374151;">Centro</p>
+                                            </div>
+                                            <div style="background: #fed7d7; border-radius: 12px; padding: 1rem; border: 2px solid #ef4444;">
+                                                <div class="text-2xl mb-2">🍇</div>
+                                                <h4 class="font-bold" style="color: #dc2626;">Cuyo</h4>
+                                                <p class="text-sm" style="color: #374151;">Oeste</p>
+                                            </div>
+                                            <div style="background: #e0e7ff; border-radius: 12px; padding: 1rem; border: 2px solid #6366f1;">
+                                                <div class="text-2xl mb-2">🌾</div>
+                                                <h4 class="font-bold" style="color: #4f46e5;">Pampeana</h4>
+                                                <p class="text-sm" style="color: #374151;">Buenos Aires</p>
+                                            </div>
+                                            <div style="background: #f3e8ff; border-radius: 12px; padding: 1rem; border: 2px solid #8b5cf6;">
+                                                <div class="text-2xl mb-2">🏔️</div>
+                                                <h4 class="font-bold" style="color: #7c3aed;">Patagonia</h4>
+                                                <p class="text-sm" style="color: #374151;">Sur</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Call to action -->
+                                    <div class="mt-8">
+                                        <a href="guia-sistema-jerarquico.html" class="inline-block px-8 py-4 text-lg font-bold text-white rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); text-decoration: none;">
+                                            📖 Ver Guía Completa del Sistema
+                                        </a>
+                                    </div>
+                                </div>
+                            </section>
+                            
+                            <!-- Galería Carrusel Interactivo -->
                             <section class="gallery-section py-12">
-                                <h2 class="titulo-seccion text-center mb-8">📸 Galería del Certamen</h2>
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                    <div class="gallery-item">
-                                        <img src="https://via.placeholder.com/400x300/1e3a8a/ffffff?text=Presentación+1" alt="Presentación 1" class="w-full h-64 object-cover rounded-lg">
+                                <h2 class="titulo-seccion text-center mb-8">📸 Galería de Certámenes Anteriores</h2>
+                                
+                                <!-- Carrusel Principal -->
+                                <div class="gallery-carousel-container" style="position: relative; max-width: 1200px; margin: 0 auto; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.15);">
+                                    
+                                    <!-- Slides del Carrusel -->
+                                    <div class="carousel-slides" style="display: flex; transition: transform 0.5s ease-in-out; will-change: transform;" id="gallery-carousel">
+                                        
+                                        <!-- Slide 1: Certamen 2024 -->
+                                        <div class="carousel-slide" style="min-width: 100%; position: relative;">
+                                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=1200&h=600&fit=crop" alt="Certamen VYT 2024 - Final Nacional" style="width: 100%; height: 600px; object-fit: cover;">
+                                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 2rem;">
+                                                <h3 style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">🏆 Final Nacional 2024</h3>
+                                                <p style="font-size: 1.1rem; opacity: 0.9;">Más de 500 participantes de todo el país. Teatro San Martín, Buenos Aires.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Slide 2: Semifinales Regionales -->
+                                        <div class="carousel-slide" style="min-width: 100%; position: relative;">
+                                            <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=1200&h=600&fit=crop" alt="Semifinales Regionales VYT" style="width: 100%; height: 600px; object-fit: cover;">
+                                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 2rem;">
+                                                <h3 style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">🌎 Semifinales Regionales</h3>
+                                                <p style="font-size: 1.1rem; opacity: 0.9;">Las 6 regiones compitiendo por su lugar en la final nacional.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Slide 3: Backstage -->
+                                        <div class="carousel-slide" style="min-width: 100%; position: relative;">
+                                            <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=1200&h=600&fit=crop" alt="Backstage VYT Music" style="width: 100%; height: 600px; object-fit: cover;">
+                                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 2rem;">
+                                                <h3 style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">🎭 Detrás de Escena</h3>
+                                                <p style="font-size: 1.1rem; opacity: 0.9;">Los momentos únicos que viven nuestros artistas antes de subir al escenario.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Slide 4: Ganadores -->
+                                        <div class="carousel-slide" style="min-width: 100%; position: relative;">
+                                            <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=1200&h=600&fit=crop" alt="Ganadores VYT 2024" style="width: 100%; height: 600px; object-fit: cover;">
+                                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 2rem;">
+                                                <h3 style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">🥇 Nuestros Campeones</h3>
+                                                <p style="font-size: 1.1rem; opacity: 0.9;">Los artistas que han marcado la historia de VYT Music.</p>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Slide 5: Audiencia -->
+                                        <div class="carousel-slide" style="min-width: 100%; position: relative;">
+                                            <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=1200&h=600&fit=crop" alt="Audiencia VYT Music" style="width: 100%; height: 600px; object-fit: cover;">
+                                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; padding: 2rem;">
+                                                <h3 style="font-size: 1.8rem; font-weight: bold; margin-bottom: 0.5rem;">👥 Nuestra Comunidad</h3>
+                                                <p style="font-size: 1.1rem; opacity: 0.9;">Miles de personas que siguen y apoyan el talento argentino.</p>
+                                            </div>
+                                        </div>
+                                        
                                     </div>
-                                    <div class="gallery-item">
-                                        <img src="https://via.placeholder.com/400x300/1e3a8a/ffffff?text=Presentación+2" alt="Presentación 2" class="w-full h-64 object-cover rounded-lg">
+                                    
+                                    <!-- Controles del Carrusel -->
+                                    <button onclick="previousSlide()" style="position: absolute; left: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 10;" onmouseover="this.style.background='white'; this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.background='rgba(255,255,255,0.9)'; this.style.transform='translateY(-50%) scale(1)'">‹</button>
+                                    
+                                    <button onclick="nextSlide()" style="position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.9); border: none; border-radius: 50%; width: 60px; height: 60px; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); transition: all 0.3s ease; z-index: 10;" onmouseover="this.style.background='white'; this.style.transform='translateY(-50%) scale(1.1)'" onmouseout="this.style.background='rgba(255,255,255,0.9)'; this.style.transform='translateY(-50%) scale(1)'">›</button>
+                                    
+                                    <!-- Indicadores -->
+                                    <div style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 0.5rem; z-index: 10;" id="carousel-indicators">
+                                        <button onclick="goToSlide(0)" class="carousel-dot active" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: white; cursor: pointer; transition: all 0.3s ease; opacity: 0.7;"></button>
+                                        <button onclick="goToSlide(1)" class="carousel-dot" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: white; cursor: pointer; transition: all 0.3s ease; opacity: 0.5;"></button>
+                                        <button onclick="goToSlide(2)" class="carousel-dot" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: white; cursor: pointer; transition: all 0.3s ease; opacity: 0.5;"></button>
+                                        <button onclick="goToSlide(3)" class="carousel-dot" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: white; cursor: pointer; transition: all 0.3s ease; opacity: 0.5;"></button>
+                                        <button onclick="goToSlide(4)" class="carousel-dot" style="width: 12px; height: 12px; border-radius: 50%; border: none; background: white; cursor: pointer; transition: all 0.3s ease; opacity: 0.5;"></button>
                                     </div>
-                                    <div class="gallery-item">
-                                        <img src="https://via.placeholder.com/400x300/1e3a8a/ffffff?text=Presentación+3" alt="Presentación 3" class="w-full h-64 object-cover rounded-lg">
+                                </div>
+                                
+                                <!-- Miniaturas Clickeables -->
+                                <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem; flex-wrap: wrap;">
+                                    <div onclick="goToSlide(0)" style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 3px solid transparent; transition: all 0.3s ease; width: 120px; height: 80px;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='transparent'; this.style.transform='scale(1)'">
+                                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=120&h=80&fit=crop" alt="Final 2024" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <div onclick="goToSlide(1)" style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 3px solid transparent; transition: all 0.3s ease; width: 120px; height: 80px;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='transparent'; this.style.transform='scale(1)'">
+                                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=120&h=80&fit=crop" alt="Semifinales" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <div onclick="goToSlide(2)" style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 3px solid transparent; transition: all 0.3s ease; width: 120px; height: 80px;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='transparent'; this.style.transform='scale(1)'">
+                                        <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=120&h=80&fit=crop" alt="Backstage" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <div onclick="goToSlide(3)" style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 3px solid transparent; transition: all 0.3s ease; width: 120px; height: 80px;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='transparent'; this.style.transform='scale(1)'">
+                                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=120&h=80&fit=crop" alt="Ganadores" style="width: 100%; height: 100%; object-fit: cover;">
+                                    </div>
+                                    <div onclick="goToSlide(4)" style="cursor: pointer; border-radius: 12px; overflow: hidden; border: 3px solid transparent; transition: all 0.3s ease; width: 120px; height: 80px;" onmouseover="this.style.borderColor='#3b82f6'; this.style.transform='scale(1.05)'" onmouseout="this.style.borderColor='transparent'; this.style.transform='scale(1)'">
+                                        <img src="https://images.unsplash.com/photo-1540039155733-5bb30b53aa14?w=120&h=80&fit=crop" alt="Audiencia" style="width: 100%; height: 100%; object-fit: cover;">
                                     </div>
                                 </div>
                             </section>
@@ -2350,6 +2972,150 @@
                                             <h3 class="text-xl font-bold mb-2">Comunidad</h3>
                                             <p>Conecta con otros artistas y forma parte del movimiento</p>
                                         </div>
+                                    </div>
+                                </div>
+                            </section>
+                            
+                            <!-- Ranking Semanal Destacado -->
+                            <section class="ranking-section py-16" style="background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border-radius: 20px; margin: 2rem 0; box-shadow: 0 15px 40px rgba(0,0,0,0.1);">
+                                <div class="text-center">
+                                    <h2 class="text-4xl font-bold mb-6" style="color: #1e40af; text-shadow: 2px 2px 4px rgba(0,0,0,0.1);">
+                                        🏆 Ranking Semanal - ¡Votá por tu Favorito!
+                                    </h2>
+                                    <p class="text-xl mb-8" style="color: #374151; max-width: 700px; margin: 0 auto;">
+                                        Los videos más populares de esta semana. <strong>¡Tu voto cuenta!</strong>
+                                    </p>
+                                    
+                                    <!-- Top 3 Podio -->
+                                    <div class="flex flex-wrap justify-center items-end gap-6 mb-12" style="perspective: 1000px;">
+                                        <!-- 2do Lugar -->
+                                        <div class="ranking-card" style="background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%); border-radius: 16px; padding: 1.5rem; min-width: 250px; max-width: 280px; transform: rotateY(-5deg) scale(0.95); border: 3px solid #9ca3af;">
+                                            <div class="text-6xl mb-3">🥈</div>
+                                            <h3 class="text-xl font-bold mb-2" style="color: #374151;">María González</h3>
+                                            <p style="color: #6b7280; font-size: 0.9rem; margin-bottom: 1rem;">Región NEA • Formosa</p>
+                                            <div style="background: #f3f4f6; border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                                                <div style="width: 100%; height: 120px; background: #d1d5db; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #6b7280; font-weight: bold;">
+                                                    🎵 "Cuando llora mi guitarra"
+                                                </div>
+                                            </div>
+                                            <div class="flex justify-between items-center mb-3">
+                                                <span style="color: #374151; font-weight: bold;">4,287 votos</span>
+                                                <span style="color: #22c55e; font-weight: bold;">📈 +12%</span>
+                                            </div>
+                                            <button onclick="voteForArtist('maria-gonzalez')" class="w-full py-2 px-4 bg-gradient-to-r from-gray-500 to-gray-600 text-white rounded-full font-bold hover:from-gray-600 hover:to-gray-700 transition-all duration-300 hover:scale-105">
+                                                👍 Votar
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- 1er Lugar -->
+                                        <div class="ranking-card" style="background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); border-radius: 16px; padding: 2rem; min-width: 280px; max-width: 320px; transform: scale(1.1); border: 4px solid #d97706; box-shadow: 0 20px 40px rgba(245, 158, 11, 0.3);">
+                                            <div class="text-7xl mb-3">🥇</div>
+                                            <h3 class="text-2xl font-bold mb-2 text-white">Carlos Mendoza</h3>
+                                            <p class="text-orange-100 mb-4">Región Cuyo • Mendoza</p>
+                                            <div style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                                                <div style="width: 100%; height: 140px; background: rgba(255,255,255,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1.1rem;">
+                                                    🎵 "Zamba de mi esperanza"
+                                                </div>
+                                            </div>
+                                            <div class="flex justify-between items-center mb-3 text-white">
+                                                <span class="font-bold text-lg">6,543 votos</span>
+                                                <span style="color: #dcfce7; font-weight: bold;">📈 +28%</span>
+                                            </div>
+                                            <button onclick="voteForArtist('carlos-mendoza')" class="w-full py-3 px-4 bg-white text-orange-600 rounded-full font-bold hover:bg-orange-50 transition-all duration-300 hover:scale-105 shadow-lg">
+                                                🌟 ¡Votar al Líder!
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- 3er Lugar -->
+                                        <div class="ranking-card" style="background: linear-gradient(135deg, #cd7f32 0%, #b8860b 100%); border-radius: 16px; padding: 1.5rem; min-width: 250px; max-width: 280px; transform: rotateY(5deg) scale(0.95); border: 3px solid #a0522d;">
+                                            <div class="text-6xl mb-3">🥉</div>
+                                            <h3 class="text-xl font-bold mb-2 text-white">Ana Rodríguez</h3>
+                                            <p class="text-orange-100 mb-4">Región Patagonia • Neuquén</p>
+                                            <div style="background: rgba(255,255,255,0.2); border-radius: 12px; padding: 1rem; margin-bottom: 1rem;">
+                                                <div style="width: 100%; height: 120px; background: rgba(255,255,255,0.3); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">
+                                                    🎵 "Viento patagónico"
+                                                </div>
+                                            </div>
+                                            <div class="flex justify-between items-center mb-3 text-white">
+                                                <span class="font-bold">3,891 votos</span>
+                                                <span style="color: #dcfce7; font-weight: bold;">📈 +8%</span>
+                                            </div>
+                                            <button onclick="voteForArtist('ana-rodriguez')" class="w-full py-2 px-4 bg-white text-orange-700 rounded-full font-bold hover:bg-orange-50 transition-all duration-300 hover:scale-105">
+                                                👍 Votar
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Resto del Top 10 -->
+                                    <div style="background: #f8fafc; border-radius: 16px; padding: 2rem; margin-top: 2rem;">
+                                        <h3 class="text-2xl font-bold mb-6" style="color: #1e40af;">🎯 Top 10 Completo</h3>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div class="flex items-center justify-between p-4" style="background: white; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                                                <div class="flex items-center">
+                                                    <span class="text-2xl mr-3">4️⃣</span>
+                                                    <div>
+                                                        <h4 class="font-bold" style="color: #1e40af;">Luis Herrera</h4>
+                                                        <p class="text-sm" style="color: #6b7280;">NOA • Salta</p>
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-bold" style="color: #374151;">3,205 votos</div>
+                                                    <button onclick="voteForArtist('luis-herrera')" class="text-blue-600 hover:text-blue-800 font-bold">👍 Votar</button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center justify-between p-4" style="background: white; border-radius: 12px; border-left: 4px solid #10b981;">
+                                                <div class="flex items-center">
+                                                    <span class="text-2xl mr-3">5️⃣</span>
+                                                    <div>
+                                                        <h4 class="font-bold" style="color: #059669;">Sofía Morales</h4>
+                                                        <p class="text-sm" style="color: #6b7280;">Centro • Córdoba</p>
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-bold" style="color: #374151;">2,987 votos</div>
+                                                    <button onclick="voteForArtist('sofia-morales')" class="text-green-600 hover:text-green-800 font-bold">👍 Votar</button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center justify-between p-4" style="background: white; border-radius: 12px; border-left: 4px solid #f59e0b;">
+                                                <div class="flex items-center">
+                                                    <span class="text-2xl mr-3">6️⃣</span>
+                                                    <div>
+                                                        <h4 class="font-bold" style="color: #d97706;">Diego Silva</h4>
+                                                        <p class="text-sm" style="color: #6b7280;">Pampeana • Buenos Aires</p>
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-bold" style="color: #374151;">2,743 votos</div>
+                                                    <button onclick="voteForArtist('diego-silva')" class="text-yellow-600 hover:text-yellow-800 font-bold">👍 Votar</button>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-center justify-between p-4" style="background: white; border-radius: 12px; border-left: 4px solid #8b5cf6;">
+                                                <div class="flex items-center">
+                                                    <span class="text-2xl mr-3">7️⃣</span>
+                                                    <div>
+                                                        <h4 class="font-bold" style="color: #7c3aed;">Carmen López</h4>
+                                                        <p class="text-sm" style="color: #6b7280;">NEA • Corrientes</p>
+                                                    </div>
+                                                </div>
+                                                <div class="text-right">
+                                                    <div class="font-bold" style="color: #374151;">2,456 votos</div>
+                                                    <button onclick="voteForArtist('carmen-lopez')" class="text-purple-600 hover:text-purple-800 font-bold">👍 Votar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="mt-6 text-center">
+                                            <button onclick="showFullRanking()" class="px-8 py-3 text-lg font-bold text-white rounded-full transition-all duration-300 hover:scale-105" style="background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);">
+                                                📊 Ver Ranking Completo
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Próxima votación -->
+                                    <div class="mt-8 p-6" style="background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%); border-radius: 16px; border: 2px solid #f59e0b;">
+                                        <h3 class="text-xl font-bold mb-3" style="color: #92400e;">⏰ Próxima Ronda de Votación</h3>
+                                        <p style="color: #451a03; margin-bottom: 1rem;">La votación se cierra el <strong>Domingo 22:00 hs</strong></p>
+                                        <div class="text-2xl font-bold" style="color: #dc2626;" id="voting-countdown">2 días, 14 horas, 23 minutos</div>
                                     </div>
                                 </div>
                             </section>
@@ -2683,6 +3449,105 @@
                                     </div>
                                     <button class="btn btn-secundario" style="width: 100%;">
                                         🗺️ Ver Todas
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Estilos Musicales -->
+                            <h3 class="titulo-seccion" style="font-size: 2rem; margin-top: 3rem; margin-bottom: 1.5rem;">🎵 Estilos Musicales Disponibles</h3>
+                            <p style="color: var(--color-texto-secundario); text-align: center; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                                Elegí tu estilo favorito y compite en la categoría que mejor represente tu talento musical
+                            </p>
+                            
+                            <div class="musical-styles-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+                                
+                                <!-- Folklore -->
+                                <div class="musical-style-card" style="background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%); border-radius: 16px; padding: 2rem; text-align: center; color: white; position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onclick="selectMusicStyle('folklore')" onmouseover="this.style.transform='translateY(-5px) scale(1.02)'; this.style.boxShadow='0 20px 40px rgba(139, 69, 19, 0.3)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='none'">
+                                    <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">Tradicional</div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🪕</div>
+                                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">Folklore</h4>
+                                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Zambas, chacareras, cuecas y toda la música tradicional argentina</p>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem;">
+                                        <span>🎤 156 artistas</span>
+                                        <span>💰 $45,000</span>
+                                    </div>
+                                    <button style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                        🎵 Ver Ranking Folklore
+                                    </button>
+                                </div>
+
+                                <!-- Pop Latino -->
+                                <div class="musical-style-card" style="background: linear-gradient(135deg, #FF1493 0%, #FF69B4 100%); border-radius: 16px; padding: 2rem; text-align: center; color: white; position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onclick="selectMusicStyle('pop')" onmouseover="this.style.transform='translateY(-5px) scale(1.02)'; this.style.boxShadow='0 20px 40px rgba(255, 20, 147, 0.3)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='none'">
+                                    <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">Popular</div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎤</div>
+                                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">Pop Latino</h4>
+                                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Baladas, reggaeton, pop moderno y éxitos contemporáneos</p>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem;">
+                                        <span>🎤 198 artistas</span>
+                                        <span>💰 $52,000</span>
+                                    </div>
+                                    <button style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                        🎵 Ver Ranking Pop
+                                    </button>
+                                </div>
+
+                                <!-- Rock Nacional -->
+                                <div class="musical-style-card" style="background: linear-gradient(135deg, #2C3E50 0%, #4A4A4A 100%); border-radius: 16px; padding: 2rem; text-align: center; color: white; position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onclick="selectMusicStyle('rock')" onmouseover="this.style.transform='translateY(-5px) scale(1.02)'; this.style.boxShadow='0 20px 40px rgba(44, 62, 80, 0.3)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='none'">
+                                    <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">Energético</div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎸</div>
+                                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">Rock Nacional</h4>
+                                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Rock argentino, metal, alternativo y música independiente</p>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem;">
+                                        <span>🎤 127 artistas</span>
+                                        <span>💰 $38,500</span>
+                                    </div>
+                                    <button style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                        🎵 Ver Ranking Rock
+                                    </button>
+                                </div>
+
+                                <!-- Tango -->
+                                <div class="musical-style-card" style="background: linear-gradient(135deg, #8B0000 0%, #DC143C 100%); border-radius: 16px; padding: 2rem; text-align: center; color: white; position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onclick="selectMusicStyle('tango')" onmouseover="this.style.transform='translateY(-5px) scale(1.02)'; this.style.boxShadow='0 20px 40px rgba(139, 0, 0, 0.3)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='none'">
+                                    <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">Clásico</div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎭</div>
+                                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">Tango</h4>
+                                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Tango tradicional, milonga y música porteña auténtica</p>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem;">
+                                        <span>🎤 78 artistas</span>
+                                        <span>💰 $32,000</span>
+                                    </div>
+                                    <button style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                        🎵 Ver Ranking Tango
+                                    </button>
+                                </div>
+
+                                <!-- Cumbia -->
+                                <div class="musical-style-card" style="background: linear-gradient(135deg, #00CED1 0%, #20B2AA 100%); border-radius: 16px; padding: 2rem; text-align: center; color: white; position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onclick="selectMusicStyle('cumbia')" onmouseover="this.style.transform='translateY(-5px) scale(1.02)'; this.style.boxShadow='0 20px 40px rgba(0, 206, 209, 0.3)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='none'">
+                                    <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">Tropical</div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🪘</div>
+                                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">Cumbia</h4>
+                                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Cumbia santafesina, tropical, reggaeton y música bailable</p>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem;">
+                                        <span>🎤 143 artistas</span>
+                                        <span>💰 $41,200</span>
+                                    </div>
+                                    <button style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                        🎵 Ver Ranking Cumbia
+                                    </button>
+                                </div>
+
+                                <!-- Libre/Otros -->
+                                <div class="musical-style-card" style="background: linear-gradient(135deg, #9932CC 0%, #8A2BE2 100%); border-radius: 16px; padding: 2rem; text-align: center; color: white; position: relative; overflow: hidden; cursor: pointer; transition: all 0.3s ease;" onclick="selectMusicStyle('libre')" onmouseover="this.style.transform='translateY(-5px) scale(1.02)'; this.style.boxShadow='0 20px 40px rgba(153, 50, 204, 0.3)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='none'">
+                                    <div style="position: absolute; top: 10px; right: 10px; background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 15px; font-size: 0.8rem;">Experimental</div>
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎨</div>
+                                    <h4 style="font-size: 1.5rem; margin-bottom: 1rem; font-weight: bold;">Libre</h4>
+                                    <p style="opacity: 0.9; margin-bottom: 1.5rem;">Jazz, blues, fusión, experimental y estilos únicos</p>
+                                    <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; font-size: 0.9rem;">
+                                        <span>🎤 89 artistas</span>
+                                        <span>💰 $28,000</span>
+                                    </div>
+                                    <button style="width: 100%; padding: 0.8rem; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); border-radius: 25px; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+                                        🎵 Ver Ranking Libre
                                     </button>
                                 </div>
                             </div>
@@ -3189,7 +4054,7 @@
                             <p class="subtitulo-seccion">Adquiere VYT-MONEY para votar por tus artistas favoritos y contribuir al pozo de premios</p>
                             
                             <!-- Balance actual del usuario -->
-                            <div class="balance-display" id="balanceDisplay" style="display: none;">
+                            <div class="balance-display user-only" id="balanceDisplay" style="display: none;">
                                 <div class="balance-card">
                                     <h3>📊 Tu Balance Actual</h3>
                                     <div class="balance-amount" id="currentBalance">0 VYT-MONEY</div>
@@ -3482,6 +4347,362 @@
                         </div>
                     </section>
                 </div>
+
+                <!-- Página de Perfil de Artista -->
+                <div id="page-perfil-artista" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <!-- Header del Perfil -->
+                            <div class="artist-profile-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 20px; padding: 2rem; margin-bottom: 2rem; color: white; position: relative; overflow: hidden;">
+                                
+                                <!-- Foto de perfil y datos básicos -->
+                                <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                                    <div class="artist-avatar" style="width: 120px; height: 120px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 4rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);" id="artist-main-avatar">
+                                        🎤
+                                    </div>
+                                    
+                                    <div style="flex: 1; min-width: 300px;">
+                                        <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: bold;" id="artist-name">María González</h1>
+                                        <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 1rem;" id="artist-location">📍 Formosa, Argentina • Región NEA</p>
+                                        <p style="opacity: 0.8; line-height: 1.6;" id="artist-bio">
+                                            Cantante de folklore con 8 años de experiencia. Especializada en zambas y chacareras tradicionales. 
+                                            Ganadora regional 2024 y representante de la región NEA.
+                                        </p>
+                                    </div>
+                                    
+                                    <!-- Botones de acción -->
+                                    <div style="display: flex; flex-direction: column; gap: 0.8rem; min-width: 200px;">
+                                        <button onclick="followArtist('maria-gonzalez')" class="btn" style="background: rgba(255,255,255,0.2); border: 2px solid white; color: white; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; transition: all 0.3s ease;" onmouseover="this.style.background='white'; this.style.color='#667eea'" onmouseout="this.style.background='rgba(255,255,255,0.2)'; this.style.color='white'">
+                                            👥 Seguir (2,847)
+                                        </button>
+                                        <button onclick="voteForArtist('maria-gonzalez')" class="btn" style="background: #10b981; border: none; color: white; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; transition: all 0.3s ease;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                                            ⭐ Votar Ahora
+                                        </button>
+                                        <button onclick="challengeArtist('maria-gonzalez')" class="btn" style="background: #f59e0b; border: none; color: white; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; transition: all 0.3s ease;" onmouseover="this.style.background='#d97706'" onmouseout="this.style.background='#f59e0b'">
+                                            ⚔️ Desafiar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Estadísticas del artista -->
+                                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem;">
+                                    <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 12px; text-align: center; backdrop-filter: blur(10px);">
+                                        <div style="font-size: 2rem; font-weight: bold;">4,287</div>
+                                        <div style="opacity: 0.8;">Votos Totales</div>
+                                    </div>
+                                    <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 12px; text-align: center; backdrop-filter: blur(10px);">
+                                        <div style="font-size: 2rem; font-weight: bold;">2,847</div>
+                                        <div style="opacity: 0.8;">Seguidores</div>
+                                    </div>
+                                    <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 12px; text-align: center; backdrop-filter: blur(10px);">
+                                        <div style="font-size: 2rem; font-weight: bold;">12</div>
+                                        <div style="opacity: 0.8;">Canciones</div>
+                                    </div>
+                                    <div style="background: rgba(255,255,255,0.1); padding: 1rem; border-radius: 12px; text-align: center; backdrop-filter: blur(10px);">
+                                        <div style="font-size: 2rem; font-weight: bold;">#2</div>
+                                        <div style="opacity: 0.8;">Ranking</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tabs de contenido -->
+                            <div class="artist-tabs" style="margin-bottom: 2rem;">
+                                <div style="display: flex; border-bottom: 2px solid #e5e7eb; margin-bottom: 2rem;">
+                                    <button onclick="showArtistTab('canciones')" class="artist-tab active" data-tab="canciones" style="padding: 1rem 2rem; border: none; background: none; color: #3b82f6; border-bottom: 2px solid #3b82f6; font-weight: bold; cursor: pointer;">
+                                        🎵 Canciones
+                                    </button>
+                                    <button onclick="showArtistTab('galeria')" class="artist-tab" data-tab="galeria" style="padding: 1rem 2rem; border: none; background: none; color: #6b7280; cursor: pointer;">
+                                        📸 Galería
+                                    </button>
+                                    <button onclick="showArtistTab('batallas')" class="artist-tab" data-tab="batallas" style="padding: 1rem 2rem; border: none; background: none; color: #6b7280; cursor: pointer;">
+                                        ⚔️ Batallas
+                                    </button>
+                                    <button onclick="showArtistTab('seguidores')" class="artist-tab" data-tab="seguidores" style="padding: 1rem 2rem; border: none; background: none; color: #6b7280; cursor: pointer;">
+                                        👥 Seguidores
+                                    </button>
+                                </div>
+                                
+                                <!-- Contenido de Canciones -->
+                                <div id="artist-tab-canciones" class="artist-tab-content">
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+                                        
+                                        <!-- Canción 1 -->
+                                        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8B4513, #D2691E); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🪕</div>
+                                                <div style="flex: 1;">
+                                                    <h4 style="margin: 0; color: #1e40af; font-weight: bold;">Cuando llora mi guitarra</h4>
+                                                    <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">Folklore • 3:45</p>
+                                                </div>
+                                                <button onclick="playSong('cuando-llora')" style="background: #3b82f6; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem;">▶</button>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                                <span style="color: #10b981; font-weight: bold;">1,247 votos</span>
+                                                <span style="color: #6b7280; font-size: 0.9rem;">Subido hace 3 días</span>
+                                            </div>
+                                            <button onclick="voteForSong('cuando-llora')" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 0.8rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
+                                                ⭐ Votar esta canción
+                                            </button>
+                                        </div>
+
+                                        <!-- Canción 2 -->
+                                        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8B4513, #D2691E); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🪕</div>
+                                                <div style="flex: 1;">
+                                                    <h4 style="margin: 0; color: #1e40af; font-weight: bold;">Zamba de los humildes</h4>
+                                                    <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">Folklore • 4:12</p>
+                                                </div>
+                                                <button onclick="playSong('zamba-humildes')" style="background: #3b82f6; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem;">▶</button>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                                <span style="color: #10b981; font-weight: bold;">987 votos</span>
+                                                <span style="color: #6b7280; font-size: 0.9rem;">Subido hace 1 semana</span>
+                                            </div>
+                                            <button onclick="voteForSong('zamba-humildes')" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 0.8rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
+                                                ⭐ Votar esta canción
+                                            </button>
+                                        </div>
+
+                                        <!-- Canción 3 -->
+                                        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;">
+                                            <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem;">
+                                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8B4513, #D2691E); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.5rem;">🪕</div>
+                                                <div style="flex: 1;">
+                                                    <h4 style="margin: 0; color: #1e40af; font-weight: bold;">Chacarera del monte</h4>
+                                                    <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">Folklore • 3:28</p>
+                                                </div>
+                                                <button onclick="playSong('chacarera-monte')" style="background: #3b82f6; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; font-size: 1.2rem;">▶</button>
+                                            </div>
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                                <span style="color: #10b981; font-weight: bold;">2,053 votos</span>
+                                                <span style="color: #6b7280; font-size: 0.9rem;">Subido hace 2 semanas</span>
+                                            </div>
+                                            <button onclick="voteForSong('chacarera-monte')" style="width: 100%; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; padding: 0.8rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
+                                                ⭐ Votar esta canción
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Contenido de Galería -->
+                                <div id="artist-tab-galeria" class="artist-tab-content hidden">
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=300&fit=crop" alt="Foto 1" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;" onclick="openImageModal(this.src)">
+                                        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=300&h=300&fit=crop" alt="Foto 2" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;" onclick="openImageModal(this.src)">
+                                        <img src="https://images.unsplash.com/photo-1598387993441-a364f854c3e1?w=300&h=300&fit=crop" alt="Foto 3" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;" onclick="openImageModal(this.src)">
+                                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=300&fit=crop" alt="Foto 4" style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; cursor: pointer;" onclick="openImageModal(this.src)">
+                                    </div>
+                                </div>
+
+                                <!-- Contenido de Batallas -->
+                                <div id="artist-tab-batallas" class="artist-tab-content hidden">
+                                    <div style="display: grid; gap: 1.5rem;">
+                                        
+                                        <!-- Batalla Reciente -->
+                                        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                                <h4 style="color: #1e40af; margin: 0;">Batalla vs Luis Herrera</h4>
+                                                <span style="background: #10b981; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">GANADA</span>
+                                            </div>
+                                            <p style="color: #6b7280; margin-bottom: 1rem;">Duelo de folklore tradicional • Hace 2 días</p>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="color: #374151; font-weight: bold;">María: 1,456 votos vs Luis: 987 votos</span>
+                                                <button onclick="viewBattle('maria-vs-luis')" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer;">Ver batalla</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Batalla Pendiente -->
+                                        <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                                <h4 style="color: #1e40af; margin: 0;">Batalla vs Ana Rodríguez</h4>
+                                                <span style="background: #f59e0b; color: white; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem; font-weight: bold;">EN CURSO</span>
+                                            </div>
+                                            <p style="color: #6b7280; margin-bottom: 1rem;">Duelo de folklore vs tango • Finaliza en 3 días</p>
+                                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                                <span style="color: #374151; font-weight: bold;">María: 834 votos vs Ana: 756 votos</span>
+                                                <button onclick="viewBattle('maria-vs-ana')" style="background: #f59e0b; color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer;">Ver batalla</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Contenido de Seguidores -->
+                                <div id="artist-tab-seguidores" class="artist-tab-content hidden">
+                                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+                                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                            <div style="font-size: 2.5rem;">🎸</div>
+                                            <div style="flex: 1;">
+                                                <h5 style="margin: 0; color: #1e40af;">Carlos Mendoza</h5>
+                                                <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">Cuyo • 6,543 votos</p>
+                                            </div>
+                                            <button onclick="viewProfile('carlos-mendoza')" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer;">Ver</button>
+                                        </div>
+                                        
+                                        <div style="display: flex; align-items: center; gap: 1rem; padding: 1rem; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                            <div style="font-size: 2.5rem;">🎤</div>
+                                            <div style="flex: 1;">
+                                                <h5 style="margin: 0; color: #1e40af;">Ana Rodríguez</h5>
+                                                <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">Patagonia • 3,891 votos</p>
+                                            </div>
+                                            <button onclick="viewProfile('ana-rodriguez')" style="background: #3b82f6; color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer;">Ver</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Página de Batallas -->
+                <div id="page-batallas" class="page">
+                    <section class="seccion">
+                        <div class="container">
+                            <h2 class="titulo-seccion">⚔️ Batallas Musicales</h2>
+                            <p class="subtitulo-seccion">Duelos épicos entre artistas donde TÚ decides el ganador</p>
+                            
+                            <!-- Batalla Destacada -->
+                            <div class="featured-battle" style="background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); border-radius: 20px; padding: 2rem; margin-bottom: 3rem; color: white; position: relative; overflow: hidden;">
+                                <div style="position: absolute; top: 10px; right: 20px; background: rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">
+                                    ⏰ Finaliza en 2 días, 14 horas
+                                </div>
+                                
+                                <h3 style="font-size: 2.5rem; margin-bottom: 1rem; text-align: center;">🔥 BATALLA ÉPICA EN CURSO</h3>
+                                
+                                <!-- Versus -->
+                                <div style="display: flex; align-items: center; justify-content: space-between; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                                    
+                                    <!-- Artista 1 -->
+                                    <div style="flex: 1; min-width: 250px; text-align: center;">
+                                        <div style="width: 120px; height: 120px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 4rem; margin: 0 auto 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">🎤</div>
+                                        <h4 style="font-size: 1.8rem; margin-bottom: 0.5rem;">María González</h4>
+                                        <p style="opacity: 0.9; margin-bottom: 1rem;">Folklore • NEA</p>
+                                        <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
+                                            <div style="font-size: 2rem; font-weight: bold;">1,247</div>
+                                            <div style="opacity: 0.8;">votos</div>
+                                        </div>
+                                        <button onclick="voteInBattle('maria-vs-ana', 'maria')" style="background: #10b981; border: none; color: white; padding: 1rem 2rem; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem; width: 100%;">
+                                            ⭐ Votar por María
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- VS -->
+                                    <div style="text-align: center; font-size: 3rem; font-weight: bold; min-width: 100px;">
+                                        VS
+                                    </div>
+                                    
+                                    <!-- Artista 2 -->
+                                    <div style="flex: 1; min-width: 250px; text-align: center;">
+                                        <div style="width: 120px; height: 120px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; font-size: 4rem; margin: 0 auto 1rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">🎭</div>
+                                        <h4 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Ana Rodríguez</h4>
+                                        <p style="opacity: 0.9; margin-bottom: 1rem;">Tango • Patagonia</p>
+                                        <div style="background: rgba(255,255,255,0.2); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
+                                            <div style="font-size: 2rem; font-weight: bold;">1,089</div>
+                                            <div style="opacity: 0.8;">votos</div>
+                                        </div>
+                                        <button onclick="voteInBattle('maria-vs-ana', 'ana')" style="background: #8B0000; border: none; color: white; padding: 1rem 2rem; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem; width: 100%;">
+                                            ⭐ Votar por Ana
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Barra de progreso -->
+                                <div style="background: rgba(255,255,255,0.2); border-radius: 25px; height: 40px; position: relative; margin-bottom: 1rem;">
+                                    <div style="background: #10b981; height: 100%; border-radius: 25px 0 0 25px; width: 53%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                        53% María
+                                    </div>
+                                    <div style="position: absolute; right: 0; top: 0; height: 100%; background: #8B0000; border-radius: 0 25px 25px 0; width: 47%; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                                        47% Ana
+                                    </div>
+                                </div>
+                                
+                                <div style="text-align: center;">
+                                    <p style="opacity: 0.9; margin-bottom: 1rem;">Total de votos: 2,336 • Premio: $15,000</p>
+                                    <button onclick="shareBattle('maria-vs-ana')" style="background: rgba(255,255,255,0.2); border: 1px solid white; color: white; padding: 0.8rem 1.5rem; border-radius: 25px; cursor: pointer;">
+                                        📤 Compartir batalla
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Lista de Batallas -->
+                            <h3 style="color: #1e40af; font-size: 2rem; margin-bottom: 2rem;">🎯 Todas las Batallas</h3>
+                            
+                            <div style="display: grid; gap: 1.5rem;">
+                                
+                                <!-- Batalla 1 -->
+                                <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #f59e0b;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                                        <div>
+                                            <h4 style="color: #1e40af; margin: 0; font-size: 1.3rem;">Carlos Mendoza vs Luis Herrera</h4>
+                                            <p style="color: #6b7280; margin: 0;">Rock vs Folklore • Finaliza en 5 días</p>
+                                        </div>
+                                        <span style="background: #f59e0b; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">EN CURSO</span>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="font-size: 1.5rem;">🎸</span>
+                                            <span style="font-weight: bold;">Carlos: 2,134 votos</span>
+                                        </div>
+                                        <div style="font-size: 1.2rem; font-weight: bold;">VS</div>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="font-size: 1.5rem;">🪕</span>
+                                            <span style="font-weight: bold;">Luis: 1,876 votos</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                                        <button onclick="viewBattle('carlos-vs-luis')" style="background: #3b82f6; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 20px; cursor: pointer; font-weight: bold;">
+                                            👁️ Ver Batalla
+                                        </button>
+                                        <button onclick="voteInBattle('carlos-vs-luis', 'carlos')" style="background: #10b981; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 20px; cursor: pointer;">
+                                            Votar Carlos
+                                        </button>
+                                        <button onclick="voteInBattle('carlos-vs-luis', 'luis')" style="background: #8B4513; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 20px; cursor: pointer;">
+                                            Votar Luis
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Batalla 2 -->
+                                <div style="background: white; border-radius: 16px; padding: 1.5rem; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-left: 4px solid #10b981;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 1rem;">
+                                        <div>
+                                            <h4 style="color: #1e40af; margin: 0; font-size: 1.3rem;">Sofía Morales vs Diego Silva</h4>
+                                            <p style="color: #6b7280; margin: 0;">Pop vs Cumbia • Finalizada hace 1 día</p>
+                                        </div>
+                                        <span style="background: #10b981; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">FINALIZADA</span>
+                                    </div>
+                                    
+                                    <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="font-size: 1.5rem;">🎤</span>
+                                            <span style="font-weight: bold; color: #10b981;">Sofía: 3,421 votos ✅</span>
+                                        </div>
+                                        <div style="font-size: 1.2rem; font-weight: bold;">VS</div>
+                                        <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                            <span style="font-size: 1.5rem;">🪘</span>
+                                            <span style="font-weight: bold;">Diego: 2,987 votos</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <button onclick="viewBattle('sofia-vs-diego')" style="background: #3b82f6; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 20px; cursor: pointer; font-weight: bold;">
+                                        👁️ Ver Resultado
+                                    </button>
+                                </div>
+
+                                <!-- Crear Nueva Batalla -->
+                                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 16px; padding: 2rem; text-align: center; color: white;">
+                                    <h4 style="font-size: 1.8rem; margin-bottom: 1rem;">⚔️ ¿Quieres crear una batalla?</h4>
+                                    <p style="opacity: 0.9; margin-bottom: 2rem;">Desafía a otros artistas y demuestra quién tiene el mejor talento</p>
+                                    <button onclick="createBattle()" style="background: white; color: #667eea; border: none; padding: 1rem 2rem; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">
+                                        🚀 Crear Nueva Batalla
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </main>
             
             <div id="modo-payment-modal" class="modal-backdrop">
@@ -3489,8 +4710,9 @@
                     <h3>Pago con MODO</h3>
                     <p>Para finalizar tu compra de <span id="modal-vyt-amount"></span> VYT Coins, por favor realiza una transferencia al siguiente alias MODO:</p>
                     <div class="payment-instructions">
-                        <strong>ALIAS:</strong> <div class="alias" id="modo-alias">VYT.MUSIC.PAGO</div>
-                        <p class="text-sm text-gray-400 mt-2">Copia el alias y realiza la transferencia desde tu app bancaria o billetera virtual (MODO).</p>
+                        <strong>ALIAS:</strong> <div class="alias" id="modo-alias">CONCURSO.CANTO</div>
+                        <strong>CUENTA:</strong> <div class="alias">5547300042625460</div>
+                        <p class="text-sm text-gray-400 mt-2">Copia el alias o número de cuenta y realiza la transferencia desde tu app bancaria o billetera virtual (MODO).</p>
                         <p class="text-sm text-gray-400 mt-1">Monto a transferir: <strong id="modal-payment-amount"></strong></p>
                     </div>
                     <button class="btn upload-receipt-btn" id="upload-receipt-btn">Ya transferí, subir comprobante</button>
@@ -3625,6 +4847,28 @@
                 <a href="blog.html" class="mobile-menu-link">
                     <span class="menu-icon">📝</span>
                     <span>Blog</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Sección Artistas -->
+        <div class="mobile-menu-section">
+            <div class="mobile-menu-title accordion-trigger" data-section="artistas">
+                👤 Artistas
+                <span class="accordion-arrow">▼</span>
+            </div>
+            <div class="accordion-content" id="artistas-content">
+                <a href="#" data-target="page-perfil-artista" class="mobile-menu-link">
+                    <span class="menu-icon">👤</span>
+                    <span>Mi Perfil</span>
+                </a>
+                <a href="#" data-target="page-batallas" class="mobile-menu-link">
+                    <span class="menu-icon">⚔️</span>
+                    <span>Batallas</span>
+                </a>
+                <a href="#" onclick="openSocialLogin()" class="mobile-menu-link">
+                    <span class="menu-icon">🔗</span>
+                    <span>Conectar Redes</span>
                 </a>
             </div>
         </div>
@@ -4199,7 +5443,7 @@
         }
         
         function showLoginModal() {
-            showNotification('Debes iniciar sesión para votar', 'info');
+            openSocialLogin();
         }
         
         function getArtistName(artistaId) {
@@ -4866,8 +6110,1345 @@
         }
     </script>
     
-    <!-- TEMPORAL: Comentado para que funcione la navegación unificada -->
-    <!-- <script type="module" src="principal-dynamic.js"></script> -->
+    <!-- Sistema de Votación y Ranking -->
+    <script>
+        // Sistema de votación con efectos gamificados
+        function voteForArtist(artistId) {
+            console.log('🎤 Votando por:', artistId);
+            
+            // Crear efecto visual de voto
+            createVoteEffect();
+            
+            // Simular voto (en producción sería una llamada a Firebase)
+            setTimeout(() => {
+                showVoteConfirmation(artistId);
+                updateVoteCount(artistId);
+            }, 500);
+        }
+        
+        function createVoteEffect() {
+            // Crear efecto de estrella que vuela
+            const effect = document.createElement('div');
+            effect.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: 30px;
+                height: 30px;
+                background: linear-gradient(45deg, #fbbf24, #f59e0b);
+                border-radius: 50%;
+                z-index: 1000;
+                transform: translate(-50%, -50%) scale(0);
+                pointer-events: none;
+                animation: voteEffect 1s ease-out forwards;
+            `;
+            effect.textContent = '⭐';
+            effect.style.display = 'flex';
+            effect.style.alignItems = 'center';
+            effect.style.justifyContent = 'center';
+            effect.style.fontSize = '20px';
+            
+            document.body.appendChild(effect);
+            
+            // Crear CSS animation si no existe
+            if (!document.getElementById('vote-animation-styles')) {
+                const styles = document.createElement('style');
+                styles.id = 'vote-animation-styles';
+                styles.textContent = `
+                    @keyframes voteEffect {
+                        0% {
+                            transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                            opacity: 1;
+                        }
+                        50% {
+                            transform: translate(-50%, -50%) scale(1.5) rotate(180deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(-50%, -300px) scale(0.5) rotate(360deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(styles);
+            }
+            
+            // Limpiar efecto después de la animación
+            setTimeout(() => {
+                if (effect.parentNode) {
+                    effect.parentNode.removeChild(effect);
+                }
+            }, 1000);
+        }
+        
+        function showVoteConfirmation(artistId) {
+            const confirmation = document.createElement('div');
+            confirmation.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+                z-index: 1001;
+                transform: translateX(100%);
+                transition: transform 0.3s ease-out;
+                font-weight: bold;
+            `;
+            confirmation.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 1.2rem;">✅</span>
+                    <span>¡Voto registrado exitosamente!</span>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmation);
+            
+            // Mostrar confirmación
+            setTimeout(() => {
+                confirmation.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Ocultar después de 3 segundos
+            setTimeout(() => {
+                confirmation.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (confirmation.parentNode) {
+                        confirmation.parentNode.removeChild(confirmation);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        function updateVoteCount(artistId) {
+            // En producción, esto actualizaría la base de datos
+            console.log('📊 Actualizando conteo de votos para:', artistId);
+            
+            // Trigger de gamificación
+            if (window.VYTGamification) {
+                window.VYTGamification.triggerVoteReward();
+            }
+        }
+        
+        function showFullRanking() {
+            console.log('📊 Mostrando ranking completo');
+            
+            // Crear modal de ranking completo
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s ease-out;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                border-radius: 20px;
+                padding: 2rem;
+                max-width: 800px;
+                max-height: 80vh;
+                overflow-y: auto;
+                position: relative;
+                transform: scale(0.8);
+                transition: transform 0.3s ease-out;
+            `;
+            
+            content.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2 style="color: #1e40af; font-size: 2rem; font-weight: bold; margin: 0;">🏆 Ranking Completo</h2>
+                    <button onclick="this.closest('[style*=fixed]').remove()" style="background: #ef4444; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer;">✕</button>
+                </div>
+                <div style="text-align: center; color: #6b7280; margin-bottom: 2rem;">
+                    <p>Top 50 artistas más votados esta semana</p>
+                </div>
+                <div style="display: grid; gap: 1rem;">
+                    ${generateFullRankingList()}
+                </div>
+            `;
+            
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            // Mostrar modal con animación
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                content.style.transform = 'scale(1)';
+            }, 10);
+        }
+        
+        function generateFullRankingList() {
+            const artists = [
+                {name: 'Carlos Mendoza', region: 'Cuyo • Mendoza', votes: 6543, trend: '+28%', position: 1},
+                {name: 'María González', region: 'NEA • Formosa', votes: 4287, trend: '+12%', position: 2},
+                {name: 'Ana Rodríguez', region: 'Patagonia • Neuquén', votes: 3891, trend: '+8%', position: 3},
+                {name: 'Luis Herrera', region: 'NOA • Salta', votes: 3205, trend: '+15%', position: 4},
+                {name: 'Sofía Morales', region: 'Centro • Córdoba', votes: 2987, trend: '+5%', position: 5},
+                {name: 'Diego Silva', region: 'Pampeana • Buenos Aires', votes: 2743, trend: '+18%', position: 6},
+                {name: 'Carmen López', region: 'NEA • Corrientes', votes: 2456, trend: '+3%', position: 7},
+                {name: 'Roberto Paz', region: 'NOA • Tucumán', votes: 2234, trend: '+22%', position: 8},
+                {name: 'Valeria Torres', region: 'Centro • Santa Fe', votes: 2156, trend: '+7%', position: 9},
+                {name: 'Marcos Fernández', region: 'Cuyo • San Juan', votes: 1987, trend: '+11%', position: 10}
+            ];
+            
+            return artists.map(artist => {
+                const medal = artist.position <= 3 ? 
+                    (artist.position === 1 ? '🥇' : artist.position === 2 ? '🥈' : '🥉') : 
+                    `${artist.position}️⃣`;
+                
+                return `
+                    <div style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: #f8fafc; border-radius: 12px; border-left: 4px solid #3b82f6;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <span style="font-size: 1.5rem;">${medal}</span>
+                            <div>
+                                <h4 style="margin: 0; color: #1e40af; font-weight: bold;">${artist.name}</h4>
+                                <p style="margin: 0; color: #6b7280; font-size: 0.9rem;">${artist.region}</p>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-weight: bold; color: #374151;">${artist.votes.toLocaleString()} votos</div>
+                            <div style="color: #22c55e; font-size: 0.9rem;">${artist.trend}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Contador de tiempo para votación
+        function updateVotingCountdown() {
+            const countdownElement = document.getElementById('voting-countdown');
+            if (!countdownElement) return;
+            
+            // Simular tiempo restante (en producción sería calculado desde la fecha real)
+            const now = new Date();
+            const nextSunday = new Date();
+            nextSunday.setDate(now.getDate() + (7 - now.getDay()));
+            nextSunday.setHours(22, 0, 0, 0);
+            
+            const timeLeft = nextSunday - now;
+            
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                
+                countdownElement.textContent = `${days} días, ${hours} horas, ${minutes} minutos`;
+            } else {
+                countdownElement.textContent = '¡Votación cerrada!';
+            }
+        }
+        
+        // Actualizar countdown cada minuto
+        setInterval(updateVotingCountdown, 60000);
+        updateVotingCountdown(); // Ejecutar inmediatamente
+    </script>
+    
+    <!-- Sistema de Carrusel de Galería -->
+    <script>
+        let currentSlide = 0;
+        let autoSlideInterval;
+        
+        function nextSlide() {
+            const carousel = document.getElementById('gallery-carousel');
+            const totalSlides = 5;
+            
+            currentSlide = (currentSlide + 1) % totalSlides;
+            updateCarousel();
+            
+            // Reproducir sonido de carrusel
+            if (window.vytGamification && window.vytGamification.playSound) {
+                window.vytGamification.playSound('carousel');
+            }
+        }
+        
+        function previousSlide() {
+            const carousel = document.getElementById('gallery-carousel');
+            const totalSlides = 5;
+            
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+            
+            // Reproducir sonido de carrusel
+            if (window.vytGamification && window.vytGamification.playSound) {
+                window.vytGamification.playSound('carousel');
+            }
+        }
+        
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            updateCarousel();
+            
+            // Reiniciar auto-slide cuando se navega manualmente
+            clearInterval(autoSlideInterval);
+            startAutoSlide();
+        }
+        
+        function updateCarousel() {
+            const carousel = document.getElementById('gallery-carousel');
+            const indicators = document.querySelectorAll('.carousel-dot');
+            
+            if (carousel) {
+                carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            
+            // Actualizar indicadores
+            indicators.forEach((dot, index) => {
+                if (index === currentSlide) {
+                    dot.style.opacity = '1';
+                    dot.style.transform = 'scale(1.2)';
+                    dot.classList.add('active');
+                } else {
+                    dot.style.opacity = '0.5';
+                    dot.style.transform = 'scale(1)';
+                    dot.classList.remove('active');
+                }
+            });
+        }
+        
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                nextSlide();
+            }, 5000); // Cambiar slide cada 5 segundos
+        }
+        
+        // Pausar auto-slide cuando se hace hover
+        function pauseAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+        
+        function resumeAutoSlide() {
+            startAutoSlide();
+        }
+        
+        // Inicializar carrusel cuando la página carga
+        document.addEventListener('DOMContentLoaded', function() {
+            // Agregar eventos de hover para pausar/reanudar
+            const carouselContainer = document.querySelector('.gallery-carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', pauseAutoSlide);
+                carouselContainer.addEventListener('mouseleave', resumeAutoSlide);
+                
+                // Iniciar auto-slide
+                startAutoSlide();
+            }
+            
+            // Agregar soporte para teclado
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowLeft') {
+                    previousSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                }
+            });
+            
+            // Soporte para touch/swipe en móviles
+            let startX = 0;
+            let endX = 0;
+            
+            if (carouselContainer) {
+                carouselContainer.addEventListener('touchstart', function(e) {
+                    startX = e.touches[0].clientX;
+                });
+                
+                carouselContainer.addEventListener('touchend', function(e) {
+                    endX = e.changedTouches[0].clientX;
+                    handleSwipe();
+                });
+            }
+            
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const diff = startX - endX;
+                
+                if (Math.abs(diff) > swipeThreshold) {
+                    if (diff > 0) {
+                        nextSlide(); // Swipe left
+                    } else {
+                        previousSlide(); // Swipe right
+                    }
+                }
+            }
+        });
+    </script>
+    
+    <!-- Sistema de Estilos Musicales -->
+    <script>
+        function selectMusicStyle(style) {
+            console.log('🎵 Estilo musical seleccionado:', style);
+            
+            // Reproducir sonido del estilo musical
+            if (window.vytGamification && window.vytGamification.playMusicStyle) {
+                window.vytGamification.playMusicStyle(style);
+            }
+            
+            // Crear efecto visual de selección
+            createMusicStyleEffect(style);
+            
+            // Mostrar información del estilo (simular)
+            showMusicStyleInfo(style);
+        }
+        
+        function createMusicStyleEffect(style) {
+            const effect = document.createElement('div');
+            effect.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: 40px;
+                height: 40px;
+                background: linear-gradient(45deg, #fbbf24, #f59e0b);
+                border-radius: 50%;
+                z-index: 1000;
+                transform: translate(-50%, -50%) scale(0);
+                pointer-events: none;
+                animation: musicStyleEffect 1.2s ease-out forwards;
+            `;
+            
+            const icon = getStyleIcon(style);
+            effect.textContent = icon;
+            effect.style.display = 'flex';
+            effect.style.alignItems = 'center';
+            effect.style.justifyContent = 'center';
+            effect.style.fontSize = '24px';
+            
+            document.body.appendChild(effect);
+            
+            // Crear CSS animation si no existe
+            if (!document.getElementById('music-style-animation-styles')) {
+                const styles = document.createElement('style');
+                styles.id = 'music-style-animation-styles';
+                styles.textContent = `
+                    @keyframes musicStyleEffect {
+                        0% {
+                            transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                            opacity: 1;
+                        }
+                        50% {
+                            transform: translate(-50%, -50%) scale(2) rotate(180deg);
+                            opacity: 1;
+                        }
+                        100% {
+                            transform: translate(-50%, -400px) scale(0.5) rotate(360deg);
+                            opacity: 0;
+                        }
+                    }
+                `;
+                document.head.appendChild(styles);
+            }
+            
+            // Limpiar efecto
+            setTimeout(() => {
+                if (effect.parentNode) {
+                    effect.parentNode.removeChild(effect);
+                }
+            }, 1200);
+        }
+        
+        function getStyleIcon(style) {
+            const icons = {
+                'folklore': '🪕',
+                'pop': '🎤',
+                'rock': '🎸',
+                'tango': '🎭',
+                'cumbia': '🪘',
+                'libre': '🎨'
+            };
+            return icons[style] || '🎵';
+        }
+        
+        function showMusicStyleInfo(style) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s ease-out;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                border-radius: 20px;
+                padding: 2rem;
+                max-width: 500px;
+                position: relative;
+                transform: scale(0.8);
+                transition: transform 0.3s ease-out;
+            `;
+            
+            content.innerHTML = getMusicStyleContent(style);
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                content.style.transform = 'scale(1)';
+            }, 10);
+            
+            // Cerrar modal
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    modal.style.opacity = '0';
+                    setTimeout(() => modal.remove(), 300);
+                }
+            };
+        }
+        
+        function getMusicStyleContent(style) {
+            const styleData = {
+                'folklore': {
+                    name: 'Folklore Argentino',
+                    icon: '🪕',
+                    description: 'La música tradicional de nuestro país. Zambas, chacareras, cuecas y toda la riqueza folclórica argentina.',
+                    artists: 156,
+                    prize: '$45,000',
+                    examples: ['Zamba de mi esperanza', 'La López Pereyra', 'Chacarera del violín']
+                },
+                'pop': {
+                    name: 'Pop Latino',
+                    icon: '🎤',
+                    description: 'Música pop moderna, baladas románticas, reggaeton y todos los éxitos contemporáneos.',
+                    artists: 198,
+                    prize: '$52,000',
+                    examples: ['Baladas románticas', 'Pop internacional', 'Reggaeton actual']
+                },
+                'rock': {
+                    name: 'Rock Nacional',
+                    icon: '🎸',
+                    description: 'El rock argentino en todas sus formas: clásico, alternativo, metal e independiente.',
+                    artists: 127,
+                    prize: '$38,500',
+                    examples: ['Rock clásico', 'Rock alternativo', 'Metal argentino']
+                },
+                'tango': {
+                    name: 'Tango',
+                    icon: '🎭',
+                    description: 'El género porteño por excelencia. Tango tradicional, milonga y música de Buenos Aires.',
+                    artists: 78,
+                    prize: '$32,000',
+                    examples: ['Tango tradicional', 'Milonga', 'Vals criollo']
+                },
+                'cumbia': {
+                    name: 'Cumbia',
+                    icon: '🪘',
+                    description: 'Música tropical y bailable. Cumbia santafesina, tropical y todos los ritmos pegadizos.',
+                    artists: 143,
+                    prize: '$41,200',
+                    examples: ['Cumbia santafesina', 'Tropical', 'Música bailable']
+                },
+                'libre': {
+                    name: 'Libre',
+                    icon: '🎨',
+                    description: 'Categoría experimental para jazz, blues, fusión y todos los estilos únicos e innovadores.',
+                    artists: 89,
+                    prize: '$28,000',
+                    examples: ['Jazz argentino', 'Blues', 'Fusión experimental']
+                }
+            };
+            
+            const data = styleData[style];
+            
+            return `
+                <div style="text-align: center;">
+                    <button onclick="this.closest('[style*=fixed]').remove()" style="position: absolute; top: 15px; right: 15px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 30px; height: 30px; font-size: 1rem; cursor: pointer;">×</button>
+                    
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">${data.icon}</div>
+                    <h3 style="color: #1e40af; font-size: 2rem; margin-bottom: 1rem;">${data.name}</h3>
+                    <p style="color: #374151; margin-bottom: 2rem; line-height: 1.6;">${data.description}</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px;">
+                            <div style="font-weight: bold; color: #1e40af;">👥 Artistas</div>
+                            <div style="font-size: 1.5rem; color: #374151;">${data.artists}</div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 1rem; border-radius: 12px;">
+                            <div style="font-weight: bold; color: #1e40af;">💰 Premio</div>
+                            <div style="font-size: 1.5rem; color: #374151;">${data.prize}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: left; margin-bottom: 2rem;">
+                        <h4 style="color: #1e40af; margin-bottom: 1rem;">🎵 Ejemplos de este estilo:</h4>
+                        <ul style="color: #374151; line-height: 1.8;">
+                            ${data.examples.map(example => `<li>• ${example}</li>`).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <button onclick="alert('Función en desarrollo')" style="background: #3b82f6; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
+                            🎤 Ver Ranking
+                        </button>
+                        <button onclick="alert('Redirigiendo a inscripción')" style="background: #10b981; color: white; border: none; padding: 0.8rem 1.5rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
+                            ✍️ Inscribirme
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+    
+    <!-- Sistema de Avatares Personalizables -->
+    <script>
+        // Avatares disponibles organizados por categorías
+        const AVATAR_CATEGORIES = {
+            'clasicos': {
+                name: 'Clásicos',
+                icon: '😊',
+                avatars: ['😊', '😎', '🤩', '😇', '🙂', '😄', '😁', '🥰', '😍', '🤗']
+            },
+            'musicales': {
+                name: 'Musicales',
+                icon: '🎤',
+                avatars: ['🎤', '🎸', '🎹', '🥁', '🎺', '🎷', '🎻', '🪕', '🪘', '🎧']
+            },
+            'profesionales': {
+                name: 'Profesionales', 
+                icon: '👔',
+                avatars: ['👔', '👗', '🤵', '👩‍💼', '👨‍💼', '👩‍🎨', '👨‍🎨', '👩‍🎤', '👨‍🎤', '🎭']
+            },
+            'animales': {
+                name: 'Animales',
+                icon: '🐱',
+                avatars: ['🐱', '🐶', '🦁', '🐻', '🐨', '🐼', '🦊', '🐯', '🐸', '🐧']
+            },
+            'objetos': {
+                name: 'Objetos',
+                icon: '⭐',
+                avatars: ['⭐', '🌟', '✨', '💎', '🏆', '🎯', '🎪', '🎨', '🔥', '⚡']
+            }
+        };
+        
+        // ===== SISTEMA DE REDES SOCIALES =====
+        // Funciones para login social
+        function openSocialLogin() {
+            console.log('🔗 Abriendo modal de login social');
+            const modal = document.getElementById('social-login-modal');
+            if (modal) {
+                modal.style.display = 'flex';
+                playSound('modal_open');
+            }
+        }
+        
+        function closeSocialLogin() {
+            console.log('❌ Cerrando modal de login social');
+            const modal = document.getElementById('social-login-modal');
+            if (modal) {
+                modal.style.display = 'none';
+                playSound('modal_close');
+            }
+        }
+        
+        function loginWith(platform) {
+            console.log('🔗 Iniciando login con:', platform);
+            
+            // Mostrar loader
+            showNotification(`Conectando con ${platform}...`, 'info');
+            
+            // Simular proceso de login
+            setTimeout(() => {
+                if (platform === 'email') {
+                    // Redirigir al login tradicional
+                    showPage('page-login');
+                    closeSocialLogin();
+                } else {
+                    // Simular login exitoso
+                    showNotification(`¡Conectado exitosamente con ${platform}!`, 'success');
+                    playSound('login_success');
+                    
+                    // Simular datos del usuario
+                    const userData = {
+                        platform: platform,
+                        name: 'Usuario Demo',
+                        avatar: platform === 'facebook' ? '📘' : platform === 'instagram' ? '📷' : '♪',
+                        followers: Math.floor(Math.random() * 5000) + 100
+                    };
+                    
+                    // Actualizar UI
+                    updateUserProfileData(userData);
+                    
+                    // Cerrar modal y ir al perfil
+                    closeSocialLogin();
+                    showPage('page-perfil-artista');
+                }
+            }, 1500);
+        }
+        
+        function updateUserProfileData(userData) {
+            // Actualizar nombre del artista
+            const nameEl = document.getElementById('artist-name');
+            if (nameEl) nameEl.textContent = userData.name;
+            
+            // Actualizar avatar principal
+            const avatarEl = document.getElementById('artist-main-avatar');
+            if (avatarEl) avatarEl.textContent = userData.avatar;
+            
+            // Actualizar contadores (simulados)
+            setTimeout(() => {
+                animateCounterTo('artist-followers', userData.followers);
+                animateCounterTo('artist-votes', Math.floor(Math.random() * 2000) + 500);
+                animateCounterTo('artist-songs', Math.floor(Math.random() * 20) + 5);
+            }, 500);
+        }
+        
+        function animateCounterTo(elementId, targetValue) {
+            const element = document.querySelector(`#${elementId}, [data-counter="${elementId}"]`);
+            if (!element) return;
+            
+            let currentValue = 0;
+            const increment = Math.ceil(targetValue / 50);
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= targetValue) {
+                    currentValue = targetValue;
+                    clearInterval(timer);
+                }
+                element.textContent = currentValue.toLocaleString();
+            }, 30);
+        }
+        
+        // ===== SISTEMA DE PERFILES DE ARTISTAS =====
+        function followArtist(artistId) {
+            console.log('👥 Siguiendo artista:', artistId);
+            playSound('follow_success');
+            showNotification('¡Ahora sigues a este artista!', 'success');
+            
+            // Simular actualización del botón
+            const button = event.target;
+            if (button) {
+                const currentCount = parseInt(button.textContent.match(/\d+/)[0]);
+                button.innerHTML = `👥 Siguiendo (${(currentCount + 1).toLocaleString()})`;
+                button.style.background = 'rgba(16, 185, 129, 0.2)';
+                button.style.borderColor = '#10b981';
+                button.style.color = '#10b981';
+            }
+        }
+        
+        function voteForArtist(artistId) {
+            console.log('⭐ Votando por artista:', artistId);
+            
+            // Verificar si el usuario puede votar
+            if (!isUserLoggedIn()) {
+                openSocialLogin();
+                return;
+            }
+            
+            playSound('vote_success');
+            showNotification('¡Voto registrado exitosamente!', 'success');
+            
+            // Simular incremento de votos
+            setTimeout(() => {
+                const voteCounters = document.querySelectorAll('[data-counter="artist-votes"]');
+                voteCounters.forEach(counter => {
+                    const current = parseInt(counter.textContent.replace(/[,\.]/g, ''));
+                    animateCounterTo(counter.id || 'artist-votes', current + 1);
+                });
+            }, 500);
+        }
+        
+        function challengeArtist(artistId) {
+            console.log('⚔️ Desafiando artista:', artistId);
+            
+            if (!isUserLoggedIn()) {
+                openSocialLogin();
+                return;
+            }
+            
+            // Mostrar modal de creación de batalla
+            createBattleModal(artistId);
+        }
+        
+        function showArtistTab(tabName) {
+            console.log('📑 Mostrando tab de artista:', tabName);
+            
+            // Ocultar todas las pestañas
+            document.querySelectorAll('.artist-tab-content').forEach(content => {
+                content.classList.add('hidden');
+                content.style.display = 'none';
+            });
+            
+            // Mostrar pestaña seleccionada
+            const targetTab = document.getElementById(`artist-tab-${tabName}`);
+            if (targetTab) {
+                targetTab.classList.remove('hidden');
+                targetTab.style.display = 'block';
+            }
+            
+            // Actualizar estado de los botones
+            document.querySelectorAll('.artist-tab').forEach(tab => {
+                tab.style.color = '#6b7280';
+                tab.style.borderBottom = 'none';
+            });
+            
+            const activeTab = document.querySelector(`[data-tab="${tabName}"]`);
+            if (activeTab) {
+                activeTab.style.color = '#3b82f6';
+                activeTab.style.borderBottom = '2px solid #3b82f6';
+            }
+        }
+        
+        function playSong(songId) {
+            console.log('🎵 Reproduciendo canción:', songId);
+            playSound('song_play');
+            showNotification('Reproduciendo canción...', 'info');
+            
+            // Simular cambio de botón de play
+            const button = event.target;
+            if (button) {
+                button.textContent = '⏸';
+                setTimeout(() => {
+                    button.textContent = '▶';
+                }, 3000);
+            }
+        }
+        
+        function voteForSong(songId) {
+            console.log('🎵⭐ Votando por canción:', songId);
+            
+            if (!isUserLoggedIn()) {
+                openSocialLogin();
+                return;
+            }
+            
+            playSound('vote_success');
+            showNotification('¡Voto por canción registrado!', 'success');
+        }
+        
+        function viewProfile(artistId) {
+            console.log('👁️ Viendo perfil:', artistId);
+            showPage('page-perfil-artista');
+        }
+        
+        function openImageModal(imageSrc) {
+            console.log('🖼️ Abriendo modal de imagen:', imageSrc);
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.9);
+                z-index: 10001;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(5px);
+            `;
+            
+            modal.innerHTML = `
+                <div style="position: relative; max-width: 90%; max-height: 90%;">
+                    <img src="${imageSrc}" alt="Imagen ampliada" style="width: 100%; height: 100%; object-fit: contain; border-radius: 12px;">
+                    <button onclick="this.closest('div').parentNode.remove()" style="position: absolute; top: -40px; right: -40px; background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.5rem; cursor: pointer; color: #000;">×</button>
+                </div>
+            `;
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+            
+            document.body.appendChild(modal);
+        }
+        
+        // ===== SISTEMA DE BATALLAS =====
+        function voteInBattle(battleId, artistChoice) {
+            console.log('⚔️ Votando en batalla:', battleId, 'por', artistChoice);
+            
+            if (!isUserLoggedIn()) {
+                openSocialLogin();
+                return;
+            }
+            
+            playSound('battle_vote');
+            showNotification(`¡Voto registrado por ${artistChoice}!`, 'success');
+            
+            // Simular actualización de contadores
+            setTimeout(() => {
+                const battleCard = document.querySelector(`[data-battle="${battleId}"]`);
+                if (battleCard) {
+                    // Actualizar números de votos (simulado)
+                    const voteElements = battleCard.querySelectorAll('.vote-count');
+                    voteElements.forEach((el, index) => {
+                        if (el.textContent.includes(artistChoice)) {
+                            const current = parseInt(el.textContent.match(/\d+/)[0]);
+                            el.textContent = el.textContent.replace(/\d+/, (current + 1).toLocaleString());
+                        }
+                    });
+                }
+            }, 500);
+        }
+        
+        function viewBattle(battleId) {
+            console.log('👁️ Viendo batalla:', battleId);
+            showPage('page-batallas');
+            
+            // Opcional: scroll a la batalla específica
+            setTimeout(() => {
+                const battleElement = document.querySelector(`[data-battle="${battleId}"]`);
+                if (battleElement) {
+                    battleElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+        
+        function createBattle() {
+            console.log('🚀 Creando nueva batalla');
+            
+            if (!isUserLoggedIn()) {
+                openSocialLogin();
+                return;
+            }
+            
+            showNotification('Función de crear batalla en desarrollo...', 'info');
+        }
+        
+        function createBattleModal(targetArtistId) {
+            console.log('⚔️ Creando modal de batalla contra:', targetArtistId);
+            
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.7);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(5px);
+            `;
+            
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 20px; padding: 2rem; max-width: 500px; width: 90%; position: relative;">
+                    <button onclick="this.closest('div').parentNode.remove()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer;">×</button>
+                    
+                    <div style="text-align: center; margin-bottom: 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">⚔️</div>
+                        <h2 style="color: #1e40af; margin: 0 0 0.5rem 0;">Crear Batalla Musical</h2>
+                        <p style="color: #6b7280; margin: 0;">Desafía a este artista en un duelo épico</p>
+                    </div>
+                    
+                    <div style="display: grid; gap: 1rem;">
+                        <div>
+                            <label style="display: block; color: #374151; font-weight: bold; margin-bottom: 0.5rem;">Tipo de Batalla:</label>
+                            <select style="width: 100%; padding: 0.8rem; border: 2px solid #e5e7eb; border-radius: 8px;">
+                                <option>Folklore vs Folklore</option>
+                                <option>Folklore vs Pop</option>
+                                <option>Libre (cualquier estilo)</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; color: #374151; font-weight: bold; margin-bottom: 0.5rem;">Duración:</label>
+                            <select style="width: 100%; padding: 0.8rem; border: 2px solid #e5e7eb; border-radius: 8px;">
+                                <option>3 días</option>
+                                <option>5 días</option>
+                                <option>1 semana</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label style="display: block; color: #374151; font-weight: bold; margin-bottom: 0.5rem;">Premio mínimo:</label>
+                            <select style="width: 100%; padding: 0.8rem; border: 2px solid #e5e7eb; border-radius: 8px;">
+                                <option>$5,000</option>
+                                <option>$10,000</option>
+                                <option>$15,000</option>
+                                <option>$25,000</option>
+                            </select>
+                        </div>
+                        
+                        <button onclick="confirmCreateBattle('${targetArtistId}'); this.closest('div').parentNode.remove();" style="width: 100%; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none; padding: 1rem; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 1rem;">
+                            🚀 Enviar Desafío
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        function confirmCreateBattle(targetArtistId) {
+            console.log('✅ Confirmando creación de batalla contra:', targetArtistId);
+            playSound('battle_created');
+            showNotification('¡Desafío enviado! El artista recibirá una notificación.', 'success');
+        }
+        
+        function shareBattle(battleId) {
+            console.log('📤 Compartiendo batalla:', battleId);
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Batalla Musical Épica - VYT Music',
+                    text: '¡Vota por tu artista favorito en esta batalla musical!',
+                    url: window.location.href + `#battle-${battleId}`
+                });
+            } else {
+                // Fallback para navegadores que no soportan Web Share API
+                const url = window.location.href + `#battle-${battleId}`;
+                navigator.clipboard.writeText(url).then(() => {
+                    showNotification('¡Link de batalla copiado al portapapeles!', 'success');
+                });
+            }
+        }
+        
+        // Funciones auxiliares para efectos de sonido específicos de redes sociales
+        function playSound(type) {
+            if (!window.audioContext) return;
+            
+            try {
+                const oscillator = window.audioContext.createOscillator();
+                const gainNode = window.audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(window.audioContext.destination);
+                
+                switch (type) {
+                    case 'modal_open':
+                        oscillator.frequency.setValueAtTime(300, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(600, window.audioContext.currentTime + 0.1);
+                        break;
+                    case 'modal_close':
+                        oscillator.frequency.setValueAtTime(600, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(300, window.audioContext.currentTime + 0.1);
+                        break;
+                    case 'login_success':
+                        oscillator.frequency.setValueAtTime(440, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(880, window.audioContext.currentTime + 0.2);
+                        break;
+                    case 'follow_success':
+                        oscillator.frequency.setValueAtTime(523, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(659, window.audioContext.currentTime + 0.15);
+                        break;
+                    case 'battle_vote':
+                        oscillator.frequency.setValueAtTime(330, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(440, window.audioContext.currentTime + 0.1);
+                        oscillator.frequency.exponentialRampToValueAtTime(523, window.audioContext.currentTime + 0.2);
+                        break;
+                    case 'battle_created':
+                        oscillator.frequency.setValueAtTime(220, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(330, window.audioContext.currentTime + 0.1);
+                        oscillator.frequency.exponentialRampToValueAtTime(440, window.audioContext.currentTime + 0.2);
+                        break;
+                    case 'song_play':
+                        oscillator.frequency.setValueAtTime(262, window.audioContext.currentTime);
+                        oscillator.frequency.exponentialRampToValueAtTime(392, window.audioContext.currentTime + 0.1);
+                        break;
+                    default:
+                        oscillator.frequency.setValueAtTime(440, window.audioContext.currentTime);
+                }
+                
+                gainNode.gain.setValueAtTime(0.1, window.audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, window.audioContext.currentTime + 0.3);
+                oscillator.start(window.audioContext.currentTime);
+                oscillator.stop(window.audioContext.currentTime + 0.3);
+            } catch (error) {
+                console.log('Audio not available:', error);
+            }
+        }
+        
+        // ===== SISTEMA DE AVATARES =====
+        let selectedAvatar = '😊'; // Avatar por defecto
+        
+        function openAvatarSelector() {
+            const modal = document.createElement('div');
+            modal.id = 'avatar-selector-modal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                z-index: 3000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                transition: opacity 0.3s ease-out;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                border-radius: 20px;
+                padding: 2rem;
+                max-width: 600px;
+                max-height: 80vh;
+                overflow-y: auto;
+                position: relative;
+                transform: scale(0.8);
+                transition: transform 0.3s ease-out;
+            `;
+            
+            content.innerHTML = createAvatarSelectorContent();
+            modal.appendChild(content);
+            document.body.appendChild(modal);
+            
+            setTimeout(() => {
+                modal.style.opacity = '1';
+                content.style.transform = 'scale(1)';
+            }, 10);
+        }
+        
+        function createAvatarSelectorContent() {
+            return `
+                <div style="text-align: center;">
+                    <button onclick="closeAvatarSelector()" style="position: absolute; top: 15px; right: 15px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 1.2rem; cursor: pointer;">×</button>
+                    
+                    <h3 style="color: #1e40af; font-size: 2rem; margin-bottom: 1rem;">🎭 Elegí tu Avatar</h3>
+                    <p style="color: #374151; margin-bottom: 2rem;">Seleccioná el avatar que mejor represente tu personalidad musical</p>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <div style="font-size: 4rem; margin-bottom: 1rem;" id="preview-avatar">${selectedAvatar}</div>
+                        <div style="color: #6b7280;">Vista previa de tu avatar</div>
+                    </div>
+                    
+                    ${Object.entries(AVATAR_CATEGORIES).map(([key, category]) => `
+                        <div style="margin-bottom: 2rem;">
+                            <h4 style="color: #374151; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                                <span style="font-size: 1.5rem;">${category.icon}</span>
+                                ${category.name}
+                            </h4>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(60px, 1fr)); gap: 0.5rem;">
+                                ${category.avatars.map(avatar => `
+                                    <button onclick="selectAvatar('${avatar}')" style="background: ${selectedAvatar === avatar ? '#3b82f6' : '#f8fafc'}; border: 2px solid ${selectedAvatar === avatar ? '#1d4ed8' : '#e5e7eb'}; border-radius: 12px; padding: 1rem; font-size: 2rem; cursor: pointer; transition: all 0.3s ease; width: 100%; aspect-ratio: 1;" onmouseover="this.style.transform='scale(1.1)'; this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.3)'" onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none'">
+                                        ${avatar}
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                    
+                    <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                        <button onclick="saveAvatar()" style="background: #10b981; color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-weight: bold; cursor: pointer; font-size: 1.1rem;">
+                            ✅ Guardar Avatar
+                        </button>
+                        <button onclick="closeAvatarSelector()" style="background: #6b7280; color: white; border: none; padding: 1rem 2rem; border-radius: 25px; font-weight: bold; cursor: pointer;">
+                            ❌ Cancelar
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function selectAvatar(avatar) {
+            selectedAvatar = avatar;
+            
+            // Actualizar vista previa
+            const preview = document.getElementById('preview-avatar');
+            if (preview) {
+                preview.textContent = avatar;
+                
+                // Efecto de selección
+                preview.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    preview.style.transform = 'scale(1)';
+                }, 200);
+            }
+            
+            // Actualizar botones
+            const buttons = document.querySelectorAll('#avatar-selector-modal button[onclick*="selectAvatar"]');
+            buttons.forEach(btn => {
+                if (btn.textContent.trim() === avatar) {
+                    btn.style.background = '#3b82f6';
+                    btn.style.borderColor = '#1d4ed8';
+                    btn.style.transform = 'scale(1.1)';
+                } else {
+                    btn.style.background = '#f8fafc';
+                    btn.style.borderColor = '#e5e7eb';
+                    btn.style.transform = 'scale(1)';
+                }
+            });
+            
+            // Efecto sonoro (si está disponible)
+            if (window.VYTGamification && window.VYTGamification.playSound) {
+                window.VYTGamification.playSound('select');
+            }
+        }
+        
+        function saveAvatar() {
+            // Guardar en localStorage (en producción sería en Firebase)
+            localStorage.setItem('vyt-user-avatar', selectedAvatar);
+            
+            // Actualizar avatar en el header si existe
+            updateUserAvatar(selectedAvatar);
+            
+            // Mostrar confirmación
+            showAvatarConfirmation();
+            
+            // Cerrar modal
+            closeAvatarSelector();
+        }
+        
+        function closeAvatarSelector() {
+            const modal = document.getElementById('avatar-selector-modal');
+            if (modal) {
+                modal.style.opacity = '0';
+                setTimeout(() => modal.remove(), 300);
+            }
+        }
+        
+        function updateUserAvatar(avatar) {
+            // Buscar elementos donde mostrar el avatar
+            const profileElements = document.querySelectorAll('.user-avatar, #user-avatar');
+            profileElements.forEach(element => {
+                element.textContent = avatar;
+            });
+            
+            // Actualizar el icono de perfil en el header
+            const profileIcon = document.querySelector('.icon-profile');
+            if (profileIcon) {
+                profileIcon.style.display = 'none';
+                
+                // Crear elemento de avatar si no existe
+                let avatarElement = document.querySelector('.header-user-avatar');
+                if (!avatarElement) {
+                    avatarElement = document.createElement('span');
+                    avatarElement.className = 'header-user-avatar';
+                    avatarElement.style.cssText = 'font-size: 2rem; margin-right: 0.5rem;';
+                    profileIcon.parentNode.insertBefore(avatarElement, profileIcon);
+                }
+                avatarElement.textContent = avatar;
+            }
+        }
+        
+        function showAvatarConfirmation() {
+            const confirmation = document.createElement('div');
+            confirmation.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+                z-index: 3001;
+                transform: translateX(100%);
+                transition: transform 0.3s ease-out;
+                font-weight: bold;
+            `;
+            confirmation.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 2rem;">${selectedAvatar}</span>
+                    <span>¡Avatar guardado exitosamente!</span>
+                </div>
+            `;
+            
+            document.body.appendChild(confirmation);
+            
+            setTimeout(() => {
+                confirmation.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+                confirmation.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (confirmation.parentNode) {
+                        confirmation.parentNode.removeChild(confirmation);
+                    }
+                }, 300);
+            }, 3000);
+        }
+        
+        // Cargar avatar guardado al iniciar
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedAvatar = localStorage.getItem('vyt-user-avatar');
+            if (savedAvatar) {
+                selectedAvatar = savedAvatar;
+                updateUserAvatar(savedAvatar);
+            }
+        });
+    </script>
+    
+    <!-- Modal de Login Social -->
+    <div id="social-login-modal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; backdrop-filter: blur(5px);">
+        <div class="modal-content" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; border-radius: 20px; padding: 2rem; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+            
+            <!-- Header del modal -->
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button onclick="closeSocialLogin()" style="position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center;" onmouseover="this.style.background='#f3f4f6'" onmouseout="this.style.background='none'">×</button>
+                
+                <div style="font-size: 3rem; margin-bottom: 1rem;">🎤</div>
+                <h2 style="color: #1e40af; margin: 0 0 0.5rem 0; font-size: 1.8rem;">Únete como Artista</h2>
+                <p style="color: #6b7280; margin: 0; font-size: 0.9rem;">Conecta con tu red social favorita y comienza tu carrera musical</p>
+            </div>
+            
+            <!-- Botones de redes sociales -->
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                
+                <!-- Facebook -->
+                <button onclick="loginWith('facebook')" style="display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1rem; border: none; border-radius: 12px; background: #1877f2; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#166fe5'" onmouseout="this.style.background='#1877f2'">
+                    <div style="width: 24px; height: 24px; background: white; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #1877f2; font-weight: bold; font-size: 14px;">f</div>
+                    <span style="flex: 1; text-align: center;">Continuar con Facebook</span>
+                    <div style="width: 24px;"></div>
+                </button>
+                
+                <!-- Instagram -->
+                <button onclick="loginWith('instagram')" style="display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1rem; border: none; border-radius: 12px; background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%); color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
+                    <div style="width: 24px; height: 24px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #e1306c; font-weight: bold; font-size: 12px;">📷</div>
+                    <span style="flex: 1; text-align: center;">Continuar con Instagram</span>
+                    <div style="width: 24px;"></div>
+                </button>
+                
+                <!-- TikTok -->
+                <button onclick="loginWith('tiktok')" style="display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1rem; border: none; border-radius: 12px; background: #000; color: white; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.background='#333'" onmouseout="this.style.background='#000'">
+                    <div style="width: 24px; height: 24px; background: white; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #000; font-weight: bold; font-size: 12px;">♪</div>
+                    <span style="flex: 1; text-align: center;">Continuar con TikTok</span>
+                    <div style="width: 24px;"></div>
+                </button>
+                
+                <!-- Divider -->
+                <div style="display: flex; align-items: center; margin: 1rem 0;">
+                    <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                    <span style="padding: 0 1rem; color: #6b7280; font-size: 0.8rem;">O</span>
+                    <div style="flex: 1; height: 1px; background: #e5e7eb;"></div>
+                </div>
+                
+                <!-- Email tradicional -->
+                <button onclick="loginWith('email')" style="display: flex; align-items: center; gap: 1rem; width: 100%; padding: 1rem; border: 2px solid #d1d5db; border-radius: 12px; background: white; color: #374151; font-weight: bold; cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.borderColor='#3b82f6'; this.style.background='#f8fafc'" onmouseout="this.style.borderColor='#d1d5db'; this.style.background='white'">
+                    <div style="width: 24px; height: 24px; background: #3b82f6; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px;">@</div>
+                    <span style="flex: 1; text-align: center;">Usar email tradicional</span>
+                    <div style="width: 24px;"></div>
+                </button>
+            </div>
+            
+            <!-- Footer del modal -->
+            <div style="text-align: center; margin-top: 2rem;">
+                <p style="color: #6b7280; font-size: 0.8rem; margin: 0;">
+                    Al continuar aceptas nuestros 
+                    <a href="#" style="color: #3b82f6; text-decoration: none;">Términos</a> y 
+                    <a href="#" style="color: #3b82f6; text-decoration: none;">Política de Privacidad</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sistema dinámico principal activado -->
+    <script type="module" src="principal-dynamic.js"></script>
     
     <!-- Gamification System -->
     <script src="gamification.js"></script>

@@ -1,7 +1,7 @@
 import { initializeCountdown } from './src/countdown.js';
 import { initializeModal } from './src/modal.js';
 import { auth, db } from './firebase-config.js'; // Importar la instancia de auth y db
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; // Importar funciones de Firestore
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -79,6 +79,18 @@ document.addEventListener('DOMContentLoaded', () => {
             registerError.style.display = 'none';
         });
 
+        // Auto-completar email si "recordarme" estaba marcado
+        const rememberedEmail = localStorage.getItem('vyt_remember_email');
+        const rememberMeChecked = localStorage.getItem('vyt_remember_me') === 'true';
+        
+        if (rememberedEmail && rememberMeChecked) {
+            const emailInput = loginForm['login-email'];
+            const rememberCheckbox = loginForm['remember-me'];
+            
+            if (emailInput) emailInput.value = rememberedEmail;
+            if (rememberCheckbox) rememberCheckbox.checked = true;
+        }
+
         // Login functionality
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -86,9 +98,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const email = loginForm['login-email'].value;
             const password = loginForm['login-password'].value;
+            const rememberMe = loginForm['remember-me'] ? loginForm['remember-me'].checked : false;
 
             try {
+                // Configurar persistencia basada en checkbox "recordarme"
+                if (rememberMe) {
+                    // Persistencia local (30 días)
+                    await setPersistence(auth, browserLocalPersistence);
+                } else {
+                    // Solo durante la sesión
+                    await setPersistence(auth, browserSessionPersistence);
+                }
+                
                 await signInWithEmailAndPassword(auth, email, password);
+                
+                // Guardar preferencia de recordarme
+                if (rememberMe) {
+                    localStorage.setItem('vyt_remember_me', 'true');
+                    localStorage.setItem('vyt_remember_email', email);
+                } else {
+                    localStorage.removeItem('vyt_remember_me');
+                    localStorage.removeItem('vyt_remember_email');
+                }
+                
                 // Redirect to principal.html or a new profile page
                 window.location.href = 'principal.html'; 
             } catch (error) {

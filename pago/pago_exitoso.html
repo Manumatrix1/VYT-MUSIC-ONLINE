@@ -116,6 +116,12 @@
                 document.getElementById('monto-pagado').textContent = `Monto: $${precio}`;
             }
 
+            // Mostrar notificación de éxito si hay sistema de notificaciones
+            if (window.notifications) {
+                const tipoTexto = tipo === 'vyt_money' ? 'VYT-MONEY' : 'Inscripción';
+                window.notifications.paymentSuccess(precio, tipo);
+            }
+
             // Actualizar el estado de pago en Firebase
             if (inscripcionRef) {
                 try {

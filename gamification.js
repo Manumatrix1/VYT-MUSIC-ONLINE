@@ -7,13 +7,16 @@ class VYTGamification {
         this.totalVotes = 127346;
         this.vytMoneySpent = 1247890;
         this.isAnimating = false;
+        this.ambientMusicPlaying = false;
+        this.ambientSource = null;
+        this.ambientGain = null;
         this.init();
     }
 
     init() {
         this.createFloatingCoins();
         this.startPrizePoolAnimation();
-        this.initializeAudioSystem();
+        // this.initializeAudioSystem(); // DESHABILITADO: Música molesta removida
         this.loadRealDataFromFirebase();
         this.setupMobileOptimizations();
     }
@@ -150,10 +153,8 @@ class VYTGamification {
     }
 
     createAudioBuffers() {
-        // Crear sonidos sintéticos para evitar archivos externos
-        this.sounds.coin = this.createCoinSound();
-        this.sounds.vote = this.createVoteSound();
-        this.sounds.levelUp = this.createLevelUpSound();
+        // Usar el método extendido para crear todos los sonidos
+        this.createExtendedAudioBuffers();
     }
 
     createCoinSound() {
@@ -200,6 +201,9 @@ class VYTGamification {
     }
 
     playSound(soundName) {
+        // DESHABILITADO: Sonidos automáticos removidos por petición del usuario
+        return;
+        /*
         if (!this.audioContext || !this.sounds[soundName]) return;
         
         const source = this.audioContext.createBufferSource();
@@ -211,6 +215,7 @@ class VYTGamification {
         
         gainNode.gain.setValueAtTime(0.1, this.audioContext.currentTime);
         source.start();
+        */
     }
 
     // === CONEXIÓN CON FIREBASE ===
@@ -261,8 +266,8 @@ class VYTGamification {
         // Crear efecto visual de voto
         this.createVoteEffect();
         
-        // Reproducir sonido
-        this.playSound('vote');
+        // Reproducir sonido - DESHABILITADO
+        // this.playSound('vote');
         
         // Hacer monedas aparecer
         for (let i = 0; i < amount; i++) {
@@ -434,6 +439,243 @@ class VYTGamification {
             document.body.removeChild(overlay);
         }, 3000);
     }
+
+    // === SISTEMA MUSICAL MEJORADO ===
+    
+    createMusicStyleSound(style) {
+        const duration = 1.5;
+        const sampleRate = this.audioContext.sampleRate;
+        const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+        const data = buffer.getChannelData(0);
+        
+        // Diferentes tonos para cada estilo musical
+        const styleFrequencies = {
+            'folklore': [330, 392, 440, 523], // Sol, Sol#, La, Do
+            'pop': [261, 329, 392, 523],      // Do, Mi, Sol#, Do
+            'rock': [146, 195, 246, 293],     // Re, Sol, Si, Re (más grave)
+            'tango': [207, 311, 415, 466],    // Sol#, Mi♭, Sol#, Si♭
+            'cumbia': [220, 277, 330, 440],   // La, Do#, Mi, La
+            'libre': [174, 233, 311, 415]     // Fa, Si♭, Mi♭, Sol#
+        };
+        
+        const frequencies = styleFrequencies[style] || styleFrequencies['pop'];
+        
+        for (let i = 0; i < buffer.length; i++) {
+            const time = i / sampleRate;
+            let sample = 0;
+            
+            // Crear acorde con múltiples frecuencias
+            frequencies.forEach((freq, index) => {
+                const amplitude = Math.exp(-time * (2 + index * 0.5)) * 0.2;
+                sample += Math.sin(2 * Math.PI * freq * time) * amplitude;
+            });
+            
+            data[i] = sample;
+        }
+        
+        return buffer;
+    }
+
+    createAmbientMusic() {
+        // Música de fondo sutil opcional
+        const duration = 10; // 10 segundos de loop
+        const sampleRate = this.audioContext.sampleRate;
+        const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+        const data = buffer.getChannelData(0);
+        
+        const baseFreq = 220; // La grave
+        
+        for (let i = 0; i < buffer.length; i++) {
+            const time = i / sampleRate;
+            const loopTime = time % 2; // Loop cada 2 segundos
+            
+            // Crear armonías suaves
+            let sample = 0;
+            sample += Math.sin(2 * Math.PI * baseFreq * time) * 0.05;
+            sample += Math.sin(2 * Math.PI * (baseFreq * 1.5) * time) * 0.03;
+            sample += Math.sin(2 * Math.PI * (baseFreq * 2) * time) * 0.02;
+            
+            // Modulación suave
+            sample *= 0.5 + 0.5 * Math.sin(2 * Math.PI * 0.1 * time);
+            
+            data[i] = sample;
+        }
+        
+        return buffer;
+    }
+
+    playMusicStyleSound(style) {
+        if (!this.audioContext) return;
+        
+        // Crear sonido específico del estilo si no existe
+        if (!this.sounds[style]) {
+            this.sounds[style] = this.createMusicStyleSound(style);
+        }
+        
+        const source = this.audioContext.createBufferSource();
+        const gainNode = this.audioContext.createGain();
+        
+        source.buffer = this.sounds[style];
+        source.connect(gainNode);
+        gainNode.connect(this.audioContext.destination);
+        gainNode.gain.value = 0.3;
+        
+        source.start(0);
+    }
+
+    toggleAmbientMusic() {
+        if (this.ambientMusicPlaying) {
+            this.stopAmbientMusic();
+        } else {
+            this.startAmbientMusic();
+        }
+    }
+
+    startAmbientMusic() {
+        // DESHABILITADO: Música de fondo removida por petición del usuario
+        return;
+        /*
+        if (!this.audioContext) return;
+        
+        if (!this.sounds.ambient) {
+            this.sounds.ambient = this.createAmbientMusic();
+        }
+        
+        this.ambientSource = this.audioContext.createBufferSource();
+        this.ambientGain = this.audioContext.createGain();
+        
+        this.ambientSource.buffer = this.sounds.ambient;
+        this.ambientSource.loop = true;
+        this.ambientSource.connect(this.ambientGain);
+        this.ambientGain.connect(this.audioContext.destination);
+        this.ambientGain.gain.value = 0.1; // Muy sutil
+        
+        this.ambientSource.start(0);
+        this.ambientMusicPlaying = true;
+        
+        // Mostrar control de música
+        this.showMusicControl();
+        */
+    }
+
+    stopAmbientMusic() {
+        if (this.ambientSource) {
+            this.ambientSource.stop();
+            this.ambientSource = null;
+            this.ambientMusicPlaying = false;
+        }
+    }
+
+    showMusicControl() {
+        // Crear control flotante de música si no existe
+        let musicControl = document.getElementById('music-control');
+        if (!musicControl) {
+            musicControl = document.createElement('div');
+            musicControl.id = 'music-control';
+            musicControl.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: rgba(0,0,0,0.8);
+                color: white;
+                padding: 0.8rem 1.2rem;
+                border-radius: 25px;
+                z-index: 1000;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                backdrop-filter: blur(10px);
+                border: 1px solid rgba(255,255,255,0.2);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                font-size: 0.9rem;
+                user-select: none;
+            `;
+            
+            musicControl.onclick = () => {
+                this.toggleAmbientMusic();
+                this.updateMusicControlIcon();
+            };
+            
+            document.body.appendChild(musicControl);
+        }
+        
+        this.updateMusicControlIcon();
+    }
+
+    updateMusicControlIcon() {
+        const musicControl = document.getElementById('music-control');
+        if (musicControl) {
+            if (this.ambientMusicPlaying) {
+                musicControl.innerHTML = '🎵 Música: ON';
+                musicControl.style.background = 'rgba(34, 197, 94, 0.8)';
+            } else {
+                musicControl.innerHTML = '🔇 Música: OFF';
+                musicControl.style.background = 'rgba(0,0,0,0.8)';
+            }
+        }
+    }
+
+    // === EFECTOS SONOROS ADICIONALES ===
+    
+    createCarouselSound() {
+        const duration = 0.15;
+        const sampleRate = this.audioContext.sampleRate;
+        const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+        const data = buffer.getChannelData(0);
+        
+        for (let i = 0; i < buffer.length; i++) {
+            const time = i / sampleRate;
+            data[i] = Math.sin(2 * Math.PI * 800 * time) * Math.exp(-time * 10) * 0.2;
+        }
+        
+        return buffer;
+    }
+
+    createSuccessSound() {
+        const duration = 0.6;
+        const sampleRate = this.audioContext.sampleRate;
+        const buffer = this.audioContext.createBuffer(1, duration * sampleRate, sampleRate);
+        const data = buffer.getChannelData(0);
+        
+        for (let i = 0; i < buffer.length; i++) {
+            const time = i / sampleRate;
+            // Progresión ascendente Do-Mi-Sol
+            let freq = 523; // Do
+            if (time > 0.2) freq = 659; // Mi
+            if (time > 0.4) freq = 784; // Sol
+            
+            data[i] = Math.sin(2 * Math.PI * freq * time) * Math.exp(-time * 3) * 0.4;
+        }
+        
+        return buffer;
+    }
+
+    // Agregar nuevos sonidos al sistema
+    createExtendedAudioBuffers() {
+        this.sounds.coin = this.createCoinSound();
+        this.sounds.vote = this.createVoteSound();
+        this.sounds.levelUp = this.createLevelUpSound();
+        this.sounds.carousel = this.createCarouselSound();
+        this.sounds.success = this.createSuccessSound();
+        this.sounds.select = this.createVoteSound(); // Reutilizar para selección
+        
+        // Crear sonidos para cada estilo musical
+        ['folklore', 'pop', 'rock', 'tango', 'cumbia', 'libre'].forEach(style => {
+            this.sounds[style] = this.createMusicStyleSound(style);
+        });
+    }
+
+    // Método público para reproducir cualquier sonido
+    triggerVoteReward() {
+        this.playSound('vote');
+        // Crear pequeña explosión de partículas en posición aleatoria
+        this.createParticleExplosion(
+            Math.random() * window.innerWidth,
+            Math.random() * window.innerHeight * 0.5 + 100,
+            3
+        );
+    }
 }
 
 // === INICIALIZACIÓN ===
@@ -452,9 +694,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // === FUNCIONES GLOBALES PARA USO EXTERNO ===
+window.VYTGamification = VYTGamification;
 window.vytGamification = {
     vote: (artistId, amount) => vytGamification?.vote(artistId, amount),
     showLevelUp: (level) => vytGamification?.showLevelUpEffect(level),
     spawnCoin: () => vytGamification?.spawnCoin(),
-    updateRanking: (artists) => vytGamification?.updateRanking(artists)
+    updateRanking: (artists) => vytGamification?.updateRanking(artists),
+    playSound: (soundName) => vytGamification?.playSound(soundName),
+    playMusicStyle: (style) => vytGamification?.playMusicStyleSound(style),
+    toggleMusic: () => vytGamification?.toggleAmbientMusic(),
+    triggerVoteReward: () => vytGamification?.triggerVoteReward()
 };

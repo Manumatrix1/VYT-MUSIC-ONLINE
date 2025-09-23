@@ -5,6 +5,7 @@ const admin = require("firebase-admin");
 const { defineString } = require("firebase-functions/params");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 const nodemailer = require("nodemailer");
+const { withRateLimit } = require('./rate-limiter');
 
 // Define environment variables
 const gmailEmail = defineString("GMAIL_EMAIL");
@@ -13,7 +14,7 @@ const mercadopagoToken = defineString("MERCADOPAGO_TOKEN");
 const siteUrl = defineString("SITE_URL", { default: "https://vytonlineprueva.web.app" });
 
 // Webhook to receive payment notifications from Mercado Pago (legacy function)
-const recibirNotificacionPago = onRequest({ cors: true }, async (req, res) => {
+const recibirNotificacionPago = onRequest({ cors: true }, withRateLimit('critical', async (req, res) => {
   console.log("Webhook received from Mercado Pago");
 
   if (req.method !== 'POST') {
@@ -101,7 +102,7 @@ const getPricingConfig = onCall(async (request) => {
 /**
  * Crear pago para inscripción online (con certamen específico)
  */
-const createInscripcionOnlinePayment = onCall(async (request) => {
+const createInscripcionOnlinePayment = onCall(withRateLimit('critical', async (request) => {
   try {
     const { 
       participante_data, 

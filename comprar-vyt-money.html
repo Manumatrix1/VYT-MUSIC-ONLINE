@@ -288,7 +288,13 @@
                 const userDoc = await getDoc(doc(db, 'users', currentUser.uid));
                 if (userDoc.exists()) {
                     const userData = userDoc.data();
-                    balanceAmount.textContent = userData.vyt_money_balance || 0;
+                    const balance = userData.vyt_money_balance || 0;
+                    balanceAmount.textContent = balance.toLocaleString();
+                    
+                    // Actualizar balance en página principal si está disponible
+                    if (window.updateBalanceDisplay) {
+                        window.updateBalanceDisplay(balance);
+                    }
                 }
             } catch (error) {
                 console.error('Error loading user data:', error);

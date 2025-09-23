@@ -1,6 +1,7 @@
 import { db } from './firebase-config.js';
 import { collection, getDocs, query, orderBy, onSnapshot, doc, getDoc, limit, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import notifications from './src/notifications.js';
 
 const auth = getAuth();
 
@@ -45,14 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentPurchase = { vyt: 0, amount: 0 };
 
-    // --- Lógica de Autenticación ---
-    onAuthStateChanged(auth, (user) => {
+    // --- Lógica de Autenticación y Balance ---
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             profileLink.classList.add('hidden');
             logoutButton.classList.remove('hidden');
+            
+            // Cargar balance del usuario
+            await loadUserBalance(user.uid);
+            
+            // Mostrar elementos de usuario autenticado
+            showUserElements();
+            
+            // Notificación de bienvenida
+            const userName = user.displayName || user.email.split('@')[0];
+            notifications.loginSuccess(userName);
         } else {
             profileLink.classList.remove('hidden');
             logoutButton.classList.add('hidden');
+            
+            // Ocultar elementos de usuario
+            hideUserElements();
         }
     });
 
@@ -299,6 +313,72 @@ document.addEventListener('DOMContentLoaded', () => {
             blocksContainer.innerHTML = '<p class="text-red-500">Error al cargar el contenido dinámico.</p>';
         }
     }
+
+    // --- Funciones de Balance de Usuario ---
+    async function loadUserBalance(userId) {
+        try {
+            const userDoc = await getDoc(doc(db, 'users', userId));
+            if (userDoc.exists()) {
+                const userData = userDoc.data();
+                updateBalanceDisplay(userData.vyt_money_balance || 0);
+                console.log('💰 Balance cargado:', userData.vyt_money_balance || 0);
+            }
+        } catch (error) {
+            console.error('Error cargando balance:', error);
+        }
+    }
+
+    function updateBalanceDisplay(balance, previousBalance = null) {
+        // Actualizar balance en la página
+        const balanceElements = [
+            document.getElementById('currentBalance'),
+            document.getElementById('userBalance'),
+            document.getElementById('balance-amount')
+        ];
+        
+        balanceElements.forEach(element => {
+            if (element) {
+                element.textContent = `${balance.toLocaleString()} VYT-MONEY`;
+                
+                // Agregar animación de actualización
+                element.classList.add('balance-update');
+                setTimeout(() => {
+                    element.classList.remove('balance-update');
+                }, 800);
+            }
+        });
+
+        // Mostrar balance display si existe
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        if (balanceDisplay) {
+            balanceDisplay.style.display = 'block';
+        }
+
+        // Notificar cambio de balance si hay cambio
+        if (previousBalance !== null && balance !== previousBalance) {
+            const change = balance - previousBalance;
+            notifications.balanceUpdated(balance, change);
+        }
+    }
+
+    function showUserElements() {
+        const userElements = document.querySelectorAll('.user-only');
+        userElements.forEach(el => el.style.display = 'block');
+    }
+
+    function hideUserElements() {
+        const userElements = document.querySelectorAll('.user-only');
+        userElements.forEach(el => el.style.display = 'none');
+        
+        const balanceDisplay = document.getElementById('balanceDisplay');
+        if (balanceDisplay) {
+            balanceDisplay.style.display = 'none';
+        }
+    }
+
+    // Hacer funciones disponibles globalmente
+    window.loadUserBalance = loadUserBalance;
+    window.updateBalanceDisplay = updateBalanceDisplay;
 
     // Helper function to get YouTube embed URL
     function getYouTubeEmbedUrl(url) {

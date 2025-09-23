@@ -1,13 +1,17 @@
 [
   {
     "origin": [
-      "https://manumatrix1.github.io",
-      "http://127.0.0.1:3000",
-      "http://localhost:3000",
+      "https://vytonlineprueva.web.app",
+      "https://vytonlineprueva.firebaseapp.com",
       "http://127.0.0.1:5000",
       "http://localhost:5000"
     ],
     "method": ["GET", "POST", "PUT", "DELETE"],
-    "maxAgeSeconds": 3600
+    "maxAgeSeconds": 3600,
+    "responseHeader": [
+      "Content-Type",
+      "Authorization",
+      "X-Requested-With"
+    ]
   }
 ]

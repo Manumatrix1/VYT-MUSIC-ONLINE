@@ -1,0 +1,334 @@
+/* ===== ESTILOS DEDICADOS PARA DESKTOP ===== */
+
+/* Aplicar solo en pantallas de desktop */
+@media screen and (min-width: 1024px) {
+    
+    /* DEBUG: Marca visual para confirmar que el CSS se está cargando */
+    body::before {
+        content: "✅ DESKTOP CSS CARGADO";
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        background: #10b981;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-size: 0.8rem;
+        font-weight: bold;
+        z-index: 10000;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    }
+    
+    /* === HEADER Y NAVEGACIÓN === */
+    .header {
+        padding: 1.5rem 0 !important;
+        min-height: 90px !important;
+        background: var(--color-fondo) !important;
+    }
+    
+    .header-logo img {
+        height: 70px !important;
+        width: auto !important;
+        transition: transform 0.3s ease !important;
+    }
+    
+    .header-logo:hover img {
+        transform: scale(1.05) !important;
+    }
+    
+    /* === ICONOS DEL MENÚ === */
+    .header-nav a {
+        padding: 1.2rem 1.8rem !important;
+        font-size: 1.2rem !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+        margin: 0 0.2rem !important;
+    }
+    
+    .header-nav a i,
+    .header-nav a .fas,
+    .header-nav a .far,
+    .header-nav a .fab {
+        font-size: 1.5rem !important;
+        margin-right: 0.8rem !important;
+        color: currentColor !important;
+    }
+    
+    .header-nav a:hover {
+        background: rgba(59, 130, 246, 0.15) !important;
+        color: #58a6ff !important;
+        transform: translateY(-3px) !important;
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.2) !important;
+    }
+    
+    /* === ICONO DE PERFIL === */
+    .header-user a {
+        padding: 1rem 1.5rem !important;
+        border-radius: 12px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .header-user .icon-profile {
+        font-size: 2.5rem !important;
+        color: #58a6ff !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .header-user a:hover {
+        background: rgba(59, 130, 246, 0.1) !important;
+        transform: translateY(-2px) scale(1.05) !important;
+    }
+    
+    .header-user a:hover .icon-profile {
+        color: #ffffff !important;
+        text-shadow: 0 0 20px rgba(59, 130, 246, 0.8) !important;
+    }
+    
+    /* === DROPDOWNS === */
+    .dropdown-content {
+        min-width: 250px !important;
+        padding: 1.2rem 0 !important;
+        background: var(--color-fondo-secundario) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 12px !important;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    .dropdown-content a {
+        padding: 1rem 2rem !important;
+        font-size: 1.1rem !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .dropdown-content a:hover {
+        background: rgba(59, 130, 246, 0.1) !important;
+        color: #58a6ff !important;
+        transform: translateX(5px) !important;
+    }
+    
+    /* === DROPDOWN ARROWS === */
+    .dropdown-arrow {
+        width: 1.5rem !important;
+        height: 1.5rem !important;
+        stroke-width: 2.5 !important;
+        transition: transform 0.3s ease !important;
+    }
+    
+    .dropdown-toggle:hover .dropdown-arrow {
+        transform: rotate(180deg) !important;
+    }
+    
+    /* === CONTENIDO PRINCIPAL === */
+    .titulo-seccion {
+        font-size: 4rem !important;
+        margin-bottom: 2rem !important;
+        text-shadow: 0 4px 20px rgba(88, 166, 255, 0.3) !important;
+    }
+    
+    .subtitulo-seccion {
+        font-size: 1.5rem !important;
+        margin-bottom: 3rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* === CONTENEDOR === */
+    .container {
+        max-width: 1400px !important;
+        padding: 0 2.5rem !important;
+        margin: 0 auto !important;
+    }
+    
+    /* === BOTONES === */
+    .btn,
+    button:not(.carousel-btn):not(.close-btn) {
+        font-size: 1.2rem !important;
+        padding: 1.2rem 2.5rem !important;
+        min-height: 55px !important;
+        border-radius: 12px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .btn:hover,
+    button:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    /* === CARRUSEL === */
+    .carousel-slide img {
+        height: 550px !important;
+        object-fit: cover !important;
+        border-radius: 20px !important;
+    }
+    
+    .carousel-btn {
+        width: 70px !important;
+        height: 70px !important;
+        font-size: 2rem !important;
+        border-radius: 50% !important;
+        background: rgba(0, 0, 0, 0.7) !important;
+        backdrop-filter: blur(10px) !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .carousel-btn:hover {
+        background: rgba(59, 130, 246, 0.8) !important;
+        transform: scale(1.1) !important;
+    }
+    
+    /* === CARDS DE RANKING === */
+    .ranking-card {
+        padding: 2.5rem !important;
+        margin: 2rem 0 !important;
+        border-radius: 20px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .ranking-card:hover {
+        transform: translateY(-5px) !important;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    .ranking-card h3 {
+        font-size: 2.2rem !important;
+        margin-bottom: 1rem !important;
+    }
+    
+    .ranking-card p {
+        font-size: 1.2rem !important;
+        line-height: 1.6 !important;
+    }
+    
+    /* === ESTILOS MUSICALES === */
+    .musical-style-card {
+        padding: 2.5rem !important;
+        border-radius: 20px !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .musical-style-card:hover {
+        transform: translateY(-8px) scale(1.02) !important;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4) !important;
+    }
+    
+    .musical-style-card h3 {
+        font-size: 2rem !important;
+        margin-bottom: 1.5rem !important;
+    }
+    
+    /* === POZO DE PREMIOS === */
+    .prize-pool-amount {
+        font-size: 4.5rem !important;
+        text-shadow: 0 4px 20px rgba(255, 215, 0, 0.5) !important;
+    }
+    
+    .prize-pool-stats {
+        font-size: 1.4rem !important;
+    }
+    
+    /* === PÁGINAS SOCIALES === */
+    .artist-profile-header {
+        padding: 3.5rem !important;
+        border-radius: 25px !important;
+    }
+    
+    .artist-avatar {
+        width: 180px !important;
+        height: 180px !important;
+        font-size: 6rem !important;
+        border: 5px solid rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    .artist-profile-header h1 {
+        font-size: 4rem !important;
+        text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+    }
+    
+    .artist-profile-header p {
+        font-size: 1.5rem !important;
+        line-height: 1.7 !important;
+    }
+    
+    /* === TABS DE ARTISTAS === */
+    .artist-tab {
+        font-size: 1.3rem !important;
+        padding: 1.5rem 3rem !important;
+        border-radius: 12px 12px 0 0 !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    .artist-tab:hover {
+        background: rgba(59, 130, 246, 0.1) !important;
+        transform: translateY(-2px) !important;
+    }
+    
+    /* === MODAL DE LOGIN SOCIAL === */
+    .modal-content {
+        max-width: 550px !important;
+        padding: 3.5rem !important;
+        border-radius: 25px !important;
+    }
+    
+    .modal-content h2 {
+        font-size: 2.8rem !important;
+        margin-bottom: 2rem !important;
+    }
+    
+    .modal-content button {
+        font-size: 1.3rem !important;
+        padding: 1.5rem 2.5rem !important;
+        border-radius: 15px !important;
+    }
+    
+    /* === EFECTOS ESPECIALES === */
+    .header-nav a.active {
+        background: linear-gradient(135deg, #58a6ff, #1f6feb) !important;
+        color: white !important;
+        box-shadow: 0 8px 25px rgba(88, 166, 255, 0.4) !important;
+    }
+    
+    /* === ANIMACIONES SUAVES === */
+    * {
+        scroll-behavior: smooth !important;
+    }
+    
+    .page {
+        transition: opacity 0.3s ease !important;
+    }
+}
+
+/* === PANTALLAS EXTRA GRANDES === */
+@media screen and (min-width: 1440px) {
+    .header-logo img {
+        height: 80px !important;
+    }
+    
+    .titulo-seccion {
+        font-size: 5rem !important;
+    }
+    
+    .container {
+        max-width: 1600px !important;
+    }
+    
+    .artist-avatar {
+        width: 200px !important;
+        height: 200px !important;
+        font-size: 7rem !important;
+    }
+}
+
+/* === PANTALLAS ULTRA ANCHAS === */
+@media screen and (min-width: 1920px) {
+    .titulo-seccion {
+        font-size: 6rem !important;
+    }
+    
+    .container {
+        max-width: 1800px !important;
+    }
+    
+    .carousel-slide img {
+        height: 650px !important;
+    }
+}

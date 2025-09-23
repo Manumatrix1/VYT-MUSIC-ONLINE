@@ -98,6 +98,42 @@
             transition: all 0.3s ease;
         }
 
+        /* Estilo para checkbox recordarme */
+        .form-checkbox {
+            appearance: none;
+            background-color: #374151;
+            border: 1px solid #6b7280;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .form-checkbox:checked {
+            background-color: #2bb7d1;
+            border-color: #2bb7d1;
+        }
+
+        .form-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #000;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .form-checkbox:hover {
+            border-color: #2bb7d1;
+        }
+
+        .form-checkbox:focus {
+            outline: none;
+            border-color: #2bb7d1;
+            box-shadow: 0 0 0 2px rgba(43, 183, 209, 0.2);
+        }
+
         .social-btn:hover {
             border-color: var(--color-primario);
             transform: translateY(-1px);
@@ -173,6 +209,13 @@
                         </div>
                         <a href="#" id="forgot-password-link" class="text-sm text-gray-400 hover:text-[#2bb7d1] mt-2 block text-right">¿Olvidaste tu contraseña?</a>
                     </div>
+                    
+                    <!-- Checkbox Recordarme -->
+                    <div class="flex items-center">
+                        <input type="checkbox" id="remember-me" name="remember-me" class="form-checkbox h-4 w-4 text-[#2bb7d1] bg-gray-700 border-gray-600 rounded focus:ring-[#2bb7d1] focus:ring-2">
+                        <label for="remember-me" class="ml-2 text-sm text-gray-300">Recordarme por 30 días</label>
+                    </div>
+                    
                     <p id="login-error" class="error-message">Error al iniciar sesión.</p>
                     <button type="submit" class="btn-submit w-full bg-[#2bb7d1] text-black py-4 rounded-full font-bold text-lg">
                         Iniciar Sesión
