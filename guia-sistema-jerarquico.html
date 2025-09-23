@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cómo Funciona el Sistema - VYT MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="gamification-styles.css">
+    
+    <style>
+        :root {
+            --color-primario: #ffd700;
+            --color-secundario: #ff6b35;
+            --color-fondo: #0a0a0a;
+            --color-card: #1a1a1a;
+            --color-texto-principal: #ffffff;
+            --color-texto-secundario: #cccccc;
+        }
+        
+        body {
+            background: var(--color-fondo);
+            color: var(--color-texto-principal);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, var(--color-primario), var(--color-secundario));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .region-card {
+            background: linear-gradient(135deg, var(--color-card), #2a2a2a);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .region-card:hover {
+            border-color: var(--color-primario);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .province-item {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .province-item:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: var(--color-primario);
+        }
+        
+        .flow-arrow {
+            font-size: 3rem;
+            color: var(--color-primario);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
+        }
+        
+        .level-badge {
+            background: linear-gradient(45deg, var(--color-primario), #ffed4e);
+            color: #000;
+            font-weight: bold;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 1rem;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--color-primario), var(--color-secundario));
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--color-card);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 1.5rem;
+            width: 1rem;
+            height: 1rem;
+            background: var(--color-primario);
+            border-radius: 50%;
+            border: 3px solid var(--color-fondo);
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Back Navigation -->
+    <div class="fixed top-4 left-4 z-50">
+        <button onclick="window.history.back()" class="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-all duration-300 shadow-lg">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </button>
+    </div>
+    
+    <!-- Header Section -->
+    <section class="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-orange-500/10"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h1 class="text-6xl font-bold mb-6">
+                    <span class="gradient-text">🗺️ Cómo Funciona el Sistema</span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+                    Sistema de Certámenes Jerárquicos por Regiones, Provincias y Zonas de Argentina
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Overview Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">🎯 Estructura del Sistema</h2>
+                <p class="text-gray-400 text-lg max-w-3xl mx-auto">
+                    VYT MUSIC organiza los certámenes siguiendo la división territorial argentina, 
+                    permitiendo una competencia justa y progresiva desde lo local hasta lo nacional.
+                </p>
+            </div>
+            
+            <div class="max-w-6xl mx-auto">
+                <!-- Flow Diagram -->
+                <div class="grid md:grid-cols-1 gap-8 text-center">
+                    <!-- Nivel Local -->
+                    <div class="region-card rounded-2xl p-8">
+                        <div class="text-6xl mb-4">🏠</div>
+                        <h3 class="text-2xl font-bold gradient-text mb-4">NIVEL 1: Local/Municipal</h3>
+                        <p class="text-gray-400 mb-4">Certámenes por ciudad o municipio</p>
+                        <div class="level-badge">
+                            📍 Ejemplo: Rosario, Córdoba Capital, La Plata
+                        </div>
+                    </div>
+                    
+                    <div class="flow-arrow text-center">↓</div>
+                    
+                    <!-- Nivel Provincial -->
+                    <div class="region-card rounded-2xl p-8">
+                        <div class="text-6xl mb-4">🏛️</div>
+                        <h3 class="text-2xl font-bold gradient-text mb-4">NIVEL 2: Provincial</h3>
+                        <p class="text-gray-400 mb-4">Ganadores locales compiten a nivel provincial</p>
+                        <div class="level-badge">
+                            🗺️ Ejemplo: Provincia de Santa Fe, Córdoba, Buenos Aires
+                        </div>
+                    </div>
+                    
+                    <div class="flow-arrow text-center">↓</div>
+                    
+                    <!-- Nivel Regional -->
+                    <div class="region-card rounded-2xl p-8">
+                        <div class="text-6xl mb-4">🌎</div>
+                        <h3 class="text-2xl font-bold gradient-text mb-4">NIVEL 3: Regional</h3>
+                        <p class="text-gray-400 mb-4">Agrupación de provincias vecinas</p>
+                        <div class="level-badge">
+                            🗺️ Región Centro: Córdoba, Santa Fe, Entre Ríos
+                        </div>
+                    </div>
+                    
+                    <div class="flow-arrow text-center">↓</div>
+                    
+                    <!-- Nivel Nacional -->
+                    <div class="region-card rounded-2xl p-8 border-4 border-yellow-400">
+                        <div class="text-6xl mb-4">🇦🇷</div>
+                        <h3 class="text-2xl font-bold gradient-text mb-4">NIVEL 4: Nacional</h3>
+                        <p class="text-gray-400 mb-4">Gran Final de Argentina</p>
+                        <div class="level-badge">
+                            🏆 Los mejores de cada región compiten por el título nacional
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Regions Detail -->
+    <section class="py-20 bg-gradient-to-r from-gray-900 to-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">🗺️ División Regional de Argentina</h2>
+                <p class="text-gray-400 text-lg">Agrupación estratégica de provincias para competencias equilibradas</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Región NOA -->
+                <div class="region-card rounded-2xl p-6">
+                    <div class="text-4xl mb-4 text-center">🏔️</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">NOA (Noroeste)</h3>
+                    <div class="space-y-2">
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Salta</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Jujuy</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Tucumán</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Catamarca</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">La Rioja</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Santiago del Estero</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Región NEA -->
+                <div class="region-card rounded-2xl p-6">
+                    <div class="text-4xl mb-4 text-center">🌿</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">NEA (Noreste)</h3>
+                    <div class="space-y-2">
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Misiones</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Corrientes</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Chaco</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Formosa</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Región Centro -->
+                <div class="region-card rounded-2xl p-6">
+                    <div class="text-4xl mb-4 text-center">🌾</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Centro</h3>
+                    <div class="space-y-2">
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Córdoba</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Santa Fe</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Entre Ríos</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Región Cuyo -->
+                <div class="region-card rounded-2xl p-6">
+                    <div class="text-4xl mb-4 text-center">🍇</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Cuyo</h3>
+                    <div class="space-y-2">
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Mendoza</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">San Juan</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">San Luis</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Región Pampeana -->
+                <div class="region-card rounded-2xl p-6">
+                    <div class="text-4xl mb-4 text-center">🌾</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Pampeana</h3>
+                    <div class="space-y-2">
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Buenos Aires</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">La Pampa</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">CABA</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Región Patagónica -->
+                <div class="region-card rounded-2xl p-6">
+                    <div class="text-4xl mb-4 text-center">🏔️</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Patagonia</h3>
+                    <div class="space-y-2">
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Río Negro</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Neuquén</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Chubut</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Santa Cruz</span>
+                        </div>
+                        <div class="province-item rounded-lg p-3">
+                            <span class="font-bold">Tierra del Fuego</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Timeline Process -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">📅 Cronograma de Competencias</h2>
+                <p class="text-gray-400 text-lg">Proceso anual de certificación por niveles</p>
+            </div>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold gradient-text mb-2">Enero - Marzo: Inscripciones</h3>
+                        <p class="text-gray-400">
+                            Período de inscripción para certámenes locales y municipales. 
+                            Los artistas se registran en su ciudad de residencia.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold gradient-text mb-2">Abril - Junio: Certámenes Locales</h3>
+                        <p class="text-gray-400">
+                            Competencias en cada ciudad. Los ganadores avanzan al nivel provincial.
+                            Premios locales y reconocimiento municipal.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold gradient-text mb-2">Julio - Agosto: Certámenes Provinciales</h3>
+                        <p class="text-gray-400">
+                            Los campeones locales compiten por el título provincial. 
+                            Premios incrementados y cobertura mediática.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold gradient-text mb-2">Septiembre - Octubre: Certámenes Regionales</h3>
+                        <p class="text-gray-400">
+                            Competencia entre campeones provinciales de cada región. 
+                            Eventos de gran envergadura con sponsors.
+                        </p>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <h3 class="text-xl font-bold gradient-text mb-2">Noviembre - Diciembre: Gran Final Nacional</h3>
+                        <p class="text-gray-400">
+                            Los 6 campeones regionales compiten por el título nacional. 
+                            Evento televisado con premios máximos y contratos discográficos.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Benefits Section -->
+    <section class="py-20 bg-gradient-to-r from-black to-gray-900">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">🎯 Ventajas del Sistema Jerárquico</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">⚖️</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Competencia Justa</h4>
+                    <p class="text-gray-400 text-sm">Los artistas compiten con otros de su mismo nivel geográfico</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">📈</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Crecimiento Progresivo</h4>
+                    <p class="text-gray-400 text-sm">Avance gradual desde lo local hasta lo nacional</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Diversidad Cultural</h4>
+                    <p class="text-gray-400 text-sm">Representación de todas las regiones y géneros musicales</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 text-center">
+                    <div class="text-4xl mb-4">🏆</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Múltiples Oportunidades</h4>
+                    <p class="text-gray-400 text-sm">Premios y reconocimiento en cada nivel del sistema</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">🚀 ¡Comenzá tu Camino al Éxito!</h2>
+            <p class="text-gray-400 text-xl mb-8 max-w-3xl mx-auto">
+                Inscribite en tu ciudad y comenzá el ascenso hacia la gloria nacional. 
+                Cada gran artista comenzó desde su lugar de origen.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="inscripcion_online.html" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-4 px-8 rounded-full text-xl hover:shadow-lg hover:shadow-yellow-400/25 transition-all duration-300">
+                    ✍️ Inscribirme Ahora
+                </a>
+                <a href="principal.html" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-4 px-8 rounded-full text-xl transition-all duration-300">
+                    🏠 Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <script src="gamification.js"></script>
+</body>
+</html>
