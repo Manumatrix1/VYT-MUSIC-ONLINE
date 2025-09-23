@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nosotros - VYT MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-primario: #ffd700;
+            --color-secundario: #ff6b35;
+            --color-fondo: #0a0a0a;
+            --color-card: #1a1a1a;
+            --color-texto-principal: #ffffff;
+            --color-texto-secundario: #cccccc;
+        }
+        
+        body {
+            background: var(--color-fondo);
+            color: var(--color-texto-principal);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, var(--color-primario), var(--color-secundario));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.3);
+        }
+        
+        .floating-coins {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .coin {
+            width: 30px;
+            height: 30px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 50%;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Floating Coins Animation -->
+    <div class="floating-coins" id="floating-coins"></div>
+    
+    <!-- Back Navigation -->
+    <div class="fixed top-4 left-4 z-50">
+        <button onclick="window.history.back()" class="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-all duration-300 shadow-lg">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </button>
+    </div>
+    
+    <!-- Header Section -->
+    <section class="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-orange-500/10"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h1 class="text-6xl font-bold mb-6">
+                    <span class="gradient-text">Nosotros</span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
+                    Somos el equipo detrás de la plataforma de certámenes de canto más innovadora de Argentina
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">🎵 Nuestro Equipo</h2>
+                <p class="text-gray-400 text-lg">Profesionales apasionados por la música y la tecnología</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Team Member 1 -->
+                <div class="bg-gray-800 rounded-2xl p-8 text-center card-hover">
+                    <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-4xl">
+                        👨‍💼
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 gradient-text">Director General</h3>
+                    <p class="text-gray-400 mb-4">Visionario del proyecto VYT MUSIC</p>
+                    <p class="text-sm text-gray-500">
+                        Más de 10 años de experiencia en la industria musical y eventos en vivo.
+                    </p>
+                </div>
+                
+                <!-- Team Member 2 -->
+                <div class="bg-gray-800 rounded-2xl p-8 text-center card-hover">
+                    <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-blue-400 to-purple-500 rounded-full flex items-center justify-center text-4xl">
+                        👩‍💻
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 gradient-text">Directora de Tecnología</h3>
+                    <p class="text-gray-400 mb-4">Arquitecta de la plataforma digital</p>
+                    <p class="text-sm text-gray-500">
+                        Especialista en desarrollo web y sistemas de votación en tiempo real.
+                    </p>
+                </div>
+                
+                <!-- Team Member 3 -->
+                <div class="bg-gray-800 rounded-2xl p-8 text-center card-hover">
+                    <div class="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-green-400 to-teal-500 rounded-full flex items-center justify-center text-4xl">
+                        🎤
+                    </div>
+                    <h3 class="text-2xl font-bold mb-2 gradient-text">Director Artístico</h3>
+                    <p class="text-gray-400 mb-4">Curador de talento y experiencias</p>
+                    <p class="text-sm text-gray-500">
+                        Productor musical con amplia trayectoria en certámenes nacionales.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Mission Section -->
+    <section class="py-20 bg-gradient-to-r from-gray-900 to-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">🎯 Nuestra Misión</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h3 class="text-3xl font-bold mb-6 gradient-text">Democratizar el Talento</h3>
+                    <p class="text-gray-300 text-lg mb-6">
+                        Creemos que cada voz merece ser escuchada. VYT MUSIC es más que una plataforma: 
+                        es un movimiento que rompe barreras geográficas y económicas para que los artistas 
+                        emergentes puedan brillar.
+                    </p>
+                    <ul class="space-y-3 text-gray-400">
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-400 mr-3"></i>
+                            Acceso igualitario para todos los artistas
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-400 mr-3"></i>
+                            Tecnología de vanguardia en votación
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-check-circle text-green-400 mr-3"></i>
+                            Premios reales y oportunidades concretas
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <div class="bg-gradient-to-br from-yellow-400/20 to-orange-500/20 rounded-3xl p-12">
+                        <div class="text-8xl mb-6">🏆</div>
+                        <h4 class="text-2xl font-bold gradient-text mb-4">+1000</h4>
+                        <p class="text-gray-400">Artistas Participantes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Values Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4">💎 Nuestros Valores</h2>
+                <p class="text-gray-400 text-lg">Los principios que guían cada decisión en VYT MUSIC</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-gray-800 rounded-xl p-6 text-center card-hover">
+                    <div class="text-4xl mb-4">🤝</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Transparencia</h4>
+                    <p class="text-gray-400 text-sm">Procesos claros y justos en cada etapa del certamen</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 text-center card-hover">
+                    <div class="text-4xl mb-4">🚀</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Innovación</h4>
+                    <p class="text-gray-400 text-sm">Tecnología cutting-edge para la mejor experiencia</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 text-center card-hover">
+                    <div class="text-4xl mb-4">🎨</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Creatividad</h4>
+                    <p class="text-gray-400 text-sm">Fomentamos la expresión artística en todas sus formas</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6 text-center card-hover">
+                    <div class="text-4xl mb-4">💪</div>
+                    <h4 class="text-xl font-bold gradient-text mb-2">Compromiso</h4>
+                    <p class="text-gray-400 text-sm">Dedicación total al éxito de nuestros artistas</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Contact Section -->
+    <section class="py-20 bg-gradient-to-r from-black to-gray-900">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">📞 Contactanos</h2>
+            <p class="text-gray-400 text-lg mb-8">¿Tenés preguntas? ¡Queremos escucharte!</p>
+            
+            <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <div class="text-3xl mb-4">📧</div>
+                    <h4 class="font-bold gradient-text mb-2">Email</h4>
+                    <p class="text-gray-400">info@vytmusic.com</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <div class="text-3xl mb-4">📱</div>
+                    <h4 class="font-bold gradient-text mb-2">WhatsApp</h4>
+                    <p class="text-gray-400">+54 11 5555-5555</p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <div class="text-3xl mb-4">📍</div>
+                    <h4 class="font-bold gradient-text mb-2">Ubicación</h4>
+                    <p class="text-gray-400">Rosario, Argentina</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // Floating coins animation
+        function createCoin() {
+            const coin = document.createElement('div');
+            coin.className = 'coin';
+            coin.style.left = Math.random() * 100 + 'vw';
+            coin.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            document.getElementById('floating-coins').appendChild(coin);
+            
+            setTimeout(() => {
+                coin.remove();
+            }, 5000);
+        }
+        
+        // Create coins periodically
+        setInterval(createCoin, 2000);
+        
+        // Add some sparkle effects on scroll
+        window.addEventListener('scroll', () => {
+            if (Math.random() < 0.1) {
+                createCoin();
+            }
+        });
+    </script>
+</body>
+</html>

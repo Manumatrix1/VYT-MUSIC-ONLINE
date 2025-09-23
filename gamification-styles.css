@@ -1,0 +1,550 @@
+/* === SISTEMA DE GAMIFICACIÓN VYT MUSIC === */
+
+:root {
+    --color-oro: #ffd700;
+    --color-plata: #c0c0c0;
+    --color-bronce: #cd7f32;
+    --color-premio: #ff6b35;
+    --color-fondo-oscuro: #0a0a0a;
+    --color-card: #1a1a1a;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #cccccc;
+}
+
+/* === POZO DINÁMICO DE PREMIOS === */
+.dynamic-prize-pool {
+    background: linear-gradient(135deg, var(--color-fondo-oscuro) 0%, #1a1a1a 50%, #0a0a0a 100%);
+    border: 3px solid var(--color-oro);
+    border-radius: 25px;
+    padding: 2rem;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 0 50px rgba(255, 215, 0, 0.3),
+        inset 0 0 30px rgba(255, 215, 0, 0.1);
+    animation: pool-glow 3s ease-in-out infinite alternate;
+}
+
+@keyframes pool-glow {
+    0% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(255, 215, 0, 0.1); }
+    100% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.5), inset 0 0 40px rgba(255, 215, 0, 0.2); }
+}
+
+.pool-effects {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.pool-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.pool-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(45deg, var(--color-oro), #ffed4e, var(--color-oro));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+}
+
+.pool-subtitle {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+.pool-main-counter {
+    text-align: center;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.pool-amount {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--color-oro);
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    position: relative;
+}
+
+.pool-increment {
+    position: absolute;
+    top: -20px;
+    right: -60px;
+    background: var(--color-premio);
+    color: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    animation: increment-popup 2s ease-out infinite;
+}
+
+@keyframes increment-popup {
+    0% { opacity: 0; transform: translateY(20px) scale(0.8); }
+    20% { opacity: 1; transform: translateY(0) scale(1); }
+    80% { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-20px) scale(0.8); }
+}
+
+.pool-progress {
+    margin: 2rem 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 1rem;
+}
+
+.pool-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+}
+
+.pool-progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+    height: 12px;
+    border-radius: 6px;
+    overflow: hidden;
+    position: relative;
+}
+
+.pool-progress-fill {
+    background: linear-gradient(90deg, var(--color-oro), #ffed4e, var(--color-oro));
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.5s ease;
+    position: relative;
+    animation: progress-shimmer 2s linear infinite;
+}
+
+@keyframes progress-shimmer {
+    0% { background-position: -100% 0; }
+    100% { background-position: 100% 0; }
+}
+
+.pool-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.pool-stat {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.pool-stat:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-oro);
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.2);
+}
+
+.pool-stat-label {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.pool-stat-value {
+    color: var(--color-oro);
+    font-size: 1.8rem;
+    font-weight: bold;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.pool-contributions {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.pool-contributions h4 {
+    color: var(--color-oro);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.contribution-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    animation: contribution-fade-in 0.5s ease-out;
+}
+
+.contribution-item:last-child {
+    border-bottom: none;
+}
+
+@keyframes contribution-fade-in {
+    0% { opacity: 0; transform: translateX(-20px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.contribution-source {
+    color: var(--color-text-secondary);
+}
+
+.contribution-amount {
+    color: var(--color-oro);
+    font-weight: bold;
+}
+
+/* === MONEDAS FLOTANTES === */
+.floating-coins {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+.coin-float {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle, var(--color-oro) 0%, #ffed4e  70%, var(--color-oro) 100%);
+    border-radius: 50%;
+    animation: coin-fall 4s linear infinite;
+    opacity: 0.8;
+}
+
+.coin-float::before {
+    content: '💰';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2rem;
+}
+
+@keyframes coin-fall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* === EFECTOS DE PARTÍCULAS === */
+.particle-explosion {
+    position: absolute;
+    pointer-events: none;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--color-oro);
+    border-radius: 50%;
+    animation: particle-burst 1s ease-out forwards;
+}
+
+@keyframes particle-burst {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.3) translate(var(--random-x, 50px), var(--random-y, 50px));
+    }
+}
+
+/* === RANKINGS GAMIFICADOS === */
+.ranking-container {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 2rem 0;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.ranking-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.ranking-title {
+    font-size: 2.5rem;
+    background: linear-gradient(45deg, var(--color-oro), var(--color-premio));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 900;
+}
+
+.artist-card {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.artist-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.artist-card:hover::before {
+    left: 100%;
+}
+
+.artist-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--color-oro);
+    box-shadow: 0 15px 35px rgba(255, 215, 0, 0.2);
+}
+
+.artist-position {
+    font-size: 2rem;
+    font-weight: 900;
+    margin-right: 1.5rem;
+    min-width: 60px;
+    text-align: center;
+}
+
+.position-1 { color: var(--color-oro); text-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+.position-2 { color: var(--color-plata); text-shadow: 0 0 15px rgba(192, 192, 192, 0.8); }
+.position-3 { color: var(--color-bronce); text-shadow: 0 0 15px rgba(205, 127, 50, 0.8); }
+
+.artist-avatar {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin-right: 1.5rem;
+    border: 3px solid var(--color-oro);
+    object-fit: cover;
+}
+
+.artist-info {
+    flex: 1;
+}
+
+.artist-name {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+}
+
+.artist-genre {
+    color: var(--color-text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.artist-stats {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.stat-badge {
+    background: rgba(255, 215, 0, 0.1);
+    color: var(--color-oro);
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border: 1px solid rgba(255, 215, 0, 0.3);
+}
+
+.vote-button {
+    background: linear-gradient(135deg, var(--color-oro), #ffed4e);
+    color: #000;
+    border: none;
+    border-radius: 25px;
+    padding: 0.75rem 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.vote-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+}
+
+.vote-button:active {
+    transform: scale(0.95);
+}
+
+/* === RESPONSIVE MOBILE === */
+@media (max-width: 768px) {
+    .pool-title {
+        font-size: 2rem;
+    }
+    
+    .pool-amount {
+        font-size: 2.5rem;
+    }
+    
+    .pool-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .pool-stat {
+        padding: 1rem;
+    }
+    
+    .pool-stat-value {
+        font-size: 1.4rem;
+    }
+    
+    .dynamic-prize-pool {
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 15px;
+    }
+    
+    .artist-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 1rem;
+    }
+    
+    .artist-position {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .artist-avatar {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    .artist-stats {
+        justify-content: center;
+    }
+    
+    .ranking-title {
+        font-size: 2rem;
+    }
+    
+    .coin-float {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .coin-float::before {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pool-title {
+        font-size: 1.5rem;
+    }
+    
+    .pool-amount {
+        font-size: 2rem;
+    }
+    
+    .pool-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .dynamic-prize-pool {
+        padding: 1rem;
+        border-radius: 10px;
+    }
+    
+    .artist-card {
+        padding: 0.75rem;
+    }
+    
+    .artist-avatar {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .artist-name {
+        font-size: 1.2rem;
+    }
+    
+    .ranking-title {
+        font-size: 1.5rem;
+    }
+}
+
+/* === ANIMACIONES DE CARGA === */
+.loading-shimmer {
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* === EFECTOS DE SONIDO VISUAL === */
+.sound-wave {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    margin-left: 10px;
+}
+
+.wave-bar {
+    width: 3px;
+    background: var(--color-oro);
+    border-radius: 3px;
+    animation: wave-animation 1s ease-in-out infinite;
+}
+
+.wave-bar:nth-child(1) { height: 10px; animation-delay: 0s; }
+.wave-bar:nth-child(2) { height: 15px; animation-delay: 0.1s; }
+.wave-bar:nth-child(3) { height: 20px; animation-delay: 0.2s; }
+.wave-bar:nth-child(4) { height: 15px; animation-delay: 0.3s; }
+.wave-bar:nth-child(5) { height: 10px; animation-delay: 0.4s; }
+
+@keyframes wave-animation {
+    0%, 100% { transform: scaleY(1); opacity: 0.7; }
+    50% { transform: scaleY(2); opacity: 1; }
+}

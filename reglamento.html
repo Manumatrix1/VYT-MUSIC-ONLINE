@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reglamento Jerárquico - VYT MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --color-primario: #ffd700;
+            --color-secundario: #ff6b35;
+            --color-fondo: #0a0a0a;
+            --color-card: #1a1a1a;
+            --color-texto-principal: #ffffff;
+            --color-texto-secundario: #cccccc;
+        }
+        
+        body {
+            background: var(--color-fondo);
+            color: var(--color-texto-principal);
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(45deg, var(--color-primario), var(--color-secundario));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hierarchy-level {
+            border-left: 4px solid var(--color-primario);
+            margin-left: 20px;
+            padding-left: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .hierarchy-level:hover {
+            border-left-color: var(--color-secundario);
+            background: rgba(255, 215, 0, 0.05);
+        }
+        
+        .tier-card {
+            background: linear-gradient(135deg, var(--color-card), #2a2a2a);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+            transition: all 0.3s ease;
+        }
+        
+        .tier-card:hover {
+            border-color: var(--color-primario);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2);
+        }
+        
+        .floating-notes {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .note {
+            font-size: 30px;
+            animation: float-note 4s ease-in-out infinite;
+        }
+        
+        @keyframes float-note {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Floating Musical Notes -->
+    <div class="floating-notes" id="floating-notes"></div>
+    
+    <!-- Back Navigation -->
+    <div class="fixed top-4 left-4 z-50">
+        <button onclick="window.history.back()" class="bg-gray-800 hover:bg-gray-700 text-white p-3 rounded-full transition-all duration-300 shadow-lg">
+            <i class="fas fa-arrow-left text-xl"></i>
+        </button>
+    </div>
+    
+    <!-- Header Section -->
+    <section class="relative py-20 bg-gradient-to-br from-gray-900 via-black to-gray-900 overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-r from-yellow-400/10 to-orange-500/10"></div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h1 class="text-6xl font-bold mb-6">
+                    <span class="gradient-text">📜 Reglamento Jerárquico</span>
+                </h1>
+                <p class="text-xl text-gray-300 max-w-4xl mx-auto">
+                    Sistema de certificación por niveles que te permitirá crecer como artista paso a paso, 
+                    desde principiante hasta profesional reconocido nacionalmente.
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Overview Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">🎯 ¿Cómo Funciona el Sistema?</h2>
+                <p class="text-gray-400 text-lg max-w-3xl mx-auto">
+                    Nuestro sistema jerárquico está diseñado para que cada artista pueda evolucionar de manera 
+                    progresiva, ganando experiencia, credibilidad y premios en cada nivel.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-gray-800 rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">🌱</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Crecimiento Progresivo</h3>
+                    <p class="text-gray-400">
+                        Avanzá de nivel superando desafíos específicos y acumulando experiencia real.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">🏆</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Reconocimiento Oficial</h3>
+                    <p class="text-gray-400">
+                        Obtené certificaciones oficiales que validen tu nivel artístico ante la industria.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-800 rounded-2xl p-8 text-center">
+                    <div class="text-6xl mb-4">💰</div>
+                    <h3 class="text-2xl font-bold gradient-text mb-4">Premios Escalonados</h3>
+                    <p class="text-gray-400">
+                        Los premios aumentan progresivamente: más nivel = mayores oportunidades y recompensas.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Hierarchy Levels -->
+    <section class="py-20 bg-gradient-to-r from-gray-900 to-black">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">🏰 Los Niveles del Sistema</h2>
+                <p class="text-gray-400 text-lg">7 niveles progresivos desde Principiante hasta Leyenda Nacional</p>
+            </div>
+            
+            <div class="space-y-8">
+                <!-- Nivel 1: Principiante -->
+                <div class="tier-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-gray-500 to-gray-700 rounded-full flex items-center justify-center text-2xl mr-6">
+                            🎤
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold text-gray-400">NIVEL 1: Principiante</h3>
+                            <p class="text-gray-500">Tus primeros pasos en el mundo de VYT MUSIC</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-300 mb-3">📋 Requisitos</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Registro en la plataforma</li>
+                                <li>• Subir 1 video de presentación</li>
+                                <li>• Completar perfil artístico</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-300 mb-3">🏆 Premios</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• $5,000 - $15,000</li>
+                                <li>• Certificado digital</li>
+                                <li>• Badge "Principiante"</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-gray-300 mb-3">⚡ Para Avanzar</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Top 50 en certamen local</li>
+                                <li>• Mín. 100 votos recibidos</li>
+                                <li>• 30 días de participación</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nivel 2: Aficionado -->
+                <div class="tier-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center text-2xl mr-6">
+                            🎵
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold text-green-400">NIVEL 2: Aficionado</h3>
+                            <p class="text-green-300">Ya tenés experiencia básica y empezás a destacar</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-green-300 mb-3">📋 Requisitos</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Completar Nivel 1</li>
+                                <li>• 3 videos subidos</li>
+                                <li>• Perfil verificado</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-green-300 mb-3">🏆 Premios</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• $10,000 - $30,000</li>
+                                <li>• Certificado físico</li>
+                                <li>• Acceso a workshops</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-green-300 mb-3">⚡ Para Avanzar</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Top 30 en certamen regional</li>
+                                <li>• Mín. 500 votos recibidos</li>
+                                <li>• 2 meses activo</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nivel 3: Intermedio -->
+                <div class="tier-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-2xl mr-6">
+                            🎼
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold text-blue-400">NIVEL 3: Intermedio</h3>
+                            <p class="text-blue-300">Talento consolidado con técnica desarrollada</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-blue-300 mb-3">📋 Requisitos</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Completar Nivel 2</li>
+                                <li>• Portfolio de 5 videos</li>
+                                <li>• Evaluación técnica aprobada</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-blue-300 mb-3">🏆 Premios</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• $25,000 - $60,000</li>
+                                <li>• Sesión de grabación</li>
+                                <li>• Mentoring personalizado</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-blue-300 mb-3">⚡ Para Avanzar</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Top 20 en certamen provincial</li>
+                                <li>• Mín. 1,000 votos recibidos</li>
+                                <li>• 3 meses de actividad</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nivel 4: Avanzado -->
+                <div class="tier-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-700 rounded-full flex items-center justify-center text-2xl mr-6">
+                            🎹
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold text-purple-400">NIVEL 4: Avanzado</h3>
+                            <p class="text-purple-300">Artista con experiencia y reconocimiento regional</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-purple-300 mb-3">📋 Requisitos</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Completar Nivel 3</li>
+                                <li>• 10 videos de calidad profesional</li>
+                                <li>• Audición en vivo</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-purple-300 mb-3">🏆 Premios</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• $50,000 - $120,000</li>
+                                <li>• Producción de single</li>
+                                <li>• Gira regional</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-purple-300 mb-3">⚡ Para Avanzar</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Top 10 en certamen interprovincial</li>
+                                <li>• Mín. 2,500 votos recibidos</li>
+                                <li>• 6 meses de trayectoria</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nivel 5: Experto -->
+                <div class="tier-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-700 rounded-full flex items-center justify-center text-2xl mr-6">
+                            🎺
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold text-orange-400">NIVEL 5: Experto</h3>
+                            <p class="text-orange-300">Profesional con proyección nacional</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-orange-300 mb-3">📋 Requisitos</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Completar Nivel 4</li>
+                                <li>• Album/EP completo</li>
+                                <li>• Presentación en vivo obligatoria</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-orange-300 mb-3">🏆 Premios</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• $100,000 - $250,000</li>
+                                <li>• Contrato discográfico</li>
+                                <li>• Tour nacional</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-orange-300 mb-3">⚡ Para Avanzar</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Top 5 en certamen nacional</li>
+                                <li>• Mín. 5,000 votos recibidos</li>
+                                <li>• 1 año de experiencia</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nivel 6: Maestro -->
+                <div class="tier-card rounded-2xl p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-yellow-700 rounded-full flex items-center justify-center text-2xl mr-6">
+                            👑
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold gradient-text">NIVEL 6: Maestro</h3>
+                            <p class="text-yellow-300">Artista reconocido nacionalmente</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-yellow-300 mb-3">📋 Requisitos</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Completar Nivel 5</li>
+                                <li>• Carrera artística consolidada</li>
+                                <li>• Evaluación de jurado profesional</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-yellow-300 mb-3">🏆 Premios</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• $200,000 - $500,000</li>
+                                <li>• Contrato internacional</li>
+                                <li>• Estudio de grabación</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-yellow-300 mb-3">⚡ Para Avanzar</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Campeón certamen nacional</li>
+                                <li>• Mín. 10,000 votos recibidos</li>
+                                <li>• Impacto cultural demostrable</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Nivel 7: Leyenda -->
+                <div class="tier-card rounded-2xl p-8 border-4 border-gradient-to-r from-yellow-400 to-orange-500">
+                    <div class="flex items-center mb-6">
+                        <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center text-2xl mr-6">
+                            🏆
+                        </div>
+                        <div>
+                            <h3 class="text-3xl font-bold gradient-text">NIVEL 7: Leyenda Nacional</h3>
+                            <p class="text-yellow-300">El más alto honor de VYT MUSIC</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-xl font-bold text-yellow-300 mb-3">📋 Requisitos</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Completar Nivel 6</li>
+                                <li>• Trayectoria excepcional</li>
+                                <li>• Aporte cultural significativo</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-yellow-300 mb-3">🏆 Premios</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• $500,000 - $1,000,000</li>
+                                <li>• Salón de la Fama VYT</li>
+                                <li>• Legado perpetuo</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-bold text-yellow-300 mb-3">⚡ Reconocimiento</h4>
+                            <ul class="text-gray-400 space-y-1">
+                                <li>• Estatua conmemorativa</li>
+                                <li>• Documental oficial</li>
+                                <li>• Certamen anual en su honor</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Rules Section -->
+    <section class="py-20">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-6">⚖️ Reglas Generales del Sistema</h2>
+                <p class="text-gray-400 text-lg">Normas que garantizan la equidad y transparencia en todos los niveles</p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-gray-800 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold gradient-text mb-6">✅ Permitido</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                            <span>Participar en múltiples certámenes simultáneamente</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                            <span>Colaboraciones con otros artistas certificados</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                            <span>Reintentar niveles después de 30 días</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-check-circle text-green-400 mr-3 mt-1"></i>
+                            <span>Mentoring a artistas de niveles inferiores</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-2xl p-8">
+                    <h3 class="text-2xl font-bold text-red-400 mb-6">❌ Prohibido</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-400 mr-3 mt-1"></i>
+                            <span>Usar material con derechos de autor sin autorización</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-400 mr-3 mt-1"></i>
+                            <span>Manipular votos o usar bots automatizados</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-400 mr-3 mt-1"></i>
+                            <span>Saltear niveles sin cumplir requisitos</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fas fa-times-circle text-red-400 mr-3 mt-1"></i>
+                            <span>Crear múltiples cuentas (una por persona)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Section -->
+    <section class="py-20 bg-gradient-to-r from-black to-gray-900">
+        <div class="container mx-auto px-4 text-center">
+            <h2 class="text-4xl font-bold mb-6">🚀 ¡Comenzá tu Ascenso Hoy!</h2>
+            <p class="text-gray-400 text-xl mb-8 max-w-3xl mx-auto">
+                Cada leyenda comenzó desde cero. Tu historia musical empieza con un simple paso: 
+                registrarte y subir tu primer video.
+            </p>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="inscripcion_online.html" class="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold py-4 px-8 rounded-full text-xl hover:shadow-lg hover:shadow-yellow-400/25 transition-all duration-300">
+                    ✍️ Inscribirme Ahora
+                </a>
+                <a href="principal.html" class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-4 px-8 rounded-full text-xl transition-all duration-300">
+                    🏠 Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // Floating musical notes animation
+        function createNote() {
+            const notes = ['🎵', '🎶', '🎼', '🎤', '🎸', '🎹'];
+            const note = document.createElement('div');
+            note.className = 'note';
+            note.textContent = notes[Math.floor(Math.random() * notes.length)];
+            note.style.left = Math.random() * 100 + 'vw';
+            note.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.getElementById('floating-notes').appendChild(note);
+            
+            setTimeout(() => {
+                note.remove();
+            }, 5000);
+        }
+        
+        // Create notes periodically
+        setInterval(createNote, 3000);
+        
+        // Add notes on scroll
+        window.addEventListener('scroll', () => {
+            if (Math.random() < 0.1) {
+                createNote();
+            }
+        });
+        
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
