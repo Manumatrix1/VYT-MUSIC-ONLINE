@@ -250,6 +250,90 @@
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    <script type="module" src="main.js" defer></script>
+    
+    <!-- Countdown Script -->
+    <script>
+        // Set countdown target date (7 days from now)
+        const targetDate = new Date();
+        targetDate.setDate(targetDate.getDate() + 7);
+        
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = targetDate.getTime() - now;
+            
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            } else {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+            }
+        }
+        
+        // Update countdown immediately and then every second
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+        
+        // Modal functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('welcome-modal');
+            const otraProvinciaBtn = document.getElementById('otra-provincia-btn');
+            const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+            const modalExploreBtn = document.getElementById('modal-explore-btn');
+            const provinciaSelect = document.getElementById('modal-provincia-select');
+            
+            // Populate provinces
+            const provincias = [
+                'Buenos Aires', 'Catamarca', 'Chaco', 'Chubut', 'Córdoba', 'Corrientes',
+                'Entre Ríos', 'Formosa', 'Jujuy', 'La Pampa', 'La Rioja', 'Mendoza',
+                'Misiones', 'Neuquén', 'Río Negro', 'Salta', 'San Juan', 'San Luis',
+                'Santa Cruz', 'Santa Fe', 'Santiago del Estero', 'Tierra del Fuego',
+                'Tucumán'
+            ];
+            
+            provincias.forEach(provincia => {
+                const option = document.createElement('option');
+                option.value = provincia;
+                option.textContent = provincia;
+                provinciaSelect.appendChild(option);
+            });
+            
+            // Show modal when "Otra Provincia" is clicked
+            otraProvinciaBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                modal.classList.add('visible');
+            });
+            
+            // Hide modal and redirect when confirm is clicked
+            modalConfirmBtn.addEventListener('click', function() {
+                if (provinciaSelect.value) {
+                    modal.classList.remove('visible');
+                    localStorage.setItem('selectedProvincia', provinciaSelect.value);
+                    window.location.href = 'inscripcion_online.html';
+                }
+            });
+            
+            // Hide modal when explore is clicked
+            modalExploreBtn.addEventListener('click', function() {
+                modal.classList.remove('visible');
+            });
+            
+            // Close modal when clicking outside
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('visible');
+                }
+            });
+        });
+    </script>
 </body>
 </html>

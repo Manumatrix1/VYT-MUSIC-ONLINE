@@ -102,88 +102,90 @@ const getPricingConfig = onCall(async (request) => {
 /**
  * Crear pago para inscripción online (con certamen específico)
  */
-const createInscripcionOnlinePayment = onCall(withRateLimit('critical', async (request) => {
-  try {
-    const { 
-      participante_data, 
-      certamen_id,
-      user_email 
-    } = request.data;
-    
-    // Obtener datos del certamen
-    const certamenDoc = await admin.firestore().collection('certamenes_provinciales').doc(certamen_id).get();
-    if (!certamenDoc.exists()) {
-      throw new functions.https.HttpsError('not-found', 'Certamen no encontrado');
-    }
-    
-    const certamen = certamenDoc.data();
-    const precio = certamen.precio;
-    
-    // Crear cliente de MercadoPago
-    const client = new MercadoPagoConfig({ 
-      accessToken: mercadopagoToken.value() 
-    });
-    const preference = new Preference(client);
-    
-    // Crear preferencia de pago
-    const preferenceData = {
-      items: [
-        {
-          title: `Inscripción ${certamen.nombre} - VYT Music`,
-          description: `Inscripción para el certamen online de ${certamen.provincia}`,
-          quantity: 1,
-          currency_id: 'ARS',
-          unit_price: precio
-        }
-      ],
-      payer: {
-        email: user_email,
-        name: participante_data.nombre_artista
-      },
-      back_urls: {
-        success: `${siteUrl.value()}/pago/pago_exitoso.html?tipo=inscripcion_online&certamen=${encodeURIComponent(certamen.nombre)}&precio=${precio}`,
-        failure: `${siteUrl.value()}/pago/pago_fallido.html?tipo=inscripcion_online&certamen=${encodeURIComponent(certamen.nombre)}&precio=${precio}`,
-        pending: `${siteUrl.value()}/pago/pago_pendiente.html?tipo=inscripcion_online&certamen=${encodeURIComponent(certamen.nombre)}&precio=${precio}`
-      },
-      auto_return: "approved",
-      external_reference: JSON.stringify({
+const createInscripcionOnlinePayment = onCall(
+  withRateLimit('critical', async (request) => {
+    try {
+      const { 
+        participante_data, 
+        certamen_id,
+        user_email 
+      } = request.data;
+      
+      // Obtener datos del certamen
+      const certamenDoc = await admin.firestore().collection('certamenes_provinciales').doc(certamen_id).get();
+      if (!certamenDoc.exists()) {
+        throw new functions.https.HttpsError('not-found', 'Certamen no encontrado');
+      }
+      
+      const certamen = certamenDoc.data();
+      const precio = certamen.precio;
+      
+      // Crear cliente de MercadoPago
+      const client = new MercadoPagoConfig({ 
+        accessToken: mercadopagoToken.value() 
+      });
+      const preference = new Preference(client);
+      
+      // Crear preferencia de pago
+      const preferenceData = {
+        items: [
+          {
+            title: `Inscripción ${certamen.nombre} - VYT Music`,
+            description: `Inscripción para el certamen online de ${certamen.provincia}`,
+            quantity: 1,
+            currency_id: 'ARS',
+            unit_price: precio
+          }
+        ],
+        payer: {
+          email: user_email,
+          name: participante_data.nombre_artista
+        },
+        back_urls: {
+          success: `${siteUrl.value()}/pago/pago_exitoso.html?tipo=inscripcion_online&certamen=${encodeURIComponent(certamen.nombre)}&precio=${precio}`,
+          failure: `${siteUrl.value()}/pago/pago_fallido.html?tipo=inscripcion_online&certamen=${encodeURIComponent(certamen.nombre)}&precio=${precio}`,
+          pending: `${siteUrl.value()}/pago/pago_pendiente.html?tipo=inscripcion_online&certamen=${encodeURIComponent(certamen.nombre)}&precio=${precio}`
+        },
+        auto_return: "approved",
+        external_reference: JSON.stringify({
+          type: 'inscripcion_online',
+          certamen_id: certamen_id,
+          participante_data: participante_data,
+          precio: precio,
+          timestamp: Date.now()
+        }),
+        notification_url: `https://us-central1-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/processPaymentNotification`
+      };
+      
+      const result = await preference.create({ body: preferenceData });
+      
+      // Guardar transacción pendiente
+      await admin.firestore().collection('payment_transactions').add({
         type: 'inscripcion_online',
         certamen_id: certamen_id,
+        certamen_nombre: certamen.nombre,
         participante_data: participante_data,
         precio: precio,
-        timestamp: Date.now()
-      }),
-      notification_url: `https://us-central1-${process.env.GCLOUD_PROJECT}.cloudfunctions.net/processPaymentNotification`
-    };
-    
-    const result = await preference.create({ body: preferenceData });
-    
-    // Guardar transacción pendiente
-    await admin.firestore().collection('payment_transactions').add({
-      type: 'inscripcion_online',
-      certamen_id: certamen_id,
-      certamen_nombre: certamen.nombre,
-      participante_data: participante_data,
-      precio: precio,
-      moneda: 'ARS',
-      preference_id: result.id,
-      status: 'pending',
-      created_at: admin.firestore.FieldValue.serverTimestamp(),
-      mercadopago_data: result
-    });
-    
-    return {
-      preference_id: result.id,
-      init_point: result.init_point,
-      precio: precio,
-      certamen: certamen.nombre
-    };
-    
-  } catch (error) {
-    console.error('Error creating inscripcion online payment:', error);
-    throw new functions.https.HttpsError('internal', error.message);
-  }
-});
+        moneda: 'ARS',
+        preference_id: result.id,
+        status: 'pending',
+        created_at: admin.firestore.FieldValue.serverTimestamp(),
+        mercadopago_data: result
+      });
+      
+      return {
+        preference_id: result.id,
+        init_point: result.init_point,
+        precio: precio,
+        certamen: certamen.nombre
+      };
+      
+    } catch (error) {
+      console.error('Error creating inscripcion online payment:', error);
+      throw new functions.https.HttpsError('internal', error.message);
+    }
+  })
+);
 
 /**
  * Crear pago para inscripción presencial
@@ -549,7 +551,7 @@ async function sendVYTMoneyPurchaseConfirmation(user_id, cantidad_vyt_money) {
     
     const userData = userDoc.data();
     
-    const transporter = nodemailer.createTransporter({
+    const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
         user: gmailEmail.value(),
