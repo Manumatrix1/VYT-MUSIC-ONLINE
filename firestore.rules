@@ -38,16 +38,28 @@ service cloud.firestore {
     
     // ===== REGLAS PARA PARTICIPANTES ONLINE =====
     match /participantes_online/{participanteId} {
-      // Los usuarios pueden leer su propia participación
-      allow read: if request.auth != null && 
-        (resource.data.user_id == request.auth.uid || isAdmin());
+      // PERMITIR INSCRIPCIONES SIN AUTENTICACIÓN
+      // Los usuarios pueden crear inscripciones libremente (registro público)
+      allow create: if validateInscripcionData();
       
-      // Los usuarios pueden crear su participación
-      allow create: if request.auth != null && 
-        request.resource.data.user_id == request.auth.uid;
+      // Los usuarios autenticados pueden leer su propia participación
+      allow read: if request.auth != null && 
+        (resource.data.uid == request.auth.uid || isAdmin());
+        
+      // Permitir lectura pública para mostrar participantes (si es necesario)
+      allow read: if isAdmin();
       
       // Solo admins pueden modificar participaciones
       allow update: if isAdmin();
+    }
+    
+    // ===== REGLAS PARA TESTS (TEMPORAL) =====
+    match /test_conexion/{docId} {
+      allow create: if true; // Permitir cualquier creación para tests
+    }
+    
+    match /test_inscripciones/{docId} {
+      allow create: if true; // Permitir cualquier creación para tests
     }
     
     // ===== REGLAS PARA PARTICIPANTES PRESENCIALES =====
@@ -178,6 +190,18 @@ service cloud.firestore {
       return request.resource.data.keys().hasAll(['email', 'firstName', 'lastName', 'userType']) &&
         request.resource.data.email == request.auth.token.email &&
         request.resource.data.userType in ['fan', 'artist', 'artist_group'];
+    }
+    
+    // Validar datos de inscripción online
+    function validateInscripcionData() {
+      let data = request.resource.data;
+      return data.keys().hasAll(['email', 'nombre', 'apellido', 'nombre_artista']) &&
+        data.email is string &&
+        data.nombre is string &&
+        data.apellido is string &&
+        data.nombre_artista is string &&
+        data.email.size() > 0 &&
+        data.nombre.size() > 0;
     }
     
     // Validar datos de voto

@@ -58,15 +58,15 @@
       {
         "source": "/panel",
         "destination": "/admin.html"
-      },
-      {
-        "source": "/recibirPago",
-        "function": "recibirNotificacionPago"
       }
     ]
   },
   "functions": {
     "source": "functions",
     "runtime": "nodejs20"
+  },
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
   }
 }
