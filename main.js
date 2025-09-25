@@ -1,14 +1,133 @@
-import { initializeCountdown } from './src/countdown.js';
-import { initializeModal } from './src/modal.js';
-import { auth, db } from './firebase-config.js'; // Importar la instancia de auth y db
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import { doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"; // Importar funciones de Firestore
+// Optimización: Carga diferida de componentes
+const loadComponent = async (modulePath) => {
+    try {
+        const module = await import(modulePath);
+        return module;
+    } catch (error) {
+        console.warn(`⚠️ No se pudo cargar el componente: ${modulePath}`, error);
+        return null;
+    }
+};
 
-document.addEventListener('DOMContentLoaded', () => {
-    // No auth-modal elements found in current HTML files.
-    // These variables are commented out as they are not used.
-    // const authModal = document.getElementById('auth-modal');
-    // const authModalTitle = document.getElementById('auth-modal-title');
+// Importar configuración de Firebase de manera diferida
+let firebaseImports = null;
+const initializeFirebase = async () => {
+    if (firebaseImports) return firebaseImports;
+    
+    const [
+        { auth, db },
+        authMethods,
+        firestoreMethods
+    ] = await Promise.all([
+        import('./firebase-config.js'),
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
+    ]);
+    
+    firebaseImports = {
+        auth,
+        db,
+        createUserWithEmailAndPassword: authMethods.createUserWithEmailAndPassword,
+        signInWithEmailAndPassword: authMethods.signInWithEmailAndPassword,
+        signOut: authMethods.signOut,
+        onAuthStateChanged: authMethods.onAuthStateChanged,
+        sendPasswordResetEmail: authMethods.sendPasswordResetEmail,
+        setPersistence: authMethods.setPersistence,
+        browserLocalPersistence: authMethods.browserLocalPersistence,
+        browserSessionPersistence: authMethods.browserSessionPersistence,
+        doc: firestoreMethods.doc,
+        setDoc: firestoreMethods.setDoc,
+        getDoc: firestoreMethods.getDoc,
+        query: firestoreMethods.query,
+        where: firestoreMethods.where,
+        collection: firestoreMethods.collection,
+        getDocs: firestoreMethods.getDocs
+    };
+    
+    return firebaseImports;
+};
+
+// Función optimizada para verificar si el usuario está inscrito con caché
+let inscriptionCache = new Map();
+async function checkUserInscription(userId) {
+    // Verificar caché primero
+    if (inscriptionCache.has(userId)) {
+        const cached = inscriptionCache.get(userId);
+        const now = Date.now();
+        // Cache válido por 5 minutos
+        if (now - cached.timestamp < 300000) {
+            return cached.data;
+        }
+    }
+
+    try {
+        const firebase = await initializeFirebase();
+        
+        // Buscar en participantes_online con límite para optimizar
+        const q = firebase.query(
+            firebase.collection(firebase.db, 'participantes_online'), 
+            firebase.where('userId', '==', userId)
+        );
+        const querySnapshot = await firebase.getDocs(q);
+        
+        const result = querySnapshot.empty ? 
+            { isInscribed: false } : 
+            {
+                isInscribed: true,
+                inscriptionData: querySnapshot.docs[0].data(),
+                inscriptionId: querySnapshot.docs[0].id
+            };
+        
+        // Guardar en caché
+        inscriptionCache.set(userId, {
+            data: result,
+            timestamp: Date.now()
+        });
+        
+        return result;
+    } catch (error) {
+        console.error('Error verificando inscripción:', error);
+        return { isInscribed: false };
+    }
+}
+
+// Función para redirigir según estado de inscripción
+async function redirectBasedOnInscription(user) {
+    const inscriptionStatus = await checkUserInscription(user.uid);
+    
+    if (inscriptionStatus.isInscribed) {
+        // Usuario ya inscrito - redirigir a perfil
+        window.location.href = 'perfil.html';
+    } else {
+        // Usuario no inscrito - redirigir a inscripción unificada
+        window.location.href = 'inscripcion_unificada.html';
+    }
+}
+
+// Hacer funciones disponibles globalmente
+window.checkUserInscription = checkUserInscription;
+window.redirectBasedOnInscription = redirectBasedOnInscription;
+
+// Inicialización optimizada con carga diferida
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🚀 Iniciando carga optimizada...');
+    
+    // Cargar componentes básicos de manera asíncrona
+    const [countdown, modal] = await Promise.all([
+        loadComponent('./src/countdown.js'),
+        loadComponent('./src/modal.js')
+    ]);
+    
+    // Inicializar componentes si se cargaron correctamente
+    if (countdown && countdown.initializeCountdown) {
+        countdown.initializeCountdown();
+    }
+    
+    if (modal && modal.initializeModal) {
+        modal.initializeModal();
+    }
+    
+    console.log('✅ Componentes básicos cargados');
     // const authModalMessage = document.getElementById('auth-modal-message');
     // const loginFormContainer = document.getElementById('login-form-container');
     // const registerFormContainer = document.getElementById('register-form-container');
@@ -110,7 +229,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     await setPersistence(auth, browserSessionPersistence);
                 }
                 
-                await signInWithEmailAndPassword(auth, email, password);
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
                 
                 // Guardar preferencia de recordarme
                 if (rememberMe) {
@@ -121,8 +241,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.removeItem('vyt_remember_email');
                 }
                 
-                // Redirect to principal.html or a new profile page
-                window.location.href = 'principal.html'; 
+                // Redirigir basado en el estado de inscripción del usuario
+                await redirectBasedOnInscription(user); 
             } catch (error) {
                 console.error("Error al iniciar sesión:", error.message);
                 let errorMessage = 'Error al iniciar sesión.';
@@ -228,8 +348,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     // You can add more fields here later, like nombre_artista, foto_url, frase_identificativa
                 });
 
-                // Redirect to principal.html or a new profile page
-                window.location.href = 'principal.html'; 
+                // Para usuarios nuevos, redirigir siempre a inscripción
+                window.location.href = 'inscripcion_unificada.html'; 
             } catch (error) {
                 console.error("Error al registrarse:", error.message);
                 let errorMessage = 'Error al registrarse.';

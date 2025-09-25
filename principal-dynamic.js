@@ -1,35 +1,90 @@
+// Importaciones optimizadas con lazy loading
 import { db } from './firebase-config.js';
-import { collection, getDocs, query, orderBy, onSnapshot, doc, getDoc, limit, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import notifications from './src/notifications.js';
 
-const auth = getAuth();
+// Cache para datos frecuentemente accedidos
+const dataCache = new Map();
+const CACHE_DURATION = 300000; // 5 minutos
 
-document.addEventListener('DOMContentLoaded', () => {
-    console.log('🔥 principal-dynamic.js cargado correctamente');
+// Función para cargar Firebase de manera diferida
+let firebaseModules = null;
+const loadFirebaseModules = async () => {
+    if (firebaseModules) return firebaseModules;
     
-    // Elementos
-    const blogPostsContainer = document.getElementById('blog-posts-container');
-    const profileLink = document.getElementById('profile-link');
-    const logoutButton = document.getElementById('logout-button');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const mobileMenuOverlay = document.getElementById('mobile-menu-overlay');
-    const hamburgerTrigger = document.getElementById('hamburger-menu-trigger');
+    const [firestoreModule, authModule] = await Promise.all([
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"),
+        import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js")
+    ]);
     
-    console.log('📱 Elementos del menú:', {
-        mobileMenu: !!mobileMenu,
-        mobileMenuOverlay: !!mobileMenuOverlay,
-        hamburgerTrigger: !!hamburgerTrigger
-    });
-    const allInternalLinks = document.querySelectorAll('.header-nav a[data-target], .bottom-nav a[data-target], .mobile-menu-link');
-    const pages = document.querySelectorAll('.page');
+    firebaseModules = {
+        collection: firestoreModule.collection,
+        getDocs: firestoreModule.getDocs,
+        query: firestoreModule.query,
+        orderBy: firestoreModule.orderBy,
+        onSnapshot: firestoreModule.onSnapshot,
+        doc: firestoreModule.doc,
+        getDoc: firestoreModule.getDoc,
+        limit: firestoreModule.limit,
+        where: firestoreModule.where,
+        getAuth: authModule.getAuth,
+        onAuthStateChanged: authModule.onAuthStateChanged,
+        signOut: authModule.signOut
+    };
     
-    console.log('🔗 Enlaces encontrados:', allInternalLinks.length);
-    console.log('📄 Páginas encontradas:', pages.length);
+    return firebaseModules;
+};
+
+// Cargar notificaciones de manera diferida
+let notificationsModule = null;
+const loadNotifications = async () => {
+    if (!notificationsModule) {
+        try {
+            notificationsModule = await import('./src/notifications.js');
+            return notificationsModule.default || notificationsModule;
+        } catch (error) {
+            console.warn('⚠️ No se pudieron cargar las notificaciones:', error);
+            return null;
+        }
+    }
+    return notificationsModule;
+};
+
+// Inicialización optimizada del componente
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('🔥 principal-dynamic.js cargando de manera optimizada...');
     
-    const pozoTextElement = document.getElementById('pozoText');
-    const pozoBarElement = document.querySelector('.pozo-bar');
-    const communityFeedList = document.getElementById('community-feed-list');
+    try {
+        // Cargar módulos de Firebase de manera asíncrona
+        const firebase = await loadFirebaseModules();
+        const notifications = await loadNotifications();
+        const auth = firebase.getAuth();
+        
+        console.log('✅ Módulos Firebase cargados');
+        
+        // Elementos del DOM - Solo cargar los que existen
+        const elements = {
+            blogPostsContainer: document.getElementById('blog-posts-container'),
+            profileLink: document.getElementById('profile-link'),
+            logoutButton: document.getElementById('logout-button'),
+            mobileMenu: document.getElementById('mobile-menu'),
+            mobileMenuOverlay: document.getElementById('mobile-menu-overlay'),
+            hamburgerTrigger: document.getElementById('hamburger-menu-trigger'),
+            pozoTextElement: document.getElementById('pozoText'),
+            pozoBarElement: document.querySelector('.pozo-bar'),
+            communityFeedList: document.getElementById('community-feed-list')
+        };
+        
+        // Filtrar elementos que existen
+        const existingElements = Object.fromEntries(
+            Object.entries(elements).filter(([key, element]) => element !== null)
+        );
+        
+        console.log('📱 Elementos encontrados:', Object.keys(existingElements));
+        
+        const allInternalLinks = document.querySelectorAll('.header-nav a[data-target], .bottom-nav a[data-target], .mobile-menu-link');
+        const pages = document.querySelectorAll('.page');
+        
+        console.log('🔗 Enlaces encontrados:', allInternalLinks.length);
+        console.log('📄 Páginas encontradas:', pages.length);
     const heroButtons = document.querySelectorAll('.hero-buttons .btn');
     const dropdownLinks = document.querySelectorAll('.dropdown > a');
     const buyVytButtons = document.querySelectorAll('.buy-vyt-btn');
@@ -394,4 +449,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Ejecutar la carga de bloques dinámicos al iniciar
     loadDynamicBlocks();
+    
+    } catch (error) {
+        console.error('❌ Error durante la inicialización:', error);
+        // Fallback en caso de error
+        console.log('🔄 Intentando inicialización básica...');
+    }
 });
