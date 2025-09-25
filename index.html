@@ -51,110 +51,6 @@
             }
         }
 
-        /* Estilos para el Modal de Bienvenida */
-        .modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease, visibility 0s 0.3s;
-        }
-        .modal-backdrop.visible {
-            opacity: 1;
-            pointer-events: all;
-            transition: opacity 0.3s ease;
-        }
-        .modal-content {
-            background: #161b22; /* Color de fondo secundario */
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 500px;
-            width: 90%;
-            transform: scale(0.9);
-            transition: transform 0.3s ease;
-            border: 1px solid #30363d; /* Borde sutil */
-            box-shadow: 0 8px 16px rgba(0,0,0,0.4);
-        }
-        .modal-backdrop.visible .modal-content {
-            transform: scale(1);
-        }
-        .modal-content h3 {
-            font-family: 'Montserrat', sans-serif; /* Usar font-display */
-            color: #58a6ff; /* Color primario */
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        .modal-content p {
-            margin-bottom: 1.5rem;
-            color: #b0b8c4; /* Color texto secundario */
-        }
-        .modal-select {
-            width: 100%;
-            padding: 0.8rem;
-            background-color: #0d1117; /* Color de fondo */
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            cursor: pointer;
-            outline: none;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-align-last: center;
-        }
-        .modal-select option {
-            background-color: #1a1a1a;
-            color: white;
-        }
-        .modal-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-        .modal-btn {
-            display: inline-block;
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            cursor: pointer;
-        }
-        .modal-btn-confirm {
-            background-color: #58a6ff; /* Color primario */
-            color: #0d1117; /* Color de fondo */
-        }
-        .modal-btn-confirm:hover {
-            background-color: transparent;
-            border-color: #58a6ff;
-            color: #58a6ff;
-            transform: scale(1.05);
-        }
-        .modal-btn-other {
-            background-color: transparent;
-            color: #e6edf3; /* Color texto principal */
-            border-color: #8b949e;
-        }
-        .modal-btn-other:hover {
-            border-color: #e6edf3;
-            color: #e6edf3;
-            transform: scale(1.05);
-        }
-        
         /* Regla CSS para ocultar la burbuja de texto de Tawk.to */
         .tawk-minimized-container .tawk-text-bubble {
             display: none !important;
@@ -199,44 +95,70 @@
         
         <div class="bg-sky-400/10 border border-sky-400/30 text-sky-300 text-md rounded-xl p-6 mb-10 max-w-lg">
             <p class="font-bold text-lg mb-2">¿Te gusta cantar?</p>
-            <p class="text-sky-200">Sabemos que tenés talento y que solo necesitás una oportunidad.</p>
+            <p class="text-sky-200">Sabemos que tenés talento y que solo necesitás una oportunidad para brillar.</p>
         </div>
 
-        <h2 class="text-2xl font-bold mb-6 font-display">¿Desde dónde vas a brillar?</h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 w-full max-w-3xl mx-auto">
-            <a href="inscripcion_presencial.html" class="btn-choice bg-[#2bb7d1] text-black py-4 px-6 rounded-xl">
-                <span class="font-bold text-xl block">Soy de Rosario</span>
-                <span class="text-sm">(o alrededores)</span>
-            </a>
-            <a href="#" id="otra-provincia-btn" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
-                <span class="font-bold text-xl block">Otra Provincia</span>
-                <span class="text-sm">(100% Online)</span>
-            </a>
-            <a href="principal.html" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-4 px-6 rounded-xl">
-                <span class="font-bold text-xl block">Modo Fan</span>
-                <span class="text-sm">(Ver sin participar)</span>
-            </a>
-        </div>
-
-        <p class="text-sm mt-8 text-gray-400 max-w-md">
-            (Si sos de Rosario, también podés participar de forma online. ¡Vos elegís cómo brillar!)
-        </p>
-
-    </div>
-
-    <div id="welcome-modal" class="modal-backdrop">
-        <div class="modal-content">
-            <h3>¡Bienvenido a VYT MUSIC!</h3>
-            <p>Para ofrecerte la mejor experiencia, contanos desde dónde nos visitás.</p>
-            <select id="modal-provincia-select" class="modal-select">
-                <option value="" disabled selected>Seleccioná tu provincia...</option>
-                </select>
-            <div class="modal-buttons">
-                <button id="modal-confirm-btn" class="modal-btn modal-btn-confirm">Confirmar</button>
-                <button id="modal-explore-btn" class="modal-btn modal-btn-other">Explorar el sitio</button>
+        <!-- Información sobre el certamen -->
+        <div class="max-w-4xl mx-auto mb-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-400/30 rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4 text-purple-300">🏆 Modalidades Disponibles</h3>
+                <div class="space-y-3">
+                    <div class="flex items-center">
+                        <span class="w-3 h-3 bg-[#2bb7d1] rounded-full mr-3"></span>
+                        <span><strong>Presencial:</strong> Para artistas de Rosario y alrededores</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="w-3 h-3 bg-green-400 rounded-full mr-3"></span>
+                        <span><strong>Online:</strong> Para artistas de toda Argentina</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-gradient-to-r from-emerald-500/10 to-teal-500/10 border border-emerald-400/30 rounded-xl p-6">
+                <h3 class="text-xl font-bold mb-4 text-emerald-300">🎵 Categorías</h3>
+                <div class="space-y-2 text-sm">
+                    <p>• Pop & Rock</p>
+                    <p>• Folclore & Tango</p>
+                    <p>• Tropical & Cumbia</p>
+                    <p>• Balada & Romántica</p>
+                    <p>• Urbano & Trap</p>
+                </div>
             </div>
         </div>
+
+        <!-- Opciones principales -->
+        <h2 class="text-2xl font-bold mb-8 font-display">¿Listo para mostrar tu talento?</h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-2xl mx-auto mb-8">
+            <a href="login.html" class="btn-choice bg-gradient-to-r from-[#2bb7d1] to-[#1e9bb3] text-black py-6 px-8 rounded-xl">
+                <div class="flex items-center justify-center mb-2">
+                    <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span class="font-bold text-xl">PARTICIPAR AHORA</span>
+                </div>
+                <span class="text-sm opacity-90">Registrate y elegí tu modalidad</span>
+            </a>
+            
+            <a href="principal.html" class="btn-choice bg-transparent border-2 border-gray-600 hover:border-[#2bb7d1] text-white py-6 px-8 rounded-xl">
+                <div class="flex items-center justify-center mb-2">
+                    <svg class="w-8 h-8 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
+                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="font-bold text-xl">MODO FAN</span>
+                </div>
+                <span class="text-sm opacity-90">Ver certámenes y artistas</span>
+            </a>
+        </div>
+
+        <div class="bg-yellow-500/10 border border-yellow-400/30 text-yellow-200 text-sm rounded-xl p-4 max-w-2xl mx-auto">
+            <p class="text-center">
+                <span class="font-bold">💡 Proceso simple:</span> 
+                Registrate → Completá tu perfil → Elegí certamen → Subí tu video → ¡Nuestro equipo lo valida!
+            </p>
+        </div>
+
     </div>
     
     <script type="text/javascript">
@@ -282,58 +204,6 @@
         // Update countdown immediately and then every second
         updateCountdown();
         setInterval(updateCountdown, 1000);
-        
-        // Modal functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            const modal = document.getElementById('welcome-modal');
-            const otraProvinciaBtn = document.getElementById('otra-provincia-btn');
-            const modalConfirmBtn = document.getElementById('modal-confirm-btn');
-            const modalExploreBtn = document.getElementById('modal-explore-btn');
-            const provinciaSelect = document.getElementById('modal-provincia-select');
-            
-            // Populate provinces
-            const provincias = [
-                'Buenos Aires', 'Catamarca', 'Chaco', 'Chubut', 'Córdoba', 'Corrientes',
-                'Entre Ríos', 'Formosa', 'Jujuy', 'La Pampa', 'La Rioja', 'Mendoza',
-                'Misiones', 'Neuquén', 'Río Negro', 'Salta', 'San Juan', 'San Luis',
-                'Santa Cruz', 'Santa Fe', 'Santiago del Estero', 'Tierra del Fuego',
-                'Tucumán'
-            ];
-            
-            provincias.forEach(provincia => {
-                const option = document.createElement('option');
-                option.value = provincia;
-                option.textContent = provincia;
-                provinciaSelect.appendChild(option);
-            });
-            
-            // Show modal when "Otra Provincia" is clicked
-            otraProvinciaBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                modal.classList.add('visible');
-            });
-            
-            // Hide modal and redirect when confirm is clicked
-            modalConfirmBtn.addEventListener('click', function() {
-                if (provinciaSelect.value) {
-                    modal.classList.remove('visible');
-                    localStorage.setItem('selectedProvincia', provinciaSelect.value);
-                    window.location.href = 'inscripcion_online.html';
-                }
-            });
-            
-            // Hide modal when explore is clicked
-            modalExploreBtn.addEventListener('click', function() {
-                modal.classList.remove('visible');
-            });
-            
-            // Close modal when clicking outside
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove('visible');
-                }
-            });
-        });
     </script>
 </body>
 </html>

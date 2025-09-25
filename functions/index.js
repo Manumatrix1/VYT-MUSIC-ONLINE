@@ -360,4 +360,19 @@ exports.createAdminUser = functions.https.onCall(async (data, context) => {
   }
 });
 
-console.log('🚀 VYT Music Online - Funciones básicas v1 cargadas');
+// ===== FUNCIONES DE PAGO VYT-MONEY (SOLO LO ESENCIAL) =====
+
+// Solo importar y exportar la función principal para evitar timeouts
+try {
+  const paymentFunctions = require('./payments');
+  
+  // Exportar solo la función más importante
+  exports.createVYTMoneyPayment = paymentFunctions.createVYTMoneyPayment;
+  
+  console.log('✅ VYT Money Payment function loaded successfully');
+} catch (error) {
+  console.error('⚠️ Error loading payment functions:', error.message);
+  console.log('🔄 Continuing with basic functions only');
+}
+
+console.log('🚀 VYT Music Online - Core functions ready');

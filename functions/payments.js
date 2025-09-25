@@ -1,22 +1,28 @@
 // payments.js - Módulo separado para todas las funciones de pagos y MercadoPago
-const { onRequest, onCall } = require("firebase-functions/v2/https");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const { defineString } = require("firebase-functions/params");
 const { MercadoPagoConfig, Preference, Payment } = require("mercadopago");
 const nodemailer = require("nodemailer");
-const { withRateLimit } = require('./rate-limiter');
 
-// Define environment variables
-const gmailEmail = defineString("GMAIL_EMAIL");
-const gmailPassword = defineString("GMAIL_PASSWORD");
-const mercadopagoToken = defineString("MERCADOPAGO_TOKEN");
-const siteUrl = defineString("SITE_URL", { default: "https://vytonlineprueva.web.app" });
+// Variables de entorno (usando la forma tradicional para evitar conflictos)
+const mercadopagoToken = functions.config().mercadopago?.token || process.env.MERCADOPAGO_TOKEN;
+const gmailEmail = functions.config().gmail?.email || process.env.GMAIL_EMAIL;
+const gmailPassword = functions.config().gmail?.password || process.env.GMAIL_PASSWORD;
+const siteUrl = functions.config().site?.url || process.env.SITE_URL || "https://vytonlineprueva.web.app";
 
-// Webhook to receive payment notifications from Mercado Pago (legacy function)
-const recibirNotificacionPago = onRequest({ cors: true }, withRateLimit('critical', async (req, res) => {
+// Webhook to receive payment notifications from Mercado Pago
+const recibirNotificacionPago = functions.https.onRequest(async (req, res) => {
   console.log("Webhook received from Mercado Pago");
 
+  // Configurar CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
   if (req.method !== 'POST') {
     res.status(405).send('Method Not Allowed');
     return;
@@ -26,7 +32,7 @@ const recibirNotificacionPago = onRequest({ cors: true }, withRateLimit('critica
 
   if (type === 'payment') {
     try {
-      const mercadopagoClient = new MercadoPagoConfig({ accessToken: mercadopagoToken.value() });
+      const mercadopagoClient = new MercadoPagoConfig({ accessToken: mercadopagoToken });
       const payment = await new Payment(mercadopagoClient).get({ id: data.id });
 
       if (payment && payment.status === 'approved') {
@@ -57,7 +63,7 @@ const recibirNotificacionPago = onRequest({ cors: true }, withRateLimit('critica
 /**
  * Obtener configuración de precios para un tipo específico
  */
-const getPricingConfig = onCall(async (request) => {
+const getPricingConfig = functions.https.onCall(async (data, context) => {
   try {
     const { tipo, certamen_id } = request.data;
     
@@ -102,14 +108,13 @@ const getPricingConfig = onCall(async (request) => {
 /**
  * Crear pago para inscripción online (con certamen específico)
  */
-const createInscripcionOnlinePayment = onCall(
-  withRateLimit('critical', async (request) => {
+const createInscripcionOnlinePayment = functions.https.onCall(async (data, context) => {
     try {
       const { 
         participante_data, 
         certamen_id,
         user_email 
-      } = request.data;
+      } = data;
       
       // Obtener datos del certamen
       const certamenDoc = await admin.firestore().collection('certamenes_provinciales').doc(certamen_id).get();
@@ -184,15 +189,14 @@ const createInscripcionOnlinePayment = onCall(
       console.error('Error creating inscripcion online payment:', error);
       throw new functions.https.HttpsError('internal', error.message);
     }
-  })
-);
+});
 
 /**
  * Crear pago para inscripción presencial
  */
-const createInscripcionPresencialPayment = onCall(async (request) => {
+const createInscripcionPresencialPayment = functions.https.onCall(async (data, context) => {
   try {
-    const { participante_data, user_email } = request.data;
+    const { participante_data, user_email } = data;
     
     // Obtener precio de inscripción presencial
     const priceDoc = await admin.firestore().collection('configuracion_precios').doc('inscripcion_presencial').get();
@@ -263,18 +267,23 @@ const createInscripcionPresencialPayment = onCall(async (request) => {
 /**
  * Crear preferencia de pago para comprar VYT-MONEY
  */
-const createVYTMoneyPayment = onCall(async (request) => {
+/**
+ * Crear pago para VYT-MONEY - FUNCIÓN PRINCIPAL
+ */
+const createVYTMoneyPayment = functions.https.onCall(async (data, context) => {
   try {
-    const { cantidad_vyt_money, user_id, user_email } = request.data;
+    const { cantidad, user_id, user_email, user_name } = data;
     
-    if (!cantidad_vyt_money || !user_id || !user_email) {
-      throw new functions.https.HttpsError('invalid-argument', 'Datos incompletos');
+    if (!cantidad || !user_id || !user_email) {
+      throw new functions.https.HttpsError('invalid-argument', 'Datos incompletos para el pago');
     }
 
+    console.log(`💰 Creando pago VYT-MONEY: ${cantidad} para usuario ${user_email}`);
+
     // Obtener configuración actual de VYT-MONEY
-    const configDoc = await admin.firestore().collection('vyt_money_config').doc('general').get();
+    const configDoc = await admin.firestore().collection('payment_config').doc('vyt_money').get();
     const config = configDoc.exists ? configDoc.data() : {
-      precio_por_100_vyt_money: 50,
+      precio_por_100: 50, // $50 ARS por 100 VYT-MONEY
       moneda: 'ARS',
       activo: true
     };
@@ -283,12 +292,14 @@ const createVYTMoneyPayment = onCall(async (request) => {
       throw new functions.https.HttpsError('failed-precondition', 'Las compras de VYT-MONEY están deshabilitadas temporalmente');
     }
 
-    // Calcular precio
-    const precio_total = (cantidad_vyt_money / 100) * config.precio_por_100_vyt_money;
+    // Calcular precio (cantidad / 100 * precio_por_100)
+    const precio_total = Math.ceil((cantidad / 100) * config.precio_por_100);
+
+    console.log(`💵 Calculando precio: ${cantidad} VYT-MONEY = $${precio_total} ${config.moneda}`);
 
     // Crear cliente de MercadoPago
     const client = new MercadoPagoConfig({ 
-      accessToken: mercadopagoToken.value() 
+      accessToken: mercadopagoToken 
     });
     const preference = new Preference(client);
 
@@ -296,28 +307,31 @@ const createVYTMoneyPayment = onCall(async (request) => {
     const preferenceData = {
       items: [
         {
-          title: `${cantidad_vyt_money} VYT-MONEY`,
-          description: `Compra de ${cantidad_vyt_money} VYT-MONEY para votar en VYT Music`,
+          title: `${cantidad} VYT-MONEY`,
+          description: `Compra de ${cantidad.toLocaleString()} VYT-MONEY para votar en VYT Music`,
           quantity: 1,
           currency_id: config.moneda,
           unit_price: precio_total
         }
       ],
       payer: {
-        email: user_email
+        email: user_email,
+        name: user_name || user_email.split('@')[0]
       },
       back_urls: {
-        success: `${siteUrl.value()}/pago/pago_exitoso.html?type=vyt_money&amount=${cantidad_vyt_money}`,
-        failure: `${siteUrl.value()}/pago/pago_fallido.html?type=vyt_money`,
-        pending: `${siteUrl.value()}/pago/pago_pendiente.html?type=vyt_money`
+        success: `${siteUrl}/pago/pago_exitoso.html?type=vyt_money&amount=${cantidad}`,
+        failure: `${siteUrl}/pago/pago_fallido.html?type=vyt_money`,
+        pending: `${siteUrl}/pago/pago_pendiente.html?type=vyt_money`
       },
       auto_return: "approved",
-      external_reference: JSON.stringify({
-        type: 'vyt_money_purchase',
+      external_reference: user_id,
+      notification_url: `${siteUrl}/recibirPago`,
+      metadata: {
+        tipo_compra: 'vyt_money',
         user_id: user_id,
-        cantidad_vyt_money: cantidad_vyt_money,
-        timestamp: Date.now()
-      })
+        user_email: user_email,
+        cantidad_vyt_money: cantidad
+      }
     };
 
     const result = await preference.create({ body: preferenceData });
@@ -349,9 +363,19 @@ const createVYTMoneyPayment = onCall(async (request) => {
 /**
  * Procesar notificaciones de pago de MercadoPago (WEBHOOK UNIFICADO)
  */
-const processPaymentNotification = onRequest(async (req, res) => {
+const processPaymentNotification = functions.https.onRequest(async (req, res) => {
+  // Configurar CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+  
   try {
-    console.log('Payment notification received:', req.body);
+    console.log('🔔 Payment notification received:', req.body);
     
     const { type, data } = req.body;
     

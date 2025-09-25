@@ -46,7 +46,7 @@ const DEFAULT_PRICING = {
 /**
  * Inicializar configuración de pagos en Firestore
  */
-const initializePaymentConfig = onCall(async (request) => {
+const initializePaymentConfig = functions.https.onCall(async (data, context) => {
   try {
     const batch = admin.firestore().batch();
     
@@ -103,9 +103,9 @@ const initializePaymentConfig = onCall(async (request) => {
 /**
  * Obtener configuración de precios actualizada
  */
-const getPaymentConfig = onCall(async (request) => {
+const getPaymentConfig = functions.https.onCall(async (data, context) => {
   try {
-    const { tipo } = request.data;
+    const { tipo } = data;
     
     if (tipo) {
       // Obtener configuración específica
@@ -132,14 +132,14 @@ const getPaymentConfig = onCall(async (request) => {
 /**
  * Actualizar configuración de precios (solo admins)
  */
-const updatePaymentConfig = onCall(async (request) => {
+const updatePaymentConfig = functions.https.onCall(async (data, context) => {
   try {
     // Verificar que sea admin
-    if (!request.auth) {
+    if (!context.auth) {
       throw new functions.https.HttpsError('unauthenticated', 'Usuario no autenticado');
     }
 
-    const userDoc = await admin.firestore().collection('users').doc(request.auth.uid).get();
+    const userDoc = await admin.firestore().collection('users').doc(context.auth.uid).get();
     if (!userDoc.exists || userDoc.data().role !== 'admin') {
       throw new functions.https.HttpsError('permission-denied', 'Solo administradores pueden modificar precios');
     }
@@ -163,7 +163,7 @@ const updatePaymentConfig = onCall(async (request) => {
 /**
  * Calcular precio con descuentos aplicados
  */
-const calculatePrice = onCall(async (request) => {
+const calculatePrice = functions.https.onCall(async (data, context) => {
   try {
     const { tipo, cantidad, fecha_limite } = request.data;
     
@@ -239,7 +239,7 @@ const calculatePrice = onCall(async (request) => {
 /**
  * Crear preferencia de pago unificada
  */
-const createUnifiedPaymentPreference = onCall(async (request) => {
+const createUnifiedPaymentPreference = functions.https.onCall(async (data, context) => {
   try {
     const { 
       tipo_pago, 
@@ -354,7 +354,16 @@ const createUnifiedPaymentPreference = onCall(async (request) => {
 /**
  * Webhook unificado para procesar todas las notificaciones de pago
  */
-const processUnifiedPaymentNotification = onRequest({ cors: true }, async (req, res) => {
+const processUnifiedPaymentNotification = functions.https.onRequest(async (req, res) => {
+  // Configurar CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type');
+  
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
   try {
     console.log('Unified payment notification received:', req.body);
     

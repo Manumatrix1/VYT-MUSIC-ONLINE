@@ -231,6 +231,108 @@
                 </select>
             </div>
 
+            <!-- Información de ubicación -->
+            <div>
+                <label for="location" class="block text-sm font-medium text-gray-300 mb-1">
+                    📍 Ubicación
+                    <span class="text-xs text-blue-400">(importante para modalidades)</span>
+                </label>
+                <select id="location" name="location" class="form-input w-full px-3 py-2 rounded-lg">
+                    <option value="">Seleccionar provincia...</option>
+                    <option value="rosario" class="font-bold text-yellow-400">🏆 Rosario, Santa Fe (Presencial + Online)</option>
+                    <option value="buenos_aires">Buenos Aires</option>
+                    <option value="catamarca">Catamarca</option>
+                    <option value="chaco">Chaco</option>
+                    <option value="chubut">Chubut</option>
+                    <option value="cordoba">Córdoba</option>
+                    <option value="corrientes">Corrientes</option>
+                    <option value="entre_rios">Entre Ríos</option>
+                    <option value="formosa">Formosa</option>
+                    <option value="jujuy">Jujuy</option>
+                    <option value="la_pampa">La Pampa</option>
+                    <option value="la_rioja">La Rioja</option>
+                    <option value="mendoza">Mendoza</option>
+                    <option value="misiones">Misiones</option>
+                    <option value="neuquen">Neuquén</option>
+                    <option value="rio_negro">Río Negro</option>
+                    <option value="salta">Salta</option>
+                    <option value="san_juan">San Juan</option>
+                    <option value="san_luis">San Luis</option>
+                    <option value="santa_cruz">Santa Cruz</option>
+                    <option value="santa_fe">Santa Fe</option>
+                    <option value="santiago_del_estero">Santiago del Estero</option>
+                    <option value="tierra_del_fuego">Tierra del Fuego</option>
+                    <option value="tucuman">Tucumán</option>
+                    <option value="extranjero">Extranjero</option>
+                </select>
+            </div>
+
+            <!-- Modalidad preferida -->
+            <div>
+                <label for="preferredModality" class="block text-sm font-medium text-gray-300 mb-1">
+                    🎯 Modalidad preferida
+                </label>
+                <select id="preferredModality" name="preferredModality" class="form-input w-full px-3 py-2 rounded-lg">
+                    <option value="">Seleccionar modalidad...</option>
+                    <option value="online">🌐 Online (desde cualquier lugar)</option>
+                    <option value="presencial">🎤 Presencial (solo Rosario)</option>
+                    <option value="both">✨ Ambas modalidades</option>
+                </select>
+            </div>
+
+            <!-- Información del artista (solo visible para artistas) -->
+            <div id="artist-info" class="space-y-4 hidden">
+                <div class="border-t border-gray-600 pt-4">
+                    <h3 class="text-lg font-semibold text-blue-400 mb-3">🎵 Información del Artista</h3>
+                    
+                    <div>
+                        <label for="musicalGenre" class="block text-sm font-medium text-gray-300 mb-1">Género Musical Principal</label>
+                        <select id="musicalGenre" name="musicalGenre" class="form-input w-full px-3 py-2 rounded-lg">
+                            <option value="">Seleccionar género...</option>
+                            <option value="pop">Pop</option>
+                            <option value="rock">Rock</option>
+                            <option value="folk">Folclore</option>
+                            <option value="tango">Tango</option>
+                            <option value="reggaeton">Reggaeton</option>
+                            <option value="cumbia">Cumbia</option>
+                            <option value="trap">Trap</option>
+                            <option value="hip_hop">Hip Hop</option>
+                            <option value="blues">Blues</option>
+                            <option value="jazz">Jazz</option>
+                            <option value="electronica">Electrónica</option>
+                            <option value="balada">Balada</option>
+                            <option value="indie">Indie</option>
+                            <option value="metal">Metal</option>
+                            <option value="reggae">Reggae</option>
+                            <option value="other">Otro</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="experience" class="block text-sm font-medium text-gray-300 mb-1">Experiencia Musical</label>
+                        <select id="experience" name="experience" class="form-input w-full px-3 py-2 rounded-lg">
+                            <option value="">Seleccionar experiencia...</option>
+                            <option value="beginner">🌱 Principiante (menos de 1 año)</option>
+                            <option value="amateur">🎵 Amateur (1-3 años)</option>
+                            <option value="intermediate">🎤 Intermedio (3-5 años)</option>
+                            <option value="advanced">⭐ Avanzado (5-10 años)</option>
+                            <option value="professional">🏆 Profesional (más de 10 años)</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label for="instruments" class="block text-sm font-medium text-gray-300 mb-1">Instrumentos / Habilidades</label>
+                        <input 
+                            type="text" 
+                            id="instruments" 
+                            name="instruments" 
+                            class="form-input w-full px-3 py-2 rounded-lg text-sm"
+                            placeholder="Ej: Guitarra, Piano, Canto, Composición..."
+                        >
+                    </div>
+                </div>
+            </div>
+
             <!-- Términos y condiciones -->
             <div class="flex items-start space-x-3">
                 <input 
@@ -363,6 +465,30 @@
                 return;
             }
 
+            // Validaciones adicionales
+            if (!data.location) {
+                showMessage('Por favor selecciona tu ubicación', 'error');
+                return;
+            }
+
+            if (!data.preferredModality) {
+                showMessage('Por favor selecciona tu modalidad preferida', 'error');
+                return;
+            }
+
+            // Validaciones específicas para artistas
+            if (data.userType === 'artist' || data.userType === 'artist_group') {
+                if (!data.musicalGenre) {
+                    showMessage('Por favor selecciona tu género musical', 'error');
+                    return;
+                }
+                
+                if (!data.experience) {
+                    showMessage('Por favor selecciona tu nivel de experiencia', 'error');
+                    return;
+                }
+            }
+
             setLoading(true);
 
             try {
@@ -381,6 +507,8 @@
                     lastName: data.lastName,
                     email: data.email,
                     userType: data.userType,
+                    location: data.location || '',
+                    preferredModality: data.preferredModality || '',
                     newsletter: data.newsletter || false,
                     vyt_money_balance: 0,
                     verified: false,
@@ -389,12 +517,20 @@
                     profile: {
                         avatar: null,
                         bio: '',
-                        location: '',
+                        location: data.location || '',
                         social: {
                             instagram: '',
                             youtube: '',
                             tiktok: ''
                         }
+                    },
+                    artistInfo: data.userType === 'artist' || data.userType === 'artist_group' ? {
+                        musicalGenre: data.musicalGenre || '',
+                        experience: data.experience || '',
+                        instruments: data.instruments || '',
+                        isArtist: true
+                    } : {
+                        isArtist: false
                     },
                     stats: {
                         votes_given: 0,
@@ -435,6 +571,61 @@
                 showMessage(errorMessage, 'error');
             } finally {
                 setLoading(false);
+            }
+        });
+
+        // Manejar mostrar/ocultar información de artista
+        const userTypeSelect = document.getElementById('userType');
+        const artistInfoSection = document.getElementById('artist-info');
+        const locationSelect = document.getElementById('location');
+        const modalitySelect = document.getElementById('preferredModality');
+
+        userTypeSelect.addEventListener('change', function() {
+            const isArtist = this.value === 'artist' || this.value === 'artist_group';
+            
+            if (isArtist) {
+                artistInfoSection.classList.remove('hidden');
+                // Hacer campos de artista requeridos
+                document.getElementById('musicalGenre').required = true;
+                document.getElementById('experience').required = true;
+            } else {
+                artistInfoSection.classList.add('hidden');
+                // Quitar requerimiento de campos de artista
+                document.getElementById('musicalGenre').required = false;
+                document.getElementById('experience').required = false;
+            }
+        });
+
+        // Actualizar opciones de modalidad según ubicación
+        locationSelect.addEventListener('change', function() {
+            const location = this.value;
+            const modalityOptions = modalitySelect.querySelectorAll('option');
+            
+            if (location === 'rosario') {
+                // En Rosario: todas las opciones disponibles
+                modalityOptions.forEach(option => {
+                    option.style.display = 'block';
+                    option.disabled = false;
+                });
+                showMessage('🎉 ¡Genial! En Rosario puedes participar en modalidad presencial y online', 'success');
+            } else if (location && location !== '') {
+                // Fuera de Rosario: solo online
+                modalityOptions.forEach(option => {
+                    if (option.value === 'presencial' || option.value === 'both') {
+                        option.style.display = 'none';
+                        option.disabled = true;
+                    } else {
+                        option.style.display = 'block';
+                        option.disabled = false;
+                    }
+                });
+                
+                // Auto-seleccionar online si estaba en presencial
+                if (modalitySelect.value === 'presencial' || modalitySelect.value === 'both') {
+                    modalitySelect.value = 'online';
+                }
+                
+                showMessage('📍 Desde tu ubicación puedes participar en modalidad online', 'success');
             }
         });
 

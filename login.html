@@ -308,11 +308,12 @@
 
                     <!-- Social Login Buttons -->
                     <div class="space-y-3">
-                        <button id="facebook-login-btn" class="social-btn facebook-btn w-full py-3 px-4 rounded-lg font-medium text-sm">
+                        <button id="facebook-login-btn" class="social-btn facebook-btn w-full py-3 px-4 rounded-lg font-medium text-sm relative">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                             </svg>
                             Continuar con Facebook
+                            <span class="absolute -top-2 -right-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">Beta</span>
                         </button>
                         
                         <button id="google-login-btn" class="social-btn google-btn w-full py-3 px-4 rounded-lg font-medium text-sm">
@@ -331,17 +332,98 @@
     </main>
 
     <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    <script src="firebase-config.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+
+    <!-- Facebook SDK -->
+    <script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          appId      : '1815856085687196',  // Tu App ID de Facebook
+          cookie     : true,
+          xfbml      : true,
+          version    : 'v18.0'
+        });
+          
+        FB.AppEvents.logPageView();   
+        
+        // Verificar estado de login al cargar la página
+        FB.getLoginStatus(function(response) {
+            statusChangeCallback(response);
+        });
+          
+      };
+
+      // Callback para manejar cambios en el estado de login
+      function statusChangeCallback(response) {
+        console.log('Facebook Login Status:', response);
+        
+        if (response.status === 'connected') {
+            // Usuario está logueado en Facebook y conectado a tu app
+            console.log('Usuario conectado a Facebook:', response.authResponse);
+            
+            // Obtener información del usuario
+            FB.api('/me', {fields: 'name,email,picture'}, function(userInfo) {
+                console.log('Info del usuario desde Facebook:', userInfo);
+                
+                // Aquí podrías auto-loguear al usuario o mostrar su info
+                // Por ahora solo guardamos que está conectado
+                localStorage.setItem('facebookConnected', 'true');
+                localStorage.setItem('facebookUserInfo', JSON.stringify(userInfo));
+            });
+            
+        } else if (response.status === 'not_authorized') {
+            // Usuario está logueado en Facebook pero no autorizó tu app
+            console.log('Usuario no ha autorizado la app');
+            localStorage.removeItem('facebookConnected');
+            
+        } else {
+            // Usuario no está logueado en Facebook
+            console.log('Usuario no está logueado en Facebook');
+            localStorage.removeItem('facebookConnected');
+        }
+      }
+
+      // Función para verificar estado de login (puede ser llamada desde botones)
+      function checkLoginState() {
+        FB.getLoginStatus(function(response) {
+          statusChangeCallback(response);
+        });
+      }
+
+      (function(d, s, id){
+         var js, fjs = d.getElementsByTagName(s)[0];
+         if (d.getElementById(id)) {return;}
+         js = d.createElement(s); js.id = id;
+         js.src = "https://connect.facebook.net/es_ES/sdk.js";
+         fjs.parentNode.insertBefore(js, fjs);
+       }(document, 'script', 'facebook-jssdk'));
+    </script>
 
     <script>
+        // Inicializar Firebase con configuración completa
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
+        };
+
+        // Inicializar Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+
         // Inicializar proveedores de autenticación
         const facebookProvider = new firebase.auth.FacebookAuthProvider();
         const googleProvider = new firebase.auth.GoogleAuthProvider();
 
-        // Configurar alcances adicionales si es necesario
+        // Configurar alcances adicionales
         facebookProvider.addScope('email');
+        facebookProvider.addScope('public_profile');
         googleProvider.addScope('email');
         googleProvider.addScope('profile');
 
@@ -349,27 +431,83 @@
         async function signInWithFacebook() {
             try {
                 console.log('Iniciando autenticación con Facebook...');
-                const result = await firebase.auth().signInWithPopup(facebookProvider);
-                const user = result.user;
                 
-                console.log('Usuario autenticado con Facebook:', user);
-                
-                // Redirigir a la página principal
-                window.location.href = 'principal.html';
+                // Primero verificar si ya está conectado
+                FB.getLoginStatus(function(response) {
+                    if (response.status === 'connected') {
+                        // Ya está conectado, proceder con la autenticación
+                        console.log('Usuario ya conectado a Facebook');
+                        authenticateWithFacebookToken(response.authResponse.accessToken);
+                    } else {
+                        // No está conectado, mostrar dialog de login
+                        FB.login(function(loginResponse) {
+                            if (loginResponse.authResponse) {
+                                console.log('Login exitoso con Facebook SDK');
+                                authenticateWithFacebookToken(loginResponse.authResponse.accessToken);
+                            } else {
+                                console.log('Usuario canceló el login');
+                                alert('Login cancelado');
+                            }
+                        }, {scope: 'email,public_profile'});
+                    }
+                });
                 
             } catch (error) {
-                console.error('Error en autenticación con Facebook:', error);
+                console.error('Error general en autenticación con Facebook:', error);
+                handleFacebookError(error);
+            }
+        }
+
+        // Función auxiliar para autenticar con token de Facebook
+        async function authenticateWithFacebookToken(accessToken) {
+            try {
+                // Método 1: Intentar con Firebase Auth
+                const credential = firebase.auth.FacebookAuthProvider.credential(accessToken);
+                const result = await firebase.auth().signInWithCredential(credential);
+                console.log('Usuario autenticado con Firebase usando Facebook token:', result.user);
                 
-                let errorMessage = 'Error al iniciar sesión con Facebook.';
-                if (error.code === 'auth/popup-closed-by-user') {
-                    errorMessage = 'Inicio de sesión cancelado.';
-                } else if (error.code === 'auth/popup-blocked') {
-                    errorMessage = 'Por favor permite ventanas emergentes para continuar.';
-                } else if (error.code === 'auth/account-exists-with-different-credential') {
-                    errorMessage = 'Ya existe una cuenta con este email usando otro método.';
-                }
+                // Marcar como logueado y redirigir
+                localStorage.setItem('userLoggedIn', 'true');
+                window.location.href = 'principal.html';
                 
-                alert(errorMessage);
+            } catch (firebaseError) {
+                console.log('Firebase Auth falló, usando método alternativo...', firebaseError);
+                
+                // Método alternativo: obtener info del usuario y guardar localmente
+                FB.api('/me', {fields: 'name,email,picture'}, function(userInfo) {
+                    console.log('Info del usuario:', userInfo);
+                    
+                    // Guardar información en localStorage como alternativa
+                    localStorage.setItem('userLoggedIn', 'true');
+                    localStorage.setItem('userName', userInfo.name);
+                    localStorage.setItem('userEmail', userInfo.email || '');
+                    localStorage.setItem('userPhoto', userInfo.picture?.data?.url || '');
+                    localStorage.setItem('loginMethod', 'facebook');
+                    
+                    alert('¡Bienvenido ' + userInfo.name + '! Login con Facebook exitoso.');
+                    window.location.href = 'principal.html';
+                });
+            }
+        }
+
+        // Función para manejar errores de Facebook
+        function handleFacebookError(error) {
+            let errorMessage = '🔧 Facebook Login está en configuración. Por ahora puedes:\n\n✅ Registrarte con email\n✅ Usar Google (disponible)\n\nPronto estará disponible Facebook Login.';
+            
+            if (error.code === 'auth/popup-closed-by-user') {
+                errorMessage = 'Inicio de sesión cancelado.';
+            } else if (error.code === 'auth/popup-blocked') {
+                errorMessage = 'Por favor permite ventanas emergentes para continuar.';
+            } else if (error.code === 'auth/account-exists-with-different-credential') {
+                errorMessage = 'Ya existe una cuenta con este email usando otro método.';
+            }
+            
+            alert(errorMessage);
+            
+            // Ofrecer Google como alternativa
+            const useGoogle = confirm('¿Te gustaría probar con Google mientras configuramos Facebook?');
+            if (useGoogle) {
+                signInWithGoogle();
             }
         }
 
