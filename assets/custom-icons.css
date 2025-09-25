@@ -1,0 +1,82 @@
+/* 
+ * 🎨 VYT MUSIC - Iconos Personalizados
+ * Sistema para iconos creados en Canva
+ */
+
+/* Clase base para iconos personalizados */
+.custom-icon {
+    display: inline-block;
+    width: 64px;
+    height: 64px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: all 0.3s ease;
+}
+
+/* Tamaños para iconos */
+.custom-icon-sm { width: 32px; height: 32px; }
+.custom-icon-md { width: 48px; height: 48px; }
+.custom-icon-lg { width: 64px; height: 64px; }
+.custom-icon-xl { width: 80px; height: 80px; }
+.custom-icon-2xl { width: 96px; height: 96px; }
+
+/* Efectos hover */
+.custom-icon:hover {
+    transform: scale(1.1);
+    filter: brightness(1.2);
+}
+
+/* Iconos específicos - agregar aquí los iconos de Canva */
+
+/* Ejemplo de cómo agregar un icono personalizado:
+.custom-icon-microphone {
+    background-image: url('../assets/icons/microphone-custom.png');
+}
+
+.custom-icon-music-note {
+    background-image: url('../assets/icons/music-note-custom.png');
+}
+
+.custom-icon-stage {
+    background-image: url('../assets/icons/stage-custom.png');
+}
+*/
+
+/* Contenedores para iconos con fondo */
+.icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    padding: 12px;
+    background: rgba(59, 130, 246, 0.2);
+    border: 2px solid rgba(59, 130, 246, 0.4);
+    transition: all 0.3s ease;
+}
+
+.icon-container:hover {
+    background: rgba(59, 130, 246, 0.3);
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+}
+
+/* Animaciones para iconos */
+@keyframes icon-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes icon-bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+}
+
+.custom-icon-animated {
+    animation: icon-pulse 2s infinite;
+}
+
+.custom-icon-bounce {
+    animation: icon-bounce 1s infinite;
+}
