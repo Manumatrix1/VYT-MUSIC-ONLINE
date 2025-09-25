@@ -166,6 +166,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/custom-icons.css">
     <script src="https://cdn.tailwindcss.com"></script>
     
     <style>
@@ -408,7 +409,7 @@
                     <a href="#certamenes" class="header-nav-link">
                         <span>🏆 Certámenes</span>
                     </a>
-                    <a href="inscripcion_online.html" class="header-nav-link">
+                    <a href="inscripcion_unificada.html" class="header-nav-link">
                         <span>✍️ Inscripción Online</span>
                     </a>
                     <a href="inscripcion_presencial.html" class="header-nav-link">
@@ -460,11 +461,11 @@
                     
                     <!-- Botones principales -->
                     <div class="hero-buttons flex flex-wrap justify-center gap-4 mb-12">
-                        <a href="inscripcion_online.html" class="btn btn-primario">
-                            🎵 Participar Online
+                        <a href="inscripcion_unificada.html" class="btn btn-primario">
+                            � Participar Online
                         </a>
                         <a href="inscripcion_presencial.html" class="btn btn-primario">
-                            🎪 Participar Presencial
+                            � Participar Presencial
                         </a>
                         <a href="comprar-vyt-money.html" class="btn btn-primario">
                             💰 Comprar VYT-MONEY
@@ -474,48 +475,98 @@
 
                 <!-- Sección de Certámenes -->
                 <section id="certamenes" class="py-16">
-                    <h2 class="text-4xl font-bold text-center mb-12">🏆 Próximos Certámenes</h2>
+                    <!-- Mensaje principal -->
+                    <div class="text-center mb-12">
+                        <div class="bg-gradient-to-r from-emerald-500/20 to-green-400/20 border-2 border-green-400/60 rounded-3xl p-12 max-w-3xl mx-auto mb-16 shadow-2xl shadow-green-500/30 backdrop-blur-sm">
+                            <h2 class="text-5xl font-bold text-white mb-6 drop-shadow-lg">¿Te gusta cantar? 🎤</h2>
+                            <p class="text-green-100 text-xl leading-relaxed">Sabemos que tenés talento y que solo necesitás una oportunidad para brillar. ¡Es tu momento!</p>
+                        </div>
+                    </div>
                     
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        <div class="bg-gray-800 rounded-lg p-6 text-center">
-                            <h3 class="text-2xl font-bold mb-4">🎵 Online Nacional</h3>
-                            <p class="text-gray-300 mb-4">Participa desde cualquier parte del país</p>
-                            <div class="text-sm text-gray-400 mb-4">
-                                <p>• Todas las provincias</p>
-                                <p>• Videos de evaluación</p>
-                                <p>• Premios hasta $500.000</p>
+                    <!-- Tres recuadros principales -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto mb-12">
+                        <!-- Modalidades Disponibles -->
+                        <div class="bg-blue-800/30 border border-blue-400/40 rounded-2xl p-8 text-center hover:bg-blue-800/40 transition-all duration-300">
+                            <div class="text-blue-300 mb-6">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-blue-600/30 rounded-full flex items-center justify-center">
+                                    <span class="text-3xl">🎯</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-4">Modalidades Disponibles</h3>
                             </div>
-                            <a href="login.html" class="btn btn-primario">Participar</a>
+                            
+                            <div class="space-y-3 text-left">
+                                <div class="flex items-center text-blue-100">
+                                    <span class="w-3 h-3 bg-blue-400 rounded-full mr-3"></span>
+                                    <span><strong>Presencial:</strong> Para artistas de Rosario y alrededores</span>
+                                </div>
+                                <div class="flex items-center text-blue-100">
+                                    <span class="w-3 h-3 bg-blue-400 rounded-full mr-3"></span>
+                                    <span><strong>Online:</strong> Para artistas de toda Argentina</span>
+                                </div>
+                            </div>
                         </div>
                         
-                        <div class="bg-gray-800 rounded-lg p-6 text-center">
-                            <h3 class="text-2xl font-bold mb-4">🎪 Presencial Rosario</h3>
-                            <p class="text-gray-300 mb-4">Evento en vivo en Rosario</p>
-                            <div class="text-sm text-gray-400 mb-4">
-                                <p>• Solo Rosario y alrededores</p>
-                                <p>• Audiciones presenciales</p>
-                                <p>• Gran final en vivo</p>
+                        <!-- Categorías -->
+                        <div class="bg-blue-800/30 border border-blue-400/40 rounded-2xl p-8 text-center hover:bg-blue-800/40 transition-all duration-300">
+                            <div class="text-blue-300 mb-6">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-blue-600/30 rounded-full flex items-center justify-center">
+                                    <span class="text-3xl">🎵</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-4">Categorías</h3>
                             </div>
-                            <a href="login.html" class="btn btn-primario">Participar</a>
+                            
+                            <div class="space-y-2 text-left">
+                                <div class="text-blue-100">• Pop & Rock</div>
+                                <div class="text-blue-100">• Folclore & Tango</div>
+                                <div class="text-blue-100">• Tropical & Cumbia</div>
+                                <div class="text-blue-100">• Balada & Romántica</div>
+                                <div class="text-blue-100">• Urbano & Trap</div>
+                                <div class="text-blue-100">• Otros géneros</div>
+                            </div>
                         </div>
                         
-                        <div class="bg-gray-800 rounded-lg p-6 text-center">
-                            <h3 class="text-2xl font-bold mb-4">💎 VYT-MONEY</h3>
-                            <p class="text-gray-300 mb-4">Monedas para votar y premios</p>
-                            <div class="text-sm text-gray-400 mb-4">
-                                <p>• Vota a tus favoritos</p>
-                                <p>• Gana premios especiales</p>
-                                <p>• Apoya a los artistas</p>
+                        <!-- ¿Listo para mostrar tu talento? -->
+                        <div class="bg-blue-800/30 border border-blue-400/40 rounded-2xl p-8 text-center hover:bg-blue-800/40 transition-all duration-300">
+                            <div class="text-blue-300 mb-6">
+                                <div class="w-16 h-16 mx-auto mb-4 bg-blue-600/30 rounded-full flex items-center justify-center">
+                                    <span class="text-3xl">🎤</span>
+                                </div>
+                                <h3 class="text-xl font-bold text-white mb-4">¿Listo para mostrar tu talento?</h3>
                             </div>
-                            <a href="comprar-vyt-money.html" class="btn btn-primario">Comprar</a>
+                            
+                            <div class="space-y-4">
+                                <a href="inscripcion_unificada.html" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-full text-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/25 block">
+                                    🎤 PARTICIPAR AHORA
+                                </a>
+                                <a href="reglamento.html" class="bg-blue-800/50 hover:bg-blue-800/70 text-blue-100 font-medium py-2 px-4 rounded-full text-sm transition-all duration-300 block">
+                                    📋 Ver Reglamento
+                                </a>
+                            </div>
                         </div>
                     </div>
                     
                     <!-- Información adicional -->
-                    <div class="text-center mt-12">
-                        <div class="bg-yellow-500/10 border border-yellow-400/30 text-yellow-200 rounded-xl p-6 max-w-2xl mx-auto">
-                            <p class="font-bold mb-2">📋 Para participar:</p>
-                            <p>1. Regístrate o inicia sesión • 2. Completa tu perfil de artista • 3. Elige tu certamen • 4. Sube tu video para validación</p>
+                    <div class="text-center">
+                        <div class="bg-blue-600/10 border border-blue-400/30 text-blue-100 rounded-xl p-6 max-w-4xl mx-auto">
+                            <p class="font-bold mb-2 text-white">📋 Para participar:</p>
+                            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                                <div class="flex items-center justify-center">
+                                    <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold mr-2">1</span>
+                                    Regístrate o inicia sesión
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold mr-2">2</span>
+                                    Completa tu perfil de artista
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold mr-2">3</span>
+                                    Elige tu certamen
+                                </div>
+                                <div class="flex items-center justify-center">
+                                    <span class="bg-blue-600 text-white w-6 h-6 rounded-full flex items-center justify-center font-bold mr-2">4</span>
+                                    Sube tu video para validación
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -1170,6 +1221,16 @@
             );
             
             return competitions.find(c => c.id === competitionId);
+        }
+        
+        // Inicializar manejadores inteligentes de inscripción
+        document.addEventListener('DOMContentLoaded', () => {
+            // Importar y inicializar manejadores inteligentes
+            import('./src/inscription-handler.js').then(() => {
+                if (window.initializeSmartInscriptionHandlers) {
+                    window.initializeSmartInscriptionHandlers();
+                }
+            });
         });
     </script>
 </body>

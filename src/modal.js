@@ -27,7 +27,7 @@ export function initializeModal() {
     modalConfirmBtn.addEventListener('click', () => {
         const selectedProvince = modalProvinciaSelect.value;
         if (selectedProvince) {
-            window.location.href = `inscripcion_online.html?prov=${encodeURIComponent(selectedProvince)}`; 
+            window.location.href = `inscripcion_unificada.html?prov=${encodeURIComponent(selectedProvince)}`; 
         } else {
             alert('Por favor, selecciona una provincia.');
         }
