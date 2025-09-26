@@ -496,15 +496,16 @@
             <div class="text-6xl mb-4">🎉</div>
             <h3 class="text-3xl font-bold mb-4">¡Inscripción Completada!</h3>
             <p class="text-white mb-6">
-                ¡Felicitaciones! Tu inscripción se ha registrado exitosamente. 
-                Te llegará un email de confirmación con todos los detalles.
+                ¡Felicitaciones! Tu inscripción se ha registrado exitosamente.<br>
+                <strong>📧 Revisa tu correo electrónico</strong> - Te hemos enviado un link de verificación.<br>
+                <small class="text-blue-200">También recibirás todos los detalles del certamen por email.</small>
             </p>
             <div class="space-y-3">
-                <button onclick="window.location.href='principal.html'" class="w-full btn-primary py-3 rounded-xl font-semibold">
-                    <i class="fas fa-home mr-2"></i>Volver al Inicio
+                <button onclick="window.location.href='perfil-artista.html'" class="w-full btn-primary py-3 rounded-xl font-semibold">
+                    <i class="fas fa-user-circle mr-2"></i>Ver Mi Perfil de Artista
                 </button>
-                <button onclick="window.location.href='perfil.html'" class="w-full border border-cyan-400 text-cyan-400 py-3 rounded-xl font-semibold hover:bg-cyan-400/10 transition-colors">
-                    <i class="fas fa-user mr-2"></i>Ver Mi Perfil
+                <button onclick="window.location.href='fan-mode.html'" class="w-full border border-cyan-400 text-cyan-400 py-3 rounded-xl font-semibold hover:bg-cyan-400/10 transition-colors">
+                    <i class="fas fa-eye mr-2"></i>Ver como Fan
                 </button>
             </div>
         </div>
@@ -514,7 +515,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
         import { getFirestore, collection, doc, addDoc, getDocs, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-        import { getAuth, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
         import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js';
 
         // Configuración Firebase
@@ -1082,10 +1083,71 @@
                     throw new Error(`Campos con valores undefined: ${camposUndefined.join(', ')}`);
                 }
 
+                console.log('=== CREANDO CUENTA DE USUARIO ===');
+                // Crear cuenta de Firebase Auth
+                let userCredential = null;
+                let firebaseUID = null;
+                
+                try {
+                    // Generar contraseña temporal segura
+                    const tempPassword = Math.random().toString(36).slice(-12) + Math.random().toString(36).slice(-12);
+                    
+                    userCredential = await createUserWithEmailAndPassword(auth, datosFinales.email, tempPassword);
+                    firebaseUID = userCredential.user.uid;
+                    
+                    console.log('Cuenta creada con UID:', firebaseUID);
+                    
+                    // Actualizar perfil con nombre artístico
+                    await updateProfile(userCredential.user, {
+                        displayName: datosFinales.nombre_artista
+                    });
+                    
+                    // Enviar email de verificación
+                    await sendEmailVerification(userCredential.user, {
+                        url: `${window.location.origin}/login-artista.html`,
+                        handleCodeInApp: false
+                    });
+                    
+                    console.log('Email de verificación enviado');
+                    
+                } catch (authError) {
+                    console.warn('Error en autenticación (continuando con registro):', authError);
+                    // Si falla la autenticación, continuamos con el registro normal
+                    firebaseUID = docRef?.id || `temp_${Date.now()}`;
+                }
+
                 console.log('=== ENVIANDO A FIRESTORE ===');
-                // Guardar en Firestore
-                const docRef = await addDoc(collection(db, "participantes_online"), datosFinales);
+                // Guardar en Firestore (ahora incluyendo el UID de Firebase)
+                const finalData = {
+                    ...datosFinales,
+                    firebaseUID: firebaseUID,
+                    tempPassword: userCredential ? 'GENERADA_AUTOMATICAMENTE' : null,
+                    emailVerified: false,
+                    fechaCreacionAuth: userCredential?.user?.metadata?.creationTime || null
+                };
+                
+                const docRef = await addDoc(collection(db, "participantes_online"), finalData);
                 console.log('Inscripción guardada con ID:', docRef.id);
+
+                // Actualizar datos para localStorage
+                const artistaData = {
+                    uid: firebaseUID,
+                    docId: docRef.id,
+                    email: datosFinales.email,
+                    nombre: datosFinales.nombre,
+                    apellido: datosFinales.apellido,
+                    nombre_artista: datosFinales.nombre_artista,
+                    genero: datosFinales.genero,
+                    ciudad: datosFinales.ciudad,
+                    whatsapp: datosFinales.whatsapp,
+                    fotoURL: datosFinales.foto_url || null,
+                    fechaRegistro: new Date().toISOString(),
+                    needsPasswordReset: !!userCredential,
+                    emailVerified: false
+                };
+                
+                localStorage.setItem('artistaLogueado', JSON.stringify(artistaData));
+                console.log('Datos del artista guardados en localStorage');
 
                 // Mostrar éxito
                 document.getElementById('success-modal').classList.remove('hidden');

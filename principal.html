@@ -7,7 +7,7 @@
     
     <link rel="preconnect" href="https://fonts.go                    <!-- Botones principales -->
                     <div class="hero-buttons flex flex-wrap justify-center gap-4 mb-12">
-                        <a href="login.html" class="btn btn-primario">
+                        <a href="inscripcion_unificada.html" class="btn btn-primario">
                             🎤 Unirme a VYT Music
                         </a>
                         <a href="comprar-vyt-money.html" class="btn btn-primario">
@@ -16,7 +16,7 @@
                     </div>
 
                     <!-- Sección de Perfil de Artista (Solo para usuarios logueados) -->
-                    <div id="artist-profile-section" class="hidden bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-400/30 rounded-2xl p-8 mb-12 max-w-4xl mx-auto">
+                    <div id="artist-profile-section" class="hidden user-only bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-purple-400/30 rounded-2xl p-8 mb-12 max-w-4xl mx-auto">
                         <h2 class="text-2xl font-bold mb-6 text-center">
                             <i class="fas fa-user-music"></i> Mi Perfil de Artista
                         </h2>
@@ -430,9 +430,9 @@
 
                 <!-- Usuario -->
                 <div class="header-user">
-                    <a href="login.html">
+                    <a href="inscripcion_unificada.html">
                         <i class="fas fa-user-circle" style="font-size: 2rem;"></i>
-                        <span>Iniciar Sesión</span>
+                        <span>Unirme como Artista</span>
                     </a>
                 </div>
             </header>
@@ -1232,6 +1232,84 @@
                 }
             });
         });
+    </script>
+    
+    <!-- Script principal para funcionalidad de perfiles de artista -->
+    <script src="principal-dynamic.js"></script>
+    
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    
+    // Personalización para mostrar solo el ícono
+    Tawk_API.customStyle = {
+        visibility: {
+            desktop: {
+                position: 'br',
+                xOffset: '20px',
+                yOffset: '20px'
+            },
+            mobile: {
+                position: 'br', 
+                xOffset: '10px',
+                yOffset: '10px'
+            }
+        }
+    };
+    
+    // Configuración para ocultar texto y mostrar solo ícono
+    Tawk_API.onLoad = function(){
+        // Ocultar el texto del widget
+        Tawk_API.hideWidget();
+        
+        // Crear botón personalizado solo con ícono
+        const customChatBtn = document.createElement('div');
+        customChatBtn.innerHTML = '<i class="fas fa-comments"></i>';
+        customChatBtn.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #00d9ff, #0099cc);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0, 217, 255, 0.3);
+            z-index: 9999;
+            transition: all 0.3s ease;
+            font-size: 24px;
+            color: white;
+        `;
+        
+        // Efectos hover
+        customChatBtn.onmouseenter = function() {
+            this.style.transform = 'scale(1.1)';
+            this.style.boxShadow = '0 6px 25px rgba(0, 217, 255, 0.5)';
+        };
+        
+        customChatBtn.onmouseleave = function() {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = '0 4px 20px rgba(0, 217, 255, 0.3)';
+        };
+        
+        // Click para abrir chat
+        customChatBtn.onclick = function() {
+            Tawk_API.maximize();
+        };
+        
+        document.body.appendChild(customChatBtn);
+    };
+    
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
     </script>
 </body>
 </html>
