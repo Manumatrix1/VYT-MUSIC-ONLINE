@@ -538,19 +538,20 @@
 
     <!-- Scripts -->
     <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, collection, doc, addDoc, getDocs, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
-        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js';
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+        import { getFirestore, collection, doc, addDoc, getDocs, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
-        // Configuración Firebase
+        // Configuración Firebase (actualizada y consistente)
         const firebaseConfig = {
-            apiKey: "AIzaSyBt1sUvw6vb_zWAYwJjUB2D2qJi6tujQsY",
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
             authDomain: "vytonlineprueva.firebaseapp.com",
             projectId: "vytonlineprueva",
-            storageBucket: "vytonlineprueva.appspot.com",
-            messagingSenderId: "680407847435",
-            appId: "1:680407847435:web:13b3b720d57c10e1fa8cc5"
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
         };
 
         // Inicializar Firebase
@@ -1127,13 +1128,26 @@
                         displayName: datosFinales.nombre_artista
                     });
                     
-                    // Enviar email de verificación
-                    await sendEmailVerification(userCredential.user, {
-                        url: `${window.location.origin}/login-artista.html`,
-                        handleCodeInApp: false
-                    });
-                    
-                    console.log('Email de verificación enviado');
+                    // Enviar email de verificación con configuración mejorada
+                    try {
+                        const continueUrl = `${window.location.origin}/login-artista.html?verified=true`;
+                        const actionCodeSettings = {
+                            url: continueUrl,
+                            handleCodeInApp: false
+                        };
+                        
+                        await sendEmailVerification(userCredential.user, actionCodeSettings);
+                        
+                        console.log('✅ Email de verificación enviado exitosamente a:', datosFinales.email);
+                        
+                        // Mostrar mensaje al usuario
+                        showEmailConfirmation(datosFinales.email);
+                        
+                    } catch (emailError) {
+                        console.error('❌ Error enviando email de verificación:', emailError);
+                        // No fallar el proceso si el email falla, pero informar al usuario
+                        showEmailError(emailError.message);
+                    }
                     
                 } catch (authError) {
                     console.warn('Error en autenticación (continuando con registro):', authError);
@@ -1224,6 +1238,74 @@
                 loadCertamenes();
             }
         });
+
+        // Funciones para manejo de emails
+        function showEmailConfirmation(email) {
+            // Crear modal de confirmación de email
+            const emailModal = document.createElement('div');
+            emailModal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            emailModal.innerHTML = `
+                <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-md mx-4 text-center">
+                    <div class="text-6xl mb-4">📧</div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">¡Email Enviado!</h3>
+                    <p class="text-blue-100 mb-4">
+                        Hemos enviado un email de verificación a:<br>
+                        <strong class="text-white">${email}</strong>
+                    </p>
+                    <p class="text-blue-100 text-sm mb-6">
+                        Por favor, revisa tu bandeja de entrada (y spam) y haz clic en el enlace para verificar tu cuenta.
+                    </p>
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            class="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        <i class="fas fa-check mr-2"></i>Entendido
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(emailModal);
+            
+            // Auto-remover después de 10 segundos
+            setTimeout(() => {
+                if (emailModal.parentElement) {
+                    emailModal.remove();
+                }
+            }, 10000);
+        }
+
+        function showEmailError(errorMessage) {
+            // Crear modal de error de email
+            const errorModal = document.createElement('div');
+            errorModal.className = 'fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            errorModal.innerHTML = `
+                <div class="bg-white/10 backdrop-blur-md border border-red-500/30 rounded-2xl p-8 max-w-md mx-4 text-center">
+                    <div class="text-6xl mb-4">⚠️</div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">Error con Email</h3>
+                    <p class="text-red-200 mb-4">
+                        No pudimos enviar el email de verificación automáticamente.
+                    </p>
+                    <p class="text-blue-100 text-sm mb-6">
+                        <strong>No te preocupes:</strong> Tu cuenta se creó correctamente. 
+                        Puedes solicitar un nuevo email de verificación desde el login.
+                    </p>
+                    <div class="text-xs text-gray-400 mb-4 p-2 bg-black/20 rounded">
+                        Error técnico: ${errorMessage}
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" 
+                            class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                        <i class="fas fa-times mr-2"></i>Cerrar
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(errorModal);
+            
+            // Auto-remover después de 15 segundos
+            setTimeout(() => {
+                if (errorModal.parentElement) {
+                    errorModal.remove();
+                }
+            }, 15000);
+        }
     </script>
 </body>
 </html>

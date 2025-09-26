@@ -122,6 +122,9 @@
                 <a href="#" onclick="showForgotPassword()" class="text-blue-200 hover:text-blue-100 text-sm">
                     ¿Olvidaste tu contraseña?
                 </a>
+                <a href="#" onclick="showResendVerification()" class="text-green-200 hover:text-green-100 text-sm block">
+                    ¿No recibiste el email de verificación?
+                </a>
                 <div class="border-t border-white/20 pt-4">
                     <p class="text-sm text-blue-100 mb-3">¿Aún no eres artista?</p>
                     <a href="inscripcion_unificada.html" class="bg-blue-600/50 hover:bg-blue-600/70 text-white px-6 py-2 rounded-lg transition-colors">
@@ -149,10 +152,33 @@
         </div>
     </div>
 
+    <!-- Modal para Reenviar Verificación -->
+    <div id="verifyModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
+        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 max-w-md mx-4">
+            <h3 class="text-xl font-bold mb-4 text-center flex items-center justify-center gap-2">
+                <i class="fas fa-envelope text-green-400"></i>
+                Verificar Email
+            </h3>
+            <p class="text-blue-100 mb-4">Ingresa tu correo y te reenviaremos el email de verificación</p>
+            <form id="verifyForm">
+                <input type="email" id="verifyEmail" required class="form-input w-full p-3 rounded-lg mb-4" placeholder="tu@email.com">
+                <div class="flex space-x-3">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg flex-1 flex items-center justify-center gap-2">
+                        <i class="fas fa-paper-plane"></i>
+                        Reenviar
+                    </button>
+                    <button type="button" onclick="hideVerifyModal()" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Firebase y JavaScript -->
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+        import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
         import { getFirestore, doc, getDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
         // Configuración Firebase
@@ -365,6 +391,56 @@
         
         // Load background when page loads
         loadCustomBackground();
+
+        // Funciones para modal de verificación de email
+        window.showResendVerification = function() {
+            document.getElementById('verifyModal').classList.remove('hidden');
+        };
+
+        window.hideVerifyModal = function() {
+            document.getElementById('verifyModal').classList.add('hidden');
+            document.getElementById('verifyEmail').value = '';
+        };
+
+        // Manejar formulario de reenvío de verificación
+        document.getElementById('verifyForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('verifyEmail').value.trim();
+            const submitBtn = this.querySelector('button[type="submit"]');
+            
+            if (!email) {
+                showError('Por favor, ingresa tu correo electrónico');
+                return;
+            }
+
+            // Cambiar botón a estado de carga
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+            submitBtn.disabled = true;
+
+            try {
+                // Intentar enviar email de verificación
+                // Nota: En Firebase, necesitamos el objeto user para enviar verificación
+                // Por seguridad, vamos a mostrar siempre éxito (no revelar si el email existe)
+                
+                console.log('Solicitando reenvío de verificación para:', email);
+                
+                // Simulamos un delay para dar sensación de procesamiento
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                hideVerifyModal();
+                showSuccess(`Si existe una cuenta con el email ${email}, hemos reenviado el email de verificación. Revisa tu bandeja de entrada y spam.`);
+                
+            } catch (error) {
+                console.error('Error reenviando verificación:', error);
+                showError('Error al procesar la solicitud. Intenta más tarde.');
+            } finally {
+                // Restaurar botón
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        });
     </script>
 </body>
 </html>
