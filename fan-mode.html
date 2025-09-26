@@ -301,7 +301,27 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadCertamenes();
             loadArtistas();
+            loadCustomBackground();
         });
+
+        // Load custom background if set
+        function loadCustomBackground() {
+            const config = localStorage.getItem('backgroundConfig');
+            if (config) {
+                try {
+                    const backgroundConfig = JSON.parse(config);
+                    if (backgroundConfig.currentBackground) {
+                        document.body.style.backgroundImage = `url(${backgroundConfig.currentBackground})`;
+                        document.body.style.backgroundSize = 'cover';
+                        document.body.style.backgroundPosition = 'center center';
+                        document.body.style.backgroundRepeat = 'no-repeat';
+                        document.body.style.backgroundAttachment = 'fixed';
+                    }
+                } catch (e) {
+                    console.log('No se pudo cargar el fondo personalizado:', e);
+                }
+            }
+        }
     </script>
 </body>
 </html>

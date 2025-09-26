@@ -123,6 +123,9 @@
                     <button onclick="showPage('pagos')" class="admin-nav-btn bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-credit-card mr-1"></i>Pagos
                     </button>
+                    <button onclick="showPage('fondos')" class="admin-nav-btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-images mr-1"></i>Fondos
+                    </button>
                 </div>
             </div>
         </nav>
@@ -724,6 +727,179 @@
                                 <i class="fas fa-credit-card text-4xl mb-4"></i>
                                 <p>Haz clic en "Filtrar" para cargar pagos</p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección Gestión de Fondos -->
+            <section id="fondos-section" class="admin-section">
+                <div class="max-w-7xl mx-auto">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">
+                        <i class="fas fa-images mr-2 text-pink-500"></i>
+                        Gestión de Fondos
+                    </h2>
+                    
+                    <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
+                        <p class="text-gray-600 mb-4">
+                            Administra las imágenes de fondo de las diferentes páginas del sitio web de forma visual y sencilla.
+                        </p>
+                        
+                        <!-- Lista de páginas -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            
+                            <!-- Página Principal (Index) -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-home text-blue-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Página Principal</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-index" src="images/fotos/chica-feliz-grabando-una-cancion.jpg" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg" 
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div style="display: none;" class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-index" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-index').click()" 
+                                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+
+                            <!-- Página de Inscripción -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-user-plus text-green-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Página de Inscripción</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-inscripcion" src="images/fotos/inscripcion-background.png" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div style="display: none;" class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-inscripcion" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-inscripcion').click()" 
+                                        class="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+
+                            <!-- Perfil de Artista -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-user-circle text-purple-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Perfil de Artista</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-perfil" src="images/fotos/inscripcion-background.png" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div style="display: none;" class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-perfil" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-perfil').click()" 
+                                        class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+
+                            <!-- Login de Artista -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-sign-in-alt text-indigo-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Login de Artista</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-login" src="" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen personalizada</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-login" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-login').click()" 
+                                        class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+
+                            <!-- Modo Fan -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-eye text-pink-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Modo Fan</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-fan" src="" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen personalizada</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-fan" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-fan').click()" 
+                                        class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+
+                            <!-- Admin Panel -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-cog text-gray-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Panel Admin</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-admin" src="" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen personalizada</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-admin" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-admin').click()" 
+                                        class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Estado de carga -->
+                        <div id="upload-status" class="hidden mt-4 p-4 rounded-lg">
+                            <div class="flex items-center">
+                                <i class="fas fa-spinner fa-spin mr-2"></i>
+                                <span>Subiendo imagen...</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Instrucciones -->
+                        <div class="mt-6 bg-blue-50 p-4 rounded-lg">
+                            <h4 class="font-medium text-blue-900 mb-2">
+                                <i class="fas fa-info-circle mr-1"></i>Instrucciones
+                            </h4>
+                            <ul class="text-sm text-blue-800 space-y-1">
+                                <li>• Las imágenes se redimensionan automáticamente</li>
+                                <li>• Formatos soportados: JPG, PNG, GIF</li>
+                                <li>• Tamaño recomendado: 1920x1080px (Full HD)</li>
+                                <li>• Los cambios se aplican inmediatamente</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
@@ -2132,6 +2308,251 @@
                 throw error;
             }
         }
+
+        // ========================
+        // GESTIÓN DE FONDOS
+        // ========================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar manejadores para todos los inputs de archivo
+            const fileInputs = {
+                'upload-index': { 
+                    file: 'index.html',
+                    preview: 'preview-index',
+                    bgProperty: 'background-image',
+                    currentImage: 'chica-feliz-grabando-una-cancion.jpg'
+                },
+                'upload-inscripcion': { 
+                    file: 'inscripcion_unificada.html',
+                    preview: 'preview-inscripcion',
+                    bgProperty: 'background-image',
+                    currentImage: 'inscripcion-background.png'
+                },
+                'upload-perfil': { 
+                    file: 'perfil-artista.html',
+                    preview: 'preview-perfil',
+                    bgProperty: 'background-image',
+                    currentImage: 'inscripcion-background.png'
+                },
+                'upload-login': { 
+                    file: 'login-artista.html',
+                    preview: 'preview-login',
+                    bgProperty: 'background-image',
+                    currentImage: null
+                },
+                'upload-fan': { 
+                    file: 'fan-mode.html',
+                    preview: 'preview-fan',
+                    bgProperty: 'background-image',
+                    currentImage: null
+                },
+                'upload-admin': { 
+                    file: 'admin.html',
+                    preview: 'preview-admin',
+                    bgProperty: 'background-image',
+                    currentImage: null
+                }
+            };
+
+            Object.keys(fileInputs).forEach(inputId => {
+                const input = document.getElementById(inputId);
+                if (input) {
+                    input.addEventListener('change', function(e) {
+                        handleImageUpload(e, fileInputs[inputId]);
+                    });
+                }
+            });
+        });
+
+        function showImageUpdateInstructions(fileName, newImageName) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-white rounded-lg p-6 max-w-lg mx-4">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+                        <i class="fas fa-info-circle text-blue-500 mr-2"></i>
+                        Cómo Aplicar la Nueva Imagen
+                    </h3>
+                    <p class="text-gray-600 mb-4">
+                        La imagen está lista para usar. Para aplicarla automáticamente:
+                    </p>
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                        <p class="text-blue-800 text-sm mb-2">
+                            <strong>Opción Recomendada:</strong> Guarda la imagen manualmente
+                        </p>
+                        <ol class="text-sm text-blue-700 space-y-1">
+                            <li>1. Guarda la imagen en <code>images/fotos/</code></li>
+                            <li>2. Nómbrala como quieras (ej: <code>nuevo-fondo.jpg</code>)</li>
+                            <li>3. Actualiza la referencia en <code>${fileName}</code></li>
+                        </ol>
+                    </div>
+                    <div class="flex justify-end space-x-2">
+                        <button onclick="this.closest('.fixed').remove()" 
+                                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                            Cerrar
+                        </button>
+                        <button onclick="applyBackgroundChange(event); this.closest('.fixed').remove();" 
+                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                            <i class="fas fa-save mr-1"></i>Guardar y Aplicar
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+
+        function downloadImage(event) {
+            // Esta función permitiría descargar la imagen procesada
+            console.log('Descarga de imagen solicitada');
+        }
+
+        // Nueva función para aplicar cambios automáticamente
+        let currentImageData = null;
+        let currentConfig = null;
+
+        async function handleImageUpload(event, config) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validar tipo de archivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor selecciona un archivo de imagen válido');
+                return;
+            }
+
+            // Guardar para uso posterior
+            currentImageData = file;
+            currentConfig = config;
+
+            const statusDiv = document.getElementById('upload-status');
+            statusDiv.classList.remove('hidden');
+            statusDiv.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-spinner fa-spin mr-2 text-blue-600"></i>
+                    <span class="text-blue-600">Procesando imagen...</span>
+                </div>
+            `;
+
+            try {
+                // Crear vista previa
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    // Actualizar preview inmediatamente
+                    const previewImg = document.getElementById(config.preview);
+                    if (previewImg) {
+                        previewImg.src = e.target.result;
+                        previewImg.style.display = 'block';
+                        if (previewImg.nextElementSibling) {
+                            previewImg.nextElementSibling.style.display = 'none';
+                        }
+                    }
+
+                    setTimeout(() => {
+                        statusDiv.innerHTML = `
+                            <div class="flex items-center text-green-600">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                <span>¡Vista previa lista! Haz clic en "Guardar y Aplicar" para confirmar.</span>
+                            </div>
+                        `;
+                        
+                        // Mostrar instrucciones
+                        showImageUpdateInstructions(config.file, `new-bg-${Date.now()}.${file.name.split('.').pop()}`);
+                    }, 1000);
+                };
+                reader.readAsDataURL(file);
+
+            } catch (error) {
+                statusDiv.innerHTML = `
+                    <div class="flex items-center text-red-600">
+                        <i class="fas fa-exclamation-circle mr-2"></i>
+                        <span>Error al procesar la imagen: ${error.message}</span>
+                    </div>
+                `;
+                console.error('Error processing image:', error);
+            }
+        }
+
+        async function applyBackgroundChange() {
+            if (!currentImageData || !currentConfig) {
+                alert('No hay imagen para aplicar');
+                return;
+            }
+
+            try {
+                // Crear nombre único para el archivo
+                const timestamp = Date.now();
+                const extension = currentImageData.name.split('.').pop();
+                const newFileName = `bg-${currentConfig.file.replace('.html', '')}-${timestamp}.${extension}`;
+                
+                // Convertir imagen a base64 para almacenamiento local
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    
+                    // Guardar configuración en localStorage
+                    const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                    backgroundConfig[currentConfig.file] = {
+                        imageData: imageData,
+                        fileName: newFileName,
+                        applied: new Date().toISOString()
+                    };
+                    localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
+                    
+                    // Aplicar inmediatamente si estamos en la página correspondiente
+                    applyBackgroundToCurrentPage(currentConfig.file, imageData);
+                    
+                    // Mostrar mensaje de éxito
+                    showSuccessMessage(`Fondo aplicado correctamente a ${currentConfig.file}`);
+                };
+                reader.readAsDataURL(currentImageData);
+                
+            } catch (error) {
+                console.error('Error aplicando fondo:', error);
+                alert('Error al aplicar el fondo: ' + error.message);
+            }
+        }
+
+        function applyBackgroundToCurrentPage(targetFile, imageData) {
+            // Detectar página actual
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            if (currentPage === targetFile) {
+                // Aplicar el fondo inmediatamente a la página actual
+                document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${imageData}')`;
+                document.body.style.backgroundSize = 'cover';
+                document.body.style.backgroundAttachment = 'fixed';
+                document.body.style.backgroundPosition = 'center top';
+                document.body.style.backgroundRepeat = 'no-repeat';
+                
+                console.log('✅ Fondo aplicado a la página actual');
+            }
+        }
+
+        function showSuccessMessage(message) {
+            const successDiv = document.getElementById('upload-status');
+            successDiv.classList.remove('hidden');
+            successDiv.innerHTML = `
+                <div class="flex items-center text-green-600 bg-green-50 border border-green-200 rounded-lg p-4">
+                    <i class="fas fa-check-circle mr-2"></i>
+                    <span class="font-medium">${message}</span>
+                </div>
+            `;
+            
+            // Ocultar después de 5 segundos
+            setTimeout(() => {
+                successDiv.classList.add('hidden');
+            }, 5000);
+        }
+
+        // Aplicar fondos guardados al cargar la página
+        document.addEventListener('DOMContentLoaded', function() {
+            const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                console.log('🎨 Aplicando fondo guardado para:', currentPage);
+                applyBackgroundToCurrentPage(currentPage, backgroundConfig[currentPage].imageData);
+            }
+        });
     </script>
     <script type="module" src="admin-simple.js"></script>
 </body>

@@ -9,10 +9,35 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 30%, #1e40af 70%, #2563eb 100%);
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('images/fotos/inscripcion-background.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center top;
+            background-repeat: no-repeat;
             font-family: 'Roboto', sans-serif;
             color: white;
             min-height: 100vh;
+        }
+
+        /* Ajuste específico para pantallas grandes (PC/Desktop) */
+        @media (min-width: 1024px) {
+            body {
+                background-position: center 20%;
+            }
+        }
+
+        /* Para tablets */
+        @media (min-width: 768px) and (max-width: 1023px) {
+            body {
+                background-position: center 15%;
+            }
+        }
+
+        /* Para móviles mantener el centro */
+        @media (max-width: 767px) {
+            body {
+                background-position: center center;
+            }
         }
         .font-display { font-family: 'Montserrat', sans-serif; }
         
@@ -515,7 +540,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
         import { getFirestore, collection, doc, addDoc, getDocs, getDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
-        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
+        import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js';
         import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-storage.js';
 
         // Configuración Firebase
@@ -1113,7 +1138,7 @@
                 } catch (authError) {
                     console.warn('Error en autenticación (continuando con registro):', authError);
                     // Si falla la autenticación, continuamos con el registro normal
-                    firebaseUID = docRef?.id || `temp_${Date.now()}`;
+                    firebaseUID = `temp_${Date.now()}`;
                 }
 
                 console.log('=== ENVIANDO A FIRESTORE ===');
