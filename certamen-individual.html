@@ -76,6 +76,9 @@
                     <button onclick="goBack()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors">
                         <i class="fas fa-arrow-left"></i>
                     </button>
+                    <a href="principal.html" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-home"></i> Principal
+                    </a>
                     <div>
                         <h1 class="text-2xl font-bold text-white font-display" id="certamen-titulo">Súmate al Certamen</h1>
                         <p class="text-blue-200">Envía tu video y forma parte de la competencia</p>
@@ -402,25 +405,52 @@
 
             // Simular envío
             setTimeout(() => {
-                // Mostrar estado de éxito
+                // Mostrar estado de PENDIENTE DE APROBACIÓN
                 statusDiv.innerHTML = `
-                    <div class="bg-green-600/20 border border-green-500/30 rounded-lg p-4 text-center">
-                        <i class="fas fa-check-circle text-green-400 text-2xl mb-3"></i>
-                        <h3 class="text-lg font-bold text-white mb-2">¡Video Enviado con Éxito!</h3>
+                    <div class="bg-blue-600/20 border border-blue-500/30 rounded-lg p-4 text-center">
+                        <i class="fas fa-clock text-blue-400 text-2xl mb-3"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">¡Video Enviado!</h3>
                         <p class="text-gray-300 mb-4">
-                            Tu video ha sido enviado para revisión. Recibirás una notificación por email 
-                            dentro de 24-48 horas con el resultado.
+                            Tu video "<strong>${document.getElementById('titulo-cancion').value}</strong>" ha sido enviado correctamente.
                         </p>
+                        <div class="bg-yellow-600/20 border border-yellow-500/30 rounded-lg p-3 mb-4">
+                            <p class="text-yellow-300 font-semibold">
+                                <i class="fas fa-hourglass-half mr-2"></i>
+                                Estado: PENDIENTE DE APROBACIÓN
+                            </p>
+                            <p class="text-yellow-200 text-sm mt-2">
+                                Nuestro equipo revisará tu video en las próximas 24-48 horas.
+                            </p>
+                        </div>
                         <div class="bg-blue-600/20 border border-blue-500/30 rounded p-3 mt-4">
                             <h4 class="font-semibold text-blue-300 mb-1">Próximos pasos:</h4>
                             <ul class="text-sm text-gray-300 text-left space-y-1">
-                                <li>• Revisaremos tu video</li>
-                                <li>• Si es aprobado, podrás pagar la inscripción</li>
-                                <li>• Tu video aparecerá en el certamen público</li>
+                                <li>• ✅ Video enviado y almacenado</li>
+                                <li>• 🔄 En revisión por nuestro equipo</li>
+                                <li>• 📧 Te notificaremos el resultado por email</li>
+                                <li>• 💳 Una vez aprobado, podrás pagar la inscripción</li>
+                                <li>• 🏆 Tu video aparecerá en el certamen público</li>
                             </ul>
                         </div>
                     </div>
                 `;
+                
+                // Simular guardado en sistema de aprobación para que el admin lo vea
+                const datosVideo = {
+                    id: 'video_' + Date.now(),
+                    titulo: document.getElementById('titulo-cancion').value,
+                    artista: localStorage.getItem('artistaLogueado') ? JSON.parse(localStorage.getItem('artistaLogueado')).nombre_artista : 'Artista Demo',
+                    video_url: document.getElementById('youtube-url').value,
+                    certamen: 'Certamen Rosario 2025',
+                    estado: 'pendiente_aprobacion',
+                    fecha_envio: new Date().toISOString(),
+                    email: localStorage.getItem('artistaLogueado') ? JSON.parse(localStorage.getItem('artistaLogueado')).email : 'demo@email.com'
+                };
+                
+                // Guardar en localStorage para que el admin lo vea
+                const videosParaAprobacion = JSON.parse(localStorage.getItem('videosParaAprobacion') || '[]');
+                videosParaAprobacion.push(datosVideo);
+                localStorage.setItem('videosParaAprobacion', JSON.stringify(videosParaAprobacion));
                 
                 statusDiv.classList.remove('hidden');
                 form.style.display = 'none';
@@ -441,7 +471,7 @@
 
         function goBack() {
             if (confirm('¿Seguro que quieres salir? Se perderán los datos ingresados.')) {
-                window.location.href = 'perfil-artista.html';
+                window.location.href = 'perfil-simple.html';
             }
         }
 

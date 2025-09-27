@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="src/notification-system.js"></script>
     <style>
         body {
             background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('images/fotos/inscripcion-background.png');
@@ -129,25 +130,39 @@
     <header class="bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 sticky top-0 z-50">
         <div class="container mx-auto px-4 py-3">
             <nav class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
-                    <a href="index.html" class="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-                        <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
-                            <span class="font-bold text-white text-lg">🎵</span>
-                        </div>
-                        <div>
-                            <span class="font-bold text-xl text-white">VYT MUSIC</span>
-                            <div class="text-xs text-blue-200">Tu plataforma musical</div>
+                <!-- Logo y brand -->
+                <div class="flex items-center space-x-3">
+                    <a href="principal.html" class="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+                        <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo" class="w-8 h-8 md:w-10 md:h-10">
+                        <!-- Logo para pantallas pequeñas y medianas -->
+                        <div class="hidden sm:block">
+                            <span class="font-bold text-lg md:text-xl text-white">VYT MUSIC</span>
+                            <div class="text-xs text-blue-200 hidden md:block">Tu plataforma musical</div>
                         </div>
                     </a>
-                    <span class="bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">ARTISTA</span>
+                    <span class="bg-blue-500 text-white px-2 py-1 md:px-3 md:py-1 rounded-full text-xs md:text-sm font-semibold">ARTISTA</span>
                 </div>
                 
-                <div class="flex items-center space-x-4">
-                    <a href="fan-mode.html" class="text-gray-300 hover:text-white transition-colors">
-                        <i class="fas fa-eye"></i> Ver como Fan
+                <!-- Navegación responsive -->
+                <div class="flex items-center space-x-2 md:space-x-4">
+                    <!-- Botón Principal (siempre visible) -->
+                    <a href="principal.html" class="bg-blue-600 hover:bg-blue-700 text-white px-2 py-1 md:px-3 md:py-2 rounded-lg text-xs md:text-sm transition-colors">
+                        <i class="fas fa-home mr-1"></i>
+                        <span class="hidden sm:inline">Principal</span>
                     </a>
-                    <button onclick="logout()" class="text-red-400 hover:text-red-300 transition-colors">
-                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    
+                    <!-- Modo Fan (responsive) -->
+                    <a href="fan-mode.html" class="text-gray-300 hover:text-white transition-colors px-2 py-1 rounded text-xs md:text-sm">
+                        <i class="fas fa-eye mr-1"></i>
+                        <span class="hidden md:inline">Ver como Fan</span>
+                        <span class="md:hidden">Fan</span>
+                    </a>
+                    
+                    <!-- Cerrar sesión (responsive) -->
+                    <button onclick="logout()" class="text-red-400 hover:text-red-300 transition-colors px-2 py-1 rounded text-xs md:text-sm">
+                        <i class="fas fa-sign-out-alt mr-1"></i>
+                        <span class="hidden md:inline">Cerrar Sesión</span>
+                        <span class="md:hidden">Salir</span>
                     </button>
                 </div>
             </nav>
@@ -201,9 +216,9 @@
                         <button onclick="editProfile()" class="btn-secondary text-sm md:text-base">
                             <i class="fas fa-edit"></i> Editar Perfil
                         </button>
-                        <button onclick="viewCertamenes()" class="btn-primary text-sm md:text-base">
+                        <a href="principal.html#certamenes" class="btn-primary text-sm md:text-base text-center">
                             <i class="fas fa-trophy"></i> Ver Certámenes
-                        </button>
+                        </a>
                         <a href="certamen-individual.html?id=certamen-rosario-2025" class="btn-primary text-sm md:text-base sm:col-span-2 text-center">
                             <i class="fas fa-plus"></i> Inscribirse a Certamen
                         </a>
@@ -450,20 +465,25 @@
             if (confirm('¿Seguro que quieres cerrar sesión?')) {
                 localStorage.removeItem('artistaLogueado');
                 localStorage.removeItem('profilePhotoVYT');
-                window.location.href = 'index.html';
+                window.location.href = 'principal.html';
             }
         }
 
         function mostrarNotificacion(mensaje, tipo = 'info') {
-            const notification = document.getElementById('notification');
-            const colores = {
-                success: 'bg-green-500',
-                error: 'bg-red-500',
-                info: 'bg-blue-500'
-            };
+            // Usar el sistema de notificaciones global
+            if (window.notificationSystem) {
+                window.notificationSystem.showToast(mensaje, tipo);
+            } else {
+                // Fallback al sistema anterior
+                const notification = document.getElementById('notification');
+                const colores = {
+                    success: 'bg-green-500',
+                    error: 'bg-red-500',
+                    info: 'bg-blue-500'
+                };
 
-            const iconos = {
-                success: 'fa-check-circle',
+                const iconos = {
+                    success: 'fa-check-circle',
                 error: 'fa-exclamation-circle',
                 info: 'fa-info-circle'
             };

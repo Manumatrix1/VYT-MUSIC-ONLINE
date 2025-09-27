@@ -1,0 +1,25 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://vyt-music-online.web.app/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /functions/
+Disallow: /temp-dev/
+Disallow: /data-backup/
+Disallow: *.bat
+Disallow: *.ps1
+Disallow: *.sh
+
+# Allow important pages
+Allow: /principal.html
+Allow: /inscripcion_unificada.html
+Allow: /resultados.html
+Allow: /reglamento.html
+Allow: /nosotros.html
+Allow: /blog.html
+
+# Crawl-delay
+Crawl-delay: 1

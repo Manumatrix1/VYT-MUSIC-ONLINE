@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rankings y Resultados - VYT MUSIC | Los Mejores Talentos de Argentina</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Descubre los rankings actualizados de VYT Music. Conoce a los mejores cantantes de Argentina, vota por tus favoritos y sigue las competencias en tiempo real.">
+    <meta name="keywords" content="ranking cantantes, resultados concurso canto, mejores cantantes Argentina, votar cantantes, clasificación musical, ganadores VYT Music">
+    <meta name="author" content="VYT Music">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://vyt-music-online.web.app/resultados.html">
+    <meta property="og:title" content="Rankings y Resultados VYT MUSIC">
+    <meta property="og:description" content="Descubre los mejores talentos musicales de Argentina. Vota por tus cantantes favoritos y sigue las competencias.">
+    <meta property="og:image" content="https://i.ibb.co/Ldwq7cNx/logo-blanco.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://vyt-music-online.web.app/resultados.html">
+    <meta property="twitter:title" content="Rankings VYT MUSIC - Los Mejores Cantantes">
+    <meta property="twitter:description" content="Descubre los mejores talentos musicales de Argentina y vota por tus favoritos.">
+    <meta property="twitter:image" content="https://i.ibb.co/Ldwq7cNx/logo-blanco.png">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://vyt-music-online.web.app/resultados.html">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="src/notification-system.js"></script>
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('images/fotos/inscripcion-background.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .trophy-gold { color: #FFD700; }
+        .trophy-silver { color: #C0C0C0; }
+        .trophy-bronze { color: #CD7F32; }
+        
+        .rank-position {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); }
+        .rank-2 { background: linear-gradient(135deg, #C0C0C0, #808080); }
+        .rank-3 { background: linear-gradient(135deg, #CD7F32, #8B4513); }
+
+        .stats-card {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .stats-card:hover {
+            background: rgba(59, 130, 246, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-filter {
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-filter:hover {
+            background: rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-filter.active {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Header con navegación -->
+        <div class="container mx-auto px-4 mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <a href="principal.html" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    <div>
+                        <h1 class="text-3xl font-bold text-white font-display">🏆 Rankings y Resultados</h1>
+                        <p class="text-blue-200">Descubre a los mejores artistas de VYT Music</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="h-12">
+                </div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4">
+            <!-- Estadísticas generales -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="stats-card rounded-lg p-6 text-center">
+                    <div class="text-3xl mb-2">🎤</div>
+                    <div class="text-2xl font-bold text-white" id="total-artistas">1,247</div>
+                    <div class="text-sm text-gray-300">Artistas Registrados</div>
+                </div>
+                <div class="stats-card rounded-lg p-6 text-center">
+                    <div class="text-3xl mb-2">🏆</div>
+                    <div class="text-2xl font-bold text-white" id="total-certamenes">8</div>
+                    <div class="text-sm text-gray-300">Certámenes Activos</div>
+                </div>
+                <div class="stats-card rounded-lg p-6 text-center">
+                    <div class="text-3xl mb-2">⭐</div>
+                    <div class="text-2xl font-bold text-white" id="total-votos">45,892</div>
+                    <div class="text-sm text-gray-300">Votos Totales</div>
+                </div>
+                <div class="stats-card rounded-lg p-6 text-center">
+                    <div class="text-3xl mb-2">🎵</div>
+                    <div class="text-2xl font-bold text-white" id="total-videos">3,156</div>
+                    <div class="text-sm text-gray-300">Videos Subidos</div>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card p-6 mb-8">
+                <h2 class="text-xl font-bold text-white mb-4">Filtrar Resultados</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button onclick="filtrarPor('general')" class="btn-filter active text-white px-4 py-3 rounded-lg font-medium">
+                        <i class="fas fa-globe mr-2"></i>General
+                    </button>
+                    <button onclick="filtrarPor('provincia')" class="btn-filter text-white px-4 py-3 rounded-lg font-medium">
+                        <i class="fas fa-map-marker-alt mr-2"></i>Por Provincia
+                    </button>
+                    <button onclick="filtrarPor('genero')" class="btn-filter text-white px-4 py-3 rounded-lg font-medium">
+                        <i class="fas fa-music mr-2"></i>Por Género
+                    </button>
+                    <button onclick="filtrarPor('mes')" class="btn-filter text-white px-4 py-3 rounded-lg font-medium">
+                        <i class="fas fa-calendar mr-2"></i>Este Mes
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Top 10 General -->
+                <div class="lg:col-span-2">
+                    <div class="card p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-white">
+                                <i class="fas fa-trophy trophy-gold mr-2"></i>
+                                Ranking General
+                            </h2>
+                            <select id="certamen-select" class="bg-gray-800 text-white px-4 py-2 rounded-lg border border-gray-600">
+                                <option value="all">Todos los Certámenes</option>
+                                <option value="rosario-2025">Certamen Rosario 2025</option>
+                                <option value="cordoba-2025">Certamen Córdoba 2025</option>
+                                <option value="mendoza-2025">Certamen Mendoza 2025</option>
+                            </select>
+                        </div>
+                        
+                        <div id="ranking-lista" class="space-y-4">
+                            <!-- El ranking se cargará dinámicamente -->
+                        </div>
+
+                        <div class="mt-6 text-center">
+                            <button onclick="cargarMasResultados()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-chevron-down mr-2"></i>Ver Más Resultados
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Panel lateral con información adicional -->
+                <div class="space-y-6">
+                    <!-- Ganadores del mes -->
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">
+                            <i class="fas fa-crown trophy-gold mr-2"></i>
+                            Ganadores del Mes
+                        </h3>
+                        <div class="space-y-4" id="ganadores-mes">
+                            <div class="bg-yellow-100/10 border border-yellow-500/30 rounded-lg p-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-full flex items-center justify-center">
+                                        <i class="fas fa-crown text-white"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-semibold text-white">Luna Martínez</div>
+                                        <div class="text-sm text-gray-300">Certamen Rosario 2025</div>
+                                        <div class="text-xs text-yellow-400">1,847 votos</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estadísticas por género -->
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">
+                            <i class="fas fa-chart-pie mr-2"></i>
+                            Por Género Musical
+                        </h3>
+                        <div class="space-y-3" id="stats-genero">
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Pop</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-20 h-2 bg-gray-700 rounded-full">
+                                        <div class="w-3/4 h-full bg-blue-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-white text-sm">487</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Rock</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-20 h-2 bg-gray-700 rounded-full">
+                                        <div class="w-2/3 h-full bg-red-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-white text-sm">321</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Folclore</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-20 h-2 bg-gray-700 rounded-full">
+                                        <div class="w-1/2 h-full bg-green-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-white text-sm">258</span>
+                                </div>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-gray-300">Tango</span>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-20 h-2 bg-gray-700 rounded-full">
+                                        <div class="w-1/3 h-full bg-purple-500 rounded-full"></div>
+                                    </div>
+                                    <span class="text-white text-sm">181</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="card p-6">
+                        <h3 class="text-xl font-bold text-white mb-4">Acciones</h3>
+                        <div class="space-y-3">
+                            <button onclick="exportarRanking()" class="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-3 rounded-lg font-medium transition-colors">
+                                <i class="fas fa-download mr-2"></i>Exportar Ranking
+                            </button>
+                            <a href="certamen-individual.html" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-3 rounded-lg font-medium transition-colors block text-center">
+                                <i class="fas fa-plus mr-2"></i>Participar
+                            </a>
+                            <a href="principal.html" class="w-full bg-gray-600 hover:bg-gray-700 text-white px-4 py-3 rounded-lg font-medium transition-colors block text-center">
+                                <i class="fas fa-home mr-2"></i>Volver al Inicio
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de ejemplo para el ranking
+        const rankingData = [
+            { id: 1, nombre: "Sol Frecuencia", certamen: "Certamen Rosario 2025", votos: 2847, provincia: "Santa Fe", genero: "Pop", video_url: "https://youtube.com/watch?v=demo1" },
+            { id: 2, nombre: "Luna Martínez", certamen: "Certamen Córdoba 2025", votos: 2634, provincia: "Córdoba", genero: "Rock", video_url: "https://youtube.com/watch?v=demo2" },
+            { id: 3, nombre: "Diego Cantante", certamen: "Certamen Mendoza 2025", votos: 2398, provincia: "Mendoza", genero: "Folclore", video_url: "https://youtube.com/watch?v=demo3" },
+            { id: 4, nombre: "María Voz", certamen: "Certamen Rosario 2025", votos: 2156, provincia: "Buenos Aires", genero: "Tango", video_url: "https://youtube.com/watch?v=demo4" },
+            { id: 5, nombre: "Carlos Melody", certamen: "Certamen Córdoba 2025", votos: 1987, provincia: "Córdoba", genero: "Pop", video_url: "https://youtube.com/watch?v=demo5" },
+            { id: 6, nombre: "Ana Sonido", certamen: "Certamen Mendoza 2025", votos: 1823, provincia: "Mendoza", genero: "Rock", video_url: "https://youtube.com/watch?v=demo6" },
+            { id: 7, nombre: "Roberto Ritmo", certamen: "Certamen Rosario 2025", votos: 1764, provincia: "Santa Fe", genero: "Cumbia", video_url: "https://youtube.com/watch?v=demo7" },
+            { id: 8, nombre: "Laura Beat", certamen: "Certamen Córdoba 2025", votos: 1542, provincia: "Córdoba", genero: "Pop", video_url: "https://youtube.com/watch?v=demo8" },
+            { id: 9, nombre: "Pedro Armonía", certamen: "Certamen Mendoza 2025", votos: 1456, provincia: "Mendoza", genero: "Folclore", video_url: "https://youtube.com/watch?v=demo9" },
+            { id: 10, nombre: "Carmen Nota", certamen: "Certamen Rosario 2025", votos: 1387, provincia: "Buenos Aires", genero: "Tango", video_url: "https://youtube.com/watch?v=demo10" }
+        ];
+
+        let filtroActual = 'general';
+        let resultadosMostrados = 10;
+
+        // Cargar ranking inicial
+        document.addEventListener('DOMContentLoaded', function() {
+            cargarRanking();
+            actualizarEstadisticas();
+        });
+
+        function cargarRanking() {
+            const container = document.getElementById('ranking-lista');
+            let datosAMostrar = [...rankingData];
+
+            // Aplicar filtros
+            if (filtroActual !== 'general') {
+                // Aquí se aplicarían filtros específicos
+                // Por ahora mostramos todos los datos
+            }
+
+            // Limitar a resultados mostrados
+            datosAMostrar = datosAMostrar.slice(0, resultadosMostrados);
+
+            container.innerHTML = datosAMostrar.map((artista, index) => {
+                const posicion = index + 1;
+                let rankClass = 'rank-position';
+                let trophyIcon = '';
+
+                if (posicion === 1) {
+                    rankClass += ' rank-1';
+                    trophyIcon = '<i class="fas fa-trophy trophy-gold ml-2"></i>';
+                } else if (posicion === 2) {
+                    rankClass += ' rank-2';
+                    trophyIcon = '<i class="fas fa-trophy trophy-silver ml-2"></i>';
+                } else if (posicion === 3) {
+                    rankClass += ' rank-3';
+                    trophyIcon = '<i class="fas fa-trophy trophy-bronze ml-2"></i>';
+                }
+
+                return `
+                    <div class="bg-white/5 border border-white/10 rounded-lg p-4 hover:bg-white/10 transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <div class="${rankClass}">
+                                ${posicion}
+                            </div>
+                            
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">
+                                            ${artista.nombre}
+                                            ${trophyIcon}
+                                        </h4>
+                                        <p class="text-gray-300 text-sm">${artista.certamen}</p>
+                                        <p class="text-gray-400 text-xs">
+                                            <i class="fas fa-map-marker-alt mr-1"></i>${artista.provincia} 
+                                            <span class="ml-2">
+                                                <i class="fas fa-music mr-1"></i>${artista.genero}
+                                            </span>
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="text-right">
+                                        <div class="text-2xl font-bold text-blue-400">${artista.votos.toLocaleString()}</div>
+                                        <div class="text-gray-400 text-sm">votos</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="mt-3 flex space-x-2">
+                                    <a href="${artista.video_url}" target="_blank" 
+                                       class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fab fa-youtube mr-1"></i>Ver Video
+                                    </a>
+                                    <button onclick="votar(${artista.id})" 
+                                            class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fas fa-heart mr-1"></i>Votar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filtrarPor(tipo) {
+            // Actualizar botones activos
+            document.querySelectorAll('.btn-filter').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            filtroActual = tipo;
+            resultadosMostrados = 10; // Reset a 10
+            cargarRanking();
+            
+            if (window.notificationSystem) {
+                window.notificationSystem.showToast(`Filtrando por: ${tipo}`, 'info', 3000);
+            }
+        }
+
+        function cargarMasResultados() {
+            resultadosMostrados += 10;
+            cargarRanking();
+            
+            if (window.notificationSystem) {
+                window.notificationSystem.showToast('Cargando más resultados...', 'info', 2000);
+            }
+        }
+
+        function votar(artistaId) {
+            // Simular votación
+            const artista = rankingData.find(a => a.id === artistaId);
+            if (artista) {
+                artista.votos += 1;
+                cargarRanking();
+                
+                if (window.notificationSystem) {
+                    window.notificationSystem.showToast(`¡Votaste por ${artista.nombre}!`, 'success', 3000);
+                }
+            }
+        }
+
+        function exportarRanking() {
+            // Simular exportación
+            const data = JSON.stringify(rankingData.slice(0, resultadosMostrados), null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ranking-vyt-music.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            if (window.notificationSystem) {
+                window.notificationSystem.showToast('Ranking exportado correctamente', 'success', 3000);
+            }
+        }
+
+        function actualizarEstadisticas() {
+            // Actualizar contadores con animación
+            const stats = {
+                'total-artistas': 1247,
+                'total-certamenes': 8,
+                'total-votos': 45892,
+                'total-videos': 3156
+            };
+
+            Object.entries(stats).forEach(([id, valor]) => {
+                const elemento = document.getElementById(id);
+                if (elemento) {
+                    animarContador(elemento, 0, valor, 2000);
+                }
+            });
+        }
+
+        function animarContador(elemento, inicio, fin, duracion) {
+            const incremento = (fin - inicio) / (duracion / 16);
+            let actual = inicio;
+            
+            const timer = setInterval(() => {
+                actual += incremento;
+                if (actual >= fin) {
+                    actual = fin;
+                    clearInterval(timer);
+                }
+                elemento.textContent = Math.floor(actual).toLocaleString();
+            }, 16);
+        }
+
+        // Cambiar certamen
+        document.getElementById('certamen-select').addEventListener('change', function(e) {
+            const certamen = e.target.value;
+            if (window.notificationSystem) {
+                const texto = certamen === 'all' ? 'todos los certámenes' : certamen;
+                window.notificationSystem.showToast(`Mostrando: ${texto}`, 'info', 2000);
+            }
+        });
+    </script>
+</body>
+</html>

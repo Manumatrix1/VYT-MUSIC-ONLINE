@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bienvenido a VYT MUSIC</title>
+    <title>VYT MUSIC - Certamen Nacional de Canto</title>
     
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Redirección inmediata a principal.html -->
+    <script>
+        window.location.replace('principal.html');
+    </script>
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    <!-- Fallback si JavaScript está deshabilitado -->
+    <meta http-equiv="refresh" content="0; url=principal.html">
+</head>
+<body>
+    <!-- Mensaje de respaldo -->
+    <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>Redirigiendo a VYT MUSIC...</h1>
+        <p>Si no eres redirigido automáticamente, <a href="principal.html">haz clic aquí</a>.</p>
+    </div>
+</body>
+</html>
 
     <style>
         body {
