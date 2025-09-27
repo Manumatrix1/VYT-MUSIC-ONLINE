@@ -215,6 +215,9 @@
                         <a href="#" onclick="viewCertamenes()" class="btn-primary">
                             <i class="fas fa-trophy"></i> Ver certámenes
                         </a>
+                        <a href="inscripcion-certamen.html" class="btn-primary">
+                            <i class="fas fa-plus"></i> Inscribirse a Certamen
+                        </a>
                     </div>
                 </div>
             </div>
@@ -241,6 +244,24 @@
                 <div class="text-3xl mb-2">👥</div>
                 <div class="text-2xl font-bold" id="followersCount">0</div>
                 <div class="text-sm text-gray-400">Seguidores</div>
+            </div>
+        </div>
+
+        <!-- Certámenes Disponibles -->
+        <div class="mb-8">
+            <div class="profile-card">
+                <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                    <i class="fas fa-trophy text-yellow-400 mr-3"></i>
+                    Certámenes Disponibles
+                </h2>
+                
+                <div id="certamenes-disponibles" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Los certámenes se cargan dinámicamente -->
+                    <div class="text-center text-gray-400 py-8">
+                        <i class="fas fa-spinner fa-spin text-2xl mb-3"></i>
+                        <p>Cargando certámenes disponibles...</p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -335,6 +356,38 @@
             </div>
             
             <form id="editProfileForm" class="space-y-6">
+                <!-- Foto de Perfil -->
+                <div>
+                    <label class="block text-white text-sm font-semibold mb-2">
+                        <i class="fas fa-camera text-yellow-400 mr-2"></i>
+                        Foto de Perfil
+                    </label>
+                    <div class="flex items-center space-x-4">
+                        <!-- Vista previa actual -->
+                        <div class="relative">
+                            <img id="currentPhotoPreview" src="" alt="Foto actual" class="w-16 h-16 rounded-full object-cover border-2 border-gray-600 hidden">
+                            <div id="defaultPhotoPreview" class="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold border-2 border-gray-600">
+                                👤
+                            </div>
+                        </div>
+                        <!-- Input de archivo -->
+                        <div class="flex-1">
+                            <input type="file" id="photoInput" accept="image/*" class="hidden">
+                            <div class="flex space-x-2">
+                                <button type="button" onclick="document.getElementById('photoInput').click()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2">
+                                    <i class="fas fa-upload"></i>
+                                    <span>Seleccionar Foto</span>
+                                </button>
+                                <button type="button" id="savePhotoBtn" onclick="savePhoto()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center space-x-2 hidden">
+                                    <i class="fas fa-save"></i>
+                                    <span>Guardar Foto</span>
+                                </button>
+                            </div>
+                            <p class="text-gray-400 text-xs mt-1">1. Selecciona una imagen • 2. Haz clic en "Guardar Foto"</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Nombre Artístico -->
                 <div>
                     <label class="block text-white text-sm font-semibold mb-2">
@@ -484,6 +537,7 @@
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
         import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
         import { getFirestore, collection, getDocs, getDoc, query, where, orderBy, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
 
         // Configuración Firebase (unificada y actualizada)
         const firebaseConfig = {
@@ -499,11 +553,20 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
+        const storage = getStorage(app);
 
         // Verificar si hay un artista logueado
+        console.log('🔍 Cargando datos desde localStorage...');
         let artistaData = JSON.parse(localStorage.getItem('artistaLogueado') || '{}');
+        console.log('📊 Datos iniciales cargados:', {
+            email: artistaData.email,
+            nombre_artista: artistaData.nombre_artista,
+            tieneFoto: !!artistaData.fotoURL,
+            fotoTipo: artistaData.fotoURL ? (artistaData.fotoURL.startsWith('data:') ? 'base64' : 'url') : 'ninguna'
+        });
         
         if (!artistaData.uid) {
+            console.warn('⚠️ No hay UID, redirigiendo al login...');
             // Si no hay datos, redirigir al login
             window.location.href = 'login-artista.html';
         }
@@ -511,16 +574,38 @@
         // Recargar datos del usuario desde Firebase (para obtener cambios recientes)
         async function reloadUserData() {
             try {
-                const userDocRef = doc(db, 'artistas', artistaData.uid);
-                const userDoc = await getDoc(userDocRef);
+                let userDoc = null;
                 
-                if (userDoc.exists()) {
+                // Intentar por UID primero
+                if (artistaData.uid) {
+                    const userDocRef = doc(db, 'artistas', artistaData.uid);
+                    userDoc = await getDoc(userDocRef);
+                }
+                
+                // Si no encuentra por UID, buscar por email
+                if (!userDoc || !userDoc.exists()) {
+                    console.log('Buscando por email:', artistaData.email);
+                    const artistasRef = collection(db, 'artistas');
+                    const q = query(artistasRef, where('email', '==', artistaData.email));
+                    const querySnapshot = await getDocs(q);
+                    
+                    if (!querySnapshot.empty) {
+                        userDoc = querySnapshot.docs[0];
+                        // Actualizar el UID para futuras consultas
+                        artistaData.uid = userDoc.id;
+                    }
+                }
+                
+                if (userDoc && userDoc.exists()) {
                     const freshData = userDoc.data();
                     // Combinar datos existentes con datos frescos
-                    artistaData = { ...artistaData, ...freshData, uid: artistaData.uid };
+                    artistaData = { ...artistaData, ...freshData, uid: userDoc.id };
                     // Actualizar localStorage
                     localStorage.setItem('artistaLogueado', JSON.stringify(artistaData));
                     console.log('✅ Datos actualizados desde Firebase:', artistaData);
+                    console.log('Foto URL encontrada:', artistaData.fotoURL);
+                } else {
+                    console.warn('No se encontró documento del usuario');
                 }
             } catch (error) {
                 console.warn('⚠️ Error al recargar datos del usuario:', error);
@@ -529,7 +614,8 @@
 
         // Cargar información del perfil
         function loadProfile() {
-            console.log('Datos del artista:', artistaData); // Debug
+            console.log('🔄 Cargando perfil...');
+            console.log('📊 Datos del artista completos:', artistaData);
             
             document.getElementById('artistName').textContent = artistaData.nombre_artista || 'Artista Sin Nombre';
             document.getElementById('realName').textContent = `${artistaData.nombre || ''} ${artistaData.apellido || ''}`.trim() || 'Nombre no disponible';
@@ -558,14 +644,39 @@
             
             document.getElementById('phoneNumber').textContent = artistaData.whatsapp || 'No especificado';
             
-            // Cargar foto de perfil
-            if (artistaData.fotoURL || artistaData.foto_url) {
-                const photoUrl = artistaData.fotoURL || artistaData.foto_url;
-                // Agregar timestamp para evitar cache
-                const photoWithTimestamp = photoUrl + '?t=' + new Date().getTime();
-                document.getElementById('profilePhoto').src = photoWithTimestamp;
-                document.getElementById('profilePhoto').classList.remove('hidden');
-                document.getElementById('defaultAvatar').classList.add('hidden');
+            // Cargar foto de perfil usando la función simplificada
+            loadProfilePhoto();
+        }
+
+        // Función SIMPLIFICADA para cargar foto de perfil
+        function loadProfilePhoto() {
+            console.log('🖼️ CARGANDO FOTO DE PERFIL...');
+            
+            const profilePhoto = document.getElementById('profilePhoto');
+            const defaultAvatar = document.getElementById('defaultAvatar');
+            const saveBtn = document.getElementById('savePhotoBtn');
+            
+            if (!profilePhoto) {
+                console.error('❌ No se encontró elemento profilePhoto');
+                return;
+            }
+            
+            // 1. Buscar en localStorage directo (fotos guardadas permanentemente)
+            const savedPhoto = localStorage.getItem('profilePhotoVYT');
+            
+            console.log('📊 Estado: Foto guardada =', savedPhoto ? 'SÍ' : 'NO');
+            
+            if (savedPhoto) {
+                console.log('✅ Cargando foto guardada permanentemente');
+                profilePhoto.src = savedPhoto;
+                profilePhoto.classList.remove('hidden');
+                if (defaultAvatar) defaultAvatar.classList.add('hidden');
+                if (saveBtn) saveBtn.classList.add('hidden'); // Ocultar botón guardar
+            } else {
+                console.log('ℹ️ No hay foto guardada, mostrando avatar por defecto');
+                profilePhoto.classList.add('hidden');
+                if (defaultAvatar) defaultAvatar.classList.remove('hidden');
+                if (saveBtn) saveBtn.classList.add('hidden'); // Ocultar botón guardar
             }
         }
 
@@ -653,41 +764,158 @@
             document.body.removeChild(input);
         };
 
+        // Variable global para almacenar la imagen seleccionada temporalmente
+        let tempPhotoData = null;
+
         function handlePhotoUpload(file) {
-            // Validar tipo de archivo
+            console.log('� Archivo seleccionado:', file.name);
+            
             if (!file.type.startsWith('image/')) {
-                alert('Por favor selecciona una imagen válida');
+                showMessage('Por favor selecciona una imagen válida', 'error');
                 return;
             }
 
-            // Validar tamaño (máximo 5MB)
             if (file.size > 5 * 1024 * 1024) {
-                alert('La imagen es muy grande. Por favor selecciona una imagen menor a 5MB');
+                showMessage('La imagen es muy grande (máximo 5MB)', 'error');
                 return;
             }
 
-            // Mostrar vista previa inmediatamente
             const reader = new FileReader();
             reader.onload = function(e) {
+                console.log('👀 Mostrando vista previa...');
+                
+                // Guardar temporalmente
+                tempPhotoData = e.target.result;
+                
+                // Mostrar vista previa
                 const profilePhoto = document.getElementById('profilePhoto');
                 const defaultAvatar = document.getElementById('defaultAvatar');
                 
-                profilePhoto.src = e.target.result;
+                profilePhoto.src = tempPhotoData;
                 profilePhoto.classList.remove('hidden');
-                defaultAvatar.classList.add('hidden');
-            };
-            reader.readAsDataURL(file);
-
-            // Simular guardado (en un entorno real, aquí subirías a Firebase Storage)
-            setTimeout(() => {
-                // Actualizar localStorage con la nueva foto
-                const artistaData = JSON.parse(localStorage.getItem('artistaLogueado') || '{}');
-                artistaData.fotoURL = reader.result; // En producción sería una URL de Firebase Storage
-                localStorage.setItem('artistaLogueado', JSON.stringify(artistaData));
+                if (defaultAvatar) defaultAvatar.classList.add('hidden');
                 
-                // Mostrar mensaje de éxito
-                showMessage('¡Foto de perfil actualizada correctamente!', 'success');
-            }, 1000);
+                // Mostrar el botón de guardar
+                document.getElementById('savePhotoBtn').classList.remove('hidden');
+                
+                showMessage('Vista previa lista. Haz clic en "Guardar Foto" para confirmar.', 'info');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+
+        // Nueva función para guardar definitivamente la foto
+        window.savePhoto = function() {
+            if (!tempPhotoData) {
+                showMessage('No hay ninguna foto seleccionada', 'error');
+                return;
+            }
+            
+            console.log('💾 Guardando foto definitivamente...');
+            
+            // Guardar en localStorage directo
+            localStorage.setItem('profilePhotoVYT', tempPhotoData);
+            
+            // Actualizar artistaData
+            artistaData.fotoURL = tempPhotoData;
+            localStorage.setItem('artistaLogueado', JSON.stringify(artistaData));
+            
+            // Ocultar botón de guardar
+            document.getElementById('savePhotoBtn').classList.add('hidden');
+            
+            // Limpiar temp
+            tempPhotoData = null;
+            
+            console.log('✅ Foto guardada permanentemente');
+            showMessage('¡Foto guardada correctamente! Ahora se mantendrá al recargar.', 'success');
+        };
+
+        // Nueva función para subir foto a Firebase Storage - Versión simplificada
+        async function uploadProfilePhotoToFirebase(file) {
+            try {
+                console.log('🚀 Iniciando subida de foto...');
+                showMessage('Subiendo foto de perfil...', 'info');
+                
+                // Validar que tenemos los datos del usuario
+                if (!artistaData.email) {
+                    throw new Error('No se encontró información del usuario');
+                }
+                
+                // Convertir imagen a base64
+                const reader = new FileReader();
+                reader.onload = async function(e) {
+                    try {
+                        const imageData = e.target.result;
+                        console.log('📸 Imagen convertida a base64, tamaño:', imageData.length, 'caracteres');
+                        
+                        // Guardar en los datos del artista
+                        artistaData.fotoURL = imageData;
+                        console.log('💾 Guardando en localStorage...');
+                        localStorage.setItem('artistaLogueado', JSON.stringify(artistaData));
+                        
+                        // Verificar que se guardó correctamente
+                        const verificacion = JSON.parse(localStorage.getItem('artistaLogueado') || '{}');
+                        if (verificacion.fotoURL) {
+                            console.log('✅ Foto guardada correctamente en localStorage');
+                        } else {
+                            console.error('❌ Error: No se guardó en localStorage');
+                        }
+                        
+                        // Intentar guardar en Firestore también
+                        await updateProfilePhotoInFirestore(imageData);
+                        
+                        showMessage('¡Foto de perfil actualizada correctamente!', 'success');
+                        console.log('🎉 Proceso de subida completado exitosamente');
+                        
+                    } catch (error) {
+                        console.error('❌ Error al procesar imagen:', error);
+                        showMessage('Error al procesar la imagen: ' + error.message, 'error');
+                    }
+                };
+                
+                reader.onerror = function(error) {
+                    console.error('❌ Error al leer archivo:', error);
+                    showMessage('Error al leer el archivo de imagen', 'error');
+                };
+                
+                reader.readAsDataURL(file);
+                
+            } catch (error) {
+                console.error('❌ Error general en subida:', error);
+                showMessage('Error al subir la foto: ' + error.message, 'error');
+            }
+        }
+
+        // Función mejorada para actualizar la foto en Firestore
+        async function updateProfilePhotoInFirestore(photoURL) {
+            try {
+                console.log('Intentando actualizar en Firestore...');
+                
+                if (!artistaData.email) {
+                    console.warn('No hay email de usuario para actualizar');
+                    return;
+                }
+                
+                // Buscar el documento del artista por email
+                const artistasRef = collection(db, 'artistas');
+                const q = query(artistasRef, where('email', '==', artistaData.email));
+                const querySnapshot = await getDocs(q);
+                
+                if (!querySnapshot.empty) {
+                    // Actualizar el primer documento encontrado
+                    const docRef = querySnapshot.docs[0].ref;
+                    await updateDoc(docRef, {
+                        fotoURL: photoURL,
+                        fechaActualizacion: new Date().toISOString()
+                    });
+                    console.log('✅ Foto actualizada en Firestore');
+                } else {
+                    console.warn('⚠️ No se encontró documento del artista en Firestore');
+                }
+            } catch (error) {
+                console.error('❌ Error al actualizar en Firestore:', error);
+                // No lanzar error, solo loguear para no interrumpir la funcionalidad
+            }
         }
 
         function showMessage(message, type = 'info') {
@@ -736,14 +964,146 @@
             alert('Función de Estadísticas en desarrollo');
         };
 
-        // Inicializar página
+        // Datos de ejemplo de certámenes (después se conectará con Firebase)
+        const certamenesEjemplo = [
+            {
+                id: 'certamen-rosario-2025',
+                nombre: 'Certamen Rosario 2025',
+                descripcion: 'El certamen de canto más importante de Rosario',
+                fechaCierre: '2025-10-15',
+                categoria: 'Regional',
+                premio: '$50,000',
+                estado: 'activo',
+                inscripciones: 45,
+                maxInscripciones: 100
+            },
+            {
+                id: 'certamen-nacional-2025',
+                nombre: 'Certamen Nacional Argentina',
+                descripcion: 'Competencia a nivel nacional para todas las provincias',
+                fechaCierre: '2025-11-30',
+                categoria: 'Nacional',
+                premio: '$200,000',
+                estado: 'proximo',
+                inscripciones: 0,
+                maxInscripciones: 500
+            },
+            {
+                id: 'certamen-santa-fe-2025',
+                nombre: 'Certamen Provincial Santa Fe',
+                descripcion: 'Para todos los artistas de la provincia',
+                fechaCierre: '2025-10-31',
+                categoria: 'Provincial',
+                premio: '$75,000',
+                estado: 'activo',
+                inscripciones: 23,
+                maxInscripciones: 200
+            }
+        ];
+
+        // Función para cargar certámenes disponibles
+        function loadCertamenesDisponibles() {
+            const container = document.getElementById('certamenes-disponibles');
+            if (!container) return;
+
+            // Filtrar solo certámenes activos
+            const certamenesActivos = certamenesEjemplo.filter(c => c.estado === 'activo');
+
+            if (certamenesActivos.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center text-gray-400 py-8">
+                        <i class="fas fa-calendar-times text-3xl mb-3"></i>
+                        <h3 class="text-lg font-semibold mb-2">No hay certámenes activos</h3>
+                        <p>¡Mantente atento! Pronto habrá nuevos certámenes disponibles.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = certamenesActivos.map(certamen => {
+                const fechaCierre = new Date(certamen.fechaCierre);
+                const hoy = new Date();
+                const diasRestantes = Math.ceil((fechaCierre - hoy) / (1000 * 60 * 60 * 24));
+                
+                const porcentajeInscripciones = (certamen.inscripciones / certamen.maxInscripciones) * 100;
+                
+                return `
+                    <div class="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 hover:bg-white/15 transition-all duration-300 cursor-pointer" 
+                         onclick="irACertamen('${certamen.id}')">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold text-white mb-1">${certamen.nombre}</h3>
+                                <p class="text-gray-300 text-sm">${certamen.descripcion}</p>
+                            </div>
+                            <div class="ml-4 text-center">
+                                <div class="bg-yellow-500 text-black text-xs font-bold px-2 py-1 rounded">
+                                    ${certamen.categoria}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-300">Premio:</span>
+                                <span class="text-green-400 font-bold">${certamen.premio}</span>
+                            </div>
+                            
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-300">Cierra en:</span>
+                                <span class="text-blue-400 font-bold">${diasRestantes} días</span>
+                            </div>
+                            
+                            <div class="space-y-2">
+                                <div class="flex justify-between text-sm">
+                                    <span class="text-gray-300">Inscripciones:</span>
+                                    <span class="text-white">${certamen.inscripciones}/${certamen.maxInscripciones}</span>
+                                </div>
+                                <div class="w-full bg-gray-700 rounded-full h-2">
+                                    <div class="bg-blue-500 h-2 rounded-full transition-all duration-300" 
+                                         style="width: ${porcentajeInscripciones}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-4 pt-4 border-t border-white/10">
+                            <button class="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-bold py-2 px-4 rounded-lg transition-all duration-300 transform hover:scale-105">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                ¡Súmate al certamen!
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Función para ir a página específica del certamen
+        function irACertamen(certamenId) {
+            window.location.href = `certamen-individual.html?id=${certamenId}`;
+        }
+
+        // Inicialización SIMPLIFICADA
         document.addEventListener('DOMContentLoaded', async () => {
-            // Primero recargar datos del usuario
-            await reloadUserData();
-            // Luego cargar el perfil con datos actualizados
+            console.log('🚀 INICIANDO VERSION SIMPLIFICADA...');
+            
+            // Cargar perfil inmediatamente con datos actuales
             loadProfile();
             loadCertamenes();
-            loadCustomBackground();
+            loadCertamenesDisponibles(); // Nueva función para certámenes disponibles
+            
+            // Configurar event listener para foto
+            const photoInput = document.getElementById('photoInput');
+            if (photoInput) {
+                photoInput.addEventListener('change', function(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        console.log('📁 Nuevo archivo:', file.name);
+                        handlePhotoUpload(file);
+                    }
+                });
+                console.log('✅ Event listener configurado');
+            }
+            
+            console.log('✅ Inicialización completa');
         });
 
         // Función para cargar fondo personalizado desde admin
@@ -1078,6 +1438,43 @@
         // Auto debug al cargar (puedes comentar esta línea en producción)
         console.log('🔍 Debug automático al cargar:');
         debugArtistData();
+        
+        // *** INICIALIZACIÓN PRINCIPAL ***
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('🚀 INICIANDO PERFIL DE ARTISTA...');
+            
+            try {
+                // 1. Cargar perfil inmediatamente
+                console.log('📋 Cargando datos del perfil...');
+                loadProfile();
+                
+                // 2. Cargar foto de perfil
+                console.log('🖼️ Cargando foto de perfil...');
+                loadProfilePhoto();
+                
+                // 3. Cargar certámenes disponibles
+                console.log('🏆 Cargando certámenes disponibles...');
+                loadCertamenesDisponibles();
+                
+                // 4. Configurar event listener para cambio de foto
+                const photoInput = document.getElementById('photoInput');
+                if (photoInput) {
+                    photoInput.addEventListener('change', function(event) {
+                        const file = event.target.files[0];
+                        if (file) {
+                            console.log('📁 Archivo seleccionado:', file.name);
+                            handlePhotoUpload(file);
+                        }
+                    });
+                    console.log('✅ Event listener para foto configurado');
+                }
+                
+                console.log('✅ Inicialización completa del perfil');
+                
+            } catch (error) {
+                console.error('❌ Error en inicialización:', error);
+            }
+        });
     </script>
 </body>
 </html>

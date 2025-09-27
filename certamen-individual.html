@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Súmate al Certamen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('images/fotos/inscripcion-background.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center top;
+            background-repeat: no-repeat;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .form-card {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            color: #1f2937;
+        }
+
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+
+        .youtube-preview {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 0.5rem;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Header con navegación -->
+        <div class="container mx-auto px-4 mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white font-display" id="certamen-titulo">Súmate al Certamen</h1>
+                        <p class="text-blue-200">Envía tu video y forma parte de la competencia</p>
+                    </div>
+                </div>
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="h-12">
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                
+                <!-- Información del Certamen -->
+                <div class="form-card mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <h2 class="text-xl font-bold text-white mb-4" id="certamen-nombre">Certamen Rosario 2025</h2>
+                            <p class="text-gray-300 mb-4" id="certamen-descripcion">El certamen de canto más importante de Rosario</p>
+                            
+                            <div class="space-y-3">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Categoría:</span>
+                                    <span class="badge status-badge" id="certamen-categoria">Regional</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Premio:</span>
+                                    <span class="text-green-400 font-bold" id="certamen-premio">$50,000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Fecha de cierre:</span>
+                                    <span class="text-blue-400 font-bold" id="certamen-fecha">15 de Octubre, 2025</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-400">Inscripciones:</span>
+                                    <span class="text-white" id="certamen-inscripciones">45/100</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-lg font-semibold text-white mb-3">Requisitos</h3>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    Video original en YouTube
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    Duración: máximo 5 minutos
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    Audio e imagen de calidad
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    Sin copyright de terceros
+                                </li>
+                                <li class="flex items-center">
+                                    <i class="fas fa-check text-green-400 mr-2"></i>
+                                    Pago de inscripción tras aprobación
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Formulario de Inscripción -->
+                <div class="form-card">
+                    <h2 class="text-2xl font-bold text-white mb-6">
+                        <i class="fas fa-video text-red-500 mr-3"></i>
+                        Envía tu Video de YouTube
+                    </h2>
+
+                    <form id="inscripcion-form" class="space-y-6">
+                        <!-- URL de YouTube -->
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fab fa-youtube text-red-500 mr-2"></i>
+                                URL del Video de YouTube *
+                            </label>
+                            <input 
+                                type="url" 
+                                id="youtube-url" 
+                                name="youtubeUrl"
+                                class="form-input w-full px-4 py-3 rounded-lg"
+                                placeholder="https://www.youtube.com/watch?v=..."
+                                required
+                            >
+                            <p class="text-gray-400 text-sm mt-2">
+                                <i class="fas fa-info-circle mr-1"></i>
+                                Copia el enlace completo de tu video de YouTube
+                            </p>
+                        </div>
+
+                        <!-- Preview del Video -->
+                        <div id="video-preview-container" class="hidden">
+                            <label class="block text-white font-medium mb-2">Vista Previa</label>
+                            <div class="youtube-preview" id="video-preview">
+                                <div class="text-center">
+                                    <i class="fas fa-play-circle text-4xl text-white/50 mb-2"></i>
+                                    <p class="text-white/70">Vista previa del video aparecerá aquí</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Título de la Canción -->
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fas fa-music text-purple-500 mr-2"></i>
+                                Título de la Canción *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="song-title" 
+                                name="songTitle"
+                                class="form-input w-full px-4 py-3 rounded-lg"
+                                placeholder="Nombre de la canción que interpretas"
+                                required
+                            >
+                        </div>
+
+                        <!-- Género Musical -->
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fas fa-guitar text-orange-500 mr-2"></i>
+                                Género Musical *
+                            </label>
+                            <select id="genre" name="genre" class="form-input w-full px-4 py-3 rounded-lg" required>
+                                <option value="">Selecciona un género</option>
+                                <option value="pop">Pop</option>
+                                <option value="rock">Rock</option>
+                                <option value="folk">Folk</option>
+                                <option value="blues">Blues</option>
+                                <option value="jazz">Jazz</option>
+                                <option value="reggae">Reggae</option>
+                                <option value="country">Country</option>
+                                <option value="rap">Rap/Hip Hop</option>
+                                <option value="electronica">Electrónica</option>
+                                <option value="balada">Balada</option>
+                                <option value="cumbia">Cumbia</option>
+                                <option value="tango">Tango</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+
+                        <!-- Descripción -->
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fas fa-align-left text-blue-500 mr-2"></i>
+                                Descripción del Video (Opcional)
+                            </label>
+                            <textarea 
+                                id="description" 
+                                name="description"
+                                rows="3"
+                                class="form-input w-full px-4 py-3 rounded-lg resize-none"
+                                placeholder="Cuéntanos algo sobre tu interpretación..."
+                            ></textarea>
+                        </div>
+
+                        <!-- Términos y Condiciones -->
+                        <div class="bg-gray-800/30 p-4 rounded-lg">
+                            <label class="flex items-start space-x-3 cursor-pointer">
+                                <input type="checkbox" id="terms" name="terms" class="mt-1" required>
+                                <div class="text-sm text-gray-300">
+                                    Acepto los <a href="#" class="text-blue-400 hover:underline">términos y condiciones</a> del certamen. 
+                                    Entiendo que mi video será revisado por el equipo de VYT Music y, si es aprobado, 
+                                    podré proceder con el pago de la inscripción para participar oficialmente.
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Estado del envío -->
+                        <div id="submission-status" class="hidden">
+                            <!-- Se mostrará dinámicamente -->
+                        </div>
+
+                        <!-- Botón de Envío -->
+                        <div class="text-center pt-4">
+                            <button type="submit" id="submit-btn" class="bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
+                                <i class="fas fa-paper-plane mr-2"></i>
+                                Enviar Video para Revisión
+                            </button>
+                            <p class="text-gray-400 text-sm mt-3">
+                                Tu video será revisado en un plazo de 24-48 horas
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos del certamen (se cargarán dinámicamente)
+        let certamenActual = null;
+        
+        // Datos de ejemplo de certámenes
+        const certamenesData = {
+            'certamen-rosario-2025': {
+                id: 'certamen-rosario-2025',
+                nombre: 'Certamen Rosario 2025',
+                descripcion: 'El certamen de canto más importante de Rosario',
+                fechaCierre: '2025-10-15',
+                categoria: 'Regional',
+                premio: '$50,000',
+                inscripciones: 45,
+                maxInscripciones: 100
+            },
+            'certamen-nacional-2025': {
+                id: 'certamen-nacional-2025',
+                nombre: 'Certamen Nacional Argentina',
+                descripcion: 'Competencia a nivel nacional para todas las provincias',
+                fechaCierre: '2025-11-30',
+                categoria: 'Nacional',
+                premio: '$200,000',
+                inscripciones: 0,
+                maxInscripciones: 500
+            },
+            'certamen-santa-fe-2025': {
+                id: 'certamen-santa-fe-2025',
+                nombre: 'Certamen Provincial Santa Fe',
+                descripción: 'Para todos los artistas de la provincia',
+                fechaCierre: '2025-10-31',
+                categoria: 'Provincial',
+                premio: '$75,000',
+                inscripciones: 23,
+                maxInscripciones: 200
+            }
+        };
+
+        // Cargar información del certamen
+        function loadCertamenInfo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const certamenId = urlParams.get('id') || 'certamen-rosario-2025';
+            
+            certamenActual = certamenesData[certamenId];
+            
+            if (!certamenActual) {
+                alert('Certamen no encontrado');
+                goBack();
+                return;
+            }
+
+            // Actualizar información en la página
+            document.getElementById('certamen-titulo').textContent = `Súmate al ${certamenActual.nombre}`;
+            document.getElementById('certamen-nombre').textContent = certamenActual.nombre;
+            document.getElementById('certamen-descripcion').textContent = certamenActual.descripcion;
+            document.getElementById('certamen-categoria').textContent = certamenActual.categoria;
+            document.getElementById('certamen-premio').textContent = certamenActual.premio;
+            
+            // Formatear fecha
+            const fecha = new Date(certamenActual.fechaCierre);
+            const opciones = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('certamen-fecha').textContent = fecha.toLocaleDateString('es-ES', opciones);
+            
+            document.getElementById('certamen-inscripciones').textContent = `${certamenActual.inscripciones}/${certamenActual.maxInscripciones}`;
+        }
+
+        // Función para validar y mostrar preview de YouTube
+        function validateYouTubeURL(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        function showVideoPreview(videoId) {
+            const previewContainer = document.getElementById('video-preview-container');
+            const preview = document.getElementById('video-preview');
+            
+            preview.innerHTML = `
+                <iframe 
+                    width="100%" 
+                    height="100%" 
+                    src="https://www.youtube.com/embed/${videoId}" 
+                    frameborder="0" 
+                    allowfullscreen
+                    style="border-radius: 0.5rem;">
+                </iframe>
+            `;
+            
+            previewContainer.classList.remove('hidden');
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            loadCertamenInfo();
+
+            // Validar URL de YouTube en tiempo real
+            const youtubeInput = document.getElementById('youtube-url');
+            youtubeInput.addEventListener('input', function(e) {
+                const url = e.target.value;
+                const videoId = validateYouTubeURL(url);
+                
+                if (videoId) {
+                    showVideoPreview(videoId);
+                    youtubeInput.classList.remove('border-red-500');
+                } else if (url.length > 10) {
+                    youtubeInput.classList.add('border-red-500');
+                    document.getElementById('video-preview-container').classList.add('hidden');
+                } else {
+                    document.getElementById('video-preview-container').classList.add('hidden');
+                    youtubeInput.classList.remove('border-red-500');
+                }
+            });
+
+            // Manejar envío del formulario
+            document.getElementById('inscripcion-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                enviarVideoParaRevision();
+            });
+        });
+
+        // Función para enviar video para revisión
+        function enviarVideoParaRevision() {
+            const form = document.getElementById('inscripcion-form');
+            const submitBtn = document.getElementById('submit-btn');
+            const statusDiv = document.getElementById('submission-status');
+
+            // Deshabilitar botón
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+
+            // Simular envío
+            setTimeout(() => {
+                // Mostrar estado de éxito
+                statusDiv.innerHTML = `
+                    <div class="bg-green-600/20 border border-green-500/30 rounded-lg p-4 text-center">
+                        <i class="fas fa-check-circle text-green-400 text-2xl mb-3"></i>
+                        <h3 class="text-lg font-bold text-white mb-2">¡Video Enviado con Éxito!</h3>
+                        <p class="text-gray-300 mb-4">
+                            Tu video ha sido enviado para revisión. Recibirás una notificación por email 
+                            dentro de 24-48 horas con el resultado.
+                        </p>
+                        <div class="bg-blue-600/20 border border-blue-500/30 rounded p-3 mt-4">
+                            <h4 class="font-semibold text-blue-300 mb-1">Próximos pasos:</h4>
+                            <ul class="text-sm text-gray-300 text-left space-y-1">
+                                <li>• Revisaremos tu video</li>
+                                <li>• Si es aprobado, podrás pagar la inscripción</li>
+                                <li>• Tu video aparecerá en el certamen público</li>
+                            </ul>
+                        </div>
+                    </div>
+                `;
+                
+                statusDiv.classList.remove('hidden');
+                form.style.display = 'none';
+
+                // Aquí iría la integración con Firebase para guardar los datos
+                console.log('Datos del video enviados:', {
+                    certamenId: certamenActual.id,
+                    youtubeUrl: document.getElementById('youtube-url').value,
+                    songTitle: document.getElementById('song-title').value,
+                    genre: document.getElementById('genre').value,
+                    description: document.getElementById('description').value,
+                    timestamp: new Date().toISOString(),
+                    status: 'pending_review'
+                });
+                
+            }, 2000);
+        }
+
+        function goBack() {
+            if (confirm('¿Seguro que quieres salir? Se perderán los datos ingresados.')) {
+                window.location.href = 'perfil-artista.html';
+            }
+        }
+
+        // Cargar fondo personalizado desde admin
+        function loadCustomBackground() {
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'certamen-individual.html';
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log('🎨 Aplicando fondo personalizado para certamen individual');
+                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('${backgroundConfig[currentPage].imageData}')`;
+                }
+            } catch (error) {
+                console.error('Error al cargar fondo personalizado:', error);
+            }
+        }
+
+        // Cargar fondo al inicializar
+        document.addEventListener('DOMContentLoaded', loadCustomBackground);
+    </script>
+</body>
+</html>

@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscripción a Certamen - VYT MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('images/fotos/inscripcion-background.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .font-display { font-family: 'Montserrat', sans-serif; }
+        
+        .step-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .step-active {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        
+        .video-preview {
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Header con navegación -->
+        <div class="container mx-auto px-4 mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white font-display">Inscripción a Certamen</h1>
+                        <p class="text-blue-200">Completa los pasos para participar</p>
+                    </div>
+                </div>
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="h-12">
+            </div>
+        </div>
+
+        <!-- Pasos del proceso -->
+        <div class="container mx-auto px-4 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <!-- Paso 1: Modalidad -->
+                <div id="step1-indicator" class="step-card step-active p-4 rounded-lg text-center">
+                    <div class="w-8 h-8 bg-blue-600 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold">1</div>
+                    <div class="text-white font-semibold">Modalidad</div>
+                    <div class="text-blue-200 text-sm">Presencial u Online</div>
+                </div>
+                
+                <!-- Paso 2: Categoría -->
+                <div id="step2-indicator" class="step-card p-4 rounded-lg text-center">
+                    <div class="w-8 h-8 bg-gray-500 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold">2</div>
+                    <div class="text-white font-semibold">Categoría</div>
+                    <div class="text-gray-300 text-sm">Género y nivel</div>
+                </div>
+                
+                <!-- Paso 3: Video -->
+                <div id="step3-indicator" class="step-card p-4 rounded-lg text-center">
+                    <div class="w-8 h-8 bg-gray-500 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold">3</div>
+                    <div class="text-white font-semibold">Video</div>
+                    <div class="text-gray-300 text-sm">Sube tu performance</div>
+                </div>
+                
+                <!-- Paso 4: Pago -->
+                <div id="step4-indicator" class="step-card p-4 rounded-lg text-center">
+                    <div class="w-8 h-8 bg-gray-500 rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold">4</div>
+                    <div class="text-white font-semibold">Pago</div>
+                    <div class="text-gray-300 text-sm">Confirmar inscripción</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contenido principal -->
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto">
+                
+                <!-- PASO 1: Selección de Modalidad -->
+                <div id="step1" class="step-content">
+                    <div class="step-card p-8 rounded-2xl">
+                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">¿Cómo quieres participar?</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Modalidad Presencial -->
+                            <div onclick="selectModalidad('presencial')" class="modalidad-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                        <i class="fas fa-microphone text-2xl text-white"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Presencial</h3>
+                                    <p class="text-blue-200 mb-4">Para Rosario y zona</p>
+                                    <ul class="text-left text-gray-300 text-sm space-y-1">
+                                        <li>• Presentación en vivo</li>
+                                        <li>• Interacción con jurado</li>
+                                        <li>• Mayor impacto escénico</li>
+                                        <li>• Networking presencial</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Modalidad Online -->
+                            <div onclick="selectModalidad('online')" class="modalidad-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-green-400 hover:bg-green-500/10 transition-all duration-300">
+                                <div class="text-center">
+                                    <div class="w-16 h-16 bg-green-600 rounded-full mx-auto mb-4 flex items-center justify-center">
+                                        <i class="fas fa-video text-2xl text-white"></i>
+                                    </div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Online</h3>
+                                    <p class="text-green-200 mb-4">Para toda Argentina</p>
+                                    <ul class="text-left text-gray-300 text-sm space-y-1">
+                                        <li>• Participa desde casa</li>
+                                        <li>• Graba cuando quieras</li>
+                                        <li>• Sin límites geográficos</li>
+                                        <li>• Menor costo de participación</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 2: Selección de Categoría -->
+                <div id="step2" class="step-content hidden">
+                    <div class="step-card p-8 rounded-2xl">
+                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Elige tu Categoría</h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                            <!-- Categoría Local -->
+                            <div onclick="selectCategoria('local')" class="categoria-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-yellow-400 hover:bg-yellow-500/10 transition-all duration-300">
+                                <div class="text-center">
+                                    <div class="text-4xl mb-3">🏘️</div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Local</h3>
+                                    <p class="text-yellow-200 text-sm">Barrio / Localidad</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Categoría Regional -->
+                            <div onclick="selectCategoria('regional')" class="categoria-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-orange-400 hover:bg-orange-500/10 transition-all duration-300">
+                                <div class="text-center">
+                                    <div class="text-4xl mb-3">🏙️</div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Regional</h3>
+                                    <p class="text-orange-200 text-sm">Rosario y zona</p>
+                                </div>
+                            </div>
+                            
+                            <!-- Categoría Provincial -->
+                            <div onclick="selectCategoria('provincial')" class="categoria-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-purple-400 hover:bg-purple-500/10 transition-all duration-300">
+                                <div class="text-center">
+                                    <div class="text-4xl mb-3">🗺️</div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Provincial</h3>
+                                    <p class="text-purple-200 text-sm">Toda Santa Fe</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Géneros musicales -->
+                        <div class="mt-8">
+                            <h3 class="text-xl font-bold text-white mb-4">Género Musical</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="pop" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Pop</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="rock" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Rock</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="folclore" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Folclore</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="tango" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Tango</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="cumbia" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Cumbia</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="reggaeton" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Reggaeton</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="balada" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Balada</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" name="genero" value="otro" class="w-4 h-4 text-blue-600">
+                                    <span class="text-white">Otro</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 3: Subida de Video -->
+                <div id="step3" class="step-content hidden">
+                    <div class="step-card p-8 rounded-2xl">
+                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Sube tu Video</h2>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Area de subida -->
+                            <div>
+                                <div id="video-upload-area" class="border-2 border-dashed border-white/30 rounded-xl p-8 text-center hover:border-blue-400 transition-colors cursor-pointer">
+                                    <div class="text-6xl text-white/50 mb-4">🎥</div>
+                                    <h3 class="text-xl font-bold text-white mb-2">Arrastra tu video aquí</h3>
+                                    <p class="text-gray-300 mb-4">o haz clic para seleccionar</p>
+                                    <button type="button" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+                                        Seleccionar Video
+                                    </button>
+                                    <input type="file" id="video-input" accept="video/*" class="hidden">
+                                </div>
+                                
+                                <!-- Requisitos del video -->
+                                <div class="mt-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+                                    <h4 class="font-bold text-white mb-2">📋 Requisitos del Video</h4>
+                                    <ul class="text-sm text-blue-200 space-y-1">
+                                        <li>• Duración máxima: 5 minutos</li>
+                                        <li>• Formato: MP4, MOV, AVI</li>
+                                        <li>• Tamaño máximo: 500 MB</li>
+                                        <li>• Calidad mínima: 720p</li>
+                                        <li>• Audio claro y sincronizado</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <!-- Preview del video -->
+                            <div>
+                                <div id="video-preview" class="video-preview p-6 rounded-xl hidden">
+                                    <h4 class="text-white font-bold mb-4">Vista Previa</h4>
+                                    <video id="preview-video" class="w-full rounded-lg" controls></video>
+                                    <div class="mt-4 flex justify-between items-center">
+                                        <span class="text-gray-300" id="video-info">-</span>
+                                        <button onclick="removeVideo()" class="text-red-400 hover:text-red-300">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Consejos -->
+                                <div class="mt-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+                                    <h4 class="font-bold text-white mb-2">💡 Consejos</h4>
+                                    <ul class="text-sm text-green-200 space-y-1">
+                                        <li>• Graba en un lugar con buena iluminación</li>
+                                        <li>• Asegúrate de que se escuche bien tu voz</li>
+                                        <li>• Mira a la cámara y sonríe</li>
+                                        <li>• Viste apropiadamente para tu género</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PASO 4: Pago -->
+                <div id="step4" class="step-content hidden">
+                    <div class="step-card p-8 rounded-2xl">
+                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Confirma tu Inscripción</h2>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <!-- Resumen -->
+                            <div>
+                                <div class="bg-white/5 p-6 rounded-xl border border-white/10">
+                                    <h3 class="text-xl font-bold text-white mb-4">📋 Resumen de Inscripción</h3>
+                                    
+                                    <div class="space-y-3 text-sm">
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-300">Modalidad:</span>
+                                            <span class="text-white font-semibold" id="resumen-modalidad">-</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-300">Categoría:</span>
+                                            <span class="text-white font-semibold" id="resumen-categoria">-</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-300">Géneros:</span>
+                                            <span class="text-white font-semibold" id="resumen-generos">-</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span class="text-gray-300">Video:</span>
+                                            <span class="text-green-400 font-semibold" id="resumen-video">-</span>
+                                        </div>
+                                        <hr class="border-white/20">
+                                        <div class="flex justify-between text-lg">
+                                            <span class="text-white font-bold">Total:</span>
+                                            <span class="text-green-400 font-bold" id="resumen-precio">$2,500</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Información de contacto -->
+                                <div class="mt-6 p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+                                    <h4 class="font-bold text-white mb-2">📞 ¿Necesitas ayuda?</h4>
+                                    <p class="text-yellow-200 text-sm">
+                                        WhatsApp: <a href="https://wa.me/5493415123456" class="underline">+54 9 341 512-3456</a><br>
+                                        Email: inscripciones@vytmusic.com
+                                    </p>
+                                </div>
+                            </div>
+                            
+                            <!-- Métodos de pago -->
+                            <div>
+                                <h3 class="text-xl font-bold text-white mb-4">💳 Método de Pago</h3>
+                                
+                                <div class="space-y-4">
+                                    <!-- MercadoPago -->
+                                    <div onclick="selectPago('mercadopago')" class="pago-option cursor-pointer p-4 rounded-xl border-2 border-white/20 hover:border-blue-400 hover:bg-blue-500/10 transition-all duration-300">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-credit-card text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white font-bold">MercadoPago</h4>
+                                                <p class="text-blue-200 text-sm">Tarjeta, débito, efectivo</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Transferencia -->
+                                    <div onclick="selectPago('transferencia')" class="pago-option cursor-pointer p-4 rounded-xl border-2 border-white/20 hover:border-green-400 hover:bg-green-500/10 transition-all duration-300">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-university text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white font-bold">Transferencia</h4>
+                                                <p class="text-green-200 text-sm">Banco / CBU</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Efectivo -->
+                                    <div onclick="selectPago('efectivo')" class="pago-option cursor-pointer p-4 rounded-xl border-2 border-white/20 hover:border-yellow-400 hover:bg-yellow-500/10 transition-all duration-300">
+                                        <div class="flex items-center space-x-4">
+                                            <div class="w-12 h-12 bg-yellow-500 rounded-lg flex items-center justify-center">
+                                                <i class="fas fa-money-bill text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h4 class="text-white font-bold">Efectivo</h4>
+                                                <p class="text-yellow-200 text-sm">Solo modalidad presencial</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <button onclick="procesarPago()" class="w-full mt-6 bg-green-600 hover:bg-green-700 text-white font-bold py-4 rounded-xl transition-colors">
+                                    <i class="fas fa-credit-card mr-2"></i>
+                                    Proceder al Pago - $2,500
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Botones de navegación -->
+                <div class="flex justify-between mt-8">
+                    <button id="prev-btn" onclick="prevStep()" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-3 rounded-lg font-semibold hidden">
+                        <i class="fas fa-arrow-left mr-2"></i>Anterior
+                    </button>
+                    <button id="next-btn" onclick="nextStep()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold ml-auto">
+                        Siguiente<i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        let currentStep = 1;
+        let inscripcionData = {
+            modalidad: null,
+            categoria: null,
+            generos: [],
+            video: null,
+            metodoPago: null
+        };
+
+        // Navegación entre pasos
+        function nextStep() {
+            if (validateCurrentStep()) {
+                if (currentStep < 4) {
+                    showStep(currentStep + 1);
+                }
+            }
+        }
+
+        function prevStep() {
+            if (currentStep > 1) {
+                showStep(currentStep - 1);
+            }
+        }
+
+        function showStep(step) {
+            // Ocultar todos los pasos
+            document.querySelectorAll('.step-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('[id*="step"][id*="indicator"]').forEach(el => {
+                el.classList.remove('step-active');
+                el.querySelector('div').classList.remove('bg-blue-600');
+                el.querySelector('div').classList.add('bg-gray-500');
+            });
+
+            // Mostrar paso actual
+            document.getElementById(`step${step}`).classList.remove('hidden');
+            const indicator = document.getElementById(`step${step}-indicator`);
+            indicator.classList.add('step-active');
+            indicator.querySelector('div').classList.remove('bg-gray-500');
+            indicator.querySelector('div').classList.add('bg-blue-600');
+
+            currentStep = step;
+
+            // Actualizar botones
+            document.getElementById('prev-btn').classList.toggle('hidden', step === 1);
+            document.getElementById('next-btn').textContent = step === 4 ? 'Finalizar Inscripción' : 'Siguiente';
+            if (step < 4) {
+                document.getElementById('next-btn').innerHTML = 'Siguiente<i class="fas fa-arrow-right ml-2"></i>';
+            } else {
+                document.getElementById('next-btn').innerHTML = '<i class="fas fa-check mr-2"></i>Finalizar Inscripción';
+            }
+        }
+
+        function validateCurrentStep() {
+            switch(currentStep) {
+                case 1:
+                    if (!inscripcionData.modalidad) {
+                        alert('Por favor selecciona una modalidad');
+                        return false;
+                    }
+                    break;
+                case 2:
+                    if (!inscripcionData.categoria) {
+                        alert('Por favor selecciona una categoría');
+                        return false;
+                    }
+                    if (inscripcionData.generos.length === 0) {
+                        alert('Por favor selecciona al menos un género musical');
+                        return false;
+                    }
+                    break;
+                case 3:
+                    if (!inscripcionData.video) {
+                        alert('Por favor sube tu video de presentación');
+                        return false;
+                    }
+                    break;
+                case 4:
+                    if (!inscripcionData.metodoPago) {
+                        alert('Por favor selecciona un método de pago');
+                        return false;
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        // Funciones de selección
+        function selectModalidad(modalidad) {
+            inscripcionData.modalidad = modalidad;
+            
+            // Actualizar UI
+            document.querySelectorAll('.modalidad-option').forEach(el => {
+                el.classList.remove('border-blue-400', 'bg-blue-500/20', 'border-green-400', 'bg-green-500/20');
+                el.classList.add('border-white/20');
+            });
+            
+            const selected = event.currentTarget;
+            if (modalidad === 'presencial') {
+                selected.classList.add('border-blue-400', 'bg-blue-500/20');
+            } else {
+                selected.classList.add('border-green-400', 'bg-green-500/20');
+            }
+        }
+
+        function selectCategoria(categoria) {
+            inscripcionData.categoria = categoria;
+            
+            document.querySelectorAll('.categoria-option').forEach(el => {
+                el.classList.remove('border-yellow-400', 'bg-yellow-500/20', 'border-orange-400', 'bg-orange-500/20', 'border-purple-400', 'bg-purple-500/20');
+                el.classList.add('border-white/20');
+            });
+            
+            const selected = event.currentTarget;
+            if (categoria === 'local') {
+                selected.classList.add('border-yellow-400', 'bg-yellow-500/20');
+            } else if (categoria === 'regional') {
+                selected.classList.add('border-orange-400', 'bg-orange-500/20');
+            } else {
+                selected.classList.add('border-purple-400', 'bg-purple-500/20');
+            }
+        }
+
+        function selectPago(metodo) {
+            inscripcionData.metodoPago = metodo;
+            
+            document.querySelectorAll('.pago-option').forEach(el => {
+                el.classList.remove('border-blue-400', 'bg-blue-500/20', 'border-green-400', 'bg-green-500/20', 'border-yellow-400', 'bg-yellow-500/20');
+                el.classList.add('border-white/20');
+            });
+            
+            const selected = event.currentTarget;
+            if (metodo === 'mercadopago') {
+                selected.classList.add('border-blue-400', 'bg-blue-500/20');
+            } else if (metodo === 'transferencia') {
+                selected.classList.add('border-green-400', 'bg-green-500/20');
+            } else {
+                selected.classList.add('border-yellow-400', 'bg-yellow-500/20');
+            }
+        }
+
+        // Manejo de géneros
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('input[name="genero"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    if (this.checked) {
+                        inscripcionData.generos.push(this.value);
+                    } else {
+                        inscripcionData.generos = inscripcionData.generos.filter(g => g !== this.value);
+                    }
+                    updateResumen();
+                });
+            });
+
+            // Video upload
+            document.getElementById('video-input').addEventListener('change', handleVideoUpload);
+            document.getElementById('video-upload-area').addEventListener('click', () => {
+                document.getElementById('video-input').click();
+            });
+        });
+
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validar archivo
+            if (!file.type.startsWith('video/')) {
+                alert('Por favor selecciona un archivo de video válido');
+                return;
+            }
+
+            if (file.size > 500 * 1024 * 1024) { // 500MB
+                alert('El video es muy grande. Máximo 500MB');
+                return;
+            }
+
+            inscripcionData.video = file;
+
+            // Mostrar preview
+            const preview = document.getElementById('video-preview');
+            const video = document.getElementById('preview-video');
+            const info = document.getElementById('video-info');
+
+            const url = URL.createObjectURL(file);
+            video.src = url;
+            info.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(1)} MB)`;
+            
+            preview.classList.remove('hidden');
+            updateResumen();
+        }
+
+        function removeVideo() {
+            inscripcionData.video = null;
+            document.getElementById('video-preview').classList.add('hidden');
+            document.getElementById('video-input').value = '';
+            updateResumen();
+        }
+
+        function updateResumen() {
+            document.getElementById('resumen-modalidad').textContent = inscripcionData.modalidad || '-';
+            document.getElementById('resumen-categoria').textContent = inscripcionData.categoria || '-';
+            document.getElementById('resumen-generos').textContent = inscripcionData.generos.join(', ') || '-';
+            document.getElementById('resumen-video').textContent = inscripcionData.video ? '✓ Subido' : '-';
+        }
+
+        function procesarPago() {
+            if (!validateCurrentStep()) return;
+            
+            alert('Procesando pago... (Integración con MercadoPago pendiente)');
+            // Aquí iría la integración real con MercadoPago
+        }
+
+        function goBack() {
+            if (confirm('¿Seguro que quieres salir? Se perderán los datos ingresados.')) {
+                window.location.href = 'perfil-artista.html';
+            }
+        }
+
+        // Cargar fondo personalizado desde admin
+        function loadCustomBackground() {
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'inscripcion-certamen.html';
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].enabled) {
+                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('${backgroundConfig[currentPage].imageUrl}')`;
+                    console.log('✅ Fondo personalizado cargado para inscripción');
+                }
+            } catch (error) {
+                console.log('ℹ️ Usando fondo predeterminado');
+            }
+        }
+
+        // Cargar al inicio
+        loadCustomBackground();
+    </script>
+</body>
+</html>

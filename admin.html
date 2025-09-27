@@ -886,6 +886,50 @@
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
                                 </button>
                             </div>
+
+                            <!-- Inscripción a Certamen -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Inscripción a Certamen</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-certamen" src="" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen personalizada</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-certamen" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-certamen').click()" 
+                                        class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+
+                            <!-- Certamen Individual -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-video text-red-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Certamen Individual</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-certamen-individual" src="" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen personalizada</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-certamen-individual" accept="image/*" class="hidden">
+                                <button onclick="document.getElementById('upload-certamen-individual').click()" 
+                                        class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
                         </div>
                         
                         <!-- Estado de carga -->
@@ -2355,6 +2399,18 @@
                 'upload-admin': { 
                     file: 'admin.html',
                     preview: 'preview-admin',
+                    bgProperty: 'background-image',
+                    currentImage: null
+                },
+                'upload-certamen': { 
+                    file: 'inscripcion-certamen.html',
+                    preview: 'preview-certamen',
+                    bgProperty: 'background-image',
+                    currentImage: null
+                },
+                'upload-certamen-individual': { 
+                    file: 'certamen-individual.html',
+                    preview: 'preview-certamen-individual',
                     bgProperty: 'background-image',
                     currentImage: null
                 }

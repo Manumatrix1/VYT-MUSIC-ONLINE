@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro Artista - VYT MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('images/fotos/inscripcion-background.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-repeat: no-repeat;
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+        }
+        
+        .form-card {
+            background: rgba(30, 41, 59, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-input {
+            background-color: rgba(255, 255, 255, 0.9);
+            border: 2px solid rgba(59, 130, 246, 0.3);
+            transition: all 0.3s ease;
+            color: #1f2937;
+        }
+
+        .form-input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            outline: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Header -->
+        <div class="container mx-auto px-4 mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goHome()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-2xl font-bold text-white font-display">Registro de Artista</h1>
+                        <p class="text-blue-200">Únete a VYT Music</p>
+                    </div>
+                </div>
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="h-12">
+            </div>
+        </div>
+
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto">
+                <!-- Formulario Simplificado -->
+                <div class="form-card">
+                    <div class="text-center mb-8">
+                        <div class="text-5xl mb-4">🎤</div>
+                        <h2 class="text-3xl font-bold text-white mb-2">¡Únete como Artista!</h2>
+                        <p class="text-gray-300">Completa tus datos y accede a tu perfil</p>
+                    </div>
+
+                    <form id="registro-form" class="space-y-6">
+                        <!-- Datos Básicos -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white font-medium mb-2">
+                                    <i class="fas fa-user mr-2"></i>Nombre *
+                                </label>
+                                <input type="text" id="nombre" name="nombre" class="form-input w-full px-4 py-3 rounded-lg" placeholder="Tu nombre" required>
+                            </div>
+                            <div>
+                                <label class="block text-white font-medium mb-2">
+                                    <i class="fas fa-user mr-2"></i>Apellido *
+                                </label>
+                                <input type="text" id="apellido" name="apellido" class="form-input w-full px-4 py-3 rounded-lg" placeholder="Tu apellido" required>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fas fa-envelope mr-2"></i>Email *
+                            </label>
+                            <input type="email" id="email" name="email" class="form-input w-full px-4 py-3 rounded-lg" placeholder="tu-email@ejemplo.com" required>
+                        </div>
+
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fas fa-microphone mr-2"></i>Nombre Artístico *
+                            </label>
+                            <input type="text" id="nombre_artista" name="nombre_artista" class="form-input w-full px-4 py-3 rounded-lg" placeholder="Ej: Sol Frecuencia" required>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-white font-medium mb-2">
+                                    <i class="fas fa-map-marker-alt mr-2"></i>Ciudad *
+                                </label>
+                                <input type="text" id="ciudad" name="ciudad" class="form-input w-full px-4 py-3 rounded-lg" placeholder="Tu ciudad" required>
+                            </div>
+                            <div>
+                                <label class="block text-white font-medium mb-2">
+                                    <i class="fas fa-map mr-2"></i>Provincia *
+                                </label>
+                                <select id="provincia" name="provincia" class="form-input w-full px-4 py-3 rounded-lg" required>
+                                    <option value="">Selecciona tu provincia...</option>
+                                    <option value="Buenos Aires">Buenos Aires</option>
+                                    <option value="CABA">Ciudad Autónoma de Buenos Aires</option>
+                                    <option value="Catamarca">Catamarca</option>
+                                    <option value="Chaco">Chaco</option>
+                                    <option value="Chubut">Chubut</option>
+                                    <option value="Córdoba">Córdoba</option>
+                                    <option value="Corrientes">Corrientes</option>
+                                    <option value="Entre Ríos">Entre Ríos</option>
+                                    <option value="Formosa">Formosa</option>
+                                    <option value="Jujuy">Jujuy</option>
+                                    <option value="La Pampa">La Pampa</option>
+                                    <option value="La Rioja">La Rioja</option>
+                                    <option value="Mendoza">Mendoza</option>
+                                    <option value="Misiones">Misiones</option>
+                                    <option value="Neuquén">Neuquén</option>
+                                    <option value="Río Negro">Río Negro</option>
+                                    <option value="Salta">Salta</option>
+                                    <option value="San Juan">San Juan</option>
+                                    <option value="San Luis">San Luis</option>
+                                    <option value="Santa Cruz">Santa Cruz</option>
+                                    <option value="Santa Fe">Santa Fe</option>
+                                    <option value="Santiago del Estero">Santiago del Estero</option>
+                                    <option value="Tierra del Fuego">Tierra del Fuego</option>
+                                    <option value="Tucumán">Tucumán</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fas fa-music mr-2"></i>Género Musical *
+                            </label>
+                            <select id="genero" name="genero" class="form-input w-full px-4 py-3 rounded-lg" required>
+                                <option value="">Selecciona tu género principal...</option>
+                                <option value="pop">Pop</option>
+                                <option value="rock">Rock</option>
+                                <option value="folk">Folk</option>
+                                <option value="cumbia">Cumbia</option>
+                                <option value="tango">Tango</option>
+                                <option value="jazz">Jazz</option>
+                                <option value="blues">Blues</option>
+                                <option value="reggae">Reggae</option>
+                                <option value="reggaeton">Reggaetón</option>
+                                <option value="urbano">Urbano</option>
+                                <option value="clasica">Clásica</option>
+                                <option value="country">Country</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-white font-medium mb-2">
+                                <i class="fab fa-whatsapp mr-2"></i>WhatsApp *
+                            </label>
+                            <input type="tel" id="whatsapp" name="whatsapp" class="form-input w-full px-4 py-3 rounded-lg" placeholder="5491112345678" required>
+                            <p class="text-xs text-gray-400 mt-1">Código de país + número (ej: 5491112345678)</p>
+                        </div>
+
+                        <!-- Términos -->
+                        <div class="bg-blue-500/10 border border-blue-400/20 rounded-xl p-4">
+                            <label class="flex items-start space-x-3 cursor-pointer">
+                                <input type="checkbox" id="terminos" name="terminos" class="mt-1" required>
+                                <div class="text-sm text-gray-300">
+                                    Acepto los <a href="reglamento.html" class="text-blue-400 hover:underline" target="_blank">términos y condiciones</a> de VYT Music y autorizo el uso de mis datos según la política de privacidad.
+                                </div>
+                            </label>
+                        </div>
+
+                        <!-- Estado del envío -->
+                        <div id="form-status" class="hidden">
+                            <!-- Se mostrará dinámicamente -->
+                        </div>
+
+                        <!-- Botón de envío -->
+                        <div class="text-center pt-4">
+                            <button type="submit" id="submit-btn" class="btn-primary w-full py-4 px-8 rounded-lg text-lg font-bold text-white">
+                                <i class="fas fa-user-plus mr-2"></i>
+                                Crear mi Perfil de Artista
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para ir al home
+        function goHome() {
+            window.location.href = 'index.html';
+        }
+
+        // Manejar el envío del formulario
+        document.getElementById('registro-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            procesarRegistro();
+        });
+
+        function procesarRegistro() {
+            const submitBtn = document.getElementById('submit-btn');
+            const statusDiv = document.getElementById('form-status');
+
+            // Deshabilitar botón
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Procesando...';
+
+            // Recopilar datos del formulario
+            const formData = new FormData(document.getElementById('registro-form'));
+            const datos = Object.fromEntries(formData);
+
+            // Generar ID único
+            const artistaId = 'artista_' + Date.now();
+
+            // Datos completos del artista
+            const artistaData = {
+                id: artistaId,
+                uid: artistaId,
+                email: datos.email,
+                nombre: datos.nombre,
+                apellido: datos.apellido,
+                nombre_artista: datos.nombre_artista,
+                ciudad: datos.ciudad,
+                provincia: datos.provincia,
+                genero: datos.genero,
+                whatsapp: datos.whatsapp,
+                fechaRegistro: new Date().toISOString(),
+                fotoURL: null,
+                videoURL: null,
+                biografia: '',
+                // Estadísticas iniciales
+                certamenes: 0,
+                votos: 0,
+                seguidores: 0,
+                videos: 0,
+                // Estado
+                activo: true,
+                verificado: false,
+                perfilCompleto: true
+            };
+
+            // Simular guardado (reemplazará Firebase por ahora)
+            setTimeout(() => {
+                try {
+                    // Guardar en localStorage
+                    localStorage.setItem('artistaLogueado', JSON.stringify(artistaData));
+                    
+                    // Mostrar éxito
+                    statusDiv.innerHTML = `
+                        <div class="bg-green-600/20 border border-green-500/30 rounded-lg p-6 text-center">
+                            <i class="fas fa-check-circle text-green-400 text-3xl mb-4"></i>
+                            <h3 class="text-xl font-bold text-white mb-2">¡Registro Exitoso!</h3>
+                            <p class="text-gray-300 mb-4">
+                                Bienvenido/a <strong>${datos.nombre_artista}</strong>. 
+                                Tu perfil ha sido creado correctamente.
+                            </p>
+                            <p class="text-green-300 font-semibold">
+                                <i class="fas fa-clock mr-1"></i>
+                                Redirigiendo a tu perfil en 3 segundos...
+                            </p>
+                        </div>
+                    `;
+                    
+                    statusDiv.classList.remove('hidden');
+
+                    // Redireccionar al perfil
+                    setTimeout(() => {
+                        window.location.href = 'perfil-simple.html';
+                    }, 3000);
+
+                } catch (error) {
+                    // Mostrar error
+                    statusDiv.innerHTML = `
+                        <div class="bg-red-600/20 border border-red-500/30 rounded-lg p-4">
+                            <i class="fas fa-exclamation-triangle text-red-400 text-xl mb-2"></i>
+                            <h4 class="text-red-300 font-semibold mb-2">Error en el registro</h4>
+                            <p class="text-red-200 text-sm">${error.message}</p>
+                        </div>
+                    `;
+                    statusDiv.classList.remove('hidden');
+                    
+                    // Rehabilitar botón
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Crear mi Perfil de Artista';
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
