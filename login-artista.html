@@ -181,14 +181,15 @@
         import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
         import { getFirestore, doc, getDoc, collection, query, where, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-        // Configuración Firebase
+        // Configuración Firebase (unificada y actualizada)
         const firebaseConfig = {
-            apiKey: "AIzaSyDE2yLPUFyDPHoI9zqnwLFLTyeHmgmdS4M",
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
             authDomain: "vytonlineprueva.firebaseapp.com",
             projectId: "vytonlineprueva",
             storageBucket: "vytonlineprueva.firebasestorage.app",
-            messagingSenderId: "243069825423",
-            appId: "1:243069825423:web:d4e4b55e5cc5b0b8f6fcb1"
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
         };
 
         const app = initializeApp(firebaseConfig);
@@ -253,45 +254,131 @@
             setLoading(true);
 
             try {
+                console.log('🔐 Iniciando login con email:', email);
+                
                 // Autenticar usuario
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
 
+                console.log('✅ Autenticación exitosa. UID:', user.uid);
+
                 // Verificar si es un artista registrado
-                // Primero buscar en la colección usuarios
-                const userDocRef = doc(db, 'usuarios', user.uid);
-                const userDoc = await getDoc(userDocRef);
-                
+                // Buscar en múltiples colecciones
                 let artistData = null;
                 let artistId = null;
+                
+                console.log('🔍 Buscando datos del artista en múltiples colecciones...');
 
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    if (userData.nombre_artista) {
-                        artistData = userData;
-                        artistId = user.uid; // En usuarios, el ID es el UID
+                // 1. Buscar en 'usuarios'
+                try {
+                    const userDocRef = doc(db, 'usuarios', user.uid);
+                    const userDoc = await getDoc(userDocRef);
+                    
+                    if (userDoc.exists()) {
+                        const userData = userDoc.data();
+                        console.log('📋 Datos encontrados en usuarios:', userData);
+                        if (userData.nombre_artista || userData.nombre_artistico) {
+                            artistData = userData;
+                            artistId = user.uid;
+                            console.log('✅ Artista encontrado en usuarios');
+                        }
+                    } else {
+                        console.log('❌ No encontrado en usuarios');
+                    }
+                } catch (userError) {
+                    console.log('⚠️ Error buscando en usuarios:', userError);
+                }
+
+                // 2. Si no se encuentra, buscar en 'artistas'
+                if (!artistData) {
+                    try {
+                        const artistasQuery = query(collection(db, 'artistas'), where('uid', '==', user.uid));
+                        const artistSnapshot = await getDocs(artistasQuery);
+                        
+                        if (!artistSnapshot.empty) {
+                            artistSnapshot.forEach((doc) => {
+                                artistData = doc.data();
+                                artistId = doc.id;
+                                console.log('✅ Artista encontrado en artistas:', artistData);
+                            });
+                        } else {
+                            console.log('❌ No encontrado en artistas');
+                        }
+                    } catch (artistError) {
+                        console.log('⚠️ Error buscando en artistas:', artistError);
                     }
                 }
 
-                // Si no se encuentra en usuarios, buscar en la colección artistas
+                // 3. Si no se encuentra, buscar en 'participantes_online' (donde se guarda el registro)
                 if (!artistData) {
-                    const artistasQuery = query(collection(db, 'artistas'), where('uid', '==', user.uid));
-                    const artistSnapshot = await getDocs(artistasQuery);
-                    
-                    if (!artistSnapshot.empty) {
-                        artistSnapshot.forEach((doc) => {
-                            artistData = doc.data();
-                            artistId = doc.id; // En artistas, el ID es el ID del documento
-                        });
+                    try {
+                        const participantesQuery = query(collection(db, 'participantes_online'), where('uid', '==', user.uid));
+                        const participantesSnapshot = await getDocs(participantesQuery);
+                        
+                        if (!participantesSnapshot.empty) {
+                            participantesSnapshot.forEach((doc) => {
+                                artistData = doc.data();
+                                artistId = doc.id;
+                                console.log('✅ Artista encontrado en participantes_online:', artistData);
+                            });
+                        } else {
+                            console.log('❌ No encontrado en participantes_online');
+                        }
+                    } catch (participantError) {
+                        console.log('⚠️ Error buscando en participantes_online:', participantError);
+                    }
+                }
+
+                // 4. Último intento: buscar por email
+                if (!artistData) {
+                    try {
+                        const emailQuery = query(collection(db, 'participantes_online'), where('email', '==', email));
+                        const emailSnapshot = await getDocs(emailQuery);
+                        
+                        if (!emailSnapshot.empty) {
+                            emailSnapshot.forEach((doc) => {
+                                artistData = doc.data();
+                                artistId = doc.id;
+                                console.log('✅ Artista encontrado por email en participantes_online:', artistData);
+                            });
+                        } else {
+                            console.log('❌ No encontrado por email');
+                        }
+                    } catch (emailError) {
+                        console.log('⚠️ Error buscando por email:', emailError);
                     }
                 }
 
                 if (artistData) {
+                    console.log('🎯 Datos del artista encontrados:', artistData);
+                    
+                    // Verificar si el email está verificado
+                    if (!user.emailVerified) {
+                        console.log('⚠️ Email no verificado');
+                        showError('Por favor, verifica tu email antes de iniciar sesión. Revisa tu bandeja de entrada.');
+                        
+                        // Ofrecer reenviar verificación
+                        setTimeout(() => {
+                            if (confirm('¿Quieres que reenviemos el email de verificación?')) {
+                                try {
+                                    sendEmailVerification(user);
+                                    showSuccess('Email de verificación reenviado. Revisa tu bandeja de entrada.');
+                                } catch (resendError) {
+                                    console.error('Error reenviando email:', resendError);
+                                }
+                            }
+                        }, 2000);
+                        
+                        setLoading(false);
+                        return;
+                    }
+                    
                     // Guardar datos en localStorage para el perfil
                     localStorage.setItem('artistaLogueado', JSON.stringify({
                         id: artistId, // ¡IMPORTANTE! Guardar el ID del documento
                         uid: user.uid,
                         email: user.email,
+                        emailVerified: user.emailVerified,
                         ...artistData
                     }));
 
@@ -304,9 +391,12 @@
                         window.location.href = 'perfil-artista.html';
                     }, 1500);
                 } else {
-                    showError('Esta cuenta no tiene un perfil de artista completo. Por favor, completa tu registro.');
+                    console.log('❌ No se encontraron datos de artista para este usuario');
+                    showError('Esta cuenta no tiene un perfil de artista completo o no existe. Por favor, regístrate primero.');
                     setTimeout(() => {
-                        window.location.href = 'inscripcion_unificada.html';
+                        if (confirm('¿Quieres ir a la página de registro?')) {
+                            window.location.href = 'inscripcion_unificada.html';
+                        }
                     }, 2000);
                 }
 
