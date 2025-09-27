@@ -483,7 +483,7 @@
     <script type="module">
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
         import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-        import { getFirestore, collection, getDocs, query, where, orderBy, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+        import { getFirestore, collection, getDocs, getDoc, query, where, orderBy, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
         // Configuración Firebase (unificada y actualizada)
         const firebaseConfig = {
@@ -501,11 +501,30 @@
         const db = getFirestore(app);
 
         // Verificar si hay un artista logueado
-        const artistaData = JSON.parse(localStorage.getItem('artistaLogueado') || '{}');
+        let artistaData = JSON.parse(localStorage.getItem('artistaLogueado') || '{}');
         
         if (!artistaData.uid) {
             // Si no hay datos, redirigir al login
             window.location.href = 'login-artista.html';
+        }
+
+        // Recargar datos del usuario desde Firebase (para obtener cambios recientes)
+        async function reloadUserData() {
+            try {
+                const userDocRef = doc(db, 'artistas', artistaData.uid);
+                const userDoc = await getDoc(userDocRef);
+                
+                if (userDoc.exists()) {
+                    const freshData = userDoc.data();
+                    // Combinar datos existentes con datos frescos
+                    artistaData = { ...artistaData, ...freshData, uid: artistaData.uid };
+                    // Actualizar localStorage
+                    localStorage.setItem('artistaLogueado', JSON.stringify(artistaData));
+                    console.log('✅ Datos actualizados desde Firebase:', artistaData);
+                }
+            } catch (error) {
+                console.warn('⚠️ Error al recargar datos del usuario:', error);
+            }
         }
 
         // Cargar información del perfil
@@ -542,7 +561,9 @@
             // Cargar foto de perfil
             if (artistaData.fotoURL || artistaData.foto_url) {
                 const photoUrl = artistaData.fotoURL || artistaData.foto_url;
-                document.getElementById('profilePhoto').src = photoUrl;
+                // Agregar timestamp para evitar cache
+                const photoWithTimestamp = photoUrl + '?t=' + new Date().getTime();
+                document.getElementById('profilePhoto').src = photoWithTimestamp;
                 document.getElementById('profilePhoto').classList.remove('hidden');
                 document.getElementById('defaultAvatar').classList.add('hidden');
             }
@@ -701,7 +722,7 @@
 
         window.joinCertamen = function(certamenId = null, certamenData = null) {
             if (certamenId) {
-                alert(`Inscribi�ndote al certamen: ${certamenData?.titulo || 'Certamen'}`);
+                alert(`Inscribiéndote al certamen: ${certamenData?.titulo || 'Certamen'}`);
             } else {
                 document.querySelector('#certamenesContainer').scrollIntoView({ behavior: 'smooth' });
             }
@@ -716,7 +737,10 @@
         };
 
         // Inicializar página
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Primero recargar datos del usuario
+            await reloadUserData();
+            // Luego cargar el perfil con datos actualizados
             loadProfile();
             loadCertamenes();
             loadCustomBackground();
@@ -1057,6 +1081,7 @@
     </script>
 </body>
 </html>
+
 
 
 
