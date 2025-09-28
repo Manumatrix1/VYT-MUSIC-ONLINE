@@ -3,151 +3,447 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprar VYT-MONEY - VYT MUSIC</title>
+    <title>VYT MONEY - Moneda Virtual | VYT MUSIC</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;900&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="src/navigation-styles.css">
+    
+    <script src="firebase-config.js"></script>
     
     <style>
-        :root {
-            --color-primario: #58a6ff;
-            --color-secundario: #2bb7d1;
-            --color-oro: #FFD700;
-            --color-fondo: #0d1117;
-            --color-fondo-secundario: #161b22;
-            --color-card: #21262d;
-            --color-texto-principal: #f0f6fc;
-            --color-texto-secundario: #8b949e;
-            --color-success: #40c057;
-            --color-warning: #fab005;
-        }
-
         body {
-            background: linear-gradient(135deg, var(--color-fondo) 0%, var(--color-fondo-secundario) 100%);
-            font-family: 'Montserrat', sans-serif;
-            color: var(--color-texto-principal);
-            min-height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
         }
 
-        .gradient-card {
-            background: linear-gradient(135deg, var(--color-card) 0%, #2d333b 100%);
-            border: 1px solid #30363d;
-            border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        .vyt-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .vyt-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+            border-color: rgba(59, 130, 246, 0.4);
         }
 
         .vyt-money-icon {
-            background: linear-gradient(135deg, var(--color-oro), #ffa500);
+            background: linear-gradient(135deg, #FFD700, #3B82F6);
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
+            width: 80px;
+            height: 80px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            color: #000;
-            font-size: 1.2rem;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
         }
 
         .package-card {
-            background: var(--color-card);
-            border: 2px solid transparent;
-            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
             transition: all 0.3s ease;
             cursor: pointer;
         }
 
         .package-card:hover {
-            border-color: var(--color-primario);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(88, 166, 255, 0.2);
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 35px rgba(59, 130, 246, 0.25);
         }
 
-        .package-card.selected {
-            border-color: var(--color-oro);
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.05));
+        .package-card.popular {
+            border-color: rgba(255, 215, 0, 0.6);
+            background: rgba(255, 215, 0, 0.1);
+            position: relative;
         }
 
-        .discount-badge {
-            background: linear-gradient(135deg, var(--color-success), #51cf66);
+        .package-card.popular::before {
+            content: '🔥 MÁS POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: #000;
+            padding: 4px 16px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .btn-buy {
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
             color: white;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .btn-purchase {
-            background: linear-gradient(135deg, var(--color-primario), var(--color-oro));
-            color: var(--color-fondo);
             border: none;
-            border-radius: 10px;
             padding: 12px 24px;
-            font-weight: bold;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s ease;
+            width: 100%;
         }
 
-        .btn-purchase:hover {
+        .btn-buy:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(88, 166, 255, 0.3);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
         }
 
-        .btn-purchase:disabled {
-            background: #6c757d;
-            cursor: not-allowed;
-            transform: none;
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .feature-item i {
+            color: #3B82F6;
+            margin-right: 12px;
+            width: 20px;
         }
     </style>
 </head>
 <body>
-    <!-- Navegación -->
-    <nav class="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full flex items-center justify-center">
-                    <span class="text-white font-bold">VYT</span>
-                </div>
-                <span class="text-xl font-bold text-white">VYT MUSIC</span>
-            </a>
+    <div class="min-h-screen py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <div class="vyt-money-icon mx-auto mb-6">
+                <i class="fas fa-coins"></i>
+            </div>
+            <h1 class="text-5xl font-bold text-white mb-4">💰 VYT MONEY</h1>
+            <p class="text-gray-300 text-xl max-w-3xl mx-auto">
+                La moneda virtual oficial de VYT Music. ¡Compra, vota y gana increíbles premios!
+            </p>
+        </header>
+
+        <div class="container mx-auto px-4 pb-32 max-w-6xl">
             
-            <div class="flex items-center space-x-4">
-                <div id="user-balance" class="hidden text-gray-300">
-                    <span class="text-sm">Balance:</span>
-                    <span id="balance-amount" class="font-bold text-yellow-400">0</span>
-                    <span class="text-xs">VYT</span>
+            <!-- ¿Qué es VYT Money? -->
+            <div class="vyt-card mb-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-6 flex items-center justify-center">
+                        <i class="fas fa-question-circle text-blue-400 mr-3"></i>
+                        ¿Qué es VYT MONEY?
+                    </h2>
                 </div>
-                <button id="logout-btn" class="hidden text-gray-300 hover:text-white">Salir</button>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-blue-600/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-vote-yea text-3xl text-blue-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Votar</h3>
+                        <p class="text-gray-300">
+                            Usa VYT Money para votar por tus artistas favoritos. 
+                            <strong class="text-blue-400">1 VYT = 1 Voto</strong>
+                        </p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-green-600/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-trophy text-3xl text-green-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Ganar Premios</h3>
+                        <p class="text-gray-300">
+                            Si el artista que votaste gana, recibes premios en VYT Money. 
+                            <strong class="text-green-400">¡Multiplica tu inversión!</strong>
+                        </p>
+                    </div>
+                    
+                    <div class="text-center">
+                        <div class="w-16 h-16 mx-auto mb-4 bg-yellow-600/20 rounded-full flex items-center justify-center">
+                            <i class="fas fa-exchange-alt text-3xl text-yellow-400"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white mb-3">Canjear</h3>
+                        <p class="text-gray-300">
+                            Cambia tu VYT Money por premios reales: dinero, productos y experiencias exclusivas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cómo Funciona -->
+            <div class="vyt-card mb-12">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center flex items-center justify-center">
+                    <i class="fas fa-cogs text-purple-400 mr-3"></i>
+                    ¿Cómo Funciona?
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                    <div class="text-center">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl">1</div>
+                        <h4 class="font-bold text-white mb-2">Comprar VYT Money</h4>
+                        <p class="text-gray-300 text-sm">Adquiere VYT Money con dinero real</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl">2</div>
+                        <h4 class="font-bold text-white mb-2">Votar Artistas</h4>
+                        <p class="text-gray-300 text-sm">Usa tu VYT Money para votar</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl">3</div>
+                        <h4 class="font-bold text-white mb-2">Artista Gana</h4>
+                        <p class="text-gray-300 text-sm">Si tu artista gana, recibes premios</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 mx-auto mb-4 bg-yellow-600 rounded-full flex items-center justify-center text-white font-bold text-xl">4</div>
+                        <h4 class="font-bold text-white mb-2">Canjear Premios</h4>
+                        <p class="text-gray-300 text-sm">Cambia VYT Money por premios reales</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Paquetes de VYT Money -->
+            <div class="vyt-card mb-12">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center flex items-center justify-center">
+                    <i class="fas fa-shopping-cart text-green-400 mr-3"></i>
+                    Comprar VYT MONEY
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <!-- Paquete Básico -->
+                    <div class="package-card p-6">
+                        <div class="text-center mb-6">
+                            <div class="text-2xl font-bold text-white mb-2">Paquete Básico</div>
+                            <div class="text-4xl font-bold text-blue-400 mb-1">100 VYT</div>
+                            <div class="text-gray-300">$5.000 ARS</div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>100 votos para artistas</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>Ideal para comenzar</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>Sin comisiones extras</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-buy" onclick="buyPackage('basic', 100, 5000)">
+                            <i class="fas fa-shopping-cart mr-2"></i>
+                            Comprar Ahora
+                        </button>
+                    </div>
+
+                    <!-- Paquete Popular -->
+                    <div class="package-card popular p-6">
+                        <div class="text-center mb-6">
+                            <div class="text-2xl font-bold text-white mb-2">Paquete Estándar</div>
+                            <div class="text-4xl font-bold text-green-400 mb-1">300 VYT</div>
+                            <div class="text-gray-300">
+                                <span class="line-through">$15.000</span>
+                                <span class="text-green-400 font-bold ml-2">$12.000 ARS</span>
+                            </div>
+                            <div class="text-green-400 text-sm font-bold">¡Ahorra $3.000!</div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>300 votos para artistas</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>20% de descuento</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>Bonus de 50 VYT gratis</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-star text-yellow-400"></i>
+                                <span>Soporte prioritario</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-buy" onclick="buyPackage('standard', 300, 12000)">
+                            <i class="fas fa-fire mr-2"></i>
+                            Comprar Popular
+                        </button>
+                    </div>
+
+                    <!-- Paquete Premium -->
+                    <div class="package-card p-6">
+                        <div class="text-center mb-6">
+                            <div class="text-2xl font-bold text-white mb-2">Paquete Premium</div>
+                            <div class="text-4xl font-bold text-yellow-400 mb-1">1000 VYT</div>
+                            <div class="text-gray-300">
+                                <span class="line-through">$50.000</span>
+                                <span class="text-yellow-400 font-bold ml-2">$35.000 ARS</span>
+                            </div>
+                            <div class="text-yellow-400 text-sm font-bold">¡Ahorra $15.000!</div>
+                        </div>
+                        
+                        <div class="mb-6">
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>1000 votos para artistas</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>30% de descuento</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check"></i>
+                                <span>Bonus de 200 VYT gratis</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-crown text-yellow-400"></i>
+                                <span>Acceso VIP a eventos</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-gift text-purple-400"></i>
+                                <span>Premios exclusivos</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-buy" onclick="buyPackage('premium', 1000, 35000)">
+                            <i class="fas fa-crown mr-2"></i>
+                            Comprar Premium
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sistema de Premios -->
+            <div class="vyt-card mb-12">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center flex items-center justify-center">
+                    <i class="fas fa-gift text-purple-400 mr-3"></i>
+                    Sistema de Premios
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">💰 Premios por Votación</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span>Artista 1er lugar</span>
+                                <span class="text-green-400 font-bold">300% de retorno</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span>Artista 2do lugar</span>
+                                <span class="text-yellow-400 font-bold">200% de retorno</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span>Artista 3er lugar</span>
+                                <span class="text-orange-400 font-bold">150% de retorno</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-4">🎁 Premios Canjeables</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span>Dinero real (PayPal)</span>
+                                <span class="text-blue-400">1000 VYT = $2000</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span>Merchandise VYT</span>
+                                <span class="text-purple-400">500 VYT = Remera</span>
+                            </div>
+                            <div class="flex justify-between items-center p-3 bg-white/5 rounded-lg">
+                                <span>Entradas VIP</span>
+                                <span class="text-red-400">2000 VYT = Evento</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div class="vyt-card">
+                <h2 class="text-3xl font-bold text-white mb-8 text-center flex items-center justify-center">
+                    <i class="fas fa-question-circle text-orange-400 mr-3"></i>
+                    Preguntas Frecuentes
+                </h2>
+                
+                <div class="space-y-6">
+                    <div class="border-l-4 border-blue-400 pl-6">
+                        <h4 class="font-bold text-white mb-2">¿Es seguro comprar VYT Money?</h4>
+                        <p class="text-gray-300">Sí, utilizamos sistemas de pago seguros como MercadoPago y todos los datos están encriptados.</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-green-400 pl-6">
+                        <h4 class="font-bold text-white mb-2">¿Puedo recuperar mi dinero?</h4>
+                        <p class="text-gray-300">El VYT Money no es reembolsable, pero puedes canjearlo por premios reales o usarlo para votar.</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-purple-400 pl-6">
+                        <h4 class="font-bold text-white mb-2">¿Cómo funciona el sistema de premios?</h4>
+                        <p class="text-gray-300">Si el artista que votaste queda en el podium (1ro, 2do o 3ro), recibes VYT Money adicional como premio.</p>
+                    </div>
+                    
+                    <div class="border-l-4 border-yellow-400 pl-6">
+                        <h4 class="font-bold text-white mb-2">¿Expira el VYT Money?</h4>
+                        <p class="text-gray-300">No, tu VYT Money no expira y puedes usarlo cuando quieras para votar o canjear premios.</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </nav>
+    </div>
 
-    <!-- Contenido principal -->
-    <main class="pt-20 pb-8">
-        <div class="container mx-auto px-4">
+    <!-- Scripts -->
+    <script src="src/navigation.js"></script>
+    <script>
+        // Funciones de compra
+        function buyPackage(type, amount, price) {
+            console.log(`Comprando paquete ${type}: ${amount} VYT por $${price}`);
             
-            <!-- Header -->
-            <div class="text-center mb-12">
-                <div class="vyt-money-icon mx-auto mb-4">VYT</div>
-                <h1 class="text-4xl font-bold mb-4" style="font-family: 'Bebas Neue', sans-serif;">
-                    COMPRAR VYT-MONEY
-                </h1>
-                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-                    Compra VYT-MONEY para votar por tus artistas favoritos y ganar increíbles premios
-                </p>
-            </div>
+            // Simular proceso de compra
+            if (confirm(`¿Confirmas la compra de ${amount} VYT por $${price.toLocaleString()} ARS?`)) {
+                // Aquí conectarías con MercadoPago o el sistema de pagos
+                alert('¡Compra exitosa! Tu VYT Money será acreditado en unos minutos.');
+                
+                // Aquí actualizarías el balance del usuario
+                updateUserBalance(amount);
+            }
+        }
 
-            <!-- Información del sistema -->
-            <div class="gradient-card p-6 mb-8 max-w-4xl mx-auto">
-                <div class="grid md:grid-cols-3 gap-6 text-center">
-                    <div>
-                        <div class="text-3xl font-bold text-blue-400 mb-2">1 VYT = 1 VOTO</div>
-                        <p class="text-gray-400">Cada VYT-MONEY equivale a un voto para tu artista favorito</p>
-                    </div>
-                    <div>
-                        <div class="text-3xl font-bold text-green-400 mb-2">PREMIOS</div>
-                        <p class="text-gray-400">Gana premios votando por los artistas ganadores</p>
-                    </div>
+        function updateUserBalance(newAmount) {
+            // Actualizar balance en localStorage (en producción sería Firebase)
+            const currentBalance = parseInt(localStorage.getItem('vytBalance') || '0');
+            const newBalance = currentBalance + newAmount;
+            localStorage.setItem('vytBalance', newBalance.toString());
+            
+            console.log(`Balance actualizado: ${newBalance} VYT`);
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('💰 VYT MONEY - Sistema iniciado');
+            
+            // Mostrar balance actual si existe
+            const balance = localStorage.getItem('vytBalance') || '0';
+            console.log(`Balance actual: ${balance} VYT`);
+        });
+    </script>
+</body>
+</html>
                     <div>
                         <div class="text-3xl font-bold text-yellow-400 mb-2">DESCUENTOS</div>
                         <p class="text-gray-400">Más compras = más descuentos disponibles</p>

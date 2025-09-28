@@ -166,15 +166,47 @@ class VYTNavigation {
 
 // Auto-initialize navigation if we're not on excluded pages
 function initNavigation() {
-    const excludedPages = ['index.html', 'admin.html', 'admin-', 'debug-', 'init-', 'reset-'];
     const currentPath = window.location.pathname;
+    const currentFile = currentPath.split('/').pop() || window.location.href.split('/').pop();
     
-    const shouldShowNav = !excludedPages.some(page => 
-        currentPath.includes(page) || currentPath === '/' && !currentPath.includes('principal')
+    // Páginas que NO deben tener navegación
+    const excludedPages = [
+        'index.html',           // Página de inicio principal
+        'admin.html',          // Panel admin
+        'admin-simple.html',   // Admin simple
+        'admin-jerarquico.html', // Admin jerárquico
+        'debug-admin.html',    // Debug admin
+        'init-database.html',  // Init database
+        'reset-admin.html',    // Reset admin
+        'reset-password.html', // Reset password
+        'hacer-admin.html',    // Hacer admin
+        'crear-admin.html'     // Crear admin
+    ];
+    
+    // Verificar si estamos en la página raíz sin archivo específico
+    const isRootPage = currentPath === '/' || currentPath === '' || currentFile === '';
+    
+    // Verificar si estamos en una página excluida
+    const isExcludedPage = excludedPages.some(page => 
+        currentFile === page || currentFile.includes(page.replace('.html', ''))
     );
+
+    // Mostrar navegación si NO es página raíz Y NO es página excluida
+    const shouldShowNav = !isRootPage && !isExcludedPage;
+
+    console.log('🧭 Navegación:', {
+        currentPath,
+        currentFile,
+        isRootPage,
+        isExcludedPage,
+        shouldShowNav
+    });
 
     if (shouldShowNav) {
         new VYTNavigation();
+        console.log('✅ Navegación inicializada para:', currentFile);
+    } else {
+        console.log('❌ Navegación omitida para:', currentFile || 'página raíz');
     }
 }
 
