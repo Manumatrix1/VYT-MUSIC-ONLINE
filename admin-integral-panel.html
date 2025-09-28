@@ -1,0 +1,468 @@
+<!-- 
+🎛️ PANEL DE GESTIÓN INTEGRAL - VYT MUSIC ADMIN
+Panel extendido para gestión completa del sistema desde una interfaz unificada
+-->
+
+<div id="admin-integral-panel" class="admin-section">
+    <!-- Header del Panel Integral -->
+    <div class="integral-header bg-gradient-to-r from-blue-600 to-purple-700 p-6 rounded-lg mb-6">
+        <div class="flex items-center justify-between text-white">
+            <div>
+                <h2 class="text-2xl font-bold">🎛️ Gestión Integral del Sistema</h2>
+                <p class="opacity-80">Control total de VYT Music Online</p>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="admin-status">
+                    <div class="online-indicator"></div>
+                    <span class="text-sm">Sistema Operativo</span>
+                </div>
+                <button id="emergency-mode-btn" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg">
+                    🚨 Modo Emergencia
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Métricas en Tiempo Real -->
+    <div class="realtime-metrics grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="metric-card bg-white p-4 rounded-lg shadow-md">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-medium text-gray-600">Usuarios Online</h4>
+                    <p id="online-users-count" class="text-2xl font-bold text-blue-600">--</p>
+                </div>
+                <div class="text-3xl">👥</div>
+            </div>
+            <div class="text-xs text-gray-500 mt-2">
+                <span id="users-trend" class="text-green-500">+12% vs ayer</span>
+            </div>
+        </div>
+
+        <div class="metric-card bg-white p-4 rounded-lg shadow-md">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-medium text-gray-600">Votos Hoy</h4>
+                    <p id="total-votes-count" class="text-2xl font-bold text-green-600">--</p>
+                </div>
+                <div class="text-3xl">🗳️</div>
+            </div>
+            <div class="text-xs text-gray-500 mt-2">
+                <span id="votes-trend" class="text-blue-500">+45 en la última hora</span>
+            </div>
+        </div>
+
+        <div class="metric-card bg-white p-4 rounded-lg shadow-md">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-medium text-gray-600">Ingresos Hoy</h4>
+                    <p id="daily-revenue" class="text-2xl font-bold text-yellow-600">--</p>
+                </div>
+                <div class="text-3xl">💰</div>
+            </div>
+            <div class="text-xs text-gray-500 mt-2">
+                <span id="revenue-trend" class="text-green-500">Meta: 85% completada</span>
+            </div>
+        </div>
+
+        <div class="metric-card bg-white p-4 rounded-lg shadow-md">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h4 class="text-sm font-medium text-gray-600">Pendientes</h4>
+                    <p id="pending-approvals" class="text-2xl font-bold text-orange-600">--</p>
+                </div>
+                <div class="text-3xl">⏳</div>
+            </div>
+            <div class="text-xs text-gray-500 mt-2">
+                <span class="text-orange-500">Requiere atención</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabs de Gestión -->
+    <div class="management-tabs mb-6">
+        <div class="tab-header flex space-x-2 bg-gray-100 p-1 rounded-lg">
+            <button class="tab-btn active" data-tab="content">🎨 Contenido Visual</button>
+            <button class="tab-btn" data-tab="emails">📧 Emails & Notificaciones</button>
+            <button class="tab-btn" data-tab="config">⚙️ Configuración</button>
+            <button class="tab-btn" data-tab="moderation">🛡️ Moderación</button>
+            <button class="tab-btn" data-tab="analytics">📊 Analytics</button>
+            <button class="tab-btn" data-tab="backup">💾 Backup</button>
+        </div>
+
+        <!-- Tab: Contenido Visual -->
+        <div id="content-tab" class="tab-content active bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4">🎨 Gestión de Contenido Visual</h3>
+            
+            <!-- Cambio de Banner Principal -->
+            <div class="visual-section mb-6">
+                <h4 class="font-semibold mb-3">🖼️ Banner Principal</h4>
+                <div class="flex items-center space-x-4">
+                    <div class="current-banner">
+                        <img id="current-main-banner" src="https://i.ibb.co/banner-actual.jpg" 
+                             alt="Banner actual" class="w-32 h-20 object-cover rounded">
+                    </div>
+                    <div class="banner-controls">
+                        <input type="file" id="new-main-banner" accept="image/*" class="mb-2">
+                        <button id="update-main-banner-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                            Actualizar Banner
+                        </button>
+                    </div>
+                </div>
+                <div id="banner-upload-progress" class="mt-2 hidden">
+                    <div class="progress-bar bg-gray-200 rounded-full">
+                        <div class="progress-fill bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fondos de Páginas -->
+            <div class="visual-section mb-6">
+                <h4 class="font-semibold mb-3">🎨 Fondos de Páginas</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="page-background-control" data-page="principal">
+                        <label class="block text-sm font-medium mb-2">Página Principal</label>
+                        <input type="file" accept="image/*" class="page-bg-input w-full p-2 border rounded">
+                        <button class="update-page-bg-btn bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mt-2">
+                            Cambiar
+                        </button>
+                    </div>
+                    <div class="page-background-control" data-page="certamenes">
+                        <label class="block text-sm font-medium mb-2">Página Certámenes</label>
+                        <input type="file" accept="image/*" class="page-bg-input w-full p-2 border rounded">
+                        <button class="update-page-bg-btn bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded mt-2">
+                            Cambiar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor de Colores del Sistema -->
+            <div class="visual-section">
+                <h4 class="font-semibold mb-3">🎨 Colores del Sistema</h4>
+                <div class="color-picker-grid grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="color-control">
+                        <label class="block text-sm font-medium mb-1">Color Primario</label>
+                        <input type="color" id="primary-color" value="#00d9ff" class="color-input w-full h-10 border rounded">
+                    </div>
+                    <div class="color-control">
+                        <label class="block text-sm font-medium mb-1">Color Secundario</label>
+                        <input type="color" id="secondary-color" value="#FFD700" class="color-input w-full h-10 border rounded">
+                    </div>
+                    <div class="color-control">
+                        <label class="block text-sm font-medium mb-1">Fondo Principal</label>
+                        <input type="color" id="background-color" value="#0d1117" class="color-input w-full h-10 border rounded">
+                    </div>
+                    <div class="color-control">
+                        <label class="block text-sm font-medium mb-1">Texto Principal</label>
+                        <input type="color" id="text-color" value="#f0f6fc" class="color-input w-full h-10 border rounded">
+                    </div>
+                </div>
+                <button id="apply-colors-btn" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded mt-4">
+                    Aplicar Colores
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab: Emails & Notificaciones -->
+        <div id="emails-tab" class="tab-content bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4">📧 Gestión de Emails y Notificaciones</h3>
+            
+            <!-- Editor de Plantillas de Email -->
+            <div class="email-section mb-6">
+                <h4 class="font-semibold mb-3">✉️ Plantillas de Email</h4>
+                <div class="template-selector mb-4">
+                    <select id="email-template-select" class="w-full p-3 border rounded-lg">
+                        <option value="welcome">Bienvenida</option>
+                        <option value="approval">Aprobación de Video</option>
+                        <option value="rejection">Rechazo de Video</option>
+                        <option value="payment_confirmation">Confirmación de Pago</option>
+                        <option value="ranking_update">Actualización de Ranking</option>
+                    </select>
+                </div>
+                
+                <div class="template-editor">
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Asunto del Email</label>
+                        <input type="text" id="email-subject" class="w-full p-3 border rounded-lg" 
+                               placeholder="Asunto del email...">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium mb-2">Contenido HTML</label>
+                        <textarea id="email-html-content" rows="10" class="w-full p-3 border rounded-lg font-mono text-sm"
+                                  placeholder="<html>..."></textarea>
+                    </div>
+                    
+                    <div class="flex space-x-3">
+                        <button id="save-email-template-btn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
+                            Guardar Plantilla
+                        </button>
+                        <button id="test-email-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                            Enviar Prueba
+                        </button>
+                        <button id="preview-email-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                            Vista Previa
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Email Masivo -->
+            <div class="email-section">
+                <h4 class="font-semibold mb-3">📤 Envío Masivo</h4>
+                <div class="mass-email-controls space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Destinatarios</label>
+                        <select id="mass-email-recipients" class="w-full p-3 border rounded-lg">
+                            <option value="all_users">Todos los Usuarios</option>
+                            <option value="participants_only">Solo Participantes</option>
+                            <option value="approved_only">Solo Aprobados</option>
+                            <option value="fans_only">Solo Fans/Votantes</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Plantilla</label>
+                        <select id="mass-email-template" class="w-full p-3 border rounded-lg">
+                            <option value="announcement">Anuncio General</option>
+                            <option value="new_certamen">Nuevo Certamen</option>
+                            <option value="winner_announcement">Anuncio de Ganador</option>
+                            <option value="system_update">Actualización del Sistema</option>
+                        </select>
+                    </div>
+                    
+                    <button id="send-mass-email-btn" class="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg">
+                        📤 Enviar Email Masivo
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Configuración -->
+        <div id="config-tab" class="tab-content bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold mb-4">⚙️ Configuración del Sistema</h3>
+            
+            <!-- Configuración de VYT-Money -->
+            <div class="config-section mb-6">
+                <h4 class="font-semibold mb-3">💰 VYT-Money</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="rate-control">
+                        <label class="block text-sm font-medium mb-2">100 VYT (Precio en ARS)</label>
+                        <input type="number" id="rate-100-vyt" class="w-full p-2 border rounded" value="299">
+                    </div>
+                    <div class="rate-control">
+                        <label class="block text-sm font-medium mb-2">500 VYT (Precio en ARS)</label>
+                        <input type="number" id="rate-500-vyt" class="w-full p-2 border rounded" value="1299">
+                    </div>
+                    <div class="rate-control">
+                        <label class="block text-sm font-medium mb-2">1000 VYT (Precio en ARS)</label>
+                        <input type="number" id="rate-1000-vyt" class="w-full p-2 border rounded" value="2399">
+                    </div>
+                </div>
+                <button id="update-vyt-rates-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded mt-3">
+                    Actualizar Precios
+                </button>
+            </div>
+
+            <!-- Configuración de Certámenes -->
+            <div class="config-section mb-6">
+                <h4 class="font-semibold mb-3">🏆 Certámenes</h4>
+                <div class="certamen-config space-y-3">
+                    <div class="flex items-center justify-between p-3 border rounded">
+                        <span>Duración de votación (días)</span>
+                        <input type="number" id="voting-duration" class="w-20 p-1 border rounded" value="15">
+                    </div>
+                    <div class="flex items-center justify-between p-3 border rounded">
+                        <span>Máximo de participantes por certamen</span>
+                        <input type="number" id="max-participants" class="w-20 p-1 border rounded" value="100">
+                    </div>
+                    <div class="flex items-center justify-between p-3 border rounded">
+                        <span>Costo de inscripción online (ARS)</span>
+                        <input type="number" id="inscription-cost" class="w-24 p-1 border rounded" value="5000">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Configuración General del Sitio -->
+            <div class="config-section">
+                <h4 class="font-semibold mb-3">🌐 Configuración General</h4>
+                <div class="general-config space-y-3">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Nombre del Sitio</label>
+                        <input type="text" id="site-name" class="w-full p-2 border rounded" value="VYT Music Online">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Descripción</label>
+                        <textarea id="site-description" rows="3" class="w-full p-2 border rounded">El certamen de canto online más grande de Argentina</textarea>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <input type="checkbox" id="maintenance-mode" class="rounded">
+                        <label for="maintenance-mode" class="text-sm font-medium">Modo Mantenimiento</label>
+                    </div>
+                </div>
+                <button id="save-general-config-btn" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-3">
+                    Guardar Configuración
+                </button>
+            </div>
+        </div>
+
+        <!-- Más tabs se pueden agregar según necesidades -->
+    </div>
+
+    <!-- Panel de Acciones Rápidas -->
+    <div class="quick-actions bg-gray-50 p-6 rounded-lg">
+        <h3 class="text-lg font-bold mb-4">⚡ Acciones Rápidas</h3>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <button id="approve-all-pending-btn" class="quick-action-btn bg-green-500 hover:bg-green-600 text-white p-3 rounded-lg text-sm">
+                ✅ Aprobar Todos los Pendientes
+            </button>
+            <button id="backup-now-btn" class="quick-action-btn bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-lg text-sm">
+                💾 Backup Ahora
+            </button>
+            <button id="clear-cache-btn" class="quick-action-btn bg-orange-500 hover:bg-orange-600 text-white p-3 rounded-lg text-sm">
+                🗑️ Limpiar Cache
+            </button>
+            <button id="export-data-btn" class="quick-action-btn bg-purple-500 hover:bg-purple-600 text-white p-3 rounded-lg text-sm">
+                📊 Exportar Datos
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Vista Previa de Email -->
+<div id="email-preview-modal" class="modal-overlay hidden">
+    <div class="modal-content bg-white p-6 rounded-lg max-w-2xl mx-auto">
+        <div class="modal-header flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold">📧 Vista Previa del Email</h3>
+            <button id="close-email-preview" class="text-gray-500 hover:text-gray-700">✕</button>
+        </div>
+        <div id="email-preview-content" class="border rounded-lg p-4 min-h-64">
+            <!-- Contenido del email se carga aquí -->
+        </div>
+        <div class="modal-footer mt-4 flex justify-end space-x-3">
+            <button id="close-preview-btn" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded">
+                Cerrar
+            </button>
+            <button id="edit-email-btn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
+                Editar
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+.integral-header .online-indicator {
+    width: 8px;
+    height: 8px;
+    background: #10B981;
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+    margin-right: 8px;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.metric-card {
+    transition: all 0.3s ease;
+}
+
+.metric-card:hover {
+    transform: translateY(-2px);
+    shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.metric-updated {
+    animation: highlight 1s ease-out;
+}
+
+@keyframes highlight {
+    0% { background-color: #FEF3C7; }
+    100% { background-color: transparent; }
+}
+
+.tab-btn {
+    padding: 8px 16px;
+    border-radius: 6px;
+    background: transparent;
+    color: #6B7280;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.tab-btn.active {
+    background: white;
+    color: #1F2937;
+    shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.tab-content {
+    display: none;
+    margin-top: 16px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.progress-bar {
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    transition: width 0.3s ease;
+}
+
+.color-input {
+    cursor: pointer;
+    border: 2px solid #E5E7EB;
+}
+
+.color-input:hover {
+    border-color: #3B82F6;
+}
+
+.quick-action-btn {
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.quick-action-btn:hover {
+    transform: translateY(-1px);
+    shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    margin: 20px;
+}
+
+#pending-approvals.high-priority {
+    color: #DC2626 !important;
+    animation: urgentPulse 1s infinite;
+}
+
+@keyframes urgentPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+</style>

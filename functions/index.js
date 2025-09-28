@@ -375,4 +375,40 @@ try {
   console.log('🔄 Continuing with basic functions only');
 }
 
-console.log('🚀 VYT Music Online - Core functions ready');
+// ===== FUNCIONES DEL SISTEMA INTEGRAL DE ADMIN =====
+
+try {
+  const adminIntegralFunctions = require('./admin-integral');
+  
+  // Gestión de contenido visual
+  exports.updateSiteVisualConfig = adminIntegralFunctions.updateSiteVisualConfig;
+  exports.updatePageStyles = adminIntegralFunctions.updatePageStyles;
+  
+  // Email masivo y comunicación
+  exports.sendMassEmail = adminIntegralFunctions.sendMassEmail;
+  
+  // Configuración del sistema
+  exports.updateVYTMoneyRates = adminIntegralFunctions.updateVYTMoneyRates;
+  
+  // Moderación avanzada
+  exports.massApproveParticipants = adminIntegralFunctions.massApproveParticipants;
+  
+  // Backup y restauración
+  exports.createSystemBackup = adminIntegralFunctions.createSystemBackup;
+  
+  // Métricas en tiempo real
+  exports.updateSystemMetrics = adminIntegralFunctions.updateSystemMetrics;
+  
+  // Salud del sistema
+  exports.integralSystemHealth = adminIntegralFunctions.integralSystemHealth;
+  
+  // Broadcast handler
+  exports.handleSystemBroadcast = adminIntegralFunctions.handleSystemBroadcast;
+  
+  console.log('✅ Admin Integral System functions loaded successfully');
+} catch (error) {
+  console.error('⚠️ Error loading admin integral functions:', error.message);
+  console.log('🔄 Admin integral features will not be available');
+}
+
+console.log('🚀 VYT Music Online - Core functions + Admin Integral ready');

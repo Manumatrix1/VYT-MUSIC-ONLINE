@@ -135,6 +135,9 @@
                     <button onclick="showPage('fondos')" class="admin-nav-btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-images mr-1"></i>Fondos
                     </button>
+                    <button onclick="showPage('admin-integral-panel')" class="admin-nav-btn bg-gradient-to-r from-blue-600 to-purple-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-cog mr-1"></i>🎛️ Gestión Integral
+                    </button>
                 </div>
             </div>
         </nav>
@@ -964,6 +967,14 @@
                             </ul>
                         </div>
                     </div>
+                </div>
+            </section>
+
+            <!-- Panel de Gestión Integral -->
+            <section id="admin-integral-panel-section" class="admin-section">
+                <div class="max-w-7xl mx-auto">
+                    <!-- Incluir el panel integral aquí -->
+                    <div id="admin-integral-container"></div>
                 </div>
             </section>
         </main>
@@ -2765,9 +2776,97 @@
                 if (typeof cargarVideosPendientes === 'function') {
                     cargarVideosPendientes();
                 }
+                // Cargar panel integral
+                loadAdminIntegralPanel();
             }, 1000);
         });
+
+        // Función para cargar el panel integral
+        async function loadAdminIntegralPanel() {
+            try {
+                console.log('🎛️ Cargando Panel de Gestión Integral...');
+                
+                const container = document.getElementById('admin-integral-container');
+                if (!container) return;
+                
+                // Cargar el HTML del panel integral
+                const response = await fetch('admin-integral-panel.html');
+                const panelHTML = await response.text();
+                container.innerHTML = panelHTML;
+                
+                // Cargar el sistema integral
+                const { default: AdminIntegralSystem } = await import('./admin-integral-system.js');
+                
+                // Inicializar el sistema cuando se accede al panel
+                window.loadAdminIntegralSystem = () => {
+                    if (!window.adminSystem) {
+                        window.adminSystem = new AdminIntegralSystem();
+                    }
+                };
+                
+                // Configurar navegación del panel integral
+                setupIntegralPanelNavigation();
+                
+                console.log('✅ Panel de Gestión Integral cargado correctamente');
+                
+            } catch (error) {
+                console.error('❌ Error cargando Panel Integral:', error);
+                const container = document.getElementById('admin-integral-container');
+                if (container) {
+                    container.innerHTML = `
+                        <div class="bg-red-50 border border-red-200 rounded-lg p-6 text-center">
+                            <i class="fas fa-exclamation-triangle text-red-500 text-2xl mb-3"></i>
+                            <h3 class="font-bold text-red-800 mb-2">Error cargando Panel Integral</h3>
+                            <p class="text-red-600 text-sm mb-4">No se pudo cargar el sistema de gestión integral.</p>
+                            <button onclick="loadAdminIntegralPanel()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded">
+                                Reintentar
+                            </button>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Configurar navegación del panel integral
+        function setupIntegralPanelNavigation() {
+            // Configurar tabs del panel integral
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('tab-btn')) {
+                    e.preventDefault();
+                    
+                    const tabId = e.target.dataset.tab;
+                    
+                    // Remover active de todos los tabs
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    // Activar tab seleccionado
+                    e.target.classList.add('active');
+                    const targetContent = document.getElementById(tabId + '-tab');
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        // Modificar showPage para manejar el panel integral
+        const originalShowPage = window.showPage;
+        window.showPage = function(pageId) {
+            // Llamar a la función original
+            originalShowPage(pageId);
+            
+            // Si estamos cargando el panel integral, inicializarlo
+            if (pageId === 'admin-integral-panel') {
+                setTimeout(() => {
+                    if (window.loadAdminIntegralSystem) {
+                        window.loadAdminIntegralSystem();
+                    }
+                }, 100);
+            }
+        };
     </script>
     <script type="module" src="admin-simple.js"></script>
+    <script src="admin-integral-controllers.js"></script>
 </body>
 </html>
