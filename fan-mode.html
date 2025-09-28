@@ -53,14 +53,16 @@
             <nav class="flex items-center justify-between">
                 <!-- Logo -->
                 <div class="flex items-center space-x-3">
-                    <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo" class="w-10 h-10">
+                    <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+                        <span class="font-bold text-white text-lg">🎵</span>
+                    </div>
                     <span class="font-bold text-xl text-white">VYT MUSIC</span>
                     <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold">MODO FAN</span>
                 </div>
                 
                 <!-- Navegación -->
                 <div class="flex items-center space-x-4">
-                    <a href="principal.html" class="text-gray-300 hover:text-white transition-colors">
+                    <a href="index.html" class="text-gray-300 hover:text-white transition-colors">
                         <i class="fas fa-home"></i> Inicio
                     </a>
                     <a href="inscripcion_unificada.html" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white font-medium transition-colors">
@@ -299,27 +301,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             loadCertamenes();
             loadArtistas();
-            loadCustomBackground();
         });
-
-        // Load custom background if set
-        function loadCustomBackground() {
-            const config = localStorage.getItem('backgroundConfig');
-            if (config) {
-                try {
-                    const backgroundConfig = JSON.parse(config);
-                    if (backgroundConfig.currentBackground) {
-                        document.body.style.backgroundImage = `url(${backgroundConfig.currentBackground})`;
-                        document.body.style.backgroundSize = 'cover';
-                        document.body.style.backgroundPosition = 'center center';
-                        document.body.style.backgroundRepeat = 'no-repeat';
-                        document.body.style.backgroundAttachment = 'fixed';
-                    }
-                } catch (e) {
-                    console.log('No se pudo cargar el fondo personalizado:', e);
-                }
-            }
-        }
     </script>
 </body>
 </html>

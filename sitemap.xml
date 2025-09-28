@@ -19,7 +19,7 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Inscripción -->
+  <!-- Inscripción Unificada -->
   <url>
     <loc>https://vyt-music-online.web.app/inscripcion_unificada.html</loc>
     <lastmod>2025-01-27</lastmod>
@@ -62,14 +62,6 @@
   <!-- Perfil de artistas -->
   <url>
     <loc>https://vyt-music-online.web.app/perfil-artista.html</loc>
-    <lastmod>2025-01-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-
-  <!-- Blog -->
-  <url>
-    <loc>https://vyt-music-online.web.app/blog.html</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>

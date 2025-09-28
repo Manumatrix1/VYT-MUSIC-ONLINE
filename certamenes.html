@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Certámenes</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="src/navigation-styles.css">
+    
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .certamen-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .certamen-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .status-badge {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22C55E;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-coming {
+            background: rgba(251, 191, 36, 0.2);
+            color: #FBBF24;
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .btn-participate {
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-participate:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-info {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-info:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-32 mx-auto mb-4">
+            <h1 class="text-5xl font-bold text-white mb-4">🏆 Certámenes VYT Music</h1>
+            <p class="text-gray-300 text-lg max-w-3xl mx-auto">
+                Encuentra tu certamen perfecto y comienza tu carrera musical. 
+                Participa, compite y haz que tu voz se escuche en toda Argentina.
+            </p>
+        </header>
+
+        <!-- Contenido Principal -->
+        <main class="container mx-auto px-4 pb-32 max-w-6xl">
+            
+            <!-- Certámenes Activos -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-center mb-8 flex items-center justify-center">
+                    <i class="fas fa-fire text-red-400 mr-3"></i>
+                    Certámenes Activos - ¡Inscríbete Ya!
+                </h2>
+                
+                <!-- Certamen 1: Nacional Pop -->
+                <div class="certamen-card">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <div class="lg:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=250&fit=crop" alt="Certamen Pop" class="w-full h-48 lg:h-full object-cover rounded-lg">
+                        </div>
+                        <div class="lg:w-2/3">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="status-badge status-active">Inscripciones Abiertas</span>
+                                <span class="text-2xl font-bold text-yellow-400">Premio: $15,000</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">🎤 Certamen Nacional de Pop</h3>
+                            <p class="text-gray-300 mb-4">
+                                El certamen de música Pop más importante de Argentina. Participa con tu mejor interpretación 
+                                y compite con artistas de todo el país. Todas las edades pueden participar.
+                            </p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
+                                <div>
+                                    <strong class="text-blue-400">Fecha límite:</strong>
+                                    <p class="text-gray-300">15 Oct 2025</p>
+                                </div>
+                                <div>
+                                    <strong class="text-blue-400">Modalidad:</strong>
+                                    <p class="text-gray-300">Online</p>
+                                </div>
+                                <div>
+                                    <strong class="text-blue-400">Participantes:</strong>
+                                    <p class="text-gray-300">247 inscritos</p>
+                                </div>
+                                <div>
+                                    <strong class="text-blue-400">Género:</strong>
+                                    <p class="text-gray-300">Pop</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <a href="crear-perfil-artista.html" class="btn-participate">
+                                    <i class="fas fa-microphone"></i>
+                                    Participar Ahora
+                                </a>
+                                <button class="btn-info" onclick="showContestDetails('pop-nacional')">
+                                    <i class="fas fa-info-circle"></i>
+                                    Ver Reglamento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certamen 2: Rock Nacional -->
+                <div class="certamen-card">
+                    <div class="flex flex-col lg:flex-row gap-6">
+                        <div class="lg:w-1/3">
+                            <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=400&h=250&fit=crop" alt="Certamen Rock" class="w-full h-48 lg:h-full object-cover rounded-lg">
+                        </div>
+                        <div class="lg:w-2/3">
+                            <div class="flex items-center justify-between mb-4">
+                                <span class="status-badge status-active">Inscripciones Abiertas</span>
+                                <span class="text-2xl font-bold text-yellow-400">Premio: $12,000</span>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-3">🎸 Certamen Nacional de Rock</h3>
+                            <p class="text-gray-300 mb-4">
+                                Para los amantes del Rock Nacional Argentino. Demuestra tu potencia vocal y tu 
+                                interpretación con los clásicos y nuevas propuestas del rock argentino.
+                            </p>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4 text-sm">
+                                <div>
+                                    <strong class="text-blue-400">Fecha límite:</strong>
+                                    <p class="text-gray-300">20 Oct 2025</p>
+                                </div>
+                                <div>
+                                    <strong class="text-blue-400">Modalidad:</strong>
+                                    <p class="text-gray-300">Online</p>
+                                </div>
+                                <div>
+                                    <strong class="text-blue-400">Participantes:</strong>
+                                    <p class="text-gray-300">189 inscritos</p>
+                                </div>
+                                <div>
+                                    <strong class="text-blue-400">Género:</strong>
+                                    <p class="text-gray-300">Rock</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <a href="crear-perfil-artista.html" class="btn-participate">
+                                    <i class="fas fa-microphone"></i>
+                                    Participar Ahora
+                                </a>
+                                <button class="btn-info" onclick="showContestDetails('rock-nacional')">
+                                    <i class="fas fa-info-circle"></i>
+                                    Ver Reglamento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Próximos Certámenes -->
+            <section class="mb-12">
+                <h2 class="text-3xl font-bold text-center mb-8 flex items-center justify-center">
+                    <i class="fas fa-calendar-alt text-blue-400 mr-3"></i>
+                    Próximos Certámenes
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Folclore -->
+                    <div class="certamen-card text-center">
+                        <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&h=200&fit=crop" alt="Folclore" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <span class="status-badge status-coming mb-3 inline-block">Noviembre 2025</span>
+                        <h3 class="text-xl font-bold text-white mb-2">🪕 Certamen de Folclore</h3>
+                        <p class="text-gray-300 text-sm mb-4">Celebra la música tradicional argentina con zambas, chacareras y cuecas.</p>
+                        <p class="text-yellow-400 font-bold mb-4">Premio: $18,000</p>
+                        <button class="btn-info w-full" onclick="notifyWhenOpen('folclore')">
+                            <i class="fas fa-bell"></i>
+                            Recibir Notificación
+                        </button>
+                    </div>
+
+                    <!-- Tango -->
+                    <div class="certamen-card text-center">
+                        <img src="https://images.unsplash.com/photo-1493676304819-0d7a8d026dcf?w=300&h=200&fit=crop" alt="Tango" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <span class="status-badge status-coming mb-3 inline-block">Diciembre 2025</span>
+                        <h3 class="text-xl font-bold text-white mb-2">💃 Certamen de Tango</h3>
+                        <p class="text-gray-300 text-sm mb-4">La pasión del tango argentino en una competencia única.</p>
+                        <p class="text-yellow-400 font-bold mb-4">Premio: $20,000</p>
+                        <button class="btn-info w-full" onclick="notifyWhenOpen('tango')">
+                            <i class="fas fa-bell"></i>
+                            Recibir Notificación
+                        </button>
+                    </div>
+
+                    <!-- Urbano -->
+                    <div class="certamen-card text-center">
+                        <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=200&fit=crop" alt="Urbano" class="w-full h-40 object-cover rounded-lg mb-4">
+                        <span class="status-badge status-coming mb-3 inline-block">Enero 2026</span>
+                        <h3 class="text-xl font-bold text-white mb-2">🎵 Certamen Urbano</h3>
+                        <p class="text-gray-300 text-sm mb-4">Rap, reggaeton, trap y todos los géneros urbanos.</p>
+                        <p class="text-yellow-400 font-bold mb-4">Premio: $16,000</p>
+                        <button class="btn-info w-full" onclick="notifyWhenOpen('urbano')">
+                            <i class="fas fa-bell"></i>
+                            Recibir Notificación
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action -->
+            <section class="text-center bg-gradient-to-r from-blue-900/30 to-purple-900/30 backdrop-blur-10 border border-white/10 rounded-2xl p-12">
+                <h2 class="text-4xl font-bold text-white mb-6">
+                    ¿Listo para Competir? 🚀
+                </h2>
+                <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                    Únete a miles de artistas que ya están participando en VYT Music. 
+                    Tu momento de brillar ha llegado.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="crear-perfil-artista.html" class="btn-participate text-lg px-8 py-4">
+                        <i class="fas fa-user-plus"></i>
+                        Crear mi Perfil de Artista
+                    </a>
+                    <a href="ranking.html" class="btn-info text-lg px-8 py-4">
+                        <i class="fas fa-trophy"></i>
+                        Ver Ranking Actual
+                    </a>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/navigation.js"></script>
+    <script>
+        function showContestDetails(contestId) {
+            console.log(`Mostrando detalles del certamen: ${contestId}`);
+            alert('Próximamente: Detalles completos del certamen con reglamento y condiciones.');
+        }
+
+        function notifyWhenOpen(contestId) {
+            console.log(`Configurando notificación para: ${contestId}`);
+            alert('¡Perfecto! Te notificaremos cuando abran las inscripciones.');
+        }
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🏆 VYT MUSIC - Certámenes iniciado');
+        });
+    </script>
+</body>
+</html>

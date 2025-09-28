@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Crear Perfil de Artista</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="src/navigation-styles.css">
+    
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3B82F6;
+            background: rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin: 0 16px;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        .step.active .step-number {
+            background: #3B82F6;
+        }
+
+        .genre-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .genre-checkbox {
+            display: none;
+        }
+
+        .genre-label {
+            display: block;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .genre-checkbox:checked + .genre-label {
+            background: rgba(59, 130, 246, 0.2);
+            border-color: #3B82F6;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen py-8">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-32 mx-auto mb-4">
+            <h1 class="text-4xl font-bold text-white mb-4">🎤 Crear tu Perfil de Artista</h1>
+            <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+                Completa tu perfil para participar en los certámenes de VYT Music. 
+                Tus datos nos ayudan a conocer la demanda de cada ciudad.
+            </p>
+        </header>
+
+        <!-- Formulario -->
+        <main class="container mx-auto px-4 pb-32 max-w-4xl">
+            <!-- Step Indicator -->
+            <div class="step-indicator">
+                <div class="step active">
+                    <div class="step-number">1</div>
+                    <span>Datos Básicos</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <span>Perfil Artístico</span>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <span>Ubicación</span>
+                </div>
+            </div>
+
+            <form id="artist-profile-form">
+                <!-- Sección 1: Datos Básicos -->
+                <div class="form-card" id="step-1">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-user mr-3"></i>
+                        Datos Básicos
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">Email *</label>
+                            <input type="email" name="email" class="form-input" placeholder="tu@email.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">WhatsApp *</label>
+                            <input type="tel" name="whatsapp" class="form-input" placeholder="+54 9 11 1234-5678" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">Nombre *</label>
+                            <input type="text" name="nombre" class="form-input" placeholder="Tu nombre" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">Apellido *</label>
+                            <input type="text" name="apellido" class="form-input" placeholder="Tu apellido" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">Fecha de Nacimiento *</label>
+                            <input type="date" name="fecha_nacimiento" class="form-input" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">DNI *</label>
+                            <input type="text" name="dni" class="form-input" placeholder="12345678" required>
+                        </div>
+                    </div>
+                    
+                    <button type="button" class="btn-primary mt-6" onclick="nextStep(2)">
+                        Continuar →
+                    </button>
+                </div>
+
+                <!-- Sección 2: Perfil Artístico -->
+                <div class="form-card hidden" id="step-2">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-music mr-3"></i>
+                        Perfil Artístico
+                    </h2>
+                    
+                    <div class="form-group">
+                        <label class="block text-white font-medium mb-2">Nombre Artístico *</label>
+                        <input type="text" name="nombre_artistico" class="form-input" placeholder="Tu nombre artístico" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-white font-medium mb-2">Géneros Musicales (selecciona todos los que manejes) *</label>
+                        <div class="genre-grid">
+                            <div>
+                                <input type="checkbox" id="pop" name="generos[]" value="pop" class="genre-checkbox">
+                                <label for="pop" class="genre-label">🎤 Pop</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="rock" name="generos[]" value="rock" class="genre-checkbox">
+                                <label for="rock" class="genre-label">🎸 Rock</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="folclore" name="generos[]" value="folclore" class="genre-checkbox">
+                                <label for="folclore" class="genre-label">🪕 Folclore</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="tango" name="generos[]" value="tango" class="genre-checkbox">
+                                <label for="tango" class="genre-label">💃 Tango</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="cumbia" name="generos[]" value="cumbia" class="genre-checkbox">
+                                <label for="cumbia" class="genre-label">🎺 Cumbia</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="balada" name="generos[]" value="balada" class="genre-checkbox">
+                                <label for="balada" class="genre-label">❤️ Balada</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="urbano" name="generos[]" value="urbano" class="genre-checkbox">
+                                <label for="urbano" class="genre-label">🎵 Urbano</label>
+                            </div>
+                            <div>
+                                <input type="checkbox" id="tropical" name="generos[]" value="tropical" class="genre-checkbox">
+                                <label for="tropical" class="genre-label">🌴 Tropical</label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="block text-white font-medium mb-2">Biografía Artística</label>
+                        <textarea name="biografia" class="form-textarea" placeholder="Contanos sobre tu trayectoria musical, experiencia, logros, etc..."></textarea>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <button type="button" class="btn-primary bg-gray-600 hover:bg-gray-700" onclick="prevStep(1)">
+                            ← Anterior
+                        </button>
+                        <button type="button" class="btn-primary" onclick="nextStep(3)">
+                            Continuar →
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Sección 3: Ubicación -->
+                <div class="form-card hidden" id="step-3">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
+                        <i class="fas fa-map-marker-alt mr-3"></i>
+                        Ubicación Geográfica
+                    </h2>
+                    
+                    <div class="bg-blue-900/20 border border-blue-400/30 rounded-xl p-4 mb-6">
+                        <h3 class="text-blue-300 font-semibold mb-2">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            ¿Por qué necesitamos tu ubicación?
+                        </h3>
+                        <p class="text-blue-100 text-sm">
+                            Tu ubicación nos ayuda a medir la demanda en cada ciudad. Si hay suficientes artistas en tu zona, 
+                            organizaremos certámenes presenciales allí. ¡Podrías ser parte del primer certamen presencial de tu ciudad!
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">Provincia *</label>
+                            <select name="provincia" class="form-select" required onchange="loadCities(this.value)">
+                                <option value="">Selecciona tu provincia</option>
+                                <option value="buenos_aires">Buenos Aires</option>
+                                <option value="catamarca">Catamarca</option>
+                                <option value="chaco">Chaco</option>
+                                <option value="chubut">Chubut</option>
+                                <option value="cordoba">Córdoba</option>
+                                <option value="corrientes">Corrientes</option>
+                                <option value="entre_rios">Entre Ríos</option>
+                                <option value="formosa">Formosa</option>
+                                <option value="jujuy">Jujuy</option>
+                                <option value="la_pampa">La Pampa</option>
+                                <option value="la_rioja">La Rioja</option>
+                                <option value="mendoza">Mendoza</option>
+                                <option value="misiones">Misiones</option>
+                                <option value="neuquen">Neuquén</option>
+                                <option value="rio_negro">Río Negro</option>
+                                <option value="salta">Salta</option>
+                                <option value="san_juan">San Juan</option>
+                                <option value="san_luis">San Luis</option>
+                                <option value="santa_cruz">Santa Cruz</option>
+                                <option value="santa_fe">Santa Fe</option>
+                                <option value="santiago_del_estero">Santiago del Estero</option>
+                                <option value="tierra_del_fuego">Tierra del Fuego</option>
+                                <option value="tucuman">Tucumán</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">Ciudad *</label>
+                            <select name="ciudad" class="form-select" required>
+                                <option value="">Primero selecciona tu provincia</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group md:col-span-2">
+                            <label class="block text-white font-medium mb-2">Código Postal</label>
+                            <input type="text" name="codigo_postal" class="form-input" placeholder="1234">
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-4">
+                        <button type="button" class="btn-primary bg-gray-600 hover:bg-gray-700" onclick="prevStep(2)">
+                            ← Anterior
+                        </button>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-check mr-2"></i>
+                            Crear mi Perfil de Artista
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="src/navigation.js"></script>
+    <script>
+        // Sistema de pasos
+        let currentStep = 1;
+
+        function nextStep(step) {
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+            
+            // Update step indicator
+            document.querySelectorAll('.step').forEach((el, index) => {
+                if (index + 1 <= step) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+            
+            currentStep = step;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function prevStep(step) {
+            document.getElementById(`step-${currentStep}`).classList.add('hidden');
+            document.getElementById(`step-${step}`).classList.remove('hidden');
+            
+            // Update step indicator
+            document.querySelectorAll('.step').forEach((el, index) => {
+                if (index + 1 <= step) {
+                    el.classList.add('active');
+                } else {
+                    el.classList.remove('active');
+                }
+            });
+            
+            currentStep = step;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Sistema de ciudades por provincia
+        const cityData = {
+            buenos_aires: ['Ciudad de Buenos Aires', 'La Plata', 'Mar del Plata', 'Bahía Blanca', 'Tandil', 'Quilmes', 'Avellaneda'],
+            santa_fe: ['Rosario', 'Santa Fe', 'Rafaela', 'Reconquista', 'Venado Tuerto'],
+            cordoba: ['Córdoba', 'Río Cuarto', 'Villa María', 'San Francisco', 'Villa Carlos Paz'],
+            mendoza: ['Mendoza', 'San Rafael', 'Godoy Cruz', 'Guaymallén', 'Maipú'],
+            // ... agregar más ciudades según necesidad
+        };
+
+        function loadCities(provincia) {
+            const citySelect = document.querySelector('select[name="ciudad"]');
+            citySelect.innerHTML = '<option value="">Selecciona tu ciudad</option>';
+            
+            if (cityData[provincia]) {
+                cityData[provincia].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.toLowerCase().replace(/\s+/g, '_');
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        // Manejo del formulario
+        document.getElementById('artist-profile-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Validar géneros seleccionados
+            const selectedGenres = document.querySelectorAll('input[name="generos[]"]:checked');
+            if (selectedGenres.length === 0) {
+                alert('Por favor, selecciona al menos un género musical.');
+                nextStep(2);
+                return;
+            }
+            
+            // Recopilar datos del formulario
+            const formData = new FormData(this);
+            const artistData = {};
+            
+            // Datos básicos
+            artistData.email = formData.get('email');
+            artistData.whatsapp = formData.get('whatsapp');
+            artistData.nombre = formData.get('nombre');
+            artistData.apellido = formData.get('apellido');
+            artistData.fechaNacimiento = formData.get('fecha_nacimiento');
+            artistData.dni = formData.get('dni');
+            
+            // Perfil artístico
+            artistData.nombreArtistico = formData.get('nombre_artistico');
+            artistData.generos = Array.from(selectedGenres).map(cb => cb.value);
+            artistData.biografia = formData.get('biografia');
+            
+            // Ubicación
+            artistData.provincia = formData.get('provincia');
+            artistData.ciudad = formData.get('ciudad');
+            artistData.codigoPostal = formData.get('codigo_postal');
+            
+            // Datos adicionales
+            artistData.fechaCreacion = new Date().toISOString();
+            artistData.estado = 'pendiente_aprobacion'; // pendiente, aprobado, rechazado
+            
+            try {
+                // Aquí conectarías con Firebase
+                console.log('Datos del artista:', artistData);
+                
+                // Simular guardado exitoso
+                alert('¡Perfil creado exitosamente! Te contactaremos pronto para la aprobación.');
+                
+                // Redirigir a página de éxito o principal
+                window.location.href = 'principal.html';
+                
+            } catch (error) {
+                console.error('Error al crear perfil:', error);
+                alert('Error al crear el perfil. Por favor, intenta nuevamente.');
+            }
+        });
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎤 VYT MUSIC - Formulario de perfil de artista iniciado');
+        });
+    </script>
+</body>
+</html>
