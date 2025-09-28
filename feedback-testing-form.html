@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 Feedback Testing VYT Music - 50 Artistas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .rating-star {
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .rating-star:hover {
+            color: #f59e0b;
+        }
+        .rating-star.active {
+            color: #f59e0b;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .card-glass {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen py-8">
+    <div class="container mx-auto px-4 max-w-4xl">
+        <!-- Header -->
+        <div class="card-glass rounded-lg p-6 mb-8 text-center">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">
+                🎵 Feedback Testing VYT Music Online
+            </h1>
+            <p class="text-gray-600">
+                Tu opinión es fundamental para mejorar la plataforma. ¡Gracias por participar!
+            </p>
+            <div class="mt-4 text-sm text-gray-500">
+                Tiempo estimado: 8-12 minutos
+            </div>
+        </div>
+
+        <form id="feedbackForm" class="space-y-8">
+            <!-- Datos del Tester -->
+            <section class="card-glass rounded-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-4 flex items-center">
+                    <i class="fas fa-user-circle mr-2"></i>
+                    Datos del Tester
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Nombre/Pseudónimo:</label>
+                        <input type="text" name="nombre" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+                               placeholder="Tu nombre artístico" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Edad:</label>
+                        <select name="edad" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Selecciona...</option>
+                            <option value="18-25">18-25</option>
+                            <option value="26-35">26-35</option>
+                            <option value="36-45">36-45</option>
+                            <option value="46+">46+</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Experiencia con tecnología:</label>
+                        <select name="experiencia_tech" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Selecciona...</option>
+                            <option value="basica">Básica</option>
+                            <option value="intermedia">Intermedia</option>
+                            <option value="avanzada">Avanzada</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Dispositivo usado:</label>
+                        <select name="dispositivo" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" required>
+                            <option value="">Selecciona...</option>
+                            <option value="desktop">Desktop/Laptop</option>
+                            <option value="mobile">Smartphone</option>
+                            <option value="tablet">Tablet</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Evaluación por Flujos -->
+            <section class="card-glass rounded-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-chart-line mr-2"></i>
+                    Evaluación por Funcionalidades
+                </h2>
+
+                <!-- Registro e Ingreso -->
+                <div class="mb-8 p-4 bg-blue-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        🔐 1. Registro e Ingreso
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Facilidad de registro:</label>
+                            <div class="rating" data-field="registro_facilidad">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Claridad de instrucciones:</label>
+                            <div class="rating" data-field="registro_claridad">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Velocidad del proceso:</label>
+                            <div class="rating" data-field="registro_velocidad">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comentarios sobre Registro:</label>
+                        <textarea name="registro_comentarios" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+                                  rows="3" placeholder="¿Tuviste algún problema o sugerencia?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Creación de Perfil -->
+                <div class="mb-8 p-4 bg-green-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        👤 2. Creación de Perfil de Artista
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Intuitividad del formulario:</label>
+                            <div class="rating" data-field="perfil_intuitividad">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Funcionamiento del upload:</label>
+                            <div class="rating" data-field="perfil_upload">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Claridad de campos requeridos:</label>
+                            <div class="rating" data-field="perfil_claridad">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comentarios sobre Perfil:</label>
+                        <textarea name="perfil_comentarios" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+                                  rows="3" placeholder="¿Fue fácil completar tu perfil?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Exploración de Certámenes -->
+                <div class="mb-8 p-4 bg-yellow-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        🏆 3. Exploración de Certámenes
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Facilidad de navegación:</label>
+                            <div class="rating" data-field="certamenes_navegacion">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Claridad de información:</label>
+                            <div class="rating" data-field="certamenes_claridad">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Utilidad de filtros:</label>
+                            <div class="rating" data-field="certamenes_filtros">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comentarios sobre Certámenes:</label>
+                        <textarea name="certamenes_comentarios" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+                                  rows="3" placeholder="¿Fue fácil encontrar certámenes de tu interés?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Inscripción a Certamen -->
+                <div class="mb-8 p-4 bg-purple-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        📝 4. Proceso de Inscripción a Certamen
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Claridad del proceso:</label>
+                            <div class="rating" data-field="inscripcion_claridad">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Funcionamiento del pago:</label>
+                            <div class="rating" data-field="inscripcion_pago">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Upload de video (YouTube):</label>
+                            <div class="rating" data-field="inscripcion_video">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comentarios sobre Inscripción:</label>
+                        <textarea name="inscripcion_comentarios" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+                                  rows="3" placeholder="¿El proceso de inscripción fue claro y rápido?"></textarea>
+                    </div>
+                </div>
+
+                <!-- Gestión de Cuenta -->
+                <div class="mb-8 p-4 bg-red-50 rounded-lg">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">
+                        ⚙️ 5. Gestión de Cuenta y Perfil
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Facilidad de edición:</label>
+                            <div class="rating" data-field="gestion_edicion">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Claridad del historial:</label>
+                            <div class="rating" data-field="gestion_historial">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Sistema VYT Money:</label>
+                            <div class="rating" data-field="gestion_vyt_money">
+                                <span class="rating-star text-2xl" data-value="1">⭐</span>
+                                <span class="rating-star text-2xl" data-value="2">⭐</span>
+                                <span class="rating-star text-2xl" data-value="3">⭐</span>
+                                <span class="rating-star text-2xl" data-value="4">⭐</span>
+                                <span class="rating-star text-2xl" data-value="5">⭐</span>
+                                <span class="rating-star text-2xl" data-value="6">⭐</span>
+                                <span class="rating-star text-2xl" data-value="7">⭐</span>
+                                <span class="rating-star text-2xl" data-value="8">⭐</span>
+                                <span class="rating-star text-2xl" data-value="9">⭐</span>
+                                <span class="rating-star text-2xl" data-value="10">⭐</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Comentarios sobre Gestión:</label>
+                        <textarea name="gestion_comentarios" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+                                  rows="3" placeholder="¿Fue fácil gestionar tu cuenta y datos?"></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Evaluación General -->
+            <section class="card-glass rounded-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-star mr-2"></i>
+                    Evaluación General
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="text-center">
+                        <label class="block text-lg font-medium text-gray-700 mb-4">Satisfacción General (1-10):</label>
+                        <div class="rating justify-center" data-field="satisfaccion_general">
+                            <span class="rating-star text-3xl mx-1" data-value="1">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="2">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="3">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="4">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="5">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="6">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="7">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="8">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="9">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="10">⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <label class="block text-lg font-medium text-gray-700 mb-4">¿Recomendarías la plataforma? (1-10):</label>
+                        <div class="rating justify-center" data-field="recomendacion">
+                            <span class="rating-star text-3xl mx-1" data-value="1">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="2">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="3">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="4">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="5">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="6">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="7">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="8">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="9">⭐</span>
+                            <span class="rating-star text-3xl mx-1" data-value="10">⭐</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">¿Participarías en certámenes reales?</label>
+                    <div class="flex space-x-4">
+                        <label class="flex items-center">
+                            <input type="radio" name="participaria" value="si" class="mr-2">
+                            <span class="text-green-600 font-medium">✅ Sí, definitivamente</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="participaria" value="tal_vez" class="mr-2">
+                            <span class="text-yellow-600 font-medium">🤔 Tal vez</span>
+                        </label>
+                        <label class="flex items-center">
+                            <input type="radio" name="participaria" value="no" class="mr-2">
+                            <span class="text-red-600 font-medium">❌ No</span>
+                        </label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Problemas y Sugerencias -->
+            <section class="card-glass rounded-lg p-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-bug mr-2"></i>
+                    Problemas Encontrados y Sugerencias
+                </h2>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Error más grave encontrado:</label>
+                        <input type="text" name="error_grave" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-red-500" 
+                               placeholder="Describe el problema más importante que encontraste">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Funcionalidad más confusa:</label>
+                        <input type="text" name="funcionalidad_confusa" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-yellow-500" 
+                               placeholder="¿Qué parte del sistema te resultó más difícil de usar?">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Sugerencia principal:</label>
+                        <input type="text" name="sugerencia_principal" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500" 
+                               placeholder="¿Cómo mejorarías la plataforma?">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Feedback libre - ¿Qué cambiarías o mejorarías?</label>
+                        <textarea name="feedback_libre" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500" 
+                                  rows="5" placeholder="Comparte cualquier otro comentario, sugerencia o experiencia que hayas tenido..."></textarea>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Botones de Acción -->
+            <div class="text-center space-y-4">
+                <button type="submit" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition duration-300 shadow-lg">
+                    <i class="fas fa-paper-plane mr-2"></i>
+                    Enviar Feedback
+                </button>
+                
+                <div class="text-sm text-gray-600">
+                    <i class="fas fa-lock mr-1"></i>
+                    Tu información es confidencial y será usada solo para mejorar la plataforma
+                </div>
+            </div>
+        </form>
+
+        <!-- Success Message -->
+        <div id="successMessage" class="hidden card-glass rounded-lg p-6 text-center">
+            <div class="text-6xl mb-4">🎉</div>
+            <h2 class="text-2xl font-bold text-green-600 mb-2">¡Feedback Enviado!</h2>
+            <p class="text-gray-700">Gracias por tu tiempo y opiniones. Tu feedback es muy valioso para nosotros.</p>
+        </div>
+    </div>
+
+    <script>
+        // Rating System
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratings = document.querySelectorAll('.rating');
+            
+            ratings.forEach(rating => {
+                const stars = rating.querySelectorAll('.rating-star');
+                const fieldName = rating.dataset.field;
+                
+                stars.forEach((star, index) => {
+                    star.addEventListener('click', () => {
+                        const value = parseInt(star.dataset.value);
+                        
+                        // Reset all stars
+                        stars.forEach(s => s.classList.remove('active'));
+                        
+                        // Activate stars up to clicked value
+                        for (let i = 0; i < value; i++) {
+                            stars[i].classList.add('active');
+                        }
+                        
+                        // Store value in form
+                        let hiddenInput = document.querySelector(`input[name="${fieldName}"]`);
+                        if (!hiddenInput) {
+                            hiddenInput = document.createElement('input');
+                            hiddenInput.type = 'hidden';
+                            hiddenInput.name = fieldName;
+                            document.getElementById('feedbackForm').appendChild(hiddenInput);
+                        }
+                        hiddenInput.value = value;
+                    });
+                    
+                    star.addEventListener('mouseover', () => {
+                        const value = parseInt(star.dataset.value);
+                        stars.forEach((s, i) => {
+                            s.style.color = i < value ? '#f59e0b' : '#d1d5db';
+                        });
+                    });
+                });
+                
+                rating.addEventListener('mouseleave', () => {
+                    const activeStars = rating.querySelectorAll('.rating-star.active').length;
+                    stars.forEach((s, i) => {
+                        s.style.color = i < activeStars ? '#f59e0b' : '#d1d5db';
+                    });
+                });
+            });
+        });
+
+        // Form Submission
+        document.getElementById('feedbackForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = {};
+            
+            // Collect all form data
+            for (let [key, value] of formData.entries()) {
+                data[key] = value;
+            }
+            
+            // Collect rating data
+            const hiddenInputs = this.querySelectorAll('input[type="hidden"]');
+            hiddenInputs.forEach(input => {
+                data[input.name] = input.value;
+            });
+            
+            try {
+                // Simulate API call
+                console.log('Feedback Data:', data);
+                
+                // Show success message
+                document.getElementById('feedbackForm').style.display = 'none';
+                document.getElementById('successMessage').classList.remove('hidden');
+                
+                // Scroll to top
+                window.scrollTo(0, 0);
+                
+                // In real implementation, send to Firebase or your backend
+                // await fetch('/api/feedback', { method: 'POST', body: JSON.stringify(data) });
+                
+            } catch (error) {
+                alert('Error enviando feedback. Por favor, intenta nuevamente.');
+                console.error('Error:', error);
+            }
+        });
+
+        // Auto-save functionality (optional)
+        let autoSaveTimer;
+        document.getElementById('feedbackForm').addEventListener('input', function() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                const formData = new FormData(this);
+                const data = {};
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                localStorage.setItem('vyt_feedback_draft', JSON.stringify(data));
+            }, 2000);
+        });
+
+        // Load draft on page load
+        window.addEventListener('load', function() {
+            const draft = localStorage.getItem('vyt_feedback_draft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                Object.keys(data).forEach(key => {
+                    const input = document.querySelector(`[name="${key}"]`);
+                    if (input) {
+                        input.value = data[key];
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
