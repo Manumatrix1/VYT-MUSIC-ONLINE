@@ -412,6 +412,14 @@
     <script>
         // Funciones de compra
         function buyPackage(type, amount, price) {
+            // Verificar si el usuario está autenticado antes de proceder
+            if (!currentUser) {
+                if (confirm('Para comprar VYT Money necesitas iniciar sesión. ¿Quieres ir al login ahora?')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
             console.log(`Comprando paquete ${type}: ${amount} VYT por $${price}`);
             
             // Simular proceso de compra
@@ -569,7 +577,7 @@
             { amount: 2000, label: 'VIP', popular: false }
         ];
 
-        // Inicializar cuando el usuario esté autenticado
+        // Inicializar la página (sin requerir autenticación)
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -578,8 +586,11 @@
                 renderPackages();
                 showUserElements();
             } else {
-                // Redirigir al login si no está autenticado
-                window.location.href = 'login.html';
+                // Usuario no autenticado: permitir ver la página, pero con funcionalidad limitada
+                currentUser = null;
+                await loadPaymentConfig();
+                renderPackages();
+                showGuestElements();
             }
         });
 
@@ -822,12 +833,28 @@
         // Event listeners para botones de compra
         document.addEventListener('click', async (e) => {
             if (e.target.classList.contains('package-btn')) {
+                // Verificar si el usuario está autenticado antes de proceder
+                if (!currentUser) {
+                    if (confirm('Para comprar VYT Money necesitas iniciar sesión. ¿Quieres ir al login ahora?')) {
+                        window.location.href = 'login.html';
+                    }
+                    return;
+                }
+
                 const amount = parseInt(e.target.dataset.amount);
                 await purchaseVYTMoney(amount);
             }
         });
 
         customPurchaseBtn.addEventListener('click', async () => {
+            // Verificar si el usuario está autenticado antes de proceder
+            if (!currentUser) {
+                if (confirm('Para comprar VYT Money necesitas iniciar sesión. ¿Quieres ir al login ahora?')) {
+                    window.location.href = 'login.html';
+                }
+                return;
+            }
+
             const amount = parseInt(customAmountInput.value);
             if (amount >= 100) {
                 await purchaseVYTMoney(amount);
@@ -931,6 +958,29 @@
         function showUserElements() {
             userBalance.classList.remove('hidden');
             logoutBtn.classList.remove('hidden');
+        }
+
+        // Mostrar elementos para visitantes no autenticados
+        function showGuestElements() {
+            // Ocultar elementos que requieren autenticación
+            if (userBalance) userBalance.classList.add('hidden');
+            if (logoutBtn) logoutBtn.classList.add('hidden');
+            
+            // Mostrar mensaje para visitantes
+            const guestMessage = document.createElement('div');
+            guestMessage.className = 'text-center p-4 mb-6 bg-blue-500/20 border border-blue-400/30 rounded-lg';
+            guestMessage.innerHTML = `
+                <p class="text-blue-300">
+                    👋 ¡Bienvenido! Puedes ver todos nuestros paquetes.
+                    <br>Para comprar VYT Money necesitas <a href="login.html" class="text-blue-400 underline hover:text-blue-300">iniciar sesión</a>.
+                </p>
+            `;
+            
+            // Insertar el mensaje antes del contenedor de paquetes
+            const packagesContainer = document.querySelector('.packages-grid')?.parentElement;
+            if (packagesContainer) {
+                packagesContainer.insertBefore(guestMessage, packagesContainer.firstChild);
+            }
         }
 
         // Logout
