@@ -9,7 +9,11 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Fallback para Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.4.0/css/all.css">
+    <!-- Iconos personalizados -->
+    <link rel="stylesheet" href="assets/custom-icons.css">
     
     <!-- Sistema de navegación -->
     <link rel="stylesheet" href="src/navigation-styles.css">
@@ -149,7 +153,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="text-center">
                         <div class="w-16 h-16 mx-auto mb-4 bg-blue-600/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-vote-yea text-3xl text-blue-400"></i>
+                            <span class="text-3xl">🗳️</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Votar</h3>
                         <p class="text-gray-300">
@@ -160,7 +164,7 @@
                     
                     <div class="text-center">
                         <div class="w-16 h-16 mx-auto mb-4 bg-green-600/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-trophy text-3xl text-green-400"></i>
+                            <span class="text-3xl">🏆</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Ganar Premios</h3>
                         <p class="text-gray-300">
@@ -171,7 +175,7 @@
                     
                     <div class="text-center">
                         <div class="w-16 h-16 mx-auto mb-4 bg-yellow-600/20 rounded-full flex items-center justify-center">
-                            <i class="fas fa-exchange-alt text-3xl text-yellow-400"></i>
+                            <span class="text-3xl">💱</span>
                         </div>
                         <h3 class="text-xl font-bold text-white mb-3">Canjear</h3>
                         <p class="text-gray-300">
@@ -448,6 +452,24 @@
             // Mostrar balance actual si existe
             const balance = localStorage.getItem('vytBalance') || '0';
             console.log(`Balance actual: ${balance} VYT`);
+            
+            // Verificar si Font Awesome se cargó correctamente
+            setTimeout(() => {
+                const faIcons = document.querySelectorAll('i.fas');
+                faIcons.forEach(icon => {
+                    const computedStyle = window.getComputedStyle(icon, '::before');
+                    const content = computedStyle.getPropertyValue('content');
+                    
+                    // Si Font Awesome no cargó, mostrar emoji de respaldo
+                    if (!content || content === 'none' || content === '""') {
+                        icon.style.display = 'none';
+                        const fallbackIcon = icon.nextElementSibling;
+                        if (fallbackIcon && fallbackIcon.tagName === 'SPAN') {
+                            fallbackIcon.style.display = 'inline';
+                        }
+                    }
+                });
+            }, 1000);
         });
     </script>
 </body>
