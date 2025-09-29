@@ -1,0 +1,91 @@
+/*
+ * 🎨 VYT MUSIC - Control de Iconos Global
+ * Archivo para controlar el tamaño de iconos en producción
+ * Incluir en todos los HTML después de FontAwesome
+ */
+
+/* Control estricto de iconos FontAwesome */
+.fas, .fab, .far, .fal, .fass {
+    font-size: inherit !important;
+    width: auto !important;
+    height: auto !important;
+    display: inline-block !important;
+}
+
+/* Iconos de navegación inferior */
+.nav-icon,
+.nav-icon i {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    display: inline-block !important;
+    text-align: center !important;
+}
+
+/* Iconos en botones principales */
+.btn-primary .fas,
+.btn-primary .fab {
+    font-size: 1.25rem !important;
+    margin-right: 8px;
+}
+
+/* Iconos con clases Tailwind específicas */
+.text-xs .fas, .text-xs .fab { font-size: 0.75rem !important; }
+.text-sm .fas, .text-sm .fab { font-size: 0.875rem !important; }
+.text-base .fas, .text-base .fab { font-size: 1rem !important; }
+.text-lg .fas, .text-lg .fab { font-size: 1.125rem !important; }
+.text-xl .fas, .text-xl .fab { font-size: 1.25rem !important; }
+.text-2xl .fas, .text-2xl .fab { font-size: 1.5rem !important; }
+.text-3xl .fas, .text-3xl .fab { font-size: 1.875rem !important; }
+.text-4xl .fas, .text-4xl .fab { font-size: 2.25rem !important; }
+
+/* Reset general para evitar tamaños descontrolados */
+i[class*="fa-"] {
+    max-width: 3rem;
+    max-height: 3rem;
+    box-sizing: content-box;
+}
+
+/* Iconos específicos por contexto */
+.header-user svg,
+.header-user .fas {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    font-size: 1.5rem !important;
+}
+
+.bottom-nav .fas,
+.bottom-navigation .fas {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+}
+
+/* Iconos sociales */
+.social-icons .fas,
+.social-icons .fab {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    font-size: 1.5rem !important;
+}
+
+/* Prevenir overflow en contenedores */
+.icon-container,
+.nav-item,
+.nav-btn {
+    overflow: hidden;
+}
+
+/* Iconos en cards y componentes */
+.card .fas,
+.component .fas {
+    font-size: 1rem !important;
+}
+
+/* Iconos grandes para landing */
+.hero-icon .fas,
+.feature-icon .fas {
+    font-size: 2rem !important;
+    max-width: 2rem !important;
+    max-height: 2rem !important;
+}

@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="icon-control.css?v=20250929">
     
     <!-- Sistema de navegación -->
     <link rel="stylesheet" href="src/navigation-styles.css">
@@ -356,5 +357,27 @@
             console.log('Cargando datos del ranking...');
         }
     </script>
+
+    <!-- 🚨 NAVEGACIÓN INFERIOR CON ICONOS EMOJI (IGUAL QUE PRINCIPAL-SIMPLE) -->
+    <nav style="position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; background: rgba(15, 23, 42, 0.95) !important; backdrop-filter: blur(20px) !important; border-top: 1px solid rgba(59, 130, 246, 0.3) !important; z-index: 9999 !important; padding: 10px 0 !important;">
+        <div style="display: flex !important; justify-content: space-around !important; align-items: center !important; max-width: 600px !important; margin: 0 auto !important; padding: 0 20px !important;">
+            <a href="principal-simple.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
+                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">🏠</span>
+                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Principal</span>
+            </a>
+            <a href="certamenes.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
+                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">🏆</span>
+                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Certámenes</span>
+            </a>
+            <a href="ranking.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: #3B82F6 !important; background: rgba(59, 130, 246, 0.1) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
+                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">📊</span>
+                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Ranking</span>
+            </a>
+            <button onclick="alert('Menú próximamente')" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important; background: none !important; border: none !important; cursor: pointer !important; font-family: inherit !important;">
+                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">☰</span>
+                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Menú</span>
+            </button>
+        </div>
+    </nav>
 </body>
 </html>
