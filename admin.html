@@ -2866,39 +2866,55 @@
             try {
                 console.log('💾 Guardando configuración de fondo...');
                 
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const imageData = e.target.result;
-                    
-                    // Guardar configuración con posición en localStorage
-                    const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
-                    backgroundConfig[currentConfig.file] = {
-                        imageData: imageData,
-                        fileName: currentImageData.name,
-                        position: currentBackgroundPosition,
-                        scale: currentImagePosition.scale,
-                        applied: new Date().toISOString()
-                    };
-                    localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
-                    
-                    console.log('✅ Configuración guardada:', backgroundConfig[currentConfig.file]);
-                    
-                    // Cerrar modal
-                    closePositionEditor();
-                    
-                    // Mostrar mensaje de éxito
-                    showSuccessMessage(`✅ Fondo con posición personalizada aplicado correctamente a ${currentConfig.file}`);
-                    
-                    // Limpiar el estado de upload
-                    const statusDiv = document.getElementById('upload-status');
+                // Usar la imagen ya redimensionada del currentConfig
+                const imageData = currentConfig.imageData;
+                
+                // Guardar configuración con posición en localStorage
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                backgroundConfig[currentConfig.file] = {
+                    imageData: imageData,
+                    fileName: currentImageData.name,
+                    position: currentBackgroundPosition,
+                    scale: currentImagePosition.scale,
+                    applied: new Date().toISOString()
+                };
+                localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
+                
+                console.log('✅ Configuración guardada para:', currentConfig.file);
+                console.log('📊 Tamaño de datos:', Math.round(imageData.length / 1024), 'KB');
+                
+                // Cerrar modal
+                closePositionEditor();
+                
+                // Mostrar mensaje de éxito
+                showSuccessMessage(`✅ Fondo con posición personalizada aplicado correctamente a ${currentConfig.file}`);
+                
+                // Limpiar el estado de upload
+                const statusDiv = document.getElementById('upload-status');
+                if (statusDiv) {
                     statusDiv.innerHTML = `
                         <div class="flex items-center text-green-600">
                             <i class="fas fa-check-circle mr-2"></i>
                             <span>¡Fondo aplicado exitosamente! Ve a ${currentConfig.file} para verlo.</span>
                         </div>
                     `;
-                };
-                reader.readAsDataURL(currentImageData);
+                }
+                
+                // Actualizar el preview en el admin inmediatamente
+                const previewImg = document.getElementById(currentConfig.preview);
+                if (previewImg) {
+                    previewImg.src = imageData;
+                    previewImg.style.display = 'block';
+                    if (previewImg.nextElementSibling) {
+                        previewImg.nextElementSibling.style.display = 'none';
+                    }
+                }
+                
+            } catch (error) {
+                console.error('❌ Error guardando configuración:', error);
+                alert('Error guardando la configuración. Inténtalo de nuevo.');
+            }
+        };
                 
             } catch (error) {
                 console.error('Error aplicando fondo:', error);
@@ -2982,9 +2998,40 @@
 
         // Funciones específicas de login eliminadas - ahora usamos la función genérica
         
+        // Función para redimensionar imágenes y evitar problemas con localStorage
+        function resizeImageForStorage(file, maxWidth = 1920, quality = 0.8) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calcular nuevas dimensiones manteniendo aspecto
+                    let { width, height } = img;
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Dibujar imagen redimensionada
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convertir a base64 con compresión
+                    const resizedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    console.log(`📏 Imagen redimensionada: ${file.name} (${width}x${height})`);
+                    resolve(resizedDataUrl);
+                };
+                
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
         // Crear funciones genéricas para todas las secciones
         function createImageUploadHandler(sectionId, fileName) {
-            return function(input) {
+            return async function(input) {
                 const file = input.files[0];
                 if (!file) return;
                 
@@ -2996,24 +3043,28 @@
                     return;
                 }
                 
-                // Guardar en variables globales
-                currentImageData = file;
-                currentConfig = {
-                    file: fileName,
-                    preview: `preview-${sectionId.replace('upload-', '')}`
-                };
-                
-                console.log(`📋 [${sectionId}] Config guardada:`, currentConfig);
-                
-                // Crear vista previa inmediatamente
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    console.log(`📸 [${sectionId}] Vista previa creada`);
+                try {
+                    // Redimensionar imagen para storage
+                    const resizedImageData = await resizeImageForStorage(file);
                     
-                    // Actualizar preview si existe
+                    // Guardar en variables globales
+                    currentImageData = file;
+                    currentConfig = {
+                        file: fileName,
+                        preview: `preview-${sectionId.replace('upload-', '')}`,
+                        imageData: resizedImageData // Agregar imagen redimensionada
+                    };
+                    
+                    console.log(`📋 [${sectionId}] Config guardada:`, currentConfig.file);
+                    
+                    // Actualizar preview inmediatamente
                     const previewImg = document.getElementById(currentConfig.preview);
                     if (previewImg) {
-                        previewImg.src = e.target.result;
+                        previewImg.src = resizedImageData;
+                        previewImg.style.display = 'block';
+                        if (previewImg.nextElementSibling) {
+                            previewImg.nextElementSibling.style.display = 'none';
+                        }
                         console.log(`🖼️ [${sectionId}] Preview actualizado en:`, currentConfig.preview);
                     } else {
                         console.warn(`⚠️ [${sectionId}] No se encontró preview:`, currentConfig.preview);
@@ -3021,9 +3072,12 @@
                     
                     // Mostrar mensaje y botón
                     console.log(`🎯 [${sectionId}] Llamando a showPositionButton`);
-                    showPositionButton(sectionId, e.target.result);
-                };
-                reader.readAsDataURL(file);
+                    showPositionButton(sectionId, resizedImageData);
+                    
+                } catch (error) {
+                    console.error(`❌ [${sectionId}] Error procesando imagen:`, error);
+                    alert('Error procesando la imagen. Inténtalo de nuevo.');
+                }
             };
         }
         
@@ -3502,6 +3556,47 @@
             });
         }
 
+        function loadSavedBackgrounds() {
+            console.log('🔄 Cargando configuraciones guardadas...');
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                console.log('📋 Configuraciones encontradas:', backgroundConfig);
+                
+                // Mapeo de nombres de página a IDs de preview
+                const pageToPreview = {
+                    'index': 'preview-index',
+                    'inscripcion-certamen': 'preview-inscripcion', 
+                    'perfil-artista': 'preview-perfil',
+                    'login-artista': 'preview-login',
+                    'fan-mode': 'preview-fan',
+                    'admin': 'preview-admin',
+                    'certamenes': 'preview-certamen',
+                    'certamen-individual': 'preview-certamen-individual',
+                    'register': 'preview-register',
+                    'nosotros': 'preview-nosotros'
+                };
+                
+                // Cargar cada configuración guardada
+                Object.entries(backgroundConfig).forEach(([pageName, config]) => {
+                    if (config.imageData && pageToPreview[pageName]) {
+                        const previewImg = document.getElementById(pageToPreview[pageName]);
+                        if (previewImg) {
+                            previewImg.src = config.imageData;
+                            previewImg.style.display = 'block';
+                            if (previewImg.nextElementSibling) {
+                                previewImg.nextElementSibling.style.display = 'none';
+                            }
+                            console.log(`✅ Preview cargado para ${pageName}:`, pageToPreview[pageName]);
+                        }
+                    }
+                });
+                
+                console.log('🎯 Carga de configuraciones completada');
+            } catch (error) {
+                console.error('❌ Error cargando configuraciones:', error);
+            }
+        }
+
         function loadDynamicBackground() {
             console.log('🎨 [Admin] Cargando fondo dinámico...');
             try {
@@ -3537,9 +3632,10 @@
             }
         }
 
-        // Cargar videos pendientes al inicializar y fondo dinámico
+        // Cargar videos pendientes al inicializar, fondo dinámico y configuraciones guardadas
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicBackground();
+            loadSavedBackgrounds(); // Cargar configuraciones guardadas
             setTimeout(() => {
                 if (typeof cargarVideosPendientes === 'function') {
                     cargarVideosPendientes();
