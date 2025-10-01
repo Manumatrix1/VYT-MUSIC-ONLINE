@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Panel de Administraci????n</title>
+    <title>VYT MUSIC - Panel de Administración</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <script src="src/notification-system.js"></script>
+    <!-- <script src="src/notification-system.js"></script> Temporalmente deshabilitado para debugging -->
     <style>
         :root {
             --color-primario: #00d9ff;
@@ -36,7 +36,7 @@
             background: #f8fafc;
         }
 
-        /* CSS para fondos din????micos */
+        /* CSS para fondos dinómicos */
         .dynamic-background {
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), var(--dynamic-bg, #f8fafc);
             background-size: var(--dynamic-bg-size, cover);
@@ -45,7 +45,7 @@
             background-repeat: no-repeat;
         }
         
-        /* Estilos para el editor de posici????n de im????genes */
+        /* Estilos para el editor de posición de imógenes */
         .image-position-editor {
             backdrop-filter: blur(5px);
         }
@@ -107,7 +107,7 @@
             box-shadow: 0 0 0 2px #ffffff;
         }
         
-        /* Posiciones espec????ficas para los puntos */
+        /* Posiciones especóficas para los puntos */
         .position-preset[data-position="top left"]::after { top: 4px; left: 4px; }
         .position-preset[data-position="top center"]::after { top: 4px; left: 50%; transform: translateX(-50%); }
         .position-preset[data-position="top right"]::after { top: 4px; right: 4px; }
@@ -157,12 +157,12 @@
     </style>
 </head>
 <body>
-    <!-- Secci????n de Login -->
+    <!-- Sección de Login -->
     <div id="login-section" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700">
         <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">VYT MUSIC</h1>
-                <p class="text-gray-600">Panel de Administraci????n</p>
+                <p class="text-gray-600">Panel de Administración</p>
             </div>
             
             <form id="login-form" class="space-y-6">
@@ -173,17 +173,17 @@
                 </div>
                 
                 <div>
-                    <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">Contrase????a</label>
+                    <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">Contraseóa</label>
                     <input type="password" id="admin-password" required 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
                 <button type="button" id="login-btn" 
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesi????n
+                    <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
                 </button>
                 
-                <!-- Acceso r????pido para desarrollador -->
+                <!-- Acceso rópido para desarrollador -->
                 <div class="mt-4 pt-4 border-t border-gray-200">
                     <button type="button" id="dev-access-btn" 
                             class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
@@ -207,7 +207,7 @@
                         <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo" class="w-10 h-10">
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900">VYT MUSIC</h1>
-                            <p class="text-sm text-gray-600">Panel de administraci????n</p>
+                            <p class="text-sm text-gray-600">Panel de administración</p>
                         </div>
                     </a>
                     <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
@@ -220,13 +220,13 @@
                     </a>
                     <span id="admin-user-email" class="text-sm text-gray-600"></span>
                     <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-sign-out-alt mr-1"></i>Cerrar Sesi????n
+                        <i class="fas fa-sign-out-alt mr-1"></i>Cerrar Sesión
                     </button>
                 </div>
             </div>
         </header>
 
-        <!-- Navegaci????n -->
+        <!-- Navegación -->
         <nav class="bg-gray-50 border-b">
             <div class="px-6 py-3">
                 <div class="flex flex-wrap gap-2">
@@ -243,7 +243,7 @@
                         <i class="fas fa-tools mr-1"></i>Constructor
                     </button>
                     <button onclick="showPage('certamenes')" class="admin-nav-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-trophy mr-1"></i>Cert????menes
+                        <i class="fas fa-trophy mr-1"></i>Certómenes
                     </button>
                     <button onclick="showPage('vyt-money')" class="admin-nav-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-coins mr-1"></i>VYT Money
@@ -255,7 +255,7 @@
                         <i class="fas fa-images mr-1"></i>Fondos
                     </button>
                     <button onclick="window.open('demanda-geografica.html', '_blank')" class="admin-nav-btn bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-map-marked-alt mr-1"></i>An????lisis Geogr????fico
+                        <i class="fas fa-map-marked-alt mr-1"></i>Anólisis Geogrófico
                     </button>
                 </div>
             </div>
@@ -263,7 +263,7 @@
 
         <!-- Contenido Principal -->
         <main class="p-6">
-            <!-- Secci????n Inicio -->
+            <!-- Sección Inicio -->
             <section id="inicio-section" class="admin-section active">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard General</h2>
@@ -318,7 +318,7 @@
                         </div>
                     </div>
 
-                    <!-- Segunda fila de estad????sticas -->
+                    <!-- Segunda fila de estadósticas -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
                             <div class="flex items-center">
@@ -326,7 +326,7 @@
                                     <i class="fas fa-trophy text-2xl text-amber-500"></i>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-500">Cert????menes Activos</p>
+                                    <p class="text-sm font-medium text-gray-500">Certómenes Activos</p>
                                     <p class="text-2xl font-semibold text-gray-900" id="total-certamenes">-</p>
                                 </div>
                             </div>
@@ -370,7 +370,7 @@
                     </div>
 
                     <div class="bg-white p-6 rounded-lg shadow-sm border">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones R????pidas</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones Rópidas</h3>
                         <div class="flex flex-wrap gap-3">
                             <button onclick="loadParticipantesOnline()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                                 <i class="fas fa-sync mr-1"></i>Cargar Online
@@ -386,7 +386,7 @@
                 </div>
             </section>
 
-            <!-- Secci????n Participantes Online -->
+            <!-- Sección Participantes Online -->
             <section id="participantes-online-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
@@ -401,7 +401,7 @@
                             <div class="p-4 border-b bg-yellow-50">
                                 <h3 class="font-semibold text-gray-900 flex items-center">
                                     <i class="fas fa-clock text-yellow-500 mr-2"></i>
-                                    Pendientes de Aprobaci????n
+                                    Pendientes de Aprobación
                                 </h3>
                             </div>
                             <div id="participantes-online-pendientes" class="p-4">
@@ -414,8 +414,8 @@
                                 <div id="videos-pendientes-lista">
                                     <div class="text-center py-8 text-gray-500">
                                         <i class="fas fa-video text-4xl mb-4"></i>
-                                        <p>No hay videos pendientes de aprobaci????n</p>
-                                        <p class="text-sm mt-2">Los videos enviados por artistas aparecer????n aqu????</p>
+                                        <p>No hay videos pendientes de aprobación</p>
+                                        <p class="text-sm mt-2">Los videos enviados por artistas aparecerón aquó</p>
                                     </div>
                                 </div>
                             </div>
@@ -439,7 +439,7 @@
                 </div>
             </section>
 
-            <!-- Secci????n Participantes Presenciales -->
+            <!-- Sección Participantes Presenciales -->
             <section id="participantes-presenciales-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
@@ -454,7 +454,7 @@
                             <div class="p-4 border-b bg-yellow-50">
                                 <h3 class="font-semibold text-gray-900 flex items-center">
                                     <i class="fas fa-clock text-yellow-500 mr-2"></i>
-                                    Pendientes de Aprobaci????n
+                                    Pendientes de Aprobación
                                 </h3>
                             </div>
                             <div id="participantes-presenciales-pendientes" class="p-4">
@@ -483,16 +483,16 @@
                 </div>
             </section>
 
-            <!-- Secci????n Constructor -->
+            <!-- Sección Constructor -->
             <section id="constructor-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Constructor de P????ginas</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Constructor de Póginas</h2>
                     
                     <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Seleccionar P????gina</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Seleccionar Pógina</h3>
                         <div class="flex gap-4 items-center">
                             <select id="page-selector" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                                <option value="index">P????gina Principal (index.html)</option>
+                                <option value="index">Pógina Principal (index.html)</option>
                                 <option value="principal">Dashboard (principal.html)</option>
                             </select>
                             <button id="load-page-content" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
@@ -510,19 +510,19 @@
                         <!-- Mensaje de bienvenida -->
                         <div id="editor-welcome" class="text-center py-12 text-gray-500">
                             <i class="fas fa-code text-4xl mb-4"></i>
-                            <p class="text-lg">Selecciona una p????gina y haz clic en "Cargar Contenido" para comenzar a editar</p>
+                            <p class="text-lg">Selecciona una pógina y haz clic en "Cargar Contenido" para comenzar a editar</p>
                         </div>
                         
                         <!-- Panel del editor -->
                         <div id="content-editor-panel" class="hidden">
                             <div id="page-info" class="bg-blue-50 p-4 rounded-lg mb-4">
-                                <h4 class="font-semibold text-blue-900">Informaci????n de la p????gina</h4>
-                                <p class="text-blue-700 text-sm" id="page-description">Descripci????n de la p????gina</p>
+                                <h4 class="font-semibold text-blue-900">Información de la pógina</h4>
+                                <p class="text-blue-700 text-sm" id="page-description">Descripción de la pógina</p>
                             </div>
                             
                             <textarea id="page-content-editor" rows="20" 
                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-                                      placeholder="El contenido de la p????gina aparecer???? aqu????..."></textarea>
+                                      placeholder="El contenido de la pógina apareceró aquó..."></textarea>
                             <div class="mt-4">
                                 <button id="save-page-content" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
                                     <i class="fas fa-save mr-1"></i>Guardar Cambios
@@ -534,17 +534,17 @@
                 </div>
             </section>
 
-            <!-- Secci????n Gesti????n de Cert????menes -->
+            <!-- Sección Gestión de Certómenes -->
             <section id="certamenes-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Gesti????n de Cert????menes</h2>
+                        <h2 class="text-2xl font-bold text-gray-900">Gestión de Certómenes</h2>
                         <button onclick="openCreateCertamenModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                             <i class="fas fa-plus mr-1"></i>Crear Certamen
                         </button>
                     </div>
 
-                    <!-- Formulario de creaci????n de certamen -->
+                    <!-- Formulario de creación de certamen -->
                     <div id="create-certamen-form" class="bg-white p-6 rounded-lg shadow-sm border mb-6 hidden">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Nuevo Certamen</h3>
                         <form id="certamen-form" class="space-y-4">
@@ -558,12 +558,12 @@
                                     <select id="certamen-provincia" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                         <option value="">Seleccionar provincia</option>
                                         <option value="Buenos Aires">Buenos Aires</option>
-                                        <option value="C????rdoba">C????rdoba</option>
+                                        <option value="Córdoba">Córdoba</option>
                                         <option value="Santa Fe">Santa Fe</option>
                                         <option value="Mendoza">Mendoza</option>
-                                        <option value="Tucum????n">Tucum????n</option>
+                                        <option value="Tucumón">Tucumón</option>
                                         <option value="Salta">Salta</option>
-                                        <option value="Entre R????os">Entre R????os</option>
+                                        <option value="Entre Róos">Entre Róos</option>
                                         <option value="Misiones">Misiones</option>
                                         <option value="Corrientes">Corrientes</option>
                                         <option value="Jujuy">Jujuy</option>
@@ -571,8 +571,8 @@
                                         <option value="Chaco">Chaco</option>
                                         <option value="San Juan">San Juan</option>
                                         <option value="Formosa">Formosa</option>
-                                        <option value="Neuqu????n">Neuqu????n</option>
-                                        <option value="R????o Negro">R????o Negro</option>
+                                        <option value="Neuquón">Neuquón</option>
+                                        <option value="Róo Negro">Róo Negro</option>
                                         <option value="Chubut">Chubut</option>
                                         <option value="San Luis">San Luis</option>
                                         <option value="Catamarca">Catamarca</option>
@@ -585,7 +585,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Descripci????n</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
                                 <textarea id="certamen-descripcion" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
                             
@@ -623,7 +623,7 @@
                                     <input type="file" id="certamen-imagen" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de Inscripci????n</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de Inscripción</label>
                                     <input type="url" id="certamen-url-inscripcion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://...">
                                 </div>
                             </div>
@@ -639,11 +639,11 @@
                         </form>
                     </div>
 
-                    <!-- Lista de cert????menes existentes -->
+                    <!-- Lista de certómenes existentes -->
                     <div class="bg-white rounded-lg shadow-sm border">
                         <div class="p-4 border-b">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-gray-900">Cert????menes Existentes</h3>
+                                <h3 class="font-semibold text-gray-900">Certómenes Existentes</h3>
                                 <div class="flex gap-2">
                                     <button onclick="loadCertamenes()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
                                         <i class="fas fa-sync mr-1"></i>Actualizar
@@ -657,19 +657,19 @@
                         <div id="certamenes-list" class="p-4">
                             <div class="text-center py-8 text-gray-500">
                                 <i class="fas fa-trophy text-4xl mb-4"></i>
-                                <p>Haz clic en "Actualizar" para cargar cert????menes</p>
+                                <p>Haz clic en "Actualizar" para cargar certómenes</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Secci????n VYT Money -->
+            <!-- Sección VYT Money -->
             <section id="vyt-money-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Sistema VYT Money</h2>
                     
-                    <!-- Estad????sticas VYT Money -->
+                    <!-- Estadósticas VYT Money -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
                             <div class="flex items-center">
@@ -677,7 +677,7 @@
                                     <i class="fas fa-coins text-2xl text-green-500"></i>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-500">Total en Circulaci????n</p>
+                                    <p class="text-sm font-medium text-gray-500">Total en Circulación</p>
                                     <p class="text-2xl font-semibold text-gray-900" id="vyt-circulacion">$125,430</p>
                                 </div>
                             </div>
@@ -708,10 +708,10 @@
                         </div>
                     </div>
 
-                    <!-- Herramientas de gesti????n VYT Money -->
+                    <!-- Herramientas de gestión VYT Money -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Gesti????n de Saldo</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Gestión de Saldo</h3>
                             <form class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Email del Usuario</label>
@@ -723,7 +723,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Motivo</label>
-                                    <input type="text" id="vyt-reason" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Motivo de la transacci????n">
+                                    <input type="text" id="vyt-reason" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Motivo de la transacción">
                                 </div>
                                 <div class="flex gap-2">
                                     <button type="button" onclick="addVytMoney()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors flex-1">
@@ -737,7 +737,7 @@
                         </div>
 
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones R????pidas</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones Rópidas</h3>
                             <div class="space-y-3">
                                 <button onclick="loadVytTransactions()" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                                     <i class="fas fa-list mr-2"></i>Ver Todas las Transacciones
@@ -749,7 +749,7 @@
                                     <i class="fas fa-chart-bar mr-2"></i>Generar Reporte
                                 </button>
                                 <button onclick="refreshVytStats()" class="w-full bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">
-                                    <i class="fas fa-sync mr-2"></i>Actualizar Estad????sticas
+                                    <i class="fas fa-sync mr-2"></i>Actualizar Estadósticas
                                 </button>
                             </div>
                         </div>
@@ -770,12 +770,12 @@
                 </div>
             </section>
 
-            <!-- Secci????n Pagos -->
+            <!-- Sección Pagos -->
             <section id="pagos-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Gesti????n de Pagos</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Gestión de Pagos</h2>
                     
-                    <!-- Estad????sticas de pagos -->
+                    <!-- Estadósticas de pagos -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
                             <div class="flex items-center">
@@ -839,7 +839,7 @@
                             </select>
                             
                             <select id="pago-metodo-filter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                                <option value="">Todos los m????todos</option>
+                                <option value="">Todos los mótodos</option>
                                 <option value="mercadopago">MercadoPago</option>
                                 <option value="transferencia">Transferencia</option>
                                 <option value="efectivo">Efectivo</option>
@@ -872,27 +872,27 @@
                 </div>
             </section>
 
-            <!-- Secci????n Gesti????n de Fondos -->
+            <!-- Sección Gestión de Fondos -->
             <section id="fondos-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">
                         <i class="fas fa-images mr-2 text-pink-500"></i>
-                        Gesti????n de Fondos
+                        Gestión de Fondos
                     </h2>
                     
                     <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                         <p class="text-gray-600 mb-4">
-                            Administra las im????genes de fondo de las diferentes p????ginas del sitio web de forma visual y sencilla.
+                            Administra las imógenes de fondo de las diferentes póginas del sitio web de forma visual y sencilla.
                         </p>
                         
-                        <!-- Lista de p????ginas -->
+                        <!-- Lista de póginas -->
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             
-                            <!-- P????gina Principal (Index) -->
+                            <!-- Pógina Principal (Index) -->
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-home text-blue-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">P????gina Principal</h3>
+                                    <h3 class="font-semibold text-gray-900">Pógina Principal</h3>
                                 </div>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-index" src="images/fotos/chica-feliz-grabando-una-cancion.jpg" 
@@ -910,11 +910,11 @@
                                 </button>
                             </div>
 
-                            <!-- P????gina de Inscripci????n -->
+                            <!-- Pógina de Inscripción -->
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-user-plus text-green-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">P????gina de Inscripci????n</h3>
+                                    <h3 class="font-semibold text-gray-900">Pógina de Inscripción</h3>
                                 </div>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-inscripcion" src="images/fotos/inscripcion-background.png" 
@@ -1020,11 +1020,11 @@
                                 </button>
                             </div>
 
-                            <!-- Inscripci????n a Certamen -->
+                            <!-- Inscripción a Certamen -->
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-trophy text-yellow-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">Inscripci????n a Certamen</h3>
+                                    <h3 class="font-semibold text-gray-900">Inscripción a Certamen</h3>
                                 </div>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-certamen" src="" 
@@ -1068,7 +1068,7 @@
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-user-plus text-emerald-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">P????gina de Registro</h3>
+                                    <h3 class="font-semibold text-gray-900">Pógina de Registro</h3>
                                 </div>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-register" src="" 
@@ -1090,7 +1090,7 @@
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-users text-amber-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">P????gina Nosotros</h3>
+                                    <h3 class="font-semibold text-gray-900">Pógina Nosotros</h3>
                                 </div>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-nosotros" src="" 
@@ -1123,9 +1123,9 @@
                                 <i class="fas fa-info-circle mr-1"></i>Instrucciones
                             </h4>
                             <ul class="text-sm text-blue-800 space-y-1">
-                                <li>?? Las im????genes se redimensionan autom????ticamente</li>
+                                <li>?? Las imógenes se redimensionan automóticamente</li>
                                 <li>?? Formatos soportados: JPG, PNG, GIF</li>
-                                <li>?? Tama????o recomendado: 1920x1080px (Full HD)</li>
+                                <li>?? Tamaóo recomendado: 1920x1080px (Full HD)</li>
                                 <li>?? Los cambios se aplican inmediatamente</li>
                             </ul>
                         </div>
@@ -1137,7 +1137,7 @@
 
     <!-- Scripts -->
     <script>
-        // Funci????n global para mostrar secciones
+        // Función global para mostrar secciones
         function showPage(pageId) {
             document.querySelectorAll('.admin-section').forEach(section => {
                 section.classList.remove('active');
@@ -1156,11 +1156,11 @@
         window.showPage = showPage;
         window.aprobarParticipante = function(id, collection) {
             console.log('Aprobar participante:', id, collection);
-            // Esta funci????n ser???? implementada por admin-simple.js
+            // Esta función seró implementada por admin-simple.js
         };
         window.rechazarParticipante = function(id, collection) {
             console.log('Rechazar participante:', id, collection);
-            // Esta funci????n ser???? implementada por admin-simple.js
+            // Esta función seró implementada por admin-simple.js
         };
         window.desaprobarParticipante = function(id, collection) {
             console.log('Desaprobar participante:', id, collection);
@@ -1188,7 +1188,7 @@
             console.log('Exportar datos');
         };
 
-        // Acceso r????pido para desarrollador
+        // Acceso rópido para desarrollador
         document.addEventListener('DOMContentLoaded', function() {
             const devAccessBtn = document.getElementById('dev-access-btn');
             const loginSection = document.getElementById('login-section');
@@ -1197,20 +1197,20 @@
             
             if (devAccessBtn) {
                 devAccessBtn.addEventListener('click', function() {
-                    console.log('???? Acceso desarrollador activado');
+                    console.log('ó Acceso desarrollador activado');
                     
                     // Simular login exitoso
                     loginSection.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
                     adminUserEmail.textContent = 'Desarrollador (modo local)';
                     
-                    // Mostrar la secci????n de inicio
+                    // Mostrar la sección de inicio
                     showPage('inicio');
                     
                     // Intentar cargar datos reales primero, luego simulados
-                    console.log('???? Intentando cargar datos reales...');
+                    console.log('ó Intentando cargar datos reales...');
                     
-                    // Intentar conexi????n r????pida con Firebase
+                    // Intentar conexión rópida con Firebase
                     setTimeout(() => {
                         tryQuickFirebaseConnection();
                     }, 1000);
@@ -1218,8 +1218,8 @@
                     initializeWithRealData().then(() => {
                         console.log('?? Datos reales cargados exitosamente');
                     }).catch((error) => {
-                        console.warn('???? Error cargando datos reales:', error.message);
-                        console.log('???? Fallback: Usando datos simulados realistas');
+                        console.warn('ó Error cargando datos reales:', error.message);
+                        console.log('ó Fallback: Usando datos simulados realistas');
                         loadSimulatedData();
                     });
                     
@@ -1227,28 +1227,28 @@
                 });
             }
             
-            // Tambi????n agregar funcionalidad al bot????n de logout
+            // Tambión agregar funcionalidad al botón de logout
             const logoutBtn = document.getElementById('logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
                     adminDashboard.classList.add('hidden');
                     loginSection.classList.remove('hidden');
-                    console.log('???? Sesi????n cerrada');
+                    console.log('ó Sesión cerrada');
                 });
             }
         });
 
-        // Funci????n para cargar datos reales
+        // Función para cargar datos reales
         async function loadRealData() {
             try {
-                console.log('???? Intentando cargar datos reales de Firebase...');
+                console.log('ó Intentando cargar datos reales de Firebase...');
                 
-                // Esperar a que Firebase est???? disponible
+                // Esperar a que Firebase estó disponible
                 if (typeof window.firebaseDB !== 'undefined') {
                     db = window.firebaseDB;
                     firebaseConnected = true;
                     
-                    // Cargar estad????sticas reales
+                    // Cargar estadósticas reales
                     await loadRealStats();
                     console.log('?? Datos reales cargados desde Firebase');
                 } else {
@@ -1260,7 +1260,7 @@
             }
         }
 
-        // Funci????n para cargar estad????sticas reales
+        // Función para cargar estadósticas reales
         async function loadRealStats() {
             try {
                 if (!db || !window.firestoreQuery) {
@@ -1277,7 +1277,7 @@
                 const participantesPresencialRef = collection(db, 'participantes_presencial');
                 const participantesPresencialSnapshot = await getDocs(participantesPresencialRef);
 
-                // Cargar cert????menes
+                // Cargar certómenes
                 const certamenesRef = collection(db, 'certamenes');
                 const certamenesSnapshot = await getDocs(certamenesRef);
 
@@ -1289,7 +1289,7 @@
                 const pagosRef = collection(db, 'payment_transactions');
                 const pagosSnapshot = await getDocs(pagosRef);
 
-                // Actualizar estad????sticas con datos reales
+                // Actualizar estadósticas con datos reales
                 const totalOnline = participantesOnlineSnapshot.size;
                 const totalPresencial = participantesPresencialSnapshot.size;
                 const totalParticipantes = totalOnline + totalPresencial;
@@ -1368,7 +1368,7 @@
                 document.getElementById('total-pagos').textContent = '$' + pagosTotal.toLocaleString();
                 document.getElementById('transacciones-hoy').textContent = transaccionesHoy;
 
-                // Actualizar estad????sticas espec????ficas de VYT Money
+                // Actualizar estadósticas especóficas de VYT Money
                 if (document.getElementById('vyt-circulacion')) {
                     document.getElementById('vyt-circulacion').textContent = '$' + vytMoneyTotal.toLocaleString();
                 }
@@ -1379,7 +1379,7 @@
                     document.getElementById('vyt-usuarios-activos').textContent = totalParticipantes;
                 }
 
-                // Actualizar estad????sticas espec????ficas de pagos
+                // Actualizar estadósticas especóficas de pagos
                 if (document.getElementById('pagos-total')) {
                     document.getElementById('pagos-total').textContent = '$' + pagosTotal.toLocaleString();
                 }
@@ -1393,7 +1393,7 @@
                     document.getElementById('pagos-rechazados').textContent = pagosRechazados;
                 }
 
-                console.log('???? Estad????sticas reales cargadas:', {
+                console.log('ó Estadósticas reales cargadas:', {
                     participantes: totalParticipantes,
                     online: totalOnline,
                     presencial: totalPresencial,
@@ -1405,18 +1405,18 @@
                 });
 
             } catch (error) {
-                console.error('?? Error cargando estad????sticas reales:', error);
+                console.error('?? Error cargando estadósticas reales:', error);
                 throw error;
             }
         }
 
-        // Funci????n de respaldo con datos simulados realistas
+        // Función de respaldo con datos simulados realistas
         function loadSimulatedData() {
-            console.log('???? Cargando datos simulados realistas basados en tu Firebase...');
+            console.log('ó Cargando datos simulados realistas basados en tu Firebase...');
             
-            // Datos m????s realistas para VYT Music (comenzando peque????o)
+            // Datos mós realistas para VYT Music (comenzando pequeóo)
             const fecha = new Date();
-            const baseParticipantes = Math.floor(Math.random() * 20) + 5; // Entre 5-25 (m????s realista para inicio)
+            const baseParticipantes = Math.floor(Math.random() * 20) + 5; // Entre 5-25 (mós realista para inicio)
             const baseOnline = Math.floor(baseParticipantes * 0.7); // 70% online
             const basePresencial = baseParticipantes - baseOnline;
             const baseAprobados = Math.floor(baseParticipantes * 0.6); // 60% aprobados
@@ -1427,11 +1427,11 @@
             document.getElementById('total-presencial').textContent = basePresencial.toString();
             document.getElementById('total-aprobados').textContent = baseAprobados.toString();
             
-            // Cert????menes (empezando con pocos)
-            const certamenesActivos = Math.floor(Math.random() * 3) + 1; // 1-4 cert????menes
+            // Certómenes (empezando con pocos)
+            const certamenesActivos = Math.floor(Math.random() * 3) + 1; // 1-4 certómenes
             document.getElementById('total-certamenes').textContent = certamenesActivos.toString();
             
-            // VYT Money (cantidades m????s peque????as y realistas)
+            // VYT Money (cantidades mós pequeóas y realistas)
             const vytMoneyTotal = (Math.floor(Math.random() * 10000) + 1000).toLocaleString(); // 1k-11k
             document.getElementById('vyt-money-total').textContent = '$' + vytMoneyTotal;
             
@@ -1443,52 +1443,52 @@
             const transaccionesHoy = Math.floor(Math.random() * 10) + 2; // 2-12
             document.getElementById('transacciones-hoy').textContent = transaccionesHoy.toString();
             
-            console.log(`?? Datos simulados realistas: ${baseParticipantes} participantes, ${certamenesActivos} cert????menes`);
+            console.log(`?? Datos simulados realistas: ${baseParticipantes} participantes, ${certamenesActivos} certómenes`);
             
-            // Cargar datos de demostraci????n en las secciones
+            // Cargar datos de demostración en las secciones
             setTimeout(() => {
                 loadDemoData();
             }, 500);
         }
 
-        // Funci????n para intentar conexi????n r????pida con Firebase
+        // Función para intentar conexión rópida con Firebase
         async function tryQuickFirebaseConnection() {
-            console.log('?? Intentando conexi????n r????pida con Firebase...');
+            console.log('?? Intentando conexión rópida con Firebase...');
             
             try {
-                // Verificar si admin-simple.js ya configur???? Firebase
+                // Verificar si admin-simple.js ya configuró Firebase
                 if (window.db && window.auth) {
-                    console.log('???? Firebase ya est???? configurado por admin-simple.js');
+                    console.log('ó Firebase ya estó configurado por admin-simple.js');
                     
-                    // Intentar una consulta simple y r????pida
+                    // Intentar una consulta simple y rópida
                     const { collection, getDocs, limit, query } = window.firestoreQuery || {};
                     
                     if (collection && getDocs) {
-                        // Probar con una consulta r????pida
+                        // Probar con una consulta rópida
                         const testQuery = query(collection(window.db, 'participantes_online'), limit(1));
                         const snapshot = await getDocs(testQuery);
                         
-                        console.log('?? Conexi????n Firebase exitosa!');
+                        console.log('?? Conexión Firebase exitosa!');
                         
-                        // Cargar estad????sticas reales r????pidas
+                        // Cargar estadósticas reales rópidas
                         loadQuickRealStats();
                         
                         return true;
                     }
                 }
                 
-                console.log('???? Firebase no est???? completamente inicializado');
+                console.log('ó Firebase no estó completamente inicializado');
                 return false;
                 
             } catch (error) {
-                console.log('?? Conexi????n r????pida fall????:', error.message);
+                console.log('?? Conexión rópida falló:', error.message);
                 return false;
             }
         }
 
-        // Funci????n para cargar estad????sticas reales r????pidas
+        // Función para cargar estadósticas reales rópidas
         async function loadQuickRealStats() {
-            console.log('???? Cargando estad????sticas reales r????pidas...');
+            console.log('ó Cargando estadósticas reales rópidas...');
             
             try {
                 const { collection, getDocs, query, where } = window.firestoreQuery;
@@ -1519,18 +1519,18 @@
                 document.getElementById('total-aprobados').textContent = totalAprobados.toString();
                 document.getElementById('total-certamenes').textContent = totalCertamenes.toString();
                 
-                console.log(`?? Estad????sticas reales cargadas: ${totalParticipantes} participantes, ${totalCertamenes} cert????menes`);
+                console.log(`?? Estadósticas reales cargadas: ${totalParticipantes} participantes, ${totalCertamenes} certómenes`);
                 
-                // Marcar que Firebase est???? funcionando
+                // Marcar que Firebase estó funcionando
                 firebaseConnected = true;
                 
             } catch (error) {
-                console.error('?? Error cargando estad????sticas r????pidas:', error);
+                console.error('?? Error cargando estadósticas rópidas:', error);
                 throw error;
             }
         }
 
-        // Funci????n para cargar datos de demostraci????n
+        // Función para cargar datos de demostración
         function loadDemoData() {
             const pendientesOnline = document.getElementById('participantes-online-pendientes');
             const aprobadosOnline = document.getElementById('participantes-online-aprobados');
@@ -1542,10 +1542,10 @@
                 loadDemoParticipants(pendientesOnline, aprobadosOnline, pendientesPresencial, aprobadosPresencial);
             }
             
-            console.log('???? Datos de demostraci????n cargados');
+            console.log('ó Datos de demostración cargados');
         }
 
-        // Funci????n para cargar participantes demo
+        // Función para cargar participantes demo
         function loadDemoParticipants(pendientesOnline, aprobadosOnline, pendientesPresencial, aprobadosPresencial) {
             // Datos demo para participantes online pendientes
             if (pendientesOnline) {
@@ -1553,11 +1553,11 @@
                     <div class="space-y-4">
                         <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="font-semibold text-gray-900">Mar????a Gonz????lez</h4>
+                                <h4 class="font-semibold text-gray-900">Maróa Gonzólez</h4>
                                 <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pendiente</span>
                             </div>
-                            <p class="text-sm text-gray-600 mb-2">???? maria.gonzalez@email.com</p>
-                            <p class="text-sm text-gray-600 mb-3">???? Buenos Aires, Argentina</p>
+                            <p class="text-sm text-gray-600 mb-2">ó maria.gonzalez@email.com</p>
+                            <p class="text-sm text-gray-600 mb-3">ó Buenos Aires, Argentina</p>
                             <div class="flex gap-2">
                                 <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">?? Aprobar</button>
                                 <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">?? Rechazar</button>
@@ -1572,14 +1572,14 @@
                     <div class="space-y-4">
                         <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="font-semibold text-gray-900">Ana Mart????nez</h4>
+                                <h4 class="font-semibold text-gray-900">Ana Martónez</h4>
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Aprobado</span>
                             </div>
-                            <p class="text-sm text-gray-600 mb-2">???? ana.martinez@email.com</p>
-                            <p class="text-sm text-gray-600 mb-3">???? Mendoza, Argentina</p>
+                            <p class="text-sm text-gray-600 mb-2">ó ana.martinez@email.com</p>
+                            <p class="text-sm text-gray-600 mb-3">ó Mendoza, Argentina</p>
                             <div class="flex gap-2">
-                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">???? Editar</button>
-                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">???? Desaprobar</button>
+                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">ó Editar</button>
+                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">ó Desaprobar</button>
                             </div>
                         </div>
                     </div>
@@ -1587,7 +1587,7 @@
             }
         }
 
-        // Funci????n para cargar participantes reales de Firebase
+        // Función para cargar participantes reales de Firebase
         async function loadRealParticipants() {
             if (!db || !window.firestoreQuery) {
                 console.log('Firebase no disponible, usando datos demo');
@@ -1611,7 +1611,7 @@
             }
         }
 
-        // Funci????n para cargar participantes online reales
+        // Función para cargar participantes online reales
         async function loadRealParticipantesOnline() {
             if (!db || !window.firestoreQuery) return;
 
@@ -1665,7 +1665,7 @@
                     }
                 }
 
-                console.log(`???? Participantes online cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
+                console.log(`ó Participantes online cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
 
             } catch (error) {
                 console.error('?? Error cargando participantes online:', error);
@@ -1674,7 +1674,7 @@
             }
         }
 
-        // Funci????n para cargar participantes presenciales reales
+        // Función para cargar participantes presenciales reales
         async function loadRealParticipantesPresenciales() {
             if (!db || !window.firestoreQuery) return;
 
@@ -1728,7 +1728,7 @@
                     }
                 }
 
-                console.log(`???? Participantes presencial cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
+                console.log(`ó Participantes presencial cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
 
             } catch (error) {
                 console.error('?? Error cargando participantes presencial:', error);
@@ -1737,7 +1737,7 @@
             }
         }
 
-        // Funci????n para renderizar una tarjeta de participante
+        // Función para renderizar una tarjeta de participante
         function renderParticipantCard(id, data, collection, isApproved) {
             const nombre = data.nombre_artista || data.nombreArtista || data.nombre || 'Sin nombre';
             const email = data.email || data.correo || 'Sin email';
@@ -1753,17 +1753,17 @@
                             ${isApproved ? 'Aprobado' : 'Pendiente'}
                         </span>
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">???? ${email}</p>
-                    <p class="text-sm text-gray-600 mb-2">???? ${provincia}</p>
-                    <p class="text-xs text-gray-400 mb-3">???? ${fechaInscripcion}</p>
-                    ${videoLink ? `<p class="text-sm text-blue-600 mb-3"><a href="${videoLink}" target="_blank">???? Ver video</a></p>` : ''}
+                    <p class="text-sm text-gray-600 mb-2">ó ${email}</p>
+                    <p class="text-sm text-gray-600 mb-2">ó ${provincia}</p>
+                    <p class="text-xs text-gray-400 mb-3">ó ${fechaInscripcion}</p>
+                    ${videoLink ? `<p class="text-sm text-blue-600 mb-3"><a href="${videoLink}" target="_blank">ó Ver video</a></p>` : ''}
                     <div class="flex gap-2">
                         ${!isApproved ? `
                             <button onclick="aprobarParticipanteReal('${id}', '${collection}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">?? Aprobar</button>
                             <button onclick="rechazarParticipanteReal('${id}', '${collection}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">?? Rechazar</button>
                         ` : `
-                            <button onclick="editarParticipanteReal('${id}', '${collection}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">???? Editar</button>
-                            <button onclick="desaprobarParticipanteReal('${id}', '${collection}')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">???? Desaprobar</button>
+                            <button onclick="editarParticipanteReal('${id}', '${collection}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">ó Editar</button>
+                            <button onclick="desaprobarParticipanteReal('${id}', '${collection}')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">ó Desaprobar</button>
                         `}
                     </div>
                     <p class="text-xs text-gray-400 mt-2">ID: ${id}</p>
@@ -1795,7 +1795,7 @@
                     loadRealParticipantesPresenciales();
                 }
                 
-                // Actualizar estad????sticas
+                // Actualizar estadósticas
                 loadRealStats();
                 
             } catch (error) {
@@ -1805,7 +1805,7 @@
         };
 
         window.rechazarParticipanteReal = async function(id, collection) {
-            if (!confirm('????Est????s seguro de que quieres rechazar este participante?')) {
+            if (!confirm('óEstós seguro de que quieres rechazar este participante?')) {
                 return;
             }
 
@@ -1831,7 +1831,7 @@
                     loadRealParticipantesPresenciales();
                 }
                 
-                // Actualizar estad????sticas
+                // Actualizar estadósticas
                 loadRealStats();
                 
             } catch (error) {
@@ -1841,7 +1841,7 @@
         };
 
         window.desaprobarParticipanteReal = async function(id, collection) {
-            if (!confirm('????Est????s seguro de que quieres desaprobar este participante?')) {
+            if (!confirm('óEstós seguro de que quieres desaprobar este participante?')) {
                 return;
             }
 
@@ -1856,7 +1856,7 @@
                     estado: 'pendiente'
                 });
                 
-                console.log(`???? Participante ${id} desaprobado`);
+                console.log(`ó Participante ${id} desaprobado`);
                 alert('Participante movido a pendientes');
                 
                 // Recargar datos
@@ -1866,7 +1866,7 @@
                     loadRealParticipantesPresenciales();
                 }
                 
-                // Actualizar estad????sticas
+                // Actualizar estadósticas
                 loadRealStats();
                 
             } catch (error) {
@@ -1876,24 +1876,24 @@
         };
 
         window.editarParticipanteReal = function(id, collection) {
-            alert(`Funci????n de edici????n para participante ${id} en desarrollo`);
+            alert(`Función de edición para participante ${id} en desarrollo`);
         };
 
         // Actualizar las funciones de carga para usar datos reales
         window.loadParticipantesOnline = function() {
-            console.log('???? Cargando participantes online...');
+            console.log('ó Cargando participantes online...');
             loadRealParticipantesOnline();
         };
 
         window.loadParticipantesPresenciales = function() {
-            console.log('???? Cargando participantes presenciales...');
+            console.log('ó Cargando participantes presenciales...');
             loadRealParticipantesPresenciales();
         };
 
-        // Funci????n para cargar datos reales de cert????menes
+        // Función para cargar datos reales de certómenes
         async function loadRealCertamenes() {
             if (!db || !window.firestoreQuery) {
-                console.log('Firebase no disponible, usando datos demo de cert????menes');
+                console.log('Firebase no disponible, usando datos demo de certómenes');
                 loadDemoCertamenes();
                 return;
             }
@@ -1912,9 +1912,9 @@
                 if (certamenesSnapshot.empty) {
                     certamenesContainer.innerHTML = `
                         <div class="text-center py-8">
-                            <p class="text-gray-500 mb-4">No hay cert????menes creados</p>
+                            <p class="text-gray-500 mb-4">No hay certómenes creados</p>
                             <button onclick="showCreateCertamen()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                ???? Crear Primer Certamen
+                                ó Crear Primer Certamen
                             </button>
                         </div>
                     `;
@@ -1928,18 +1928,18 @@
                     certamenesContainer.innerHTML = certamenesHTML;
                 }
 
-                console.log(`???? Cert????menes cargados: ${certamenesSnapshot.size} cert????menes`);
+                console.log(`ó Certómenes cargados: ${certamenesSnapshot.size} certómenes`);
 
             } catch (error) {
-                console.error('?? Error cargando cert????menes:', error);
+                console.error('?? Error cargando certómenes:', error);
                 loadDemoCertamenes();
             }
         }
 
-        // Funci????n para renderizar tarjeta de certamen real
+        // Función para renderizar tarjeta de certamen real
         function renderCertamenCardReal(id, data) {
             const nombre = data.nombre || 'Sin nombre';
-            const descripcion = data.descripcion || 'Sin descripci????n';
+            const descripcion = data.descripcion || 'Sin descripción';
             const estado = data.estado || 'activo';
             const provincia = data.provincia || 'Sin provincia';
             const participantesCount = data.participantes_count || 0;
@@ -1962,9 +1962,9 @@
                     </div>
                     <p class="text-sm text-gray-700 mb-3">${descripcion}</p>
                     <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                        <span>???? ${fechaInicio} - ${fechaFin}</span>
-                        <span>???? $${premio}</span>
-                        <span>???? ${participantesCount} inscriptos</span>
+                        <span>ó ${fechaInicio} - ${fechaFin}</span>
+                        <span>ó $${premio}</span>
+                        <span>ó ${participantesCount} inscriptos</span>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="editCertamen('${id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
@@ -1982,12 +1982,12 @@
             `;
         }
 
-        // Funci????n para cargar datos demo de cert????menes
+        // Función para cargar datos demo de certómenes
         function loadDemoCertamenes() {
             const certamenesContainer = document.getElementById('certamenes-list');
             if (!certamenesContainer) return;
             
-            // Usar la funci????n existente que ya est???? definida
+            // Usar la función existente que ya estó definida
             if (window.loadCertamenes && typeof window.loadCertamenes === 'function') {
                 window.loadCertamenes();
             } else {
@@ -2001,11 +2001,11 @@
                                 </div>
                                 <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Activo</span>
                             </div>
-                            <p class="text-sm text-gray-700 mb-3">Certamen principal de canto del a????o 2024</p>
+                            <p class="text-sm text-gray-700 mb-3">Certamen principal de canto del aóo 2024</p>
                             <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                                <span>???? 15/01/2024 - 30/03/2024</span>
-                                <span>???? $5,000</span>
-                                <span>???? 45 inscriptos</span>
+                                <span>ó 15/01/2024 - 30/03/2024</span>
+                                <span>ó $5,000</span>
+                                <span>ó 45 inscriptos</span>
                             </div>
                             <div class="flex gap-2">
                                 <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
@@ -2021,7 +2021,7 @@
             }
         }
 
-        // ===== FUNCIONES PARA GESTI????N DE CERT????MENES =====
+        // ===== FUNCIONES PARA GESTIóN DE CERTóMENES =====
         window.openCreateCertamenModal = function() {
             const form = document.getElementById('create-certamen-form');
             form.classList.remove('hidden');
@@ -2035,28 +2035,28 @@
         };
 
         window.loadCertamenes = function() {
-            console.log('???? Cargando cert????menes...');
+            console.log('ó Cargando certómenes...');
             loadRealCertamenes();
         };
 
         window.exportCertamenes = function() {
-            console.log('???? Exportando cert????menes...');
-            alert('Funci????n de exportaci????n de cert????menes - Pr????ximamente');
+            console.log('ó Exportando certómenes...');
+            alert('Función de exportación de certómenes - Próximamente');
         };
 
         window.editCertamen = function(id) {
-            console.log('???? Editando certamen:', id);
-            alert('Funci????n de edici????n de certamen - ID: ' + id);
+            console.log('ó Editando certamen:', id);
+            alert('Función de edición de certamen - ID: ' + id);
         };
 
         window.toggleCertamen = function(id) {
-            console.log('???? Pausando/Activando certamen:', id);
+            console.log('ó Pausando/Activando certamen:', id);
             alert('Certamen pausado/activado - ID: ' + id);
         };
 
         window.deleteCertamen = function(id) {
-            if (confirm('????Est????s seguro de que quieres eliminar este certamen?')) {
-                console.log('?????? Eliminando certamen:', id);
+            if (confirm('óEstós seguro de que quieres eliminar este certamen?')) {
+                console.log('ó?? Eliminando certamen:', id);
                 alert('Certamen eliminado - ID: ' + id);
                 loadCertamenes(); // Recargar lista
             }
@@ -2073,7 +2073,7 @@
                 return;
             }
             
-            console.log('???? Agregando VYT Money:', { email, amount, reason });
+            console.log('ó Agregando VYT Money:', { email, amount, reason });
             alert(`Se agregaron $${amount} VYT Money a ${email}`);
         };
 
@@ -2087,7 +2087,7 @@
                 return;
             }
             
-            console.log('???? Restando VYT Money:', { email, amount, reason });
+            console.log('ó Restando VYT Money:', { email, amount, reason });
             alert(`Se restaron $${amount} VYT Money de ${email}`);
         };
 
@@ -2109,7 +2109,7 @@
                     <div class="flex justify-between items-center p-3 bg-red-50 border border-red-200 rounded">
                         <div>
                             <p class="font-medium text-gray-900">carlos.rodriguez@email.com</p>
-                            <p class="text-sm text-gray-600">Compra de inscripci????n</p>
+                            <p class="text-sm text-gray-600">Compra de inscripción</p>
                         </div>
                         <div class="text-right">
                             <p class="font-semibold text-red-600">-$5,000</p>
@@ -2120,7 +2120,7 @@
                     <div class="flex justify-between items-center p-3 bg-green-50 border border-green-200 rounded">
                         <div>
                             <p class="font-medium text-gray-900">ana.martinez@email.com</p>
-                            <p class="text-sm text-gray-600">Premio por votaci????n</p>
+                            <p class="text-sm text-gray-600">Premio por votación</p>
                         </div>
                         <div class="text-right">
                             <p class="font-semibold text-green-600">+$2,000</p>
@@ -2129,26 +2129,26 @@
                     </div>
                 </div>
             `;
-            console.log('???? Transacciones VYT Money cargadas');
+            console.log('ó Transacciones VYT Money cargadas');
         };
 
         window.exportVytData = function() {
-            console.log('???? Exportando datos VYT Money...');
-            alert('Funci????n de exportaci????n VYT Money - Pr????ximamente');
+            console.log('ó Exportando datos VYT Money...');
+            alert('Función de exportación VYT Money - Próximamente');
         };
 
         window.generateVytReport = function() {
-            console.log('???? Generando reporte VYT Money...');
-            alert('Funci????n de reporte VYT Money - Pr????ximamente');
+            console.log('ó Generando reporte VYT Money...');
+            alert('Función de reporte VYT Money - Próximamente');
         };
 
         window.refreshVytStats = function() {
-            console.log('???? Actualizando estad????sticas VYT Money...');
+            console.log('ó Actualizando estadósticas VYT Money...');
             // Simular nuevos datos
             document.getElementById('vyt-circulacion').textContent = '$' + (Math.floor(Math.random() * 50000) + 100000).toLocaleString();
             document.getElementById('vyt-transacciones-hoy').textContent = Math.floor(Math.random() * 50) + 20;
             document.getElementById('vyt-usuarios-activos').textContent = Math.floor(Math.random() * 100) + 200;
-            alert('Estad????sticas VYT Money actualizadas');
+            alert('Estadósticas VYT Money actualizadas');
         };
 
         // ===== FUNCIONES PARA PAGOS =====
@@ -2165,10 +2165,10 @@
                             <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Pendiente</span>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
-                            <span>???? $5,000</span>
-                            <span>???? MercadoPago</span>
-                            <span>???? 22/09/2025</span>
-                            <span>???? Inscripci????n Online</span>
+                            <span>ó $5,000</span>
+                            <span>ó MercadoPago</span>
+                            <span>ó 22/09/2025</span>
+                            <span>ó Inscripción Online</span>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="approvePago('pay1')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
@@ -2192,10 +2192,10 @@
                             <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Aprobado</span>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
-                            <span>???? $8,000</span>
-                            <span>???? Transferencia</span>
-                            <span>???? 21/09/2025</span>
-                            <span>???? Inscripci????n Presencial</span>
+                            <span>ó $8,000</span>
+                            <span>ó Transferencia</span>
+                            <span>ó 21/09/2025</span>
+                            <span>ó Inscripción Presencial</span>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="viewPago('pay2')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
@@ -2208,12 +2208,12 @@
                     </div>
                 </div>
             `;
-            console.log('???? Pagos cargados');
+            console.log('ó Pagos cargados');
         };
 
         window.exportPagos = function() {
-            console.log('???? Exportando pagos...');
-            alert('Funci????n de exportaci????n de pagos - Pr????ximamente');
+            console.log('ó Exportando pagos...');
+            alert('Función de exportación de pagos - Próximamente');
         };
 
         window.approvePago = function(id) {
@@ -2223,7 +2223,7 @@
         };
 
         window.rejectPago = function(id) {
-            if (confirm('????Est????s seguro de que quieres rechazar este pago?')) {
+            if (confirm('óEstós seguro de que quieres rechazar este pago?')) {
                 console.log('?? Rechazando pago:', id);
                 alert('Pago rechazado - ID: ' + id);
                 loadPagos(); // Recargar lista
@@ -2231,19 +2231,19 @@
         };
 
         window.viewPago = function(id) {
-            console.log('?????? Viendo detalles del pago:', id);
-            alert('Detalles del pago - ID: ' + id + '\n\nFunci????n pr????ximamente');
+            console.log('ó?? Viendo detalles del pago:', id);
+            alert('Detalles del pago - ID: ' + id + '\n\nFunción próximamente');
         };
 
         window.refundPago = function(id) {
-            if (confirm('????Est????s seguro de que quieres reembolsar este pago?')) {
-                console.log('???? Reembolsando pago:', id);
+            if (confirm('óEstós seguro de que quieres reembolsar este pago?')) {
+                console.log('ó Reembolsando pago:', id);
                 alert('Pago reembolsado - ID: ' + id);
                 loadPagos(); // Recargar lista
             }
         };
 
-        // Funci????n para cargar datos reales de VYT Money
+        // Función para cargar datos reales de VYT Money
         async function loadRealVytMoney() {
             if (!db || !window.firestoreQuery) {
                 console.log('Firebase no disponible, usando datos demo de VYT Money');
@@ -2275,7 +2275,7 @@
                     vytMoneyContainer.innerHTML = transaccionesHTML;
                 }
 
-                console.log(`???? Transacciones VYT Money cargadas: ${transaccionesSnapshot.size} transacciones`);
+                console.log(`ó Transacciones VYT Money cargadas: ${transaccionesSnapshot.size} transacciones`);
 
             } catch (error) {
                 console.error('?? Error cargando VYT Money:', error);
@@ -2283,18 +2283,18 @@
             }
         }
 
-        // Funci????n para renderizar tarjeta de transacci????n VYT Money real
+        // Función para renderizar tarjeta de transacción VYT Money real
         function renderVytMoneyTransactionCardReal(id, data) {
             const usuario = data.usuario_email || data.usuario || 'Usuario desconocido';
             const tipo = data.tipo || 'unknown';
             const monto = data.monto || 0;
             const fecha = data.fecha ? new Date(data.fecha.seconds * 1000).toLocaleString() : 'Sin fecha';
             const estado = data.estado || 'completado';
-            const descripcion = data.descripcion || 'Sin descripci????n';
+            const descripcion = data.descripcion || 'Sin descripción';
             
             const tipoColor = tipo === 'compra' ? 'green' : tipo === 'gasto' ? 'red' : 'blue';
             const tipoTexto = tipo === 'compra' ? 'Compra' : tipo === 'gasto' ? 'Gasto' : 'Otro';
-            const tipoIcon = tipo === 'compra' ? '????' : tipo === 'gasto' ? '????' : '????';
+            const tipoIcon = tipo === 'compra' ? 'ó' : tipo === 'gasto' ? 'ó' : 'ó';
             
             return `
                 <div class="border border-gray-200 rounded-lg p-4">
@@ -2307,8 +2307,8 @@
                     </div>
                     <p class="text-sm text-gray-600">${usuario}</p>
                     <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                        <span>???? ${monto} VYT Money</span>
-                        <span>???? ${fecha}</span>
+                        <span>ó ${monto} VYT Money</span>
+                        <span>ó ${fecha}</span>
                     </div>
                     <p class="text-sm text-gray-700 mb-3">${descripcion}</p>
                     <div class="flex gap-2">
@@ -2321,7 +2321,7 @@
             `;
         }
 
-        // Funci????n para cargar datos demo de VYT Money
+        // Función para cargar datos demo de VYT Money
         function loadDemoVytMoney() {
             const vytMoneyContainer = document.getElementById('vyt-money-list');
             if (!vytMoneyContainer) return;
@@ -2331,15 +2331,15 @@
                     <div class="border border-gray-200 rounded-lg p-4">
                         <div class="flex justify-between items-start mb-2">
                             <div class="flex items-center gap-2">
-                                <span class="text-lg">????</span>
+                                <span class="text-lg">ó</span>
                                 <h4 class="font-semibold text-gray-900">Compra VYT Money</h4>
                             </div>
                             <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Completado</span>
                         </div>
                         <p class="text-sm text-gray-600">ana.martinez@email.com</p>
                         <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                            <span>???? 100 VYT Money</span>
-                            <span>???? ${new Date().toLocaleString()}</span>
+                            <span>ó 100 VYT Money</span>
+                            <span>ó ${new Date().toLocaleString()}</span>
                         </div>
                         <p class="text-sm text-gray-700 mb-3">Compra de VYT Money para votaciones</p>
                         <div class="flex gap-2">
@@ -2352,7 +2352,7 @@
             `;
         }
 
-        // Funci????n para cargar datos reales de pagos
+        // Función para cargar datos reales de pagos
         async function loadRealPagos() {
             if (!db || !window.firestoreQuery) {
                 console.log('Firebase no disponible, usando datos demo de pagos');
@@ -2384,7 +2384,7 @@
                     pagosContainer.innerHTML = pagosHTML;
                 }
 
-                console.log(`???? Transacciones de pago cargadas: ${pagosSnapshot.size} transacciones`);
+                console.log(`ó Transacciones de pago cargadas: ${pagosSnapshot.size} transacciones`);
 
             } catch (error) {
                 console.error('?? Error cargando pagos:', error);
@@ -2392,7 +2392,7 @@
             }
         }
 
-        // Funci????n para renderizar tarjeta de transacci????n de pago real
+        // Función para renderizar tarjeta de transacción de pago real
         function renderPaymentTransactionCardReal(id, data) {
             const usuario = data.usuario_email || data.email || 'Usuario desconocido';
             const monto = data.monto || data.amount || 0;
@@ -2420,10 +2420,10 @@
                     </div>
                     <p class="text-sm text-gray-600">${usuario}</p>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
-                        <span>???? $${monto}</span>
-                        <span>???? ${metodo}</span>
-                        <span>???? ${fecha}</span>
-                        <span>???? ${concepto}</span>
+                        <span>ó $${monto}</span>
+                        <span>ó ${metodo}</span>
+                        <span>ó ${fecha}</span>
+                        <span>ó ${concepto}</span>
                     </div>
                     <div class="flex gap-2">
                         ${estado === 'pending' || estado === 'pendiente' ? `
@@ -2448,22 +2448,22 @@
             `;
         }
 
-        // Funci????n para cargar datos demo de pagos
+        // Función para cargar datos demo de pagos
         function loadDemoPagos() {
             const pagosContainer = document.getElementById('pagos-list');
             if (!pagosContainer) return;
             
-            // Usar la funci????n existente si est???? disponible
+            // Usar la función existente si estó disponible
             if (window.loadPagos && typeof window.loadPagos === 'function') {
-                // Evitar recursi????n infinita
+                // Evitar recursión infinita
                 const originalLoadPagos = window.loadPagos;
                 window.loadPagos = function() {
-                    console.log('???? Cargando pagos...');
+                    console.log('ó Cargando pagos...');
                     loadRealPagos();
                 };
                 originalLoadPagos();
                 window.loadPagos = function() {
-                    console.log('???? Cargando pagos...');
+                    console.log('ó Cargando pagos...');
                     loadRealPagos();
                 };
             }
@@ -2472,46 +2472,46 @@
         // Actualizar las funciones principales para usar datos reales
         const originalLoadVytMoney = window.loadVytMoney;
         window.loadVytMoney = function() {
-            console.log('???? Cargando VYT Money...');
+            console.log('ó Cargando VYT Money...');
             loadRealVytMoney();
         };
 
         const originalLoadPagos = window.loadPagos;
         window.loadPagos = function() {
-            console.log('???? Cargando pagos...');
+            console.log('ó Cargando pagos...');
             loadRealPagos();
         };
 
-        // Funci????n para inicializar con datos reales
+        // Función para inicializar con datos reales
         async function initializeWithRealData() {
-            console.log('???? Inicializando con datos reales...');
+            console.log('ó Inicializando con datos reales...');
             
             try {
-                // Verificar si Firebase est???? disponible con timeout
-                console.log('???? Verificando disponibilidad de Firebase...');
+                // Verificar si Firebase estó disponible con timeout
+                console.log('ó Verificando disponibilidad de Firebase...');
                 
                 const timeoutPromise = new Promise((_, reject) => {
                     setTimeout(() => reject(new Error('Timeout: Firebase no responde')), 5000);
                 });
                 
-                // Verificar si las dependencias de Firebase est????n cargadas
+                // Verificar si las dependencias de Firebase estón cargadas
                 if (!window.firebase && !window.db && !window.firestoreQuery) {
-                    console.log('?? Firebase no est???? cargado. Intentando cargar...');
+                    console.log('?? Firebase no estó cargado. Intentando cargar...');
                     
                     // Esperar un poco para que Firebase se cargue
                     await new Promise(resolve => setTimeout(resolve, 2000));
                     
                     if (!window.firebase && !window.db && !window.firestoreQuery) {
-                        throw new Error('Firebase no est???? disponible');
+                        throw new Error('Firebase no estó disponible');
                     }
                 }
                 
-                console.log('?? Firebase detectado, cargando configuraci????n...');
+                console.log('?? Firebase detectado, cargando configuración...');
                 
-                // Cargar configuraci????n de Firebase
+                // Cargar configuración de Firebase
                 await Promise.race([loadFirebaseConfig(), timeoutPromise]);
                 
-                console.log('???? Cargando datos reales...');
+                console.log('ó Cargando datos reales...');
                 
                 // Cargar datos reales en paralelo con timeout
                 await Promise.race([
@@ -2538,7 +2538,7 @@
         }
 
         // ========================
-        // GESTI????N DE FONDOS
+        // GESTIóN DE FONDOS
         // ========================
         document.addEventListener('DOMContentLoaded', function() {
             // Configurar manejadores para todos los inputs de archivo
@@ -2604,8 +2604,8 @@
         });
 
         function showImagePositionEditor(fileName, imageData) {
-            console.log('???? Abriendo editor de posici????n para:', fileName);
-            console.log('???? Datos de imagen:', imageData ? 'Disponibles' : 'No disponibles');
+            console.log('ó Abriendo editor de posición para:', fileName);
+            console.log('ó Datos de imagen:', imageData ? 'Disponibles' : 'No disponibles');
             
             const modal = document.createElement('div');
             modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 image-position-editor';
@@ -2614,16 +2614,16 @@
                     <div class="p-6">
                         <h3 class="text-2xl font-semibold text-gray-900 mb-4">
                             <i class="fas fa-crop text-blue-500 mr-2"></i>
-                            Ajustar Posici????n del Fondo
+                            Ajustar Posición del Fondo
                         </h3>
                         <p class="text-gray-600 mb-6">
-                            Ajusta la posici????n de tu imagen para que se vea perfecta como fondo. Mueve la imagen dentro del marco de preview.
+                            Ajusta la posición de tu imagen para que se vea perfecta como fondo. Mueve la imagen dentro del marco de preview.
                         </p>
                         
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                             <!-- Editor Visual -->
                             <div class="space-y-4">
-                                <h4 class="font-semibold text-gray-900">???? Editor Visual</h4>
+                                <h4 class="font-semibold text-gray-900">ó Editor Visual</h4>
                                 <div class="relative border-2 border-gray-300 rounded-lg overflow-hidden position-preview" style="height: 300px; background: #f3f4f6;">
                                     <img id="editor-image" src="${imageData}" 
                                          class="absolute cursor-move transition-transform duration-200" 
@@ -2635,40 +2635,40 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Controles de Posici????n -->
+                                <!-- Controles de Posición -->
                                 <div class="grid grid-cols-3 gap-2">
                                     <button onclick="setPosition('top-left')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Superior Izq.
+                                        ó Superior Izq.
                                     </button>
                                     <button onclick="setPosition('top-center')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Superior Centro
+                                        ó Superior Centro
                                     </button>
                                     <button onclick="setPosition('top-right')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Superior Der.
+                                        ó Superior Der.
                                     </button>
                                     <button onclick="setPosition('center-left')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Centro Izq.
+                                        ó Centro Izq.
                                     </button>
                                     <button onclick="setPosition('center')" class="p-2 bg-blue-100 hover:bg-blue-200 rounded text-xs font-semibold">
-                                        ???? Centro
+                                        ó Centro
                                     </button>
                                     <button onclick="setPosition('center-right')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Centro Der.
+                                        ó Centro Der.
                                     </button>
                                     <button onclick="setPosition('bottom-left')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Inferior Izq.
+                                        ó Inferior Izq.
                                     </button>
                                     <button onclick="setPosition('bottom-center')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Inferior Centro
+                                        ó Inferior Centro
                                     </button>
                                     <button onclick="setPosition('bottom-right')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
-                                        ???? Inferior Der.
+                                        ó Inferior Der.
                                     </button>
                                 </div>
                                 
                                 <!-- Controles de Zoom -->
                                 <div class="space-y-2">
-                                    <label class="block text-sm font-medium text-gray-700">???? Zoom</label>
+                                    <label class="block text-sm font-medium text-gray-700">ó Zoom</label>
                                     <input type="range" id="zoom-slider" min="1" max="3" step="0.1" value="1" 
                                            class="w-full" onchange="updateZoom(this.value)">
                                     <div class="flex justify-between text-xs text-gray-500">
@@ -2681,7 +2681,7 @@
                             
                             <!-- Preview -->
                             <div class="space-y-4">
-                                <h4 class="font-semibold text-gray-900">?????? Vista Previa Final</h4>
+                                <h4 class="font-semibold text-gray-900">ó?? Vista Previa Final</h4>
                                 <div class="relative border-2 border-gray-300 rounded-lg overflow-hidden" style="height: 300px;">
                                     <div id="preview-background" 
                                          class="w-full h-full bg-cover bg-no-repeat"
@@ -2689,21 +2689,21 @@
                                         <div class="flex items-center justify-center h-full">
                                             <div class="text-center text-white">
                                                 <h5 class="text-lg font-bold mb-2">Vista Previa</h5>
-                                                <p class="text-sm opacity-80">As???? se ver???? en la p????gina</p>
+                                                <p class="text-sm opacity-80">Asó se veró en la pógina</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <!-- Informaci????n T????cnica -->
+                                <!-- Información Tócnica -->
                                 <div class="bg-gray-50 p-3 rounded-lg text-sm">
                                     <div class="grid grid-cols-2 gap-2">
                                         <div>
-                                            <span class="font-medium">Posici????n X:</span>
+                                            <span class="font-medium">Posición X:</span>
                                             <span id="pos-x-display">0px</span>
                                         </div>
                                         <div>
-                                            <span class="font-medium">Posici????n Y:</span>
+                                            <span class="font-medium">Posición Y:</span>
                                             <span id="pos-y-display">0px</span>
                                         </div>
                                         <div>
@@ -2711,7 +2711,7 @@
                                             <span id="scale-display">100%</span>
                                         </div>
                                         <div>
-                                            <span class="font-medium">Posici????n CSS:</span>
+                                            <span class="font-medium">Posición CSS:</span>
                                             <span id="css-position-display">center center</span>
                                         </div>
                                     </div>
@@ -2719,11 +2719,11 @@
                             </div>
                         </div>
                         
-                        <!-- Botones de Acci????n -->
+                        <!-- Botones de Acción -->
                         <div class="flex justify-between items-center mt-6 pt-4 border-t">
                             <button onclick="resetPosition()" 
                                     class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                                ???? Restablecer
+                                ó Restablecer
                             </button>
                             <div class="space-x-2">
                                 <button onclick="closePositionEditor()" 
@@ -2746,7 +2746,7 @@
             setupImageDragging();
         }
 
-        // Variables globales para el editor de posici????n
+        // Variables globales para el editor de posición
         let currentImagePosition = { x: 0, y: 0, scale: 1 };
         let isDragging = false;
         let dragStart = { x: 0, y: 0 };
@@ -2793,7 +2793,7 @@
         function updatePreview() {
             const preview = document.getElementById('preview-background');
             if (preview) {
-                // Convertir posici????n a porcentajes para CSS background-position
+                // Convertir posición a porcentajes para CSS background-position
                 const container = document.getElementById('editor-image').parentElement;
                 const containerRect = container.getBoundingClientRect();
                 
@@ -2864,12 +2864,12 @@
             }
 
             try {
-                console.log('???? Guardando configuraci????n de fondo...');
+                console.log('ó Guardando configuración de fondo...');
                 
                 // Usar la imagen ya redimensionada del currentConfig
                 const imageData = currentConfig.imageData;
                 
-                // Guardar configuraci????n con posici????n en localStorage
+                // Guardar configuración con posición en localStorage
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 backgroundConfig[currentConfig.file] = {
                     imageData: imageData,
@@ -2880,14 +2880,14 @@
                 };
                 localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
                 
-                console.log('?? Configuraci????n guardada para:', currentConfig.file);
-                console.log('???? Tama????o de datos:', Math.round(imageData.length / 1024), 'KB');
+                console.log('?? Configuración guardada para:', currentConfig.file);
+                console.log('ó Tamaóo de datos:', Math.round(imageData.length / 1024), 'KB');
                 
                 // Cerrar modal
                 closePositionEditor();
                 
-                // Mostrar mensaje de ????xito
-                showSuccessMessage(`?? Fondo con posici????n personalizada aplicado correctamente a ${currentConfig.file}`);
+                // Mostrar mensaje de óxito
+                showSuccessMessage(`?? Fondo con posición personalizada aplicado correctamente a ${currentConfig.file}`);
                 
                 // Limpiar el estado de upload
                 const statusDiv = document.getElementById('upload-status');
@@ -2895,7 +2895,7 @@
                     statusDiv.innerHTML = `
                         <div class="flex items-center text-green-600">
                             <i class="fas fa-check-circle mr-2"></i>
-                            <span>????Fondo aplicado exitosamente! Ve a ${currentConfig.file} para verlo.</span>
+                            <span>óFondo aplicado exitosamente! Ve a ${currentConfig.file} para verlo.</span>
                         </div>
                     `;
                 }
@@ -2911,8 +2911,8 @@
                 }
                 
             } catch (error) {
-                console.error('?? Error guardando configuraci????n:', error);
-                alert('Error guardando la configuraci????n. Int????ntalo de nuevo.');
+                console.error('?? Error guardando configuración:', error);
+                alert('Error guardando la configuración. Intóntalo de nuevo.');
             }
         };
                 
@@ -2951,14 +2951,14 @@
                     animation: successPulse 0.5s ease-out;
                 ">
                     <div style="font-size: 3rem; margin-bottom: 1rem;">??</div>
-                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">????xito!</h3>
+                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">óxito!</h3>
                     <p style="margin: 0; opacity: 0.9;">${message}</p>
                 </div>
             `;
             
             document.body.appendChild(overlay);
             
-            // Auto-cerrar despu????s de 3 segundos
+            // Auto-cerrar despuós de 3 segundos
             setTimeout(() => {
                 overlay.remove();
             }, 3000);
@@ -2967,7 +2967,7 @@
             overlay.addEventListener('click', () => overlay.remove());
         }
         
-        // Agregar estilos de animaci????n
+        // Agregar estilos de animación
         if (!document.querySelector('#success-styles')) {
             const style = document.createElement('style');
             style.id = 'success-styles';
@@ -2992,13 +2992,13 @@
                 document.body.style.backgroundPosition = position;
                 document.body.style.backgroundRepeat = 'no-repeat';
                 
-                console.log('?? Fondo con posici????n personalizada aplicado a la p????gina actual');
+                console.log('?? Fondo con posición personalizada aplicado a la pógina actual');
             }
         }
 
-        // Funciones espec????ficas de login eliminadas - ahora usamos la funci????n gen????rica
+        // Funciones especóficas de login eliminadas - ahora usamos la función genórica
         
-        // Funci????n para redimensionar im????genes y evitar problemas con localStorage
+        // Función para redimensionar imógenes y evitar problemas con localStorage
         function resizeImageForStorage(file, maxWidth = 1920, quality = 0.8) {
             return new Promise((resolve) => {
                 const canvas = document.createElement('canvas');
@@ -3019,9 +3019,9 @@
                     // Dibujar imagen redimensionada
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    // Convertir a base64 con compresi????n
+                    // Convertir a base64 con compresión
                     const resizedDataUrl = canvas.toDataURL('image/jpeg', quality);
-                    console.log(`???? Imagen redimensionada: ${file.name} (${width}x${height})`);
+                    console.log(`ó Imagen redimensionada: ${file.name} (${width}x${height})`);
                     resolve(resizedDataUrl);
                 };
                 
@@ -3029,17 +3029,17 @@
             });
         }
 
-        // Crear funciones gen????ricas para todas las secciones
+        // Crear funciones genóricas para todas las secciones
         function createImageUploadHandler(sectionId, fileName) {
             return async function(input) {
                 const file = input.files[0];
                 if (!file) return;
                 
-                console.log(`?????? [${sectionId}] Imagen seleccionada:`, file.name);
+                console.log(`ó?? [${sectionId}] Imagen seleccionada:`, file.name);
                 
                 // Validar tipo de archivo
                 if (!file.type.startsWith('image/')) {
-                    alert('Por favor selecciona un archivo de imagen v????lido');
+                    alert('Por favor selecciona un archivo de imagen vólido');
                     return;
                 }
                 
@@ -3055,7 +3055,7 @@
                         imageData: resizedImageData // Agregar imagen redimensionada
                     };
                     
-                    console.log(`???? [${sectionId}] Config guardada:`, currentConfig.file);
+                    console.log(`ó [${sectionId}] Config guardada:`, currentConfig.file);
                     
                     // Actualizar preview inmediatamente
                     const previewImg = document.getElementById(currentConfig.preview);
@@ -3065,23 +3065,23 @@
                         if (previewImg.nextElementSibling) {
                             previewImg.nextElementSibling.style.display = 'none';
                         }
-                        console.log(`?????? [${sectionId}] Preview actualizado en:`, currentConfig.preview);
+                        console.log(`ó?? [${sectionId}] Preview actualizado en:`, currentConfig.preview);
                     } else {
-                        console.warn(`???? [${sectionId}] No se encontr???? preview:`, currentConfig.preview);
+                        console.warn(`ó [${sectionId}] No se encontró preview:`, currentConfig.preview);
                     }
                     
-                    // Mostrar mensaje y bot????n
-                    console.log(`???? [${sectionId}] Llamando a showPositionButton`);
+                    // Mostrar mensaje y botón
+                    console.log(`ó [${sectionId}] Llamando a showPositionButton`);
                     showPositionButton(sectionId, resizedImageData);
                     
                 } catch (error) {
                     console.error(`?? [${sectionId}] Error procesando imagen:`, error);
-                    alert('Error procesando la imagen. Int????ntalo de nuevo.');
+                    alert('Error procesando la imagen. Intóntalo de nuevo.');
                 }
             };
         }
         
-        // Crear todas las funciones espec????ficas - usando nombres consistentes con loadDynamicBackground
+        // Crear todas las funciones especóficas - usando nombres consistentes con loadDynamicBackground
         window.handleIndexImageUpload = createImageUploadHandler('upload-index', 'index');
         window.handleInscripcionImageUpload = createImageUploadHandler('upload-inscripcion', 'inscripcion-certamen');
         window.handlePerfilImageUpload = createImageUploadHandler('upload-perfil', 'perfil-artista');
@@ -3095,33 +3095,33 @@
         
         function showPositionButton(sectionId, imageData) {
             console.log('?? [showPositionButton] Iniciando para:', sectionId);
-            console.log('???? [showPositionButton] currentConfig:', currentConfig);
+            console.log('ó [showPositionButton] currentConfig:', currentConfig);
             
-            // Buscar donde mostrar el bot????n
+            // Buscar donde mostrar el botón
             const uploadElement = document.getElementById(sectionId);
-            console.log('???? [showPositionButton] Elemento upload encontrado:', !!uploadElement);
+            console.log('ó [showPositionButton] Elemento upload encontrado:', !!uploadElement);
             
             if (!uploadElement) {
-                console.error('?? [showPositionButton] No se encontr???? elemento:', sectionId);
+                console.error('?? [showPositionButton] No se encontró elemento:', sectionId);
                 return;
             }
             
             const container = uploadElement.parentNode;
-            console.log('???? [showPositionButton] Contenedor encontrado:', !!container);
+            console.log('ó [showPositionButton] Contenedor encontrado:', !!container);
             
             // Limpiar botones anteriores
             const existingButton = container.querySelector('.position-button');
             if (existingButton) {
-                console.log('?????? [showPositionButton] Removiendo bot????n existente');
+                console.log('ó?? [showPositionButton] Removiendo botón existente');
                 existingButton.remove();
             }
             
-            // Crear bot????n de posicionamiento
+            // Crear botón de posicionamiento
             const buttonDiv = document.createElement('div');
             buttonDiv.className = 'position-button mt-4 text-center';
             buttonDiv.innerHTML = `
                 <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-3">
-                    ?? ????Imagen cargada para ${currentConfig.file}! Ahora puedes posicionarla.
+                    ?? óImagen cargada para ${currentConfig.file}! Ahora puedes posicionarla.
                 </div>
                 <button onclick="openGenericPositionEditor()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
                     <i class="fas fa-crop mr-2"></i>Posicionar Imagen
@@ -3129,15 +3129,15 @@
             `;
             
             container.appendChild(buttonDiv);
-            console.log('?? [showPositionButton] Bot????n agregado exitosamente a:', sectionId);
+            console.log('?? [showPositionButton] Botón agregado exitosamente a:', sectionId);
         }
         
         function openGenericPositionEditor() {
-            console.log('???? Abriendo editor gen????rico para:', currentConfig);
+            console.log('ó Abriendo editor genórico para:', currentConfig);
             if (currentImageData) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    console.log('???? Cargando imagen en editor:', currentImageData.name);
+                    console.log('ó Cargando imagen en editor:', currentImageData.name);
                     showImagePositionEditor(currentImageData.name, e.target.result);
                 };
                 reader.readAsDataURL(currentImageData);
@@ -3147,9 +3147,9 @@
             }
         }
 
-        // Funci????n eliminada - usamos openGenericPositionEditor() en su lugar
+        // Función eliminada - usamos openGenericPositionEditor() en su lugar
         
-        // Funci????n eliminada - usamos openGenericPositionEditor() en su lugar
+        // Función eliminada - usamos openGenericPositionEditor() en su lugar
 
         async function handleImageUpload(event, config) {
             const file = event.target.files[0];
@@ -3157,7 +3157,7 @@
 
             // Validar tipo de archivo
             if (!file.type.startsWith('image/')) {
-                alert('Por favor selecciona un archivo de imagen v????lido');
+                alert('Por favor selecciona un archivo de imagen vólido');
                 return;
             }
 
@@ -3192,14 +3192,14 @@
                         statusDiv.innerHTML = `
                             <div class="flex items-center text-green-600">
                                 <i class="fas fa-check-circle mr-2"></i>
-                                <span>????Vista previa lista! Haz clic en "Posicionar Imagen" para ajustar.</span>
+                                <span>óVista previa lista! Haz clic en "Posicionar Imagen" para ajustar.</span>
                             </div>
                         `;
                         
-                        // NO mostrar autom????ticamente - esperar a que el usuario haga clic
+                        // NO mostrar automóticamente - esperar a que el usuario haga clic
                         // showImagePositionEditor(file.name, e.target.result);
                         
-                        // Mostrar bot????n de posicionar
+                        // Mostrar botón de posicionar
                         showPositionButton();
                     }, 1000);
                 };
@@ -3223,7 +3223,7 @@
             }
 
             try {
-                // Crear nombre ????nico para el archivo
+                // Crear nombre ónico para el archivo
                 const timestamp = Date.now();
                 const extension = currentImageData.name.split('.').pop();
                 const newFileName = `bg-${currentConfig.file.replace('.html', '')}-${timestamp}.${extension}`;
@@ -3233,7 +3233,7 @@
                 reader.onload = function(e) {
                     const imageData = e.target.result;
                     
-                    // Guardar configuraci????n en localStorage
+                    // Guardar configuración en localStorage
                     const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                     backgroundConfig[currentConfig.file] = {
                         imageData: imageData,
@@ -3242,10 +3242,10 @@
                     };
                     localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
                     
-                    // Aplicar inmediatamente si estamos en la p????gina correspondiente
+                    // Aplicar inmediatamente si estamos en la pógina correspondiente
                     applyBackgroundToCurrentPage(currentConfig.file, imageData);
                     
-                    // Mostrar mensaje de ????xito
+                    // Mostrar mensaje de óxito
                     showSuccessMessage(`Fondo aplicado correctamente a ${currentConfig.file}`);
                 };
                 reader.readAsDataURL(currentImageData);
@@ -3257,18 +3257,18 @@
         }
 
         function applyBackgroundToCurrentPage(targetFile, imageData) {
-            // Detectar p????gina actual
+            // Detectar pógina actual
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
             
             if (currentPage === targetFile) {
-                // Aplicar el fondo inmediatamente a la p????gina actual
+                // Aplicar el fondo inmediatamente a la pógina actual
                 document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${imageData}')`;
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundAttachment = 'fixed';
                 document.body.style.backgroundPosition = 'center top';
                 document.body.style.backgroundRepeat = 'no-repeat';
                 
-                console.log('?? Fondo aplicado a la p????gina actual');
+                console.log('?? Fondo aplicado a la pógina actual');
             }
         }
 
@@ -3282,27 +3282,27 @@
                 </div>
             `;
             
-            // Ocultar despu????s de 5 segundos
+            // Ocultar despuós de 5 segundos
             setTimeout(() => {
                 successDiv.classList.add('hidden');
             }, 5000);
         }
 
-        // Aplicar fondos guardados al cargar la p????gina
+        // Aplicar fondos guardados al cargar la pógina
         document.addEventListener('DOMContentLoaded', function() {
             const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
             
             if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                console.log('???? Aplicando fondo guardado para:', currentPage);
+                console.log('ó Aplicando fondo guardado para:', currentPage);
                 applyBackgroundToCurrentPage(currentPage, backgroundConfig[currentPage].imageData);
             }
         });
     </script>
 
-    <!-- Sistema de Aprobaci????n de Videos -->
+    <!-- Sistema de Aprobación de Videos -->
     <script>
-        // ===== SISTEMA DE APROBACI????N DE VIDEOS =====
+        // ===== SISTEMA DE APROBACIóN DE VIDEOS =====
         function cargarVideosPendientes() {
             const videosParaAprobacion = JSON.parse(localStorage.getItem('videosParaAprobacion') || '[]');
             const container = document.getElementById('videos-pendientes-lista');
@@ -3311,8 +3311,8 @@
                 container.innerHTML = `
                     <div class="text-center py-8 text-gray-500">
                         <i class="fas fa-video text-4xl mb-4"></i>
-                        <p>No hay videos pendientes de aprobaci????n</p>
-                        <p class="text-sm mt-2">Los videos enviados por artistas aparecer????n aqu????</p>
+                        <p>No hay videos pendientes de aprobación</p>
+                        <p class="text-sm mt-2">Los videos enviados por artistas aparecerón aquó</p>
                     </div>
                 `;
                 return;
@@ -3350,7 +3350,7 @@
                     <div class="mt-3 bg-yellow-100 border border-yellow-300 rounded p-2">
                         <p class="text-yellow-800 text-sm">
                             <i class="fas fa-clock mr-1"></i>
-                            <strong>Estado:</strong> Pendiente de aprobaci????n
+                            <strong>Estado:</strong> Pendiente de aprobación
                         </p>
                     </div>
                 </div>
@@ -3430,7 +3430,7 @@
 
         window.rechazarVideo = rechazarVideo;
 
-        // Funciones globales para el editor de posici????n
+        // Funciones globales para el editor de posición
         
         window.setPosition = function(position) {
             const img = document.getElementById('editor-image');
@@ -3504,7 +3504,7 @@
         };
         
         function updateBackgroundPosition() {
-            // Convertir posici????n del editor a CSS background-position
+            // Convertir posición del editor a CSS background-position
             const container = document.getElementById('editor-image')?.parentElement;
             if (!container) return;
             
@@ -3542,7 +3542,7 @@
         };
         
         function updateDisplays() {
-            // Actualizar displays de informaci????n si existen
+            // Actualizar displays de información si existen
             const displays = {
                 'pos-x-display': currentImagePosition.x + 'px',
                 'pos-y-display': currentImagePosition.y + 'px', 
@@ -3557,12 +3557,12 @@
         }
 
         function loadSavedBackgrounds() {
-            console.log('???? Cargando configuraciones guardadas...');
+            console.log('ó Cargando configuraciones guardadas...');
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
-                console.log('???? Configuraciones encontradas:', backgroundConfig);
+                console.log('ó Configuraciones encontradas:', backgroundConfig);
                 
-                // Mapeo de nombres de p????gina a IDs de preview
+                // Mapeo de nombres de pógina a IDs de preview
                 const pageToPreview = {
                     'index': 'preview-index',
                     'inscripcion-certamen': 'preview-inscripcion', 
@@ -3576,7 +3576,7 @@
                     'nosotros': 'preview-nosotros'
                 };
                 
-                // Cargar cada configuraci????n guardada
+                // Cargar cada configuración guardada
                 Object.entries(backgroundConfig).forEach(([pageName, config]) => {
                     if (config.imageData && pageToPreview[pageName]) {
                         const previewImg = document.getElementById(pageToPreview[pageName]);
@@ -3591,19 +3591,19 @@
                     }
                 });
                 
-                console.log('???? Carga de configuraciones completada');
+                console.log('ó Carga de configuraciones completada');
             } catch (error) {
                 console.error('?? Error cargando configuraciones:', error);
             }
         }
 
         function loadDynamicBackground() {
-            console.log('???? [Admin] Cargando fondo din????mico...');
+            console.log('ó [Admin] Cargando fondo dinómico...');
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'admin';
                 
-                console.log('???? [Admin] Configuraci????n disponible:', backgroundConfig);
+                console.log('ó [Admin] Configuración disponible:', backgroundConfig);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
                     console.log('?? [Admin] Aplicando fondo personalizado');
@@ -3620,19 +3620,19 @@
                         document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
                     }
                     
-                    // Agregar clase de fondo din????mico
+                    // Agregar clase de fondo dinómico
                     document.body.classList.add('dynamic-background');
                     
-                    console.log('???? [Admin] Fondo din????mico aplicado exitosamente');
+                    console.log('ó [Admin] Fondo dinómico aplicado exitosamente');
                 } else {
-                    console.log('???? [Admin] Sin configuraci????n personalizada, usando fondo predeterminado');
+                    console.log('ó [Admin] Sin configuración personalizada, usando fondo predeterminado');
                 }
             } catch (error) {
-                console.error('?? [Admin] Error al cargar fondo din????mico:', error);
+                console.error('?? [Admin] Error al cargar fondo dinómico:', error);
             }
         }
 
-        // Cargar videos pendientes al inicializar, fondo din????mico y configuraciones guardadas
+        // Cargar videos pendientes al inicializar, fondo dinómico y configuraciones guardadas
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicBackground();
             loadSavedBackgrounds(); // Cargar configuraciones guardadas
@@ -3646,5 +3646,6 @@
     <script type="module" src="admin-simple.js"></script>
 </body>
 </html>
+
 
 
