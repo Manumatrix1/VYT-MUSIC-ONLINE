@@ -960,7 +960,7 @@
                                         <p class="text-sm">Sin imagen personalizada</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-login" accept="image/*" class="hidden">
+                                <input type="file" id="upload-login" accept="image/*" class="hidden" onchange="handleLoginImageUpload(this)">
                                 <button onclick="document.getElementById('upload-login').click()" 
                                         class="w-full bg-indigo-500 hover:bg-indigo-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -2924,6 +2924,78 @@
                 document.body.style.backgroundRepeat = 'no-repeat';
                 
                 console.log('✅ Fondo con posición personalizada aplicado a la página actual');
+            }
+        }
+
+        // Función específica para login que es más directa
+        window.handleLoginImageUpload = function(input) {
+            const file = input.files[0];
+            if (!file) return;
+            
+            console.log('🖼️ Imagen seleccionada para login:', file.name);
+            
+            // Validar tipo de archivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor selecciona un archivo de imagen válido');
+                return;
+            }
+            
+            // Guardar en variables globales
+            currentImageData = file;
+            currentConfig = {
+                file: 'login-artista.html',
+                preview: 'preview-login'
+            };
+            
+            // Crear vista previa inmediatamente
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                console.log('📸 Vista previa creada, mostrando botón de posicionamiento');
+                
+                // Actualizar preview
+                const previewImg = document.getElementById('preview-login');
+                if (previewImg) {
+                    previewImg.src = e.target.result;
+                }
+                
+                // Mostrar mensaje y botón
+                showLoginPositionButton(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        };
+        
+        function showLoginPositionButton(imageData) {
+            // Buscar donde mostrar el botón
+            const loginContainer = document.getElementById('upload-login').parentNode;
+            
+            // Limpiar botones anteriores
+            const existingButton = loginContainer.querySelector('.position-button');
+            if (existingButton) existingButton.remove();
+            
+            // Crear botón de posicionamiento
+            const buttonDiv = document.createElement('div');
+            buttonDiv.className = 'position-button mt-4 text-center';
+            buttonDiv.innerHTML = `
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-3">
+                    ✅ ¡Imagen cargada! Ahora puedes posicionarla.
+                </div>
+                <button onclick="openLoginPositionEditor()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                    <i class="fas fa-crop mr-2"></i>Posicionar Imagen
+                </button>
+            `;
+            
+            loginContainer.appendChild(buttonDiv);
+        }
+        
+        function openLoginPositionEditor() {
+            if (currentImageData) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    showImagePositionEditor(currentImageData.name, e.target.result);
+                };
+                reader.readAsDataURL(currentImageData);
+            } else {
+                alert('Error: No hay imagen seleccionada');
             }
         }
 
