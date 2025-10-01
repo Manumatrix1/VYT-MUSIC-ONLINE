@@ -358,13 +358,18 @@
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'login-artista.html';
                 
+                console.log('🎨 Verificando configuración de fondo para:', currentPage);
+                console.log('📋 Configuración completa:', backgroundConfig);
+                
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('🎨 Aplicando fondo personalizado para login-artista.html');
+                    console.log('🖼️ Aplicando fondo personalizado para login-artista.html');
                     
                     const config = backgroundConfig[currentPage];
                     const position = config.position || 'center center';
                     const scale = config.scale || 1;
                     const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
+                    
+                    console.log(`📍 Posición: ${position}, Escala: ${scale}`);
                     
                     // Método 1: Usar variable CSS y clase
                     document.documentElement.style.setProperty('--dynamic-bg', 
@@ -379,11 +384,14 @@
                         document.body.style.setProperty('background-attachment', 'fixed', 'important');
                         document.body.style.setProperty('background-position', position, 'important');
                         document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
+                        
+                        console.log('✅ Fondo aplicado exitosamente');
                     }, 100);
                     
                     console.log(`✅ Fondo personalizado aplicado con posición: ${position} y escala: ${scale}`);
                 } else {
-                    console.log('📝 No hay fondo personalizado, usando fondo por defecto');
+                    console.log('📝 No hay fondo personalizado configurado para esta página');
+                    console.log('💡 Para configurar un fondo, ve al admin y sube una imagen para login-artista.html');
                 }
             } catch (error) {
                 console.error('❌ Error cargando fondo personalizado:', error);

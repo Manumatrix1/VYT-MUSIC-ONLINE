@@ -2811,9 +2811,7 @@
             }
 
             try {
-                const timestamp = Date.now();
-                const extension = currentImageData.name.split('.').pop();
-                const newFileName = `bg-${currentConfig.file.replace('.html', '')}-${timestamp}.${extension}`;
+                console.log('💾 Guardando configuración de fondo...');
                 
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -2823,21 +2821,29 @@
                     const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                     backgroundConfig[currentConfig.file] = {
                         imageData: imageData,
-                        fileName: newFileName,
+                        fileName: currentImageData.name,
                         position: currentBackgroundPosition,
                         scale: currentImagePosition.scale,
                         applied: new Date().toISOString()
                     };
                     localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
                     
-                    // Aplicar inmediatamente si estamos en la página correspondiente
-                    applyPositionedBackgroundToCurrentPage(currentConfig.file, imageData, currentBackgroundPosition, currentImagePosition.scale);
+                    console.log('✅ Configuración guardada:', backgroundConfig[currentConfig.file]);
                     
                     // Cerrar modal
                     closePositionEditor();
                     
                     // Mostrar mensaje de éxito
-                    showSuccessMessage(`Fondo con posición personalizada aplicado correctamente a ${currentConfig.file}`);
+                    showSuccessMessage(`✅ Fondo con posición personalizada aplicado correctamente a ${currentConfig.file}`);
+                    
+                    // Limpiar el estado de upload
+                    const statusDiv = document.getElementById('upload-status');
+                    statusDiv.innerHTML = `
+                        <div class="flex items-center text-green-600">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            <span>¡Fondo aplicado exitosamente! Ve a ${currentConfig.file} para verlo.</span>
+                        </div>
+                    `;
                 };
                 reader.readAsDataURL(currentImageData);
                 
@@ -2846,6 +2852,65 @@
                 alert('Error al aplicar el fondo: ' + error.message);
             }
         };
+
+        function showSuccessMessage(message) {
+            // Crear overlay de mensaje
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 10001;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(5px);
+            `;
+            
+            overlay.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white;
+                    padding: 2rem;
+                    border-radius: 1rem;
+                    text-align: center;
+                    max-width: 400px;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+                    animation: successPulse 0.5s ease-out;
+                ">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+                    <h3 style="font-size: 1.2rem; font-weight: bold; margin-bottom: 0.5rem;">¡Éxito!</h3>
+                    <p style="margin: 0; opacity: 0.9;">${message}</p>
+                </div>
+            `;
+            
+            document.body.appendChild(overlay);
+            
+            // Auto-cerrar después de 3 segundos
+            setTimeout(() => {
+                overlay.remove();
+            }, 3000);
+            
+            // Permitir cerrar haciendo clic
+            overlay.addEventListener('click', () => overlay.remove());
+        }
+        
+        // Agregar estilos de animación
+        if (!document.querySelector('#success-styles')) {
+            const style = document.createElement('style');
+            style.id = 'success-styles';
+            style.textContent = `
+                @keyframes successPulse {
+                    0% { transform: scale(0.8); opacity: 0; }
+                    50% { transform: scale(1.05); }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
 
         function applyPositionedBackgroundToCurrentPage(targetFile, imageData, position, scale) {
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -2859,6 +2924,38 @@
                 document.body.style.backgroundRepeat = 'no-repeat';
                 
                 console.log('✅ Fondo con posición personalizada aplicado a la página actual');
+            }
+        }
+
+        function showPositionButton() {
+            // Buscar el área donde mostrar el botón
+            const statusDiv = document.getElementById('upload-status');
+            const positionButton = document.createElement('div');
+            positionButton.style.cssText = 'margin-top: 16px; text-align: center;';
+            positionButton.innerHTML = `
+                <button onclick="openImagePositionEditor()" style="
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    color: white;
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 16px;
+                    transition: all 0.3s ease;
+                " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <i class="fas fa-crop mr-2"></i>
+                    Posicionar Imagen
+                </button>
+            `;
+            statusDiv.appendChild(positionButton);
+        }
+        
+        function openImagePositionEditor() {
+            if (currentImageData && currentConfig) {
+                showImagePositionEditor(currentImageData.name, URL.createObjectURL(currentImageData));
+            } else {
+                alert('Error: No hay imagen seleccionada');
             }
         }
 
@@ -2903,12 +3000,15 @@
                         statusDiv.innerHTML = `
                             <div class="flex items-center text-green-600">
                                 <i class="fas fa-check-circle mr-2"></i>
-                                <span>¡Vista previa lista! Usa el editor para ajustar la posición de la imagen.</span>
+                                <span>¡Vista previa lista! Haz clic en "Posicionar Imagen" para ajustar.</span>
                             </div>
                         `;
                         
-                        // Mostrar editor de posición automáticamente
-                        showImagePositionEditor(file.name, e.target.result);
+                        // NO mostrar automáticamente - esperar a que el usuario haga clic
+                        // showImagePositionEditor(file.name, e.target.result);
+                        
+                        // Mostrar botón de posicionar
+                        showPositionButton();
                     }, 1000);
                 };
                 reader.readAsDataURL(file);
