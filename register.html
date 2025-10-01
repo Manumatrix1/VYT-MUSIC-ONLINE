@@ -30,6 +30,15 @@
             color: var(--color-texto-principal);
         }
 
+        /* CSS para fondos dinámicos */
+        .dynamic-background {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), var(--dynamic-bg, linear-gradient(135deg, var(--color-fondo) 0%, var(--color-fondo-secundario) 100%));
+            background-size: var(--dynamic-bg-size, cover);
+            background-position: var(--dynamic-bg-position, center);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
         .login-container {
             background: var(--color-card);
             border: 1px solid #30363d;
@@ -705,8 +714,46 @@
             }, 8000);
         }
 
-        // Auto-focus en el nombre al cargar
-        document.getElementById('firstName').focus();
+        function loadDynamicBackground() {
+            console.log('🎨 [Register] Cargando fondo dinámico...');
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'register';
+                
+                console.log('📋 [Register] Configuración disponible:', backgroundConfig);
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log('✅ [Register] Aplicando fondo personalizado');
+                    
+                    // Aplicar CSS variables
+                    document.documentElement.style.setProperty('--dynamic-bg', `url('${backgroundConfig[currentPage].imageData}')`);
+                    
+                    if (backgroundConfig[currentPage].position) {
+                        document.documentElement.style.setProperty('--dynamic-bg-position', backgroundConfig[currentPage].position);
+                    }
+                    
+                    if (backgroundConfig[currentPage].scale) {
+                        const scaleValue = parseFloat(backgroundConfig[currentPage].scale);
+                        document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
+                    }
+                    
+                    // Agregar clase de fondo dinámico
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log('🎯 [Register] Fondo dinámico aplicado exitosamente');
+                } else {
+                    console.log('ℹ️ [Register] Sin configuración personalizada, usando fondo predeterminado');
+                }
+            } catch (error) {
+                console.error('❌ [Register] Error al cargar fondo dinámico:', error);
+            }
+        }
+
+        // Auto-focus en el nombre al cargar y cargar fondo dinámico
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDynamicBackground();
+            document.getElementById('firstName').focus();
+        });
     </script>
 </body>
 </html>

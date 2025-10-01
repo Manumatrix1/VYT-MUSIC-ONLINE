@@ -19,6 +19,15 @@
             min-height: 100vh;
         }
 
+        /* CSS para fondos dinámicos */
+        .dynamic-background {
+            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), var(--dynamic-bg, url('images/fotos/inscripcion-background.png'));
+            background-size: var(--dynamic-bg-size, cover);
+            background-position: var(--dynamic-bg-position, center top);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
+
         .form-card {
             background: rgba(30, 41, 59, 0.3);
             backdrop-filter: blur(10px);
@@ -476,22 +485,43 @@
         }
 
         // Cargar fondo personalizado desde admin
-        function loadCustomBackground() {
+        function loadDynamicBackground() {
+            console.log('🎨 [Certamen Individual] Cargando fondo dinámico...');
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
-                const currentPage = 'certamen-individual.html';
+                const currentPage = 'certamen-individual';
+                
+                console.log('📋 [Certamen Individual] Configuración disponible:', backgroundConfig);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('🎨 Aplicando fondo personalizado para certamen individual');
-                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('${backgroundConfig[currentPage].imageData}')`;
+                    console.log('✅ [Certamen Individual] Aplicando fondo personalizado');
+                    
+                    // Aplicar CSS variables
+                    document.documentElement.style.setProperty('--dynamic-bg', `url('${backgroundConfig[currentPage].imageData}')`);
+                    
+                    if (backgroundConfig[currentPage].position) {
+                        document.documentElement.style.setProperty('--dynamic-bg-position', backgroundConfig[currentPage].position);
+                    }
+                    
+                    if (backgroundConfig[currentPage].scale) {
+                        const scaleValue = parseFloat(backgroundConfig[currentPage].scale);
+                        document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
+                    }
+                    
+                    // Agregar clase de fondo dinámico
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log('🎯 [Certamen Individual] Fondo dinámico aplicado exitosamente');
+                } else {
+                    console.log('ℹ️ [Certamen Individual] Sin configuración personalizada, usando fondo predeterminado');
                 }
             } catch (error) {
-                console.error('Error al cargar fondo personalizado:', error);
+                console.error('❌ [Certamen Individual] Error al cargar fondo dinámico:', error);
             }
         }
 
         // Cargar fondo al inicializar
-        document.addEventListener('DOMContentLoaded', loadCustomBackground);
+        document.addEventListener('DOMContentLoaded', loadDynamicBackground);
     </script>
 </body>
 </html>

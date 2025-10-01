@@ -24,6 +24,15 @@
         min-height: 100vh;
     }
     
+    /* Clase para fondo dinámico desde admin */
+    body.dynamic-background {
+        background: var(--dynamic-bg) !important;
+        background-size: var(--dynamic-bg-size, cover) !important;
+        background-attachment: fixed !important;
+        background-position: var(--dynamic-bg-position, center) !important;
+        background-repeat: no-repeat !important;
+    }
+    
     .profile-card {
         background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
         border: 1px solid rgba(59, 130, 246, 0.3);
@@ -240,6 +249,9 @@
 
         // Cargar información del perfil
         function loadProfile() {
+            // Cargar fondo dinámico
+            loadDynamicBackground();
+            
             // Intentar cargar datos desde localStorage (para artistas recién creados)
             const newArtistData = localStorage.getItem('artistData');
             if (newArtistData) {
@@ -992,6 +1004,38 @@
             loadProfile();
             loadCertamenes();
         });
+        
+        // Sistema de fondos dinámicos desde Admin
+        function loadDynamicBackground() {
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'perfil-artista.html';
+                
+                console.log('🎨 Verificando configuración de fondo para:', currentPage);
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log('🖼️ Aplicando fondo personalizado para perfil-artista.html');
+                    
+                    const config = backgroundConfig[currentPage];
+                    const position = config.position || 'center center';
+                    const scale = config.scale || 1;
+                    const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
+                    
+                    // Aplicar usando variables CSS
+                    document.documentElement.style.setProperty('--dynamic-bg', 
+                        `radial-gradient(circle at top left, rgba(88, 166, 255, 0.3), rgba(18, 18, 18, 0.9)), url('${config.imageData}')`);
+                    document.documentElement.style.setProperty('--dynamic-bg-size', backgroundSize);
+                    document.documentElement.style.setProperty('--dynamic-bg-position', position);
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log(`✅ Fondo aplicado: ${position}, escala: ${scale}`);
+                } else {
+                    console.log('📝 Usando fondo predeterminado para perfil-artista.html');
+                }
+            } catch (error) {
+                console.error('❌ Error cargando fondo:', error);
+            }
+        }
     </script>
 </body>
 </html>

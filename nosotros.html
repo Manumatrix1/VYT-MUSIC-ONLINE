@@ -23,6 +23,15 @@
             color: var(--color-texto-principal);
             font-family: 'Montserrat', sans-serif;
         }
+
+        /* CSS para fondos dinámicos */
+        .dynamic-background {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), var(--dynamic-bg, var(--color-fondo));
+            background-size: var(--dynamic-bg-size, cover);
+            background-position: var(--dynamic-bg-position, center);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
         
         .gradient-text {
             background: linear-gradient(45deg, var(--color-primario), var(--color-secundario));
@@ -241,6 +250,44 @@
     </section>
     
     <script>
+        function loadDynamicBackground() {
+            console.log('🎨 [Nosotros] Cargando fondo dinámico...');
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'nosotros';
+                
+                console.log('📋 [Nosotros] Configuración disponible:', backgroundConfig);
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log('✅ [Nosotros] Aplicando fondo personalizado');
+                    
+                    // Aplicar CSS variables
+                    document.documentElement.style.setProperty('--dynamic-bg', `url('${backgroundConfig[currentPage].imageData}')`);
+                    
+                    if (backgroundConfig[currentPage].position) {
+                        document.documentElement.style.setProperty('--dynamic-bg-position', backgroundConfig[currentPage].position);
+                    }
+                    
+                    if (backgroundConfig[currentPage].scale) {
+                        const scaleValue = parseFloat(backgroundConfig[currentPage].scale);
+                        document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
+                    }
+                    
+                    // Agregar clase de fondo dinámico
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log('🎯 [Nosotros] Fondo dinámico aplicado exitosamente');
+                } else {
+                    console.log('ℹ️ [Nosotros] Sin configuración personalizada, usando fondo predeterminado');
+                }
+            } catch (error) {
+                console.error('❌ [Nosotros] Error al cargar fondo dinámico:', error);
+            }
+        }
+
+        // Cargar fondo dinámico al inicio
+        document.addEventListener('DOMContentLoaded', loadDynamicBackground);
+
         // Floating coins animation
         function createCoin() {
             const coin = document.createElement('div');

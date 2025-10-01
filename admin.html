@@ -35,6 +35,15 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: #f8fafc;
         }
+
+        /* CSS para fondos dinámicos */
+        .dynamic-background {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), var(--dynamic-bg, #f8fafc);
+            background-size: var(--dynamic-bg-size, cover);
+            background-position: var(--dynamic-bg-position, center);
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+        }
         
         /* Estilos para el editor de posición de imágenes */
         .image-position-editor {
@@ -894,7 +903,7 @@
                                         <p class="text-sm">Sin imagen</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-index" accept="image/*" class="hidden">
+                                <input type="file" id="upload-index" accept="image/*" class="hidden" onchange="handleIndexImageUpload(this)">
                                 <button onclick="document.getElementById('upload-index').click()" 
                                         class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -916,7 +925,7 @@
                                         <p class="text-sm">Sin imagen</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-inscripcion" accept="image/*" class="hidden">
+                                <input type="file" id="upload-inscripcion" accept="image/*" class="hidden" onchange="handleInscripcionImageUpload(this)">
                                 <button onclick="document.getElementById('upload-inscripcion').click()" 
                                         class="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -938,7 +947,7 @@
                                         <p class="text-sm">Sin imagen</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-perfil" accept="image/*" class="hidden">
+                                <input type="file" id="upload-perfil" accept="image/*" class="hidden" onchange="handlePerfilImageUpload(this)">
                                 <button onclick="document.getElementById('upload-perfil').click()" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -982,7 +991,7 @@
                                         <p class="text-sm">Sin imagen personalizada</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-fan" accept="image/*" class="hidden">
+                                <input type="file" id="upload-fan" accept="image/*" class="hidden" onchange="handleFanImageUpload(this)">
                                 <button onclick="document.getElementById('upload-fan').click()" 
                                         class="w-full bg-pink-500 hover:bg-pink-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -1004,7 +1013,7 @@
                                         <p class="text-sm">Sin imagen personalizada</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-admin" accept="image/*" class="hidden">
+                                <input type="file" id="upload-admin" accept="image/*" class="hidden" onchange="handleAdminImageUpload(this)">
                                 <button onclick="document.getElementById('upload-admin').click()" 
                                         class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -1026,7 +1035,7 @@
                                         <p class="text-sm">Sin imagen personalizada</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-certamen" accept="image/*" class="hidden">
+                                <input type="file" id="upload-certamen" accept="image/*" class="hidden" onchange="handleCertamenImageUpload(this)">
                                 <button onclick="document.getElementById('upload-certamen').click()" 
                                         class="w-full bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -1048,7 +1057,7 @@
                                         <p class="text-sm">Sin imagen personalizada</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-certamen-individual" accept="image/*" class="hidden">
+                                <input type="file" id="upload-certamen-individual" accept="image/*" class="hidden" onchange="handleCertamenIndividualImageUpload(this)">
                                 <button onclick="document.getElementById('upload-certamen-individual').click()" 
                                         class="w-full bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
@@ -2998,6 +3007,89 @@
                 alert('Error: No hay imagen seleccionada');
             }
         }
+        
+        // Crear funciones genéricas para todas las secciones
+        function createImageUploadHandler(sectionId, fileName) {
+            return function(input) {
+                const file = input.files[0];
+                if (!file) return;
+                
+                console.log(`🖼️ Imagen seleccionada para ${sectionId}:`, file.name);
+                
+                // Validar tipo de archivo
+                if (!file.type.startsWith('image/')) {
+                    alert('Por favor selecciona un archivo de imagen válido');
+                    return;
+                }
+                
+                // Guardar en variables globales
+                currentImageData = file;
+                currentConfig = {
+                    file: fileName,
+                    preview: `preview-${sectionId.replace('upload-', '')}`
+                };
+                
+                // Crear vista previa inmediatamente
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    console.log(`📸 Vista previa creada para ${sectionId}`);
+                    
+                    // Actualizar preview si existe
+                    const previewImg = document.getElementById(currentConfig.preview);
+                    if (previewImg) {
+                        previewImg.src = e.target.result;
+                    }
+                    
+                    // Mostrar mensaje y botón
+                    showPositionButton(sectionId, e.target.result);
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+        
+        // Crear todas las funciones específicas
+        window.handleIndexImageUpload = createImageUploadHandler('upload-index', 'index.html');
+        window.handleInscripcionImageUpload = createImageUploadHandler('upload-inscripcion', 'inscripcion-certamen.html');
+        window.handlePerfilImageUpload = createImageUploadHandler('upload-perfil', 'perfil-artista.html');
+        window.handleFanImageUpload = createImageUploadHandler('upload-fan', 'fan-mode.html');
+        window.handleAdminImageUpload = createImageUploadHandler('upload-admin', 'admin.html');
+        window.handleCertamenImageUpload = createImageUploadHandler('upload-certamen', 'certamenes.html');
+        window.handleCertamenIndividualImageUpload = createImageUploadHandler('upload-certamen-individual', 'certamen-individual.html');
+        
+        function showPositionButton(sectionId, imageData) {
+            // Buscar donde mostrar el botón
+            const container = document.getElementById(sectionId).parentNode;
+            
+            // Limpiar botones anteriores
+            const existingButton = container.querySelector('.position-button');
+            if (existingButton) existingButton.remove();
+            
+            // Crear botón de posicionamiento
+            const buttonDiv = document.createElement('div');
+            buttonDiv.className = 'position-button mt-4 text-center';
+            buttonDiv.innerHTML = `
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-3">
+                    ✅ ¡Imagen cargada para ${currentConfig.file}! Ahora puedes posicionarla.
+                </div>
+                <button onclick="openGenericPositionEditor()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
+                    <i class="fas fa-crop mr-2"></i>Posicionar Imagen
+                </button>
+            `;
+            
+            container.appendChild(buttonDiv);
+        }
+        
+        function openGenericPositionEditor() {
+            if (currentImageData) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    showImagePositionEditor(currentImageData.name, e.target.result);
+                };
+                reader.readAsDataURL(currentImageData);
+            } else {
+                alert('Error: No hay imagen seleccionada');
+            }
+        }
 
         function showPositionButton() {
             // Buscar el área donde mostrar el botón
@@ -3436,8 +3528,44 @@
             });
         }
 
-        // Cargar videos pendientes al inicializar
+        function loadDynamicBackground() {
+            console.log('🎨 [Admin] Cargando fondo dinámico...');
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'admin';
+                
+                console.log('📋 [Admin] Configuración disponible:', backgroundConfig);
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log('✅ [Admin] Aplicando fondo personalizado');
+                    
+                    // Aplicar CSS variables
+                    document.documentElement.style.setProperty('--dynamic-bg', `url('${backgroundConfig[currentPage].imageData}')`);
+                    
+                    if (backgroundConfig[currentPage].position) {
+                        document.documentElement.style.setProperty('--dynamic-bg-position', backgroundConfig[currentPage].position);
+                    }
+                    
+                    if (backgroundConfig[currentPage].scale) {
+                        const scaleValue = parseFloat(backgroundConfig[currentPage].scale);
+                        document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
+                    }
+                    
+                    // Agregar clase de fondo dinámico
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log('🎯 [Admin] Fondo dinámico aplicado exitosamente');
+                } else {
+                    console.log('ℹ️ [Admin] Sin configuración personalizada, usando fondo predeterminado');
+                }
+            } catch (error) {
+                console.error('❌ [Admin] Error al cargar fondo dinámico:', error);
+            }
+        }
+
+        // Cargar videos pendientes al inicializar y fondo dinámico
         document.addEventListener('DOMContentLoaded', function() {
+            loadDynamicBackground();
             setTimeout(() => {
                 if (typeof cargarVideosPendientes === 'function') {
                     cargarVideosPendientes();
