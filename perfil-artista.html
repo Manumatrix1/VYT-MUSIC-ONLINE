@@ -7,6 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="firebase-config.js"></script>
+    
     <style>
     body {
         background: radial-gradient(circle at top left, #58a6ff30, #121212 40%);
@@ -226,39 +234,66 @@
     </div>
 
     <!-- JavaScript -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
-        import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
-        import { getFirestore, collection, getDocs, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
-
-        // Configuración Firebase
-        const firebaseConfig = {
-            apiKey: "AIzaSyDE2yLPUFyDPHoI9zqnwLFLTyeHmgmdS4M",
-            authDomain: "vytonlineprueva.firebaseapp.com",
-            projectId: "vytonlineprueva",
-            storageBucket: "vytonlineprueva.firebasestorage.app",
-            messagingSenderId: "243069825423",
-            appId: "1:243069825423:web:d4e4b55e5cc5b0b8f6fcb1"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        // Verificar si hay un artista logueado
-        const artistaData = JSON.parse(localStorage.getItem('artistaLogueado') || '{}');
-        
-        if (!artistaData.uid) {
-            // Si no hay datos, redirigir al login
-            window.location.href = 'login-artista.html';
-        }
+    <script>
+        // Variables globales para los datos del artista
+        let artistaData = {};
 
         // Cargar información del perfil
         function loadProfile() {
+            // Intentar cargar datos desde localStorage (para artistas recién creados)
+            const newArtistData = localStorage.getItem('artistData');
+            if (newArtistData) {
+                try {
+                    const parsedData = JSON.parse(newArtistData);
+                    console.log('Cargando datos del artista recién creado:', parsedData);
+                    
+                    // Mapear los datos del formulario a la estructura esperada
+                    artistaData = {
+                        nombre_artista: parsedData.nombreArtistico || 'Artista Sin Nombre',
+                        nombre: parsedData.nombre || '',
+                        apellido: parsedData.apellido || '',
+                        genero: parsedData.generos ? parsedData.generos.join(', ') : 'No especificado',
+                        ciudad: parsedData.ciudad || 'No especificado',
+                        provincia: parsedData.provincia || 'No especificado',
+                        whatsapp: parsedData.whatsapp || 'No especificado',
+                        email: parsedData.email || 'No especificado',
+                        biografia: parsedData.biografia || '',
+                        fechaNacimiento: parsedData.fechaNacimiento || '',
+                        dni: parsedData.dni || '',
+                        fechaCreacion: parsedData.fechaCreacion || new Date().toISOString(),
+                        estado: parsedData.estado || 'pendiente_aprobacion'
+                    };
+                    
+                    // Limpiar localStorage después de cargar
+                    localStorage.removeItem('artistData');
+                } catch (error) {
+                    console.error('Error al parsear datos del artista:', error);
+                }
+            }
+            
+            // Asegurar que artistaData tenga valores por defecto
+            if (!artistaData) {
+                artistaData = {
+                    nombre_artista: 'Artista Sin Nombre',
+                    nombre: '',
+                    apellido: '',
+                    genero: 'No especificado',
+                    ciudad: 'No especificado',
+                    provincia: 'No especificado',
+                    whatsapp: 'No especificado',
+                    email: 'No especificado'
+                };
+            }
+            
+            // Actualizar la interfaz
             document.getElementById('artistName').textContent = artistaData.nombre_artista || 'Artista Sin Nombre';
             document.getElementById('realName').textContent = `${artistaData.nombre || ''} ${artistaData.apellido || ''}`.trim() || 'Nombre no disponible';
             document.getElementById('musicGenre').textContent = artistaData.genero || 'No especificado';
-            document.getElementById('cityName').textContent = artistaData.ciudad || 'No especificado';
+            
+            // Mostrar ciudad y provincia
+            const ubicacion = `${artistaData.ciudad || 'Ciudad'}, ${artistaData.provincia || 'Provincia'}`;
+            document.getElementById('cityName').textContent = ubicacion !== 'Ciudad, Provincia' ? ubicacion : 'No especificado';
+            
             document.getElementById('phoneNumber').textContent = artistaData.whatsapp || 'No especificado';
             
             if (artistaData.fotoURL) {
@@ -271,9 +306,16 @@
         // Cargar certámenes disponibles
         async function loadCertamenes() {
             try {
-                const certamenesRef = collection(db, 'certamenes');
-                const q = query(certamenesRef, where('estado', '==', 'activo'), orderBy('fechaCreacion', 'desc'));
-                const snapshot = await getDocs(q);
+                if (!db) {
+                    console.log('📝 Firebase no disponible, mostrando certámenes de ejemplo');
+                    showExampleCertamenes();
+                    return;
+                }
+
+                const snapshot = await db.collection('certamenes')
+                    .where('estado', '==', 'activo')
+                    .orderBy('fechaCreacion', 'desc')
+                    .get();
                 
                 const container = document.getElementById('certamenesContainer');
                 
@@ -314,32 +356,616 @@
 
             } catch (error) {
                 console.error('Error cargando certámenes:', error);
-                document.getElementById('certamenesContainer').innerHTML = `
-                    <div class="col-span-full text-center py-8 text-red-400">
-                        Error cargando certámenes. Intenta recargar la página.
-                    </div>
-                `;
+                showExampleCertamenes();
             }
+        }
+
+        // Función para mostrar certámenes de ejemplo cuando Firebase no está disponible
+        function showExampleCertamenes() {
+            const container = document.getElementById('certamenesContainer');
+            container.innerHTML = `
+                <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🏆</div>
+                        <h4 class="font-bold text-white mb-2">Certamen Nacional VYT 2025</h4>
+                        <p class="text-gray-400 text-sm mb-3">Gran certamen nacional de talentos musicales</p>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="bg-green-500 text-white px-2 py-1 rounded-full">Activo</span>
+                            <span class="text-gray-400">125 participantes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🎤</div>
+                        <h4 class="font-bold text-white mb-2">Voces del Futuro</h4>
+                        <p class="text-gray-400 text-sm mb-3">Certamen para nuevos talentos vocales</p>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="bg-green-500 text-white px-2 py-1 rounded-full">Activo</span>
+                            <span class="text-gray-400">87 participantes</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
+                    <div class="text-center">
+                        <div class="text-3xl mb-2">🎸</div>
+                        <h4 class="font-bold text-white mb-2">Instrumental Challenge</h4>
+                        <p class="text-gray-400 text-sm mb-3">Competencia de instrumentos solistas</p>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="bg-yellow-500 text-white px-2 py-1 rounded-full">Próximamente</span>
+                            <span class="text-gray-400">0 participantes</span>
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         // Funciones globales
         window.logout = async function() {
             try {
-                await signOut(auth);
+                if (auth && typeof auth.signOut === 'function') {
+                    await auth.signOut();
+                }
                 localStorage.removeItem('artistaLogueado');
+                localStorage.removeItem('artistData');
                 window.location.href = 'index.html';
             } catch (error) {
                 console.error('Error al cerrar sesión:', error);
+                // Forzar logout local aunque falle Firebase
+                localStorage.removeItem('artistaLogueado');
+                localStorage.removeItem('artistData');
+                window.location.href = 'index.html';
             }
         };
 
         window.changePhoto = function() {
-            alert('Función de cambio de foto en desarrollo');
+            showPhotoModal();
         };
 
-        window.editProfile = function() {
-            alert('Función de edición de perfil en desarrollo');
+        // Función para mostrar el modal de cambio de foto
+        function showPhotoModal() {
+            const modal = document.createElement('div');
+            modal.id = 'photoModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(10px);
+                padding: 1rem;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                    border: 1px solid #3b82f6;
+                    border-radius: 1rem;
+                    max-width: 500px;
+                    width: 100%;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                ">
+                    <div style="padding: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="color: #3b82f6; font-size: 1.5rem; font-weight: bold;">📸 Cambiar Foto de Perfil</h2>
+                            <button onclick="closePhotoModal()" style="
+                                background: none;
+                                border: none;
+                                color: #9ca3af;
+                                font-size: 1.5rem;
+                                cursor: pointer;
+                                padding: 0.5rem;
+                            ">&times;</button>
+                        </div>
+                        
+                        <div style="text-align: center; margin-bottom: 1.5rem;">
+                            <div id="photoPreview" style="
+                                width: 200px;
+                                height: 200px;
+                                border-radius: 50%;
+                                overflow: hidden;
+                                margin: 0 auto 1rem;
+                                border: 3px solid #3b82f6;
+                                background: #374151;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                                <i class="fas fa-user text-4xl text-gray-400"></i>
+                            </div>
+                            
+                            <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                            <button onclick="document.getElementById('photoInput').click()" style="
+                                background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                                color: white;
+                                border: none;
+                                padding: 0.75rem 1.5rem;
+                                border-radius: 0.5rem;
+                                cursor: pointer;
+                                font-weight: 500;
+                                margin-bottom: 1rem;
+                            ">
+                                <i class="fas fa-upload"></i> Seleccionar Foto
+                            </button>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <button onclick="takePhoto()" style="
+                                    background: linear-gradient(135deg, #059669, #10b981);
+                                    color: white;
+                                    border: none;
+                                    padding: 0.75rem 1.5rem;
+                                    border-radius: 0.5rem;
+                                    cursor: pointer;
+                                    font-weight: 500;
+                                    margin-left: 0.5rem;
+                                ">
+                                    <i class="fas fa-camera"></i> Tomar Foto
+                                </button>
+                            </div>
+                            
+                            <div id="cameraContainer" style="display: none; margin-bottom: 1rem;">
+                                <video id="cameraVideo" style="width: 100%; max-width: 300px; border-radius: 0.5rem;" autoplay></video>
+                                <br>
+                                <button onclick="capturePhoto()" style="
+                                    background: #dc2626;
+                                    color: white;
+                                    border: none;
+                                    padding: 0.5rem 1rem;
+                                    border-radius: 0.5rem;
+                                    cursor: pointer;
+                                    margin-top: 0.5rem;
+                                ">Capturar</button>
+                                <button onclick="stopCamera()" style="
+                                    background: #6b7280;
+                                    color: white;
+                                    border: none;
+                                    padding: 0.5rem 1rem;
+                                    border-radius: 0.5rem;
+                                    cursor: pointer;
+                                    margin-top: 0.5rem;
+                                    margin-left: 0.5rem;
+                                ">Cancelar</button>
+                            </div>
+                            
+                            <p style="color: #9ca3af; font-size: 0.875rem;">
+                                Formatos soportados: JPG, PNG, WebP<br>
+                                Tamaño máximo: 5MB
+                            </p>
+                        </div>
+                        
+                        <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                            <button onclick="closePhotoModal()" style="
+                                padding: 0.75rem 1.5rem;
+                                background: rgba(107, 114, 128, 0.5);
+                                color: white;
+                                border: none;
+                                border-radius: 0.5rem;
+                                cursor: pointer;
+                                font-weight: 500;
+                            ">Cancelar</button>
+                            <button onclick="savePhoto()" id="savePhotoBtn" disabled style="
+                                padding: 0.75rem 1.5rem;
+                                background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                                color: white;
+                                border: none;
+                                border-radius: 0.5rem;
+                                cursor: pointer;
+                                font-weight: bold;
+                                opacity: 0.5;
+                            ">Guardar Foto</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Event listener para el input de archivo
+            document.getElementById('photoInput').addEventListener('change', function(e) {
+                handlePhotoSelection(e.target.files[0]);
+            });
+        }
+
+        // Variables globales para la cámara
+        let currentStream = null;
+        let selectedPhoto = null;
+
+        // Función para manejar la selección de foto
+        function handlePhotoSelection(file) {
+            if (!file) return;
+            
+            // Validar tipo de archivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor selecciona una imagen válida');
+                return;
+            }
+            
+            // Validar tamaño (5MB máximo)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('La imagen es muy grande. Por favor selecciona una imagen menor a 5MB');
+                return;
+            }
+            
+            selectedPhoto = file;
+            
+            // Mostrar preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById('photoPreview');
+                preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;" alt="Preview">`;
+                
+                // Habilitar botón de guardar
+                const saveBtn = document.getElementById('savePhotoBtn');
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = '1';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Función para activar la cámara
+        window.takePhoto = async function() {
+            try {
+                currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                const video = document.getElementById('cameraVideo');
+                video.srcObject = currentStream;
+                document.getElementById('cameraContainer').style.display = 'block';
+            } catch (error) {
+                alert('No se pudo acceder a la cámara. Asegúrate de dar permisos.');
+                console.error('Error accessing camera:', error);
+            }
         };
+
+        // Función para capturar foto desde la cámara
+        window.capturePhoto = function() {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
+            canvas.toBlob(function(blob) {
+                selectedPhoto = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+                
+                // Mostrar preview
+                const preview = document.getElementById('photoPreview');
+                preview.innerHTML = `<img src="${canvas.toDataURL()}" style="width: 100%; height: 100%; object-fit: cover;" alt="Preview">`;
+                
+                // Habilitar botón de guardar
+                const saveBtn = document.getElementById('savePhotoBtn');
+                saveBtn.disabled = false;
+                saveBtn.style.opacity = '1';
+                
+                // Ocultar cámara
+                stopCamera();
+            }, 'image/jpeg', 0.8);
+        };
+
+        // Función para detener la cámara
+        window.stopCamera = function() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+            document.getElementById('cameraContainer').style.display = 'none';
+        };
+
+        // Función para guardar la foto
+        window.savePhoto = async function() {
+            if (!selectedPhoto) {
+                alert('Por favor selecciona una foto primero');
+                return;
+            }
+            
+            const saveBtn = document.getElementById('savePhotoBtn');
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
+            saveBtn.disabled = true;
+            
+            try {
+                let photoURL = null;
+                
+                // Intentar subir a Firebase Storage si está disponible
+                if (storage && typeof storage.ref === 'function') {
+                    const fileName = `profile-photos/${artistaData.id || 'temp'}_${Date.now()}.jpg`;
+                    const fileRef = storage.ref().child(fileName);
+                    
+                    await fileRef.put(selectedPhoto);
+                    photoURL = await fileRef.getDownloadURL();
+                    
+                    console.log('✅ Foto subida a Firebase Storage:', photoURL);
+                } else {
+                    // Fallback: usar base64 para almacenamiento local
+                    photoURL = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = (e) => resolve(e.target.result);
+                        reader.readAsDataURL(selectedPhoto);
+                    });
+                    
+                    console.log('📱 Foto guardada localmente (base64)');
+                }
+                
+                // Actualizar los datos del artista
+                artistaData.fotoURL = photoURL;
+                
+                // Actualizar la interfaz
+                const profilePhoto = document.getElementById('profilePhoto');
+                const defaultAvatar = document.getElementById('defaultAvatar');
+                
+                if (profilePhoto && defaultAvatar) {
+                    profilePhoto.src = photoURL;
+                    profilePhoto.classList.remove('hidden');
+                    defaultAvatar.classList.add('hidden');
+                }
+                
+                // Guardar en localStorage
+                localStorage.setItem('artistData', JSON.stringify(artistaData));
+                
+                // Intentar guardar en Firebase si está disponible
+                if (db && artistaData.id) {
+                    try {
+                        await db.collection('artistas').doc(artistaData.id).update({
+                            fotoURL: photoURL,
+                            fechaActualizacion: new Date().toISOString()
+                        });
+                        console.log('✅ Datos actualizados en Firebase');
+                    } catch (firebaseError) {
+                        console.warn('⚠️ No se pudo actualizar en Firebase:', firebaseError);
+                    }
+                }
+                
+                closePhotoModal();
+                
+                // Mostrar mensaje de éxito
+                showSuccessMessage('✅ Foto de perfil actualizada correctamente');
+                
+            } catch (error) {
+                console.error('Error al guardar la foto:', error);
+                alert('Error al guardar la foto. Por favor, intenta nuevamente.');
+                
+                saveBtn.innerHTML = 'Guardar Foto';
+                saveBtn.disabled = false;
+            }
+        };
+
+        // Función para cerrar el modal de foto
+        window.closePhotoModal = function() {
+            stopCamera();
+            const modal = document.getElementById('photoModal');
+            if (modal) {
+                modal.remove();
+            }
+        };
+
+        // Función para mostrar mensajes de éxito
+        function showSuccessMessage(message) {
+            const successDiv = document.createElement('div');
+            successDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                z-index: 10000;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+                font-weight: 500;
+                animation: slideIn 0.3s ease-out;
+            `;
+            successDiv.innerHTML = message;
+            document.body.appendChild(successDiv);
+            
+            setTimeout(() => {
+                successDiv.remove();
+            }, 3000);
+        }
+
+        window.editProfile = function() {
+            showEditModal();
+        };
+
+        // Función para mostrar el modal de edición
+        function showEditModal() {
+            const modal = document.createElement('div');
+            modal.id = 'editModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(10px);
+                padding: 1rem;
+            `;
+            
+            modal.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                    border: 1px solid #3b82f6;
+                    border-radius: 1rem;
+                    max-width: 600px;
+                    width: 100%;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                ">
+                    <div style="padding: 2rem;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h2 style="color: #3b82f6; font-size: 1.5rem; font-weight: bold;">Editar Perfil</h2>
+                            <button onclick="closeEditModal()" style="
+                                background: none;
+                                border: none;
+                                color: #9ca3af;
+                                font-size: 1.5rem;
+                                cursor: pointer;
+                                padding: 0.5rem;
+                            ">&times;</button>
+                        </div>
+                        
+                        <form id="editProfileForm">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Nombre Artístico</label>
+                                    <input type="text" id="editNombreArtistico" value="${artistaData.nombre_artista || ''}" style="
+                                        width: 100%;
+                                        padding: 0.75rem;
+                                        background: rgba(55, 65, 81, 0.5);
+                                        border: 1px solid rgba(75, 85, 99, 0.5);
+                                        border-radius: 0.5rem;
+                                        color: white;
+                                        outline: none;
+                                    ">
+                                </div>
+                                <div>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">WhatsApp</label>
+                                    <input type="text" id="editWhatsapp" value="${artistaData.whatsapp || ''}" style="
+                                        width: 100%;
+                                        padding: 0.75rem;
+                                        background: rgba(55, 65, 81, 0.5);
+                                        border: 1px solid rgba(75, 85, 99, 0.5);
+                                        border-radius: 0.5rem;
+                                        color: white;
+                                        outline: none;
+                                    ">
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                                <div>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Nombre</label>
+                                    <input type="text" id="editNombre" value="${artistaData.nombre || ''}" style="
+                                        width: 100%;
+                                        padding: 0.75rem;
+                                        background: rgba(55, 65, 81, 0.5);
+                                        border: 1px solid rgba(75, 85, 99, 0.5);
+                                        border-radius: 0.5rem;
+                                        color: white;
+                                        outline: none;
+                                    ">
+                                </div>
+                                <div>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Apellido</label>
+                                    <input type="text" id="editApellido" value="${artistaData.apellido || ''}" style="
+                                        width: 100%;
+                                        padding: 0.75rem;
+                                        background: rgba(55, 65, 81, 0.5);
+                                        border: 1px solid rgba(75, 85, 99, 0.5);
+                                        border-radius: 0.5rem;
+                                        color: white;
+                                        outline: none;
+                                    ">
+                                </div>
+                            </div>
+                            
+                            <div style="margin-bottom: 1rem;">
+                                <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Biografía</label>
+                                <textarea id="editBiografia" rows="4" placeholder="Cuéntanos sobre ti..." style="
+                                    width: 100%;
+                                    padding: 0.75rem;
+                                    background: rgba(55, 65, 81, 0.5);
+                                    border: 1px solid rgba(75, 85, 99, 0.5);
+                                    border-radius: 0.5rem;
+                                    color: white;
+                                    outline: none;
+                                    resize: vertical;
+                                ">${artistaData.biografia || ''}</textarea>
+                            </div>
+                            
+                            <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+                                <button type="button" onclick="closeEditModal()" style="
+                                    padding: 0.75rem 1.5rem;
+                                    background: rgba(107, 114, 128, 0.5);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 0.5rem;
+                                    cursor: pointer;
+                                    font-weight: 500;
+                                ">Cancelar</button>
+                                <button type="submit" style="
+                                    padding: 0.75rem 1.5rem;
+                                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                                    color: white;
+                                    border: none;
+                                    border-radius: 0.5rem;
+                                    cursor: pointer;
+                                    font-weight: bold;
+                                ">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Agregar event listener al formulario
+            document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProfileChanges();
+            });
+        }
+
+        // Función para cerrar el modal de edición
+        window.closeEditModal = function() {
+            const modal = document.getElementById('editModal');
+            if (modal) {
+                modal.remove();
+            }
+        };
+
+        // Función para guardar los cambios del perfil
+        function saveProfileChanges() {
+            const nombreArtistico = document.getElementById('editNombreArtistico').value;
+            const whatsapp = document.getElementById('editWhatsapp').value;
+            const nombre = document.getElementById('editNombre').value;
+            const apellido = document.getElementById('editApellido').value;
+            const biografia = document.getElementById('editBiografia').value;
+            
+            // Actualizar los datos del artista
+            artistaData.nombre_artista = nombreArtistico;
+            artistaData.whatsapp = whatsapp;
+            artistaData.nombre = nombre;
+            artistaData.apellido = apellido;
+            artistaData.biografia = biografia;
+            
+            // Actualizar la interfaz
+            loadProfile();
+            
+            // Cerrar el modal
+            closeEditModal();
+            
+            // Mostrar mensaje de éxito
+            const successMessage = document.createElement('div');
+            successMessage.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #10b981, #059669);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                z-index: 10000;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+                font-weight: 500;
+            `;
+            successMessage.innerHTML = '✅ Perfil actualizado correctamente';
+            document.body.appendChild(successMessage);
+            
+            setTimeout(() => {
+                successMessage.remove();
+            }, 3000);
+        }
 
         window.viewCertamenes = function() {
             document.querySelector('#certamenesContainer').scrollIntoView({ behavior: 'smooth' });

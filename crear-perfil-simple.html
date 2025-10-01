@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Crear Perfil de Artista (Simplificado)</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .form-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem auto;
+            max-width: 800px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 12px center;
+            background-repeat: no-repeat;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white;
+            font-weight: bold;
+            padding: 14px 28px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center p-4">
+        <div class="form-card w-full">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-bold mb-4">🎤 Crear Perfil de Artista</h1>
+                <p class="text-blue-100 text-lg">
+                    Únete a la comunidad de talentos musicales de VYT Music
+                </p>
+            </div>
+
+            <form id="artist-profile-form" class="space-y-6">
+                <!-- Datos Básicos -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white font-medium mb-2">Nombre *</label>
+                        <input type="text" name="nombre" class="form-input" placeholder="Tu nombre" required>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2">Apellido *</label>
+                        <input type="text" name="apellido" class="form-input" placeholder="Tu apellido" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white font-medium mb-2">Email *</label>
+                        <input type="email" name="email" class="form-input" placeholder="tu@email.com" required>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2">WhatsApp *</label>
+                        <input type="text" name="whatsapp" class="form-input" placeholder="+54 9 11 1234-5678" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-white font-medium mb-2">Fecha de Nacimiento *</label>
+                        <input type="date" name="fecha_nacimiento" class="form-input" required>
+                    </div>
+                    <div>
+                        <label class="block text-white font-medium mb-2">DNI (Opcional)</label>
+                        <input type="text" name="dni" class="form-input" placeholder="12345678">
+                        <p class="text-gray-400 text-sm mt-1">Campo opcional - solo si te sientes cómodo compartiéndolo</p>
+                    </div>
+                </div>
+
+                <!-- Perfil Artístico -->
+                <div class="border-t border-gray-600 pt-6">
+                    <h3 class="text-xl font-bold mb-4 text-blue-300">🎵 Perfil Artístico</h3>
+                    
+                    <div class="mb-6">
+                        <label class="block text-white font-medium mb-2">Nombre Artístico *</label>
+                        <input type="text" name="nombre_artistico" class="form-input" placeholder="¿Cómo te conocerán tus fans?" required>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-white font-medium mb-2">Géneros Musicales *</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="generos[]" value="rock" class="text-blue-600">
+                                <span>Rock</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="generos[]" value="pop" class="text-blue-600">
+                                <span>Pop</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="generos[]" value="jazz" class="text-blue-600">
+                                <span>Jazz</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="generos[]" value="blues" class="text-blue-600">
+                                <span>Blues</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="generos[]" value="reggaeton" class="text-blue-600">
+                                <span>Reggaeton</span>
+                            </label>
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="checkbox" name="generos[]" value="folklorico" class="text-blue-600">
+                                <span>Folclórico</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-white font-medium mb-2">Biografía</label>
+                        <textarea name="biografia" rows="4" class="form-input" placeholder="Cuéntanos sobre ti, tu historia musical y tus sueños..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Ubicación -->
+                <div class="border-t border-gray-600 pt-6">
+                    <h3 class="text-xl font-bold mb-4 text-blue-300">📍 Ubicación</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-white font-medium mb-2">Provincia *</label>
+                            <select name="provincia" class="form-select" required onchange="loadCities(this.value)">
+                                <option value="">Selecciona tu provincia</option>
+                                <option value="buenos_aires">Buenos Aires</option>
+                                <option value="caba">Ciudad Autónoma de Buenos Aires</option>
+                                <option value="catamarca">Catamarca</option>
+                                <option value="chaco">Chaco</option>
+                                <option value="chubut">Chubut</option>
+                                <option value="cordoba">Córdoba</option>
+                                <option value="corrientes">Corrientes</option>
+                                <option value="entre_rios">Entre Ríos</option>
+                                <option value="formosa">Formosa</option>
+                                <option value="jujuy">Jujuy</option>
+                                <option value="la_pampa">La Pampa</option>
+                                <option value="la_rioja">La Rioja</option>
+                                <option value="mendoza">Mendoza</option>
+                                <option value="misiones">Misiones</option>
+                                <option value="neuquen">Neuquén</option>
+                                <option value="rio_negro">Río Negro</option>
+                                <option value="salta">Salta</option>
+                                <option value="san_juan">San Juan</option>
+                                <option value="san_luis">San Luis</option>
+                                <option value="santa_cruz">Santa Cruz</option>
+                                <option value="santa_fe">Santa Fe</option>
+                                <option value="santiago_del_estero">Santiago del Estero</option>
+                                <option value="tierra_del_fuego">Tierra del Fuego, Antártida e Islas del Atlántico Sur</option>
+                                <option value="tucuman">Tucumán</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-white font-medium mb-2">Ciudad *</label>
+                            <select name="ciudad" id="ciudadSelect" class="form-select" required>
+                                <option value="">Primero selecciona tu provincia</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-6">
+                        <label class="block text-white font-medium mb-2">Código Postal</label>
+                        <input type="text" name="codigo_postal" class="form-input" placeholder="1234">
+                    </div>
+                </div>
+
+                <div class="text-center pt-6">
+                    <button type="submit" class="btn-primary text-lg">
+                        <i class="fas fa-check mr-2"></i>
+                        Crear mi Perfil de Artista
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Sistema simplificado de provincias y ciudades
+        const provincesCities = {
+            "buenos_aires": ["La Plata", "Mar del Plata", "Bahía Blanca", "Tandil", "Quilmes", "Avellaneda", "Lanús", "San Isidro", "Vicente López", "Tigre"],
+            "caba": ["Puerto Madero", "San Nicolás", "Retiro", "San Telmo", "Montserrat", "Recoleta", "Palermo", "Belgrano", "Núñez", "Villa Urquiza"],
+            "cordoba": ["Córdoba", "Villa Carlos Paz", "Río Cuarto", "Villa María", "San Francisco", "Alta Gracia", "Cosquín"],
+            "santa_fe": ["Santa Fe", "Rosario", "Rafaela", "Reconquista", "Venado Tuerto", "Esperanza", "Santo Tomé"],
+            "mendoza": ["Mendoza", "San Rafael", "Godoy Cruz", "Guaymallén", "Maipú", "Las Heras", "Luján de Cuyo"],
+            "tucuman": ["San Miguel de Tucumán", "Yerba Buena", "Tafí Viejo", "Banda del Río Salí", "Las Talitas"],
+            "salta": ["Salta", "San Ramón de la Nueva Orán", "Tartagal", "Metán", "Güemes", "Cafayate"],
+            "misiones": ["Posadas", "Oberá", "Eldorado", "Puerto Iguazú", "Apóstoles", "Leandro N. Alem"],
+            "neuquen": ["Neuquén", "Cipolletti", "San Martín de los Andes", "Villa La Angostura", "Cutral Có"],
+            "chaco": ["Resistencia", "Barranqueras", "Fontana", "Puerto Vilelas", "Sáenz Peña"],
+            "corrientes": ["Corrientes", "Goya", "Paso de los Libres", "Mercedes", "Curuzú Cuatiá"],
+            "entre_rios": ["Paraná", "Concordia", "Gualeguaychú", "Concepción del Uruguay", "Villaguay"],
+            "jujuy": ["San Salvador de Jujuy", "Palpalá", "San Pedro", "Libertador General San Martín"],
+            "la_pampa": ["Santa Rosa", "General Pico", "Toay", "Realicó", "Intendente Alvear"],
+            "la_rioja": ["La Rioja", "Chilecito", "Aimogasta", "Chamical", "Chepes"],
+            "san_juan": ["San Juan", "Chimbas", "Rawson", "Rivadavia", "Santa Lucía"],
+            "san_luis": ["San Luis", "Villa Mercedes", "Merlo", "Justo Daract", "La Toma"],
+            "santa_cruz": ["Río Gallegos", "Caleta Olivia", "Pico Truncado", "Puerto Deseado"],
+            "santiago_del_estero": ["Santiago del Estero", "La Banda", "Termas de Río Hondo", "Añatuya"],
+            "tierra_del_fuego": ["Ushuaia", "Río Grande", "Tolhuin"],
+            "catamarca": ["San Fernando del Valle de Catamarca", "Andalgalá", "Tinogasta", "Belén"],
+            "chubut": ["Rawson", "Puerto Madryn", "Comodoro Rivadavia", "Trelew", "Esquel"],
+            "formosa": ["Formosa", "Clorinda", "Pirané", "El Colorado"],
+            "rio_negro": ["Viedma", "San Carlos de Bariloche", "General Roca", "Cipolletti"]
+        };
+
+        function loadCities(provincia) {
+            const citySelect = document.getElementById('ciudadSelect');
+            citySelect.innerHTML = '<option value="">Selecciona tu ciudad</option>';
+            
+            if (provincesCities[provincia]) {
+                provincesCities[provincia].forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city.toLowerCase().replace(/\s+/g, '_').replace(/[^\w]/g, '');
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+            }
+        }
+
+        // Función para mostrar mensaje de bienvenida y redirigir
+        function showWelcomeAndRedirect(artistData) {
+            const welcomeOverlay = document.createElement('div');
+            welcomeOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(10px);
+            `;
+            
+            welcomeOverlay.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                    border: 2px solid #3b82f6;
+                    border-radius: 1rem;
+                    padding: 3rem;
+                    text-align: center;
+                    max-width: 500px;
+                    margin: 2rem;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🎤</div>
+                    <h2 style="
+                        color: #3b82f6;
+                        font-size: 2rem;
+                        font-weight: bold;
+                        margin-bottom: 1rem;
+                        font-family: 'Montserrat', sans-serif;
+                    ">¡Bienvenido querido artista!</h2>
+                    <p style="
+                        color: white;
+                        font-size: 1.2rem;
+                        margin-bottom: 1.5rem;
+                        line-height: 1.6;
+                    ">Este es tu panel de artista donde podrás gestionar tu perfil, 
+                    actualizar tu información y seguir el progreso de tus inscripciones.</p>
+                    <p style="
+                        color: #3b82f6;
+                        font-size: 1rem;
+                        margin-bottom: 2rem;
+                    ">Te llevamos a tu perfil en 3 segundos...</p>
+                    <div style="
+                        width: 100%;
+                        height: 4px;
+                        background: rgba(59, 130, 246, 0.3);
+                        border-radius: 2px;
+                        overflow: hidden;
+                    ">
+                        <div id="progress-bar" style="
+                            width: 0%;
+                            height: 100%;
+                            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+                            border-radius: 2px;
+                            transition: width 3s linear;
+                        "></div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(welcomeOverlay);
+            
+            setTimeout(() => {
+                document.getElementById('progress-bar').style.width = '100%';
+            }, 100);
+            
+            localStorage.setItem('artistData', JSON.stringify(artistData));
+            
+            setTimeout(() => {
+                window.location.href = 'perfil-artista.html';
+            }, 3000);
+        }
+
+        // Manejo del formulario
+        document.getElementById('artist-profile-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validar géneros seleccionados
+            const selectedGenres = document.querySelectorAll('input[name="generos[]"]:checked');
+            if (selectedGenres.length === 0) {
+                alert('Por favor, selecciona al menos un género musical.');
+                return;
+            }
+            
+            // Recopilar datos del formulario
+            const formData = new FormData(this);
+            const artistData = {};
+            
+            // Datos básicos
+            artistData.email = formData.get('email');
+            artistData.whatsapp = formData.get('whatsapp');
+            artistData.nombre = formData.get('nombre');
+            artistData.apellido = formData.get('apellido');
+            artistData.fechaNacimiento = formData.get('fecha_nacimiento');
+            artistData.dni = formData.get('dni');
+            
+            // Perfil artístico
+            artistData.nombreArtistico = formData.get('nombre_artistico');
+            artistData.generos = Array.from(selectedGenres).map(cb => cb.value);
+            artistData.biografia = formData.get('biografia');
+            
+            // Ubicación
+            artistData.provincia = formData.get('provincia');
+            artistData.ciudad = formData.get('ciudad');
+            artistData.codigoPostal = formData.get('codigo_postal');
+            
+            // Datos adicionales
+            artistData.fechaCreacion = new Date().toISOString();
+            artistData.estado = 'activo';
+            artistData.id = 'artist_' + Date.now();
+            
+            console.log('Datos del artista:', artistData);
+            
+            // Intentar guardar en Firebase
+            saveToFirebase(artistData).then(() => {
+                // Mostrar mensaje de bienvenida y redirigir
+                showWelcomeAndRedirect(artistData);
+            }).catch((error) => {
+                console.warn('No se pudo guardar en Firebase, continuando localmente:', error);
+                // Mostrar mensaje de bienvenida y redirigir de todas formas
+                showWelcomeAndRedirect(artistData);
+            });
+        });
+
+        // Función para guardar en Firebase
+        async function saveToFirebase(artistData) {
+            if (!db) {
+                throw new Error('Firebase no está disponible');
+            }
+            
+            try {
+                // Guardar en la colección 'artistas'
+                const docRef = await db.collection('artistas').add(artistData);
+                console.log('✅ Perfil guardado en Firebase con ID:', docRef.id);
+                
+                // Actualizar el ID con el ID real de Firebase
+                artistData.id = docRef.id;
+                
+                return docRef.id;
+            } catch (error) {
+                console.error('Error al guardar en Firebase:', error);
+                throw error;
+            }
+        }
+        });
+
+        console.log('🎤 VYT MUSIC - Formulario simplificado iniciado');
+    </script>
+</body>
+</html>

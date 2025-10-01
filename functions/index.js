@@ -376,3 +376,52 @@ try {
 }
 
 console.log('🚀 VYT Music Online - Core functions ready');
+
+// ===== EMAIL TRIGGERS AUTOMÁTICOS (SOLO LOS BÁSICOS) =====
+try {
+  // Solo cargar el trigger más importante para evitar timeouts
+  const { onDocumentCreated } = require('firebase-functions/v2/firestore');
+  const nodemailer = require('nodemailer');
+  
+  // Email de bienvenida al crear perfil de artista (función inline para evitar imports complejos)
+  exports.emailPerfilArtistaCreado = onDocumentCreated(
+    "artist_profiles/{profileId}",
+    async (event) => {
+      try {
+        const data = event.data.data();
+        console.log('📧 Enviando email de bienvenida a artista:', data.nombreArtistico);
+        
+        const transporter = nodemailer.createTransporter({
+          service: "gmail",
+          auth: {
+            user: "luciano21martinez@gmail.com",
+            pass: "wwhm qqei uxxz ciwl",
+          },
+        });
+        
+        await transporter.sendMail({
+          from: "VYT Music <luciano21martinez@gmail.com>",
+          to: data.email || data.user_email,
+          subject: "🎉 ¡Bienvenido/a a VYT Music! Tu perfil de artista ha sido creado",
+          html: `
+            <h1>🎉 ¡Bienvenido/a a VYT Music!</h1>
+            <p>Hola <strong>${data.nombreArtistico}</strong>,</p>
+            <p>¡Tu perfil de artista ha sido creado exitosamente! 🎤✨</p>
+            <p><a href="https://vytonlineprueva.web.app/perfil-artista.html">Ver mi Perfil</a></p>
+            <p>El equipo de VYT Music</p>
+          `
+        });
+        
+        console.log('✅ Email de bienvenida enviado');
+        return { success: true };
+      } catch (error) {
+        console.error('❌ Error enviando email:', error);
+        return null;
+      }
+    }
+  );
+  
+  console.log('✅ Basic email trigger loaded');
+} catch (error) {
+  console.error('⚠️ Error loading email trigger:', error.message);
+}

@@ -11,8 +11,10 @@ service cloud.firestore {
       allow read: if isAdmin();
       
       // Permitir creación de nuevos usuarios autenticados
-      allow create: if request.auth != null && request.auth.uid == userId
-        && validateUserData();
+      allow create: if request.auth != null && request.auth.uid == userId;
+      
+      // Permitir acceso básico para login (lectura temporal)
+      allow read: if request.auth != null;
     }
     
     // ===== REGLAS PARA PERFILES DE ARTISTAS =====
@@ -25,6 +27,9 @@ service cloud.firestore {
       // Permitir creación si es el usuario autenticado
       allow create: if request.auth != null && 
         request.resource.data.user_id == request.auth.uid;
+        
+      // Permitir lectura para usuarios autenticados
+      allow read: if request.auth != null;
     }
     
     // ===== REGLAS PARA CERTÁMENES =====

@@ -35,6 +35,116 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: #f8fafc;
         }
+        
+        /* Estilos para el editor de posición de imágenes */
+        .image-position-editor {
+            backdrop-filter: blur(5px);
+        }
+        
+        .position-preview {
+            border: 2px dashed #e5e7eb;
+            transition: all 0.3s ease;
+            cursor: move;
+            user-select: none;
+        }
+        
+        .position-preview:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+        }
+        
+        .position-preview.dragging {
+            border-color: #10b981;
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+        }
+        
+        .position-preset {
+            width: 60px;
+            height: 40px;
+            border: 2px solid #d1d5db;
+            border-radius: 6px;
+            background: #f9fafb;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .position-preset:hover {
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+        
+        .position-preset.active {
+            border-color: #10b981;
+            background: #ecfdf5;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        
+        .position-preset::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #6b7280;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .position-preset.active::after {
+            background: #10b981;
+            box-shadow: 0 0 0 2px #ffffff;
+        }
+        
+        /* Posiciones específicas para los puntos */
+        .position-preset[data-position="top left"]::after { top: 4px; left: 4px; }
+        .position-preset[data-position="top center"]::after { top: 4px; left: 50%; transform: translateX(-50%); }
+        .position-preset[data-position="top right"]::after { top: 4px; right: 4px; }
+        .position-preset[data-position="center left"]::after { top: 50%; left: 4px; transform: translateY(-50%); }
+        .position-preset[data-position="center center"]::after { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .position-preset[data-position="center right"]::after { top: 50%; right: 4px; transform: translateY(-50%); }
+        .position-preset[data-position="bottom left"]::after { bottom: 4px; left: 4px; }
+        .position-preset[data-position="bottom center"]::after { bottom: 4px; left: 50%; transform: translateX(-50%); }
+        .position-preset[data-position="bottom right"]::after { bottom: 4px; right: 4px; }
+        
+        .zoom-slider {
+            appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e5e7eb;
+            outline: none;
+            transition: background 0.3s ease;
+        }
+        
+        .zoom-slider::-webkit-slider-thumb {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+            transition: all 0.2s ease;
+        }
+        
+        .zoom-slider::-webkit-slider-thumb:hover {
+            background: #2563eb;
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+        
+        .zoom-slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #3b82f6;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -134,6 +244,9 @@
                     </button>
                     <button onclick="showPage('fondos')" class="admin-nav-btn bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-images mr-1"></i>Fondos
+                    </button>
+                    <button onclick="window.open('demanda-geografica.html', '_blank')" class="admin-nav-btn bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-map-marked-alt mr-1"></i>Análisis Geográfico
                     </button>
                 </div>
             </div>
@@ -2437,51 +2550,317 @@
             });
         });
 
-        function showImageUpdateInstructions(fileName, newImageName) {
+        function showImagePositionEditor(fileName, imageData) {
+            console.log('🎨 Abriendo editor de posición para:', fileName);
+            console.log('📷 Datos de imagen:', imageData ? 'Disponibles' : 'No disponibles');
+            
             const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50';
+            modal.className = 'fixed inset-0 bg-gray-600 bg-opacity-75 flex items-center justify-center z-50 image-position-editor';
             modal.innerHTML = `
-                <div class="bg-white rounded-lg p-6 max-w-lg mx-4">
-                    <h3 class="text-lg font-semibold text-gray-900 mb-4">
-                        <i class="fas fa-info-circle text-blue-500 mr-2"></i>
-                        Cómo Aplicar la Nueva Imagen
-                    </h3>
-                    <p class="text-gray-600 mb-4">
-                        La imagen está lista para usar. Para aplicarla automáticamente:
-                    </p>
-                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                        <p class="text-blue-800 text-sm mb-2">
-                            <strong>Opción Recomendada:</strong> Guarda la imagen manualmente
+                <div class="bg-white rounded-lg max-w-4xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+                    <div class="p-6">
+                        <h3 class="text-2xl font-semibold text-gray-900 mb-4">
+                            <i class="fas fa-crop text-blue-500 mr-2"></i>
+                            Ajustar Posición del Fondo
+                        </h3>
+                        <p class="text-gray-600 mb-6">
+                            Ajusta la posición de tu imagen para que se vea perfecta como fondo. Mueve la imagen dentro del marco de preview.
                         </p>
-                        <ol class="text-sm text-blue-700 space-y-1">
-                            <li>1. Guarda la imagen en <code>images/fotos/</code></li>
-                            <li>2. Nómbrala como quieras (ej: <code>nuevo-fondo.jpg</code>)</li>
-                            <li>3. Actualiza la referencia en <code>${fileName}</code></li>
-                        </ol>
-                    </div>
-                    <div class="flex justify-end space-x-2">
-                        <button onclick="this.closest('.fixed').remove()" 
-                                class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                            Cerrar
-                        </button>
-                        <button onclick="applyBackgroundChange(event); this.closest('.fixed').remove();" 
-                                class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
-                            <i class="fas fa-save mr-1"></i>Guardar y Aplicar
-                        </button>
+                        
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <!-- Editor Visual -->
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900">🎨 Editor Visual</h4>
+                                <div class="relative border-2 border-gray-300 rounded-lg overflow-hidden position-preview" style="height: 300px; background: #f3f4f6;">
+                                    <img id="editor-image" src="${imageData}" 
+                                         class="absolute cursor-move transition-transform duration-200" 
+                                         style="width: auto; height: auto; min-width: 100%; min-height: 100%; transform: translate(0px, 0px) scale(1);"
+                                         draggable="false">
+                                    <div class="absolute inset-0 border-2 border-blue-500 bg-black bg-opacity-20 pointer-events-none"></div>
+                                    <div class="absolute top-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
+                                        Arrastra para mover
+                                    </div>
+                                </div>
+                                
+                                <!-- Controles de Posición -->
+                                <div class="grid grid-cols-3 gap-2">
+                                    <button onclick="setPosition('top-left')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ↖️ Superior Izq.
+                                    </button>
+                                    <button onclick="setPosition('top-center')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ⬆️ Superior Centro
+                                    </button>
+                                    <button onclick="setPosition('top-right')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ↗️ Superior Der.
+                                    </button>
+                                    <button onclick="setPosition('center-left')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ⬅️ Centro Izq.
+                                    </button>
+                                    <button onclick="setPosition('center')" class="p-2 bg-blue-100 hover:bg-blue-200 rounded text-xs font-semibold">
+                                        🎯 Centro
+                                    </button>
+                                    <button onclick="setPosition('center-right')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ➡️ Centro Der.
+                                    </button>
+                                    <button onclick="setPosition('bottom-left')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ↙️ Inferior Izq.
+                                    </button>
+                                    <button onclick="setPosition('bottom-center')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ⬇️ Inferior Centro
+                                    </button>
+                                    <button onclick="setPosition('bottom-right')" class="p-2 bg-gray-100 hover:bg-gray-200 rounded text-xs">
+                                        ↘️ Inferior Der.
+                                    </button>
+                                </div>
+                                
+                                <!-- Controles de Zoom -->
+                                <div class="space-y-2">
+                                    <label class="block text-sm font-medium text-gray-700">🔍 Zoom</label>
+                                    <input type="range" id="zoom-slider" min="1" max="3" step="0.1" value="1" 
+                                           class="w-full" onchange="updateZoom(this.value)">
+                                    <div class="flex justify-between text-xs text-gray-500">
+                                        <span>Normal</span>
+                                        <span id="zoom-value">100%</span>
+                                        <span>300%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Preview -->
+                            <div class="space-y-4">
+                                <h4 class="font-semibold text-gray-900">👁️ Vista Previa Final</h4>
+                                <div class="relative border-2 border-gray-300 rounded-lg overflow-hidden" style="height: 300px;">
+                                    <div id="preview-background" 
+                                         class="w-full h-full bg-cover bg-no-repeat"
+                                         style="background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('${imageData}'); background-position: center center;">
+                                        <div class="flex items-center justify-center h-full">
+                                            <div class="text-center text-white">
+                                                <h5 class="text-lg font-bold mb-2">Vista Previa</h5>
+                                                <p class="text-sm opacity-80">Así se verá en la página</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Información Técnica -->
+                                <div class="bg-gray-50 p-3 rounded-lg text-sm">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <div>
+                                            <span class="font-medium">Posición X:</span>
+                                            <span id="pos-x-display">0px</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium">Posición Y:</span>
+                                            <span id="pos-y-display">0px</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium">Escala:</span>
+                                            <span id="scale-display">100%</span>
+                                        </div>
+                                        <div>
+                                            <span class="font-medium">Posición CSS:</span>
+                                            <span id="css-position-display">center center</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Botones de Acción -->
+                        <div class="flex justify-between items-center mt-6 pt-4 border-t">
+                            <button onclick="resetPosition()" 
+                                    class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                                🔄 Restablecer
+                            </button>
+                            <div class="space-x-2">
+                                <button onclick="closePositionEditor()" 
+                                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                                    Cancelar
+                                </button>
+                                <button onclick="savePositionedBackground()" 
+                                        class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-bold">
+                                    <i class="fas fa-save mr-1"></i>Guardar y Aplicar
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
+            
             document.body.appendChild(modal);
+            
+            // Configurar el arrastre de imagen
+            setupImageDragging();
         }
 
-        function downloadImage(event) {
-            // Esta función permitiría descargar la imagen procesada
-            console.log('Descarga de imagen solicitada');
+        // Variables globales para el editor de posición
+        let currentImagePosition = { x: 0, y: 0, scale: 1 };
+        let isDragging = false;
+        let dragStart = { x: 0, y: 0 };
+        let currentBackgroundPosition = 'center center';
+
+        function setupImageDragging() {
+            const editorImage = document.getElementById('editor-image');
+            if (!editorImage) return;
+
+            editorImage.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                dragStart.x = e.clientX - currentImagePosition.x;
+                dragStart.y = e.clientY - currentImagePosition.y;
+                editorImage.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                currentImagePosition.x = e.clientX - dragStart.x;
+                currentImagePosition.y = e.clientY - dragStart.y;
+                
+                updateImageTransform();
+                updatePreview();
+                updateDisplayValues();
+            });
+
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    editorImage.style.cursor = 'move';
+                }
+            });
         }
 
-        // Nueva función para aplicar cambios automáticamente
-        let currentImageData = null;
-        let currentConfig = null;
+        function updateImageTransform() {
+            const editorImage = document.getElementById('editor-image');
+            if (editorImage) {
+                editorImage.style.transform = `translate(${currentImagePosition.x}px, ${currentImagePosition.y}px) scale(${currentImagePosition.scale})`;
+            }
+        }
+
+        function updatePreview() {
+            const preview = document.getElementById('preview-background');
+            if (preview) {
+                // Convertir posición a porcentajes para CSS background-position
+                const container = document.getElementById('editor-image').parentElement;
+                const containerRect = container.getBoundingClientRect();
+                
+                const xPercent = ((currentImagePosition.x + containerRect.width/2) / containerRect.width) * 100;
+                const yPercent = ((currentImagePosition.y + containerRect.height/2) / containerRect.height) * 100;
+                
+                currentBackgroundPosition = `${Math.max(0, Math.min(100, xPercent))}% ${Math.max(0, Math.min(100, yPercent))}%`;
+                
+                preview.style.backgroundPosition = currentBackgroundPosition;
+                preview.style.backgroundSize = currentImagePosition.scale > 1 ? `${currentImagePosition.scale * 100}%` : 'cover';
+            }
+        }
+
+        function updateDisplayValues() {
+            document.getElementById('pos-x-display').textContent = `${Math.round(currentImagePosition.x)}px`;
+            document.getElementById('pos-y-display').textContent = `${Math.round(currentImagePosition.y)}px`;
+            document.getElementById('scale-display').textContent = `${Math.round(currentImagePosition.scale * 100)}%`;
+            document.getElementById('css-position-display').textContent = currentBackgroundPosition;
+            document.getElementById('zoom-value').textContent = `${Math.round(currentImagePosition.scale * 100)}%`;
+        }
+
+        window.setPosition = function(position) {
+            const positions = {
+                'top-left': { x: -50, y: -50 },
+                'top-center': { x: 0, y: -50 },
+                'top-right': { x: 50, y: -50 },
+                'center-left': { x: -50, y: 0 },
+                'center': { x: 0, y: 0 },
+                'center-right': { x: 50, y: 0 },
+                'bottom-left': { x: -50, y: 50 },
+                'bottom-center': { x: 0, y: 50 },
+                'bottom-right': { x: 50, y: 50 }
+            };
+            
+            if (positions[position]) {
+                currentImagePosition.x = positions[position].x;
+                currentImagePosition.y = positions[position].y;
+                updateImageTransform();
+                updatePreview();
+                updateDisplayValues();
+            }
+        };
+
+        window.updateZoom = function(value) {
+            currentImagePosition.scale = parseFloat(value);
+            updateImageTransform();
+            updatePreview();
+            updateDisplayValues();
+        };
+
+        window.resetPosition = function() {
+            currentImagePosition = { x: 0, y: 0, scale: 1 };
+            document.getElementById('zoom-slider').value = 1;
+            updateImageTransform();
+            updatePreview();
+            updateDisplayValues();
+        };
+
+        window.closePositionEditor = function() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) modal.remove();
+        };
+
+        window.savePositionedBackground = async function() {
+            if (!currentImageData || !currentConfig) {
+                alert('No hay imagen para aplicar');
+                return;
+            }
+
+            try {
+                const timestamp = Date.now();
+                const extension = currentImageData.name.split('.').pop();
+                const newFileName = `bg-${currentConfig.file.replace('.html', '')}-${timestamp}.${extension}`;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = e.target.result;
+                    
+                    // Guardar configuración con posición en localStorage
+                    const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                    backgroundConfig[currentConfig.file] = {
+                        imageData: imageData,
+                        fileName: newFileName,
+                        position: currentBackgroundPosition,
+                        scale: currentImagePosition.scale,
+                        applied: new Date().toISOString()
+                    };
+                    localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
+                    
+                    // Aplicar inmediatamente si estamos en la página correspondiente
+                    applyPositionedBackgroundToCurrentPage(currentConfig.file, imageData, currentBackgroundPosition, currentImagePosition.scale);
+                    
+                    // Cerrar modal
+                    closePositionEditor();
+                    
+                    // Mostrar mensaje de éxito
+                    showSuccessMessage(`Fondo con posición personalizada aplicado correctamente a ${currentConfig.file}`);
+                };
+                reader.readAsDataURL(currentImageData);
+                
+            } catch (error) {
+                console.error('Error aplicando fondo:', error);
+                alert('Error al aplicar el fondo: ' + error.message);
+            }
+        };
+
+        function applyPositionedBackgroundToCurrentPage(targetFile, imageData, position, scale) {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            
+            if (currentPage === targetFile) {
+                const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
+                document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${imageData}')`;
+                document.body.style.backgroundSize = backgroundSize;
+                document.body.style.backgroundAttachment = 'fixed';
+                document.body.style.backgroundPosition = position;
+                document.body.style.backgroundRepeat = 'no-repeat';
+                
+                console.log('✅ Fondo con posición personalizada aplicado a la página actual');
+            }
+        }
 
         async function handleImageUpload(event, config) {
             const file = event.target.files[0];
@@ -2524,12 +2903,12 @@
                         statusDiv.innerHTML = `
                             <div class="flex items-center text-green-600">
                                 <i class="fas fa-check-circle mr-2"></i>
-                                <span>¡Vista previa lista! Haz clic en "Guardar y Aplicar" para confirmar.</span>
+                                <span>¡Vista previa lista! Usa el editor para ajustar la posición de la imagen.</span>
                             </div>
                         `;
                         
-                        // Mostrar instrucciones
-                        showImageUpdateInstructions(config.file, `new-bg-${Date.now()}.${file.name.split('.').pop()}`);
+                        // Mostrar editor de posición automáticamente
+                        showImagePositionEditor(file.name, e.target.result);
                     }, 1000);
                 };
                 reader.readAsDataURL(file);
@@ -2758,6 +3137,132 @@
         }
 
         window.rechazarVideo = rechazarVideo;
+
+        // Funciones globales para el editor de posición
+        
+        window.setPosition = function(position) {
+            const img = document.getElementById('editor-image');
+            if (!img) return;
+            
+            const container = img.parentElement;
+            const containerRect = container.getBoundingClientRect();
+            const imgRect = img.getBoundingClientRect();
+            
+            let x = 0, y = 0;
+            
+            switch(position) {
+                case 'top-left':
+                    x = 0; y = 0;
+                    break;
+                case 'top-center':
+                    x = (containerRect.width - imgRect.width) / 2;
+                    y = 0;
+                    break;
+                case 'top-right':
+                    x = containerRect.width - imgRect.width;
+                    y = 0;
+                    break;
+                case 'center-left':
+                    x = 0;
+                    y = (containerRect.height - imgRect.height) / 2;
+                    break;
+                case 'center':
+                    x = (containerRect.width - imgRect.width) / 2;
+                    y = (containerRect.height - imgRect.height) / 2;
+                    break;
+                case 'center-right':
+                    x = containerRect.width - imgRect.width;
+                    y = (containerRect.height - imgRect.height) / 2;
+                    break;
+                case 'bottom-left':
+                    x = 0;
+                    y = containerRect.height - imgRect.height;
+                    break;
+                case 'bottom-center':
+                    x = (containerRect.width - imgRect.width) / 2;
+                    y = containerRect.height - imgRect.height;
+                    break;
+                case 'bottom-right':
+                    x = containerRect.width - imgRect.width;
+                    y = containerRect.height - imgRect.height;
+                    break;
+            }
+            
+            currentImagePosition.x = x;
+            currentImagePosition.y = y;
+            
+            img.style.transform = `translate(${x}px, ${y}px) scale(${currentImagePosition.scale})`;
+            updateBackgroundPosition();
+        };
+        
+        window.updateZoom = function(value) {
+            currentImagePosition.scale = parseFloat(value);
+            const img = document.getElementById('editor-image');
+            const zoomValue = document.getElementById('zoom-value');
+            
+            if (img) {
+                img.style.transform = `translate(${currentImagePosition.x}px, ${currentImagePosition.y}px) scale(${currentImagePosition.scale})`;
+            }
+            
+            if (zoomValue) {
+                zoomValue.textContent = Math.round(currentImagePosition.scale * 100) + '%';
+            }
+            
+            updateBackgroundPosition();
+        };
+        
+        function updateBackgroundPosition() {
+            // Convertir posición del editor a CSS background-position
+            const container = document.getElementById('editor-image')?.parentElement;
+            if (!container) return;
+            
+            const containerRect = container.getBoundingClientRect();
+            const percentX = (currentImagePosition.x / containerRect.width) * 100;
+            const percentY = (currentImagePosition.y / containerRect.height) * 100;
+            
+            currentBackgroundPosition = `${percentX}% ${percentY}%`;
+        }
+        
+        window.closePositionEditor = function() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) modal.remove();
+        };
+        
+        window.resetPosition = function() {
+            currentImagePosition = { x: 0, y: 0, scale: 1 };
+            const img = document.getElementById('editor-image');
+            const zoomSlider = document.getElementById('zoom-slider');
+            const zoomValue = document.getElementById('zoom-value');
+            
+            if (img) {
+                img.style.transform = 'translate(0px, 0px) scale(1)';
+            }
+            
+            if (zoomSlider) {
+                zoomSlider.value = 1;
+            }
+            
+            if (zoomValue) {
+                zoomValue.textContent = '100%';
+            }
+            
+            currentBackgroundPosition = 'center center';
+        };
+        
+        function updateDisplays() {
+            // Actualizar displays de información si existen
+            const displays = {
+                'pos-x-display': currentImagePosition.x + 'px',
+                'pos-y-display': currentImagePosition.y + 'px', 
+                'scale-display': Math.round(currentImagePosition.scale * 100) + '%',
+                'css-position-display': currentBackgroundPosition
+            };
+            
+            Object.entries(displays).forEach(([id, value]) => {
+                const element = document.getElementById(id);
+                if (element) element.textContent = value;
+            });
+        }
 
         // Cargar videos pendientes al inicializar
         document.addEventListener('DOMContentLoaded', function() {

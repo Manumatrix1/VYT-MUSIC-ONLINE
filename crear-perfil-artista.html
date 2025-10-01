@@ -5,15 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VYT MUSIC - Crear Perfil de Artista</title>
     
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    
+    // Callback cuando Tawk.to se carga
+    Tawk_API.onLoad = function(){
+        console.log('Tawk.to widget cargado correctamente');
+    };
+    
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Sistema de navegación -->
-    <link rel="stylesheet" href="src/navigation-styles.css">
-    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
     <script src="firebase-config.js"></script>
     
     <style>
@@ -171,7 +193,7 @@
         </header>
 
         <!-- Formulario -->
-        <main class="container mx-auto px-4 pb-32 max-w-4xl">
+        <main class="container mx-auto px-4 pb-32 max-w-4xl" style="padding-bottom: 120px;">
             <!-- Step Indicator -->
             <div class="step-indicator">
                 <div class="step active">
@@ -223,8 +245,9 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="block text-white font-medium mb-2">DNI *</label>
-                            <input type="text" name="dni" class="form-input" placeholder="12345678" required>
+                            <label class="block text-white font-medium mb-2">DNI (Opcional)</label>
+                            <input type="text" name="dni" class="form-input" placeholder="12345678">
+                            <p class="text-gray-400 text-sm mt-1">Campo opcional - solo si te sientes cómodo compartiéndolo</p>
                         </div>
                     </div>
                     
@@ -322,6 +345,7 @@
                             <select name="provincia" class="form-select" required onchange="loadCities(this.value)">
                                 <option value="">Selecciona tu provincia</option>
                                 <option value="buenos_aires">Buenos Aires</option>
+                                <option value="caba">Ciudad Autónoma de Buenos Aires</option>
                                 <option value="catamarca">Catamarca</option>
                                 <option value="chaco">Chaco</option>
                                 <option value="chubut">Chubut</option>
@@ -342,7 +366,7 @@
                                 <option value="santa_cruz">Santa Cruz</option>
                                 <option value="santa_fe">Santa Fe</option>
                                 <option value="santiago_del_estero">Santiago del Estero</option>
-                                <option value="tierra_del_fuego">Tierra del Fuego</option>
+                                <option value="tierra_del_fuego">Tierra del Fuego, Antártida e Islas del Atlántico Sur</option>
                                 <option value="tucuman">Tucumán</option>
                             </select>
                         </div>
@@ -374,8 +398,68 @@
         </main>
     </div>
 
-    <!-- Scripts -->
-    <script src="src/navigation.js"></script>
+    <!-- Scripts de navegación y funcionalidad -->
+    <script>
+        // Funciones del menú hamburguesa
+        function toggleMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            if (menuOverlay.style.opacity === '1') {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+
+        function openMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuPanel = document.getElementById('menuPanel');
+            
+            menuOverlay.style.opacity = '1';
+            menuOverlay.style.visibility = 'visible';
+            menuPanel.style.transform = 'translateX(0)';
+            document.body.style.overflow = 'hidden';
+            console.log('🔽 Menú abierto desde la derecha');
+        }
+
+        function closeMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            const menuPanel = document.getElementById('menuPanel');
+            
+            menuOverlay.style.opacity = '0';
+            menuOverlay.style.visibility = 'hidden';
+            menuPanel.style.transform = 'translateX(100%)';
+            document.body.style.overflow = '';
+            console.log('🔼 Menú cerrado');
+        }
+
+        function openTawkTo() {
+            // Intentar maximizar el widget de Tawk.to integrado
+            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
+                Tawk_API.maximize();
+            } else if (typeof Tawk_API !== 'undefined' && Tawk_API.showWidget) {
+                Tawk_API.showWidget();
+            } else {
+                // Fallback: abrir chat directo en nueva ventana
+                window.open('https://tawk.to/chat/68b5b0ec2ccfc9192268fd71/1j42rm7na', '_blank');
+            }
+            closeMenu();
+        }
+
+        // Cerrar menú con tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+        });
+
+        // Cerrar menú al hacer clic fuera
+        document.getElementById('menuOverlay').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeMenu();
+            }
+        });
+    </script>
+    
     <script>
         // Sistema de pasos
         let currentStep = 1;
@@ -414,27 +498,312 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Sistema de ciudades por provincia
-        const cityData = {
-            buenos_aires: ['Ciudad de Buenos Aires', 'La Plata', 'Mar del Plata', 'Bahía Blanca', 'Tandil', 'Quilmes', 'Avellaneda'],
-            santa_fe: ['Rosario', 'Santa Fe', 'Rafaela', 'Reconquista', 'Venado Tuerto'],
-            cordoba: ['Córdoba', 'Río Cuarto', 'Villa María', 'San Francisco', 'Villa Carlos Paz'],
-            mendoza: ['Mendoza', 'San Rafael', 'Godoy Cruz', 'Guaymallén', 'Maipú'],
-            // ... agregar más ciudades según necesidad
+        // Sistema completo de ciudades por provincia
+        const provincesCities = {
+            "buenos_aires": {
+                name: "Buenos Aires",
+                cities: [
+                    "La Plata", "Mar del Plata", "Bahía Blanca", "Tandil", "Quilmes", "Avellaneda", 
+                    "Lanús", "San Isidro", "Vicente López", "Tigre", "San Fernando", "Morón", 
+                    "Tres de Febrero", "San Martín", "Malvinas Argentinas", "Pilar", "Escobar", 
+                    "Campana", "Zárate", "Luján", "Mercedes", "Chivilcoy", "Pergamino", "Junín", 
+                    "Lincoln", "General Pico", "Trenque Lauquen", "Pehuajó", "Carlos Casares", 
+                    "Bolivar", "Olavarría", "Azul", "Necochea", "Balcarce", "General Madariaga", 
+                    "Villa Gesell", "Pinamar", "Coronel Dorrego", "Tres Arroyos", "González Chaves"
+                ]
+            },
+            "caba": {
+                name: "Ciudad Autónoma de Buenos Aires",
+                cities: [
+                    "Puerto Madero", "San Nicolás", "Retiro", "San Telmo", "Montserrat", 
+                    "Constitución", "Recoleta", "Balvanera", "Barracas", "La Boca", "Palermo", 
+                    "Belgrano", "Núñez", "Villa Urquiza", "Villa Pueyrredón", "Coghlan", 
+                    "Saavedra", "Villa Crespo", "Almagro", "Boedo", "Caballito", "Flores", 
+                    "Floresta", "Parque Chacabuco", "Villa Soldati", "Nueva Pompeya", 
+                    "Parque Patricios", "Villa Lugano", "Liniers", "Mataderos", "Versalles"
+                ]
+            },
+            "catamarca": {
+                name: "Catamarca",
+                cities: [
+                    "San Fernando del Valle de Catamarca", "Andalgalá", "Tinogasta", "Belén", 
+                    "Santa María", "Fiambalá", "Londres", "Recreo", "Valle Viejo", "Fray Mamerto Esquiú"
+                ]
+            },
+            "chaco": {
+                name: "Chaco",
+                cities: [
+                    "Resistencia", "Barranqueras", "Fontana", "Puerto Vilelas", "Sáenz Peña", 
+                    "Villa Ángela", "Charata", "General José de San Martín", "Machagai", 
+                    "Quitilipi", "Las Breñas", "Castelli", "Villa Berthet"
+                ]
+            },
+            "chubut": {
+                name: "Chubut",
+                cities: [
+                    "Rawson", "Puerto Madryn", "Comodoro Rivadavia", "Trelew", "Esquel", 
+                    "Puerto Deseado", "Caleta Olivia", "Dolavon", "Gaiman", "Rada Tilly", 
+                    "Sarmiento", "El Bolsón", "Lago Puelo"
+                ]
+            },
+            "cordoba": {
+                name: "Córdoba",
+                cities: [
+                    "Córdoba", "Villa Carlos Paz", "Río Cuarto", "Villa María", "San Francisco", 
+                    "Alta Gracia", "Cosquín", "La Falda", "Jesus María", "Unquillo", "Salsipuedes", 
+                    "Villa Allende", "Río Ceballos", "Capilla del Monte", "Cruz del Eje", 
+                    "Dean Funes", "Bell Ville", "Marcos Juárez", "Villa Nueva", "Arroyito", 
+                    "Laboulaye", "General Cabrera", "Huinca Renancó", "Vicuña Mackenna"
+                ]
+            },
+            "corrientes": {
+                name: "Corrientes",
+                cities: [
+                    "Corrientes", "Goya", "Paso de los Libres", "Mercedes", "Curuzú Cuatiá", 
+                    "Esquina", "Monte Caseros", "Santo Tomé", "Bella Vista", "Saladas", 
+                    "Empedrado", "Itatí", "San Roque", "Lavalle"
+                ]
+            },
+            "entre_rios": {
+                name: "Entre Ríos",
+                cities: [
+                    "Paraná", "Concordia", "Gualeguaychú", "Concepción del Uruguay", "Villaguay", 
+                    "Victoria", "Chajarí", "Federación", "Colón", "San José de Feliciano", 
+                    "La Paz", "Nogoyá", "Crespo", "Basavilbaso", "Hernandarias"
+                ]
+            },
+            "formosa": {
+                name: "Formosa",
+                cities: [
+                    "Formosa", "Clorinda", "Pirané", "El Colorado", "Ingeniero Juárez", 
+                    "Las Lomitas", "Comandante Fontana", "Misión Tacaaglé", "General Mosconi", 
+                    "Villa Dos Trece"
+                ]
+            },
+            "jujuy": {
+                name: "Jujuy",
+                cities: [
+                    "San Salvador de Jujuy", "Palpalá", "San Pedro", "Libertador General San Martín", 
+                    "Perico", "El Carmen", "Monterrico", "Fraile Pintado", "Calilegua", 
+                    "San Antonio", "Purmamarca", "Tilcara", "Humahuaca", "La Quiaca"
+                ]
+            },
+            "la_pampa": {
+                name: "La Pampa",
+                cities: [
+                    "Santa Rosa", "General Pico", "Toay", "Realicó", "Intendente Alvear", 
+                    "General Acha", "Eduardo Castex", "Macachín", "Catriló", "Victorica", 
+                    "Ingeniero Luiggi", "Winifreda", "Doblas"
+                ]
+            },
+            "la_rioja": {
+                name: "La Rioja",
+                cities: [
+                    "La Rioja", "Chilecito", "Aimogasta", "Chamical", "Chepes", "Villa Unión", 
+                    "Famatina", "Sanagasta", "Patquía", "Nonogasta", "Vinchina", "Villa Castelli"
+                ]
+            },
+            "mendoza": {
+                name: "Mendoza",
+                cities: [
+                    "Mendoza", "San Rafael", "Godoy Cruz", "Guaymallén", "Maipú", "Las Heras", 
+                    "Luján de Cuyo", "Rivadavia", "Junín", "La Paz", "Santa Rosa", "Lavalle", 
+                    "General Alvear", "Tupungato", "Tunuyán", "San Carlos", "Malargüe", 
+                    "San Martín", "Palmira", "Russell"
+                ]
+            },
+            "misiones": {
+                name: "Misiones",
+                cities: [
+                    "Posadas", "Oberá", "Eldorado", "Puerto Iguazú", "Apóstoles", "Leandro N. Alem", 
+                    "Puerto Rico", "Montecarlo", "Garupá", "Candelaria", "Jardín América", 
+                    "Aristóbulo del Valle", "Campo Grande", "Puerto Esperanza", "Wanda", 
+                    "25 de Mayo", "Corpus", "San Ignacio"
+                ]
+            },
+            "neuquen": {
+                name: "Neuquén",
+                cities: [
+                    "Neuquén", "Cipolletti", "San Martín de los Andes", "Villa La Angostura", 
+                    "Cutral Có", "Plottier", "Centenario", "Zapala", "Chos Malal", "Junín de los Andes", 
+                    "Rincón de los Sauces", "Plaza Huincul", "Senillosa", "Vista Alegre", 
+                    "Piedra del Águila", "Picún Leufú"
+                ]
+            },
+            "rio_negro": {
+                name: "Río Negro",
+                cities: [
+                    "Viedma", "San Carlos de Bariloche", "General Roca", "Cipolletti", "Villa Regina", 
+                    "Río Colorado", "Allen", "Choele Choel", "Catriel", "Luis Beltrán", 
+                    "Fernández Oro", "Campo Grande", "Darwin", "General Conesa", "Lamarque", 
+                    "Cinco Saltos", "Villa Regina", "Ingeniero Huergo"
+                ]
+            },
+            "salta": {
+                name: "Salta",
+                cities: [
+                    "Salta", "San Ramón de la Nueva Orán", "Tartagal", "Metán", "Güemes", 
+                    "Cafayate", "Rosario de Lerma", "Joaquín V. González", "Embarcación", 
+                    "General Mosconi", "Pichanal", "El Carril", "Cerrillos", "La Merced", 
+                    "Coronel Moldes", "Campo Santo", "Apolinario Saravia"
+                ]
+            },
+            "san_juan": {
+                name: "San Juan",
+                cities: [
+                    "San Juan", "Chimbas", "Rawson", "Rivadavia", "Santa Lucía", "Pocito", 
+                    "9 de Julio", "Albardón", "Angaco", "Calingasta", "Capital", "Caucete", 
+                    "Iglesia", "Jáchal", "San Martín", "Sarmiento", "Ullum", "Valle Fértil", 
+                    "Zonda", "25 de Mayo"
+                ]
+            },
+            "san_luis": {
+                name: "San Luis",
+                cities: [
+                    "San Luis", "Villa Mercedes", "Merlo", "Justo Daract", "La Toma", 
+                    "Concarán", "Villa de la Quebrada", "Tilisarao", "Santa Rosa del Conlara", 
+                    "Quines", "Candelaria", "Villa General Roca", "Naschel", "Nueva Galia"
+                ]
+            },
+            "santa_cruz": {
+                name: "Santa Cruz",
+                cities: [
+                    "Río Gallegos", "Caleta Olivia", "Pico Truncado", "Puerto Deseado", 
+                    "Puerto San Julián", "El Calafate", "28 de Noviembre", "Las Heras", 
+                    "Comandante Luis Piedra Buena", "Gobernador Gregores", "Puerto Santa Cruz", 
+                    "Perito Moreno", "Los Antiguos", "El Chaltén"
+                ]
+            },
+            "santa_fe": {
+                name: "Santa Fe",
+                cities: [
+                    "Santa Fe", "Rosario", "Rafaela", "Reconquista", "Venado Tuerto", "Esperanza", 
+                    "Santo Tomé", "San Lorenzo", "Casilda", "Villa Gobernador Gálvez", "Funes", 
+                    "Pérez", "Roldán", "Capitán Bermúdez", "Puerto General San Martín", 
+                    "Villa Constitución", "Firmat", "Cañada de Gómez", "Las Rosas", 
+                    "Armstrong", "Frontera", "Sunchales"
+                ]
+            },
+            "santiago_del_estero": {
+                name: "Santiago del Estero",
+                cities: [
+                    "Santiago del Estero", "La Banda", "Termas de Río Hondo", "Añatuya", 
+                    "Frías", "Monte Quemado", "Quimilí", "Loreto", "Clodomira", "Suncho Corral", 
+                    "Campo Gallo", "Bandera", "Tintina", "Villa Ojo de Agua", "Beltrán"
+                ]
+            },
+            "tierra_del_fuego": {
+                name: "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+                cities: [
+                    "Ushuaia", "Río Grande", "Tolhuin", "Puerto Almanza", "Puerto Williams"
+                ]
+            },
+            "tucuman": {
+                name: "Tucumán",
+                cities: [
+                    "San Miguel de Tucumán", "Yerba Buena", "Tafí Viejo", "Banda del Río Salí", 
+                    "Las Talitas", "Alderetes", "Aguilares", "Concepción", "Monteros", 
+                    "Famaillá", "Lules", "Simoca", "Bella Vista", "La Cocha", "Graneros", 
+                    "Juan Bautista Alberdi", "Trancas", "Tafí del Valle"
+                ]
+            }
         };
 
         function loadCities(provincia) {
             const citySelect = document.querySelector('select[name="ciudad"]');
             citySelect.innerHTML = '<option value="">Selecciona tu ciudad</option>';
             
-            if (cityData[provincia]) {
-                cityData[provincia].forEach(city => {
+            if (provincesCities[provincia]) {
+                provincesCities[provincia].cities.forEach(city => {
                     const option = document.createElement('option');
-                    option.value = city.toLowerCase().replace(/\s+/g, '_');
+                    option.value = city.toLowerCase().replace(/\s+/g, '_').replace(/[^\w]/g, '');
                     option.textContent = city;
                     citySelect.appendChild(option);
                 });
             }
+        }
+
+        // Función para mostrar mensaje de bienvenida y redirigir
+        function showWelcomeAndRedirect(artistData) {
+            // Crear overlay de bienvenida
+            const welcomeOverlay = document.createElement('div');
+            welcomeOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(10px);
+            `;
+            
+            welcomeOverlay.innerHTML = `
+                <div style="
+                    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+                    border: 2px solid #3b82f6;
+                    border-radius: 1rem;
+                    padding: 3rem;
+                    text-align: center;
+                    max-width: 500px;
+                    margin: 2rem;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+                ">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">🎤</div>
+                    <h2 style="
+                        color: #3b82f6;
+                        font-size: 2rem;
+                        font-weight: bold;
+                        margin-bottom: 1rem;
+                        font-family: 'Montserrat', sans-serif;
+                    ">¡Bienvenido querido artista!</h2>
+                    <p style="
+                        color: white;
+                        font-size: 1.2rem;
+                        margin-bottom: 1.5rem;
+                        line-height: 1.6;
+                    ">Este es tu panel de artista donde podrás gestionar tu perfil, 
+                    actualizar tu información y seguir el progreso de tus inscripciones.</p>
+                    <p style="
+                        color: #3b82f6;
+                        font-size: 1rem;
+                        margin-bottom: 2rem;
+                    ">Te llevamos a tu perfil en 3 segundos...</p>
+                    <div style="
+                        width: 100%;
+                        height: 4px;
+                        background: rgba(59, 130, 246, 0.3);
+                        border-radius: 2px;
+                        overflow: hidden;
+                    ">
+                        <div id="progress-bar" style="
+                            width: 0%;
+                            height: 100%;
+                            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+                            border-radius: 2px;
+                            transition: width 3s linear;
+                        "></div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(welcomeOverlay);
+            
+            // Animar la barra de progreso
+            setTimeout(() => {
+                document.getElementById('progress-bar').style.width = '100%';
+            }, 100);
+            
+            // Guardar datos del artista en localStorage para el perfil
+            localStorage.setItem('artistData', JSON.stringify(artistData));
+            
+            // Redirigir después de 3 segundos
+            setTimeout(() => {
+                window.location.href = 'perfil-artista.html';
+            }, 3000);
         }
 
         // Manejo del formulario
@@ -474,16 +843,26 @@
             // Datos adicionales
             artistData.fechaCreacion = new Date().toISOString();
             artistData.estado = 'pendiente_aprobacion'; // pendiente, aprobado, rechazado
+            artistData.id = 'artist_' + Date.now(); // ID temporal
             
             try {
-                // Aquí conectarías con Firebase
                 console.log('Datos del artista:', artistData);
                 
-                // Simular guardado exitoso
-                alert('¡Perfil creado exitosamente! Te contactaremos pronto para la aprobación.');
+                // Intentar guardar en Firebase si está disponible
+                if (typeof db !== 'undefined' && db) {
+                    try {
+                        // Guardar en Firestore
+                        await db.collection('artistas').add(artistData);
+                        console.log('✅ Perfil guardado en Firebase');
+                    } catch (firebaseError) {
+                        console.warn('⚠️ No se pudo guardar en Firebase, continuando localmente:', firebaseError);
+                    }
+                } else {
+                    console.log('📝 Firebase no disponible, guardando solo localmente');
+                }
                 
-                // Redirigir a página de éxito o principal
-                window.location.href = 'principal.html';
+                // Mostrar mensaje de bienvenida y redirigir
+                showWelcomeAndRedirect(artistData);
                 
             } catch (error) {
                 console.error('Error al crear perfil:', error);
@@ -496,5 +875,265 @@
             console.log('🎤 VYT MUSIC - Formulario de perfil de artista iniciado');
         });
     </script>
+
+    <!-- Navegación Inferior con emojis -->
+    <nav style="
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(10px);
+        z-index: 50;
+        padding: 12px 0;
+    ">
+        <div style="
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 0 20px;
+        ">
+            <a href="principal.html" style="
+                color: white;
+                text-decoration: none;
+                font-size: 18px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                transition: all 0.3s ease;
+                padding: 8px 12px;
+                border-radius: 8px;
+                min-width: 80px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                <span style="font-size: 20px;">🏠</span>
+                <span style="font-size: 14px;">Principal</span>
+            </a>
+            
+            <a href="certamenes.html" style="
+                color: white;
+                text-decoration: none;
+                font-size: 18px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                transition: all 0.3s ease;
+                padding: 8px 12px;
+                border-radius: 8px;
+                min-width: 80px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                <span style="font-size: 20px;">🏆</span>
+                <span style="font-size: 14px;">Certámenes</span>
+            </a>
+            
+            <a href="ranking.html" style="
+                color: white;
+                text-decoration: none;
+                font-size: 18px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                transition: all 0.3s ease;
+                padding: 8px 12px;
+                border-radius: 8px;
+                min-width: 80px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                <span style="font-size: 20px;">📊</span>
+                <span style="font-size: 14px;">Ranking</span>
+            </a>
+            
+            <button onclick="toggleMenu()" style="
+                color: white;
+                background: transparent;
+                border: none;
+                font-size: 18px;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                transition: all 0.3s ease;
+                padding: 8px 12px;
+                border-radius: 8px;
+                min-width: 80px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                <span style="font-size: 20px;">☰</span>
+                <span style="font-size: 14px;">Menú</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Menú Hamburguesa Overlay -->
+    <div id="menuOverlay" style="
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(5px);
+        z-index: 60;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    ">
+        <div id="menuPanel" style="
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            padding: 80px 30px 30px;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        ">
+            <button onclick="closeMenu()" style="
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                background: transparent;
+                border: none;
+                color: white;
+                font-size: 28px;
+                cursor: pointer;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">×</button>
+            
+            <button class="menu-item" onclick="window.location.href='crear-perfil-artista.html'" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 16px 20px;
+                margin-bottom: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                width: 100%;
+                text-align: left;
+                cursor: pointer;
+                font-size: 16px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                🎤 Crear Perfil de Artista
+            </button>
+            
+            <button class="menu-item" onclick="window.location.href='reglamento.html'" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 16px 20px;
+                margin-bottom: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                width: 100%;
+                text-align: left;
+                cursor: pointer;
+                font-size: 16px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                📋 Bases y Reglamento
+            </button>
+            
+            <button class="menu-item" onclick="window.location.href='perfil-artista.html'" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 16px 20px;
+                margin-bottom: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                width: 100%;
+                text-align: left;
+                cursor: pointer;
+                font-size: 16px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                👤 Perfil de Artista
+            </button>
+            
+            <button class="menu-item" onclick="window.location.href='comprar-vyt-money.html'" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 16px 20px;
+                margin-bottom: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                width: 100%;
+                text-align: left;
+                cursor: pointer;
+                font-size: 16px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                💰 Comprar VYTMoney
+            </button>
+            
+            <button class="menu-item" onclick="window.location.href='principal.html'" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 16px 20px;
+                margin-bottom: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                width: 100%;
+                text-align: left;
+                cursor: pointer;
+                font-size: 16px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                🏠 Inicio
+            </button>
+            
+            <button class="menu-item" onclick="openTawkTo()" style="
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 16px 20px;
+                margin-bottom: 8px;
+                background: rgba(255, 255, 255, 0.1);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 12px;
+                color: white;
+                text-decoration: none;
+                transition: all 0.3s ease;
+                width: 100%;
+                text-align: left;
+                cursor: pointer;
+                font-size: 16px;
+            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                💬 Contacto
+            </button>
+        </div>
+    </div>
+
 </body>
 </html>

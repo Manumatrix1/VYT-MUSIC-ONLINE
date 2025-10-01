@@ -3,377 +3,581 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demanda Geográfica - VYT Music</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Análisis Geográfico - VYT MUSIC Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="firebase-config.js"></script>
+    
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    
     <style>
         body {
-            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 30%, #1e40af 70%, #2563eb 100%);
-            color: white;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            font-family: 'Roboto', sans-serif;
             min-height: 100vh;
         }
+        
         .card {
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(59, 130, 246, 0.15) 100%);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 16px;
         }
-        .card-white {
-            background: linear-gradient(145deg, rgba(30, 58, 138, 0.95) 0%, rgba(37, 99, 235, 0.9) 100%);
-            color: white;
-            border: 1px solid rgba(59, 130, 246, 0.4);
+        
+        #map {
+            height: 400px;
+            border-radius: 12px;
         }
-        .province-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.25);
-            border-color: rgba(59, 130, 246, 0.6);
-        }
+        
         .stat-card {
-            background: linear-gradient(145deg, rgba(30, 58, 138, 0.9) 0%, rgba(37, 99, 235, 0.85) 100%);
-            color: white;
-            border: 2px solid #3b82f6;
-            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(147, 51, 234, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.2);
         }
-        .header-gradient {
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 50%, #3b82f6 100%);
+        
+        .province-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
         }
-        .accent-blue { color: #60a5fa; }
-        .accent-cyan { color: #06b6d4; }
-        .bg-blue-custom {
-            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+        
+        .province-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
         }
-        .text-shadow {
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        
+        .city-bar {
+            background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+            border-radius: 4px;
+            height: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="container mx-auto px-4 py-8">
-        <!-- Header con gradiente azul -->
-        <div class="header-gradient rounded-2xl p-8 mb-8 text-center text-shadow">
-            <h1 class="text-5xl font-bold mb-4">
-                <i class="fas fa-map-marked-alt text-white mr-3"></i>
-                Demanda Geográfica
-            </h1>
-            <p class="text-blue-100 text-lg">Análisis de interés por región para planificar futuros certámenes</p>
-        </div>
-
-        <!-- Estadísticas Generales con tarjetas azules -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-            <div class="stat-card p-6 rounded-xl text-center transition-all duration-200 hover:scale-105">
-                <div class="text-4xl mb-3">👥</div>
-                <div class="text-3xl font-bold accent-cyan" id="total-usuarios">-</div>
-                <div class="text-sm text-blue-200 font-medium">Total Registrados</div>
-            </div>
-            <div class="stat-card p-6 rounded-xl text-center transition-all duration-200 hover:scale-105">
-                <div class="text-4xl mb-3">📍</div>
-                <div class="text-3xl font-bold text-yellow-400" id="sin-certamen">-</div>
-                <div class="text-sm text-blue-200 font-medium">Sin Certamen</div>
-            </div>
-            <div class="stat-card p-6 rounded-xl text-center transition-all duration-200 hover:scale-105">
-                <div class="text-4xl mb-3">🔔</div>
-                <div class="text-3xl font-bold text-green-400" id="quieren-notificaciones">-</div>
-                <div class="text-sm text-blue-200 font-medium">Quieren Notificaciones</div>
-            </div>
-            <div class="stat-card p-6 rounded-xl text-center transition-all duration-200 hover:scale-105">
-                <div class="text-4xl mb-3">🏆</div>
-                <div class="text-3xl font-bold accent-blue" id="con-certamen">-</div>
-                <div class="text-sm text-blue-200 font-medium">Con Certamen</div>
+    <div class="min-h-screen p-6">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-4">
+                    <button onclick="goBack()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-3xl font-bold text-white">Análisis Geográfico</h1>
+                        <p class="text-blue-200">Distribución de participantes por ubicación</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button onclick="exportData()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-download mr-2"></i>
+                        Exportar
+                    </button>
+                    <button onclick="refreshData()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-sync-alt mr-2"></i>
+                        Actualizar
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Lista de Provincias con fondo azul -->
-        <div class="card-white rounded-2xl overflow-hidden shadow-2xl">
-            <div class="bg-blue-custom px-8 py-6 text-white">
-                <h2 class="text-2xl font-bold flex items-center text-shadow">
-                    <i class="fas fa-chart-bar mr-3"></i>
-                    Demanda por Provincia
-                </h2>
-                <p class="text-blue-100 mt-2">Análisis detallado de cada región</p>
-            </div>
-            
-            <div class="p-8">
-                <div id="loading" class="text-center py-12">
-                    <i class="fas fa-spinner fa-spin text-5xl text-blue-400 mb-6"></i>
-                    <p class="text-blue-200 text-lg">Cargando datos geográficos...</p>
-                </div>
+        <!-- Loading -->
+        <div id="loading" class="text-center py-12">
+            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+            <p class="text-white">Cargando datos geográficos...</p>
+        </div>
 
-                <div id="provinces-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden">
-                    <!-- Se llena dinámicamente -->
+        <!-- Contenido principal -->
+        <div id="main-content" class="hidden space-y-6">
+            <!-- Estadísticas resumen -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="stat-card p-6 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-blue-200 text-sm">Total Participantes</p>
+                            <p class="text-3xl font-bold text-white" id="total-participants">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-users text-white text-xl"></i>
+                        </div>
+                    </div>
                 </div>
-
-                <div id="no-data" class="text-center py-12 hidden">
-                    <div class="bg-blue-800/50 rounded-2xl p-8 border-2 border-blue-400">
-                        <i class="fas fa-users text-6xl text-blue-300 mb-6"></i>
-                        <h3 class="text-2xl font-bold text-white mb-4">¡Esperando primeros registros!</h3>
-                        <p class="text-blue-200 text-lg mb-4">
-                            Aún no hay participantes registrados en el sistema.
-                        </p>
-                        <div class="bg-blue-700/50 rounded-xl p-4 border border-blue-400">
-                            <p class="text-sm text-blue-100">
-                                <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
-                                <strong>Tip:</strong> Una vez que los artistas comiencen a registrarse, 
-                                aquí verás un mapa completo de demanda por provincia
-                            </p>
+                
+                <div class="stat-card p-6 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-purple-200 text-sm">Provincias</p>
+                            <p class="text-3xl font-bold text-white" id="total-provinces">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-map text-white text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card p-6 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-green-200 text-sm">Ciudades</p>
+                            <p class="text-3xl font-bold text-white" id="total-cities">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-city text-white text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card p-6 rounded-xl">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-orange-200 text-sm">Potencial Presencial</p>
+                            <p class="text-3xl font-bold text-white" id="presencial-potential">0</p>
+                        </div>
+                        <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+                            <i class="fas fa-microphone text-white text-xl"></i>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Recomendaciones con diseño azul -->
-        <div class="mt-8 card-white rounded-2xl shadow-2xl">
-            <div class="bg-blue-custom px-8 py-6 text-white">
-                <h2 class="text-2xl font-bold flex items-center text-shadow">
-                    <i class="fas fa-lightbulb mr-3"></i>
-                    Recomendaciones Estratégicas
-                </h2>
-                <p class="text-blue-100 mt-2">Próximos pasos basados en datos</p>
+            <!-- Mapa -->
+            <div class="card p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold text-white">Mapa de Participantes</h2>
+                    <div class="flex space-x-2">
+                        <button onclick="toggleMapView('heat')" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                            Calor
+                        </button>
+                        <button onclick="toggleMapView('markers')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                            Marcadores
+                        </button>
+                    </div>
+                </div>
+                <div id="map"></div>
+                <div class="mt-4 flex justify-center space-x-6 text-sm">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-green-500 rounded-full"></div>
+                        <span class="text-white">1-5 participantes</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                        <span class="text-white">6-15 participantes</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <div class="w-4 h-4 bg-red-500 rounded-full"></div>
+                        <span class="text-white">16+ participantes</span>
+                    </div>
+                </div>
             </div>
-            
-            <div class="p-8">
-                <div id="recommendations" class="space-y-6">
-                    <!-- Se llena dinámicamente -->
+
+            <!-- Análisis por provincia -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold text-white mb-4">Top Provincias</h2>
+                    <div id="provinces-list" class="space-y-3">
+                        <!-- Se llenará con JS -->
+                    </div>
+                </div>
+                
+                <div class="card p-6">
+                    <h2 class="text-xl font-bold text-white mb-4">Top Ciudades</h2>
+                    <div id="cities-list" class="space-y-3">
+                        <!-- Se llenará con JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recomendaciones para eventos presenciales -->
+            <div class="card p-6">
+                <h2 class="text-xl font-bold text-white mb-4">
+                    <i class="fas fa-lightbulb text-yellow-400 mr-2"></i>
+                    Recomendaciones para Eventos Presenciales
+                </h2>
+                <div id="recommendations" class="space-y-4">
+                    <!-- Se llenará con JS -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Firebase Config -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js';
-        import { getFirestore, collection, getDocs, query, where, orderBy } from 'https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js';
+    
+    <script>
+        let map;
+        let markersLayer;
+        let geoData = {
+            participants: [],
+            provinces: {},
+            cities: {},
+            total: 0
+        };
 
-        // Configuración Firebase
-        import { firebaseConfig } from './firebase-config.js';
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        // Coordenadas aproximadas de provincias argentinas (centros)
+        const provinceCoords = {
+            'Buenos Aires': [-36.6769, -60.5588],
+            'Córdoba': [-31.4201, -64.1888],
+            'Santa Fe': [-31.6333, -60.7],
+            'Mendoza': [-32.8895, -68.8458],
+            'Tucumán': [-26.8083, -65.2176],
+            'Salta': [-24.7821, -65.4232],
+            'Entre Ríos': [-32.0588, -59.2014],
+            'Misiones': [-26.8753, -54.6568],
+            'Corrientes': [-27.4806, -58.8341],
+            'Santiago del Estero': [-27.7951, -64.2615],
+            'San Juan': [-31.5375, -68.5364],
+            'Jujuy': [-24.1858, -65.2995],
+            'Río Negro': [-40.8135, -62.9967],
+            'Neuquén': [-38.9516, -68.0591],
+            'Chubut': [-43.7886, -65.9656],
+            'San Luis': [-33.2949, -66.3367],
+            'Catamarca': [-28.4696, -65.7852],
+            'La Rioja': [-29.4130, -66.8506],
+            'Formosa': [-26.1775, -58.1781],
+            'Chaco': [-27.4511, -58.9861],
+            'Santa Cruz': [-51.6230, -69.2168],
+            'Tierra del Fuego': [-54.8019, -68.3030],
+            'La Pampa': [-36.6169, -64.2833],
+            'Ciudad Autónoma de Buenos Aires': [-34.6118, -58.3960]
+        };
 
-        async function cargarDemandaGeografica() {
-            try {
-                // Obtener todos los participantes
-                const participantesRef = collection(db, 'participantes_online');
-                const snapshot = await getDocs(participantesRef);
+        // Inicializar al cargar la página
+        window.onload = async function() {
+            await checkAdminAuth();
+            await loadGeographicData();
+        };
 
-                let totalUsuarios = 0;
-                let sinCertamen = 0;
-                let quierenNotificaciones = 0;
-                let conCertamen = 0;
-
-                const demandaPorProvincia = {};
-
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
-                    totalUsuarios++;
-
-                    const provincia = data.provincia || 'Sin Especificar';
-                    
-                    if (!demandaPorProvincia[provincia]) {
-                        demandaPorProvincia[provincia] = {
-                            total: 0,
-                            sinCertamen: 0,
-                            quierenNotificaciones: 0,
-                            conCertamen: 0,
-                            ciudades: {},
-                            generos: {}
-                        };
-                    }
-
-                    demandaPorProvincia[provincia].total++;
-
-                    // Análisis de demanda
-                    if (data.sin_certamen_disponible) {
-                        sinCertamen++;
-                        demandaPorProvincia[provincia].sinCertamen++;
+        // Verificar autenticación de admin
+        async function checkAdminAuth() {
+            return new Promise((resolve) => {
+                firebase.auth().onAuthStateChanged(async (user) => {
+                    if (user) {
+                        // Verificar si es admin
+                        const userDoc = await firebase.firestore()
+                            .collection('users')
+                            .doc(user.uid)
+                            .get();
+                        
+                        if (userDoc.exists && userDoc.data().role === 'admin') {
+                            resolve(true);
+                        } else {
+                            window.location.href = 'admin.html';
+                        }
                     } else {
-                        conCertamen++;
-                        demandaPorProvincia[provincia].conCertamen++;
+                        window.location.href = 'admin.html';
                     }
+                });
+            });
+        }
 
-                    if (data.quiere_notificaciones_region) {
-                        quierenNotificaciones++;
-                        demandaPorProvincia[provincia].quierenNotificaciones++;
-                    }
+        // Cargar datos geográficos
+        async function loadGeographicData() {
+            try {
+                // Cargar participantes desde inscripciones
+                const inscripcionesSnapshot = await firebase.firestore()
+                    .collection('inscripciones')
+                    .get();
 
-                    // Ciudades
-                    const ciudad = data.ciudad || 'Sin Especificar';
-                    demandaPorProvincia[provincia].ciudades[ciudad] = 
-                        (demandaPorProvincia[provincia].ciudades[ciudad] || 0) + 1;
+                // Cargar también desde perfiles de artistas
+                const artistsSnapshot = await firebase.firestore()
+                    .collection('artists')
+                    .where('provincia', '!=', '')
+                    .get();
 
-                    // Géneros musicales
-                    if (data.generos_musicales && Array.isArray(data.generos_musicales)) {
-                        data.generos_musicales.forEach(genero => {
-                            demandaPorProvincia[provincia].generos[genero] = 
-                                (demandaPorProvincia[provincia].generos[genero] || 0) + 1;
-                        });
+                geoData.participants = [];
+                geoData.provinces = {};
+                geoData.cities = {};
+
+                // Procesar inscripciones
+                inscripcionesSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.provincia && data.ciudad) {
+                        processParticipant(data, 'inscrito');
                     }
                 });
 
-                // Actualizar estadísticas generales
-                document.getElementById('total-usuarios').textContent = totalUsuarios;
-                document.getElementById('sin-certamen').textContent = sinCertamen;
-                document.getElementById('quieren-notificaciones').textContent = quierenNotificaciones;
-                document.getElementById('con-certamen').textContent = conCertamen;
+                // Procesar artistas (para ver potencial completo)
+                artistsSnapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (data.provincia && data.ciudad) {
+                        processParticipant(data, 'registrado');
+                    }
+                });
 
-                // Mostrar provincias
-                mostrarProvincias(demandaPorProvincia);
+                geoData.total = geoData.participants.length;
 
-                // Generar recomendaciones
-                generarRecomendaciones(demandaPorProvincia);
+                // Actualizar UI
+                updateStatistics();
+                initializeMap();
+                updateProvincesList();
+                updateCitiesList();
+                generateRecommendations();
 
-                // Ocultar loading y mostrar resultado apropiado
-                document.getElementById('loading').classList.add('hidden');
-                
-                if (totalUsuarios === 0) {
-                    document.getElementById('no-data').classList.remove('hidden');
-                } else {
-                    document.getElementById('provinces-grid').classList.remove('hidden');
-                }
+                // Ocultar loading y mostrar contenido
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('main-content').classList.remove('hidden');
 
             } catch (error) {
-                console.error('Error cargando datos:', error);
-                document.getElementById('loading').innerHTML = `
-                    <div class="bg-red-50 rounded-2xl p-8 border-2 border-red-200">
-                        <i class="fas fa-exclamation-triangle text-5xl text-red-400 mb-4"></i>
-                        <h3 class="text-xl font-bold text-red-700 mb-2">Error de conexión</h3>
-                        <p class="text-red-600">No se pudieron cargar los datos. Revisa la conexión a Firebase.</p>
-                    </div>
-                `;
+                console.error('Error al cargar datos geográficos:', error);
+                showError('Error al cargar los datos');
             }
         }
 
-        function mostrarProvincias(demandaPorProvincia) {
-            const grid = document.getElementById('provinces-grid');
-            
-            // Ordenar provincias por demanda total
-            const provinciasOrdenadas = Object.entries(demandaPorProvincia)
-                .sort(([,a], [,b]) => b.total - a.total);
+        // Procesar participante
+        function processParticipant(data, status) {
+            const participant = {
+                provincia: data.provincia,
+                ciudad: data.ciudad,
+                status: status,
+                nombre: data.nombreArtista || data.nombre || data.displayName || 'Sin nombre'
+            };
 
-            grid.innerHTML = provinciasOrdenadas.map(([provincia, data]) => {
-                const porcentajeSinCertamen = Math.round((data.sinCertamen / data.total) * 100);
-                const ciudadesPrincipales = Object.entries(data.ciudades)
-                    .sort(([,a], [,b]) => b - a)
-                    .slice(0, 3)
-                    .map(([ciudad, cantidad]) => `${ciudad} (${cantidad})`)
-                    .join(', ');
+            geoData.participants.push(participant);
 
-                const generosPrincipales = Object.entries(data.generos)
-                    .sort(([,a], [,b]) => b - a)
-                    .slice(0, 3)
-                    .map(([genero]) => genero)
-                    .join(', ');
+            // Contar por provincia
+            if (!geoData.provinces[data.provincia]) {
+                geoData.provinces[data.provincia] = { total: 0, inscritos: 0, registrados: 0 };
+            }
+            geoData.provinces[data.provincia].total++;
+            geoData.provinces[data.provincia][status === 'inscrito' ? 'inscritos' : 'registrados']++;
 
-                return `
-                    <div class="province-card card p-6 rounded-xl transition-all duration-300 cursor-pointer border-2 border-blue-400 hover:border-blue-300">
-                        <div class="flex justify-between items-start mb-4">
-                            <h3 class="font-bold text-xl text-white">${provincia}</h3>
-                            <span class="bg-blue-500/30 text-blue-200 px-3 py-1 rounded-full text-sm font-bold border border-blue-400">
-                                ${data.total} usuarios
-                            </span>
-                        </div>
-                        
-                        <div class="space-y-3 text-sm">
-                            <div class="flex justify-between items-center">
-                                <span class="text-blue-200">Sin Certamen:</span>
-                                <span class="font-bold ${data.sinCertamen > 0 ? 'text-yellow-400' : 'text-blue-400'} px-2 py-1 rounded">
-                                    ${data.sinCertamen}
-                                </span>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-blue-200">Quieren Notificaciones:</span>
-                                <span class="font-bold ${data.quierenNotificaciones > 0 ? 'text-green-400' : 'text-blue-400'} px-2 py-1 rounded">
-                                    ${data.quierenNotificaciones}
-                                </span>
-                            </div>
-                            
-                            ${ciudadesPrincipales ? `
-                                <div class="mt-4 pt-3 border-t border-blue-400">
-                                    <p class="text-xs text-blue-300 mb-2 font-medium">CIUDADES PRINCIPALES:</p>
-                                    <p class="text-xs text-cyan-400 font-medium">${ciudadesPrincipales}</p>
-                                </div>
-                            ` : ''}
-                            
-                            ${generosPrincipales ? `
-                                <div class="mt-3">
-                                    <p class="text-xs text-blue-300 mb-2 font-medium">GÉNEROS POPULARES:</p>
-                                    <p class="text-xs text-purple-400 font-medium">${generosPrincipales}</p>
-                                </div>
-                            ` : ''}
-                        </div>
-                        
-                        ${data.sinCertamen >= 5 ? `
-                            <div class="mt-4 bg-gradient-to-r from-yellow-500 to-orange-500 text-black rounded-lg p-3">
-                                <p class="text-sm font-bold flex items-center">
-                                    <i class="fas fa-star mr-2"></i>
-                                    ¡CANDIDATA A NUEVO CERTAMEN!
-                                </p>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
+            // Contar por ciudad
+            const cityKey = `${data.ciudad}, ${data.provincia}`;
+            if (!geoData.cities[cityKey]) {
+                geoData.cities[cityKey] = { 
+                    total: 0, 
+                    inscritos: 0, 
+                    registrados: 0,
+                    provincia: data.provincia,
+                    ciudad: data.ciudad
+                };
+            }
+            geoData.cities[cityKey].total++;
+            geoData.cities[cityKey][status === 'inscrito' ? 'inscritos' : 'registrados']++;
         }
 
-        function generarRecomendaciones(demandaPorProvincia) {
-            const container = document.getElementById('recommendations');
+        // Actualizar estadísticas
+        function updateStatistics() {
+            document.getElementById('total-participants').textContent = geoData.total;
+            document.getElementById('total-provinces').textContent = Object.keys(geoData.provinces).length;
+            document.getElementById('total-cities').textContent = Object.keys(geoData.cities).length;
             
-            // Encontrar provincias con alta demanda sin certamen
-            const candidatas = Object.entries(demandaPorProvincia)
-                .filter(([, data]) => data.sinCertamen >= 3)
-                .sort(([,a], [,b]) => b.sinCertamen - a.sinCertamen)
-                .slice(0, 5);
+            // Calcular potencial presencial (ciudades con más de 10 participantes)
+            const presencialPotential = Object.values(geoData.cities)
+                .filter(city => city.total >= 10)
+                .reduce((sum, city) => sum + city.total, 0);
+            
+            document.getElementById('presencial-potential').textContent = presencialPotential;
+        }
 
-            if (candidatas.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center bg-blue-800/50 rounded-xl p-8 border-2 border-blue-400">
-                        <i class="fas fa-check-circle text-blue-300 text-4xl mb-4"></i>
-                        <h3 class="text-xl font-bold text-white mb-2">¡Todo bajo control! 📊</h3>
-                        <p class="text-blue-200">
-                            ${totalUsuarios === 0 ? 
-                                'Cuando tengas registros, aquí verás las mejores oportunidades de expansión.' : 
-                                'No hay regiones con alta demanda desatendida. Excelente cobertura.'
-                            }
+        // Inicializar mapa
+        function initializeMap() {
+            // Centrar en Argentina
+            map = L.map('map').setView([-38.4161, -63.6167], 5);
+            
+            // Agregar capa base
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Inicializar capa de marcadores
+            markersLayer = L.layerGroup().addTo(map);
+            
+            // Mostrar marcadores por defecto
+            showMarkers();
+        }
+
+        // Mostrar marcadores
+        function showMarkers() {
+            markersLayer.clearLayers();
+
+            Object.entries(geoData.provinces).forEach(([provincia, data]) => {
+                const coords = provinceCoords[provincia];
+                if (!coords) return;
+
+                // Determinar color basado en cantidad
+                let color = '#10B981'; // Verde
+                if (data.total >= 6) color = '#F59E0B'; // Amarillo
+                if (data.total >= 16) color = '#EF4444'; // Rojo
+
+                // Crear marcador
+                const marker = L.circleMarker(coords, {
+                    color: color,
+                    fillColor: color,
+                    fillOpacity: 0.7,
+                    radius: Math.min(Math.max(data.total * 2, 8), 30)
+                });
+
+                // Popup con información
+                marker.bindPopup(`
+                    <div class="text-center">
+                        <h3 class="font-bold">${provincia}</h3>
+                        <p>Total: ${data.total} participantes</p>
+                        <p>Inscritos: ${data.inscritos}</p>
+                        <p>Registrados: ${data.registrados}</p>
+                        ${data.total >= 10 ? '<p class="text-green-600 font-semibold">¡Ideal para evento presencial!</p>' : ''}
+                    </div>
+                `);
+
+                markersLayer.addLayer(marker);
+            });
+        }
+
+        // Actualizar lista de provincias
+        function updateProvincesList() {
+            const provincesList = document.getElementById('provinces-list');
+            
+            // Ordenar provincias por total de participantes
+            const sortedProvinces = Object.entries(geoData.provinces)
+                .sort(([,a], [,b]) => b.total - a.total)
+                .slice(0, 10); // Top 10
+
+            provincesList.innerHTML = sortedProvinces.map(([provincia, data]) => `
+                <div class="province-item p-4 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-white font-semibold">${provincia}</span>
+                        <span class="text-blue-300 font-bold">${data.total}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-300">Inscritos: ${data.inscritos}</span>
+                        <span class="text-gray-300">Registrados: ${data.registrados}</span>
+                    </div>
+                    <div class="mt-2">
+                        <div class="city-bar" style="width: ${Math.min((data.total / Math.max(...Object.values(geoData.provinces).map(p => p.total))) * 100, 100)}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Actualizar lista de ciudades
+        function updateCitiesList() {
+            const citiesList = document.getElementById('cities-list');
+            
+            // Ordenar ciudades por total de participantes
+            const sortedCities = Object.entries(geoData.cities)
+                .sort(([,a], [,b]) => b.total - a.total)
+                .slice(0, 10); // Top 10
+
+            citiesList.innerHTML = sortedCities.map(([cityKey, data]) => `
+                <div class="province-item p-4 rounded-lg">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-white font-semibold">${data.ciudad}</span>
+                        <span class="text-blue-300 font-bold">${data.total}</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-300">${data.provincia}</span>
+                        <span class="text-gray-300">Inscritos: ${data.inscritos}</span>
+                    </div>
+                    <div class="mt-2">
+                        <div class="city-bar" style="width: ${Math.min((data.total / Math.max(...Object.values(geoData.cities).map(c => c.total))) * 100, 100)}%"></div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Generar recomendaciones
+        function generateRecommendations() {
+            const recommendations = document.getElementById('recommendations');
+            const strongCities = Object.entries(geoData.cities)
+                .filter(([,data]) => data.total >= 10)
+                .sort(([,a], [,b]) => b.total - a.total);
+
+            if (strongCities.length === 0) {
+                recommendations.innerHTML = `
+                    <div class="bg-yellow-500/20 border border-yellow-500/30 rounded-lg p-4">
+                        <p class="text-yellow-200">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Aún no hay suficientes participantes concentrados en una sola ciudad para organizar eventos presenciales. 
+                            Se recomienda continuar con modalidad online.
                         </p>
                     </div>
                 `;
                 return;
             }
 
-            container.innerHTML = candidatas.map(([provincia, data], index) => {
-                const prioridad = index === 0 ? 'Alta' : index <= 2 ? 'Media' : 'Baja';
-                const colorPrioridad = index === 0 ? 'red' : index <= 2 ? 'orange' : 'blue';
-                const bgColor = index === 0 ? 'bg-red-900/50 border-red-400' : index <= 2 ? 'bg-orange-900/50 border-orange-400' : 'bg-blue-900/50 border-blue-400';
-                
-                return `
-                    <div class="flex items-start space-x-6 p-6 ${bgColor} border-2 rounded-xl transition-all duration-200 hover:shadow-lg">
-                        <div class="text-4xl">
-                            ${index === 0 ? '🔥' : index <= 2 ? '⚡' : '💡'}
-                        </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between items-start mb-3">
-                                <h3 class="font-bold text-xl text-white">${provincia}</h3>
-                                <span class="bg-${colorPrioridad}-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                                    Prioridad ${prioridad}
-                                </span>
-                            </div>
-                            <p class="text-blue-200 mb-3 text-lg">
-                                <strong class="text-${colorPrioridad}-400">${data.sinCertamen}</strong> artistas registrados esperando certamen
-                            </p>
-                            <div class="text-sm text-blue-300 space-y-1">
-                                <p>• <strong>${data.quierenNotificaciones}</strong> quieren recibir notificaciones</p>
-                                <p>• Total de usuarios en la región: <strong>${data.total}</strong></p>
-                                <p>• Oportunidad de mercado: <strong class="text-cyan-400">${Math.round((data.sinCertamen / data.total) * 100)}%</strong></p>
-                            </div>
-                        </div>
+            const recommendationsHTML = strongCities.map(([cityKey, data]) => `
+                <div class="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="text-green-300 font-semibold">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            ${data.ciudad}, ${data.provincia}
+                        </h3>
+                        <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm">
+                            ${data.total} participantes
+                        </span>
                     </div>
-                `;
-            }).join('');
+                    <p class="text-green-100 text-sm mb-2">
+                        Con ${data.inscritos} inscritos y ${data.registrados} registrados, esta ciudad tiene potencial 
+                        para un evento presencial exitoso.
+                    </p>
+                    <div class="flex space-x-2">
+                        <button onclick="planEvent('${data.ciudad}', '${data.provincia}')" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                            Planificar Evento
+                        </button>
+                        <button onclick="contactParticipants('${data.ciudad}', '${data.provincia}')" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm transition-colors">
+                            Contactar Participantes
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+
+            recommendations.innerHTML = recommendationsHTML;
         }
 
-        // Inicializar
-        cargarDemandaGeografica();
-        
-        // Recargar cada 30 segundos
+        // Funciones de interacción
+        function toggleMapView(type) {
+            if (type === 'markers') {
+                showMarkers();
+            }
+            // TODO: Implementar vista de calor si se requiere
+        }
+
+        function planEvent(ciudad, provincia) {
+            // TODO: Implementar planificación de eventos
+            alert(`Planificando evento en ${ciudad}, ${provincia}`);
+        }
+
+        function contactParticipants(ciudad, provincia) {
+            // TODO: Implementar contacto masivo
+            alert(`Contactando participantes de ${ciudad}, ${provincia}`);
+        }
+
+        function exportData() {
+            const exportData = {
+                resumen: {
+                    totalParticipantes: geoData.total,
+                    totalProvincias: Object.keys(geoData.provinces).length,
+                    totalCiudades: Object.keys(geoData.cities).length,
+                    fechaExportacion: new Date().toISOString()
+                },
+                provincias: geoData.provinces,
+                ciudades: geoData.cities,
+                participantes: geoData.participants
+            };
+
+            const dataStr = JSON.stringify(exportData, null, 2);
+            const dataBlob = new Blob([dataStr], {type: 'application/json'});
+            
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(dataBlob);
+            link.download = `analisis_geografico_${new Date().toISOString().split('T')[0]}.json`;
+            link.click();
+        }
+
+        function refreshData() {
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('loading').style.display = 'block';
+            loadGeographicData();
+        }
+
+        function goBack() {
+            window.location.href = 'admin.html';
+        }
+
+        function showError(message) {
+            alert(message); // Temporal
+        }
+    </script>
+</body>
+</html>
         setInterval(cargarDemandaGeografica, 30000);
     </script>
 </body>

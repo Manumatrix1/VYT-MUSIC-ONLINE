@@ -3,28 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>VYT Music - Certámenes</title>
-    
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    
-    // Callback cuando Tawk.to se carga
-    Tawk_API.onLoad = function(){
-        console.log('Tawk.to widget cargado correctamente');
-    };
-    
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
-</head>
+    <title>VYT MUSIC - Certámenes</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -179,7 +158,7 @@
             right: 0;
             height: 100vh;
             width: 300px;
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(20px);
             border-left: 1px solid rgba(255, 255, 255, 0.1);
             padding: 20px 0;
@@ -363,28 +342,28 @@
                 <h3>🎵 VYT MUSIC</h3>
             </div>
 
-            <a href="crear-perfil-artista.html" class="menu-item">
-                <span class="menu-icon">🎤</span>
-                <span>Crear Perfil de Artista</span>
+            <a href="perfil-artista.html" class="menu-item">
+                <span class="menu-icon">👤</span>
+                <span>Mi Perfil</span>
+            </a>
+            <a href="inscripcion-certamen.html" class="menu-item">
+                <span class="menu-icon">📝</span>
+                <span>Inscribirme</span>
             </a>
             <a href="reglamento.html" class="menu-item">
                 <span class="menu-icon">📋</span>
-                <span>Bases y Reglamento</span>
+                <span>Reglamento</span>
             </a>
-            <a href="perfil-artista.html" class="menu-item">
-                <span class="menu-icon">👤</span>
-                <span>Perfil de Artista</span>
+            <a href="nosotros.html" class="menu-item">
+                <span class="menu-icon">ℹ️</span>
+                <span>Acerca de</span>
             </a>
-            <a href="comprar-vyt-money.html" class="menu-item">
-                <span class="menu-icon">💰</span>
-                <span>Comprar VYTMoney</span>
+            <a href="login-artista.html" class="menu-item">
+                <span class="menu-icon">🔑</span>
+                <span>Iniciar Sesión</span>
             </a>
-            <a href="principal.html" class="menu-item">
-                <span class="menu-icon">🏠</span>
-                <span>Inicio</span>
-            </a>
-            <button class="menu-item" onclick="openTawkTo()">
-                <span class="menu-icon">💬</span>
+            <button class="menu-item" onclick="showContact()">
+                <span class="menu-icon">📞</span>
                 <span>Contacto</span>
             </button>
         </div>
@@ -417,16 +396,8 @@
             console.log('🔼 Menú cerrado');
         }
 
-        function openTawkTo() {
-            // Intentar maximizar el widget de Tawk.to integrado
-            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
-                Tawk_API.maximize();
-            } else if (typeof Tawk_API !== 'undefined' && Tawk_API.showWidget) {
-                Tawk_API.showWidget();
-            } else {
-                // Fallback: abrir chat directo en nueva ventana
-                window.open('https://tawk.to/chat/68b5b0ec2ccfc9192268fd71/1j42rm7na', '_blank');
-            }
+        function showContact() {
+            alert('📞 Contacto VYT MUSIC\n\n📧 Email: info@vytmusic.com\n📱 WhatsApp: +54 9 11 1234-5678\n🌐 Web: vytmusic.com\n\n¡Estamos aquí para ayudarte!');
             closeMenu();
         }
 

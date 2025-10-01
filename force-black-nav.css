@@ -1,0 +1,26 @@
+/* ✅ FORZAR NAVEGACIÓN NEGRA TRANSPARENTE EN TODAS LAS PÁGINAS */
+nav[style*="bottom: 0"],
+.bottom-nav,
+nav.bottom-nav,
+nav[style*="position: fixed"][style*="bottom"],
+*[style*="bottom: 0"][style*="position: fixed"] {
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(20px) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ✅ FORZAR ICONOS BLANCOS */
+nav[style*="bottom: 0"] a,
+nav[style*="bottom: 0"] button,
+.bottom-nav a,
+.bottom-nav button {
+    color: rgba(255, 255, 255, 0.8) !important;
+}
+
+nav[style*="bottom: 0"] a:hover,
+nav[style*="bottom: 0"] button:hover,
+nav[style*="bottom: 0"] .active {
+    color: #ffffff !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+}
