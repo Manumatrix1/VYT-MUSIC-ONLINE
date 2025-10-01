@@ -1063,6 +1063,50 @@
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
                                 </button>
                             </div>
+                            
+                            <!-- Registro/Register -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-user-plus text-emerald-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Página de Registro</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-register" src="" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen personalizada</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-register" accept="image/*" class="hidden" onchange="handleRegisterImageUpload(this)">
+                                <button onclick="document.getElementById('upload-register').click()" 
+                                        class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
+                            
+                            <!-- Nosotros -->
+                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
+                                <div class="flex items-center mb-3">
+                                    <i class="fas fa-users text-amber-500 mr-2"></i>
+                                    <h3 class="font-semibold text-gray-900">Página Nosotros</h3>
+                                </div>
+                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
+                                    <img id="preview-nosotros" src="" 
+                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    <div class="text-gray-500">
+                                        <i class="fas fa-image text-2xl mb-2"></i>
+                                        <p class="text-sm">Sin imagen personalizada</p>
+                                    </div>
+                                </div>
+                                <input type="file" id="upload-nosotros" accept="image/*" class="hidden" onchange="handleNosotrosImageUpload(this)">
+                                <button onclick="document.getElementById('upload-nosotros').click()" 
+                                        class="w-full bg-amber-500 hover:bg-amber-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
+                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
+                                </button>
+                            </div>
                         </div>
                         
                         <!-- Estado de carga -->
@@ -2936,77 +2980,7 @@
             }
         }
 
-        // Función específica para login que es más directa
-        window.handleLoginImageUpload = function(input) {
-            const file = input.files[0];
-            if (!file) return;
-            
-            console.log('🖼️ Imagen seleccionada para login:', file.name);
-            
-            // Validar tipo de archivo
-            if (!file.type.startsWith('image/')) {
-                alert('Por favor selecciona un archivo de imagen válido');
-                return;
-            }
-            
-            // Guardar en variables globales
-            currentImageData = file;
-            currentConfig = {
-                file: 'login-artista.html',
-                preview: 'preview-login'
-            };
-            
-            // Crear vista previa inmediatamente
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                console.log('📸 Vista previa creada, mostrando botón de posicionamiento');
-                
-                // Actualizar preview
-                const previewImg = document.getElementById('preview-login');
-                if (previewImg) {
-                    previewImg.src = e.target.result;
-                }
-                
-                // Mostrar mensaje y botón
-                showLoginPositionButton(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        };
-        
-        function showLoginPositionButton(imageData) {
-            // Buscar donde mostrar el botón
-            const loginContainer = document.getElementById('upload-login').parentNode;
-            
-            // Limpiar botones anteriores
-            const existingButton = loginContainer.querySelector('.position-button');
-            if (existingButton) existingButton.remove();
-            
-            // Crear botón de posicionamiento
-            const buttonDiv = document.createElement('div');
-            buttonDiv.className = 'position-button mt-4 text-center';
-            buttonDiv.innerHTML = `
-                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-3">
-                    ✅ ¡Imagen cargada! Ahora puedes posicionarla.
-                </div>
-                <button onclick="openLoginPositionEditor()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-colors">
-                    <i class="fas fa-crop mr-2"></i>Posicionar Imagen
-                </button>
-            `;
-            
-            loginContainer.appendChild(buttonDiv);
-        }
-        
-        function openLoginPositionEditor() {
-            if (currentImageData) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    showImagePositionEditor(currentImageData.name, e.target.result);
-                };
-                reader.readAsDataURL(currentImageData);
-            } else {
-                alert('Error: No hay imagen seleccionada');
-            }
-        }
+        // Funciones específicas de login eliminadas - ahora usamos la función genérica
         
         // Crear funciones genéricas para todas las secciones
         function createImageUploadHandler(sectionId, fileName) {
@@ -3014,7 +2988,7 @@
                 const file = input.files[0];
                 if (!file) return;
                 
-                console.log(`🖼️ Imagen seleccionada para ${sectionId}:`, file.name);
+                console.log(`🖼️ [${sectionId}] Imagen seleccionada:`, file.name);
                 
                 // Validar tipo de archivo
                 if (!file.type.startsWith('image/')) {
@@ -3029,40 +3003,64 @@
                     preview: `preview-${sectionId.replace('upload-', '')}`
                 };
                 
+                console.log(`📋 [${sectionId}] Config guardada:`, currentConfig);
+                
                 // Crear vista previa inmediatamente
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    console.log(`📸 Vista previa creada para ${sectionId}`);
+                    console.log(`📸 [${sectionId}] Vista previa creada`);
                     
                     // Actualizar preview si existe
                     const previewImg = document.getElementById(currentConfig.preview);
                     if (previewImg) {
                         previewImg.src = e.target.result;
+                        console.log(`🖼️ [${sectionId}] Preview actualizado en:`, currentConfig.preview);
+                    } else {
+                        console.warn(`⚠️ [${sectionId}] No se encontró preview:`, currentConfig.preview);
                     }
                     
                     // Mostrar mensaje y botón
+                    console.log(`🎯 [${sectionId}] Llamando a showPositionButton`);
                     showPositionButton(sectionId, e.target.result);
                 };
                 reader.readAsDataURL(file);
             };
         }
         
-        // Crear todas las funciones específicas
-        window.handleIndexImageUpload = createImageUploadHandler('upload-index', 'index.html');
-        window.handleInscripcionImageUpload = createImageUploadHandler('upload-inscripcion', 'inscripcion-certamen.html');
-        window.handlePerfilImageUpload = createImageUploadHandler('upload-perfil', 'perfil-artista.html');
-        window.handleFanImageUpload = createImageUploadHandler('upload-fan', 'fan-mode.html');
-        window.handleAdminImageUpload = createImageUploadHandler('upload-admin', 'admin.html');
-        window.handleCertamenImageUpload = createImageUploadHandler('upload-certamen', 'certamenes.html');
-        window.handleCertamenIndividualImageUpload = createImageUploadHandler('upload-certamen-individual', 'certamen-individual.html');
+        // Crear todas las funciones específicas - usando nombres consistentes con loadDynamicBackground
+        window.handleIndexImageUpload = createImageUploadHandler('upload-index', 'index');
+        window.handleInscripcionImageUpload = createImageUploadHandler('upload-inscripcion', 'inscripcion-certamen');
+        window.handlePerfilImageUpload = createImageUploadHandler('upload-perfil', 'perfil-artista');
+        window.handleLoginImageUpload = createImageUploadHandler('upload-login', 'login-artista');
+        window.handleFanImageUpload = createImageUploadHandler('upload-fan', 'fan-mode');
+        window.handleAdminImageUpload = createImageUploadHandler('upload-admin', 'admin');
+        window.handleCertamenImageUpload = createImageUploadHandler('upload-certamen', 'certamenes');
+        window.handleCertamenIndividualImageUpload = createImageUploadHandler('upload-certamen-individual', 'certamen-individual');
+        window.handleRegisterImageUpload = createImageUploadHandler('upload-register', 'register');
+        window.handleNosotrosImageUpload = createImageUploadHandler('upload-nosotros', 'nosotros');
         
         function showPositionButton(sectionId, imageData) {
+            console.log('� [showPositionButton] Iniciando para:', sectionId);
+            console.log('🔥 [showPositionButton] currentConfig:', currentConfig);
+            
             // Buscar donde mostrar el botón
-            const container = document.getElementById(sectionId).parentNode;
+            const uploadElement = document.getElementById(sectionId);
+            console.log('🔥 [showPositionButton] Elemento upload encontrado:', !!uploadElement);
+            
+            if (!uploadElement) {
+                console.error('❌ [showPositionButton] No se encontró elemento:', sectionId);
+                return;
+            }
+            
+            const container = uploadElement.parentNode;
+            console.log('🔥 [showPositionButton] Contenedor encontrado:', !!container);
             
             // Limpiar botones anteriores
             const existingButton = container.querySelector('.position-button');
-            if (existingButton) existingButton.remove();
+            if (existingButton) {
+                console.log('🗑️ [showPositionButton] Removiendo botón existente');
+                existingButton.remove();
+            }
             
             // Crear botón de posicionamiento
             const buttonDiv = document.createElement('div');
@@ -3077,51 +3075,27 @@
             `;
             
             container.appendChild(buttonDiv);
+            console.log('✅ [showPositionButton] Botón agregado exitosamente a:', sectionId);
         }
         
         function openGenericPositionEditor() {
+            console.log('🎯 Abriendo editor genérico para:', currentConfig);
             if (currentImageData) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
+                    console.log('📷 Cargando imagen en editor:', currentImageData.name);
                     showImagePositionEditor(currentImageData.name, e.target.result);
                 };
                 reader.readAsDataURL(currentImageData);
             } else {
+                console.error('❌ No hay imagen seleccionada');
                 alert('Error: No hay imagen seleccionada');
             }
         }
 
-        function showPositionButton() {
-            // Buscar el área donde mostrar el botón
-            const statusDiv = document.getElementById('upload-status');
-            const positionButton = document.createElement('div');
-            positionButton.style.cssText = 'margin-top: 16px; text-align: center;';
-            positionButton.innerHTML = `
-                <button onclick="openImagePositionEditor()" style="
-                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-                    color: white;
-                    border: none;
-                    padding: 12px 24px;
-                    border-radius: 8px;
-                    font-weight: 600;
-                    cursor: pointer;
-                    font-size: 16px;
-                    transition: all 0.3s ease;
-                " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
-                    <i class="fas fa-crop mr-2"></i>
-                    Posicionar Imagen
-                </button>
-            `;
-            statusDiv.appendChild(positionButton);
-        }
+        // Función eliminada - usamos openGenericPositionEditor() en su lugar
         
-        function openImagePositionEditor() {
-            if (currentImageData && currentConfig) {
-                showImagePositionEditor(currentImageData.name, URL.createObjectURL(currentImageData));
-            } else {
-                alert('Error: No hay imagen seleccionada');
-            }
-        }
+        // Función eliminada - usamos openGenericPositionEditor() en su lugar
 
         async function handleImageUpload(event, config) {
             const file = event.target.files[0];
