@@ -3,28 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>VYT Music - Ranking de Artistas</title>
-    
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    
-    // Callback cuando Tawk.to se carga
-    Tawk_API.onLoad = function(){
-        console.log('Tawk.to widget cargado correctamente');
-    };
-    
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
-</head>
+    <title>VYT MUSIC - Ranking de Artistas</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,107 +114,6 @@
             border-radius: 12px;
             padding: 20px;
             text-align: center;
-        }
-
-        /* MENÚ SIDEBAR DESDE LA DERECHA - ESTILO SPOTIFY */
-        .menu-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            z-index: 10000;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .menu-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .menu-container {
-            position: fixed;
-            top: 0;
-            right: 0;
-            height: 100vh;
-            width: 300px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            border-left: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px 0;
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-            overflow-y: auto;
-        }
-
-        .menu-overlay.show .menu-container {
-            transform: translateX(0);
-        }
-
-        .menu-header {
-            padding: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .menu-header h3 {
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 0;
-        }
-
-        .menu-item {
-            display: flex;
-            align-items: center;
-            padding: 16px 20px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all 0.2s ease;
-            border: none;
-            background: none;
-            width: 100%;
-            text-align: left;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 14px;
-        }
-
-        .menu-item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-        }
-
-        .menu-close {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: none;
-            border: none;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 24px;
-            cursor: pointer;
-            padding: 5px;
-            border-radius: 50%;
-            transition: all 0.2s ease;
-        }
-
-        .menu-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .menu-icon {
-            margin-right: 16px;
-            font-size: 18px;
-            width: 24px;
-            text-align: center;
-            min-width: 24px;
         }
     </style>
 </head>
@@ -478,53 +356,12 @@
             // Aquí cargarías los datos reales desde Firebase
             console.log('Cargando datos del ranking...');
         }
-
-        // Funciones del menú
-        function toggleMenu() {
-            const overlay = document.getElementById('menuOverlay');
-            if (overlay.classList.contains('show')) {
-                closeMenu();
-            } else {
-                openMenu();
-            }
-        }
-
-        function openMenu() {
-            const overlay = document.getElementById('menuOverlay');
-            overlay.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeMenu() {
-            const overlay = document.getElementById('menuOverlay');
-            overlay.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-
-        function openTawkTo() {
-            // Intentar maximizar el widget de Tawk.to integrado
-            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
-                Tawk_API.maximize();
-            } else if (typeof Tawk_API !== 'undefined' && Tawk_API.showWidget) {
-                Tawk_API.showWidget();
-            } else {
-                // Fallback: abrir chat directo en nueva ventana
-                window.open('https://tawk.to/chat/68b5b0ec2ccfc9192268fd71/1j42rm7na', '_blank');
-            }
-        }
-
-        // Cerrar menú con tecla ESC
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeMenu();
-            }
-        });
     </script>
 
     <!-- 🚨 NAVEGACIÓN INFERIOR CON ICONOS EMOJI (IGUAL QUE PRINCIPAL-SIMPLE) -->
-    <nav style="position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; background: rgba(0, 0, 0, 0.7) !important; backdrop-filter: blur(20px) !important; border-top: 1px solid rgba(255, 255, 255, 0.1) !important; z-index: 9999 !important; padding: 10px 0 !important;">
+    <nav style="position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; background: rgba(15, 23, 42, 0.95) !important; backdrop-filter: blur(20px) !important; border-top: 1px solid rgba(59, 130, 246, 0.3) !important; z-index: 9999 !important; padding: 10px 0 !important;">
         <div style="display: flex !important; justify-content: space-around !important; align-items: center !important; max-width: 600px !important; margin: 0 auto !important; padding: 0 20px !important;">
-            <a href="principal.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
+            <a href="principal-simple.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
                 <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">🏠</span>
                 <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Principal</span>
             </a>
@@ -532,51 +369,15 @@
                 <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">🏆</span>
                 <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Certámenes</span>
             </a>
-            <a href="ranking.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: #ffffff !important; background: rgba(255, 255, 255, 0.1) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
+            <a href="ranking.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: #3B82F6 !important; background: rgba(59, 130, 246, 0.1) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
                 <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">📊</span>
                 <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Ranking</span>
             </a>
-            <button onclick="toggleMenu()" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important; background: none !important; border: none !important; cursor: pointer !important; font-family: inherit !important;">
+            <button onclick="alert('Menú próximamente')" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important; background: none !important; border: none !important; cursor: pointer !important; font-family: inherit !important;">
                 <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">☰</span>
                 <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Menú</span>
             </button>
         </div>
     </nav>
-
-    <!-- MENÚ SIDEBAR DESDE LA DERECHA - ESTILO SPOTIFY -->
-    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
-        <div class="menu-container" onclick="event.stopPropagation()">
-            <button class="menu-close" onclick="closeMenu()">×</button>
-            
-            <div class="menu-header">
-                <h3>🎵 VYT MUSIC</h3>
-            </div>
-
-            <a href="crear-perfil-artista.html" class="menu-item">
-                <span class="menu-icon">🎤</span>
-                <span>Crear Perfil de Artista</span>
-            </a>
-            <a href="reglamento.html" class="menu-item">
-                <span class="menu-icon">📋</span>
-                <span>Bases y Reglamento</span>
-            </a>
-            <a href="perfil-artista.html" class="menu-item">
-                <span class="menu-icon">👤</span>
-                <span>Perfil de Artista</span>
-            </a>
-            <a href="comprar-vyt-money.html" class="menu-item">
-                <span class="menu-icon">💰</span>
-                <span>Comprar VYTMoney</span>
-            </a>
-            <a href="principal.html" class="menu-item">
-                <span class="menu-icon">🏠</span>
-                <span>Inicio</span>
-            </a>
-            <button class="menu-item" onclick="openTawkTo()">
-                <span class="menu-icon">💬</span>
-                <span>Contacto</span>
-            </button>
-        </div>
-    </div>
 </body>
 </html>
