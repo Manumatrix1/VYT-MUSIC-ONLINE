@@ -3809,6 +3809,59 @@
         console.log('�🔥 Script simple cargado con funciones esenciales + fondos');
     </script>
     
+    <!-- 🧪 SCRIPT DE TEST ULTRA SIMPLE -->
+    <script>
+        // Función de test que SIEMPRE debe funcionar
+        function testBasico() {
+            console.log('🧪 TEST: Función ejecutada correctamente');
+            alert('¡La función testBasico() funciona!');
+            
+            // Test localStorage
+            localStorage.setItem('test', 'funciona');
+            var test = localStorage.getItem('test');
+            console.log('💾 localStorage test:', test);
+            
+            // Test elementos DOM
+            var fondosSection = document.getElementById('fondos-section');
+            console.log('🎨 Sección fondos encontrada:', !!fondosSection);
+            
+            // Test básico de upload
+            var uploadIndex = document.getElementById('upload-index');
+            console.log('📁 Upload index encontrado:', !!uploadIndex);
+            
+            return 'TEST COMPLETADO - REVISAR CONSOLA';
+        }
+        
+        // Test de upload súper simple
+        function testUpload() {
+            console.log('📸 Probando sistema de upload...');
+            
+            // Simular guardado de imagen
+            var testConfig = {
+                'index': {
+                    imageData: 'data:image/png;base64,test',
+                    fileName: 'test.png',
+                    applied: new Date().toISOString()
+                }
+            };
+            
+            localStorage.setItem('backgroundConfig', JSON.stringify(testConfig));
+            console.log('✅ Test config guardada en localStorage');
+            
+            // Verificar que se guardó
+            var saved = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+            console.log('📋 Config recuperada:', saved);
+            
+            alert('Test de upload completado - revisar consola');
+        }
+        
+        // Hacer funciones accesibles globalmente
+        window.testBasico = testBasico;
+        window.testUpload = testUpload;
+        
+        console.log('🧪 Funciones de test cargadas: testBasico() y testUpload()');
+    </script>
+    
     <script type="module" src="admin-simple.js"></script>
 </body>
 </html>
