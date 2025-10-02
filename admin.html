@@ -219,7 +219,7 @@
                         <i class="fas fa-home mr-1"></i>Principal
                     </a>
                     <span id="admin-user-email" class="text-sm text-gray-600"></span>
-                    <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                    <button id="logout-btn" onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-sign-out-alt mr-1"></i>Cerrar Sesión
                     </button>
                 </div>
@@ -3707,6 +3707,9 @@
                 login.style.display = 'none';
                 dashboard.style.display = 'block';
                 console.log('✅ Pantallas cambiadas');
+                
+                // Mostrar la sección de inicio por defecto
+                showPage('inicio');
             } else {
                 console.log('❌ No se encontraron elementos');
             }
@@ -3716,7 +3719,40 @@
             simpleDev(); // Por ahora usar el mismo
         }
         
-        console.log('🔥 Script simple cargado');
+        // Función simple para mostrar páginas
+        function showPage(pageId) {
+            console.log('🔥 Mostrando página:', pageId);
+            
+            // Ocultar todas las secciones
+            var sections = document.querySelectorAll('.admin-section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].classList.remove('active');
+            }
+            
+            // Mostrar la sección solicitada
+            var targetSection = document.getElementById(pageId + '-section');
+            if (targetSection) {
+                targetSection.classList.add('active');
+                console.log('✅ Sección mostrada:', pageId);
+            } else {
+                console.log('❌ No se encontró sección:', pageId + '-section');
+            }
+        }
+        
+        // Función simple para cerrar sesión
+        function logout() {
+            console.log('🔥 Cerrando sesión...');
+            var login = document.getElementById('login-section');
+            var dashboard = document.getElementById('admin-dashboard');
+            
+            if (login && dashboard) {
+                dashboard.style.display = 'none';
+                login.style.display = 'block';
+                console.log('✅ Sesión cerrada');
+            }
+        }
+        
+        console.log('🔥 Script simple cargado con funciones esenciales');
     </script>
     
     <script type="module" src="admin-simple.js"></script>
