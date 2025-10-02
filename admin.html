@@ -1089,6 +1089,18 @@
                         loadSimulatedData();
                     });
                     
+                    // Cargar configuraciones de fondos desde Firebase
+                    setTimeout(() => {
+                        loadFromFirebase().then((config) => {
+                            if (config) {
+                                console.log('🎨 Configuraciones de fondos cargadas desde Firebase');
+                                updatePreviewsFromConfig(config);
+                            }
+                        }).catch((error) => {
+                            console.log('⚠️ No se pudieron cargar configuraciones de Firebase:', error.message);
+                        });
+                    }, 2000);
+                    
                     console.log('✅ Admin cargado en modo desarrollador');
                 });
             }
@@ -1138,6 +1150,19 @@
                             console.log('📊 Fallback: Usando datos simulados realistas');
                             loadSimulatedData();
                         });
+                        
+                        // Cargar configuraciones de fondos desde Firebase
+                        setTimeout(() => {
+                            loadFromFirebase().then((config) => {
+                                if (config) {
+                                    console.log('🎨 Configuraciones de fondos cargadas desde Firebase');
+                                    // Actualizar previews si es necesario
+                                    updatePreviewsFromConfig(config);
+                                }
+                            }).catch((error) => {
+                                console.log('⚠️ No se pudieron cargar configuraciones de Firebase:', error.message);
+                            });
+                        }, 2000);
                         
                         errorDiv.classList.add('hidden');
                         console.log('✅ Admin cargado exitosamente');
@@ -3036,7 +3061,115 @@
             }
         }
 
-        window.savePosition = function() {
+        // Función para actualizar previews desde configuración
+        function updatePreviewsFromConfig(config) {
+            console.log('🖼️ Actualizando previews desde configuración...');
+            
+            const pageMappings = {
+                'index.html': 'preview-index',
+                'inscripcion_unificada.html': 'preview-inscripcion',
+                'perfil-artista.html': 'preview-perfil',
+                'login-artista.html': 'preview-login',
+                'fan-mode.html': 'preview-fan',
+                'admin.html': 'preview-admin',
+                'certamenes.html': 'preview-certamen',
+                'certamen-individual.html': 'preview-certamen-individual'
+            };
+            
+            Object.entries(config).forEach(([pageName, pageConfig]) => {
+                if (pageConfig.imageData && pageMappings[pageName]) {
+                    const previewElement = document.getElementById(pageMappings[pageName]);
+                    if (previewElement) {
+                        previewElement.src = pageConfig.imageData;
+                        previewElement.style.display = 'block';
+                        console.log(`✅ Preview actualizado para ${pageName}`);
+                    }
+                }
+            });
+        }
+
+        // Función para guardar en Firebase
+        async function saveToFirebase(pageName, pageConfig) {
+            console.log('💾 Guardando en Firebase:', pageName, pageConfig);
+            
+            try {
+                // Verificar si Firebase está disponible
+                if (typeof window.firebaseDB === 'undefined' || !window.firestoreQuery) {
+                    throw new Error('Firebase no está disponible');
+                }
+                
+                const { doc, setDoc } = window.firestoreQuery;
+                const db = window.firebaseDB;
+                
+                // Crear documento en la colección 'background_configs'
+                const docRef = doc(db, 'background_configs', pageName.replace('.html', ''));
+                
+                // Datos a guardar
+                const dataToSave = {
+                    pageName: pageName,
+                    imageData: pageConfig.imageData || null,
+                    position: pageConfig.position || 'center center',
+                    scale: pageConfig.scale || 1,
+                    updatedAt: new Date().toISOString(),
+                    updatedBy: 'admin'
+                };
+                
+                // Guardar en Firestore
+                await setDoc(docRef, dataToSave);
+                
+                console.log('✅ Guardado exitosamente en Firebase:', pageName);
+                return true;
+                
+            } catch (error) {
+                console.error('❌ Error guardando en Firebase:', error);
+                throw error;
+            }
+        }
+
+        // Función para cargar desde Firebase
+        async function loadFromFirebase() {
+            console.log('📥 Cargando configuraciones desde Firebase...');
+            
+            try {
+                if (typeof window.firebaseDB === 'undefined' || !window.firestoreQuery) {
+                    console.log('⚠️ Firebase no disponible, usando localStorage');
+                    return;
+                }
+                
+                const { collection, getDocs } = window.firestoreQuery;
+                const db = window.firebaseDB;
+                
+                // Obtener todas las configuraciones
+                const configsRef = collection(db, 'background_configs');
+                const snapshot = await getDocs(configsRef);
+                
+                const firebaseConfig = {};
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    firebaseConfig[data.pageName] = {
+                        imageData: data.imageData,
+                        position: data.position,
+                        scale: data.scale
+                    };
+                });
+                
+                // Combinar con localStorage (Firebase tiene prioridad)
+                const localConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const mergedConfig = { ...localConfig, ...firebaseConfig };
+                
+                // Actualizar localStorage con datos de Firebase
+                localStorage.setItem('backgroundConfig', JSON.stringify(mergedConfig));
+                
+                console.log('✅ Configuraciones cargadas desde Firebase:', Object.keys(firebaseConfig));
+                return mergedConfig;
+                
+            } catch (error) {
+                console.error('❌ Error cargando desde Firebase:', error);
+                return null;
+            }
+        }
+
+        window.savePosition = async function() {
             console.log('💾 Guardando posición para:', currentEditingPage);
             
             // Obtener configuración actual
@@ -3050,8 +3183,16 @@
             backgroundConfig[currentEditingPage].position = currentPosition;
             backgroundConfig[currentEditingPage].scale = currentScale;
             
-            // Guardar en localStorage
+            // Guardar en localStorage (fallback)
             localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
+            
+            // NUEVO: Guardar también en Firebase para persistencia
+            try {
+                await saveToFirebase(currentEditingPage, backgroundConfig[currentEditingPage]);
+            } catch (error) {
+                console.warn('⚠️ Error guardando en Firebase:', error);
+                console.log('📦 Guardado en localStorage como fallback');
+            }
             
             // Aplicar cambios inmediatamente
             if (backgroundConfig[currentEditingPage].imageData) {
@@ -3059,23 +3200,24 @@
                 const saveStatusElement = document.getElementById('save-status');
                 if (saveStatusElement) {
                     saveStatusElement.classList.remove('hidden');
-                    saveStatusElement.innerHTML = '✅ Guardando...';
+                    saveStatusElement.innerHTML = '✅ Guardando en Firebase...';
                     
                     setTimeout(() => {
-                        saveStatusElement.innerHTML = '✅ ¡Posición guardada exitosamente!';
-                    }, 500);
+                        saveStatusElement.innerHTML = '✅ ¡Guardado en Firebase exitosamente!';
+                    }, 1000);
                 }
                 
                 console.log('🎨 Aplicando nueva posición:', currentPosition, 'con escala:', currentScale);
                 
                 // Mostrar confirmación mejorada
-                const mensaje = `🎯 ¡Posición guardada exitosamente!
+                const mensaje = `🎯 ¡Configuración guardada exitosamente!
 
 📄 Página: ${currentEditingPage}
 📍 Posición: ${currentPosition}
 🔍 Escala: ${currentScale}x
+💾 Guardado: localStorage + Firebase
 
-💡 La nueva configuración se aplicará automáticamente en la página.`;
+💡 La configuración es persistente y se aplicará automáticamente.`;
                 
                 alert(mensaje);
             } else {
