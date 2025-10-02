@@ -2875,13 +2875,53 @@
             scaleSlider.value = currentScale;
             
             // Configurar imagen de fondo en el preview
+            let imageUrl = null;
+            
             if (pageConfig.imageData) {
-                previewElement.style.backgroundImage = `url('${pageConfig.imageData}')`;
+                imageUrl = pageConfig.imageData;
+                console.log('✅ Imagen encontrada en localStorage para:', pageName);
+            } else {
+                // Intentar obtener imagen del preview del admin
+                const pageMappings = {
+                    'index.html': 'preview-index',
+                    'inscripcion_unificada.html': 'preview-inscripcion',
+                    'perfil-artista.html': 'preview-perfil',
+                    'login-artista.html': 'preview-login',
+                    'fan-mode.html': 'preview-fan',
+                    'admin.html': 'preview-admin',
+                    'certamenes.html': 'preview-certamen',
+                    'certamen-individual.html': 'preview-certamen-individual'
+                };
+                
+                const previewId = pageMappings[pageName];
+                if (previewId) {
+                    const previewImg = document.getElementById(previewId);
+                    if (previewImg && previewImg.src && previewImg.src !== window.location.href) {
+                        imageUrl = previewImg.src;
+                        console.log('✅ Imagen obtenida del preview del admin:', previewId);
+                    }
+                }
+            }
+            
+            if (imageUrl) {
+                previewElement.style.backgroundImage = `url('${imageUrl}')`;
                 previewElement.style.backgroundPosition = currentPosition;
                 previewElement.style.backgroundSize = currentScale > 1 ? `${currentScale * 100}%` : 'cover';
+                previewElement.style.backgroundRepeat = 'no-repeat';
+                previewElement.innerHTML = ''; // Limpiar cualquier mensaje
+                console.log('🖼️ Imagen aplicada al preview:', imageUrl.substring(0, 50) + '...');
             } else {
                 previewElement.style.backgroundImage = 'none';
-                previewElement.innerHTML = '<div class="flex items-center justify-center h-full text-gray-500"><i class="fas fa-image text-4xl"></i><p class="ml-3">No hay imagen configurada</p></div>';
+                previewElement.innerHTML = `
+                    <div class="flex items-center justify-center h-full text-gray-500">
+                        <div class="text-center">
+                            <i class="fas fa-image text-4xl mb-2"></i>
+                            <p class="text-sm">No hay imagen configurada</p>
+                            <p class="text-xs mt-1">Sube una imagen primero desde "Cambiar Fondo"</p>
+                        </div>
+                    </div>
+                `;
+                console.log('⚠️ No se encontró imagen para:', pageName);
             }
             
             modal.classList.remove('hidden');
@@ -3046,6 +3086,53 @@
             closePositionEditor();
         };
 
+        // Función de debug para verificar imágenes
+        window.debugImages = function() {
+            console.log('🔍 DEBUG: Verificando imágenes disponibles...');
+            
+            // Verificar localStorage
+            const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+            console.log('📦 localStorage backgroundConfig:', backgroundConfig);
+            
+            // Verificar previews del admin
+            const pageMappings = {
+                'index.html': 'preview-index',
+                'inscripcion_unificada.html': 'preview-inscripcion',
+                'perfil-artista.html': 'preview-perfil',
+                'login-artista.html': 'preview-login',
+                'fan-mode.html': 'preview-fan',
+                'admin.html': 'preview-admin',
+                'certamenes.html': 'preview-certamen',
+                'certamen-individual.html': 'preview-certamen-individual'
+            };
+            
+            console.log('🖼️ Previews del admin:');
+            Object.entries(pageMappings).forEach(([page, previewId]) => {
+                const previewImg = document.getElementById(previewId);
+                if (previewImg) {
+                    console.log(`  ${page}: ${previewImg.src || 'Sin src'}`);
+                } else {
+                    console.log(`  ${page}: Elemento no encontrado`);
+                }
+            });
+            
+            // Mostrar en alert también
+            let debugInfo = 'Debug de Imágenes:\n\n';
+            debugInfo += `localStorage: ${Object.keys(backgroundConfig).length} páginas configuradas\n\n`;
+            
+            Object.entries(pageMappings).forEach(([page, previewId]) => {
+                const previewImg = document.getElementById(previewId);
+                const hasLocalStorage = backgroundConfig[page] && backgroundConfig[page].imageData;
+                const hasSrc = previewImg && previewImg.src && previewImg.src !== window.location.href;
+                
+                debugInfo += `${page}:\n`;
+                debugInfo += `  - localStorage: ${hasLocalStorage ? '✅' : '❌'}\n`;
+                debugInfo += `  - Preview img: ${hasSrc ? '✅' : '❌'}\n\n`;
+            });
+            
+            alert(debugInfo);
+        };
+
         // Agregar funcionalidad de clic para mover imagen
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
@@ -3073,9 +3160,14 @@
                     <i class="fas fa-crosshairs mr-2"></i>
                     Editor de Posicionamiento
                 </h3>
-                <button onclick="closePositionEditor()" class="text-white hover:text-gray-300">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+                <div class="flex items-center space-x-2">
+                    <button onclick="debugImages()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
+                        🔍 Debug
+                    </button>
+                    <button onclick="closePositionEditor()" class="text-white hover:text-gray-300">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
             </div>
             
             <div class="p-6">
