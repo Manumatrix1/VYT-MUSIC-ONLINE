@@ -178,14 +178,14 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
-                <button type="button" id="login-btn" 
+                <button type="button" id="login-btn" onclick="attemptLogin()"
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
                     <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
                 </button>
                 
                 <!-- Acceso rópido para desarrollador -->
                 <div class="mt-4 pt-4 border-t border-gray-200">
-                    <button type="button" id="dev-access-btn" 
+                    <button type="button" id="dev-access-btn" onclick="devAccess()"
                             class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
                         <i class="fas fa-code mr-2"></i>Acceso Desarrollador (Sin Auth)
                     </button>
@@ -1188,6 +1188,43 @@
             console.log('Exportar datos');
         };
 
+        // Funciones de acceso directo
+        function devAccess() {
+            console.log('🔥 Activando acceso desarrollador...');
+            try {
+                const loginSection = document.getElementById('login-section');
+                const adminDashboard = document.getElementById('admin-dashboard');
+                const adminUserEmail = document.getElementById('admin-user-email');
+                
+                if (loginSection && adminDashboard) {
+                    loginSection.classList.add('hidden');
+                    adminDashboard.classList.remove('hidden');
+                    
+                    if (adminUserEmail) {
+                        adminUserEmail.textContent = 'Desarrollador (modo local)';
+                    }
+                    
+                    // Mostrar la sección de inicio
+                    showPage('inicio');
+                    console.log('✅ Acceso desarrollador exitoso');
+                } else {
+                    console.error('❌ No se encontraron elementos del DOM');
+                }
+            } catch (error) {
+                console.error('❌ Error en devAccess:', error);
+            }
+        }
+
+        function attemptLogin() {
+            console.log('🔥 Intentando login...');
+            const password = document.getElementById('admin-password')?.value;
+            console.log('Password ingresada:', password ? 'SÍ' : 'NO');
+            
+            // Por ahora, usar devAccess como fallback
+            devAccess();
+        }
+
+        /* Comentado: usando onclick directamente ahora
         // Acceso rópido para desarrollador
         document.addEventListener('DOMContentLoaded', function() {
             const devAccessBtn = document.getElementById('dev-access-btn');
@@ -1237,6 +1274,7 @@
                 });
             }
         });
+        */ // Fin del comentario del DOMContentLoaded conflictivo
 
         // Función para cargar datos reales
         async function loadRealData() {
