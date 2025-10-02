@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Admin Completo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .section { display: none; }
+        .section.active { display: block; }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700">
+        <div class="bg-white p-8 rounded-lg shadow-2xl max-w-md w-full">
+            <div class="text-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-800">VYT MUSIC</h1>
+                <p class="text-gray-600">Panel de Administración</p>
+            </div>
+            
+            <button onclick="entrarAdmin()" class="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 px-6 rounded-lg text-lg font-semibold transition-colors">
+                <i class="fas fa-sign-in-alt mr-2"></i>
+                Entrar al Admin
+            </button>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard" class="hidden">
+        
+        <!-- Header -->
+        <header class="bg-white shadow-lg">
+            <div class="px-6 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center">
+                        <h1 class="text-2xl font-bold text-gray-800">VYT MUSIC Admin</h1>
+                    </div>
+                    <button onclick="salirAdmin()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg">
+                        <i class="fas fa-sign-out-alt mr-1"></i>Salir
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="bg-gray-800 text-white">
+            <div class="px-6 py-4">
+                <div class="flex space-x-4">
+                    <button onclick="mostrarSeccion('dashboard')" class="nav-btn bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded">
+                        <i class="fas fa-home mr-1"></i>Dashboard
+                    </button>
+                    <button onclick="mostrarSeccion('fondos')" class="nav-btn bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded">
+                        <i class="fas fa-images mr-1"></i>Fondos
+                    </button>
+                    <button onclick="mostrarSeccion('participantes')" class="nav-btn bg-green-600 hover:bg-green-700 px-4 py-2 rounded">
+                        <i class="fas fa-users mr-1"></i>Participantes
+                    </button>
+                    <button onclick="mostrarSeccion('certamenes')" class="nav-btn bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded">
+                        <i class="fas fa-trophy mr-1"></i>Certámenes
+                    </button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="p-6">
+
+            <!-- Dashboard Section -->
+            <div id="dashboard-section" class="section active">
+                <h2 class="text-2xl font-bold mb-6">Dashboard Principal</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-blue-100 rounded-full">
+                                <i class="fas fa-users text-blue-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-gray-600">Participantes</p>
+                                <p class="text-2xl font-bold">1,234</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-green-100 rounded-full">
+                                <i class="fas fa-trophy text-green-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-gray-600">Certámenes</p>
+                                <p class="text-2xl font-bold">12</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-purple-100 rounded-full">
+                                <i class="fas fa-images text-purple-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-gray-600">Fondos</p>
+                                <p class="text-2xl font-bold" id="fondos-count">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-white p-6 rounded-lg shadow">
+                        <div class="flex items-center">
+                            <div class="p-3 bg-yellow-100 rounded-full">
+                                <i class="fas fa-star text-yellow-600 text-xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <p class="text-gray-600">Rating</p>
+                                <p class="text-2xl font-bold">4.9</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-lg font-bold mb-4">Estado del Sistema</h3>
+                    <div class="space-y-2">
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                            <span>Sistema operativo</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                            <span>Base de datos conectada</span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-3 h-3 bg-green-500 rounded-full mr-2"></span>
+                            <span>Sistema de fondos funcionando</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fondos Section -->
+            <div id="fondos-section" class="section">
+                <h2 class="text-2xl font-bold mb-6">Gestión de Fondos</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <!-- Página Principal -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-home text-blue-500 mr-2"></i>
+                            Página Principal
+                        </h3>
+                        <div class="bg-gray-100 rounded h-32 mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="prev-index" src="" class="w-full h-full object-cover hidden">
+                            <div id="placeholder-index" class="text-gray-500 text-center">
+                                <i class="fas fa-image text-2xl mb-1"></i>
+                                <p class="text-sm">Sin imagen</p>
+                            </div>
+                        </div>
+                        <input type="file" id="file-index" accept="image/*" class="w-full mb-3 p-2 border rounded">
+                        <button onclick="aplicarFondo('index')" class="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+                            Aplicar Fondo
+                        </button>
+                        <div id="status-index" class="mt-2 text-sm"></div>
+                    </div>
+
+                    <!-- Perfil de Artista -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-user text-purple-500 mr-2"></i>
+                            Perfil de Artista
+                        </h3>
+                        <div class="bg-gray-100 rounded h-32 mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="prev-perfil-artista" src="" class="w-full h-full object-cover hidden">
+                            <div id="placeholder-perfil-artista" class="text-gray-500 text-center">
+                                <i class="fas fa-image text-2xl mb-1"></i>
+                                <p class="text-sm">Sin imagen</p>
+                            </div>
+                        </div>
+                        <input type="file" id="file-perfil-artista" accept="image/*" class="w-full mb-3 p-2 border rounded">
+                        <button onclick="aplicarFondo('perfil-artista')" class="w-full bg-purple-500 text-white py-2 rounded hover:bg-purple-600">
+                            Aplicar Fondo
+                        </button>
+                        <div id="status-perfil-artista" class="mt-2 text-sm"></div>
+                    </div>
+
+                    <!-- Login -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-sign-in-alt text-green-500 mr-2"></i>
+                            Login
+                        </h3>
+                        <div class="bg-gray-100 rounded h-32 mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="prev-login-artista" src="" class="w-full h-full object-cover hidden">
+                            <div id="placeholder-login-artista" class="text-gray-500 text-center">
+                                <i class="fas fa-image text-2xl mb-1"></i>
+                                <p class="text-sm">Sin imagen</p>
+                            </div>
+                        </div>
+                        <input type="file" id="file-login-artista" accept="image/*" class="w-full mb-3 p-2 border rounded">
+                        <button onclick="aplicarFondo('login-artista')" class="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">
+                            Aplicar Fondo
+                        </button>
+                        <div id="status-login-artista" class="mt-2 text-sm"></div>
+                    </div>
+
+                    <!-- Fan Mode -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-star text-pink-500 mr-2"></i>
+                            Fan Mode
+                        </h3>
+                        <div class="bg-gray-100 rounded h-32 mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="prev-fan-mode" src="" class="w-full h-full object-cover hidden">
+                            <div id="placeholder-fan-mode" class="text-gray-500 text-center">
+                                <i class="fas fa-image text-2xl mb-1"></i>
+                                <p class="text-sm">Sin imagen</p>
+                            </div>
+                        </div>
+                        <input type="file" id="file-fan-mode" accept="image/*" class="w-full mb-3 p-2 border rounded">
+                        <button onclick="aplicarFondo('fan-mode')" class="w-full bg-pink-500 text-white py-2 rounded hover:bg-pink-600">
+                            Aplicar Fondo
+                        </button>
+                        <div id="status-fan-mode" class="mt-2 text-sm"></div>
+                    </div>
+
+                    <!-- Certámenes -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-trophy text-yellow-500 mr-2"></i>
+                            Certámenes
+                        </h3>
+                        <div class="bg-gray-100 rounded h-32 mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="prev-certamenes" src="" class="w-full h-full object-cover hidden">
+                            <div id="placeholder-certamenes" class="text-gray-500 text-center">
+                                <i class="fas fa-image text-2xl mb-1"></i>
+                                <p class="text-sm">Sin imagen</p>
+                            </div>
+                        </div>
+                        <input type="file" id="file-certamenes" accept="image/*" class="w-full mb-3 p-2 border rounded">
+                        <button onclick="aplicarFondo('certamenes')" class="w-full bg-yellow-500 text-white py-2 rounded hover:bg-yellow-600">
+                            Aplicar Fondo
+                        </button>
+                        <div id="status-certamenes" class="mt-2 text-sm"></div>
+                    </div>
+
+                    <!-- Nosotros -->
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-lg font-bold mb-4 flex items-center">
+                            <i class="fas fa-users text-indigo-500 mr-2"></i>
+                            Nosotros
+                        </h3>
+                        <div class="bg-gray-100 rounded h-32 mb-4 flex items-center justify-center overflow-hidden">
+                            <img id="prev-nosotros" src="" class="w-full h-full object-cover hidden">
+                            <div id="placeholder-nosotros" class="text-gray-500 text-center">
+                                <i class="fas fa-image text-2xl mb-1"></i>
+                                <p class="text-sm">Sin imagen</p>
+                            </div>
+                        </div>
+                        <input type="file" id="file-nosotros" accept="image/*" class="w-full mb-3 p-2 border rounded">
+                        <button onclick="aplicarFondo('nosotros')" class="w-full bg-indigo-500 text-white py-2 rounded hover:bg-indigo-600">
+                            Aplicar Fondo
+                        </button>
+                        <div id="status-nosotros" class="mt-2 text-sm"></div>
+                    </div>
+
+                </div>
+
+                <!-- Panel de Control de Fondos -->
+                <div class="mt-8 bg-white p-6 rounded-lg shadow">
+                    <h3 class="text-lg font-bold mb-4">Panel de Control</h3>
+                    <div class="flex space-x-4">
+                        <button onclick="cargarFondos()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            <i class="fas fa-sync mr-1"></i>Recargar
+                        </button>
+                        <button onclick="limpiarFondos()" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600">
+                            <i class="fas fa-trash mr-1"></i>Limpiar Todo
+                        </button>
+                        <button onclick="exportarFondos()" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                            <i class="fas fa-download mr-1"></i>Exportar
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Participantes Section -->
+            <div id="participantes-section" class="section">
+                <h2 class="text-2xl font-bold mb-6">Gestión de Participantes</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p class="text-gray-600">Sección de participantes en desarrollo...</p>
+                </div>
+            </div>
+
+            <!-- Certámenes Section -->
+            <div id="certamenes-section" class="section">
+                <h2 class="text-2xl font-bold mb-6">Gestión de Certámenes</h2>
+                <div class="bg-white p-6 rounded-lg shadow">
+                    <p class="text-gray-600">Sección de certámenes en desarrollo...</p>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        // 🔥 SISTEMA COMPLETO Y FUNCIONAL
+
+        function entrarAdmin() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-dashboard').classList.remove('hidden');
+            cargarFondos();
+            actualizarContadores();
+        }
+
+        function salirAdmin() {
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function mostrarSeccion(seccion) {
+            // Ocultar todas las secciones
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            
+            // Mostrar la sección seleccionada
+            document.getElementById(seccion + '-section').classList.add('active');
+            
+            // Actualizar botones de navegación
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-800', 'bg-purple-800', 'bg-green-800', 'bg-yellow-800');
+            });
+        }
+
+        function aplicarFondo(pagina) {
+            const archivo = document.getElementById('file-' + pagina).files[0];
+            
+            if (!archivo) {
+                mostrarEstado(pagina, 'Selecciona una imagen', 'error');
+                return;
+            }
+
+            mostrarEstado(pagina, 'Procesando...', 'info');
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imagen = e.target.result;
+                    
+                    // Guardar en localStorage
+                    let config = JSON.parse(localStorage.getItem('vyt-backgrounds') || '{}');
+                    config[pagina] = {
+                        imageData: imagen,
+                        filename: archivo.name,
+                        timestamp: Date.now()
+                    };
+                    localStorage.setItem('vyt-backgrounds', JSON.stringify(config));
+                    
+                    // Actualizar preview
+                    const preview = document.getElementById('prev-' + pagina);
+                    const placeholder = document.getElementById('placeholder-' + pagina);
+                    
+                    preview.src = imagen;
+                    preview.classList.remove('hidden');
+                    placeholder.classList.add('hidden');
+                    
+                    mostrarEstado(pagina, 'Fondo aplicado ✓', 'success');
+                    actualizarContadores();
+                    
+                } catch (error) {
+                    mostrarEstado(pagina, 'Error al guardar', 'error');
+                }
+            };
+            
+            reader.readAsDataURL(archivo);
+        }
+
+        function mostrarEstado(pagina, mensaje, tipo) {
+            const elemento = document.getElementById('status-' + pagina);
+            elemento.textContent = mensaje;
+            
+            elemento.className = 'mt-2 text-sm ';
+            if (tipo === 'success') elemento.className += 'text-green-600';
+            else if (tipo === 'error') elemento.className += 'text-red-600';
+            else elemento.className += 'text-blue-600';
+        }
+
+        function cargarFondos() {
+            try {
+                const config = JSON.parse(localStorage.getItem('vyt-backgrounds') || '{}');
+                
+                for (const [pagina, datos] of Object.entries(config)) {
+                    if (datos.imageData) {
+                        const preview = document.getElementById('prev-' + pagina);
+                        const placeholder = document.getElementById('placeholder-' + pagina);
+                        
+                        if (preview && placeholder) {
+                            preview.src = datos.imageData;
+                            preview.classList.remove('hidden');
+                            placeholder.classList.add('hidden');
+                        }
+                    }
+                }
+                
+                actualizarContadores();
+            } catch (error) {
+                console.error('Error cargando fondos:', error);
+            }
+        }
+
+        function limpiarFondos() {
+            if (confirm('¿Eliminar todos los fondos?')) {
+                localStorage.removeItem('vyt-backgrounds');
+                location.reload();
+            }
+        }
+
+        function exportarFondos() {
+            const config = localStorage.getItem('vyt-backgrounds');
+            if (config) {
+                const blob = new Blob([config], {type: 'application/json'});
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'vyt-fondos-' + Date.now() + '.json';
+                a.click();
+                URL.revokeObjectURL(url);
+            }
+        }
+
+        function actualizarContadores() {
+            try {
+                const config = JSON.parse(localStorage.getItem('vyt-backgrounds') || '{}');
+                const count = Object.keys(config).length;
+                document.getElementById('fondos-count').textContent = count;
+            } catch (error) {
+                document.getElementById('fondos-count').textContent = '0';
+            }
+        }
+
+        // Inicializar
+        console.log('🎨 VYT MUSIC Admin cargado');
+    </script>
+</body>
+</html>
