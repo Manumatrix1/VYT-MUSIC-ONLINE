@@ -100,6 +100,9 @@
                         <i class="fas fa-home mr-1"></i>Principal
                     </a>
                     <span id="admin-user-email" class="text-sm text-gray-600"></span>
+                    <button id="reset-data-btn" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors mr-2">
+                        <i class="fas fa-broom mr-1"></i>Limpiar Datos
+                    </button>
                     <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-sign-out-alt mr-1"></i>Cerrar Sesión
                     </button>
@@ -114,12 +117,17 @@
                     <button onclick="showPage('inicio')" class="admin-nav-btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-home mr-1"></i>Inicio
                     </button>
-                    <button onclick="showPage('participantes-online')" class="admin-nav-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                    <button onclick="showPage('participantes')" class="admin-nav-btn bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <i class="fas fa-users mr-1"></i>Participantes
+                    </button>
+                    <!-- OBSOLETO: Botones separados ocultos
+                    <button onclick="showPage('participantes-online')" class="admin-nav-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors" style="display: none;">
                         <i class="fas fa-wifi mr-1"></i>Online
                     </button>
-                    <button onclick="showPage('participantes-presenciales')" class="admin-nav-btn bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
+                    <button onclick="showPage('participantes-presenciales')" class="admin-nav-btn bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors" style="display: none;">
                         <i class="fas fa-map-marker-alt mr-1"></i>Presencial
                     </button>
+                    -->
                     <button onclick="showPage('constructor')" class="admin-nav-btn bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-tools mr-1"></i>Constructor
                     </button>
@@ -1138,6 +1146,16 @@
                     adminDashboard.classList.add('hidden');
                     loginSection.classList.remove('hidden');
                     console.log('🚪 Sesión cerrada');
+                });
+            }
+            
+            // Agregar funcionalidad al botón de reinicio de datos
+            const resetDataBtn = document.getElementById('reset-data-btn');
+            if (resetDataBtn) {
+                resetDataBtn.addEventListener('click', function() {
+                    if (confirm('⚠️ ¿Estás seguro de que quieres LIMPIAR TODOS LOS DATOS?\n\nEsto eliminará:\n• Configuraciones de fondos\n• Datos de localStorage\n• Configuraciones guardadas\n\n⚠️ ESTA ACCIÓN NO SE PUEDE DESHACER')) {
+                        resetAllData();
+                    }
                 });
             }
             
@@ -3198,6 +3216,101 @@
             } catch (error) {
                 console.error('❌ Error cargando desde Firebase:', error);
                 return null;
+            }
+        }
+
+        // Función para reiniciar todos los datos
+        async function resetAllData() {
+            console.log('🧹 Iniciando limpieza completa de datos...');
+            
+            try {
+                // 1. Limpiar localStorage
+                console.log('🗑️ Limpiando localStorage...');
+                const keysToRemove = [
+                    'backgroundConfig',
+                    'vyt-backgrounds',
+                    'admin-settings',
+                    'user-preferences',
+                    'temp-data'
+                ];
+                
+                keysToRemove.forEach(key => {
+                    localStorage.removeItem(key);
+                    console.log(`✅ Eliminado: ${key}`);
+                });
+                
+                // 2. Limpiar Firebase (si está disponible)
+                if (typeof window.firebaseDB !== 'undefined' && window.firestoreQuery) {
+                    console.log('🔥 Limpiando datos de Firebase...');
+                    try {
+                        const { collection, getDocs, deleteDoc } = window.firestoreQuery;
+                        const db = window.firebaseDB;
+                        
+                        // Limpiar configuraciones de fondos
+                        const configsRef = collection(db, 'background_configs');
+                        const snapshot = await getDocs(configsRef);
+                        
+                        const deletePromises = [];
+                        snapshot.forEach(doc => {
+                            deletePromises.push(deleteDoc(doc.ref));
+                        });
+                        
+                        await Promise.all(deletePromises);
+                        console.log(`✅ Eliminados ${deletePromises.length} documentos de Firebase`);
+                    } catch (firebaseError) {
+                        console.warn('⚠️ Error limpiando Firebase:', firebaseError);
+                    }
+                }
+                
+                // 3. Limpiar previews del admin
+                console.log('🖼️ Limpiando previews...');
+                const previewIds = [
+                    'preview-index', 'preview-inscripcion', 'preview-perfil',
+                    'preview-login', 'preview-fan', 'preview-admin',
+                    'preview-certamen', 'preview-certamen-individual', 'preview-ranking'
+                ];
+                
+                previewIds.forEach(id => {
+                    const preview = document.getElementById(id);
+                    if (preview) {
+                        preview.src = '';
+                        preview.style.display = 'none';
+                        if (preview.nextElementSibling) {
+                            preview.nextElementSibling.style.display = 'block';
+                        }
+                    }
+                });
+                
+                // 4. Resetear inputs de archivo
+                console.log('📁 Limpiando inputs...');
+                const fileInputIds = [
+                    'upload-index', 'upload-inscripcion', 'upload-perfil',
+                    'upload-login', 'upload-fan', 'upload-admin',
+                    'upload-certamen', 'upload-certamen-individual', 'upload-ranking'
+                ];
+                
+                fileInputIds.forEach(id => {
+                    const input = document.getElementById(id);
+                    if (input) {
+                        input.value = '';
+                    }
+                });
+                
+                console.log('✅ Limpieza completa finalizada');
+                
+                // Mostrar confirmación
+                alert(`🧹 ¡DATOS LIMPIADOS EXITOSAMENTE!
+
+✅ localStorage limpiado
+✅ Firebase limpiado  
+✅ Previews restaurados
+✅ Inputs resetados
+
+💡 El sistema está listo para datos reales.`);
+                
+            } catch (error) {
+                console.error('❌ Error durante la limpieza:', error);
+                alert('❌ Error durante la limpieza. Ver consola para detalles.');
             }
         }
 
