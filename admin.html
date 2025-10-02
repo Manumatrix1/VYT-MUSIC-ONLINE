@@ -178,14 +178,14 @@
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
-                <button type="button" id="login-btn" onclick="attemptLogin()"
+                <button type="button" id="login-btn" onclick="simpleLogin()"
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
                     <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
                 </button>
                 
                 <!-- Acceso rópido para desarrollador -->
                 <div class="mt-4 pt-4 border-t border-gray-200">
-                    <button type="button" id="dev-access-btn" onclick="devAccess()"
+                    <button type="button" id="dev-access-btn" onclick="simpleDev()"
                             class="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-3 px-4 rounded-lg transition-colors">
                         <i class="fas fa-code mr-2"></i>Acceso Desarrollador (Sin Auth)
                     </button>
@@ -3693,6 +3693,32 @@
             }, 1000);
         });
     </script>
+    
+    <!-- 🚀 SCRIPT SÚPER SIMPLE DE LOGIN -->
+    <script>
+        function simpleDev() {
+            alert('Intentando acceso...');
+            console.log('🔥 simpleDev ejecutada');
+            
+            var login = document.getElementById('login-section');
+            var dashboard = document.getElementById('admin-dashboard');
+            
+            if (login && dashboard) {
+                login.style.display = 'none';
+                dashboard.style.display = 'block';
+                console.log('✅ Pantallas cambiadas');
+            } else {
+                console.log('❌ No se encontraron elementos');
+            }
+        }
+        
+        function simpleLogin() {
+            simpleDev(); // Por ahora usar el mismo
+        }
+        
+        console.log('🔥 Script simple cargado');
+    </script>
+    
     <script type="module" src="admin-simple.js"></script>
 </body>
 </html>
