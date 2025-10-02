@@ -1137,6 +1137,52 @@
 
     <!-- Scripts -->
     <script>
+        // 🔥 FUNCIONES GLOBALES DE LOGIN - DEBEN IR PRIMERO
+        window.devAccess = function() {
+            console.log('🔥 Activando acceso desarrollador...');
+            try {
+                const loginSection = document.getElementById('login-section');
+                const adminDashboard = document.getElementById('admin-dashboard');
+                const adminUserEmail = document.getElementById('admin-user-email');
+                
+                console.log('Elementos encontrados:', {
+                    loginSection: !!loginSection,
+                    adminDashboard: !!adminDashboard,
+                    adminUserEmail: !!adminUserEmail
+                });
+                
+                if (loginSection && adminDashboard) {
+                    loginSection.classList.add('hidden');
+                    adminDashboard.classList.remove('hidden');
+                    
+                    if (adminUserEmail) {
+                        adminUserEmail.textContent = 'Desarrollador (modo local)';
+                    }
+                    
+                    // Mostrar la sección de inicio
+                    if (typeof showPage === 'function') {
+                        showPage('inicio');
+                    } else {
+                        console.warn('showPage no está definida aún');
+                    }
+                    console.log('✅ Acceso desarrollador exitoso');
+                } else {
+                    console.error('❌ No se encontraron elementos del DOM');
+                }
+            } catch (error) {
+                console.error('❌ Error en devAccess:', error);
+            }
+        };
+
+        window.attemptLogin = function() {
+            console.log('🔥 Intentando login...');
+            const password = document.getElementById('admin-password')?.value;
+            console.log('Password ingresada:', password ? 'SÍ' : 'NO');
+            
+            // Por ahora, usar devAccess como fallback
+            window.devAccess();
+        };
+
         // Función global para mostrar secciones
         function showPage(pageId) {
             document.querySelectorAll('.admin-section').forEach(section => {
@@ -1188,41 +1234,7 @@
             console.log('Exportar datos');
         };
 
-        // Funciones de acceso directo
-        function devAccess() {
-            console.log('🔥 Activando acceso desarrollador...');
-            try {
-                const loginSection = document.getElementById('login-section');
-                const adminDashboard = document.getElementById('admin-dashboard');
-                const adminUserEmail = document.getElementById('admin-user-email');
-                
-                if (loginSection && adminDashboard) {
-                    loginSection.classList.add('hidden');
-                    adminDashboard.classList.remove('hidden');
-                    
-                    if (adminUserEmail) {
-                        adminUserEmail.textContent = 'Desarrollador (modo local)';
-                    }
-                    
-                    // Mostrar la sección de inicio
-                    showPage('inicio');
-                    console.log('✅ Acceso desarrollador exitoso');
-                } else {
-                    console.error('❌ No se encontraron elementos del DOM');
-                }
-            } catch (error) {
-                console.error('❌ Error en devAccess:', error);
-            }
-        }
-
-        function attemptLogin() {
-            console.log('🔥 Intentando login...');
-            const password = document.getElementById('admin-password')?.value;
-            console.log('Password ingresada:', password ? 'SÍ' : 'NO');
-            
-            // Por ahora, usar devAccess como fallback
-            devAccess();
-        }
+        // Funciones duplicadas eliminadas - usar las del window.* de arriba
 
         /* Comentado: usando onclick directamente ahora
         // Acceso rópido para desarrollador
