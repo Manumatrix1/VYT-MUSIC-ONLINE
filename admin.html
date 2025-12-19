@@ -690,7 +690,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Total en Circulación</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="vyt-circulacion">$125,430</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="vyt-circulacion">$0</p>
                                 </div>
                             </div>
                         </div>
@@ -702,7 +702,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Transacciones Hoy</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="vyt-transacciones-hoy">47</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="vyt-transacciones-hoy">0</p>
                                 </div>
                             </div>
                         </div>
@@ -714,7 +714,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Usuarios Activos</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="vyt-usuarios-activos">234</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="vyt-usuarios-activos">0</p>
                                 </div>
                             </div>
                         </div>
@@ -773,9 +773,13 @@
                             <h3 class="font-semibold text-gray-900">Transacciones Recientes</h3>
                         </div>
                         <div id="vyt-transactions-list" class="p-4">
-                            <div class="text-center py-8 text-gray-500">
-                                <i class="fas fa-exchange-alt text-4xl mb-4"></i>
-                                <p>Haz clic en "Ver Todas las Transacciones" para cargar datos</p>
+                            <div class="text-center py-12 text-gray-500">
+                                <i class="fas fa-inbox text-5xl mb-4 text-gray-300"></i>
+                                <p class="text-lg font-medium text-gray-700 mb-2">No hay transacciones VYT Money aún</p>
+                                <p class="text-sm text-gray-500 mb-4">Las transacciones aparecerán aquí cuando los usuarios compren VYT Money</p>
+                                <button onclick="loadVytTransactions()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+                                    <i class="fas fa-sync mr-2"></i>Recargar Transacciones
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -2183,46 +2187,93 @@
             alert(`Se restaron $${amount} VYT Money de ${email}`);
         };
 
-        window.loadVytTransactions = function() {
+        window.loadVytTransactions = async function() {
             const list = document.getElementById('vyt-transactions-list');
-            list.innerHTML = `
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center p-3 bg-green-50 border border-green-200 rounded">
-                        <div>
-                            <p class="font-medium text-gray-900">maria.gonzalez@email.com</p>
-                            <p class="text-sm text-gray-600">Recarga de VYT Money</p>
+            
+            try {
+                console.log('💳 Cargando transacciones VYT Money reales...');
+                
+                if (!db) {
+                    throw new Error('Firebase no disponible');
+                }
+                
+                // Cargar últimas 10 transacciones de VYT Money
+                const snapshot = await db.collection('vyt_money_transactions')
+                    .orderBy('fecha', 'desc')
+                    .limit(10)
+                    .get();
+                
+                if (snapshot.empty) {
+                    list.innerHTML = `
+                        <div class="text-center py-12 text-gray-500">
+                            <i class="fas fa-inbox text-5xl mb-4 text-gray-300"></i>
+                            <p class="text-lg font-medium text-gray-700 mb-2">No hay transacciones VYT Money aún</p>
+                            <p class="text-sm text-gray-500">Las transacciones aparecerán aquí cuando los usuarios compren VYT Money</p>
                         </div>
-                        <div class="text-right">
-                            <p class="font-semibold text-green-600">+$1,500</p>
-                            <p class="text-xs text-gray-500">Hace 2 horas</p>
-                        </div>
-                    </div>
+                    `;
+                    console.log('📭 No hay transacciones VYT Money en la base de datos');
+                    return;
+                }
+                
+                // Renderizar transacciones reales
+                let html = '<div class="space-y-3">';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const tipo = data.tipo || 'credito';
+                    const monto = data.cantidad || data.monto || 0;
+                    const usuario = data.usuario || data.email || 'Usuario';
+                    const descripcion = data.descripcion || data.motivo || 'Transacción VYT Money';
+                    const fecha = data.fecha ? data.fecha.toDate() : new Date();
+                    const fechaTexto = formatTimeAgo(fecha);
                     
-                    <div class="flex justify-between items-center p-3 bg-red-50 border border-red-200 rounded">
-                        <div>
-                            <p class="font-medium text-gray-900">carlos.rodriguez@email.com</p>
-                            <p class="text-sm text-gray-600">Compra de inscripción</p>
-                        </div>
-                        <div class="text-right">
-                            <p class="font-semibold text-red-600">-$5,000</p>
-                            <p class="text-xs text-gray-500">Hace 4 horas</p>
-                        </div>
-                    </div>
+                    const esCredito = tipo === 'credito' || tipo === 'ingreso';
+                    const colorBg = esCredito ? 'green' : 'red';
+                    const signo = esCredito ? '+' : '-';
                     
-                    <div class="flex justify-between items-center p-3 bg-green-50 border border-green-200 rounded">
-                        <div>
-                            <p class="font-medium text-gray-900">ana.martinez@email.com</p>
-                            <p class="text-sm text-gray-600">Premio por votación</p>
+                    html += `
+                        <div class="flex justify-between items-center p-3 bg-${colorBg}-50 border border-${colorBg}-200 rounded">
+                            <div>
+                                <p class="font-medium text-gray-900">${usuario}</p>
+                                <p class="text-sm text-gray-600">${descripcion}</p>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-semibold text-${colorBg}-600">${signo}$${monto.toLocaleString()}</p>
+                                <p class="text-xs text-gray-500">${fechaTexto}</p>
+                            </div>
                         </div>
-                        <div class="text-right">
-                            <p class="font-semibold text-green-600">+$2,000</p>
-                            <p class="text-xs text-gray-500">Hace 6 horas</p>
-                        </div>
+                    `;
+                });
+                html += '</div>';
+                
+                list.innerHTML = html;
+                console.log(`✅ ${snapshot.size} transacciones VYT Money cargadas`);
+                
+            } catch (error) {
+                console.error('❌ Error cargando transacciones:', error);
+                list.innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fas fa-exclamation-circle text-5xl mb-4 text-red-300"></i>
+                        <p class="text-lg font-medium text-gray-700 mb-2">Error cargando transacciones</p>
+                        <p class="text-sm text-gray-500 mb-4">${error.message}</p>
+                        <button onclick="loadVytTransactions()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
+                            <i class="fas fa-sync mr-2"></i>Reintentar
+                        </button>
                     </div>
-                </div>
-            `;
-            console.log('💳 Transacciones VYT Money cargadas');
+                `;
+            }
         };
+
+        // Función helper para formatear tiempo relativo
+        function formatTimeAgo(date) {
+            const now = new Date();
+            const diff = Math.floor((now - date) / 1000); // diferencia en segundos
+            
+            if (diff < 60) return 'Hace unos segundos';
+            if (diff < 3600) return `Hace ${Math.floor(diff / 60)} minutos`;
+            if (diff < 86400) return `Hace ${Math.floor(diff / 3600)} horas`;
+            if (diff < 604800) return `Hace ${Math.floor(diff / 86400)} días`;
+            return date.toLocaleDateString();
+        }
 
         window.exportVytData = function() {
             console.log('📤 Exportando datos VYT Money...');
