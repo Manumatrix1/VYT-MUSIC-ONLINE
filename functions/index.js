@@ -304,24 +304,40 @@ exports.createAdminUser = functions.https.onCall(async (data, context) => {
 
     console.log(`🔄 Creando usuario en Auth: ${email}`);
     
-    // Crear usuario en Auth
+    // Crear usuario en Auth SIN VERIFICAR
     const userRecord = await admin.auth().createUser({
       email: email.trim(),
-      emailVerified: true,
+      emailVerified: false, // 🔥 REQUERIR VERIFICACIÓN
       displayName: displayName.trim()
     });
 
     console.log(`✅ Usuario Auth creado con UID: ${userRecord.uid}`);
+
+    // 🔥 GENERAR Y ENVIAR EMAIL DE VERIFICACIÓN
+    try {
+      const link = await admin.auth().generateEmailVerificationLink(email.trim());
+      console.log('📧 Link de verificación generado para:', email);
+      
+      // Enviar email de verificación personalizado
+      if (global.sendVerificationEmail) {
+        await global.sendVerificationEmail(email.trim(), displayName.trim(), link);
+      } else {
+        console.warn('⚠️ Función de email no disponible, solo se generó el link');
+      }
+    } catch (emailError) {
+      console.error('❌ Error enviando verificación:', emailError);
+    }
 
     // Crear perfil en Firestore
     const userData = {
       email: email.trim(),
       displayName: displayName.trim(),
       role: 'admin',
+      emailVerified: false, // 🔥 Estado de verificación
       created_at: admin.firestore.FieldValue.serverTimestamp(),
       vyt_money_balance: 0,
       total_votes: 0,
-      status: 'active'
+      status: 'pending_verification' // 🔥 Estado pendiente
     };
     
     console.log('📝 Guardando en Firestore:', userData);
@@ -420,6 +436,59 @@ try {
       }
     }
   );
+
+  // 🔥 FUNCIÓN GLOBAL PARA ENVIAR EMAIL DE VERIFICACIÓN
+  global.sendVerificationEmail = async function(email, displayName, verificationLink) {
+    try {
+      const transporter = nodemailer.createTransporter({
+        service: "gmail",
+        auth: {
+          user: "luciano21martinez@gmail.com",
+          pass: "wwhm qqei uxxz ciwl",
+        },
+      });
+
+      await transporter.sendMail({
+        from: "VYT Music <luciano21martinez@gmail.com>",
+        to: email,
+        subject: "🔐 Verifica tu email para acceder a VYT Music",
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h1 style="color: #00d9ff;">🔐 Verifica tu Email</h1>
+            <p>Hola <strong>${displayName}</strong>,</p>
+            <p>¡Gracias por registrarte en VYT Music! 🎵</p>
+            <p>Para acceder a tu cuenta y comenzar a participar en nuestros certámenes, necesitas verificar tu dirección de email.</p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationLink}" 
+                 style="background-color: #00d9ff; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                ✅ VERIFICAR MI EMAIL
+              </a>
+            </div>
+            
+            <p><strong>¿Por qué necesitas verificar?</strong></p>
+            <ul>
+              <li>🎤 Acceder a tu perfil de artista</li>
+              <li>📧 Recibir notificaciones de nuevos certámenes</li>
+              <li>🏆 Participar en competencias</li>
+              <li>💰 Gestionar VYT Money</li>
+            </ul>
+            
+            <p><small>Si no puedes hacer clic en el botón, copia y pega este enlace en tu navegador:</small></p>
+            <p><small>${verificationLink}</small></p>
+            
+            <p>¡Nos vemos pronto en VYT Music! 🚀</p>
+            <p><strong>El equipo de VYT Music</strong></p>
+          </div>
+        `
+      });
+
+      console.log('✅ Email de verificación enviado a:', email);
+    } catch (error) {
+      console.error('❌ Error enviando verificación:', error);
+      throw error;
+    }
+  };
   
   console.log('✅ Basic email trigger loaded');
 } catch (error) {

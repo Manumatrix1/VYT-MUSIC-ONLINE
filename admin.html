@@ -272,8 +272,128 @@
                 </div>
             </section>
 
+            <!-- Nueva Sección Participantes Unificada -->
+            <section id="participantes-section" class="admin-section">
+                <div class="max-w-7xl mx-auto">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">
+                            <i class="fas fa-users mr-2 text-blue-600"></i>
+                            Gestión de Participantes
+                        </h2>
+                        <div class="flex gap-3">
+                            <button onclick="loadAllParticipantes()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                <i class="fas fa-refresh mr-1"></i>Actualizar
+                            </button>
+                            <button onclick="exportarParticipantes()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                <i class="fas fa-download mr-1"></i>Exportar
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filtros y Estadísticas -->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                        <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Total</p>
+                                    <p class="text-2xl font-bold text-blue-600" id="total-participantes">0</p>
+                                </div>
+                                <i class="fas fa-users text-blue-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Pendientes</p>
+                                    <p class="text-2xl font-bold text-yellow-600" id="pendientes-participantes">0</p>
+                                </div>
+                                <i class="fas fa-clock text-yellow-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Aprobados</p>
+                                    <p class="text-2xl font-bold text-green-600" id="aprobados-participantes">0</p>
+                                </div>
+                                <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-sm font-medium text-gray-600">Por Región</p>
+                                    <p class="text-2xl font-bold text-purple-600" id="regiones-participantes">0</p>
+                                </div>
+                                <i class="fas fa-map-marker-alt text-purple-500 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filtros -->
+                    <div class="bg-white p-4 rounded-lg shadow-sm border mb-6">
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                                <select id="filtro-estado" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="">Todos</option>
+                                    <option value="pendiente">Pendientes</option>
+                                    <option value="aprobado">Aprobados</option>
+                                    <option value="rechazado">Rechazados</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Modalidad</label>
+                                <select id="filtro-modalidad" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="">Todas</option>
+                                    <option value="online">Online (por región)</option>
+                                    <option value="presencial">Presencial</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Región</label>
+                                <select id="filtro-region" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
+                                    <option value="">Todas</option>
+                                    <option value="capital-federal">Capital Federal</option>
+                                    <option value="buenos-aires">Buenos Aires</option>
+                                    <option value="cordoba">Córdoba</option>
+                                    <option value="santa-fe">Santa Fe</option>
+                                    <option value="otras">Otras provincias</option>
+                                </select>
+                            </div>
+                            <div class="flex items-end">
+                                <button onclick="aplicarFiltros()" class="w-full bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                    <i class="fas fa-filter mr-1"></i>Filtrar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista de Participantes -->
+                    <div class="bg-white rounded-lg shadow-sm border">
+                        <div class="p-4 border-b">
+                            <h3 class="text-lg font-semibold text-gray-900">Lista de Participantes</h3>
+                        </div>
+                        <div id="participantes-lista" class="p-4">
+                            <div class="text-center py-8">
+                                <i class="fas fa-users text-gray-400 text-4xl mb-4"></i>
+                                <p class="text-gray-500">Cargando participantes...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECCIONES OBSOLETAS - Mantenidas para compatibilidad pero ocultas -->
             <!-- Sección Participantes Online -->
-            <section id="participantes-online-section" class="admin-section">
+            <section id="participantes-online-section" class="admin-section" style="display: none;">
+                <div class="max-w-7xl mx-auto">
+                    <div class="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-4">
+                        <p class="text-yellow-800">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <strong>SECCIÓN OBSOLETA:</strong> Esta sección ha sido reemplazada por "Participantes" unificado.
+                        </p>
+                    </div>
                 <div class="max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-900">Participantes Online</h2>
@@ -326,8 +446,14 @@
             </section>
 
             <!-- Sección Participantes Presenciales -->
-            <section id="participantes-presenciales-section" class="admin-section">
+            <section id="participantes-presenciales-section" class="admin-section" style="display: none;">
                 <div class="max-w-7xl mx-auto">
+                    <div class="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-4">
+                        <p class="text-yellow-800">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            <strong>SECCIÓN OBSOLETA:</strong> Esta sección ha sido reemplazada por "Participantes" unificado.
+                        </p>
+                    </div>
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-900">Participantes Presenciales</h2>
                         <button onclick="loadParticipantesPresenciales()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
@@ -659,7 +785,18 @@
             <!-- Sección Pagos -->
             <section id="pagos-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Gestión de Pagos</h2>
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold text-gray-900">Gestión de Pagos</h2>
+                        <div class="flex items-center gap-3">
+                            <div id="mercadopago-status" class="flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800">
+                                <i class="fas fa-check-circle mr-2"></i>
+                                <span class="text-sm font-medium">MercadoPago Activo</span>
+                            </div>
+                            <button onclick="verificarMercadoPago()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
+                                <i class="fas fa-sync mr-1"></i>Verificar Estado
+                            </button>
+                        </div>
+                    </div>
                     
                     <!-- Estadísticas de pagos -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
@@ -789,49 +926,23 @@
                                         <p class="text-sm">Sin imagen</p>
                                     </div>
                                 </div>
-                                <input type="file" id="upload-index" accept="image/*" class="hidden">
+                                <input type="file" id="upload-index" accept="image/*" class="hidden" onchange="handleIndexImageUpload(this)">
                                 <button onclick="document.getElementById('upload-index').click()" 
-                                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors mb-2">
+                                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
                                 </button>
-                                <button onclick="openPositionEditor('index.html')" 
-                                        class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
                                 </button>
                             </div>
 
-                            <!-- Página de Inscripción -->
-                            <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
-                                <div class="flex items-center mb-3">
-                                    <i class="fas fa-user-plus text-green-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">Página de Inscripción</h3>
-                                </div>
-                                <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
-                                    <img id="preview-inscripcion" src="images/fotos/inscripcion-background.png" 
-                                         alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
-                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                                    <div style="display: none;" class="text-gray-500">
-                                        <i class="fas fa-image text-2xl mb-2"></i>
-                                        <p class="text-sm">Sin imagen</p>
-                                    </div>
-                                </div>
-                                <input type="file" id="upload-inscripcion" accept="image/*" class="hidden">
-                                <button onclick="document.getElementById('upload-inscripcion').click()" 
-                                        class="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors mb-2">
-                                    <i class="fas fa-upload mr-1"></i>Cambiar Fondo
-                                </button>
-                                <button onclick="openPositionEditor('inscripcion_unificada.html')" 
-                                        class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
-                                </button>
-                            </div>
-
-                            <!-- Perfil de Artista -->
+                            <!-- Perfil de Artista (Formulario de Inscripción) -->
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-user-circle text-purple-500 mr-2"></i>
                                     <h3 class="font-semibold text-gray-900">Perfil de Artista</h3>
+                                    <span class="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Formulario de Inscripción</span>
                                 </div>
+                                <p class="text-sm text-gray-600 mb-3">Página donde los artistas se inscriben y completan su perfil</p>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-perfil" src="images/fotos/inscripcion-background.png" 
                                          alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
@@ -2705,37 +2816,143 @@
             }
 
             try {
+                console.log('🔄 Iniciando procesamiento de fondo...');
+                
+                // 🎯 REDIMENSIONAR LA IMAGEN DE FONDO AUTOMÁTICAMENTE
+                const optimizedImage = await resizeBackgroundImage(currentImageData);
+                
+                if (!optimizedImage) {
+                    alert('Error al procesar la imagen. Intenta con una imagen más pequeña.');
+                    return;
+                }
+                
                 // Crear nombre único para el archivo
                 const timestamp = Date.now();
                 const extension = currentImageData.name.split('.').pop();
                 const newFileName = `bg-${currentConfig.file.replace('.html', '')}-${timestamp}.${extension}`;
                 
-                // Convertir imagen a base64 para almacenamiento local
+                // Convertir imagen optimizada a base64
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const imageData = e.target.result;
+                    const sizeKB = Math.round(imageData.length / 1024);
+                    
+                    console.log(`📸 Fondo optimizado: ${sizeKB}KB`);
                     
                     // Guardar configuración en localStorage
                     const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                     backgroundConfig[currentConfig.file] = {
                         imageData: imageData,
                         fileName: newFileName,
-                        applied: new Date().toISOString()
+                        applied: new Date().toISOString(),
+                        size: sizeKB
                     };
                     localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
                     
                     // Aplicar inmediatamente si estamos en la página correspondiente
                     applyBackgroundToCurrentPage(currentConfig.file, imageData);
                     
+                    // 🔥 TAMBIÉN APLICAR A OTRAS PÁGINAS ABIERTAS
+                    notifyOtherPages(currentConfig.file, imageData);
+                    
                     // Mostrar mensaje de éxito
-                    showSuccessMessage(`Fondo aplicado correctamente a ${currentConfig.file}`);
+                    showSuccessMessage(`Fondo optimizado aplicado a ${currentConfig.file} (${sizeKB}KB)`);
                 };
-                reader.readAsDataURL(currentImageData);
+                reader.readAsDataURL(optimizedImage);
                 
             } catch (error) {
                 console.error('Error aplicando fondo:', error);
                 alert('Error al aplicar el fondo: ' + error.message);
             }
+        }
+
+        // 🖼️ FUNCIÓN PARA REDIMENSIONAR FONDOS - SIN LÍMITES
+        function resizeBackgroundImage(file, maxWidth = 1920, maxHeight = 1080, quality = 0.7) {
+            return new Promise((resolve) => {
+                // Mostrar el tamaño original sin restricciones
+                const fileSizeMB = file.size / 1024 / 1024;
+                console.log(`📏 Fondo original: ${fileSizeMB.toFixed(2)}MB - Optimizando automáticamente...`);
+                
+                // ✅ SIN LÍMITE - ACEPTAR CUALQUIER TAMAÑO
+                if (fileSizeMB > 50) {
+                    console.warn('⚠️ Imagen de fondo muy grande, esto puede tomar unos segundos...');
+                }
+                
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calcular nuevas dimensiones manteniendo proporción
+                    let { width, height } = img;
+                    
+                    // Para fondos, mantener buena resolución pero optimizar
+                    const aspectRatio = width / height;
+                    
+                    if (aspectRatio > 1) {
+                        // Imagen horizontal
+                        width = Math.min(maxWidth, width);
+                        height = width / aspectRatio;
+                    } else {
+                        // Imagen vertical
+                        height = Math.min(maxHeight, height);
+                        width = height * aspectRatio;
+                    }
+                    
+                    // Configurar canvas
+                    canvas.width = Math.round(width);
+                    canvas.height = Math.round(height);
+                    
+                    // Mejorar la calidad del redimensionado
+                    ctx.imageSmoothingEnabled = true;
+                    ctx.imageSmoothingQuality = 'high';
+                    
+                    // Dibujar imagen redimensionada
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    
+                    // 🔥 CALIDAD ADAPTATIVA para fondos
+                    let finalQuality = quality;
+                    if (fileSizeMB > 30) finalQuality = 0.5; // Muy grande -> calidad media
+                    else if (fileSizeMB > 15) finalQuality = 0.6; // Grande -> calidad media-alta
+                    else if (fileSizeMB > 8) finalQuality = 0.7; // Normal -> calidad alta
+                    
+                    // Convertir a blob con calidad adaptativa
+                    canvas.toBlob((blob) => {
+                        const newSizeMB = blob.size / 1024 / 1024;
+                        const newSizeKB = Math.round(blob.size / 1024);
+                        console.log(`✅ Fondo optimizado: ${fileSizeMB.toFixed(2)}MB → ${newSizeKB}KB (${canvas.width}x${canvas.height}px, calidad: ${Math.round(finalQuality*100)}%)`);
+                        
+                        resolve(new File([blob], file.name, { type: 'image/jpeg' }));
+                    }, 'image/jpeg', finalQuality);
+                };
+                
+                img.onerror = function() {
+                    console.error('❌ Error al cargar imagen de fondo');
+                    alert('Error al procesar la imagen de fondo. Verifica que sea un archivo de imagen válido (JPG, PNG, etc.).');
+                    resolve(null);
+                };
+                
+                // Crear URL para cargar la imagen
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // 🔔 NOTIFICAR A OTRAS PÁGINAS SOBRE CAMBIO DE FONDO
+        function notifyOtherPages(targetFile, imageData) {
+            // Usar localStorage como sistema de messaging
+            const message = {
+                type: 'background_update',
+                targetFile: targetFile,
+                imageData: imageData,
+                timestamp: Date.now()
+            };
+            
+            localStorage.setItem('background_message', JSON.stringify(message));
+            
+            // Limpiar el mensaje después de un segundo
+            setTimeout(() => {
+                localStorage.removeItem('background_message');
+            }, 1000);
         }
 
         function applyBackgroundToCurrentPage(targetFile, imageData) {

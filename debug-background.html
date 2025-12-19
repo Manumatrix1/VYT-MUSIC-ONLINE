@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Sistema de Fondos VYT Music</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            background: #f5f5f5; 
+        }
+        .debug-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .config-item {
+            margin: 10px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+        }
+        .image-preview {
+            max-width: 200px;
+            max-height: 150px;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+        }
+        .test-buttons {
+            margin: 20px 0;
+        }
+        .test-buttons button {
+            margin: 5px;
+            padding: 10px 15px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .test-buttons button:hover {
+            background: #0056b3;
+        }
+        .error { color: #dc3545; }
+        .success { color: #28a745; }
+        .warning { color: #ffc107; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Debug - Sistema de Fondos VYT Music</h1>
+    
+    <div class="debug-section">
+        <h2>📋 Configuración actual en localStorage</h2>
+        <div id="localStorage-content">Cargando...</div>
+        <button onclick="refreshLocalStorage()">🔄 Actualizar</button>
+        <button onclick="clearLocalStorage()">🗑️ Limpiar localStorage</button>
+    </div>
+
+    <div class="debug-section">
+        <h2>🧪 Pruebas de loadDynamicBackground()</h2>
+        <div class="test-buttons">
+            <button onclick="testLoadDynamic('index')">Probar Index</button>
+            <button onclick="testLoadDynamic('perfil-artista')">Probar Perfil Artista</button>
+            <button onclick="testLoadDynamic('fan-mode')">Probar Fan Mode</button>
+            <button onclick="testLoadDynamic('certamenes')">Probar Certámenes</button>
+        </div>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="debug-section">
+        <h2>🎨 Simulación de loadDynamicBackground()</h2>
+        <div id="simulation-area" style="height: 200px; background: #eee; position: relative; border-radius: 8px;">
+            <p style="text-align: center; padding-top: 80px;">Área de simulación de fondo</p>
+        </div>
+    </div>
+
+    <script>
+        function refreshLocalStorage() {
+            const container = document.getElementById('localStorage-content');
+            
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                console.log('🔍 backgroundConfig encontrado:', backgroundConfig);
+                
+                if (Object.keys(backgroundConfig).length === 0) {
+                    container.innerHTML = '<div class="warning">⚠️ No hay configuraciones guardadas en localStorage</div>';
+                    return;
+                }
+
+                let html = '<div class="success">✅ Configuraciones encontradas:</div>';
+                
+                Object.entries(backgroundConfig).forEach(([pageName, config]) => {
+                    html += `
+                        <div class="config-item">
+                            <h4>📄 Página: ${pageName}</h4>
+                            <p><strong>Archivo:</strong> ${config.fileName || 'N/A'}</p>
+                            <p><strong>Posición:</strong> ${config.position || 'N/A'}</p>
+                            <p><strong>Escala:</strong> ${config.scale || 'N/A'}</p>
+                            <p><strong>Guardado:</strong> ${config.applied || 'N/A'}</p>
+                            <p><strong>Datos imagen:</strong> ${config.imageData ? Math.round(config.imageData.length / 1024) + ' KB' : 'Sin datos'}</p>
+                            ${config.imageData ? `<img src="${config.imageData}" class="image-preview" alt="Preview ${pageName}">` : ''}
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = html;
+                
+            } catch (error) {
+                container.innerHTML = `<div class="error">❌ Error leyendo localStorage: ${error.message}</div>`;
+                console.error('Error:', error);
+            }
+        }
+
+        function clearLocalStorage() {
+            if (confirm('¿Estás seguro de que quieres limpiar todas las configuraciones?')) {
+                localStorage.removeItem('backgroundConfig');
+                refreshLocalStorage();
+                alert('✅ localStorage limpiado');
+            }
+        }
+
+        function testLoadDynamic(pageName) {
+            const resultsDiv = document.getElementById('test-results');
+            const simulationArea = document.getElementById('simulation-area');
+            
+            try {
+                console.log(`🧪 Probando loadDynamicBackground para: ${pageName}`);
+                
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                
+                if (!backgroundConfig[pageName]) {
+                    resultsDiv.innerHTML += `<div class="warning">⚠️ ${pageName}: No hay configuración guardada</div>`;
+                    return;
+                }
+
+                const config = backgroundConfig[pageName];
+                
+                if (!config.imageData) {
+                    resultsDiv.innerHTML += `<div class="error">❌ ${pageName}: Sin datos de imagen</div>`;
+                    return;
+                }
+
+                // Simular la aplicación del fondo
+                document.documentElement.style.setProperty('--dynamic-bg', `url('${config.imageData}')`);
+                
+                if (config.position) {
+                    document.documentElement.style.setProperty('--dynamic-bg-position', config.position);
+                }
+                
+                if (config.scale) {
+                    const scaleValue = parseFloat(config.scale);
+                    document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
+                }
+
+                // Aplicar al área de simulación
+                simulationArea.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), url('${config.imageData}')`;
+                simulationArea.style.backgroundSize = config.scale ? `${parseFloat(config.scale) * 100}%` : 'cover';
+                simulationArea.style.backgroundPosition = config.position || 'center';
+                simulationArea.style.backgroundRepeat = 'no-repeat';
+                
+                resultsDiv.innerHTML += `<div class="success">✅ ${pageName}: Fondo aplicado correctamente</div>`;
+                
+            } catch (error) {
+                resultsDiv.innerHTML += `<div class="error">❌ ${pageName}: Error - ${error.message}</div>`;
+                console.error('Error en test:', error);
+            }
+        }
+
+        // Cargar información al inicio
+        document.addEventListener('DOMContentLoaded', function() {
+            refreshLocalStorage();
+        });
+    </script>
+</body>
+</html>

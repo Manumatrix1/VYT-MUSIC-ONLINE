@@ -1,6 +1,6 @@
 
-// Configuración de Firebase para VYT Music (versión mejorada)
-// Uso de Firebase v8 para máxima compatibilidad
+// Configuración de Firebase para VYT Music (versión actualizada)
+// Uso de Firebase v9+ para mejor rendimiento y compatibilidad
 
 // Configuración de Firebase
 const firebaseConfig = {
@@ -17,12 +17,14 @@ const firebaseConfig = {
 let app, auth, db, storage, analytics;
 let firebaseInitialized = false;
 
-// Función de inicialización mejorada
+// Función de inicialización mejorada con mejor manejo de errores
 function initializeFirebase() {
     try {
+        console.log('🔧 Iniciando Firebase...');
+        
         // Verificar que Firebase esté disponible
         if (typeof firebase === 'undefined') {
-            console.warn('⚠️ Firebase no está disponible');
+            console.warn('⚠️ Firebase no está disponible, usando modo offline');
             return false;
         }
 

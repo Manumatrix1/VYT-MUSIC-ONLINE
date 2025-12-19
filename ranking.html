@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="icon-control.css?v=20250929">
     
+    <!-- Sistema de fondos dinámicos -->
+    <script src="src/dynamic-background.js"></script>
+    
     <!-- Sistema de navegación -->
     <link rel="stylesheet" href="src/navigation-styles.css">
     
@@ -114,6 +117,106 @@
             border-radius: 12px;
             padding: 20px;
             text-align: center;
+        }
+        
+        /* ======= MENÚ HAMBURGUESA ======= */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .menu-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .menu-overlay.active .menu-container {
+            transform: translateX(0);
+        }
+
+        .menu-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-header h3 {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .menu-icon {
+            margin-right: 16px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .menu-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .menu-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
         }
     </style>
 </head>
@@ -356,7 +459,87 @@
             // Aquí cargarías los datos reales desde Firebase
             console.log('Cargando datos del ranking...');
         }
+
+        // FUNCIONES DEL MENÚ HAMBURGUESA
+        function toggleMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            if (menuOverlay.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+
+        function openMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            console.log('🔽 Menú sidebar abierto desde la derecha');
+        }
+
+        function closeMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            console.log('🔼 Menú sidebar cerrado');
+        }
+
+        function openTawkTo() {
+            // Intentar maximizar el widget de Tawk.to integrado
+            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
+                Tawk_API.maximize();
+            } else if (typeof Tawk_API !== 'undefined' && Tawk_API.showWidget) {
+                Tawk_API.showWidget();
+            } else {
+                // Fallback: abrir chat directo en nueva ventana
+                window.open('https://tawk.to/chat/68b5b0ec2ccfc9192268fd71/1j42rm7na', '_blank');
+            }
+            closeMenu();
+        }
+
+        // Cerrar menú con tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+        });
     </script>
+
+    <!-- MENÚ HAMBURGUESA -->
+    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
+        <div class="menu-container" onclick="event.stopPropagation()">
+            <button class="menu-close" onclick="closeMenu()">×</button>
+            
+            <div class="menu-header">
+                <h3>🎵 VYT MUSIC</h3>
+            </div>
+
+            <a href="crear-perfil-artista.html" class="menu-item">
+                <span class="menu-icon">🎤</span>
+                <span>Crear Perfil de Artista</span>
+            </a>
+            <a href="reglamento.html" class="menu-item">
+                <span class="menu-icon">📋</span>
+                <span>Bases y Reglamento</span>
+            </a>
+            <a href="perfil-artista.html" class="menu-item">
+                <span class="menu-icon">👤</span>
+                <span>Perfil de Artista</span>
+            </a>
+            <a href="comprar-vyt-money.html" class="menu-item">
+                <span class="menu-icon">💰</span>
+                <span>Comprar VYTMoney</span>
+            </a>
+            <a href="principal.html" class="menu-item">
+                <span class="menu-icon">🏠</span>
+                <span>Inicio</span>
+            </a>
+            <button class="menu-item" onclick="openTawkTo()">
+                <span class="menu-icon">💬</span>
+                <span>Contacto</span>
+            </button>
+        </div>
+    </div>
 
     <!-- 🚨 NAVEGACIÓN INFERIOR CON ICONOS EMOJI (IGUAL QUE PRINCIPAL-SIMPLE) -->
     <nav style="position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; background: rgba(15, 23, 42, 0.95) !important; backdrop-filter: blur(20px) !important; border-top: 1px solid rgba(59, 130, 246, 0.3) !important; z-index: 9999 !important; padding: 10px 0 !important;">
@@ -373,7 +556,7 @@
                 <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">📊</span>
                 <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Ranking</span>
             </a>
-            <button onclick="alert('Menú próximamente')" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important; background: none !important; border: none !important; cursor: pointer !important; font-family: inherit !important;">
+            <button onclick="toggleMenu()" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important; background: none !important; border: none !important; cursor: pointer !important; font-family: inherit !important;">
                 <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">☰</span>
                 <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Menú</span>
             </button>

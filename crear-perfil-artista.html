@@ -93,6 +93,12 @@
             color: white;
             font-size: 16px;
         }
+        
+        .form-select option {
+            background: #1a1a1a;
+            color: white;
+            padding: 8px;
+        }
 
         .form-textarea {
             width: 100%;
@@ -851,9 +857,9 @@
                 // Intentar guardar en Firebase si está disponible
                 if (typeof db !== 'undefined' && db) {
                     try {
-                        // Guardar en Firestore
-                        await db.collection('artistas').add(artistData);
-                        console.log('✅ Perfil guardado en Firebase');
+                        // Guardar en Firestore (colección correcta para trigger de email)
+                        await db.collection('artist_profiles').add(artistData);
+                        console.log('✅ Perfil guardado en Firebase (artist_profiles)');
                     } catch (firebaseError) {
                         console.warn('⚠️ No se pudo guardar en Firebase, continuando localmente:', firebaseError);
                     }
