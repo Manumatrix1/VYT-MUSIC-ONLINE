@@ -140,31 +140,45 @@ FINAL NACIONAL PRESENCIAL:
 
 #### A. Inscripciones de Artistas
 ```
-100 artistas × $15,000 = $1,500,000 por región
-3 regiones × $1,500,000 = $4,500,000 por provincia (fase regional)
+Precio por inscripción: $15,000
+Distribución:
+  - 30% al pozo: $4,500
+  - 70% ganancia VYT: $10,500
+
+Ejemplo con 100 artistas:
+  - Total recaudado: $1,500,000
+  - Al pozo: $450,000
+  - Ganancia VYT: $1,050,000
 ```
 
 #### B. Votos del Público
 ```
 1 voto = 1000 VYT Money
-1000 VYT Money = $1,500 (precio de compra)
-1 voto vale $1,000 (valor de uso interno)
+Precio de compra: $1,500
+Valor interno: $1,000
+Distribución:
+  - 30% al pozo: $450
+  - 70% ganancia VYT: $1,050
 
-Margen: $500 por voto (33% ganancia)
-
-Ejemplo con 500 votos totales:
-  - Recaudación: 500 × $1,500 = $750,000
-  - Al pozo: 500 × $1,000 = $500,000
-  - Ganancia VYT: $250,000
+Ejemplo con 500 votos:
+  - Total recaudado: $750,000
+  - Al pozo: $225,000
+  - Ganancia VYT: $525,000
 ```
 
 #### C. Entradas a Eventos Presenciales
 ```
-Teatro 300 personas × $5,000 = $1,500,000
+Precio entrada: $5,000
 Distribución:
-  - 30% al pozo: $450,000
-  - 40% costos evento: $600,000 (alquiler, producción, etc.)
-  - 30% ganancia VYT: $450,000
+  - 30% al pozo: $1,500
+  - 40% costos evento: $2,000 (alquiler, producción, staff)
+  - 30% ganancia VYT: $1,500
+
+Ejemplo con 300 entradas:
+  - Total recaudado: $1,500,000
+  - Al pozo: $450,000
+  - Costos evento: $600,000
+  - Ganancia VYT: $450,000
 ```
 
 #### D. YouTube AdSense (Pasivo)
@@ -172,32 +186,93 @@ Distribución:
 100 videos × 50,000 views promedio = 5,000,000 views totales
 CPM Argentina: $1-3 USD
 Ingreso estimado: $5,000 - $15,000 USD mensuales
+100% ganancia VYT
 ```
 
 ### Cálculo de Pozo (Ejemplo Real)
 
 **Certamen Regional Sur de Santa Fe:**
 ```
-Inscripciones: 100 × $15,000        = $1,500,000
-Votos: 800 × $1,000                 = $800,000
-Entradas semifinal: 300 × $5,000×30% = $450,000
+POZO INICIAL (Seed Money):            $500,000
+
+APORTES:
+Inscripciones: 100 × $4,500 (30%)  = $450,000
+Votos: 800 × $450 (30%)            = $360,000
+Entradas: 300 × $1,500 (30%)       = $450,000
 ─────────────────────────────────────────────────
-POZO TOTAL:                          $2,750,000
+POZO TOTAL:                         $1,760,000
 
 Distribución:
-  🥇 1er lugar (50%): $1,375,000
-  🥈 2do lugar (30%): $825,000
-  🥉 3er lugar (20%): $550,000
+  🥇 1er lugar (50%): $880,000
+  🥈 2do lugar (30%): $528,000
+  🥉 3er lugar (20%): $352,000
 ```
 
 **Ganancia VYT Music:**
 ```
-Margen votos: $400,000
+Inscripciones (70%): $1,050,000
+Votos (70%): $525,000
 Entradas (30%): $450,000
 YouTube AdSense: $10,000
-Patrocinios locales: $200,000
+Patrocinios: $200,000
 ─────────────────────────────
-TOTAL NETO: $1,060,000
+TOTAL BRUTO: $2,235,000
+
+Costos operativos:
+- Evento presencial: $600,000
+- Premios: $1,760,000
+- Marketing: $100,000
+- Plataforma/hosting: $50,000
+─────────────────────────────
+COSTOS TOTALES: $2,510,000
+
+MARGEN NETO: -$275,000 ❌
+
+🔄 CORRECCIÓN: Con seed money es inversión inicial.
+En el 2do certamen (sin seed):
+  Ingresos: $2,235,000
+  Costos: $2,010,000 (sin seed)
+  GANANCIA: $225,000 ✅
+```
+
+### Estrategia de Seed Money
+
+```javascript
+// Primer certamen regional: invertir en el pozo
+{
+  pozo_inicial: 500000,  // VYT invierte
+  esperado: {
+    inscripciones: 100,
+    votos: 500,
+    entradas: 200,
+    pozo_final: 1500000,
+    ganancia_neta: -200000  // Pérdida esperada para generar confianza
+  }
+}
+
+// Segundo certamen: ya con reputación
+{
+  pozo_inicial: 300000,  // Menor inversión
+  esperado: {
+    inscripciones: 200,  // Más artistas por reputación
+    votos: 1000,
+    entradas: 400,
+    pozo_final: 2500000,
+    ganancia_neta: 500000  // Ahora sí es rentable
+  }
+}
+
+// Tercer certamen en adelante: escalable
+{
+  pozo_inicial: 100000,  // Mínimo seed
+  esperado: {
+    inscripciones: 300,
+    votos: 2000,
+    entradas: 600,
+    pozo_final: 3500000,
+    ganancia_neta: 1200000  // Altamente rentable
+  }
+}
 ```
 
 ---

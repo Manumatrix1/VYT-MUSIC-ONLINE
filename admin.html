@@ -162,7 +162,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Total Participantes</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="total-participantes">-</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="total-participantes">0</p>
                                 </div>
                             </div>
                         </div>
@@ -174,7 +174,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Online</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="total-online">-</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="total-online">0</p>
                                 </div>
                             </div>
                         </div>
@@ -186,7 +186,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Presencial</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="total-presencial">-</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="total-presencial">0</p>
                                 </div>
                             </div>
                         </div>
@@ -198,7 +198,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Aprobados</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="total-aprobados">-</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="total-aprobados">0</p>
                                 </div>
                             </div>
                         </div>
@@ -213,7 +213,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Certámenes Activos</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="total-certamenes">-</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="total-certamenes">0</p>
                                 </div>
                             </div>
                         </div>
@@ -225,7 +225,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">VYT Money Total</p>
-                                    <p class="text-xl font-semibold text-gray-900" id="vyt-money-total">$-</p>
+                                    <p class="text-xl font-semibold text-gray-900" id="vyt-money-total">$0</p>
                                 </div>
                             </div>
                         </div>
@@ -237,7 +237,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Pagos Procesados</p>
-                                    <p class="text-xl font-semibold text-gray-900" id="total-pagos">$-</p>
+                                    <p class="text-xl font-semibold text-gray-900" id="total-pagos">$0</p>
                                 </div>
                             </div>
                         </div>
@@ -249,7 +249,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Transacciones Hoy</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="transacciones-hoy">-</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="transacciones-hoy">0</p>
                                 </div>
                             </div>
                         </div>
@@ -811,7 +811,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Total Procesado</p>
-                                    <p class="text-xl font-semibold text-gray-900" id="pagos-total">$458,720</p>
+                                    <p class="text-xl font-semibold text-gray-900" id="pagos-total">$0</p>
                                 </div>
                             </div>
                         </div>
@@ -823,7 +823,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Pendientes</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="pagos-pendientes">12</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="pagos-pendientes">0</p>
                                 </div>
                             </div>
                         </div>
@@ -835,7 +835,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Aprobados</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="pagos-aprobados">156</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="pagos-aprobados">0</p>
                                 </div>
                             </div>
                         </div>
@@ -847,7 +847,7 @@
                                 </div>
                                 <div class="ml-4">
                                     <p class="text-sm font-medium text-gray-500">Rechazados</p>
-                                    <p class="text-2xl font-semibold text-gray-900" id="pagos-rechazados">3</p>
+                                    <p class="text-2xl font-semibold text-gray-900" id="pagos-rechazados">0</p>
                                 </div>
                             </div>
                         </div>
@@ -1210,6 +1210,42 @@
             const adminDashboard = document.getElementById('admin-dashboard');
             const adminUserEmail = document.getElementById('admin-user-email');
             
+            // ✨ VERIFICAR SESIÓN GUARDADA AL CARGAR
+            const savedSession = localStorage.getItem('admin_session');
+            if (savedSession) {
+                try {
+                    const session = JSON.parse(savedSession);
+                    const loginTime = session.loginTime;
+                    const now = new Date().getTime();
+                    const hoursSinceLogin = (now - loginTime) / (1000 * 60 * 60);
+                    
+                    // Mantener sesión activa por 24 horas
+                    if (hoursSinceLogin < 24 && session.isAdmin) {
+                        console.log('✅ Sesión activa encontrada - auto-login');
+                        loginSection.classList.add('hidden');
+                        adminDashboard.classList.remove('hidden');
+                        adminUserEmail.textContent = session.email;
+                        showPage('inicio');
+                        
+                        // Cargar datos
+                        setTimeout(() => {
+                            tryQuickFirebaseConnection();
+                        }, 500);
+                        
+                        initializeWithRealData().catch((error) => {
+                            console.warn('⚠️ Error cargando datos:', error.message);
+                        });
+                    } else {
+                        // Sesión expirada
+                        localStorage.removeItem('admin_session');
+                        console.log('⏰ Sesión expirada');
+                    }
+                } catch (e) {
+                    console.error('Error leyendo sesión:', e);
+                    localStorage.removeItem('admin_session');
+                }
+            }
+            
             if (devAccessBtn) {
                 devAccessBtn.addEventListener('click', function() {
                     console.log('🔧 Acceso desarrollador activado');
@@ -1258,9 +1294,12 @@
             const logoutBtn = document.getElementById('logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
+                    // Limpiar sesión guardada
+                    localStorage.removeItem('admin_session');
+                    
                     adminDashboard.classList.add('hidden');
                     loginSection.classList.remove('hidden');
-                    console.log('🚪 Sesión cerrada');
+                    console.log('🚪 Sesión cerrada y limpiada');
                 });
             }
             
@@ -1285,6 +1324,13 @@
                     // Credenciales básicas
                     if (email === 'admin@vyt.com' && password === 'vytonline') {
                         console.log('✅ Login exitoso con credenciales básicas');
+                        
+                        // Guardar sesión en localStorage
+                        localStorage.setItem('admin_session', JSON.stringify({
+                            email: email,
+                            loginTime: new Date().getTime(),
+                            isAdmin: true
+                        }));
                         
                         // Simular login exitoso
                         loginSection.classList.add('hidden');

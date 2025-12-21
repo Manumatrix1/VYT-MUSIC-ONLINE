@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración del Sistema - VYT MUSIC Admin</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="firebase-config.js"></script>
+    <script src="src/configuracion-sistema.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+    <div class="container mx-auto px-4 py-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <h1 class="text-4xl font-bold mb-2">⚙️ Configuración del Sistema</h1>
+            <p class="text-gray-400">Configura los valores económicos y operativos de la plataforma</p>
+            <button onclick="volverAdmin()" class="mt-4 bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg">
+                <i class="fas fa-arrow-left mr-2"></i> Volver al Admin
+            </button>
+        </div>
+
+        <!-- Notificación -->
+        <div id="notification" class="hidden mb-6 p-4 rounded-lg"></div>
+
+        <!-- Tabs -->
+        <div class="mb-6 border-b border-gray-700">
+            <div class="flex space-x-4">
+                <button onclick="cambiarTab('precios')" id="tab-precios" class="tab-btn active px-6 py-3 font-semibold border-b-2 border-blue-500">
+                    💰 Precios
+                </button>
+                <button onclick="cambiarTab('distribucion')" id="tab-distribucion" class="tab-btn px-6 py-3 font-semibold border-b-2 border-transparent hover:border-gray-500">
+                    📊 Distribución
+                </button>
+                <button onclick="cambiarTab('premios')" id="tab-premios" class="tab-btn px-6 py-3 font-semibold border-b-2 border-transparent hover:border-gray-500">
+                    🏆 Premios
+                </button>
+                <button onclick="cambiarTab('cupos')" id="tab-cupos" class="tab-btn px-6 py-3 font-semibold border-b-2 border-transparent hover:border-gray-500">
+                    🎯 Cupos
+                </button>
+            </div>
+        </div>
+
+        <!-- Tab: Precios -->
+        <div id="content-precios" class="tab-content">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Inscripción -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="bg-blue-500 w-10 h-10 rounded-full flex items-center justify-center mr-3">1</span>
+                        Inscripción al Certamen
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Precio por inscripción (ARS)</label>
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-2">$</span>
+                                <input type="number" id="precio-inscripcion" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-xl font-bold"
+                                       min="0" step="1000" value="15000">
+                            </div>
+                        </div>
+                        <div id="resumen-inscripcion" class="bg-gray-900 rounded-lg p-4 text-sm">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-400">Al pozo (30%):</span>
+                                <span class="font-semibold text-green-400" id="inscripcion-pozo">$4,500</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Ganancia VYT (70%):</span>
+                                <span class="font-semibold text-blue-400" id="inscripcion-ganancia">$10,500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Votos -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="bg-purple-500 w-10 h-10 rounded-full flex items-center justify-center mr-3">2</span>
+                        Sistema de Votación
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Costo de 1 voto (VYT Money)</label>
+                            <input type="number" id="costo-voto-tokens" 
+                                   class="w-full bg-gray-700 px-4 py-3 rounded-lg text-white text-xl font-bold"
+                                   min="0" step="100" value="1000">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Precio de 1000 VYT Money (ARS)</label>
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-2">$</span>
+                                <input type="number" id="precio-vyt-money" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-xl font-bold"
+                                       min="0" step="100" value="1500">
+                            </div>
+                        </div>
+                        <div id="resumen-voto" class="bg-gray-900 rounded-lg p-4 text-sm">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-400">Al pozo (30%):</span>
+                                <span class="font-semibold text-green-400" id="voto-pozo">$450</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Ganancia VYT (70%):</span>
+                                <span class="font-semibold text-blue-400" id="voto-ganancia">$1,050</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entradas -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="bg-orange-500 w-10 h-10 rounded-full flex items-center justify-center mr-3">3</span>
+                        Entradas Presenciales
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Precio sugerido por entrada (ARS)</label>
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-2">$</span>
+                                <input type="number" id="precio-entrada" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-xl font-bold"
+                                       min="0" step="1000" value="5000">
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">Este es el valor por defecto. Puede modificarse en cada evento.</p>
+                        </div>
+                        <div id="resumen-entrada" class="bg-gray-900 rounded-lg p-4 text-sm">
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-400">Al pozo (30%):</span>
+                                <span class="font-semibold text-green-400" id="entrada-pozo">$1,500</span>
+                            </div>
+                            <div class="flex justify-between mb-2">
+                                <span class="text-gray-400">Costos evento (40%):</span>
+                                <span class="font-semibold text-yellow-400" id="entrada-costos">$2,000</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-400">Ganancia VYT (30%):</span>
+                                <span class="font-semibold text-blue-400" id="entrada-ganancia">$1,500</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pozo Inicial -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <span class="bg-green-500 w-10 h-10 rounded-full flex items-center justify-center mr-3">4</span>
+                        Pozo Inicial (Seed Money)
+                    </h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Monto base inicial (ARS)</label>
+                            <div class="flex items-center">
+                                <span class="text-2xl mr-2">$</span>
+                                <input type="number" id="pozo-inicial" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-xl font-bold"
+                                       min="0" step="100000" value="500000">
+                            </div>
+                            <p class="text-xs text-gray-500 mt-2">
+                                Este valor puede personalizarse en cada certamen. Es la inversión inicial para hacer el pozo más atractivo.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Distribución -->
+        <div id="content-distribucion" class="tab-content hidden">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Inscripciones -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4">Inscripciones</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">% al Pozo</label>
+                            <div class="flex items-center">
+                                <input type="number" id="inscripcion-pozo-pct" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-lg font-bold"
+                                       min="0" max="100" value="30">
+                                <span class="ml-2 text-xl">%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">% Ganancia VYT</label>
+                            <div class="flex items-center">
+                                <input type="number" id="inscripcion-ganancia-pct" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-lg font-bold"
+                                       min="0" max="100" value="70">
+                                <span class="ml-2 text-xl">%</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-3">
+                            <div class="text-sm text-gray-400">Total:</div>
+                            <div class="text-2xl font-bold" id="inscripcion-total-pct">100%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Votos -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4">Votos</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">% al Pozo</label>
+                            <div class="flex items-center">
+                                <input type="number" id="voto-pozo-pct" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-lg font-bold"
+                                       min="0" max="100" value="30">
+                                <span class="ml-2 text-xl">%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">% Ganancia VYT</label>
+                            <div class="flex items-center">
+                                <input type="number" id="voto-ganancia-pct" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-lg font-bold"
+                                       min="0" max="100" value="70">
+                                <span class="ml-2 text-xl">%</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-3">
+                            <div class="text-sm text-gray-400">Total:</div>
+                            <div class="text-2xl font-bold" id="voto-total-pct">100%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Entradas -->
+                <div class="bg-gray-800 rounded-xl p-6">
+                    <h3 class="text-xl font-bold mb-4">Entradas</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">% al Pozo</label>
+                            <div class="flex items-center">
+                                <input type="number" id="entrada-pozo-pct" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-lg font-bold"
+                                       min="0" max="100" value="30">
+                                <span class="ml-2 text-xl">%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">% Costos Evento</label>
+                            <div class="flex items-center">
+                                <input type="number" id="entrada-costos-pct" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-lg font-bold"
+                                       min="0" max="100" value="40">
+                                <span class="ml-2 text-xl">%</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">% Ganancia VYT</label>
+                            <div class="flex items-center">
+                                <input type="number" id="entrada-ganancia-pct" 
+                                       class="flex-1 bg-gray-700 px-4 py-3 rounded-lg text-white text-lg font-bold"
+                                       min="0" max="100" value="30">
+                                <span class="ml-2 text-xl">%</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-3">
+                            <div class="text-sm text-gray-400">Total:</div>
+                            <div class="text-2xl font-bold" id="entrada-total-pct">100%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Premios -->
+        <div id="content-premios" class="tab-content hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="bg-gray-800 rounded-xl p-8">
+                    <h3 class="text-2xl font-bold mb-6">Distribución del Pozo en Premios</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-gradient-to-r from-yellow-500/20 to-yellow-600/20 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xl font-bold">🥇 Primer Lugar</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" id="premio-primero-pct" 
+                                       class="flex-1 bg-gray-700 px-6 py-4 rounded-lg text-white text-2xl font-bold"
+                                       min="0" max="100" value="50">
+                                <span class="ml-3 text-2xl">%</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-gray-400/20 to-gray-500/20 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xl font-bold">🥈 Segundo Lugar</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" id="premio-segundo-pct" 
+                                       class="flex-1 bg-gray-700 px-6 py-4 rounded-lg text-white text-2xl font-bold"
+                                       min="0" max="100" value="30">
+                                <span class="ml-3 text-2xl">%</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-gradient-to-r from-orange-700/20 to-orange-800/20 rounded-lg p-6">
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xl font-bold">🥉 Tercer Lugar</span>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="number" id="premio-tercero-pct" 
+                                       class="flex-1 bg-gray-700 px-6 py-4 rounded-lg text-white text-2xl font-bold"
+                                       min="0" max="100" value="20">
+                                <span class="ml-3 text-2xl">%</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-900 rounded-lg p-6">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xl text-gray-400">Total distribuido:</span>
+                                <span class="text-3xl font-bold" id="premios-total-pct">100%</span>
+                            </div>
+                        </div>
+
+                        <!-- Simulación con pozo ejemplo -->
+                        <div class="bg-blue-900/30 border border-blue-500/30 rounded-lg p-6">
+                            <h4 class="font-bold mb-4">📊 Simulación con pozo de $1,000,000</h4>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span>🥇 Primer lugar:</span>
+                                    <span class="font-bold text-yellow-400" id="sim-primero">$500,000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>🥈 Segundo lugar:</span>
+                                    <span class="font-bold text-gray-400" id="sim-segundo">$300,000</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>🥉 Tercer lugar:</span>
+                                    <span class="font-bold text-orange-400" id="sim-tercero">$200,000</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Cupos -->
+        <div id="content-cupos" class="tab-content hidden">
+            <div class="max-w-3xl mx-auto">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gray-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">🎯 Fase Regional</h3>
+                        <p class="text-sm text-gray-400 mb-4">Cuántos artistas avanzan de cada región (Norte/Centro/Sur)</p>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Top que avanza:</label>
+                            <input type="number" id="cupo-regional" 
+                                   class="w-full bg-gray-700 px-4 py-3 rounded-lg text-white text-2xl font-bold text-center"
+                                   min="1" value="35">
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">🏆 Fase Provincial</h3>
+                        <p class="text-sm text-gray-400 mb-4">Cuántos artistas avanzan a la fase nacional</p>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Top que avanza:</label>
+                            <input type="number" id="cupo-provincial" 
+                                   class="w-full bg-gray-700 px-4 py-3 rounded-lg text-white text-2xl font-bold text-center"
+                                   min="1" value="30">
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 rounded-xl p-6">
+                        <h3 class="text-xl font-bold mb-4">🇦🇷 Final Nacional</h3>
+                        <p class="text-sm text-gray-400 mb-4">Cuántos finalistas habrá en la gran final</p>
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-2">Finalistas:</label>
+                            <input type="number" id="cupo-nacional" 
+                                   class="w-full bg-gray-700 px-4 py-3 rounded-lg text-white text-2xl font-bold text-center"
+                                   min="1" value="10">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="mt-8 flex justify-center space-x-4">
+            <button onclick="restaurarDefecto()" class="bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-lg font-semibold">
+                <i class="fas fa-undo mr-2"></i>
+                Restaurar Valores por Defecto
+            </button>
+            <button onclick="guardarConfiguracion()" class="bg-blue-600 hover:bg-blue-700 px-8 py-3 rounded-lg font-semibold text-lg">
+                <i class="fas fa-save mr-2"></i>
+                Guardar Configuración
+            </button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { auth, db } from './firebase-config.js';
+
+        let configuracionActual = null;
+        let currentUser = null;
+
+        // Inicializar
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                await cargarConfiguracionActual();
+                inicializarListeners();
+            } else {
+                window.location.href = 'admin.html';
+            }
+        });
+
+        // Cargar configuración desde Firestore
+        async function cargarConfiguracionActual() {
+            const config = await window.cargarConfiguracion(db);
+            configuracionActual = config;
+            mostrarConfiguracion(config);
+        }
+
+        // Mostrar valores en los inputs
+        function mostrarConfiguracion(config) {
+            // Precios
+            document.getElementById('precio-inscripcion').value = config.precios.inscripcion_certamen;
+            document.getElementById('costo-voto-tokens').value = config.precios.voto_vyt_money;
+            document.getElementById('precio-vyt-money').value = config.precios.vyt_money_precio_1000;
+            document.getElementById('precio-entrada').value = config.precios.entrada_evento_default;
+            document.getElementById('pozo-inicial').value = config.pozo_inicial_default;
+
+            // Distribución
+            document.getElementById('inscripcion-pozo-pct').value = config.distribucion.inscripcion_pozo_pct;
+            document.getElementById('inscripcion-ganancia-pct').value = config.distribucion.inscripcion_ganancia_pct;
+            document.getElementById('voto-pozo-pct').value = config.distribucion.voto_pozo_pct;
+            document.getElementById('voto-ganancia-pct').value = config.distribucion.voto_ganancia_pct;
+            document.getElementById('entrada-pozo-pct').value = config.distribucion.entrada_pozo_pct;
+            document.getElementById('entrada-costos-pct').value = config.distribucion.entrada_costos_pct;
+            document.getElementById('entrada-ganancia-pct').value = config.distribucion.entrada_ganancia_pct;
+
+            // Premios
+            document.getElementById('premio-primero-pct').value = config.premios.primer_lugar_pct;
+            document.getElementById('premio-segundo-pct').value = config.premios.segundo_lugar_pct;
+            document.getElementById('premio-tercero-pct').value = config.premios.tercer_lugar_pct;
+
+            // Cupos
+            document.getElementById('cupo-regional').value = config.cupos_default.regional_avanza;
+            document.getElementById('cupo-provincial').value = config.cupos_default.provincial_avanza;
+            document.getElementById('cupo-nacional').value = config.cupos_default.nacional_finalistas;
+
+            actualizarResumenes();
+        }
+
+        // Listeners para actualizar resúmenes en tiempo real
+        function inicializarListeners() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => {
+                input.addEventListener('input', actualizarResumenes);
+            });
+        }
+
+        // Actualizar resúmenes
+        function actualizarResumenes() {
+            const inscripcion = parseInt(document.getElementById('precio-inscripcion').value) || 0;
+            const votoTokens = parseInt(document.getElementById('costo-voto-tokens').value) || 0;
+            const vyt Money = parseInt(document.getElementById('precio-vyt-money').value) || 0;
+            const entrada = parseInt(document.getElementById('precio-entrada').value) || 0;
+
+            const inscPozoPct = parseInt(document.getElementById('inscripcion-pozo-pct').value) || 0;
+            const inscGananciaPct = parseInt(document.getElementById('inscripcion-ganancia-pct').value) || 0;
+            const votoPozoPct = parseInt(document.getElementById('voto-pozo-pct').value) || 0;
+            const votoGananciaPct = parseInt(document.getElementById('voto-ganancia-pct').value) || 0;
+            const entrPozoPct = parseInt(document.getElementById('entrada-pozo-pct').value) || 0;
+            const entrCostosPct = parseInt(document.getElementById('entrada-costos-pct').value) || 0;
+            const entrGananciaPct = parseInt(document.getElementById('entrada-ganancia-pct').value) || 0;
+
+            // Resúmenes de precios
+            document.getElementById('inscripcion-pozo').textContent = window.formatearPrecio(inscripcion * inscPozoPct / 100);
+            document.getElementById('inscripcion-ganancia').textContent = window.formatearPrecio(inscripcion * inscGananciaPct / 100);
+            
+            document.getElementById('voto-pozo').textContent = window.formatearPrecio(vytMoney * votoPozoPct / 100);
+            document.getElementById('voto-ganancia').textContent = window.formatearPrecio(vytMoney * votoGananciaPct / 100);
+            
+            document.getElementById('entrada-pozo').textContent = window.formatearPrecio(entrada * entrPozoPct / 100);
+            document.getElementById('entrada-costos').textContent = window.formatearPrecio(entrada * entrCostosPct / 100);
+            document.getElementById('entrada-ganancia').textContent = window.formatearPrecio(entrada * entrGananciaPct / 100);
+
+            // Totales de porcentajes
+            document.getElementById('inscripcion-total-pct').textContent = `${inscPozoPct + inscGananciaPct}%`;
+            document.getElementById('voto-total-pct').textContent = `${votoPozoPct + votoGananciaPct}%`;
+            document.getElementById('entrada-total-pct').textContent = `${entrPozoPct + entrCostosPct + entrGananciaPct}%`;
+
+            // Premios
+            const primeroPct = parseInt(document.getElementById('premio-primero-pct').value) || 0;
+            const segundoPct = parseInt(document.getElementById('premio-segundo-pct').value) || 0;
+            const terceroPct = parseInt(document.getElementById('premio-tercero-pct').value) || 0;
+            
+            document.getElementById('premios-total-pct').textContent = `${primeroPct + segundoPct + terceroPct}%`;
+            
+            // Simulación
+            const pozoEjemplo = 1000000;
+            document.getElementById('sim-primero').textContent = window.formatearPrecio(pozoEjemplo * primeroPct / 100);
+            document.getElementById('sim-segundo').textContent = window.formatearPrecio(pozoEjemplo * segundoPct / 100);
+            document.getElementById('sim-tercero').textContent = window.formatearPrecio(pozoEjemplo * terceroPct / 100);
+
+            // Validar colores
+            validarPorcentajes('inscripcion-total-pct', inscPozoPct + inscGananciaPct);
+            validarPorcentajes('voto-total-pct', votoPozoPct + votoGananciaPct);
+            validarPorcentajes('entrada-total-pct', entrPozoPct + entrCostosPct + entrGananciaPct);
+            validarPorcentajes('premios-total-pct', primeroPct + segundoPct + terceroPct);
+        }
+
+        function validarPorcentajes(elementId, total) {
+            const elemento = document.getElementById(elementId);
+            if (total === 100) {
+                elemento.classList.remove('text-red-500');
+                elemento.classList.add('text-green-400');
+            } else {
+                elemento.classList.remove('text-green-400');
+                elemento.classList.add('text-red-500');
+            }
+        }
+
+        // Cambiar tab
+        window.cambiarTab = function(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(el => {
+                el.classList.remove('active', 'border-blue-500');
+                el.classList.add('border-transparent');
+            });
+
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('active', 'border-blue-500');
+        };
+
+        // Guardar configuración
+        window.guardarConfiguracion = async function() {
+            const config = {
+                precios: {
+                    inscripcion_certamen: parseInt(document.getElementById('precio-inscripcion').value),
+                    voto_vyt_money: parseInt(document.getElementById('costo-voto-tokens').value),
+                    vyt_money_precio_1000: parseInt(document.getElementById('precio-vyt-money').value),
+                    entrada_evento_default: parseInt(document.getElementById('precio-entrada').value)
+                },
+                distribucion: {
+                    inscripcion_pozo_pct: parseInt(document.getElementById('inscripcion-pozo-pct').value),
+                    inscripcion_ganancia_pct: parseInt(document.getElementById('inscripcion-ganancia-pct').value),
+                    voto_pozo_pct: parseInt(document.getElementById('voto-pozo-pct').value),
+                    voto_ganancia_pct: parseInt(document.getElementById('voto-ganancia-pct').value),
+                    entrada_pozo_pct: parseInt(document.getElementById('entrada-pozo-pct').value),
+                    entrada_costos_pct: parseInt(document.getElementById('entrada-costos-pct').value),
+                    entrada_ganancia_pct: parseInt(document.getElementById('entrada-ganancia-pct').value)
+                },
+                premios: {
+                    primer_lugar_pct: parseInt(document.getElementById('premio-primero-pct').value),
+                    segundo_lugar_pct: parseInt(document.getElementById('premio-segundo-pct').value),
+                    tercer_lugar_pct: parseInt(document.getElementById('premio-tercero-pct').value)
+                },
+                cupos_default: {
+                    regional_avanza: parseInt(document.getElementById('cupo-regional').value),
+                    provincial_avanza: parseInt(document.getElementById('cupo-provincial').value),
+                    nacional_finalistas: parseInt(document.getElementById('cupo-nacional').value)
+                },
+                pozo_inicial_default: parseInt(document.getElementById('pozo-inicial').value)
+            };
+
+            // Validar
+            const validacion = window.validarConfiguracion(config);
+            if (!validacion.valido) {
+                mostrarNotificacion('error', 'Errores de validación:\n' + validacion.errores.join('\n'));
+                return;
+            }
+
+            // Guardar
+            const exito = await window.guardarConfiguracion(db, config, currentUser.uid);
+            if (exito) {
+                mostrarNotificacion('success', '✅ Configuración guardada exitosamente');
+                configuracionActual = config;
+            } else {
+                mostrarNotificacion('error', '❌ Error al guardar la configuración');
+            }
+        };
+
+        // Restaurar valores por defecto
+        window.restaurarDefecto = function() {
+            if (confirm('¿Estás seguro de restaurar los valores por defecto? Se perderán los cambios no guardados.')) {
+                mostrarConfiguracion(window.CONFIG_DEFAULT);
+            }
+        };
+
+        // Volver al admin
+        window.volverAdmin = function() {
+            window.location.href = 'admin.html';
+        };
+
+        // Mostrar notificación
+        function mostrarNotificacion(tipo, mensaje) {
+            const notification = document.getElementById('notification');
+            notification.className = `mb-6 p-4 rounded-lg ${tipo === 'success' ? 'bg-green-500/20 text-green-300 border border-green-500' : 'bg-red-500/20 text-red-300 border border-red-500'}`;
+            notification.textContent = mensaje;
+            notification.classList.remove('hidden');
+            
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

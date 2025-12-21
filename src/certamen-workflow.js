@@ -103,23 +103,33 @@ export const CERTAMEN_TEMPLATE = {
     fecha_evento_presencial: null,  // Si tipo_fase = presencial/hibrido
     
     // Costos e ingresos
-    costo_inscripcion: 15000,       // Pesos argentinos
-    costo_voto: 1000,               // VYT Money por voto
+    costo_inscripcion: 15000,       // Pesos argentinos (30% al pozo, 70% ganancia VYT)
+    costo_voto: 1000,               // VYT Money por voto (equivale a $1,500 pesos: 30% al pozo, 70% ganancia)
+    pozo_inicial: 500000,           // Seed money: pozo base con el que inicia el certamen
     
     // Evento presencial (si aplica)
     evento_presencial: null,  // Ver EVENTO_PRESENCIAL_TEMPLATE
     
     // Pozo de premios
     pozo: {
-        inscripciones: 0,     // Total recaudado de inscripciones
-        votos: 0,             // Total recaudado de votos
-        entradas: 0,          // Total recaudado de entradas (si presencial)
-        total: 0,             // Suma de todo
+        inicial: 500000,          // Pozo base inicial (configurable)
+        inscripciones: 0,         // 30% de cada inscripción ($4,500 por artista)
+        votos: 0,                 // 30% de cada voto ($450 por voto)
+        entradas: 0,              // 30% de cada entrada (si hay evento presencial)
+        total: 500000,            // inicial + inscripciones + votos + entradas
         distribucion: {
             primer_lugar: 0.50,   // 50%
             segundo_lugar: 0.30,  // 30%
             tercer_lugar: 0.20    // 20%
         }
+    },
+    
+    // Ganancias VYT Music (privado, NO mostrar al público)
+    ganancias_vyt: {
+        inscripciones: 0,         // 70% de cada inscripción ($10,500 por artista)
+        votos: 0,                 // 70% de cada voto ($1,050 por voto)
+        entradas: 0,              // 30% de cada entrada (el otro 40% es costos)
+        total: 0
     },
     
     // Estadísticas
@@ -282,28 +292,62 @@ export class CertamenWorkflow {
     
     /**
      * Calcular pozo en tiempo real
+     * 
+     * DISTRIBUCIÓN DE INGRESOS:
+     * - Inscripciones: 30% al pozo, 70% ganancia VYT
+     * - Votos: 30% al pozo, 70% ganancia VYT
+     * - Entradas: 30% al pozo, 40% costos evento, 30% ganancia VYT
      */
     static calcularPozo(certamen, participantes, votos) {
-        const pozo_inscripciones = participantes.filter(p => p.pago_aprobado).length * certamen.costo_inscripcion;
-        const pozo_votos = votos.length * (certamen.costo_voto * 1.5); // Conversión VYT Money a pesos
+        // INSCRIPCIONES: Solo 30% va al pozo
+        const inscripciones_totales = participantes.filter(p => p.pago_aprobado).length * certamen.costo_inscripcion;
+        const pozo_inscripciones = inscripciones_totales * 0.30;
+        const ganancia_inscripciones = inscripciones_totales * 0.70;
         
+        // VOTOS: Solo 30% va al pozo (1000 VYT Money = $1,500 pesos)
+        const votos_totales = votos.length * 1500; // Precio de compra de VYT Money
+        const pozo_votos = votos_totales * 0.30;
+        const ganancia_votos = votos_totales * 0.70;
+        
+        // ENTRADAS PRESENCIALES: 30% al pozo, resto para costos y ganancia
         let pozo_entradas = 0;
+        let ganancia_entradas = 0;
+        let costos_entradas = 0;
         if (certamen.evento_presencial && certamen.evento_presencial.entradas_vendidas) {
-            // Solo 30% de las entradas va al pozo, el resto es para costos del evento
-            pozo_entradas = certamen.evento_presencial.entradas_vendidas * 
-                           certamen.evento_presencial.precio_entrada * 0.3;
+            const entradas_totales = certamen.evento_presencial.entradas_vendidas * 
+                                    certamen.evento_presencial.precio_entrada;
+            pozo_entradas = entradas_totales * 0.30;
+            costos_entradas = entradas_totales * 0.40; // Alquiler, producción, etc.
+            ganancia_entradas = entradas_totales * 0.30;
         }
         
-        const total = pozo_inscripciones + pozo_votos + pozo_entradas;
+        // POZO INICIAL (Seed Money configurado por admin)
+        const pozo_inicial = certamen.pozo_inicial || 0;
+        
+        // POZO TOTAL = Inicial + Aportes
+        const total = pozo_inicial + pozo_inscripciones + pozo_votos + pozo_entradas;
         
         return {
+            // Desglose del pozo
+            pozo_inicial: pozo_inicial,
             inscripciones: pozo_inscripciones,
             votos: pozo_votos,
             entradas: pozo_entradas,
             total: total,
+            
+            // Distribución de premios
             primer_lugar: total * certamen.pozo.distribucion.primer_lugar,
             segundo_lugar: total * certamen.pozo.distribucion.segundo_lugar,
-            tercer_lugar: total * certamen.pozo.distribucion.tercer_lugar
+            tercer_lugar: total * certamen.pozo.distribucion.tercer_lugar,
+            
+            // Ganancias VYT Music (NO se muestran públicamente)
+            ganancia_vyt_inscripciones: ganancia_inscripciones,
+            ganancia_vyt_votos: ganancia_votos,
+            ganancia_vyt_entradas: ganancia_entradas,
+            ganancia_vyt_total: ganancia_inscripciones + ganancia_votos + ganancia_entradas,
+            
+            // Costos operativos
+            costos_evento: costos_entradas
         };
     }
     
