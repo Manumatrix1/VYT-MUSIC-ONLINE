@@ -426,7 +426,6 @@
         let currentUser = null;
         let db = null;
         let auth = null;
-        let authChecked = false; // Bandera para evitar múltiples checks
 
         // Inicializar cuando Firebase esté listo
         window.addEventListener('load', function() {
@@ -438,36 +437,33 @@
             auth = firebase.auth();
             db = firebase.firestore();
 
-            // Verificar autenticación CON PERSISTENCIA
-            auth.onAuthStateChanged(async (user) => {
-                // Solo procesar una vez
-                if (authChecked) return;
-                authChecked = true;
+            // Dar tiempo a Firebase para cargar la sesión persistida
+            setTimeout(() => {
+                currentUser = auth.currentUser;
                 
-                if (user) {
-                    console.log('✅ Usuario autenticado:', user.email);
-                    currentUser = user;
+                if (currentUser) {
+                    console.log('✅ Usuario autenticado:', currentUser.email);
                     
                     // Ocultar loader y mostrar contenido
                     document.getElementById('loader').classList.add('hidden');
                     document.getElementById('main-content').classList.remove('hidden');
                     
-                    await cargarConfiguracionActual(db);
+                    cargarConfiguracionActual(db);
                     inicializarListeners();
                 } else {
-                    console.log('❌ No hay usuario autenticado, redirigiendo...');
+                    console.log('⚠️ No hay usuario autenticado');
                     document.getElementById('loader').innerHTML = `
                         <div class="text-center">
                             <i class="fas fa-exclamation-triangle text-6xl text-yellow-500 mb-4"></i>
-                            <p class="text-xl mb-2">Debes estar autenticado como administrador</p>
-                            <p class="text-gray-400">Redirigiendo al admin...</p>
+                            <p class="text-xl mb-2">No estás autenticado</p>
+                            <p class="text-gray-400 mb-4">Debes iniciar sesión como administrador</p>
+                            <button onclick="window.location.href='admin.html'" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
+                                <i class="fas fa-arrow-left mr-2"></i>Ir al Admin
+                            </button>
                         </div>
                     `;
-                    setTimeout(() => {
-                        window.location.href = 'admin.html';
-                    }, 2000);
                 }
-            });
+            }, 1000); // Esperar 1 segundo para que Firebase cargue la sesión
 
             // Cargar configuración desde Firestore
             async function cargarConfiguracionActual(db) {
