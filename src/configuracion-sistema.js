@@ -5,7 +5,7 @@
  * Se guardan en Firestore: colección "configuracion_sistema"
  */
 
-export const CONFIG_DEFAULT = {
+window.CONFIG_DEFAULT = {
     // ID del documento en Firestore
     id: 'config_principal',
     
@@ -83,7 +83,7 @@ export const CONFIG_DEFAULT = {
 /**
  * 📥 Cargar configuración desde Firestore
  */
-export async function cargarConfiguracion(db) {
+window.cargarConfiguracion = async function(db) {
     try {
         const doc = await db.collection('configuracion_sistema')
             .doc('config_principal')
@@ -105,7 +105,7 @@ export async function cargarConfiguracion(db) {
 /**
  * 💾 Guardar configuración en Firestore
  */
-export async function guardarConfiguracion(db, config, adminUid) {
+window.guardarConfiguracion = async function(db, config, adminUid) {
     try {
         await db.collection('configuracion_sistema')
             .doc('config_principal')
@@ -126,7 +126,7 @@ export async function guardarConfiguracion(db, config, adminUid) {
 /**
  * 🔢 Calcular aportes al pozo según configuración
  */
-export function calcularAportePozo(tipo, cantidad, config) {
+window.calcularAportePozo = function(tipo, cantidad, config) {
     switch(tipo) {
         case 'inscripcion':
             return cantidad * config.precios.inscripcion_certamen * (config.distribucion.inscripcion_pozo_pct / 100);
@@ -146,7 +146,7 @@ export function calcularAportePozo(tipo, cantidad, config) {
 /**
  * 💰 Calcular ganancias VYT según configuración
  */
-export function calcularGananciaVYT(tipo, cantidad, config) {
+window.calcularGananciaVYT = function(tipo, cantidad, config) {
     switch(tipo) {
         case 'inscripcion':
             return cantidad * config.precios.inscripcion_certamen * (config.distribucion.inscripcion_ganancia_pct / 100);
@@ -166,7 +166,7 @@ export function calcularGananciaVYT(tipo, cantidad, config) {
 /**
  * 🎁 Calcular distribución de premios
  */
-export function calcularPremios(pozoTotal, config) {
+window.calcularPremios = function(pozoTotal, config) {
     return {
         primer_lugar: pozoTotal * (config.premios.primer_lugar_pct / 100),
         segundo_lugar: pozoTotal * (config.premios.segundo_lugar_pct / 100),
@@ -177,7 +177,7 @@ export function calcularPremios(pozoTotal, config) {
 /**
  * 🔍 Validar configuración antes de guardar
  */
-export function validarConfiguracion(config) {
+window.validarConfiguracion = function(config) {
     const errores = [];
     
     // Validar que porcentajes de inscripción sumen 100%
@@ -228,7 +228,7 @@ export function validarConfiguracion(config) {
 /**
  * 🎨 Formatear precio en pesos argentinos
  */
-export function formatearPrecio(valor) {
+window.formatearPrecio = function(valor) {
     return new Intl.NumberFormat('es-AR', {
         style: 'currency',
         currency: 'ARS',
@@ -239,37 +239,24 @@ export function formatearPrecio(valor) {
 /**
  * 📊 Generar resumen de configuración para mostrar en admin
  */
-export function generarResumenConfig(config) {
+window.generarResumenConfig = function(config) {
     return {
         inscripcion: {
-            precio: formatearPrecio(config.precios.inscripcion_certamen),
-            al_pozo: formatearPrecio(config.precios.inscripcion_certamen * config.distribucion.inscripcion_pozo_pct / 100),
-            ganancia: formatearPrecio(config.precios.inscripcion_certamen * config.distribucion.inscripcion_ganancia_pct / 100)
+            precio: window.formatearPrecio(config.precios.inscripcion_certamen),
+            al_pozo: window.formatearPrecio(config.precios.inscripcion_certamen * config.distribucion.inscripcion_pozo_pct / 100),
+            ganancia: window.formatearPrecio(config.precios.inscripcion_certamen * config.distribucion.inscripcion_ganancia_pct / 100)
         },
         voto: {
             costo_tokens: config.precios.voto_vyt_money,
-            precio: formatearPrecio(config.precios.vyt_money_precio_1000),
-            al_pozo: formatearPrecio(config.precios.vyt_money_precio_1000 * config.distribucion.voto_pozo_pct / 100),
-            ganancia: formatearPrecio(config.precios.vyt_money_precio_1000 * config.distribucion.voto_ganancia_pct / 100)
+            precio: window.formatearPrecio(config.precios.vyt_money_precio_1000),
+            al_pozo: window.formatearPrecio(config.precios.vyt_money_precio_1000 * config.distribucion.voto_pozo_pct / 100),
+            ganancia: window.formatearPrecio(config.precios.vyt_money_precio_1000 * config.distribucion.voto_ganancia_pct / 100)
         },
         entrada: {
-            precio: formatearPrecio(config.precios.entrada_evento_default),
-            al_pozo: formatearPrecio(config.precios.entrada_evento_default * config.distribucion.entrada_pozo_pct / 100),
-            costos: formatearPrecio(config.precios.entrada_evento_default * config.distribucion.entrada_costos_pct / 100),
-            ganancia: formatearPrecio(config.precios.entrada_evento_default * config.distribucion.entrada_ganancia_pct / 100)
+            precio: window.formatearPrecio(config.precios.entrada_evento_default),
+            al_pozo: window.formatearPrecio(config.precios.entrada_evento_default * config.distribucion.entrada_pozo_pct / 100),
+            costos: window.formatearPrecio(config.precios.entrada_evento_default * config.distribucion.entrada_costos_pct / 100),
+            ganancia: window.formatearPrecio(config.precios.entrada_evento_default * config.distribucion.entrada_ganancia_pct / 100)
         }
     };
-}
-
-// Exportar para uso en HTML sin módulos
-if (typeof window !== 'undefined') {
-    window.CONFIG_DEFAULT = CONFIG_DEFAULT;
-    window.cargarConfiguracion = cargarConfiguracion;
-    window.guardarConfiguracion = guardarConfiguracion;
-    window.calcularAportePozo = calcularAportePozo;
-    window.calcularGananciaVYT = calcularGananciaVYT;
-    window.calcularPremios = calcularPremios;
-    window.validarConfiguracion = validarConfiguracion;
-    window.formatearPrecio = formatearPrecio;
-    window.generarResumenConfig = generarResumenConfig;
-}
+};
