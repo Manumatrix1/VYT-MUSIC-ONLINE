@@ -26,13 +26,29 @@
         `${CDN_BASE}/firebase-storage.js`
     ];
     
-    // Cargar scripts sincrónicamente
-    scripts.forEach(src => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.async = false; // Importante: cargar en orden
-        document.head.appendChild(script);
-    });
+    let loaded = 0;
     
-    console.log('📦 Firebase scripts añadidos al DOM');
+    // Cargar scripts en secuencia
+    function loadNext(index) {
+        if (index >= scripts.length) {
+            console.log('✅ Todos los scripts de Firebase cargados');
+            // Disparar evento cuando todo esté listo
+            window.dispatchEvent(new Event('firebaseScriptsLoaded'));
+            return;
+        }
+        
+        const script = document.createElement('script');
+        script.src = scripts[index];
+        script.onload = () => {
+            loaded++;
+            console.log(`✅ Cargado ${loaded}/${scripts.length}: ${scripts[index]}`);
+            loadNext(index + 1);
+        };
+        script.onerror = (err) => {
+            console.error(`❌ Error cargando ${scripts[index]}:`, err);
+        };
+        document.head.appendChild(script);
+    }
+    
+    loadNext(0);
 })();

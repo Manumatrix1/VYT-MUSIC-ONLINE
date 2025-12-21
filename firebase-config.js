@@ -204,12 +204,13 @@ window.addEventListener('offline', async () => {
 // Función de utilidad para verificar conexión
 const checkConnection = () => isOnline;
 
-export { 
-    app, 
-    auth, 
-    db, 
-    storage, 
-    analytics, 
-    functions, 
-    checkConnection 
-};
+// Exportar a window para uso global (sin ES6 modules)
+if (typeof window !== 'undefined') {
+    window.firebaseApp = app;
+    window.firebaseAuth = auth;
+    window.firebaseDb = db;
+    window.firebaseStorage = storage;
+    window.firebaseAnalytics = analytics;
+    window.firebaseFunctions = functions;
+    window.checkConnection = checkConnection;
+}

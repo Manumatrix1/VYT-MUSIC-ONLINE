@@ -7,8 +7,28 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="load-firebase.js"></script>
-    <script src="firebase-config.js" defer></script>
-    <script src="src/configuracion-sistema.js" defer></script>
+    <script>
+        // Esperar a que Firebase esté cargado antes de cargar firebase-config.js
+        window.addEventListener('firebaseScriptsLoaded', function() {
+            console.log('🎯 Firebase listo, cargando configuración...');
+            
+            // Cargar firebase-config.js
+            const configScript = document.createElement('script');
+            configScript.src = 'firebase-config.js';
+            configScript.onload = function() {
+                console.log('✅ firebase-config.js cargado');
+                // Inicializar Firebase
+                if (typeof initializeFirebase === 'function') {
+                    initializeFirebase();
+                }
+                // Cargar configuracion-sistema.js
+                const appScript = document.createElement('script');
+                appScript.src = 'src/configuracion-sistema.js';
+                document.head.appendChild(appScript);
+            };
+            document.head.appendChild(configScript);
+        });
+    </script>
 </head>
 <body class="bg-gray-900 text-white">
     <div class="container mx-auto px-4 py-8">
