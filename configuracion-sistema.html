@@ -397,6 +397,8 @@
         // Esperar a que Firebase se inicialice
         let configuracionActual = null;
         let currentUser = null;
+        let db = null;
+        let auth = null;
 
         // Inicializar cuando Firebase esté listo
         window.addEventListener('load', function() {
@@ -405,8 +407,8 @@
                 return;
             }
 
-            const auth = firebase.auth();
-            const db = firebase.firestore();
+            auth = firebase.auth();
+            db = firebase.firestore();
 
             // Verificar autenticación
             auth.onAuthStateChanged(async (user) => {
@@ -573,17 +575,23 @@
                 // Validar
                 const validacion = window.validarConfiguracion(config);
                 if (!validacion.valido) {
-                    mostrarNotificacion('error', 'Errores de validación:\n' + validacion.errores.join('\n'));
+                    window.mostrarNotificacion('error', 'Errores de validación:\n' + validacion.errores.join('\n'));
                     return;
                 }
 
-                // Guardar
-                const exito = await window.guardarConfiguracion(firebase.firestore(), config, currentUser.uid);
-                if (exito) {
-                    mostrarNotificacion('success', '✅ Configuración guardada exitosamente');
+                try {
+                    // Guardar en Firestore
+                    await db.collection('configuracion_sistema').doc('config_principal').set({
+                        ...config,
+                        ultima_modificacion: firebase.firestore.FieldValue.serverTimestamp(),
+                        modificado_por: currentUser.uid
+                    });
+                    
+                    window.mostrarNotificacion('success', '✅ Configuración guardada exitosamente');
                     configuracionActual = config;
-                } else {
-                    mostrarNotificacion('error', '❌ Error al guardar la configuración');
+                } catch (error) {
+                    console.error('Error al guardar:', error);
+                    window.mostrarNotificacion('error', '❌ Error al guardar la configuración: ' + error.message);
                 }
             };
 
@@ -600,7 +608,7 @@
             };
 
             // Mostrar notificación
-            function mostrarNotificacion(tipo, mensaje) {
+            window.mostrarNotificacion = function(tipo, mensaje) {
                 const notification = document.getElementById('notification');
                 notification.className = `mb-6 p-4 rounded-lg ${tipo === 'success' ? 'bg-green-500/20 text-green-300 border border-green-500' : 'bg-red-500/20 text-red-300 border border-red-500'}`;
                 notification.textContent = mensaje;
@@ -609,200 +617,8 @@
                 setTimeout(() => {
                     notification.classList.add('hidden');
                 }, 5000);
-            }
-        });
-
-        // Cargar configuración desde Firestore
-        async function cargarConfiguracionActual() {
-            const config = await window.cargarConfiguracion(db);
-            configuracionActual = config;
-            mostrarConfiguracion(config);
-        }
-
-        // Mostrar valores en los inputs
-        function mostrarConfiguracion(config) {
-            // Precios
-            document.getElementById('precio-inscripcion').value = config.precios.inscripcion_certamen;
-            document.getElementById('costo-voto-tokens').value = config.precios.voto_vyt_money;
-            document.getElementById('precio-vyt-money').value = config.precios.vyt_money_precio_1000;
-            document.getElementById('precio-entrada').value = config.precios.entrada_evento_default;
-            document.getElementById('pozo-inicial').value = config.pozo_inicial_default;
-
-            // Distribución
-            document.getElementById('inscripcion-pozo-pct').value = config.distribucion.inscripcion_pozo_pct;
-            document.getElementById('inscripcion-ganancia-pct').value = config.distribucion.inscripcion_ganancia_pct;
-            document.getElementById('voto-pozo-pct').value = config.distribucion.voto_pozo_pct;
-            document.getElementById('voto-ganancia-pct').value = config.distribucion.voto_ganancia_pct;
-            document.getElementById('entrada-pozo-pct').value = config.distribucion.entrada_pozo_pct;
-            document.getElementById('entrada-costos-pct').value = config.distribucion.entrada_costos_pct;
-            document.getElementById('entrada-ganancia-pct').value = config.distribucion.entrada_ganancia_pct;
-
-            // Premios
-            document.getElementById('premio-primero-pct').value = config.premios.primer_lugar_pct;
-            document.getElementById('premio-segundo-pct').value = config.premios.segundo_lugar_pct;
-            document.getElementById('premio-tercero-pct').value = config.premios.tercer_lugar_pct;
-
-            // Cupos
-            document.getElementById('cupo-regional').value = config.cupos_default.regional_avanza;
-            document.getElementById('cupo-provincial').value = config.cupos_default.provincial_avanza;
-            document.getElementById('cupo-nacional').value = config.cupos_default.nacional_finalistas;
-
-            actualizarResumenes();
-        }
-
-        // Listeners para actualizar resúmenes en tiempo real
-        function inicializarListeners() {
-            const inputs = document.querySelectorAll('input[type="number"]');
-            inputs.forEach(input => {
-                input.addEventListener('input', actualizarResumenes);
-            });
-        }
-
-        // Actualizar resúmenes
-        function actualizarResumenes() {
-            const inscripcion = parseInt(document.getElementById('precio-inscripcion').value) || 0;
-            const votoTokens = parseInt(document.getElementById('costo-voto-tokens').value) || 0;
-            const vytMoney = parseInt(document.getElementById('precio-vyt-money').value) || 0;
-            const entrada = parseInt(document.getElementById('precio-entrada').value) || 0;
-
-            const inscPozoPct = parseInt(document.getElementById('inscripcion-pozo-pct').value) || 0;
-            const inscGananciaPct = parseInt(document.getElementById('inscripcion-ganancia-pct').value) || 0;
-            const votoPozoPct = parseInt(document.getElementById('voto-pozo-pct').value) || 0;
-            const votoGananciaPct = parseInt(document.getElementById('voto-ganancia-pct').value) || 0;
-            const entrPozoPct = parseInt(document.getElementById('entrada-pozo-pct').value) || 0;
-            const entrCostosPct = parseInt(document.getElementById('entrada-costos-pct').value) || 0;
-            const entrGananciaPct = parseInt(document.getElementById('entrada-ganancia-pct').value) || 0;
-
-            // Resúmenes de precios
-            document.getElementById('inscripcion-pozo').textContent = window.formatearPrecio(inscripcion * inscPozoPct / 100);
-            document.getElementById('inscripcion-ganancia').textContent = window.formatearPrecio(inscripcion * inscGananciaPct / 100);
-            
-            document.getElementById('voto-pozo').textContent = window.formatearPrecio(vytMoney * votoPozoPct / 100);
-            document.getElementById('voto-ganancia').textContent = window.formatearPrecio(vytMoney * votoGananciaPct / 100);
-            
-            document.getElementById('entrada-pozo').textContent = window.formatearPrecio(entrada * entrPozoPct / 100);
-            document.getElementById('entrada-costos').textContent = window.formatearPrecio(entrada * entrCostosPct / 100);
-            document.getElementById('entrada-ganancia').textContent = window.formatearPrecio(entrada * entrGananciaPct / 100);
-
-            // Totales de porcentajes
-            document.getElementById('inscripcion-total-pct').textContent = `${inscPozoPct + inscGananciaPct}%`;
-            document.getElementById('voto-total-pct').textContent = `${votoPozoPct + votoGananciaPct}%`;
-            document.getElementById('entrada-total-pct').textContent = `${entrPozoPct + entrCostosPct + entrGananciaPct}%`;
-
-            // Premios
-            const primeroPct = parseInt(document.getElementById('premio-primero-pct').value) || 0;
-            const segundoPct = parseInt(document.getElementById('premio-segundo-pct').value) || 0;
-            const terceroPct = parseInt(document.getElementById('premio-tercero-pct').value) || 0;
-            
-            document.getElementById('premios-total-pct').textContent = `${primeroPct + segundoPct + terceroPct}%`;
-            
-            // Simulación
-            const pozoEjemplo = 1000000;
-            document.getElementById('sim-primero').textContent = window.formatearPrecio(pozoEjemplo * primeroPct / 100);
-            document.getElementById('sim-segundo').textContent = window.formatearPrecio(pozoEjemplo * segundoPct / 100);
-            document.getElementById('sim-tercero').textContent = window.formatearPrecio(pozoEjemplo * terceroPct / 100);
-
-            // Validar colores
-            validarPorcentajes('inscripcion-total-pct', inscPozoPct + inscGananciaPct);
-            validarPorcentajes('voto-total-pct', votoPozoPct + votoGananciaPct);
-            validarPorcentajes('entrada-total-pct', entrPozoPct + entrCostosPct + entrGananciaPct);
-            validarPorcentajes('premios-total-pct', primeroPct + segundoPct + terceroPct);
-        }
-
-        function validarPorcentajes(elementId, total) {
-            const elemento = document.getElementById(elementId);
-            if (total === 100) {
-                elemento.classList.remove('text-red-500');
-                elemento.classList.add('text-green-400');
-            } else {
-                elemento.classList.remove('text-green-400');
-                elemento.classList.add('text-red-500');
-            }
-        }
-
-        // Cambiar tab
-        window.cambiarTab = function(tab) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(el => {
-                el.classList.remove('active', 'border-blue-500');
-                el.classList.add('border-transparent');
-            });
-
-            document.getElementById(`content-${tab}`).classList.remove('hidden');
-            document.getElementById(`tab-${tab}`).classList.add('active', 'border-blue-500');
-        };
-
-        // Guardar configuración
-        window.guardarConfiguracion = async function() {
-            const config = {
-                precios: {
-                    inscripcion_certamen: parseInt(document.getElementById('precio-inscripcion').value),
-                    voto_vyt_money: parseInt(document.getElementById('costo-voto-tokens').value),
-                    vyt_money_precio_1000: parseInt(document.getElementById('precio-vyt-money').value),
-                    entrada_evento_default: parseInt(document.getElementById('precio-entrada').value)
-                },
-                distribucion: {
-                    inscripcion_pozo_pct: parseInt(document.getElementById('inscripcion-pozo-pct').value),
-                    inscripcion_ganancia_pct: parseInt(document.getElementById('inscripcion-ganancia-pct').value),
-                    voto_pozo_pct: parseInt(document.getElementById('voto-pozo-pct').value),
-                    voto_ganancia_pct: parseInt(document.getElementById('voto-ganancia-pct').value),
-                    entrada_pozo_pct: parseInt(document.getElementById('entrada-pozo-pct').value),
-                    entrada_costos_pct: parseInt(document.getElementById('entrada-costos-pct').value),
-                    entrada_ganancia_pct: parseInt(document.getElementById('entrada-ganancia-pct').value)
-                },
-                premios: {
-                    primer_lugar_pct: parseInt(document.getElementById('premio-primero-pct').value),
-                    segundo_lugar_pct: parseInt(document.getElementById('premio-segundo-pct').value),
-                    tercer_lugar_pct: parseInt(document.getElementById('premio-tercero-pct').value)
-                },
-                cupos_default: {
-                    regional_avanza: parseInt(document.getElementById('cupo-regional').value),
-                    provincial_avanza: parseInt(document.getElementById('cupo-provincial').value),
-                    nacional_finalistas: parseInt(document.getElementById('cupo-nacional').value)
-                },
-                pozo_inicial_default: parseInt(document.getElementById('pozo-inicial').value)
             };
-
-            // Validar
-            const validacion = window.validarConfiguracion(config);
-            if (!validacion.valido) {
-                mostrarNotificacion('error', 'Errores de validación:\n' + validacion.errores.join('\n'));
-                return;
-            }
-
-            // Guardar
-            const exito = await window.guardarConfiguracion(db, config, currentUser.uid);
-            if (exito) {
-                mostrarNotificacion('success', '✅ Configuración guardada exitosamente');
-                configuracionActual = config;
-            } else {
-                mostrarNotificacion('error', '❌ Error al guardar la configuración');
-            }
-        };
-
-        // Restaurar valores por defecto
-        window.restaurarDefecto = function() {
-            if (confirm('¿Estás seguro de restaurar los valores por defecto? Se perderán los cambios no guardados.')) {
-                mostrarConfiguracion(window.CONFIG_DEFAULT);
-            }
-        };
-
-        // Volver al admin
-        window.volverAdmin = function() {
-            window.location.href = 'admin.html';
-        };
-
-        // Mostrar notificación
-        function mostrarNotificacion(tipo, mensaje) {
-            const notification = document.getElementById('notification');
-            notification.className = `mb-6 p-4 rounded-lg ${tipo === 'success' ? 'bg-green-500/20 text-green-300 border border-green-500' : 'bg-red-500/20 text-red-300 border border-red-500'}`;
-            notification.textContent = mensaje;
-            notification.classList.remove('hidden');
-            
-            setTimeout(() => {
-                notification.classList.add('hidden');
-            }, 5000);
-        }
+        });
     </script>
 </body>
 </html>
