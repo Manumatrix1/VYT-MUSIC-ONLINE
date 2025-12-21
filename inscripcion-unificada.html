@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="firebase-config.js"></script>
+    <script src="src/zonas-argentina.js"></script>
     
     <style>
         body {
@@ -87,6 +88,40 @@
                     <h2 class="text-3xl font-bold text-white mb-4 font-display">Verificando tu perfil...</h2>
                     <div class="flex justify-center">
                         <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Información de ubicación y región detectada -->
+            <div id="location-detected" class="hidden">
+                <div class="location-info">
+                    <div class="flex items-start space-x-4">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-map-marker-alt text-teal-400 text-2xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">📍 Tu Ubicación</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                                <div>
+                                    <p class="text-teal-200 text-sm">Ciudad</p>
+                                    <p class="text-white font-semibold" id="user-ciudad">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-teal-200 text-sm">Provincia</p>
+                                    <p class="text-white font-semibold" id="user-provincia">-</p>
+                                </div>
+                                <div>
+                                    <p class="text-teal-200 text-sm">Región del Certamen</p>
+                                    <p class="text-white font-semibold" id="user-region">-</p>
+                                </div>
+                            </div>
+                            <div class="bg-teal-500/20 border border-teal-500/30 rounded-lg p-3">
+                                <p class="text-teal-100 text-sm">
+                                    <i class="fas fa-info-circle mr-2"></i>
+                                    <span id="region-explanation">Tu región se detectó automáticamente según tu ciudad.</span>
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -377,6 +412,28 @@
                         return;
                     }
                     
+                    // 🗺️ DETECTAR REGIÓN AUTOMÁTICAMENTE
+                    if (window.detectarRegion) {
+                        const regionInfo = detectarRegion(userData.ciudad, userData.provincia);
+                        if (regionInfo) {
+                            userData.region = regionInfo.region;
+                            userData.codigoRegion = regionInfo.codigoRegion;
+                            userData.codigoProvincia = regionInfo.codigoProvincia;
+                            userData.regionColor = regionInfo.color;
+                            userData.cupoRegional = regionInfo.cupoRegional;
+                            userData.cupoProvincial = regionInfo.cupoProvincial;
+                            userData.cupoNacional = regionInfo.cupoNacional;
+                            
+                            console.log('✅ Región detectada:', regionInfo);
+                        } else {
+                            // Si no se detecta, asignar centro por defecto
+                            userData.region = 'Centro de ' + userData.provincia;
+                            userData.codigoRegion = 'centro';
+                            userData.codigoProvincia = userData.provincia.toLowerCase().replace(/ /g, '_');
+                            userData.regionColor = '#4ECDC4';
+                        }
+                    }
+                    
                     // Mostrar información de ubicación
                     showLocationInfo();
                     showInscriptionForm();
@@ -398,22 +455,29 @@
 
         // Mostrar información de ubicación
         function showLocationInfo() {
-            const locationDisplay = document.getElementById('location-display');
-            const userLocationDiv = document.getElementById('user-location');
+            const locationDetected = document.getElementById('location-detected');
             
-            userLocationDiv.innerHTML = `
-                <div class="flex items-center space-x-4">
-                    <div>
-                        <span class="font-semibold">${userData.ciudad}</span>, 
-                        <span class="text-teal-200">${userData.provincia}</span>
-                    </div>
-                    <button onclick="changeLocation()" class="text-xs bg-teal-600 hover:bg-teal-700 px-3 py-1 rounded transition-colors">
-                        Cambiar
-                    </button>
-                </div>
-            `;
+            // Mostrar datos de ubicación y región detectada
+            document.getElementById('user-ciudad').textContent = userData.ciudad || 'No especificado';
+            document.getElementById('user-provincia').textContent = userData.provincia || 'No especificado';
+            document.getElementById('user-region').textContent = userData.region || 'No detectado';
             
-            locationDisplay.classList.remove('hidden');
+            // Actualizar explicación de región
+            const regionExplanation = document.getElementById('region-explanation');
+            if (userData.region && userData.cupoRegional) {
+                regionExplanation.innerHTML = `
+                    <i class="fas fa-trophy mr-2"></i>
+                    Competirás en la región <strong>${userData.region}</strong>. 
+                    Los <strong>Top ${userData.cupoRegional}</strong> de tu región avanzan a la fase provincial.
+                `;
+            }
+            
+            // Aplicar color de región si existe
+            if (userData.regionColor) {
+                document.getElementById('user-region').style.color = userData.regionColor;
+            }
+            
+            locationDetected.classList.remove('hidden');
             
             // Determinar modalidad basada en ubicación
             determineModalidad();
@@ -636,6 +700,12 @@
                         <span class="text-white/70">Ubicación:</span>
                         <span class="text-white font-semibold">${userData.ciudad}, ${userData.provincia}</span>
                     </div>
+                    ${userData.region ? `
+                    <div class="flex justify-between items-center">
+                        <span class="text-white/70">Región:</span>
+                        <span class="text-white font-semibold" style="color: ${userData.regionColor}">${userData.region}</span>
+                    </div>
+                    ` : ''}
                 </div>
             `;
             
@@ -666,11 +736,26 @@
                     artistaOriginal: inscriptionData.artistaOriginal || '',
                     videoURL: videoURL,
                     modalidad: inscriptionData.modalidad,
+                    
+                    // Ubicación geográfica
                     provincia: userData.provincia,
                     ciudad: userData.ciudad,
+                    
+                    // Región detectada automáticamente
+                    region: userData.region || 'centro', // Norte/Centro/Sur
+                    codigoRegion: userData.codigoRegion || 'centro',
+                    codigoProvincia: userData.codigoProvincia || '',
+                    
+                    // Datos del artista
                     nombreArtista: userData.displayName || userData.nombre || 'Sin nombre',
+                    
+                    // Metadata
                     fechaInscripcion: firebase.firestore.FieldValue.serverTimestamp(),
-                    estado: 'pendiente'
+                    estado: 'pendiente',
+                    pago_realizado: false,
+                    pago_aprobado: false,
+                    votos: 0,
+                    posicion: null
                 };
 
                 // Guardar en Firestore
