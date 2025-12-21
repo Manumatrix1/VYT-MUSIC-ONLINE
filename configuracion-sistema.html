@@ -429,47 +429,55 @@
 
         // Inicializar cuando Firebase esté listo
         window.addEventListener('load', async function() {
+            console.log('🔄 Página cargada, inicializando...');
+            
             if (typeof firebase === 'undefined') {
-                console.error('Firebase no está cargado');
+                console.error('❌ Firebase no está cargado');
+                alert('Error: Firebase no está disponible');
                 return;
             }
+            
+            console.log('✅ Firebase disponible');
 
             auth = firebase.auth();
             db = firebase.firestore();
-
-            // Esperar a que Firebase verifique la sesión (usando Promise)
-            try {
-                currentUser = await new Promise((resolve) => {
-                    const unsubscribe = auth.onAuthStateChanged((user) => {
-                        unsubscribe(); // Desuscribirse inmediatamente después del primer evento
-                        resolve(user);
-                    });
+            
+            console.log('🔍 Verificando auth.currentUser inmediatamente:', auth.currentUser);
+            
+            // Esperar un poco más tiempo
+            console.log('⏳ Esperando 2 segundos para que Firebase cargue sesión...');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            console.log('🔍 Verificando auth.currentUser después de espera:', auth.currentUser);
+            currentUser = auth.currentUser;
+            
+            if (currentUser) {
+                console.log('✅✅✅ Usuario detectado:', currentUser.email, currentUser.uid);
+                
+                // Ocultar loader y mostrar contenido
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                
+                await cargarConfiguracionActual(db);
+                inicializarListeners();
+            } else {
+                console.log('❌ NO hay usuario después de esperar 2 segundos');
+                console.log('🔍 Estado de Firebase Auth:', {
+                    authExists: !!auth,
+                    currentUser: auth.currentUser,
+                    authDomain: firebase.app().options.authDomain
                 });
                 
-                if (currentUser) {
-                    console.log('✅ Usuario autenticado:', currentUser.email);
-                    
-                    // Ocultar loader y mostrar contenido
-                    document.getElementById('loader').classList.add('hidden');
-                    document.getElementById('main-content').classList.remove('hidden');
-                    
-                    await cargarConfiguracionActual(db);
-                    inicializarListeners();
-                } else {
-                    console.log('⚠️ No hay usuario autenticado');
-                    document.getElementById('loader').innerHTML = `
-                        <div class="text-center">
-                            <i class="fas fa-exclamation-triangle text-6xl text-yellow-500 mb-4"></i>
-                            <p class="text-xl mb-2">No estás autenticado</p>
-                            <p class="text-gray-400 mb-4">Debes iniciar sesión como administrador</p>
-                            <button onclick="window.location.href='admin.html'" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
-                                <i class="fas fa-arrow-left mr-2"></i>Ir al Admin
-                            </button>
-                        </div>
-                    `;
-                }
-            } catch (error) {
-                console.error('Error verificando autenticación:', error);
+                document.getElementById('loader').innerHTML = `
+                    <div class="text-center">
+                        <i class="fas fa-exclamation-triangle text-6xl text-yellow-500 mb-4"></i>
+                        <p class="text-xl mb-2">No se detectó sesión activa</p>
+                        <p class="text-gray-400 mb-4">Verifica la consola para más detalles</p>
+                        <button onclick="window.location.href='admin.html'" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
+                            <i class="fas fa-arrow-left mr-2"></i>Ir al Admin
+                        </button>
+                    </div>
+                `;
             }
 
             // Cargar configuración desde Firestore
