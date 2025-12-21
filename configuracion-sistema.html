@@ -29,7 +29,15 @@
     <script src="src/configuracion-sistema.js"></script>
 </head>
 <body class="bg-gray-900 text-white">
-    <div class="container mx-auto px-4 py-8">
+    <!-- Loader mientras carga Firebase -->
+    <div id="loader" class="fixed inset-0 bg-gray-900 flex items-center justify-center z-50">
+        <div class="text-center">
+            <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 mx-auto mb-4"></div>
+            <p class="text-xl">Cargando configuración...</p>
+        </div>
+    </div>
+
+    <div id="main-content" class="hidden container mx-auto px-4 py-8">
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-4xl font-bold mb-2">⚙️ Configuración del Sistema</h1>
@@ -410,7 +418,7 @@
                 Guardar Configuración
             </button>
         </div>
-    </div>
+    </div></div>
 
     <script>
         // Esperar a que Firebase se inicialice
@@ -432,11 +440,27 @@
             // Verificar autenticación
             auth.onAuthStateChanged(async (user) => {
                 if (user) {
+                    console.log('✅ Usuario autenticado:', user.email);
                     currentUser = user;
+                    
+                    // Ocultar loader y mostrar contenido
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('main-content').classList.remove('hidden');
+                    
                     await cargarConfiguracionActual(db);
                     inicializarListeners();
                 } else {
-                    window.location.href = 'admin.html';
+                    console.log('❌ No hay usuario autenticado, redirigiendo...');
+                    document.getElementById('loader').innerHTML = `
+                        <div class="text-center">
+                            <i class="fas fa-exclamation-triangle text-6xl text-yellow-500 mb-4"></i>
+                            <p class="text-xl mb-2">Debes estar autenticado como administrador</p>
+                            <p class="text-gray-400">Redirigiendo al admin...</p>
+                        </div>
+                    `;
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 2000);
                 }
             });
 
