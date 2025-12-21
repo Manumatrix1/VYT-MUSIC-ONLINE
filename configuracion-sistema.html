@@ -426,6 +426,7 @@
         let currentUser = null;
         let db = null;
         let auth = null;
+        let authChecked = false; // Bandera para evitar múltiples checks
 
         // Inicializar cuando Firebase esté listo
         window.addEventListener('load', function() {
@@ -437,8 +438,12 @@
             auth = firebase.auth();
             db = firebase.firestore();
 
-            // Verificar autenticación
+            // Verificar autenticación CON PERSISTENCIA
             auth.onAuthStateChanged(async (user) => {
+                // Solo procesar una vez
+                if (authChecked) return;
+                authChecked = true;
+                
                 if (user) {
                     console.log('✅ Usuario autenticado:', user.email);
                     currentUser = user;
