@@ -6,29 +6,27 @@
     <title>Configuración del Sistema - VYT MUSIC Admin</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="load-firebase.js"></script>
+    
+    <!-- Firebase v8 SDK directo -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <!-- Inicializar Firebase directamente aquí -->
     <script>
-        // Esperar a que Firebase esté cargado antes de cargar firebase-config.js
-        window.addEventListener('firebaseScriptsLoaded', function() {
-            console.log('🎯 Firebase listo, cargando configuración...');
-            
-            // Cargar firebase-config.js
-            const configScript = document.createElement('script');
-            configScript.src = 'firebase-config.js';
-            configScript.onload = function() {
-                console.log('✅ firebase-config.js cargado');
-                // Inicializar Firebase
-                if (typeof initializeFirebase === 'function') {
-                    initializeFirebase();
-                }
-                // Cargar configuracion-sistema.js
-                const appScript = document.createElement('script');
-                appScript.src = 'src/configuracion-sistema.js';
-                document.head.appendChild(appScript);
-            };
-            document.head.appendChild(configScript);
-        });
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115"
+        };
+        firebase.initializeApp(firebaseConfig);
     </script>
+    
+    <!-- Scripts de configuración -->
+    <script src="src/configuracion-sistema.js"></script>
 </head>
 <body class="bg-gray-900 text-white">
     <div class="container mx-auto px-4 py-8">
