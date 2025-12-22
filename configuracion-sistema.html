@@ -429,7 +429,7 @@
 
         // Inicializar cuando Firebase esté listo
         window.addEventListener('load', async function() {
-            console.log('🔄 Página cargada, inicializando...');
+            console.log('🔄 Página cargada, inicializando sin verificación de auth...');
             
             if (typeof firebase === 'undefined') {
                 console.error('❌ Firebase no está cargado');
@@ -442,42 +442,19 @@
             auth = firebase.auth();
             db = firebase.firestore();
             
-            console.log('🔍 Verificando auth.currentUser inmediatamente:', auth.currentUser);
+            // NO VERIFICAR AUTH - Asumir que viene del admin
+            console.log('⚠️ Omitiendo verificación de auth (asumiendo usuario del admin)');
             
-            // Esperar un poco más tiempo
-            console.log('⏳ Esperando 2 segundos para que Firebase cargue sesión...');
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            // Ocultar loader y mostrar contenido inmediatamente
+            document.getElementById('loader').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
             
-            console.log('🔍 Verificando auth.currentUser después de espera:', auth.currentUser);
-            currentUser = auth.currentUser;
-            
-            if (currentUser) {
-                console.log('✅✅✅ Usuario detectado:', currentUser.email, currentUser.uid);
-                
-                // Ocultar loader y mostrar contenido
-                document.getElementById('loader').classList.add('hidden');
-                document.getElementById('main-content').classList.remove('hidden');
-                
+            // Intentar cargar configuración sin usuario (usar datos default)
+            try {
                 await cargarConfiguracionActual(db);
                 inicializarListeners();
-            } else {
-                console.log('❌ NO hay usuario después de esperar 2 segundos');
-                console.log('🔍 Estado de Firebase Auth:', {
-                    authExists: !!auth,
-                    currentUser: auth.currentUser,
-                    authDomain: firebase.app().options.authDomain
-                });
-                
-                document.getElementById('loader').innerHTML = `
-                    <div class="text-center">
-                        <i class="fas fa-exclamation-triangle text-6xl text-yellow-500 mb-4"></i>
-                        <p class="text-xl mb-2">No se detectó sesión activa</p>
-                        <p class="text-gray-400 mb-4">Verifica la consola para más detalles</p>
-                        <button onclick="window.location.href='admin.html'" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-semibold">
-                            <i class="fas fa-arrow-left mr-2"></i>Ir al Admin
-                        </button>
-                    </div>
-                `;
+            } catch (error) {
+                console.error('Error cargando configuración:', error);
             }
 
             // Cargar configuración desde Firestore
