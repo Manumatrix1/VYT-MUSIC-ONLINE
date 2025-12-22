@@ -29,7 +29,19 @@
         window.firebaseDB = firebase.firestore();
         window.firebaseAuth = firebase.auth();
         window.firebaseStorage = firebase.storage();
-        window.firestoreQuery = firebase.firestore;
+        
+        // Exportar funciones de Firestore (compatibilidad con SDK v8)
+        window.firestoreQuery = {
+            collection: (db, path) => db.collection(path),
+            getDocs: (ref) => ref.get(),
+            doc: (db, path) => db.doc(path),
+            setDoc: (ref, data) => ref.set(data),
+            updateDoc: (ref, data) => ref.update(data),
+            deleteDoc: (ref) => ref.delete()
+        };
+        
+        // Alias para db global
+        window.db = window.firebaseDB;
         
         console.log('✅ Firebase inicializado en admin');
     </script>
