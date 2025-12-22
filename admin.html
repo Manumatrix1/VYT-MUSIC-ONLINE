@@ -4,6 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VYT MUSIC - Panel de Administración</title>
+    
+    <!-- Firebase SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    
+    <!-- Inicializar Firebase inline -->
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyAWOnR2xjr-UkJYUPiSUUcxF7Y5y3JXU8Y",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "1005311892426",
+            appId: "1:1005311892426:web:11eb8a5a574df9bea7e1a9"
+        };
+        
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        
+        // Exportar a window para compatibilidad
+        window.firebaseDB = firebase.firestore();
+        window.firebaseAuth = firebase.auth();
+        window.firebaseStorage = firebase.storage();
+        window.firestoreQuery = firebase.firestore;
+        
+        console.log('✅ Firebase inicializado en admin');
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script src="src/notification-system.js"></script>
@@ -3901,7 +3931,5 @@
             </div>
         </div>
     </div>
-
-    <script type="module" src="admin-simple.js"></script>
 </body>
 </html>
