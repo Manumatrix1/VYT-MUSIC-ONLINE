@@ -616,18 +616,18 @@
                 }
 
                 try {
-                    // Guardar en Firestore
+                    // Guardar en Firestore SIN requerir usuario (ya que no verificamos auth)
                     await db.collection('configuracion_sistema').doc('config_principal').set({
                         ...config,
                         ultima_modificacion: firebase.firestore.FieldValue.serverTimestamp(),
-                        modificado_por: currentUser.uid
+                        modificado_por: 'admin' // Marcado genérico ya que no tenemos currentUser
                     });
                     
                     window.mostrarNotificacion('success', '✅ Configuración guardada exitosamente');
                     configuracionActual = config;
                 } catch (error) {
                     console.error('Error al guardar:', error);
-                    window.mostrarNotificacion('error', '❌ Error al guardar la configuración: ' + error.message);
+                    window.mostrarNotificacion('error', '❌ Error al guardar: ' + error.message);
                 }
             };
 
