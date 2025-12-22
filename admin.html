@@ -2683,25 +2683,27 @@
                 console.log('🔍 Verificando disponibilidad de Firebase...');
                 
                 const timeoutPromise = new Promise((_, reject) => {
-                    setTimeout(() => reject(new Error('Timeout: Firebase no responde')), 5000);
+                    setTimeout(() => reject(new Error('Timeout: Firebase no responde')), 10000);
                 });
                 
-                // Verificar si las dependencias de Firebase están cargadas
-                if (!window.firebase && !window.db && !window.firestoreQuery) {
-                    console.log('❌ Firebase no está cargado. Intentando cargar...');
-                    
-                    // Esperar un poco para que Firebase se cargue
-                    await new Promise(resolve => setTimeout(resolve, 2000));
-                    
-                    if (!window.firebase && !window.db && !window.firestoreQuery) {
-                        throw new Error('Firebase no está disponible');
+                // Esperar a que Firebase esté realmente disponible
+                let attempts = 0;
+                const maxAttempts = 20; // 10 segundos máximo
+                
+                while (attempts < maxAttempts) {
+                    if (window.firebaseDB && window.firestoreQuery) {
+                        console.log('✅ Firebase detectado después de', attempts * 500, 'ms');
+                        break;
                     }
+                    
+                    console.log('⏳ Esperando Firebase... intento', attempts + 1);
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    attempts++;
                 }
                 
-                console.log('✅ Firebase detectado, cargando configuración...');
-                
-                // Cargar configuración de Firebase
-                await Promise.race([loadFirebaseConfig(), timeoutPromise]);
+                if (!window.firebaseDB || !window.firestoreQuery) {
+                    throw new Error('Firebase no está disponible después de ' + (attempts * 500) + 'ms');
+                }
                 
                 console.log('📊 Cargando datos reales...');
                 
