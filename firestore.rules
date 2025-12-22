@@ -180,6 +180,15 @@ service cloud.firestore {
       allow create, update: if false;
     }
     
+    // ===== REGLAS PARA CONFIGURACIÓN DEL SISTEMA =====
+    match /configuracion_sistema/{configId} {
+      // Permitir lectura a usuarios autenticados
+      allow read: if request.auth != null;
+      
+      // Solo admins pueden escribir configuración
+      allow write: if isAdmin();
+    }
+    
     // ===== FUNCIONES AUXILIARES =====
     
     // Verificar si el usuario es administrador

@@ -429,7 +429,7 @@
 
         // Inicializar cuando Firebase esté listo
         window.addEventListener('load', async function() {
-            console.log('🔄 Página cargada, inicializando sin verificación de auth...');
+            console.log('🔄 Página cargada, esperando autenticación...');
             
             if (typeof firebase === 'undefined') {
                 console.error('❌ Firebase no está cargado');
@@ -442,20 +442,33 @@
             auth = firebase.auth();
             db = firebase.firestore();
             
-            // NO VERIFICAR AUTH - Asumir que viene del admin
-            console.log('⚠️ Omitiendo verificación de auth (asumiendo usuario del admin)');
-            
-            // Ocultar loader y mostrar contenido inmediatamente
-            document.getElementById('loader').classList.add('hidden');
-            document.getElementById('main-content').classList.remove('hidden');
-            
-            // Intentar cargar configuración sin usuario (usar datos default)
-            try {
-                await cargarConfiguracionActual(db);
-                inicializarListeners();
-            } catch (error) {
-                console.error('Error cargando configuración:', error);
-            }
+            // Esperar a que Firebase Auth detecte al usuario
+            // IMPORTANTE: No hacer redirect, solo esperar
+            auth.onAuthStateChanged(async (user) => {
+                if (user) {
+                    console.log('✅ Usuario autenticado:', user.email);
+                    currentUser = user;
+                    
+                    // Ocultar loader y mostrar contenido
+                    document.getElementById('loader').classList.add('hidden');
+                    document.getElementById('main-content').classList.remove('hidden');
+                    
+                    // Cargar configuración
+                    try {
+                        await cargarConfiguracionActual(db);
+                        inicializarListeners();
+                    } catch (error) {
+                        console.error('Error cargando configuración:', error);
+                        mostrarNotificacion('Error cargando configuración: ' + error.message, 'error');
+                    }
+                } else {
+                    console.log('⚠️ No hay usuario autenticado');
+                    mostrarNotificacion('Debes iniciar sesión como administrador', 'error');
+                    setTimeout(() => {
+                        window.location.href = 'admin.html';
+                    }, 2000);
+                }
+            });
 
             // Cargar configuración desde Firestore
             async function cargarConfiguracionActual(db) {
@@ -616,11 +629,11 @@
                 }
 
                 try {
-                    // Guardar en Firestore SIN requerir usuario (ya que no verificamos auth)
+                    // Guardar en Firestore con usuario autenticado
                     await db.collection('configuracion_sistema').doc('config_principal').set({
                         ...config,
                         ultima_modificacion: firebase.firestore.FieldValue.serverTimestamp(),
-                        modificado_por: 'admin' // Marcado genérico ya que no tenemos currentUser
+                        modificado_por: currentUser ? currentUser.uid : 'system'
                     });
                     
                     window.mostrarNotificacion('success', '✅ Configuración guardada exitosamente');
