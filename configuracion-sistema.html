@@ -442,33 +442,64 @@
             auth = firebase.auth();
             db = firebase.firestore();
             
-            // Esperar a que Firebase Auth detecte al usuario
-            // IMPORTANTE: No hacer redirect, solo esperar
-            auth.onAuthStateChanged(async (user) => {
-                if (user) {
-                    console.log('✅ Usuario autenticado:', user.email);
-                    currentUser = user;
-                    
-                    // Ocultar loader y mostrar contenido
-                    document.getElementById('loader').classList.add('hidden');
-                    document.getElementById('main-content').classList.remove('hidden');
-                    
-                    // Cargar configuración
-                    try {
-                        await cargarConfiguracionActual(db);
-                        inicializarListeners();
-                    } catch (error) {
-                        console.error('Error cargando configuración:', error);
-                        mostrarNotificacion('Error cargando configuración: ' + error.message, 'error');
-                    }
-                } else {
-                    console.log('⚠️ No hay usuario autenticado');
-                    mostrarNotificacion('Debes iniciar sesión como administrador', 'error');
-                    setTimeout(() => {
-                        window.location.href = 'admin.html';
-                    }, 2000);
+            // Forzar persistencia LOCAL para mantener sesión entre páginas
+            try {
+                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+                console.log('✅ Persistencia LOCAL activada');
+            } catch (error) {
+                console.warn('⚠️ Error configurando persistencia:', error);
+            }
+            
+            // Obtener usuario actual inmediatamente
+            currentUser = auth.currentUser;
+            
+            if (currentUser) {
+                // Usuario YA autenticado, cargar inmediatamente
+                console.log('✅ Usuario autenticado (inmediato):', currentUser.email);
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('main-content').classList.remove('hidden');
+                
+                try {
+                    await cargarConfiguracionActual(db);
+                    inicializarListeners();
+                } catch (error) {
+                    console.error('Error cargando configuración:', error);
+                    mostrarNotificacion('Error cargando configuración: ' + error.message, 'error');
                 }
-            });
+            } else {
+                // Esperar un poco a que Firebase detecte la sesión
+                console.log('⏳ Esperando detección de sesión...');
+                
+                const timeout = setTimeout(() => {
+                    console.log('⚠️ Timeout: No se detectó usuario');
+                    mostrarNotificacion('Debes iniciar sesión como administrador', 'error');
+                    setTimeout(() => window.location.href = 'admin.html', 1500);
+                }, 5000); // 5 segundos de espera
+                
+                auth.onAuthStateChanged(async (user) => {
+                    clearTimeout(timeout);
+                    
+                    if (user) {
+                        console.log('✅ Usuario detectado:', user.email);
+                        currentUser = user;
+                        
+                        document.getElementById('loader').classList.add('hidden');
+                        document.getElementById('main-content').classList.remove('hidden');
+                        
+                        try {
+                            await cargarConfiguracionActual(db);
+                            inicializarListeners();
+                        } catch (error) {
+                            console.error('Error cargando configuración:', error);
+                            mostrarNotificacion('Error cargando configuración: ' + error.message, 'error');
+                        }
+                    } else {
+                        console.log('⚠️ No hay usuario autenticado');
+                        mostrarNotificacion('Debes iniciar sesión como administrador', 'error');
+                        setTimeout(() => window.location.href = 'admin.html', 1500);
+                    }
+                });
+            }
 
             // Cargar configuración desde Firestore
             async function cargarConfiguracionActual(db) {
