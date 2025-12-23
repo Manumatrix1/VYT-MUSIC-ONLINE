@@ -248,6 +248,53 @@
                             </div>
                         </div>
                     </div>
+                    
+                    <!-- Pozo del Certamen -->
+                    <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-xl p-8 mb-8">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h3 class="text-3xl font-bold text-green-700 mb-2">💰 Pozo del Certamen</h3>
+                                <p class="text-green-600">Actualizado en tiempo real</p>
+                            </div>
+                            <button onclick="calcularPozoAdmin()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
+                                <i class="fas fa-sync mr-2"></i>Actualizar
+                            </button>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+                            <div class="bg-white rounded-lg p-6 text-center">
+                                <div class="text-4xl font-black text-green-600 mb-2" id="admin-pozo-total">$0</div>
+                                <div class="text-sm text-gray-600">POZO TOTAL</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg p-6 text-center">
+                                <div class="text-2xl font-bold text-yellow-700 mb-2" id="admin-premio-1">$0</div>
+                                <div class="text-xs text-yellow-700">🥇 1º Lugar (50%)</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg p-6 text-center">
+                                <div class="text-2xl font-bold text-gray-700 mb-2" id="admin-premio-2">$0</div>
+                                <div class="text-xs text-gray-700">🥈 2º Lugar (30%)</div>
+                            </div>
+                            <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg p-6 text-center">
+                                <div class="text-2xl font-bold text-orange-700 mb-2" id="admin-premio-3">$0</div>
+                                <div class="text-xs text-orange-700">🥉 3º Lugar (20%)</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 gap-4 mt-4 text-sm">
+                            <div class="bg-white/70 rounded p-3">
+                                <div class="text-gray-600">Inscripciones pagadas:</div>
+                                <div class="font-bold" id="admin-insc-count">0</div>
+                            </div>
+                            <div class="bg-white/70 rounded p-3">
+                                <div class="text-gray-600">Total votos:</div>
+                                <div class="font-bold" id="admin-votos-count">0</div>
+                            </div>
+                            <div class="bg-white/70 rounded p-3">
+                                <div class="text-gray-600">Ingresos totales:</div>
+                                <div class="font-bold text-blue-600" id="admin-ingresos-totales">$0</div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Segunda fila de estadísticas -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -704,6 +751,9 @@
                                 <div class="flex gap-2">
                                     <button onclick="loadCertamenes()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
                                         <i class="fas fa-sync mr-1"></i>Actualizar
+                                    </button>
+                                    <button onclick="calcularClasificados40()" class="bg-purple-500 hover:bg-purple-600 text-white px-3 py-1 rounded text-sm transition-colors">
+                                        <i class="fas fa-calculator mr-1"></i>Calcular 40%
                                     </button>
                                     <button onclick="exportCertamenes()" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm transition-colors">
                                         <i class="fas fa-download mr-1"></i>Exportar
@@ -1590,11 +1640,90 @@
                     pagos: pagosTotal,
                     transaccionesHoy: transaccionesHoy
                 });
+                
+                // Calcular pozo del certamen
+                calcularPozoAdmin();
 
             } catch (error) {
                 console.error('❌ Error cargando estadísticas reales:', error);
                 throw error;
             }
+        }
+        
+        // Calcular pozo del certamen en admin
+        async function calcularPozoAdmin() {
+            try {
+                // Obtener configuración
+                const configRef = firebase.firestore().collection('configuracion_sistema').doc('config_principal');
+                const configDoc = await configRef.get();
+                
+                if (!configDoc.exists) {
+                    console.log('No hay configuración');
+                    return;
+                }
+                
+                const config = configDoc.data();
+                
+                // Precios y configuración
+                const precioInscripcion = config.precios?.inscripcion_online || 1500;
+                const precioVoto = (config.precios?.precio_vyt_money || 1500) / 1000;
+                const pctInscripcion = config.distribucion?.inscripcion_pozo || 30;
+                const pctVoto = config.distribucion?.voto_pozo || 30;
+                const pctPrimero = config.premios?.primero || 50;
+                const pctSegundo = config.premios?.segundo || 30;
+                const pctTercero = config.premios?.tercero || 20;
+                
+                // Contar inscripciones pagadas
+                const inscripcionesSnapshot = await firebase.firestore()
+                    .collection('inscripciones')
+                    .where('pago_aprobado', '==', true)
+                    .get();
+                
+                const totalInscripciones = inscripcionesSnapshot.size;
+                
+                // Sumar votos
+                let totalVotos = 0;
+                inscripcionesSnapshot.forEach(doc => {
+                    totalVotos += doc.data().votos || 0;
+                });
+                
+                // Calcular ingresos
+                const ingresosInscripciones = totalInscripciones * precioInscripcion;
+                const ingresosVotos = totalVotos * precioVoto;
+                const ingresosTotales = ingresosInscripciones + ingresosVotos;
+                
+                // Calcular pozo
+                const pozoInscripciones = (ingresosInscripciones * pctInscripcion) / 100;
+                const pozoVotos = (ingresosVotos * pctVoto) / 100;
+                const pozoTotal = pozoInscripciones + pozoVotos;
+                
+                // Calcular premios
+                const premioPrimero = (pozoTotal * pctPrimero) / 100;
+                const premioSegundo = (pozoTotal * pctSegundo) / 100;
+                const premioTercero = (pozoTotal * pctTercero) / 100;
+                
+                // Actualizar interfaz
+                document.getElementById('admin-pozo-total').textContent = formatPesos(pozoTotal);
+                document.getElementById('admin-premio-1').textContent = formatPesos(premioPrimero);
+                document.getElementById('admin-premio-2').textContent = formatPesos(premioSegundo);
+                document.getElementById('admin-premio-3').textContent = formatPesos(premioTercero);
+                document.getElementById('admin-insc-count').textContent = totalInscripciones;
+                document.getElementById('admin-votos-count').textContent = totalVotos.toLocaleString();
+                document.getElementById('admin-ingresos-totales').textContent = formatPesos(ingresosTotales);
+                
+                console.log('💰 Pozo calculado:', { totalInscripciones, totalVotos, pozoTotal, premioPrimero, premioSegundo, premioTercero });
+            } catch (error) {
+                console.error('Error calculando pozo:', error);
+            }
+        }
+        
+        function formatPesos(monto) {
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(monto);
         }
 
         // Función de respaldo con datos simulados realistas
@@ -2246,6 +2375,68 @@
                 console.log('🗑️ Eliminando certamen:', id);
                 alert('Certamen eliminado - ID: ' + id);
                 loadCertamenes(); // Recargar lista
+            }
+        };
+
+        // ===== FUNCIÓN PARA CALCULAR CLASIFICADOS 40% =====
+        window.calcularClasificados40 = async function() {
+            if (!confirm('⚠️ Esto calculará el 40% de clasificados por región.\n\n¿Estás seguro de ejecutar este proceso?\n\n(Solo ejecutar al finalizar Fase 2 - Clasificación)')) {
+                return;
+            }
+            
+            const certamenId = prompt('Ingresa el ID del certamen (ej: santafe_2025):', 'santafe_2025');
+            if (!certamenId) return;
+            
+            const fase = prompt('Ingresa el número de fase (2 para calcular 40%):', '2');
+            if (!fase) return;
+            
+            console.log('🎯 Calculando clasificados...');
+            
+            try {
+                // Mostrar loading
+                const btn = event.target;
+                const originalText = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i>Calculando...';
+                
+                // Llamar a Cloud Function
+                const response = await fetch('https://us-central1-vytonlineprueva.cloudfunctions.net/calcularClasificados', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        certamenId: certamenId,
+                        fase: parseInt(fase)
+                    })
+                });
+                
+                const result = await response.json();
+                
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                
+                if (result.success) {
+                    let mensaje = `✅ Clasificación completada!\n\n`;
+                    mensaje += `Total de semifinalistas: ${result.totalClasificados}\n\n`;
+                    
+                    for (const [region, datos] of Object.entries(result.resultados)) {
+                        mensaje += `📍 ${region.toUpperCase()}: ${datos.clasificados}/${datos.total} (${datos.porcentaje}%)\n`;
+                    }
+                    
+                    alert(mensaje);
+                    loadCertamenes(); // Recargar
+                } else {
+                    alert('❌ Error: ' + (result.error || 'Error desconocido'));
+                }
+            } catch (error) {
+                console.error('Error ejecutando cálculo:', error);
+                alert('❌ Error al calcular clasificados: ' + error.message);
+                
+                // Restaurar botón
+                const btn = event.target;
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-calculator mr-1"></i>Calcular 40%';
             }
         };
 

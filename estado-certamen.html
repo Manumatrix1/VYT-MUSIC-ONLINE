@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estado del Certamen - VYT Music</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+        }
+        
+        .phase-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .phase-active {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.3);
+        }
+        
+        .phase-completed {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.05);
+        }
+        
+        .phase-pending {
+            border-color: rgba(255, 255, 255, 0.1);
+            opacity: 0.6;
+        }
+        
+        .countdown-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .time-unit {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
+            transition: width 0.5s;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+        
+        .badge-inscrito {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .badge-clasificado {
+            background: #10b981;
+            color: white;
+        }
+        
+        .badge-semifinalista {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .badge-finalista {
+            background: #8b5cf6;
+            color: white;
+        }
+    </style>
+</head>
+<body class="text-white">
+    <!-- Navigation -->
+    <nav class="bg-black/30 backdrop-blur-sm border-b border-white/10 sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <a href="principal.html" class="flex items-center gap-3">
+                    <i class="fas fa-trophy text-3xl text-yellow-400"></i>
+                    <span class="text-xl font-bold">VYT Music</span>
+                </a>
+                
+                <div class="flex items-center gap-4">
+                    <a href="perfil-artista.html" class="text-white/80 hover:text-white transition">
+                        <i class="fas fa-user mr-2"></i> Mi Perfil
+                    </a>
+                    <a href="principal.html" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg transition">
+                        <i class="fas fa-home mr-2"></i> Inicio
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="py-12 bg-gradient-to-b from-purple-900/30 to-transparent">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8">
+                <h1 class="text-5xl font-bold mb-4">
+                    <i class="fas fa-calendar-alt mr-3"></i>
+                    Estado del Certamen
+                </h1>
+                <p class="text-xl text-white/70" id="certamen-titulo">Cargando información...</p>
+            </div>
+            
+            <!-- Estado del Usuario -->
+            <div id="user-status-section" class="hidden max-w-2xl mx-auto bg-black/40 backdrop-blur-sm border border-white/10 rounded-xl p-8 mb-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2" id="user-nombre">Tu Participación</h3>
+                        <p class="text-white/60" id="user-ubicacion">Región</p>
+                    </div>
+                    <div id="user-badge"></div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div class="bg-black/40 p-4 rounded-lg">
+                        <p class="text-sm text-white/60 mb-1">Votos Recibidos</p>
+                        <p class="text-3xl font-bold text-yellow-400" id="user-votos">0</p>
+                    </div>
+                    <div class="bg-black/40 p-4 rounded-lg">
+                        <p class="text-sm text-white/60 mb-1">Posición Regional</p>
+                        <p class="text-3xl font-bold text-blue-400" id="user-posicion">-</p>
+                    </div>
+                </div>
+                
+                <div id="user-mensaje" class="bg-blue-600/20 border border-blue-500/30 rounded-lg p-4">
+                    <!-- Mensaje dinámico según fase -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown -->
+    <section class="py-8">
+        <div class="container mx-auto px-4">
+            <!-- Pozo Acumulado -->
+            <div class="max-w-4xl mx-auto mb-8 bg-gradient-to-r from-green-600/20 to-emerald-600/20 border-2 border-green-500/50 rounded-2xl p-8">
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold mb-2 text-green-300">💰 POZO ACUMULADO</h2>
+                    <p class="text-white/70 text-sm mb-4">Crece con cada inscripción y voto</p>
+                    <div class="text-6xl font-black mb-6 text-green-400" id="pozo-total">$0</div>
+                    
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <div class="text-yellow-400 text-3xl font-bold mb-1" id="premio-primero">$0</div>
+                            <div class="text-xs text-white/60">🥇 1º Lugar (50%)</div>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <div class="text-gray-400 text-3xl font-bold mb-1" id="premio-segundo">$0</div>
+                            <div class="text-xs text-white/60">🥈 2º Lugar (30%)</div>
+                        </div>
+                        <div class="bg-black/30 rounded-lg p-4">
+                            <div class="text-orange-400 text-3xl font-bold mb-1" id="premio-tercero">$0</div>
+                            <div class="text-xs text-white/60">🥉 3º Lugar (20%)</div>
+                        </div>
+                    </div>
+                    
+                    <p class="text-xs text-white/50">
+                        <i class="fas fa-info-circle mr-1"></i>
+                        El pozo se calcula: 30% inscripciones + 30% votos
+                    </p>
+                </div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto countdown-box">
+                <h2 class="text-3xl font-bold mb-2" id="countdown-titulo">Tiempo restante</h2>
+                <p class="text-white/80 mb-6" id="countdown-subtitulo">Para el cierre de inscripciones</p>
+                
+                <div class="grid grid-cols-4 gap-4">
+                    <div class="time-unit">
+                        <div class="text-5xl font-bold mb-2" id="dias">00</div>
+                        <div class="text-sm text-white/70">Días</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="text-5xl font-bold mb-2" id="horas">00</div>
+                        <div class="text-sm text-white/70">Horas</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="text-5xl font-bold mb-2" id="minutos">00</div>
+                        <div class="text-sm text-white/70">Minutos</div>
+                    </div>
+                    <div class="time-unit">
+                        <div class="text-5xl font-bold mb-2" id="segundos">00</div>
+                        <div class="text-sm text-white/70">Segundos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fases del Certamen -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Fases del Certamen</h2>
+            
+            <div class="max-w-5xl mx-auto">
+                <!-- Barra de progreso global -->
+                <div class="mb-12">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-bar" style="width: 0%"></div>
+                    </div>
+                    <p class="text-center text-white/60 mt-2" id="progress-text">Fase 1 de 3</p>
+                </div>
+                
+                <!-- Cards de Fases -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Fase 1: Inscripción -->
+                    <div class="phase-card phase-pending rounded-xl p-6" id="fase-1">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-xl font-bold">1</div>
+                                    <h3 class="text-2xl font-bold">Inscripción</h3>
+                                </div>
+                                <p class="text-sm text-white/60 ml-15" id="fecha-fase-1">-</p>
+                            </div>
+                            <i class="fas fa-check-circle text-3xl text-white/30" id="check-fase-1"></i>
+                        </div>
+                        
+                        <p class="text-white/80 mb-4">Periodo de registro para participantes. Sube tu video y completa tu inscripción.</p>
+                        
+                        <div class="bg-black/30 p-4 rounded-lg">
+                            <p class="text-sm mb-2"><i class="fas fa-info-circle mr-2 text-blue-400"></i> <strong>Requisitos:</strong></p>
+                            <ul class="text-sm text-white/70 space-y-1 ml-6">
+                                <li>• Video en YouTube</li>
+                                <li>• Completar datos personales</li>
+                                <li>• Pago de inscripción</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Fase 2: Clasificación -->
+                    <div class="phase-card phase-pending rounded-xl p-6" id="fase-2">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-12 h-12 bg-green-600 rounded-full flex items-center justify-center text-xl font-bold">2</div>
+                                    <h3 class="text-2xl font-bold">Clasificación</h3>
+                                </div>
+                                <p class="text-sm text-white/60 ml-15" id="fecha-fase-2">-</p>
+                            </div>
+                            <i class="fas fa-check-circle text-3xl text-white/30" id="check-fase-2"></i>
+                        </div>
+                        
+                        <p class="text-white/80 mb-4">Votación pública. El <strong>40% superior</strong> de cada región avanza a semifinales.</p>
+                        
+                        <div class="bg-black/30 p-4 rounded-lg">
+                            <p class="text-sm mb-2"><i class="fas fa-vote-yea mr-2 text-green-400"></i> <strong>Qué hacer:</strong></p>
+                            <ul class="text-sm text-white/70 space-y-1 ml-6">
+                                <li>• Comparte tu video</li>
+                                <li>• Consigue votos</li>
+                                <li>• Monitorea tu ranking</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Fase 3: Jurado Define Ganadores -->
+                    <div class="phase-card phase-pending rounded-xl p-6" id="fase-3">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <div class="flex items-center gap-3 mb-2">
+                                    <div class="w-12 h-12 bg-yellow-600 rounded-full flex items-center justify-center text-xl font-bold">3</div>
+                                    <h3 class="text-2xl font-bold">Jurado Define Ganadores</h3>
+                                </div>
+                                <p class="text-sm text-white/60 ml-15" id="fecha-fase-3">-</p>
+                            </div>
+                            <i class="fas fa-check-circle text-3xl text-white/30" id="check-fase-3"></i>
+                        </div>
+                        
+                        <p class="text-white/80 mb-4">Jurado profesional evalúa a los TOP más votados y define los ganadores provinciales.</p>
+                        
+                        <div class="bg-black/30 p-4 rounded-lg">
+                            <p class="text-sm mb-2"><i class="fas fa-gavel mr-2 text-yellow-400"></i> <strong>Criterios:</strong></p>
+                            <ul class="text-sm text-white/70 space-y-1 ml-6">
+                                <li>• Técnica vocal</li>
+                                <li>• Interpretación</li>
+                                <li>• Presencia escénica</li>
+                                <li>• Calidad de producción</li>
+                            </ul>
+                            <p class="text-xs text-white/50 mt-3">🏆 Los ganadores provinciales reciben sus premios. Los top más votados clasifican a la Nacional.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-12 bg-gradient-to-b from-transparent to-purple-900/30">
+        <div class="container mx-auto px-4">
+            <div class="max-w-2xl mx-auto bg-black/40 backdrop-blur-sm border border-white/10 rounded-xl p-8 text-center">
+                <h2 class="text-3xl font-bold mb-4">¿Listo para participar?</h2>
+                <p class="text-white/70 mb-6">Inscríbete ahora y demuestra tu talento en el escenario provincial</p>
+                
+                <div class="flex gap-4 justify-center flex-wrap">
+                    <a href="inscripcion-unificada.html" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+                        <i class="fas fa-user-plus mr-2"></i> Inscribirme Ahora
+                    </a>
+                    <a href="ranking.html" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold transition">
+                        <i class="fas fa-chart-bar mr-2"></i> Ver Ranking
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="firebase-config.js"></script>
+    <script>
+        let configCertamen = null;
+        let faseActual = 1;
+        let countdownInterval = null;
+        
+        // Cargar configuración del certamen
+        async function cargarConfiguracion() {
+            try {
+                const doc = await firebase.firestore()
+                    .collection('configuracion_sistema')
+                    .doc('config_principal')
+                    .get();
+                
+                if (!doc.exists) {
+                    console.error('No hay configuración');
+                    return;
+                }
+                
+                configCertamen = doc.data();
+                
+                // Determinar fase actual
+                const ahora = new Date();
+                const fases = configCertamen.certamen?.fases || {};
+                
+                if (ahora < new Date(fases.fase1_fin)) {
+                    faseActual = 1;
+                } else if (ahora < new Date(fases.fase2_fin)) {
+                    faseActual = 2;
+                } else {
+                    faseActual = 3;
+                }
+                
+                renderizarEstadoCertamen();
+                iniciarCountdown();
+                cargarEstadoUsuario();
+                calcularPozo();
+            } catch (error) {
+                console.error('Error cargando configuración:', error);
+            }
+        }
+        
+        // Renderizar estado del certamen
+        function renderizarEstadoCertamen() {
+            const fases = configCertamen.certamen?.fases || {};
+            
+            // Título
+            document.getElementById('certamen-titulo').textContent = 
+                configCertamen.certamen?.nombre || 'Certamen Provincial de Canto';
+            
+            // Fechas de las fases
+            document.getElementById('fecha-fase-1').textContent = 
+                `${formatearFecha(fases.fase1_inicio)} - ${formatearFecha(fases.fase1_fin)}`;
+            document.getElementById('fecha-fase-2').textContent = 
+                `${formatearFecha(fases.fase2_inicio)} - ${formatearFecha(fases.fase2_fin)}`;
+            document.getElementById('fecha-fase-3').textContent = 
+                `${formatearFecha(fases.fase3_inicio)} - ${formatearFecha(fases.fase3_fin)}`;
+            
+            // Marcar fases completadas y activa
+            for (let i = 1; i <= 3; i++) {
+                const card = document.getElementById(`fase-${i}`);
+                const check = document.getElementById(`check-fase-${i}`);
+                
+                card.classList.remove('phase-active', 'phase-completed', 'phase-pending');
+                
+                if (i < faseActual) {
+                    card.classList.add('phase-completed');
+                    check.classList.remove('text-white/30');
+                    check.classList.add('text-blue-400');
+                } else if (i === faseActual) {
+                    card.classList.add('phase-active');
+                    check.classList.remove('text-white/30');
+                    check.classList.add('text-green-400', 'fa-spin');
+                } else {
+                    card.classList.add('phase-pending');
+                }
+            }
+            
+            // Barra de progreso
+            const progreso = ((faseActual - 1) / 2) * 100;
+            document.getElementById('progress-bar').style.width = `${progreso}%`;
+            document.getElementById('progress-text').textContent = `Fase ${faseActual} de 3`;
+        }
+        
+        // Countdown
+        function iniciarCountdown() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            const fases = configCertamen.certamen?.fases || {};
+            let fechaObjetivo;
+            let titulo, subtitulo;
+            
+            switch (faseActual) {
+                case 1:
+                    fechaObjetivo = new Date(fases.fase1_fin);
+                    titulo = 'Tiempo restante para inscribirse';
+                    subtitulo = 'Las inscripciones cierran pronto';
+                    break;
+                case 2:
+                    fechaObjetivo = new Date(fases.fase2_fin);
+                    titulo = 'Tiempo restante de votación';
+                    subtitulo = 'La votación finaliza pronto';
+                    break;
+                case 3:
+                    fechaObjetivo = new Date(fases.fase3_fin);
+                    titulo = 'Evaluación del jurado';
+                    subtitulo = 'Esperando decisión de ganadores provinciales';
+                    break;
+            }
+            
+            document.getElementById('countdown-titulo').textContent = titulo;
+            document.getElementById('countdown-subtitulo').textContent = subtitulo;
+            
+            function actualizarCountdown() {
+                const ahora = new Date().getTime();
+                const diferencia = fechaObjetivo - ahora;
+                
+                if (diferencia <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('dias').textContent = '00';
+                    document.getElementById('horas').textContent = '00';
+                    document.getElementById('minutos').textContent = '00';
+                    document.getElementById('segundos').textContent = '00';
+                    return;
+                }
+                
+                const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+                
+                document.getElementById('dias').textContent = String(dias).padStart(2, '0');
+                document.getElementById('horas').textContent = String(horas).padStart(2, '0');
+                document.getElementById('minutos').textContent = String(minutos).padStart(2, '0');
+                document.getElementById('segundos').textContent = String(segundos).padStart(2, '0');
+            }
+            
+            actualizarCountdown();
+            countdownInterval = setInterval(actualizarCountdown, 1000);
+        }
+        
+        // Cargar estado del usuario
+        async function cargarEstadoUsuario() {
+            const user = firebase.auth().currentUser;
+            if (!user) return;
+            
+            try {
+                const snapshot = await firebase.firestore()
+                    .collection('inscripciones')
+                    .where('userId', '==', user.uid)
+                    .limit(1)
+                    .get();
+                
+                if (snapshot.empty) return;
+                
+                const inscripcion = snapshot.docs[0].data();
+                
+                document.getElementById('user-status-section').classList.remove('hidden');
+                document.getElementById('user-nombre').textContent = inscripcion.nombreArtista || 'Tu Participación';
+                document.getElementById('user-ubicacion').textContent = `Región ${inscripcion.region || 'Centro'}`;
+                document.getElementById('user-votos').textContent = inscripcion.votos || 0;
+                document.getElementById('user-posicion').textContent = inscripcion.posicion_regional || '-';
+                
+                // Badge según estado
+                const estadoBadges = {
+                    'pendiente': '<span class="status-badge badge-inscrito"><i class="fas fa-hourglass-half"></i> Inscrito</span>',
+                    'aprobado': '<span class="status-badge badge-clasificado"><i class="fas fa-check"></i> Aprobado</span>',
+                    'semifinalista': '<span class="status-badge badge-semifinalista"><i class="fas fa-star"></i> Semifinalista</span>',
+                    'finalista': '<span class="status-badge badge-finalista"><i class="fas fa-crown"></i> Finalista</span>'
+                };
+                
+                document.getElementById('user-badge').innerHTML = estadoBadges[inscripcion.estado] || '';
+                
+                // Mensaje según fase
+                let mensaje = '';
+                switch (faseActual) {
+                    case 1:
+                        mensaje = '<i class="fas fa-info-circle mr-2"></i> Tu inscripción está registrada. Espera la aprobación del equipo.';
+                        break;
+                    case 2:
+                        if (inscripcion.estado === 'aprobado') {
+                            mensaje = '<i class="fas fa-bullhorn mr-2"></i> ¡Comparte tu video y consigue votos! Necesitas estar en el top 40% para avanzar.';
+                        }
+                        break;
+                    case 3:
+                        if (inscripcion.estado === 'semifinalista') {
+                            mensaje = '<i class="fas fa-trophy mr-2"></i> ¡Estás entre los finalistas! El jurado está evaluando para decidir los ganadores provinciales.';
+                        } else if (inscripcion.clasificado_nacional) {
+                            mensaje = '<i class="fas fa-star mr-2"></i> ¡Clasificaste a la Nacional! Aunque no ganaste el provincial, estás entre los más votados.';
+                        } else {
+                            mensaje = '<i class="fas fa-heart mr-2"></i> Gracias por participar. Sigue practicando para el próximo certamen.';
+                        }
+                        break;
+                }
+                
+                document.getElementById('user-mensaje').innerHTML = mensaje;
+            } catch (error) {
+                console.error('Error cargando estado del usuario:', error);
+            }
+        }
+        
+        // Formato de fecha
+        function formatearFecha(fecha) {
+            if (!fecha) return '-';
+            const d = new Date(fecha);
+            return d.toLocaleDateString('es-AR', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+        
+        // Calcular pozo en tiempo real
+        async function calcularPozo() {
+            try {
+                // Obtener precio de inscripción y configuración
+                const precioInscripcion = configCertamen.precios?.inscripcion_online || 1500;
+                const precioVoto = (configCertamen.precios?.precio_vyt_money || 1500) / 1000; // precio por 1 voto
+                
+                // Porcentajes al pozo
+                const pctInscripcion = configCertamen.distribucion?.inscripcion_pozo || 30;
+                const pctVoto = configCertamen.distribucion?.voto_pozo || 30;
+                
+                // Distribución de premios
+                const pctPrimero = configCertamen.premios?.primero || 50;
+                const pctSegundo = configCertamen.premios?.segundo || 30;
+                const pctTercero = configCertamen.premios?.tercero || 20;
+                
+                // Contar inscripciones aprobadas
+                const inscripcionesSnapshot = await firebase.firestore()
+                    .collection('inscripciones')
+                    .where('pago_aprobado', '==', true)
+                    .get();
+                
+                const totalInscripciones = inscripcionesSnapshot.size;
+                
+                // Sumar votos totales
+                let totalVotos = 0;
+                inscripcionesSnapshot.forEach(doc => {
+                    totalVotos += doc.data().votos || 0;
+                });
+                
+                // Calcular ingresos
+                const ingresosInscripciones = totalInscripciones * precioInscripcion;
+                const ingresosVotos = totalVotos * precioVoto;
+                
+                // Calcular pozo
+                const pozoInscripciones = (ingresosInscripciones * pctInscripcion) / 100;
+                const pozoVotos = (ingresosVotos * pctVoto) / 100;
+                const pozoTotal = pozoInscripciones + pozoVotos;
+                
+                // Calcular premios
+                const premioPrimero = (pozoTotal * pctPrimero) / 100;
+                const premioSegundo = (pozoTotal * pctSegundo) / 100;
+                const premioTercero = (pozoTotal * pctTercero) / 100;
+                
+                // Mostrar en pantalla
+                document.getElementById('pozo-total').textContent = formatearPesos(pozoTotal);
+                document.getElementById('premio-primero').textContent = formatearPesos(premioPrimero);
+                document.getElementById('premio-segundo').textContent = formatearPesos(premioSegundo);
+                document.getElementById('premio-tercero').textContent = formatearPesos(premioTercero);
+                
+                console.log('💰 Pozo calculado:', {
+                    inscripciones: totalInscripciones,
+                    votos: totalVotos,
+                    pozoTotal,
+                    premios: { primero: premioPrimero, segundo: premioSegundo, tercero: premioTercero }
+                });
+            } catch (error) {
+                console.error('Error calculando pozo:', error);
+            }
+        }
+        
+        // Formatear pesos
+        function formatearPesos(monto) {
+            return new Intl.NumberFormat('es-AR', {
+                style: 'currency',
+                currency: 'ARS',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(monto);
+        }
+        
+        // Verificar autenticación
+        firebase.auth().onAuthStateChanged((user) => {
+            cargarConfiguracion();
+        });
+    </script>
+</body>
+</html>

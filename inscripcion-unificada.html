@@ -115,6 +115,25 @@
                                     <p class="text-white font-semibold" id="user-region">-</p>
                                 </div>
                             </div>
+                            
+                            <!-- Selector manual de región -->
+                            <div class="bg-blue-900/30 border border-blue-500/50 rounded-lg p-4 mb-3">
+                                <label class="block text-blue-200 text-sm font-semibold mb-2">
+                                    <i class="fas fa-map-marked-alt mr-2"></i>
+                                    Confirma o cambia tu región geográfica:
+                                </label>
+                                <select id="region-selector" class="w-full bg-gray-800 text-white px-4 py-3 rounded-lg border border-blue-500/30 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/50 transition-all">
+                                    <option value="">-- Selecciona tu región --</option>
+                                    <option value="norte">📍 Norte (zona norte de la provincia)</option>
+                                    <option value="centro">📍 Centro (zona central de la provincia)</option>
+                                    <option value="sur">📍 Sur (zona sur de la provincia)</option>
+                                </select>
+                                <p class="text-blue-300 text-xs mt-2">
+                                    <i class="fas fa-info-circle mr-1"></i>
+                                    Esta región determina contra quién competirás en la fase clasificatoria.
+                                </p>
+                            </div>
+                            
                             <div class="bg-teal-500/20 border border-teal-500/30 rounded-lg p-3">
                                 <p class="text-teal-100 text-sm">
                                     <i class="fas fa-info-circle mr-2"></i>
@@ -459,6 +478,37 @@
             
             // Mostrar datos de ubicación y región detectada
             document.getElementById('user-ciudad').textContent = userData.ciudad || 'No especificado';
+            document.getElementById('user-provincia').textContent = userData.provincia || 'No especificado';
+            document.getElementById('user-region').textContent = userData.region || 'Detectando...';
+            
+            // Pre-seleccionar región en el selector basado en detección automática
+            const regionSelector = document.getElementById('region-selector');
+            if (userData.codigoRegion) {
+                regionSelector.value = userData.codigoRegion;
+            }
+            
+            // Listener para cuando el usuario cambie manualmente la región
+            regionSelector.addEventListener('change', function() {
+                const selectedRegion = this.value;
+                if (selectedRegion) {
+                    // Actualizar userData con la región seleccionada manualmente
+                    userData.codigoRegion = selectedRegion;
+                    userData.region = selectedRegion.charAt(0).toUpperCase() + selectedRegion.slice(1) + ' de ' + userData.provincia;
+                    
+                    // Actualizar visualización
+                    document.getElementById('user-region').textContent = userData.region;
+                    
+                    // Cambiar color según región
+                    const colores = {
+                        'norte': '#FF6B6B',
+                        'centro': '#4ECDC4', 
+                        'sur': '#95E1D3'
+                    };
+                    userData.regionColor = colores[selectedRegion] || '#4ECDC4';
+                    
+                    console.log('✅ Región cambiada manualmente a:', userData.region);
+                }
+            });
             document.getElementById('user-provincia').textContent = userData.provincia || 'No especificado';
             document.getElementById('user-region').textContent = userData.region || 'No detectado';
             

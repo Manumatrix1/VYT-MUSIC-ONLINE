@@ -235,19 +235,19 @@
         <div class="container mx-auto px-4 pb-32 max-w-6xl">
             <div class="stats-grid">
                 <div class="stat-card">
-                    <div class="text-3xl font-bold text-blue-400 mb-2">156</div>
+                    <div class="text-3xl font-bold text-blue-400 mb-2" id="stat-artistas">0</div>
                     <div class="text-gray-300">Artistas Participando</div>
                 </div>
                 <div class="stat-card">
-                    <div class="text-3xl font-bold text-green-400 mb-2">23,492</div>
+                    <div class="text-3xl font-bold text-green-400 mb-2" id="stat-votos">0</div>
                     <div class="text-gray-300">Votos Registrados</div>
                 </div>
                 <div class="stat-card">
-                    <div class="text-3xl font-bold text-purple-400 mb-2">8</div>
+                    <div class="text-3xl font-bold text-purple-400 mb-2" id="stat-certamenes">0</div>
                     <div class="text-gray-300">Certámenes Activos</div>
                 </div>
                 <div class="stat-card">
-                    <div class="text-3xl font-bold text-yellow-400 mb-2">$50,000</div>
+                    <div class="text-3xl font-bold text-yellow-400 mb-2" id="stat-premios">$0</div>
                     <div class="text-gray-300">Premio Total</div>
                 </div>
             </div>
@@ -278,41 +278,11 @@
                     Top 3 del Mes
                 </h2>
                 
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
-                    <!-- 1er Lugar -->
-                    <div class="ranking-card podium-card text-center order-2 md:order-2">
-                        <div class="position-badge gold mx-auto mb-4">1</div>
-                        <img src="https://i.pravatar.cc/150?img=1" alt="Artista" class="artist-photo mx-auto mb-4">
-                        <h3 class="text-xl font-bold mb-2">María González</h3>
-                        <p class="text-gray-300 mb-2">Pop / Balada</p>
-                        <p class="text-yellow-400 font-bold text-lg mb-4">2,847 votos</p>
-                        <button class="vote-button w-full" onclick="voteArtist(1)">
-                            <i class="fas fa-heart mr-2"></i>Votar
-                        </button>
-                    </div>
-
-                    <!-- 2do Lugar -->
-                    <div class="ranking-card second-place text-center order-1 md:order-1">
-                        <div class="position-badge silver mx-auto mb-4">2</div>
-                        <img src="https://i.pravatar.cc/150?img=2" alt="Artista" class="artist-photo mx-auto mb-4">
-                        <h3 class="text-xl font-bold mb-2">Carlos Rivera</h3>
-                        <p class="text-gray-300 mb-2">Rock</p>
-                        <p class="text-silver-400 font-bold text-lg mb-4">2,156 votos</p>
-                        <button class="vote-button w-full" onclick="voteArtist(2)">
-                            <i class="fas fa-heart mr-2"></i>Votar
-                        </button>
-                    </div>
-
-                    <!-- 3er Lugar -->
-                    <div class="ranking-card third-place text-center order-3 md:order-3">
-                        <div class="position-badge bronze mx-auto mb-4">3</div>
-                        <img src="https://i.pravatar.cc/150?img=3" alt="Artista" class="artist-photo mx-auto mb-4">
-                        <h3 class="text-xl font-bold mb-2">Ana Martín</h3>
-                        <p class="text-gray-300 mb-2">Folclore</p>
-                        <p class="text-orange-400 font-bold text-lg mb-4">1,923 votos</p>
-                        <button class="vote-button w-full" onclick="voteArtist(3)">
-                            <i class="fas fa-heart mr-2"></i>Votar
-                        </button>
+                <div id="podium-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                    <div class="text-center text-gray-400 col-span-3 py-12">
+                        <i class="fas fa-trophy text-6xl mb-4 opacity-20"></i>
+                        <p class="text-lg">Aún no hay artistas en el podium</p>
+                        <p class="text-sm mt-2">¡Inscribite y comenzá a votar!</p>
                     </div>
                 </div>
             </div>
@@ -325,76 +295,10 @@
                 </h2>
 
                 <div id="ranking-list">
-                    <!-- Artista 4 -->
-                    <div class="ranking-card">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div class="position-badge regular">4</div>
-                                <img src="https://i.pravatar.cc/150?img=4" alt="Artista" class="artist-photo">
-                                <div>
-                                    <h3 class="text-lg font-bold">Diego López</h3>
-                                    <p class="text-gray-400 text-sm">Urbano / Rap</p>
-                                    <p class="text-blue-400 font-semibold">1,687 votos</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <button class="vote-button mb-2" onclick="voteArtist(4)">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <div class="text-green-400 text-sm font-medium">↑ +23</div>
-                            </div>
-                        </div>
+                    <div class="text-center text-gray-400 py-12">
+                        <i class="fas fa-users text-6xl mb-4 opacity-20"></i>
+                        <p class="text-lg">Cargando ranking de artistas...</p>
                     </div>
-
-                    <!-- Artista 5 -->
-                    <div class="ranking-card">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div class="position-badge regular">5</div>
-                                <img src="https://i.pravatar.cc/150?img=5" alt="Artista" class="artist-photo">
-                                <div>
-                                    <h3 class="text-lg font-bold">Sofía Hernández</h3>
-                                    <p class="text-gray-400 text-sm">Pop / Electrónico</p>
-                                    <p class="text-blue-400 font-semibold">1,542 votos</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <button class="vote-button mb-2" onclick="voteArtist(5)">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <div class="text-red-400 text-sm font-medium">↓ -12</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Más artistas -->
-                    <div class="ranking-card">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center space-x-4">
-                                <div class="position-badge regular">6</div>
-                                <img src="https://i.pravatar.cc/150?img=6" alt="Artista" class="artist-photo">
-                                <div>
-                                    <h3 class="text-lg font-bold">Roberto Gómez</h3>
-                                    <p class="text-gray-400 text-sm">Tango / Clásico</p>
-                                    <p class="text-blue-400 font-semibold">1,398 votos</p>
-                                </div>
-                            </div>
-                            <div class="text-right">
-                                <button class="vote-button mb-2" onclick="voteArtist(6)">
-                                    <i class="fas fa-heart"></i>
-                                </button>
-                                <div class="text-gray-400 text-sm font-medium">= 0</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Mostrar más -->
-                <div class="text-center mt-8">
-                    <button class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-full font-medium transition-colors" onclick="loadMoreArtists()">
-                        <i class="fas fa-plus mr-2"></i>
-                        Ver Más Artistas
-                    </button>
                 </div>
             </div>
         </div>
@@ -453,11 +357,171 @@
             
             // Cargar ranking desde Firebase
             loadRankingData();
+            loadStats();
         });
 
         async function loadRankingData() {
-            // Aquí cargarías los datos reales desde Firebase
-            console.log('Cargando datos del ranking...');
+            try {
+                const db = firebase.firestore();
+                
+                // Obtener participantes ordenados por votos
+                const snapshot = await db.collection('inscripciones')
+                    .where('estado', '==', 'activo')
+                    .orderBy('votos_totales', 'desc')
+                    .limit(50)
+                    .get();
+                
+                if (snapshot.empty) {
+                    document.getElementById('ranking-list').innerHTML = `
+                        <div class="text-center text-gray-400 py-12">
+                            <i class="fas fa-users text-6xl mb-4 opacity-20"></i>
+                            <p class="text-lg">Aún no hay artistas registrados</p>
+                            <p class="text-sm mt-2">¡Sé el primero en inscribirte!</p>
+                            <a href="crear-perfil-artista.html" class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors">
+                                Crear Perfil
+                            </a>
+                        </div>
+                    `;
+                    document.getElementById('podium-container').innerHTML = `
+                        <div class="text-center text-gray-400 col-span-3 py-12">
+                            <i class="fas fa-trophy text-6xl mb-4 opacity-20"></i>
+                            <p class="text-lg">Aún no hay artistas en el podium</p>
+                            <p class="text-sm mt-2">¡Inscribite y comenzá a votar!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const artistas = [];
+                snapshot.forEach(doc => {
+                    artistas.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                // Renderizar top 3
+                renderPodium(artistas.slice(0, 3));
+                
+                // Renderizar resto del ranking
+                renderRanking(artistas.slice(3));
+                
+            } catch (error) {
+                console.error('Error cargando ranking:', error);
+                document.getElementById('ranking-list').innerHTML = `
+                    <div class="text-center text-red-400 py-12">
+                        <i class="fas fa-exclamation-triangle text-6xl mb-4 opacity-20"></i>
+                        <p class="text-lg">Error al cargar el ranking</p>
+                        <p class="text-sm mt-2">${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderPodium(top3) {
+            if (!top3 || top3.length === 0) return;
+            
+            const podiumContainer = document.getElementById('podium-container');
+            podiumContainer.innerHTML = '';
+            
+            const positions = [
+                { class: 'podium-card', badge: 'gold', color: 'text-yellow-400', order: 'order-2 md:order-2' },
+                { class: 'second-place', badge: 'silver', color: 'text-gray-300', order: 'order-1 md:order-1' },
+                { class: 'third-place', badge: 'bronze', color: 'text-orange-400', order: 'order-3 md:order-3' }
+            ];
+            
+            top3.forEach((artista, index) => {
+                const pos = positions[index];
+                const card = document.createElement('div');
+                card.className = `ranking-card ${pos.class} text-center ${pos.order}`;
+                card.innerHTML = `
+                    <div class="position-badge ${pos.badge} mx-auto mb-4">${index + 1}</div>
+                    <img src="${artista.foto_perfil || 'https://via.placeholder.com/150'}" alt="${artista.nombre_artistico}" class="artist-photo mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">${artista.nombre_artistico || 'Sin nombre'}</h3>
+                    <p class="text-gray-300 mb-2">${(artista.generos || []).join(' / ') || 'Sin género'}</p>
+                    <p class="${pos.color} font-bold text-lg mb-4">${artista.votos_totales || 0} votos</p>
+                    <button class="vote-button w-full" onclick="voteArtist('${artista.id}')">
+                        <i class="fas fa-heart mr-2"></i>Votar
+                    </button>
+                `;
+                podiumContainer.appendChild(card);
+            });
+        }
+        
+        function renderRanking(artistas) {
+            const rankingList = document.getElementById('ranking-list');
+            
+            if (!artistas || artistas.length === 0) {
+                rankingList.innerHTML = `
+                    <div class="text-center text-gray-400 py-8">
+                        <p>No hay más artistas en el ranking</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            rankingList.innerHTML = '';
+            
+            artistas.forEach((artista, index) => {
+                const position = index + 4; // Porque top 3 ya está en podium
+                const card = document.createElement('div');
+                card.className = 'ranking-card';
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="position-badge regular">${position}</div>
+                            <img src="${artista.foto_perfil || 'https://via.placeholder.com/150'}" alt="${artista.nombre_artistico}" class="artist-photo">
+                            <div>
+                                <h3 class="text-lg font-bold">${artista.nombre_artistico || 'Sin nombre'}</h3>
+                                <p class="text-gray-400 text-sm">${(artista.generos || []).join(' / ') || 'Sin género'}</p>
+                                <p class="text-blue-400 font-semibold">${artista.votos_totales || 0} votos</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <button class="vote-button mb-2" onclick="voteArtist('${artista.id}')">
+                                <i class="fas fa-heart"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+                rankingList.appendChild(card);
+            });
+        }
+        
+        async function loadStats() {
+            try {
+                const db = firebase.firestore();
+                
+                // Contar artistas activos
+                const artistasSnapshot = await db.collection('inscripciones')
+                    .where('estado', '==', 'activo')
+                    .get();
+                document.getElementById('stat-artistas').textContent = artistasSnapshot.size;
+                
+                // Sumar votos totales
+                let totalVotos = 0;
+                artistasSnapshot.forEach(doc => {
+                    totalVotos += doc.data().votos_totales || 0;
+                });
+                document.getElementById('stat-votos').textContent = totalVotos.toLocaleString();
+                
+                // Contar certámenes activos
+                const certamenesSnapshot = await db.collection('certamenes')
+                    .where('estado', '==', 'activo')
+                    .get();
+                document.getElementById('stat-certamenes').textContent = certamenesSnapshot.size;
+                
+                // Calcular premio total (suma de todos los pozos activos)
+                let totalPremios = 0;
+                certamenesSnapshot.forEach(doc => {
+                    const pozo = doc.data().pozo_actual || 0;
+                    totalPremios += pozo;
+                });
+                document.getElementById('stat-premios').textContent = '$' + totalPremios.toLocaleString();
+                
+            } catch (error) {
+                console.error('Error cargando estadísticas:', error);
+            }
         }
 
         // FUNCIONES DEL MENÚ HAMBURGUESA

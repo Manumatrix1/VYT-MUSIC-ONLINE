@@ -5,7 +5,7 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const { withRateLimit } = require('./rate-limiter');
+// const { withRateLimit } = require('./rate-limiter'); // COMENTADO TEMPORALMENTE
 
 // Inicializar Firebase Admin si no está inicializado
 if (!admin.apps.length) {
@@ -494,3 +494,160 @@ try {
 } catch (error) {
   console.error('⚠️ Error loading email trigger:', error.message);
 }
+
+// ===== CÁLCULO AUTOMÁTICO DE CLASIFICACIÓN 40% =====
+
+/**
+ * Función manual para calcular los clasificados al 40% por región
+ * Se ejecuta desde el admin cuando finaliza la Fase 2 (Clasificación)
+ * 
+ * Endpoint: /calcularClasificados
+ * Método: POST
+ * Body: { certamenId: "santafe_2025", fase: 2 }
+ */
+exports.calcularClasificados = functions.https.onRequest(async (req, res) => {
+  // CORS
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+  
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Método no permitido' });
+  }
+  
+  try {
+    const { certamenId, fase } = req.body;
+    
+    if (!certamenId || !fase) {
+      return res.status(400).json({ 
+        error: 'Faltan parámetros: certamenId y fase son requeridos' 
+      });
+    }
+    
+    console.log(`🎯 Calculando clasificados para certamen: ${certamenId}, fase: ${fase}`);
+    
+    // Obtener configuración del certamen
+    const configDoc = await db.collection('configuracion_sistema').doc('config_principal').get();
+    const config = configDoc.data();
+    
+    if (!config) {
+      return res.status(404).json({ error: 'Configuración no encontrada' });
+    }
+    
+    const porcentajeClasificacion = config.certamen?.porcentaje_clasificacion || 40;
+    const regionesActivas = config.certamen?.regiones || { norte: true, centro: true, sur: true };
+    
+    // Obtener todas las inscripciones del certamen
+    const inscripcionesSnapshot = await db.collection('inscripciones')
+      .where('estado', '==', 'aprobado')
+      .get();
+    
+    if (inscripcionesSnapshot.empty) {
+      return res.status(404).json({ error: 'No hay inscripciones aprobadas' });
+    }
+    
+    // Agrupar por región
+    const porRegion = {
+      norte: [],
+      centro: [],
+      sur: []
+    };
+    
+    inscripcionesSnapshot.forEach(doc => {
+      const data = doc.data();
+      const region = data.codigoRegion || 'centro';
+      porRegion[region].push({
+        id: doc.id,
+        votos: data.votos || 0,
+        nombreArtista: data.nombreArtista || 'Sin nombre',
+        provincia: data.provincia,
+        ciudad: data.ciudad
+      });
+    });
+    
+    // Calcular clasificados por región
+    const resultados = {};
+    let totalClasificados = 0;
+    
+    for (const [region, participantes] of Object.entries(porRegion)) {
+      if (!regionesActivas[region] || participantes.length === 0) {
+        console.log(`⏭️ Región ${region} deshabilitada o sin participantes`);
+        continue;
+      }
+      
+      // Ordenar por votos descendente
+      participantes.sort((a, b) => b.votos - a.votos);
+      
+      // Calcular cuántos clasifican
+      const cantidadClasificados = Math.ceil(participantes.length * (porcentajeClasificacion / 100));
+      
+      // Si una región tiene menos de 30, fusionar con centro (simplificado para MVP)
+      const minimoParticipantes = 30;
+      if (participantes.length < minimoParticipantes && region !== 'centro') {
+        console.log(`⚠️ Región ${region} tiene solo ${participantes.length} participantes (< ${minimoParticipantes}). Fusionando con centro.`);
+        // En MVP simplificado, solo marcamos esto pero procesamos igual
+      }
+      
+      // Actualizar estado de los clasificados
+      const batch = db.batch();
+      const clasificados = participantes.slice(0, cantidadClasificados);
+      
+      for (const participante of clasificados) {
+        const docRef = db.collection('inscripciones').doc(participante.id);
+        batch.update(docRef, {
+          estado: 'semifinalista',
+          fase_actual: 3,
+          fecha_clasificacion: admin.firestore.FieldValue.serverTimestamp(),
+          posicion_regional: clasificados.indexOf(participante) + 1
+        });
+      }
+      
+      await batch.commit();
+      
+      resultados[region] = {
+        total: participantes.length,
+        clasificados: cantidadClasificados,
+        porcentaje: porcentajeClasificacion,
+        listado: clasificados.map((p, idx) => ({
+          posicion: idx + 1,
+          nombre: p.nombreArtista,
+          votos: p.votos,
+          ciudad: p.ciudad
+        }))
+      };
+      
+      totalClasificados += cantidadClasificados;
+      
+      console.log(`✅ Región ${region}: ${cantidadClasificados}/${participantes.length} clasificados`);
+    }
+    
+    // Guardar registro histórico
+    await db.collection('historial_clasificaciones').add({
+      certamenId,
+      fase,
+      fecha: admin.firestore.FieldValue.serverTimestamp(),
+      porcentaje: porcentajeClasificacion,
+      resultados,
+      totalClasificados,
+      ejecutadoPor: 'sistema'
+    });
+    
+    res.json({
+      success: true,
+      message: `Clasificación completada: ${totalClasificados} semifinalistas`,
+      resultados
+    });
+    
+  } catch (error) {
+    console.error('❌ Error calculando clasificados:', error);
+    res.status(500).json({ 
+      error: 'Error procesando clasificación',
+      details: error.message 
+    });
+  }
+});
