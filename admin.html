@@ -4134,5 +4134,197 @@
             </div>
         </div>
     </div>
+    
+    <!-- 🔥 SCRIPTS PARA SUBIDA DE FONDOS -->
+    <script>
+        // Función genérica para subir fondo de una página
+        async function subirFondoPagina(pagina, inputElement) {
+            const file = inputElement.files[0];
+            if (!file) {
+                console.log('No se seleccionó archivo');
+                return;
+            }
+            
+            // Validar que sea imagen
+            if (!file.type.startsWith('image/')) {
+                alert('❌ Por favor selecciona una imagen válida');
+                return;
+            }
+            
+            // Validar tamaño (máximo 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ La imagen no puede superar 5MB');
+                return;
+            }
+            
+            try {
+                console.log(`📤 Subiendo fondo de ${pagina}...`);
+                
+                // Mostrar estado de carga
+                const statusDiv = document.getElementById('upload-status');
+                if (statusDiv) {
+                    statusDiv.classList.remove('hidden');
+                    statusDiv.className = 'mt-4 p-4 rounded-lg bg-blue-100 text-blue-800';
+                    statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Subiendo imagen...';
+                }
+                
+                // Subir a Firebase Storage
+                const storage = firebase.storage();
+                const timestamp = Date.now();
+                const filename = `${pagina}_${timestamp}.${file.name.split('.').pop()}`;
+                const storageRef = storage.ref(`fondos/${filename}`);
+                
+                // Subir archivo
+                const uploadTask = await storageRef.put(file);
+                const downloadURL = await uploadTask.ref.getDownloadURL();
+                
+                console.log(`✅ Fondo subido: ${downloadURL}`);
+                
+                // Guardar URL en Firestore
+                const db = firebase.firestore();
+                await db.collection('configuracion_fondos').doc('fondos').set({
+                    [pagina]: downloadURL,
+                    [`${pagina}_updated`]: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+                
+                console.log(`✅ URL guardada en Firestore para ${pagina}`);
+                
+                // Actualizar preview
+                const previewImg = document.getElementById(`preview-${pagina}`);
+                if (previewImg) {
+                    previewImg.src = downloadURL;
+                    previewImg.onerror = null; // Remover handler de error
+                    previewImg.style.display = 'block';
+                }
+                
+                // Mostrar éxito
+                if (statusDiv) {
+                    statusDiv.className = 'mt-4 p-4 rounded-lg bg-green-100 text-green-800';
+                    statusDiv.innerHTML = '<i class="fas fa-check-circle mr-2"></i>¡Fondo actualizado exitosamente!';
+                    setTimeout(() => {
+                        statusDiv.classList.add('hidden');
+                    }, 3000);
+                }
+                
+                alert(`✅ Fondo de ${pagina} actualizado exitosamente`);
+                
+            } catch (error) {
+                console.error('❌ Error subiendo fondo:', error);
+                
+                const statusDiv = document.getElementById('upload-status');
+                if (statusDiv) {
+                    statusDiv.className = 'mt-4 p-4 rounded-lg bg-red-100 text-red-800';
+                    statusDiv.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>Error: ${error.message}`;
+                }
+                
+                alert(`❌ Error al subir el fondo: ${error.message}`);
+            }
+        }
+        
+        // Función específica para index
+        async function handleIndexImageUpload(inputElement) {
+            await subirFondoPagina('index', inputElement);
+        }
+        
+        // Agregar event listeners cuando se cargue el DOM
+        document.addEventListener('DOMContentLoaded', function() {
+            // Event listener para index
+            const uploadIndex = document.getElementById('upload-index');
+            if (uploadIndex) {
+                uploadIndex.addEventListener('change', function() {
+                    handleIndexImageUpload(this);
+                });
+            }
+            
+            // Event listener para perfil
+            const uploadPerfil = document.getElementById('upload-perfil');
+            if (uploadPerfil) {
+                uploadPerfil.addEventListener('change', function() {
+                    subirFondoPagina('perfil-artista', this);
+                });
+            }
+            
+            // Event listener para login
+            const uploadLogin = document.getElementById('upload-login');
+            if (uploadLogin) {
+                uploadLogin.addEventListener('change', function() {
+                    subirFondoPagina('login-artista', this);
+                });
+            }
+            
+            // Event listener para fan mode
+            const uploadFan = document.getElementById('upload-fan');
+            if (uploadFan) {
+                uploadFan.addEventListener('change', function() {
+                    subirFondoPagina('fan-mode', this);
+                });
+            }
+            
+            // Event listener para admin
+            const uploadAdmin = document.getElementById('upload-admin');
+            if (uploadAdmin) {
+                uploadAdmin.addEventListener('change', function() {
+                    subirFondoPagina('admin', this);
+                });
+            }
+            
+            // Event listener para certamen
+            const uploadCertamen = document.getElementById('upload-certamen');
+            if (uploadCertamen) {
+                uploadCertamen.addEventListener('change', function() {
+                    subirFondoPagina('certamenes', this);
+                });
+            }
+            
+            // Event listener para certamen individual
+            const uploadCertamenIndividual = document.getElementById('upload-certamen-individual');
+            if (uploadCertamenIndividual) {
+                uploadCertamenIndividual.addEventListener('change', function() {
+                    subirFondoPagina('certamen-individual', this);
+                });
+            }
+            
+            // Event listener para ranking
+            const uploadRanking = document.getElementById('upload-ranking');
+            if (uploadRanking) {
+                uploadRanking.addEventListener('change', function() {
+                    subirFondoPagina('ranking', this);
+                });
+            }
+            
+            console.log('✅ Event listeners de fondos configurados');
+        });
+        
+        // Función para cargar fondos existentes desde Firestore
+        async function cargarFondosExistentes() {
+            try {
+                const db = firebase.firestore();
+                const fondosDoc = await db.collection('configuracion_fondos').doc('fondos').get();
+                
+                if (fondosDoc.exists) {
+                    const fondos = fondosDoc.data();
+                    console.log('📂 Fondos cargados:', fondos);
+                    
+                    // Actualizar previews
+                    Object.keys(fondos).forEach(pagina => {
+                        if (!pagina.endsWith('_updated')) {
+                            const previewImg = document.getElementById(`preview-${pagina}`);
+                            if (previewImg && fondos[pagina]) {
+                                previewImg.src = fondos[pagina];
+                                previewImg.style.display = 'block';
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.log('⚠️ No se pudieron cargar fondos existentes:', error.message);
+            }
+        }
+        
+        // Cargar fondos al iniciar
+        if (typeof firebase !== 'undefined') {
+            setTimeout(cargarFondosExistentes, 1000);
+        }
+    </script>
 </body>
 </html>

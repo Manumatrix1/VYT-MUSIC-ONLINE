@@ -854,12 +854,98 @@
             try {
                 console.log('Datos del artista:', artistData);
                 
-                // Intentar guardar en Firebase si está disponible
+                // 🔥 PASO 1: SUBIR FOTO A STORAGE (si existe)
+                const fotoInput = document.querySelector('input[name="foto_perfil"]');
+                if (fotoInput && fotoInput.files[0]) {
+                    try {
+                        console.log('📸 Subiendo foto a Firebase Storage...');
+                        const fotoFile = fotoInput.files[0];
+                        
+                        // Validar tamaño (máximo 5MB)
+                        if (fotoFile.size > 5 * 1024 * 1024) {
+                            throw new Error('La foto no puede superar 5MB');
+                        }
+                        
+                        const storage = firebase.storage();
+                        const timestamp = Date.now();
+                        const fotoRef = storage.ref(`perfiles/${timestamp}_${fotoFile.name}`);
+                        
+                        // Subir archivo
+                        const uploadTask = await fotoRef.put(fotoFile);
+                        const fotoURL = await uploadTask.ref.getDownloadURL();
+                        
+                        artistData.foto_perfil = fotoURL;
+                        artistData.fotoURL = fotoURL; // Compatibilidad con perfil
+                        console.log('✅ Foto subida exitosamente:', fotoURL);
+                    } catch (fotoError) {
+                        console.error('❌ Error subiendo foto:', fotoError);
+                        alert('Error al subir la foto: ' + fotoError.message + '. Puedes continuar sin foto.');
+                        artistData.foto_perfil = '';
+                    }
+                } else {
+                    console.log('📷 No se seleccionó foto de perfil');
+                    artistData.foto_perfil = '';
+                }
+                
+                // 🎥 PASO 2: SUBIR VIDEO A STORAGE (si existe)
+                const videoInput = document.querySelector('input[name="video"]');
+                if (videoInput && videoInput.files[0]) {
+                    try {
+                        console.log('🎥 Subiendo video a Firebase Storage...');
+                        const videoFile = videoInput.files[0];
+                        
+                        // Validar tamaño (máximo 100MB)
+                        if (videoFile.size > 100 * 1024 * 1024) {
+                            throw new Error('El video no puede superar 100MB');
+                        }
+                        
+                        const storage = firebase.storage();
+                        const timestamp = Date.now();
+                        const videoRef = storage.ref(`videos/${timestamp}_${videoFile.name}`);
+                        
+                        // Mostrar progreso
+                        const uploadTask = videoRef.put(videoFile);
+                        
+                        uploadTask.on('state_changed',
+                            (snapshot) => {
+                                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                                console.log('Subiendo video: ' + Math.round(progress) + '%');
+                            },
+                            (error) => {
+                                console.error('Error subiendo video:', error);
+                            },
+                            async () => {
+                                const videoURL = await uploadTask.snapshot.ref.getDownloadURL();
+                                artistData.video_url = videoURL;
+                                console.log('✅ Video subido exitosamente:', videoURL);
+                            }
+                        );
+                        
+                        // Esperar a que termine la subida
+                        await uploadTask;
+                    } catch (videoError) {
+                        console.error('❌ Error subiendo video:', videoError);
+                        alert('Error al subir el video: ' + videoError.message + '. Puedes agregar el video después desde tu perfil.');
+                        artistData.video_url = '';
+                    }
+                } else {
+                    // Si no hay archivo, verificar si hay URL de YouTube
+                    const videoURLInput = document.querySelector('input[name="video_url"]');
+                    if (videoURLInput && videoURLInput.value) {
+                        artistData.video_url = videoURLInput.value;
+                        console.log('🔗 URL de video guardada:', artistData.video_url);
+                    } else {
+                        console.log('🎬 No se proporcionó video');
+                        artistData.video_url = '';
+                    }
+                }
+                
+                // 💾 PASO 3: GUARDAR EN FIRESTORE CON URLs
                 if (typeof db !== 'undefined' && db) {
                     try {
                         // Guardar en Firestore (colección correcta para trigger de email)
                         await db.collection('artist_profiles').add(artistData);
-                        console.log('✅ Perfil guardado en Firebase (artist_profiles)');
+                        console.log('✅ Perfil guardado en Firebase (artist_profiles) con foto:', artistData.foto_perfil);
                     } catch (firebaseError) {
                         console.warn('⚠️ No se pudo guardar en Firebase, continuando localmente:', firebaseError);
                     }
