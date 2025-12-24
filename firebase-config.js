@@ -211,6 +211,7 @@ if (typeof window !== 'undefined') {
     window.firebaseDb = db;
     window.firebaseStorage = storage;
     window.firebaseAnalytics = analytics;
-    window.firebaseFunctions = functions;
+    // Functions no está disponible en SDK v8 sin import explícito
+    // window.firebaseFunctions = functions;
     window.checkConnection = checkConnection;
 }

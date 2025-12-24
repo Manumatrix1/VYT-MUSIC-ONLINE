@@ -411,26 +411,54 @@
         // Variables globales para los datos del artista
         let artistaData = {};
         
-        // Variables globales de Firebase (declaradas aquí para evitar errores)
-        let db = null;
-        let auth = null;
-        let storage = null;
+        // NO redeclarar variables de Firebase - usar las del firebase-config.js
+        // auth, db, storage ya están disponibles globalmente desde firebase-config.js
         
-        // Intentar conectar con Firebase si está disponible
-        try {
-            if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
-                db = firebase.firestore();
-                auth = firebase.auth();
-                storage = firebase.storage();
-                console.log('✅ Firebase conectado correctamente');
-            } else {
-                console.log('⚠️ Firebase no está disponible, modo offline');
-            }
-        } catch (firebaseError) {
-            console.log('⚠️ Error conectando Firebase:', firebaseError.message);
-        }
+        console.log('🔗 Esperando inicialización de Firebase...');
+        
+        // Esperar a que Firebase esté listo
+        window.addEventListener('firebaseReady', () => {
+            console.log('✅ Firebase listo en perfil-artista');
+        });
 
-        // � FUNCIONES DE MODAL Y BANNER OBLIGATORIO
+        // ⚡ FUNCIONES GLOBALES (deben estar disponibles desde el inicio)
+        window.changePhoto = function() {
+            console.log('📸 changePhoto() ejecutado');
+            showPhotoModal();
+        };
+
+        window.editProfile = function() {
+            console.log('✏️ editProfile() ejecutado');
+            showEditModal();
+        };
+
+        window.viewCertamenes = function() {
+            const container = document.querySelector('#certamenesContainer');
+            if (container) {
+                container.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        window.joinCertamen = function(certamenId = null, certamenData = null) {
+            if (certamenId) {
+                alert(`Inscribiéndote al certamen: ${certamenData?.titulo || 'Certamen'}`);
+            } else {
+                const container = document.querySelector('#certamenesContainer');
+                if (container) {
+                    container.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        };
+
+        window.uploadVideo = function() {
+            alert('Función de subida de video en desarrollo');
+        };
+
+        window.viewStats = function() {
+            alert('Función de estadísticas en desarrollo');
+        };
+
+        // 🔐 FUNCIONES DE MODAL Y BANNER OBLIGATORIO
         function openVerificationModal() {
             document.getElementById('emailVerificationModal').style.display = 'flex';
         }
@@ -537,166 +565,157 @@
             statusDiv.textContent = message;
         }
 
-        // Cargar información del perfil (VERSIÓN SIMPLE Y CONFIABLE)
-        function loadProfile() {
-            console.log('🔄 Cargando perfil...');
+        // Cargar información del perfil desde FIREBASE FIRESTORE
+        async function loadProfile() {
+            console.log('🔄 Cargando perfil desde Firebase...');
             
             // Cargar fondo dinámico
             loadDynamicBackground();
             
-            // 🔥 SISTEMA SIMPLE: Solo datos persistentes locales
+            try {
+                // Obtener email del artista desde localStorage
+                const userEmail = localStorage.getItem('userEmail');
+                
+                if (!userEmail) {
+                    console.error('❌ No se encontró email del usuario');
+                    showErrorMessage('No se pudo identificar tu perfil. Por favor inicia sesión nuevamente.');
+                    return;
+                }
+                
+                console.log('📧 Buscando perfil con email:', userEmail);
+                
+                // Buscar perfil en Firestore por email
+                if (!db) db = firebase.firestore();
+                const querySnapshot = await db.collection('artist_profiles')
+                    .where('email', '==', userEmail)
+                    .orderBy('fechaCreacion', 'desc')
+                    .limit(1)
+                    .get();
+                
+                if (querySnapshot.empty) {
+                    console.warn('⚠️ No se encontró perfil en Firebase, usando datos locales');
+                    loadProfileFromLocalStorage();
+                    return;
+                }
+                
+                // Obtener datos del documento de Firestore
+                const doc = querySnapshot.docs[0];
+                const firestoreData = doc.data();
+                artistaData = firestoreData;
+                
+                // Guardar ID del documento para actualizaciones futuras
+                artistaData.firestoreId = doc.id;
+                
+                console.log('✅ Perfil cargado desde Firestore:', {
+                    nombre: artistaData.nombreArtistico,
+                    tieneFoto: !!artistaData.foto_perfil,
+                    tieneVideo: !!artistaData.video_url,
+                    ciudad: artistaData.ciudad,
+                    documentId: artistaData.firestoreId
+                });
+                
+                // Actualizar localStorage con datos de Firestore
+                localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
+                
+                // Actualizar interfaz
+                updateProfileDisplay();
+                
+            } catch (error) {
+                console.error('❌ Error cargando perfil desde Firebase:', error);
+                console.log('⚠️ Intentando cargar desde localStorage como respaldo');
+                loadProfileFromLocalStorage();
+            }
+        }
+        
+        // Cargar perfil desde localStorage (respaldo)
+        function loadProfileFromLocalStorage() {
+            console.log('🔄 Cargando perfil desde localStorage...');
+            
             const persistentData = localStorage.getItem('artistData_persistent');
             
             if (persistentData) {
                 try {
                     artistaData = JSON.parse(persistentData);
-                    console.log('✅ Datos persistentes encontrados:', {
-                        nombre: artistaData.nombre_artista,
-                        tieneFoto: !!artistaData.fotoURL,
-                        tieneVideo: !!artistaData.video_url,
+                    console.log('✅ Datos encontrados en localStorage:', {
+                        nombre: artistaData.nombreArtistico || artistaData.nombre_artista,
+                        tieneFoto: !!(artistaData.foto_perfil || artistaData.fotoURL),
                         ciudad: artistaData.ciudad
                     });
                     
-                    // Log específico para la foto
-                    if (artistaData.fotoURL) {
-                        const fotoSize = Math.round(artistaData.fotoURL.length / 1024);
-                        console.log(`📸 Foto encontrada en datos persistentes: ${fotoSize}KB`);
-                    } else {
-                        console.log('📷 No hay foto en datos persistentes');
-                    }
-                    
-                    // Asegurar valores por defecto para campos nuevos
-                    artistaData.video_url = artistaData.video_url || '';
-                    artistaData.instagram = artistaData.instagram || '';
-                    artistaData.facebook = artistaData.facebook || '';
-                    artistaData.tiktok = artistaData.tiktok || '';
-                    artistaData.genero_musical = artistaData.genero_musical || artistaData.genero || 'No especificado';
-                    artistaData.telefono = artistaData.telefono || artistaData.whatsapp || 'No especificado';
-                    
-                    // Actualizar interfaz INMEDIATAMENTE
                     updateProfileDisplay();
-                    console.log('✅ Perfil cargado desde datos persistentes');
                     return;
                     
                 } catch (error) {
-                    console.error('❌ Error cargando datos persistentes:', error);
+                    console.error('❌ Error cargando datos locales:', error);
                 }
             }
             
-            // Solo si NO HAY datos persistentes, intentar cargar datos temporales
-            const newArtistData = localStorage.getItem('artistData');
-            if (newArtistData) {
-                try {
-                    const parsedData = JSON.parse(newArtistData);
-                    console.log('📝 Creando perfil desde datos temporales:', parsedData);
-                    
-                    // Guardar email para identificación
-                    if (parsedData.email) {
-                        localStorage.setItem('userEmail', parsedData.email);
-                    }
-                    
-                    // Mapear los datos del formulario a la estructura esperada
-                    artistaData = {
-                        nombre_artista: parsedData.nombreArtistico || 'Artista Sin Nombre',
-                        nombre: parsedData.nombre || '',
-                        apellido: parsedData.apellido || '',
-                        genero: parsedData.generos ? parsedData.generos.join(', ') : 'No especificado',
-                        genero_musical: parsedData.generos ? parsedData.generos.join(', ') : 'No especificado',
-                        ciudad: parsedData.ciudad || 'No especificado',
-                        provincia: parsedData.provincia || 'No especificado',
-                        telefono: parsedData.whatsapp || 'No especificado',
-                        whatsapp: parsedData.whatsapp || 'No especificado',
-                        email: parsedData.email || 'No especificado',
-                        biografia: parsedData.biografia || '',
-                        fechaNacimiento: parsedData.fechaNacimiento || '',
-                        dni: parsedData.dni || '',
-                        fechaCreacion: parsedData.fechaCreacion || new Date().toISOString(),
-                        estado: parsedData.estado || 'pendiente_aprobacion',
-                        // Campos nuevos con valores por defecto
-                        video_url: '',
-                        instagram: '',
-                        facebook: '',
-                        tiktok: ''
-                    };
-                    
-                    // 🔥 NUEVO: Guardar como datos persistentes desde el primer momento
-                    localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
-                    
-                    // Limpiar localStorage temporal después de cargar
-                    localStorage.removeItem('artistData');
-                } catch (error) {
-                    console.error('Error al parsear datos del artista:', error);
-                }
-            }
+            // Si no hay datos, mostrar perfil vacío
+            artistaData = {
+                nombreArtistico: 'Artista Sin Nombre',
+                nombre: '',
+                apellido: '',
+                generos: [],
+                ciudad: 'No especificado',
+                provincia: 'No especificado',
+                whatsapp: 'No especificado',
+                email: 'No especificado'
+            };
             
-            // Asegurar que artistaData tenga valores por defecto
-            if (!artistaData) {
-                artistaData = {
-                    nombre_artista: 'Artista Sin Nombre',
-                    nombre: '',
-                    apellido: '',
-                    genero: 'No especificado',
-                    ciudad: 'No especificado',
-                    provincia: 'No especificado',
-                    whatsapp: 'No especificado',
-                    email: 'No especificado'
-                };
-            }
-            
-            // Actualizar la interfaz
-            document.getElementById('artistName').textContent = artistaData.nombre_artista || 'Artista Sin Nombre';
-            document.getElementById('realName').textContent = `${artistaData.nombre || ''} ${artistaData.apellido || ''}`.trim() || 'Nombre no disponible';
-            document.getElementById('musicGenre').textContent = artistaData.genero || 'No especificado';
-            
-            // Mostrar ciudad y provincia
-            const ubicacion = `${artistaData.ciudad || 'Ciudad'}, ${artistaData.provincia || 'Provincia'}`;
-            document.getElementById('cityName').textContent = ubicacion !== 'Ciudad, Provincia' ? ubicacion : 'No especificado';
-            
-            document.getElementById('phoneNumber').textContent = artistaData.whatsapp || 'No especificado';
-            
-            if (artistaData.fotoURL) {
-                document.getElementById('profilePhoto').src = artistaData.fotoURL;
-                document.getElementById('profilePhoto').classList.remove('hidden');
-                document.getElementById('defaultAvatar').classList.add('hidden');
-            }
+            updateProfileDisplay();
+            console.log('⚠️ No se encontraron datos, mostrando perfil vacío');
         }
-
-        // Función para actualizar solo la visualización del perfil (sin recargar todo)
+        
+        // Actualizar visualización del perfil
         function updateProfileDisplay() {
             console.log('🖼️ Actualizando visualización del perfil...');
             
             // Actualizar nombre artístico
-            document.getElementById('artistName').textContent = artistaData.nombre_artista || 'Artista Sin Nombre';
+            const artistName = artistaData.nombreArtistico || artistaData.nombre_artista || 'Artista Sin Nombre';
+            document.getElementById('artistName').textContent = artistName;
             
             // Actualizar nombre real
             const nombreCompleto = `${artistaData.nombre || ''} ${artistaData.apellido || ''}`.trim();
             document.getElementById('realName').textContent = nombreCompleto || 'Nombre no disponible';
             
             // Actualizar género musical
-            document.getElementById('musicGenre').textContent = artistaData.genero_musical || 'No especificado';
+            let genero = 'No especificado';
+            if (Array.isArray(artistaData.generos) && artistaData.generos.length > 0) {
+                genero = artistaData.generos.join(', ');
+            } else if (artistaData.genero_musical) {
+                genero = artistaData.genero_musical;
+            } else if (artistaData.genero) {
+                genero = artistaData.genero;
+            }
+            document.getElementById('musicGenre').textContent = genero;
             
-            // Actualizar ciudad
-            document.getElementById('cityName').textContent = artistaData.ciudad || 'No especificado';
+            // Actualizar ciudad y provincia
+            const ciudad = artistaData.ciudad || 'No especificado';
+            const provincia = artistaData.provincia || '';
+            const ubicacion = provincia ? `${ciudad}, ${provincia}` : ciudad;
+            document.getElementById('cityName').textContent = ubicacion;
             
             // Actualizar teléfono
-            document.getElementById('phoneNumber').textContent = artistaData.telefono || 'No especificado';
+            document.getElementById('phoneNumber').textContent = artistaData.whatsapp || artistaData.telefono || 'No especificado';
             
-            // 🔥 ACTUALIZAR FOTO DE PERFIL (ESTO FALTABA!)
-            if (artistaData.fotoURL) {
-                console.log('✅ Cargando foto de perfil desde datos persistentes');
+            // 🔥 ACTUALIZAR FOTO DE PERFIL - Soportar múltiples campos
+            const fotoURL = artistaData.foto_perfil || artistaData.fotoURL || artistaData.photoURL;
+            
+            if (fotoURL) {
+                console.log('✅ Cargando foto de perfil:', fotoURL.substring(0, 100) + '...');
                 const profilePhoto = document.getElementById('profilePhoto');
                 const defaultAvatar = document.getElementById('defaultAvatar');
                 
                 if (profilePhoto && defaultAvatar) {
-                    profilePhoto.src = artistaData.fotoURL;
+                    profilePhoto.src = fotoURL;
                     profilePhoto.classList.remove('hidden');
                     defaultAvatar.classList.add('hidden');
                     console.log('📸 Foto de perfil aplicada correctamente');
                 } else {
-                    console.error('❌ No se encontraron elementos de foto de perfil');
+                    console.error('❌ No se encontraron elementos de foto de perfil en el DOM');
                 }
             } else {
-                console.log('ℹ️ No hay foto de perfil guardada');
+                console.log('ℹ️ No hay foto de perfil guardada en ningún campo');
             }
             
             // Actualizar sección de video y redes sociales
@@ -981,11 +1000,6 @@
                 localStorage.removeItem('artistData');
                 window.location.href = 'index.html';
             }
-        };
-
-        window.changePhoto = function() {
-            console.log('📸 changePhoto() ejecutado');
-            showPhotoModal();
         };
 
         // Función para mostrar el modal de cambio de foto
@@ -1361,78 +1375,89 @@
             }
             
             const saveBtn = document.getElementById('savePhotoBtn');
-            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Optimizando...';
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
             saveBtn.disabled = true;
             
             try {
-                // 🎯 PASO 1: REDIMENSIONAR AUTOMÁTICAMENTE
-                console.log('🔄 Iniciando optimización de imagen...');
-                const optimizedPhoto = await resizeImage(selectedPhoto);
+                console.log('📸 Iniciando subida de foto a Firebase Storage...');
                 
-                if (!optimizedPhoto) {
-                    // Error en la optimización
-                    saveBtn.innerHTML = 'Guardar Foto';
-                    saveBtn.disabled = false;
-                    return;
-                }
+                // 🔥 SUBIR A FIREBASE STORAGE
+                if (!storage) storage = firebase.storage();
+                const timestamp = Date.now();
+                const fileName = `perfil_${timestamp}_${selectedPhoto.name}`;
+                const storageRef = storage.ref(`perfiles/${fileName}`);
                 
-                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+                console.log('📤 Subiendo archivo:', fileName);
                 
-                // 🎯 PASO 2: CONVERTIR A BASE64 OPTIMIZADO
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const photoURL = e.target.result;
-                    const sizeKB = Math.round(photoURL.length / 1024);
-                    
-                    console.log(`📸 Foto optimizada lista: ${sizeKB}KB`);
-                    
-                    if (sizeKB > 500) {
-                        console.warn('⚠️ Imagen aún grande después de optimización');
+                // Subir foto con progreso
+                const uploadTask = storageRef.put(selectedPhoto);
+                
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        saveBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Subiendo ${Math.round(progress)}%`;
+                        console.log(`📊 Progreso: ${Math.round(progress)}%`);
+                    },
+                    (error) => {
+                        console.error('❌ Error subiendo foto:', error);
+                        alert('Error al subir la foto: ' + error.message);
+                        saveBtn.innerHTML = 'Guardar Foto';
+                        saveBtn.disabled = false;
+                    },
+                    async () => {
+                        try {
+                            // Obtener URL de descarga
+                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                            console.log('✅ Foto subida exitosamente:', downloadURL);
+                            
+                            // Actualizar datos del artista
+                            artistaData.foto_perfil = downloadURL;
+                            artistaData.fotoURL = downloadURL; // Mantener compatibilidad
+                            
+                            // 💾 GUARDAR EN FIRESTORE SI HAY ID
+                            if (artistaData.firestoreId) {
+                                if (!db) db = firebase.firestore();
+                                await db.collection('artist_profiles').doc(artistaData.firestoreId).update({
+                                    foto_perfil: downloadURL,
+                                    fotoURL: downloadURL,
+                                    fecha_actualizacion_foto: new Date().toISOString()
+                                });
+                                console.log('✅ Foto actualizada en Firestore');
+                            } else {
+                                console.warn('⚠️ No hay firestoreId, solo guardando localmente');
+                            }
+                            
+                            // Guardar en localStorage
+                            localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
+                            
+                            // Actualizar la interfaz
+                            const profilePhoto = document.getElementById('profilePhoto');
+                            const defaultAvatar = document.getElementById('defaultAvatar');
+                            
+                            if (profilePhoto && defaultAvatar) {
+                                profilePhoto.src = downloadURL;
+                                profilePhoto.classList.remove('hidden');
+                                defaultAvatar.classList.add('hidden');
+                            }
+                            
+                            closePhotoModal();
+                            showSuccessMessage('✅ Foto actualizada exitosamente');
+                            
+                            saveBtn.innerHTML = 'Guardar Foto';
+                            saveBtn.disabled = false;
+                            
+                        } catch (error) {
+                            console.error('❌ Error obteniendo URL:', error);
+                            alert('Error al obtener URL de la foto');
+                            saveBtn.innerHTML = 'Guardar Foto';
+                            saveBtn.disabled = false;
+                        }
                     }
-                    
-                    // 🎯 PASO 3: ACTUALIZAR DATOS INMEDIATAMENTE
-                    artistaData.fotoURL = photoURL;
-                    
-                    // Actualizar la interfaz INMEDIATAMENTE
-                    const profilePhoto = document.getElementById('profilePhoto');
-                    const defaultAvatar = document.getElementById('defaultAvatar');
-                    
-                    if (profilePhoto && defaultAvatar) {
-                        profilePhoto.src = photoURL;
-                        profilePhoto.classList.remove('hidden');
-                        defaultAvatar.classList.add('hidden');
-                    }
-                    
-                    // 🔥 GUARDAR INMEDIATAMENTE Y FORZAR PERSISTENCIA
-                    localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
-                    
-                    // DOBLE GUARDADO para asegurar
-                    setTimeout(() => {
-                        localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
-                        console.log('� FOTO PERSISTIDA DOBLEMENTE - Verificando:', 
-                                  JSON.parse(localStorage.getItem('artistData_persistent')).fotoURL ? 'TIENE FOTO' : 'SIN FOTO');
-                    }, 100);
-                    
-                    closePhotoModal();
-                    showSuccessMessage('📸 Foto guardada PERMANENTEMENTE');
-                    
-                    saveBtn.innerHTML = 'Guardar Foto';
-                    saveBtn.disabled = false;
-                };
-                
-                reader.onerror = function() {
-                    console.error('Error al convertir foto a base64');
-                    alert('Error al procesar la foto. Intenta con una foto más pequeña.');
-                    saveBtn.innerHTML = 'Guardar Foto';
-                    saveBtn.disabled = false;
-                };
-                
-                reader.readAsDataURL(selectedPhoto);
+                );
                 
             } catch (error) {
-                console.error('Error al guardar la foto:', error);
-                alert('Error al guardar la foto. Por favor, intenta nuevamente.');
-                
+                console.error('❌ Error al guardar la foto:', error);
+                alert('Error al guardar la foto: ' + error.message);
                 saveBtn.innerHTML = 'Guardar Foto';
                 saveBtn.disabled = false;
             }
@@ -1471,10 +1496,29 @@
             }, 3000);
         }
 
-        window.editProfile = function() {
-            console.log('✏️ editProfile() ejecutado');
-            showEditModal();
-        };
+        // Función para mostrar mensajes de error
+        function showErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #dc2626, #991b1b);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 0.5rem;
+                z-index: 10000;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+                font-weight: 500;
+                animation: slideIn 0.3s ease-out;
+            `;
+            errorDiv.innerHTML = message;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
 
         // Función para mostrar el modal de edición
         function showEditModal() {
@@ -1871,26 +1915,6 @@
                 successMessage.remove();
             }, 4000);
         }
-
-        window.viewCertamenes = function() {
-            document.querySelector('#certamenesContainer').scrollIntoView({ behavior: 'smooth' });
-        };
-
-        window.joinCertamen = function(certamenId = null, certamenData = null) {
-            if (certamenId) {
-                alert(`Inscribiéndote al certamen: ${certamenData?.titulo || 'Certamen'}`);
-            } else {
-                document.querySelector('#certamenesContainer').scrollIntoView({ behavior: 'smooth' });
-            }
-        };
-
-        window.uploadVideo = function() {
-            alert('Función de subida de video en desarrollo');
-        };
-
-        window.viewStats = function() {
-            alert('Función de estadísticas en desarrollo');
-        };
 
         // Inicializar página
         document.addEventListener('DOMContentLoaded', () => {
