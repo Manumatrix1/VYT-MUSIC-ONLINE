@@ -60,6 +60,7 @@ const recibirNotificacionPago = functions.https.onRequest(async (req, res) => {
               .collection('payment_transactions')
               .where('participante_id', '==', participantId)
               .where('status', '==', 'pending')
+              .limit(10)  // ✅ LÍMITE AÑADIDO - máx 10 transacciones pendientes
               .get()
               .then(snapshot => {
                 snapshot.forEach(doc => {

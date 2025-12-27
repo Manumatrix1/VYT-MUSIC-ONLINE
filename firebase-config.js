@@ -57,16 +57,18 @@ function initializeFirebase() {
             db = firebase.firestore();
             console.log('✅ Firestore inicializado');
 
-            // Configurar persistencia para Firestore
-            db.enablePersistence().catch((err) => {
-                if (err.code == 'failed-precondition') {
-                    console.warn('⚠️ Persistencia no disponible (múltiples pestañas)');
-                } else if (err.code == 'unimplemented') {
-                    console.warn('⚠️ Persistencia no soportada por el navegador');
-                } else {
-                    console.warn('⚠️ Error de persistencia:', err);
-                }
-            });
+            // ⚠️ COMENTADO - Persistencia deshabilitada en desarrollo
+            // Causa lentitud extrema cuando hay muchos documentos
+            // DESCOMENTA SOLO EN PRODUCCIÓN si necesitas offline
+            // db.enablePersistence().catch((err) => {
+            //     if (err.code == 'failed-precondition') {
+            //         console.warn('⚠️ Persistencia no disponible (múltiples pestañas)');
+            //     } else if (err.code == 'unimplemented') {
+            //         console.warn('⚠️ Persistencia no soportada por el navegador');
+            //     } else {
+            //         console.warn('⚠️ Error de persistencia:', err);
+            //     }
+            // });
         } catch (dbError) {
             console.error('❌ Error al inicializar Firestore:', dbError);
         }

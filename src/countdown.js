@@ -19,4 +19,18 @@ export function initializeCountdown(targetDate) {
         document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
         document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
     }, 1000);
+
+    // ✅ LIMPIEZA - Guardar referencia global para limpiar al cambiar página
+    if (!window.activeIntervals) {
+        window.activeIntervals = [];
+    }
+    window.activeIntervals.push(countdownFunction);
+
+    // Limpiar cuando la página se descarga
+    window.addEventListener('beforeunload', () => {
+        if (window.activeIntervals && window.activeIntervals.length > 0) {
+            window.activeIntervals.forEach(interval => clearInterval(interval));
+            window.activeIntervals = [];
+        }
+    }, { once: true });
 }

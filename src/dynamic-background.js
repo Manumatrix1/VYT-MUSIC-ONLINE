@@ -26,7 +26,6 @@ function loadDynamicBackground() {
             // Aplicar directamente al body
             document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${config.imageData}')`;
             document.body.style.backgroundSize = 'cover';
-            document.body.style.backgroundAttachment = 'fixed';
             document.body.style.backgroundPosition = config.position || 'center top';
             document.body.style.backgroundRepeat = 'no-repeat';
             

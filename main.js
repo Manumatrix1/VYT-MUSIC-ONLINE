@@ -48,7 +48,9 @@ const initializeFirebase = async () => {
 };
 
 // Función optimizada para verificar si el usuario está inscrito con caché
+const MAX_CACHE_SIZE = 50;  // ✅ Límite de tamaño de caché
 let inscriptionCache = new Map();
+
 async function checkUserInscription(userId) {
     // Verificar caché primero
     if (inscriptionCache.has(userId)) {
@@ -78,7 +80,14 @@ async function checkUserInscription(userId) {
                 inscriptionId: querySnapshot.docs[0].id
             };
         
-        // Guardar en caché
+        // ✅ Guardar en caché con límite de tamaño
+        if (inscriptionCache.size >= MAX_CACHE_SIZE) {
+            // Eliminar entrada más antigua si se alcanza el límite
+            const firstKey = inscriptionCache.keys().next().value;
+            inscriptionCache.delete(firstKey);
+            console.log('🗑️ Cache limpiado - límite alcanzado');
+        }
+        
         inscriptionCache.set(userId, {
             data: result,
             timestamp: Date.now()
@@ -90,6 +99,12 @@ async function checkUserInscription(userId) {
         return { isInscribed: false };
     }
 }
+
+// ✅ Limpiar cache y listeners al cambiar página
+window.addEventListener('beforeunload', () => {
+    inscriptionCache.clear();
+    console.log('🧹 Cache limpiado al cambiar página');
+}, { once: true });
 
 // Función para redirigir según estado de inscripción
 async function redirectBasedOnInscription(user) {
