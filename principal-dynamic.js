@@ -101,8 +101,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     let currentPurchase = { vyt: 0, amount: 0 };
 
+    // ✅ Control de listeners - Guardar referencia para limpiar después
+    let authUnsubscribe = null;
+
     // --- Lógica de Autenticación y Balance ---
-    onAuthStateChanged(auth, async (user) => {
+    authUnsubscribe = onAuthStateChanged(auth, async (user) => {
         if (user) {
             profileLink.classList.add('hidden');
             logoutButton.classList.remove('hidden');
@@ -152,6 +155,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Hacer showPage disponible globalmente
     window.showPage = showPage;
 
+    // ✅ Cachear elementos para no buscar cada click
+    const headerNavLinks = document.querySelectorAll('.header-nav-link');
+    const bottomNavLinks = document.querySelectorAll('.bottom-nav-link');
+    
     allInternalLinks.forEach(link => {
         link.addEventListener('click', (e) => {
             console.log('🔗 Click en enlace detectado:', link.textContent);
@@ -162,8 +169,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             allInternalLinks.forEach(nav => nav.classList.remove('active'));
             link.classList.add('active');
 
-            document.querySelectorAll(`.header-nav-link[data-target="${targetId}"]`).forEach(l => l.classList.add('active'));
-            document.querySelectorAll(`.bottom-nav-link[data-target="${targetId}"]`).forEach(l => l.classList.add('active'));
+            headerNavLinks.forEach(l => l.dataset.target === targetId ? l.classList.add('active') : l.classList.remove('active'));
+            bottomNavLinks.forEach(l => l.dataset.target === targetId ? l.classList.add('active') : l.classList.remove('active'));
 
             if (mobileMenu.classList.contains('open')) {
                 console.log('📱 Cerrando menú móvil...');
@@ -299,16 +306,24 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    const pozoDocRef = doc(db, "estadisticas_generales", "resumen_certamen");
-    onSnapshot(pozoDocRef, (doc) => {
-        if (doc.exists()) {
-            const pozoActual = doc.data().pozo_total;
-            if(pozoTextElement) pozoTextElement.textContent = `$ ${pozoActual.toLocaleString('es-AR')}`;
-            const pozoObjetivo = 2000000;
-            const porcentaje = Math.min(100, (pozoActual / pozoObjetivo) * 100);
-            if(pozoBarElement) pozoBarElement.style.width = `${porcentaje}%`;
+    // ✅ Control de onSnapshot listener
+    let pozoUnsubscribe = null;
+    function initPozoListener() {
+        if (pozoUnsubscribe) {
+            pozoUnsubscribe();
         }
-    });
+        const pozoDocRef = doc(db, "estadisticas_generales", "resumen_certamen");
+        pozoUnsubscribe = onSnapshot(pozoDocRef, (doc) => {
+            if (doc.exists()) {
+                const pozoActual = doc.data().pozo_total;
+                if(pozoTextElement) pozoTextElement.textContent = `$ ${pozoActual.toLocaleString('es-AR')}`;
+                const pozoObjetivo = 2000000;
+                const porcentaje = Math.min(100, (pozoActual / pozoObjetivo) * 100);
+                if(pozoBarElement) pozoBarElement.style.width = `${porcentaje}%`;
+            }
+        });
+    }
+    initPozoListener();
 
     // Iniciar carga de contenido
 
@@ -430,6 +445,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             balanceDisplay.style.display = 'none';
         }
     }
+
+    // ✅ LIMPIEZA: Desuscribirse de listeners cuando se cierre la página
+    window.addEventListener('beforeunload', () => {
+        console.log('🧹 Limpiando listeners...');
+        if (authUnsubscribe) {
+            authUnsubscribe();
+            console.log('✅ Auth listener limpiado');
+        }
+        if (pozoUnsubscribe) {
+            pozoUnsubscribe();
+            console.log('✅ Pozo listener limpiado');
+        }
+    }, { once: true });
 
     // Hacer funciones disponibles globalmente
     window.loadUserBalance = loadUserBalance;
