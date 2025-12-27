@@ -1,42 +1,117 @@
-# Guía para agentes de IA en VYT-MUSIC-ONLINE
+# VYT-MUSIC-ONLINE: Guía para Agentes de IA
 
-Este proyecto es una plataforma web para la gestión de un certamen de canto online. La estructura y los flujos principales están orientados a la administración de usuarios, inscripciones, pagos y visualización de información relevante.
+Plataforma web de certamen de canto online con inscripciones, votación y panel administrativo. Firebase + Vanilla JS con Tailwind CSS.
 
-## Arquitectura y componentes clave
-- **Archivos HTML**: Cada vista principal (admin, blog, inscripción, login, perfil, principal, pago) tiene su propio archivo HTML en la raíz.
-- **JS principal**: La lógica de la aplicación está distribuida en archivos JS en la raíz (`main.js`, `principal-dynamic.js`, etc.) y en `src/` para componentes reutilizables (`countdown.js`, `modal.js`, `provinces.js`).
-- **Estilos**: Los estilos están en archivos CSS separados por contexto (`admin-styles.css`, `home-styles.css`, `style.css`) y se usa Tailwind (`tailwind.config.js`).
-- **Backend Functions**: La carpeta `functions/` contiene lógica de backend para Firebase Functions, con su propio `package.json`.
-- **Integraciones**: Se utiliza Firebase para autenticación, base de datos y hosting. El archivo `firebase-config.js` contiene la configuración.
-- **Pagos**: La carpeta `pago/` contiene vistas para el flujo de pago exitoso, fallido y pendiente.
+## Arquitectura de Alto Nivel
 
-## Flujos y convenciones
-- **Inscripción**: Dos flujos diferenciados (`inscripcion_online.html` y `inscripcion_presencial.html`).
-- **Administración**: `admin.html` y `admin.js` gestionan el panel de administración.
-- **Pagos**: El estado del pago se refleja en las vistas de la carpeta `pago/`.
-- **Estilos y clases**: Se emplean clases de Tailwind y variables CSS personalizadas (ver `:root` en los estilos).
-- **Firebase Functions**: El backend se desarrolla en `functions/index.js`. Instalar dependencias con `npm install` dentro de la carpeta `functions/`.
+**Three-tier:** Frontend (HTML/JS) → Firebase Functions (Node.js) ↔ Firestore (DB)
 
-## Comandos y workflows
-- **Desarrollo local**: Usar `firebase serve` o `firebase emulators:start` para pruebas locales.
-- **Despliegue**: `firebase deploy` para publicar cambios.
-- **Instalación de dependencias**: Ejecutar `npm install` en la raíz y en `functions/` si se modifican dependencias.
+- **Hosting público:** Todo raíz (`.` en firebase.json) - incluye HTML, JS, CSS, assets
+- **Backend serverless:** `functions/` (Node.js 20, firebase-functions v6.4+)
+- **DB:** Firestore con rules en `firestore.rules` (usuario solo lee/escribe sus docs)
+- **Pagos:** Integración MercadoPago en backend (`functions/payments.js`)
 
-## Ejemplo de patrón
-- Para agregar una nueva vista, crear el HTML en la raíz y el JS asociado en la misma carpeta o en `src/` si es reutilizable.
-- Para lógica de backend, modificar o agregar funciones en `functions/index.js`.
+## Patrones de Código Críticos
 
-## Archivos clave
-- `firebase-config.js`: Configuración de Firebase.
-- `functions/index.js`: Lógica de backend.
-- `main.js`, `principal-dynamic.js`: Lógica principal de la web.
-- `src/`: Componentes JS reutilizables.
-- `pago/`: Vistas de pago.
+### Firebase Imports (Lado cliente)
+- **Versión mixta:** Firebase v8 en HTML (`<script>` tags), pero `main.js` usa v10+ (`gstatic.com/firebasejs/10.12.2`)
+- **Lazy loading en main.js:** Importa módulos dinámicamente con `import()` para optimización
+- **Configuración:** `firebase-config.js` exporta app, auth, db globales + init function
 
-## Notas
-- Mantener la coherencia en el uso de clases y estilos.
-- Seguir la estructura de carpetas para nuevas funcionalidades.
-- Revisar el README para información general.
+```javascript
+// Patrón: defer imports y cachear en variable
+const initializeFirebase = async () => {
+  if (firebaseImports) return firebaseImports;
+  const [auth, firestore] = await Promise.all([...]);
+  return firebaseImports = { auth, db, ... };
+};
+```
 
----
-¿Falta algún flujo, integración o convención importante? Indica detalles específicos para mejorar esta guía.
+### Frontend Auth
+- Archivos HTML distintos cargan Firebase v8 CDN + `firebase-config.js`
+- `onAuthStateChanged()` usado en `principal-dynamic.js` y `inscription-handler.js`
+- Auth listeners redirigen a login si no autenticado
+
+### Backend Functions
+- **Dos patrones:** `onRequest()` (HTTP público con CORS headers) y `onCall()` (requiere cliente SDK)
+- **Rutas:** `functions/index.js` es main, módulos especializados: `vyt-money.js`, `payments.js`, `perfiles-artistas.js`
+- **Validación:** `functions/input-validator.js` y `functions/rate-limiter.js` (comentado en production)
+- **Admin:** `admin.initializeApp()` needed; Firestore FieldValue.serverTimestamp() para auditoría
+
+### Firestore Structure
+```plaintext
+/users/{userId}          → Perfil usuario (privado)
+/artist_profiles/{id}    → Datos públicos del artista
+/certamenes_provinciales/{id} → Certámenes (lectura pública)
+/inscriptions/{id}       → Datos de inscripción (private)
+/system_config/pricing   → Precios de inscripción y VYT Money
+```
+
+**Rules:** isAdmin() helper checks custom claim `admin=true`
+
+## Componentes Reutilizables (src/)
+
+| Archivo | Propósito | Exporta |
+|---------|-----------|---------|
+| `countdown.js` | Timer visual para certamen | `initializeCountdown(date)` |
+| `modal.js` | UI modal genérico | `initializeModal()` |
+| `provinces.js` | Provincias Argentina | Data y helpers |
+| `zonas-argentina.js` | Zonas geográficas | `ZONAS_ARGENTINA`, `detectarRegion()` |
+| `certamen-workflow.js` | Estados/fases certamen | `CertamenWorkflow` class, `FASES_CERTAMEN` |
+| `notification-system.js` | Toast/alerts | `NotificationSystem` class |
+| `inscription-handler.js` | Lógica de inscripción | Event listeners, form submit |
+| `inscription-validator.js` | Validación de datos | `validateFormData()`, `validateEmail()` |
+
+Todos exportan con `export` ES6 pero se cargan en HTML vía `<script src="src/file.js"></script>` (sin `type=module`), así accesibles globalmente.
+
+## Flujos Clave
+
+### Inscripción
+1. Usuario llena `inscripcion-unificada.html` (carga `zonas-argentina.js`, `inscription-validator.js`)
+2. `inscription-handler.js` valida y crea doc en `/inscriptions/` + `/users/{uid}`
+3. Redirect → `pagar-inscripcion.html` (MercadoPago)
+4. Post-pago: `pago/inscripcion-exitosa.html` o `inscripcion-fallida.html`
+
+### Admin Panel
+- `admin.html` + `admin.js` (Firebase v8)
+- Admin users (custom claim `admin=true`) pueden CRUD certamenes, ver estadísticas
+- Backend: `functions/admin.js` con `isAdmin()` checks
+
+### Votación (VYT Money)
+- Usuario compra "VYT Money" via `comprar-vyt-money.html` → MercadoPago
+- `functions/vyt-money.js` maneja balance y transferencias
+- Firestore: `/user_vyt_money/{userId}` stores balance
+
+## Estilos
+
+- **Tailwind:** v4.1.13 (input.css, tailwind.config.js)
+- **Estilos custom CSS:** Variables en `:root` (primary-color, accent-color, bg-dark)
+- **Por contexto:** `admin-styles.css`, `home-styles.css`, `style.css`, `desktop-styles.css`
+- **CSS reusable:** `navigation-styles.css`, `gamification-styles.css` (en src/)
+
+## Deploy & CI/CD
+
+- **Comando:** `firebase deploy` (all), `firebase deploy --only functions`, `firebase deploy --only hosting`
+- **npm scripts:** `deploy:dev`, `deploy:prod` con `--project` flag (desarrollo/produccion)
+- **firebase.json:** CSP headers, security headers, rewrites (SPA support)
+- **Emulator:** `firebase emulators:start --only functions` (local dev)
+
+## Gotchas & Convenciones
+
+1. **Firebase SDK versioning:** Mezcla de v8 (HTML) y v10 (JS modules) → cuidado con imports
+2. **CORS:** Backend debe setear headers en onRequest functions
+3. **Relative paths:** Sub-carpeta `pago/` refiere `../firebase-config.js`
+4. **Admin auth:** `functions/index.js` requiere `admin.initializeApp()` antes de queries
+5. **Lazy loading:** `main.js` carga Firebase modules dinámicamente para performance
+6. **Auth persistence:** `setPersistence()` used en algunos flows
+7. **Global scope:** Componentes en `src/` accesibles globalmente (no module bundler)
+
+## Comandos Útiles
+
+```bash
+npm install                          # Root + functions/
+firebase serve                       # Local server (port 5000)
+firebase emulators:start --only functions # Backend local
+firebase deploy --project desarrollo # Dev environment
+firebase deploy --only functions     # Solo funciones
+```

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Crear Participante Test</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+    <style>
+        body { font-family: Arial; max-width: 600px; margin: 50px auto; padding: 20px; }
+        button { background: #3b82f6; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; }
+        .resultado { margin-top: 20px; padding: 15px; background: #f0f0f0; border-radius: 5px; }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        code { background: #fff; padding: 5px 10px; border: 1px solid #ddd; border-radius: 3px; }
+    </style>
+</head>
+<body>
+    <h1>➕ Crear Participante de Prueba</h1>
+    <button onclick="crearParticipante()">Crear Participante TEST</button>
+    <div id="resultado"></div>
+
+    <script>
+        // Inicializar Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+            authDomain: "vytonlineprueva.firebaseapp.com",
+            projectId: "vytonlineprueva",
+            storageBucket: "vytonlineprueva.firebasestorage.app",
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function crearParticipante() {
+            try {
+                const ahora = new Date();
+                const participanteId = 'test_' + ahora.getTime();
+
+                const participante = {
+                    nombre: 'TEST Participante ' + ahora.getTime(),
+                    email: 'test' + ahora.getTime() + '@vyt.com',
+                    cancion: 'Canción de Prueba',
+                    artista_original: 'Artista Original',
+                    estado: 'pendiente_revision',
+                    certamen_id: 'certamen_1',
+                    fecha_inscripcion: firebase.firestore.FieldValue.serverTimestamp(),
+                    pais: 'Argentina',
+                    provincia: 'Buenos Aires',
+                    ciudad: 'La Plata',
+                    edad: 25,
+                    url_video: 'https://youtube.com/watch?v=test',
+                    precio: 15000,
+                    created_at: firebase.firestore.FieldValue.serverTimestamp()
+                };
+
+                // Crear documento
+                const docRef = await db.collection('participantes_certamen').doc(participanteId).set(participante);
+
+                const resultDiv = document.getElementById('resultado');
+                resultDiv.className = 'resultado success';
+                resultDiv.innerHTML = `
+                    <h2>✅ ¡Participante Creado!</h2>
+                    <p><strong>ID:</strong> ${participanteId}</p>
+                    <p><strong>Nombre:</strong> ${participante.nombre}</p>
+                    <p><strong>Email:</strong> ${participante.email}</p>
+                    <p><strong>Estado:</strong> <code>pendiente_revision</code></p>
+                    <hr>
+                    <h3>Próximos pasos:</h3>
+                    <ol>
+                        <li>Vuelve a admin.html</li>
+                        <li>Recarga la página (F5)</li>
+                        <li>Deberías ver este participante en "Pendientes"</li>
+                        <li>Haz click en "✅ Aprobar + 💳 Pagar"</li>
+                    </ol>
+                    <p style="color: green; font-weight: bold;">ID para copiar: <code style="background: #fff; padding: 5px;">${participanteId}</code></p>
+                `;
+
+            } catch (error) {
+                const resultDiv = document.getElementById('resultado');
+                resultDiv.className = 'resultado error';
+                resultDiv.innerHTML = `<h2>❌ Error</h2><p>${error.message}</p>`;
+                console.error(error);
+            }
+        }
+    </script>
+</body>
+</html>
