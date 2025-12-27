@@ -11,17 +11,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Sistema de fondos dinámicos -->
-    <script src="src/dynamic-background.js"></script>
+    <script src="src/dynamic-background.js" defer></script>
     
-    <!--Start of Tawk.to Script-->
+    <!-- TAWK.TO DESHABILITADO - Causaba cuelgues graves -->
+    <!-- Para reactivar: descomentar bloque abajo -->
+    <!--
     <script type="text/javascript">
     var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    
-    // Callback cuando Tawk.to se carga
     Tawk_API.onLoad = function(){
-        console.log('Tawk.to widget cargado correctamente');
+        console.log('Tawk.to cargado');
     };
-    
     (function(){
     var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
     s1.async=true;
@@ -31,7 +30,7 @@
     s0.parentNode.insertBefore(s1,s0);
     })();
     </script>
-    <!--End of Tawk.to Script-->
+    -->
     
     <style>
         /* 🚨 TODO EL CSS INLINE - NO DEPENDE DE NADA EXTERNO */
@@ -403,15 +402,8 @@
         }
 
         function openTawkTo() {
-            // Intentar maximizar el widget de Tawk.to integrado
-            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
-                Tawk_API.maximize();
-            } else if (typeof Tawk_API !== 'undefined' && Tawk_API.showWidget) {
-                Tawk_API.showWidget();
-            } else {
-                // Fallback: abrir chat directo en nueva ventana
-                window.open('https://tawk.to/chat/68b5b0ec2ccfc9192268fd71/1j42rm7na', '_blank');
-            }
+            // TAWK.TO DESHABILITADO - Causaba cuelgues
+            alert('📞 Contacto: info@vytmusic.com\n📱 WhatsApp: +54 9 11 1234-5678');
             closeMenu();
         }
 
