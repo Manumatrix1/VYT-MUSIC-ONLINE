@@ -5,26 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VYT MUSIC - Crear Perfil de Artista</title>
     
-    <!--Start of Tawk.to Script-->
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    
-    // Callback cuando Tawk.to se carga
-    Tawk_API.onLoad = function(){
-        console.log('Tawk.to widget cargado correctamente');
-    };
-    
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    <!--End of Tawk.to Script-->
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -227,27 +207,27 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Email *</label>
-                            <input type="email" name="email" class="form-input" placeholder="tu@email.com" required>
+                            <input type="email" name="email" class="form-input" placeholder="tu@email.com">
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">WhatsApp *</label>
-                            <input type="tel" name="whatsapp" class="form-input" placeholder="+54 9 11 1234-5678" required>
+                            <input type="tel" name="whatsapp" class="form-input" placeholder="+54 9 11 1234-5678">
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Nombre *</label>
-                            <input type="text" name="nombre" class="form-input" placeholder="Tu nombre" required>
+                            <input type="text" name="nombre" class="form-input" placeholder="Tu nombre">
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Apellido *</label>
-                            <input type="text" name="apellido" class="form-input" placeholder="Tu apellido" required>
+                            <input type="text" name="apellido" class="form-input" placeholder="Tu apellido">
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Fecha de Nacimiento *</label>
-                            <input type="date" name="fecha_nacimiento" class="form-input" required>
+                            <input type="date" name="fecha_nacimiento" class="form-input">
                         </div>
                         
                         <div class="form-group">
@@ -271,7 +251,7 @@
                     
                     <div class="form-group">
                         <label class="block text-white font-medium mb-2">Nombre Artístico *</label>
-                        <input type="text" name="nombre_artistico" class="form-input" placeholder="Tu nombre artístico" required>
+                        <input type="text" name="nombre_artistico" class="form-input" placeholder="Tu nombre artístico">
                     </div>
                     
                     <div class="form-group">
@@ -458,12 +438,15 @@
             }
         });
 
-        // Cerrar menú al hacer clic fuera
-        document.getElementById('menuOverlay').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeMenu();
-            }
-        });
+        // Cerrar menú al hacer clic fuera (solo si el elemento existe)
+        const menuOverlayElement = document.getElementById('menuOverlay');
+        if (menuOverlayElement) {
+            menuOverlayElement.addEventListener('click', function(event) {
+                if (event.target === this) {
+                    closeMenu();
+                }
+            });
+        }
     </script>
     
     <script>
@@ -471,6 +454,43 @@
         let currentStep = 1;
 
         function nextStep(step) {
+            // Validar paso actual antes de continuar
+            if (currentStep === 1 && step === 2) {
+                // Validar paso 1: Datos Básicos
+                const email = document.querySelector('input[name="email"]').value;
+                const whatsapp = document.querySelector('input[name="whatsapp"]').value;
+                const nombre = document.querySelector('input[name="nombre"]').value;
+                const apellido = document.querySelector('input[name="apellido"]').value;
+                
+                if (!email || !whatsapp || !nombre || !apellido) {
+                    alert('Por favor, completa todos los campos obligatorios del Paso 1');
+                    return;
+                }
+                
+                // Validar formato de email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert('Por favor, ingresa un email válido');
+                    return;
+                }
+            }
+            
+            if (currentStep === 2 && step === 3) {
+                // Validar paso 2: Perfil Artístico
+                const nombreArtistico = document.querySelector('input[name="nombre_artistico"]').value;
+                const generosSeleccionados = document.querySelectorAll('input[name="generos[]"]:checked');
+                
+                if (!nombreArtistico) {
+                    alert('Por favor, ingresa tu nombre artístico');
+                    return;
+                }
+                
+                if (generosSeleccionados.length === 0) {
+                    alert('Por favor, selecciona al menos un género musical');
+                    return;
+                }
+            }
+            
             document.getElementById(`step-${currentStep}`).classList.add('hidden');
             document.getElementById(`step-${step}`).classList.remove('hidden');
             
@@ -805,6 +825,16 @@
             
             // Guardar datos del artista en localStorage para el perfil
             localStorage.setItem('artistData', JSON.stringify(artistData));
+            // 🔥 TAMBIÉN guardar como persistente para que perfil-artista.html lo encuentre
+            localStorage.setItem('artistData_persistent', JSON.stringify(artistData));
+            // Guardar email para búsqueda en Firestore
+            localStorage.setItem('userEmail', artistData.email);
+            
+            console.log('💾 Datos guardados en localStorage:', {
+                email: artistData.email,
+                nombre: artistData.nombreArtistico,
+                tieneFoto: !!artistData.foto_perfil
+            });
             
             // Redirigir después de 3 segundos
             setTimeout(() => {
@@ -816,35 +846,77 @@
         document.getElementById('artist-profile-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Validar géneros seleccionados
-            const selectedGenres = document.querySelectorAll('input[name="generos[]"]:checked');
-            if (selectedGenres.length === 0) {
-                alert('Por favor, selecciona al menos un género musical.');
+            console.log('📝 Formulario enviado, validando datos...');
+            
+            // VALIDACIÓN COMPLETA ANTES DE ENVIAR
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const whatsapp = document.querySelector('input[name="whatsapp"]').value.trim();
+            const nombre = document.querySelector('input[name="nombre"]').value.trim();
+            const apellido = document.querySelector('input[name="apellido"]').value.trim();
+            const nombreArtistico = document.querySelector('input[name="nombre_artistico"]').value.trim();
+            const provincia = document.querySelector('select[name="provincia"]').value;
+            const ciudad = document.querySelector('select[name="ciudad"]').value;
+            
+            // Validar datos básicos
+            if (!email || !whatsapp || !nombre || !apellido) {
+                alert('❌ Por favor, completa todos los datos básicos (Paso 1)');
+                nextStep(1);
+                return;
+            }
+            
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('❌ Por favor, ingresa un email válido');
+                nextStep(1);
+                return;
+            }
+            
+            // Validar nombre artístico
+            if (!nombreArtistico) {
+                alert('❌ Por favor, ingresa tu nombre artístico (Paso 2)');
                 nextStep(2);
                 return;
             }
+            
+            // Validar géneros seleccionados
+            const selectedGenres = document.querySelectorAll('input[name="generos[]"]:checked');
+            if (selectedGenres.length === 0) {
+                alert('❌ Por favor, selecciona al menos un género musical (Paso 2)');
+                nextStep(2);
+                return;
+            }
+            
+            // Validar ubicación
+            if (!provincia || !ciudad) {
+                alert('❌ Por favor, selecciona tu provincia y ciudad (Paso 3)');
+                nextStep(3);
+                return;
+            }
+            
+            console.log('✅ Validación pasada, procesando datos...');
             
             // Recopilar datos del formulario
             const formData = new FormData(this);
             const artistData = {};
             
             // Datos básicos
-            artistData.email = formData.get('email');
-            artistData.whatsapp = formData.get('whatsapp');
-            artistData.nombre = formData.get('nombre');
-            artistData.apellido = formData.get('apellido');
-            artistData.fechaNacimiento = formData.get('fecha_nacimiento');
-            artistData.dni = formData.get('dni');
+            artistData.email = email;
+            artistData.whatsapp = whatsapp;
+            artistData.nombre = nombre;
+            artistData.apellido = apellido;
+            artistData.fechaNacimiento = formData.get('fecha_nacimiento') || '';
+            artistData.dni = formData.get('dni') || '';
             
             // Perfil artístico
-            artistData.nombreArtistico = formData.get('nombre_artistico');
+            artistData.nombreArtistico = nombreArtistico;
             artistData.generos = Array.from(selectedGenres).map(cb => cb.value);
-            artistData.biografia = formData.get('biografia');
+            artistData.biografia = formData.get('biografia') || '';
             
             // Ubicación
-            artistData.provincia = formData.get('provincia');
-            artistData.ciudad = formData.get('ciudad');
-            artistData.codigoPostal = formData.get('codigo_postal');
+            artistData.provincia = provincia;
+            artistData.ciudad = ciudad;
+            artistData.codigoPostal = formData.get('codigo_postal') || '';
             
             // Datos adicionales
             artistData.fechaCreacion = new Date().toISOString();
@@ -944,8 +1016,11 @@
                 if (typeof db !== 'undefined' && db) {
                     try {
                         // Guardar en Firestore (colección correcta para trigger de email)
-                        await db.collection('artist_profiles').add(artistData);
-                        console.log('✅ Perfil guardado en Firebase (artist_profiles) con foto:', artistData.foto_perfil);
+                        const docRef = await db.collection('artist_profiles').add(artistData);
+                        artistData.firestoreId = docRef.id; // Guardar el ID del documento
+                        console.log('✅ Perfil guardado en Firebase (artist_profiles) con ID:', docRef.id);
+                        console.log('📧 Email guardado:', artistData.email);
+                        console.log('📸 Foto URL:', artistData.foto_perfil);
                     } catch (firebaseError) {
                         console.warn('⚠️ No se pudo guardar en Firebase, continuando localmente:', firebaseError);
                     }

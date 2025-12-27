@@ -572,17 +572,54 @@
             // Cargar fondo dinámico
             loadDynamicBackground();
             
+            // 🔥 PRIMERO: Intentar cargar desde localStorage SIEMPRE (es más rápido)
+            const persistentData = localStorage.getItem('artistData_persistent');
+            const tempData = localStorage.getItem('artistData');
+            
+            if (persistentData || tempData) {
+                try {
+                    artistaData = JSON.parse(persistentData || tempData);
+                    console.log('✅ Datos encontrados en localStorage:', {
+                        nombre: artistaData.nombreArtistico,
+                        email: artistaData.email,
+                        tieneFoto: !!(artistaData.foto_perfil || artistaData.fotoURL)
+                    });
+                    
+                    // Actualizar interfaz inmediatamente
+                    updateProfileDisplay();
+                    
+                    // Guardar como persistente si solo estaba en temporal
+                    if (!persistentData && tempData) {
+                        localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
+                        console.log('💾 Datos promovidos a persistentes');
+                    }
+                    
+                    // Guardar email si no existe
+                    if (artistaData.email && !localStorage.getItem('userEmail')) {
+                        localStorage.setItem('userEmail', artistaData.email);
+                    }
+                    
+                    return; // Salir temprano - datos cargados exitosamente
+                    
+                } catch (error) {
+                    console.error('❌ Error parseando datos locales:', error);
+                }
+            }
+            
+            // 🔥 SEGUNDO: Si no hay datos locales, intentar Firebase
             try {
-                // Obtener email del artista desde localStorage
                 const userEmail = localStorage.getItem('userEmail');
                 
                 if (!userEmail) {
-                    console.error('❌ No se encontró email del usuario');
-                    showErrorMessage('No se pudo identificar tu perfil. Por favor inicia sesión nuevamente.');
+                    console.warn('⚠️ No hay email ni datos locales');
+                    showErrorMessage('No se encontró tu perfil. Por favor, crea tu perfil primero.');
+                    setTimeout(() => {
+                        window.location.href = 'crear-perfil-artista.html';
+                    }, 2000);
                     return;
                 }
                 
-                console.log('📧 Buscando perfil con email:', userEmail);
+                console.log('📧 Buscando perfil en Firebase con email:', userEmail);
                 
                 // Buscar perfil en Firestore por email
                 if (!db) db = firebase.firestore();
@@ -593,8 +630,8 @@
                     .get();
                 
                 if (querySnapshot.empty) {
-                    console.warn('⚠️ No se encontró perfil en Firebase, usando datos locales');
-                    loadProfileFromLocalStorage();
+                    console.warn('⚠️ No se encontró perfil en Firebase');
+                    showErrorMessage('No se encontró tu perfil en la base de datos.');
                     return;
                 }
                 
@@ -602,28 +639,19 @@
                 const doc = querySnapshot.docs[0];
                 const firestoreData = doc.data();
                 artistaData = firestoreData;
-                
-                // Guardar ID del documento para actualizaciones futuras
                 artistaData.firestoreId = doc.id;
                 
-                console.log('✅ Perfil cargado desde Firestore:', {
-                    nombre: artistaData.nombreArtistico,
-                    tieneFoto: !!artistaData.foto_perfil,
-                    tieneVideo: !!artistaData.video_url,
-                    ciudad: artistaData.ciudad,
-                    documentId: artistaData.firestoreId
-                });
+                console.log('✅ Perfil cargado desde Firestore');
                 
-                // Actualizar localStorage con datos de Firestore
+                // Guardar en localStorage para próximas visitas
                 localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
                 
                 // Actualizar interfaz
                 updateProfileDisplay();
                 
             } catch (error) {
-                console.error('❌ Error cargando perfil desde Firebase:', error);
-                console.log('⚠️ Intentando cargar desde localStorage como respaldo');
-                loadProfileFromLocalStorage();
+                console.error('❌ Error cargando perfil:', error);
+                showErrorMessage('Error al cargar tu perfil. Por favor, intenta más tarde.');
             }
         }
         

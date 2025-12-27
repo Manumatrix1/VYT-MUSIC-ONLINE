@@ -38,14 +38,53 @@ const recibirNotificacionPago = functions.https.onRequest(async (req, res) => {
       if (payment && payment.status === 'approved') {
         const participantId = payment.external_reference;
         if (participantId) {
-          const participantRef = admin.firestore().collection('participantes_online').doc(participantId);
-          await participantRef.update({
-            pago_confirmado: true,
-            fecha_pago: new Date().toISOString(),
-            monto_pago: payment.transaction_amount,
-            payment_id: payment.id
-          });
-          console.log(`Payment confirmed for participant: ${participantId}`);
+          console.log(`✅ Pago APROBADO para participante: ${participantId}`);
+          
+          // ⭐ ACTUALIZAR ESTADO A "PARTICIPANDO" (TAREA 4)
+          const participantRef = admin.firestore().collection('participantes_certamen').doc(participantId);
+          const participantDoc = await participantRef.get();
+          
+          if (participantDoc.exists) {
+            await participantRef.update({
+              estado: 'participando', // ⭐ Cambio clave: de aprobado_pendiente_pago a participando
+              pago_confirmado: true,
+              pago_aprobado: true,
+              fecha_pago: new Date().toISOString(),
+              monto_pago: payment.transaction_amount,
+              payment_id: payment.id,
+              updated_at: admin.firestore.FieldValue.serverTimestamp()
+            });
+
+            // Actualizar transacción de pago
+            await admin.firestore()
+              .collection('payment_transactions')
+              .where('participante_id', '==', participantId)
+              .where('status', '==', 'pending')
+              .get()
+              .then(snapshot => {
+                snapshot.forEach(doc => {
+                  doc.ref.update({
+                    status: 'approved',
+                    payment_id: payment.id,
+                    updated_at: admin.firestore.FieldValue.serverTimestamp()
+                  });
+                });
+              });
+
+            // Actualizar pozo del certamen
+            const certamenId = participantDoc.data().certamen_id;
+            if (certamenId) {
+              const certamenRef = admin.firestore().collection('certamenes').doc(certamenId);
+              await certamenRef.update({
+                pozo_actual: admin.firestore.FieldValue.increment(4500), // 30% de 15000
+                participantes_pagados: admin.firestore.FieldValue.increment(1)
+              });
+            }
+
+            console.log(`💰 Pozo actualizado y participante ahora está PARTICIPANDO`);
+          } else {
+            console.error(`Participante no encontrado: ${participantId}`);
+          }
         } else {
           console.error("Error: external_reference (participantId) not found in payment notification.");
         }

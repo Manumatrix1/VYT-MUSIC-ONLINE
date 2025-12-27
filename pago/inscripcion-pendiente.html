@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Pendiente - VYT MUSIC</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pending-container {
+            text-align: center;
+            max-width: 500px;
+            padding: 40px;
+        }
+
+        .pending-icon {
+            width: 100px;
+            height: 100px;
+            background: rgba(251, 191, 36, 0.2);
+            border: 2px solid #fbbf24;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 50px;
+            margin: 0 auto 30px;
+            color: #fbbf24;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+            color: #fbbf24;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #cbd5e1;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .info-box {
+            background: rgba(251, 191, 36, 0.1);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            color: #fde047;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="pending-container">
+        <div class="pending-icon">
+            <i class="fas fa-hourglass-half"></i>
+        </div>
+
+        <h1>Pago Pendiente</h1>
+        <p>Tu pago está siendo procesado. Por favor, no cierres esta página.</p>
+
+        <div class="info-box">
+            <strong>Confirmación:</strong><br>
+            Recibirás un email cuando tu pago sea confirmado. Esto puede tomar entre 1 a 24 horas.
+        </div>
+
+        <p style="color: #60a5fa; font-size: 0.95rem;">
+            <i class="fas fa-info-circle"></i> Mientras tanto, puedes revisar tu perfil.
+        </p>
+
+        <button class="btn" onclick="window.location.href='../perfil-artista.html'">
+            Mi Perfil
+        </button>
+    </div>
+</body>
+</html>

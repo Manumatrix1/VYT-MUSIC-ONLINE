@@ -393,6 +393,160 @@ try {
 
 console.log('🚀 VYT Music Online - Core functions ready');
 
+// ===== CLOUD FUNCTION PARA PAGO DE INSCRIPCIÓN - TAREA 4 =====
+
+/**
+ * Crear preferencia de pago en MercadoPago para inscripción
+ * Llamada desde: pagar-inscripcion.html
+ */
+exports.crearPagoInscripcion = functions.https.onCall(async (data, context) => {
+  try {
+    // Verificar autenticación
+    if (!context.auth) {
+      throw new functions.https.HttpsError(
+        'unauthenticated',
+        'El usuario debe estar autenticado para realizar un pago'
+      );
+    }
+
+    const { participante_id, certamen_id } = data;
+
+    if (!participante_id) {
+      throw new functions.https.HttpsError(
+        'invalid-argument',
+        'participante_id es requerido'
+      );
+    }
+
+    console.log(`💳 Creando pago para participante: ${participante_id}`);
+
+    // Obtener datos del participante
+    const participanteDoc = await db.collection('participantes_certamen').doc(participante_id).get();
+    
+    if (!participanteDoc.exists) {
+      throw new functions.https.HttpsError(
+        'not-found',
+        'Participante no encontrado'
+      );
+    }
+
+    const participanteData = participanteDoc.data();
+
+    // Verificar estado
+    if (participanteData.estado !== 'aprobado_pendiente_pago') {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'El participante no está en estado válido para pagar. Estado actual: ' + participanteData.estado
+      );
+    }
+
+    // Obtener datos del certamen
+    const certamenDoc = await db.collection('certamenes').doc(certamen_id || participanteData.certamen_id).get();
+    
+    if (!certamenDoc.exists) {
+      throw new functions.https.HttpsError(
+        'not-found',
+        'Certamen no encontrado'
+      );
+    }
+
+    const certamenData = certamenDoc.data();
+    const monto = certamenData.precio || 15000; // Precio del certamen o por defecto
+
+    console.log(`💰 Monto a cobrar: $${monto} ARS`);
+
+    // Crear preferencia de MercadoPago
+    try {
+      const { MercadoPagoConfig, Preference } = require('mercadopago');
+      const mercadopagoToken = functions.config().mercadopago?.token || process.env.MERCADOPAGO_TOKEN;
+      
+      if (!mercadopagoToken) {
+        throw new Error('Token de MercadoPago no configurado');
+      }
+
+      const client = new MercadoPagoConfig({
+        accessToken: mercadopagoToken,
+        options: { timeout: 5000 }
+      });
+
+      const preference = new Preference(client);
+
+      const preferenceData = await preference.create({
+        body: {
+          items: [
+            {
+              title: `Inscripción - ${certamenData.nombre || 'VYT Music'}`,
+              description: `${participanteData.nombre_artistico} - ${participanteData.nombre_cancion}`,
+              quantity: 1,
+              unit_price: monto,
+              currency_id: 'ARS'
+            }
+          ],
+          payer: {
+            name: participanteData.nombre_artistico,
+            email: participanteData.email
+          },
+          back_urls: {
+            success: `${process.env.SITE_URL || 'https://vytonlineprueva.web.app'}/pago/inscripcion-exitosa.html`,
+            failure: `${process.env.SITE_URL || 'https://vytonlineprueva.web.app'}/pago/inscripcion-fallida.html`,
+            pending: `${process.env.SITE_URL || 'https://vytonlineprueva.web.app'}/pago/inscripcion-pendiente.html`
+          },
+          external_reference: participante_id, // 🔑 IMPORTANTE: Para el webhook
+          notification_url: `${functions.config().site?.webhook_url || 'https://us-central1-vyt-music-online.cloudfunctions.net/recibirNotificacionPago'}`,
+          statement_descriptor: 'VYT MUSIC'
+        }
+      });
+
+      console.log(`✅ Preferencia creada en MercadoPago: ${preferenceData.id}`);
+
+      // Guardar registro de transacción en Firestore
+      await db.collection('payment_transactions').add({
+        participante_id: participante_id,
+        certamen_id: certamen_id || participanteData.certamen_id,
+        user_id: context.auth.uid,
+        monto: monto,
+        currency: 'ARS',
+        tipo: 'inscripcion_certamen',
+        status: 'pending',
+        mercadopago_preference_id: preferenceData.id,
+        nombre_artistico: participanteData.nombre_artistico,
+        email: participanteData.email,
+        created_at: admin.firestore.FieldValue.serverTimestamp(),
+        updated_at: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      return {
+        success: true,
+        initPoint: preferenceData.init_point, // URL para ir a MercadoPago
+        preferenceId: preferenceData.id,
+        monto: monto,
+        message: 'Preferencia de pago creada exitosamente'
+      };
+
+    } catch (mpError) {
+      console.error('❌ Error de MercadoPago:', mpError);
+      throw new functions.https.HttpsError(
+        'internal',
+        'Error creando preferencia de pago: ' + mpError.message
+      );
+    }
+
+  } catch (error) {
+    console.error('❌ Error en crearPagoInscripcion:', error);
+    
+    // Si ya es un HttpsError, re-lanzarlo
+    if (error.code && error.code.startsWith('auth/') || error.code && error.code.includes('unauthenticated')) {
+      throw error;
+    }
+    
+    // Convertir otros errores
+    throw new functions.https.HttpsError(
+      'internal',
+      error.message || 'Error creando preferencia de pago'
+    );
+  }
+});
+
 // ===== EMAIL TRIGGERS AUTOMÁTICOS (SOLO LOS BÁSICOS) =====
 try {
   // Solo cargar el trigger más importante para evitar timeouts

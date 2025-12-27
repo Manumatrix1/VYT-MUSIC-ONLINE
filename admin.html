@@ -34,6 +34,7 @@
         window.firestoreQuery = {
             collection: (db, path) => db.collection(path),
             getDocs: (ref) => ref.get(),
+            getDoc: (ref) => ref.get(),
             doc: (db, path) => db.doc(path),
             setDoc: (ref, data) => ref.set(data),
             updateDoc: (ref, data) => ref.update(data),
@@ -2075,7 +2076,7 @@
                     ${videoLink ? `<p class="text-sm text-blue-600 mb-3"><a href="${videoLink}" target="_blank">🎥 Ver video</a></p>` : ''}
                     <div class="flex gap-2">
                         ${!isApproved ? `
-                            <button onclick="aprobarParticipanteReal('${id}', '${collection}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">✅ Aprobar</button>
+                            <button onclick="aprobarYEnviarAPagar('${id}', '${collection}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm" title="Aprobar y enviar email para pagar">✅ Aprobar + 💳 Pagar</button>
                             <button onclick="rechazarParticipanteReal('${id}', '${collection}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">❌ Rechazar</button>
                         ` : `
                             <button onclick="editarParticipanteReal('${id}', '${collection}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">📝 Editar</button>
@@ -2117,6 +2118,68 @@
             } catch (error) {
                 console.error('❌ Error aprobando participante:', error);
                 alert('Error al aprobar participante: ' + error.message);
+            }
+        };
+
+        // ⭐ NUEVA FUNCIÓN - TAREA 4: Aprobar y enviar a pagar
+        window.aprobarYEnviarAPagar = async function(participante_id, collection) {
+            if (!confirm('¿Estás seguro de que quieres aprobar y enviar a pagar?\n\nEl participante recibirá un email con el link de pago.')) {
+                return;
+            }
+
+            if (!db || !window.firestoreQuery) {
+                alert('Firebase no disponible');
+                return;
+            }
+
+            try {
+                const { doc, updateDoc, getDoc } = window.firestoreQuery;
+                
+                console.log(`🔄 Aprobando y enviando a pagar participante: ${participante_id}`);
+                
+                // 1. Cambiar estado a "aprobado_pendiente_pago"
+                await updateDoc(doc(db, collection, participante_id), {
+                    estado: 'aprobado_pendiente_pago',
+                    fecha_aprobacion: new Date(),
+                    fecha_envio_pago: new Date()
+                });
+                
+                console.log(`✅ Estado actualizado a aprobado_pendiente_pago`);
+                
+                // 2. Obtener datos del participante para enviar email
+                const docRef = doc(db, collection, participante_id);
+                const docSnap = await getDoc(docRef);
+                const participanteData = docSnap.data();
+                
+                if (participanteData && participanteData.email) {
+                    // 3. Crear link de pago
+                    const linkPago = `https://vytonlineprueva.web.app/pagar-inscripcion.html?pid=${participante_id}`;
+                    
+                    // 4. Mostrar info al admin
+                    console.log(`📧 Link de pago: ${linkPago}`);
+                    console.log(`📧 Enviando a: ${participanteData.email}`);
+                    
+                    // Mostrar instrucciones al admin
+                    alert(`✅ Participante aprobado!\n\n📧 Link de pago:\n${linkPago}\n\n👤 Artista: ${participanteData.nombre_artistico || 'Sin nombre'}\n📧 Email: ${participanteData.email}\n\nTienes 48 horas para completar el pago.`);
+                } else {
+                    alert('✅ Participante aprobado para pago, pero no se encontró email para notificación.');
+                }
+                
+                // 5. Recargar datos
+                if (collection === 'participantes_online') {
+                    loadRealParticipantesOnline();
+                } else {
+                    loadRealParticipantesPresenciales();
+                }
+                
+                // Actualizar estadísticas
+                loadRealStats();
+                
+                console.log(`✅ Proceso completado exitosamente`);
+                
+            } catch (error) {
+                console.error('❌ Error aprobando y enviando a pagar:', error);
+                alert('Error: ' + error.message);
             }
         };
 
