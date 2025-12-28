@@ -13,25 +13,6 @@
     <!-- Sistema de fondos dinámicos -->
     <script src="src/dynamic-background.js" defer></script>
     
-    <!-- TAWK.TO DESHABILITADO - Causaba cuelgues graves -->
-    <!-- Para reactivar: descomentar bloque abajo -->
-    <!--
-    <script type="text/javascript">
-    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
-    Tawk_API.onLoad = function(){
-        console.log('Tawk.to cargado');
-    };
-    (function(){
-    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
-    s1.async=true;
-    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
-    s1.charset='UTF-8';
-    s1.setAttribute('crossorigin','*');
-    s0.parentNode.insertBefore(s1,s0);
-    })();
-    </script>
-    -->
-    
     <style>
         /* 🚨 TODO EL CSS INLINE - NO DEPENDE DE NADA EXTERNO */
         body {
@@ -352,10 +333,7 @@
                 <span class="menu-icon">🏠</span>
                 <span>Inicio</span>
             </a>
-            <button class="menu-item" onclick="openTawkTo()">
-                <span class="menu-icon">💬</span>
-                <span>Contacto</span>
-            </button>
+
         </div>
     </div>
 
@@ -401,11 +379,7 @@
             closeMenu();
         }
 
-        function openTawkTo() {
-            // TAWK.TO DESHABILITADO - Causaba cuelgues
-            alert('📞 Contacto: info@vytmusic.com\n📱 WhatsApp: +54 9 11 1234-5678');
-            closeMenu();
-        }
+
 
         // Cerrar menú con tecla ESC
         document.addEventListener('keydown', function(event) {

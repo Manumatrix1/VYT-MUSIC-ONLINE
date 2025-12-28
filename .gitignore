@@ -1,3 +1,11 @@
+# Documentación y backups (no necesarios en producción)
+DOCS_Y_BACKUPS/
+*.md
+*backup*.html
+test-*.html
+debug-*.html
+analisis-*.html
+
 # Logs
 logs
 *.log

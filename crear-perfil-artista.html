@@ -418,18 +418,7 @@
             console.log('🔼 Menú cerrado');
         }
 
-        function openTawkTo() {
-            // Intentar maximizar el widget de Tawk.to integrado
-            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
-                Tawk_API.maximize();
-            } else if (typeof Tawk_API !== 'undefined' && Tawk_API.showWidget) {
-                Tawk_API.showWidget();
-            } else {
-                // Fallback: abrir chat directo en nueva ventana
-                window.open('https://tawk.to/chat/68b5b0ec2ccfc9192268fd71/1j42rm7na', '_blank');
-            }
-            closeMenu();
-        }
+
 
         // Cerrar menú con tecla ESC
         document.addEventListener('keydown', function(event) {
@@ -1280,25 +1269,7 @@
                 🏠 Inicio
             </button>
             
-            <button class="menu-item" onclick="openTawkTo()" style="
-                display: flex;
-                align-items: center;
-                gap: 12px;
-                padding: 16px 20px;
-                margin-bottom: 8px;
-                background: rgba(255, 255, 255, 0.1);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 12px;
-                color: white;
-                text-decoration: none;
-                transition: all 0.3s ease;
-                width: 100%;
-                text-align: left;
-                cursor: pointer;
-                font-size: 16px;
-            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-                💬 Contacto
-            </button>
+
         </div>
     </div>
 

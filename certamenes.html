@@ -392,10 +392,7 @@
                 <span class="menu-icon">🏠</span>
                 <span>Inicio</span>
             </a>
-            <button class="menu-item" onclick="openTawkTo()">
-                <span class="menu-icon">💬</span>
-                <span>Contacto</span>
-            </button>
+
         </div>
     </div>
 
@@ -426,18 +423,7 @@
             console.log('🔼 Menú cerrado');
         }
 
-        function openTawkTo() {
-            // Intentar maximizar el widget de Tawk.to integrado
-            if (typeof Tawk_API !== 'undefined' && Tawk_API.maximize) {
-                Tawk_API.maximize();
-            } else if (typeof Tawk_API !== 'undefined' && Tawk_API.showWidget) {
-                Tawk_API.showWidget();
-            } else {
-                // Fallback: abrir chat directo en nueva ventana
-                window.open('https://tawk.to/chat/68b5b0ec2ccfc9192268fd71/1j42rm7na', '_blank');
-            }
-            closeMenu();
-        }
+
 
         // Cerrar menú con tecla ESC
         document.addEventListener('keydown', function(event) {
