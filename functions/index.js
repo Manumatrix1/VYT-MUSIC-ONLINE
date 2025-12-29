@@ -391,6 +391,25 @@ try {
   console.log('🔄 Continuing with basic functions only');
 }
 
+// ===== FUNCIONES VYT-MONEY COMPLETAS =====
+try {
+  const vytMoneyFunctions = require('./vyt-money');
+  
+  // Exportar funciones de votación y balance
+  exports.voteWithVYTMoney = vytMoneyFunctions.voteWithVYTMoney;
+  exports.getVYTMoneyBalance = vytMoneyFunctions.getVYTMoneyBalance;
+  exports.configureVYTMoney = vytMoneyFunctions.configureVYTMoney;
+  exports.getPrizePoolStatus = vytMoneyFunctions.getPrizePoolStatus;
+  exports.contributeToPrizePool = vytMoneyFunctions.contributeToPrizePool;
+  exports.configurePrizePool = vytMoneyFunctions.configurePrizePool;
+  exports.getPrizePoolLeaderboard = vytMoneyFunctions.getPrizePoolLeaderboard;
+  
+  console.log('✅ VYT Money system functions loaded successfully');
+} catch (error) {
+  console.error('⚠️ Error loading VYT Money functions:', error.message);
+  console.log('🔄 Continuing without VYT Money system');
+}
+
 console.log('🚀 VYT Music Online - Core functions ready');
 
 // ===== CLOUD FUNCTION PARA PAGO DE INSCRIPCIÓN - TAREA 4 =====

@@ -45,15 +45,33 @@ const recibirNotificacionPago = functions.https.onRequest(async (req, res) => {
           const participantDoc = await participantRef.get();
           
           if (participantDoc.exists) {
+            const participantData = participantDoc.data();
+            
             await participantRef.update({
-              estado: 'participando', // ⭐ Cambio clave: de aprobado_pendiente_pago a participando
+              estado: 'pago_confirmado', // ⭐ Actualizado para el nuevo flujo
               pago_confirmado: true,
               pago_aprobado: true,
               fecha_pago: new Date().toISOString(),
               monto_pago: payment.transaction_amount,
               payment_id: payment.id,
+              notificado_pago: false, // n8n lo detectará y enviará WhatsApp
               updated_at: admin.firestore.FieldValue.serverTimestamp()
             });
+
+            // ⭐ NUEVO: Agregar a cola de YouTube para subida automática
+            await admin.firestore().collection('youtube_upload_queue').add({
+              participante_id: participantId,
+              nombre_artista: participantData.nombreArtista || participantData.nombre_artista,
+              video_link: participantData.video_link || participantData.videoURL,
+              whatsapp: participantData.whatsapp || '',
+              email: participantData.userEmail || participantData.email,
+              created_at: admin.firestore.FieldValue.serverTimestamp(),
+              status: 'pending',
+              retries: 0
+            });
+
+            console.log(`💰 Pago confirmado - Video en cola para YouTube`);
+            console.log(`🎥 Participante: ${participantData.nombreArtista || participantData.nombre_artista}`);
 
             // Actualizar transacción de pago
             await admin.firestore()
@@ -63,13 +81,15 @@ const recibirNotificacionPago = functions.https.onRequest(async (req, res) => {
               .limit(10)  // ✅ LÍMITE AÑADIDO - máx 10 transacciones pendientes
               .get()
               .then(snapshot => {
+                const batch = admin.firestore().batch();
                 snapshot.forEach(doc => {
-                  doc.ref.update({
+                  batch.update(doc.ref, {
                     status: 'approved',
                     payment_id: payment.id,
                     updated_at: admin.firestore.FieldValue.serverTimestamp()
                   });
                 });
+                return batch.commit();
               });
 
             // Actualizar pozo del certamen
@@ -379,7 +399,7 @@ const createVYTMoneyPayment = functions.https.onCall(async (data, context) => {
     // Guardar transacción pendiente
     await admin.firestore().collection('vyt_money_transactions').add({
       user_id: user_id,
-      cantidad_vyt_money: cantidad_vyt_money,
+      cantidad_vyt_money: cantidad,
       precio_total: precio_total,
       moneda: config.moneda,
       preference_id: result.id,

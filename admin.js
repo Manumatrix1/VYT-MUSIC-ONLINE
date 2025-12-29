@@ -1387,11 +1387,29 @@ document.addEventListener('DOMContentLoaded', () => {
             if (e.target.closest('.approve-btn')) {
                 console.log('Aprobando participante:', participantId, modalidad);
                 
-                // Simply update Firestore - the trigger will handle the email automatically
-                await updateDoc(doc(db, collectionName, participantId), { aprobado: true });
-                console.log('Participante aprobado - el email se enviará automáticamente');
+                // Obtener datos del participante
+                const participantRef = doc(db, collectionName, participantId);
+                const participantDoc = await getDoc(participantRef);
                 
-                showNotification('Participante aprobado. Email será enviado automáticamente.', 'success');
+                if (!participantDoc.exists()) {
+                    showNotification('Participante no encontrado', 'error');
+                    return;
+                }
+                
+                const data = participantDoc.data();
+                
+                // Actualizar Firestore con nuevo estado
+                await updateDoc(participantRef, { 
+                    aprobado: true,
+                    estado: 'aprobado',
+                    fecha_aprobacion: serverTimestamp(),
+                    notificado_aprobacion: false // n8n lo detectará y enviará WhatsApp
+                });
+                
+                console.log(`✅ Aprobado: ${data.nombreArtista || data.nombre_artista}`);
+                console.log('🔔 Notificación WhatsApp se enviará automáticamente (n8n)');
+                
+                showNotification('Participante aprobado. Se enviará notificación automática.', 'success');
             }
             else if (e.target.closest('.reject-btn')) {
                 console.log('Rechazando participante:', participantId, modalidad);

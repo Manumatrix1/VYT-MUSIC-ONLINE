@@ -1,0 +1,140 @@
+{
+  // ===== CONFIGURACIÓN MÁXIMO RENDIMIENTO =====
+  
+  // Desactivar validaciones JSON
+  "json.schemaDownload.enable": false,
+  "json.validate.enable": false,
+  "json.schemas": [],
+  
+  // EXCLUSIONES AGRESIVAS - Ocultar carpetas pesadas
+  "files.exclude": {
+    "**/.git": true,
+    "**/.firebase": true,
+    "**/node_modules": true,
+    "**/functions/node_modules": true,
+    "**/*.md": true,
+    "**/DOCS_Y_BACKUPS": true,
+    "**/docs": true,
+    "**/data-backup": true,
+    "**/backup-versions": true,
+    "**/*backup*": true,
+    "**/*BACKUP*": true,
+    "**/*ANALISIS*": true,
+    "**/old-admin-versions": true,
+    "**/temp-dev": true,
+    "**/*.log": true,
+    "**/deploy_output.txt": true,
+    "**/.vscode-test": true
+  },
+  
+  // Búsquedas - Ignorar todo lo posible
+  "search.exclude": {
+    "**/.git": true,
+    "**/.firebase": true,
+    "**/node_modules": true,
+    "**/functions/node_modules": true,
+    "**/*.md": true,
+    "**/DOCS_Y_BACKUPS": true,
+    "**/docs": true,
+    "**/data-backup": true,
+    "**/backup-versions": true,
+    "**/*backup*": true,
+    "**/*BACKUP*": true,
+    "**/*ANALISIS*": true,
+    "**/old-admin-versions": true,
+    "**/temp-dev": true,
+    "**/*.log": true,
+    "**/*.json.backup": true,
+    "**/package-lock.json": true
+  },
+  
+  // File Watcher - CRÍTICO para rendimiento
+  "files.watcherExclude": {
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/.firebase/**": true,
+    "**/node_modules/**": true,
+    "**/functions/node_modules/**": true,
+    "**/*.md": true,
+    "**/DOCS_Y_BACKUPS/**": true,
+    "**/docs/**": true,
+    "**/data-backup/**": true,
+    "**/backup-versions/**": true,
+    "**/*backup*": true,
+    "**/*BACKUP*": true,
+    "**/old-admin-versions/**": true,
+    "**/temp-dev/**": true,
+    "**/*.log": true,
+    "**/images/**": true,
+    "**/assets/icons/**": true
+  },
+  
+  // ===== DESACTIVAR FEATURES PESADAS =====
+  
+  // JavaScript/TypeScript
+  "javascript.validate.enable": false,
+  "typescript.validate.enable": false,
+  "typescript.disableAutomaticTypeAcquisition": true,
+  "javascript.updateImportsOnFileMove.enabled": "never",
+  "typescript.updateImportsOnFileMove.enabled": "never",
+  "javascript.suggestionActions.enabled": false,
+  "typescript.suggestionActions.enabled": false,
+  
+  // HTML
+  "html.validate.scripts": false,
+  "html.validate.styles": false,
+  "html.autoClosingTags": false,
+  "html.format.enable": false,
+  
+  // CSS
+  "css.validate": false,
+  "scss.validate": false,
+  "less.validate": false,
+  
+  // Editor
+  "editor.quickSuggestions": {
+    "comments": "off",
+    "strings": "off",
+    "other": "off"
+  },
+  "editor.parameterHints.enabled": false,
+  "editor.suggestOnTriggerCharacters": false,
+  "editor.wordBasedSuggestions": "off",
+  "editor.semanticHighlighting.enabled": false,
+  "editor.foldingImportsByDefault": true,
+  "editor.minimap.enabled": false,
+  "editor.renderWhitespace": "none",
+  "editor.lightbulb.enabled": "off",
+  "editor.guides.indentation": false,
+  
+  // Git
+  "git.enabled": true,
+  "git.autorefresh": false,
+  "git.autofetch": false,
+  "git.decorations.enabled": false,
+  
+  // Files
+  "files.autoSave": "off",
+  "files.autoSaveDelay": 5000,
+  "files.trimTrailingWhitespace": false,
+  
+  // Telemetry & Extensions
+  "telemetry.telemetryLevel": "off",
+  "extensions.autoUpdate": false,
+  "extensions.autoCheckUpdates": false,
+  
+  // Breadcrumbs
+  "breadcrumbs.enabled": false,
+  
+  // Workbench
+  "workbench.enableExperiments": false,
+  "workbench.settings.enableNaturalLanguageSearch": false,
+  
+  // Copilot (si está instalado)
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  }
+}

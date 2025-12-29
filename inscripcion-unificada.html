@@ -4,7 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscripción a Certamen - VYT MUSIC</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Inscríbete al certamen de canto VYT Music. Completa tu inscripción online.">
+    <meta name="theme-color" content="#00d9ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="VYT Music">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/icon-32x32.png">
+    <link rel="apple-touch-icon" href="/images/icons/icon-192x192.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/mobile-optimizations.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="firebase-config.js"></script>
@@ -798,13 +811,39 @@
                     
                     // Datos del artista
                     nombreArtista: userData.displayName || userData.nombre || 'Sin nombre',
+                    whatsapp: userData.whatsapp || '',
                     
-                    // Metadata
-                    fechaInscripcion: firebase.firestore.FieldValue.serverTimestamp(),
-                    estado: 'pendiente',
+                    // Estados del flujo (NUEVO)
+                    estado: 'pendiente', // pendiente → aprobado → pago_confirmado → publicado
+                    aprobado: false,
                     pago_realizado: false,
                     pago_aprobado: false,
+                    pago_confirmado: false,
+                    
+                    // YouTube (NUEVO - se llenan después del pago)
+                    video_youtube_url: null,
+                    video_youtube_id: null,
+                    likes_youtube: 0,
+                    views_youtube: 0,
+                    puntos_youtube: 0,
+                    
+                    // Votación VYT Money
                     votos: 0,
+                    votos_vyt_money: 0,
+                    puntos_vyt_money: 0,
+                    puntos_totales: 0,
+                    
+                    // Notificaciones WhatsApp (NUEVO)
+                    notificado_aprobacion: false,
+                    notificado_pago: false,
+                    notificado_publicacion: false,
+                    
+                    // Timestamps (NUEVO)
+                    fechaInscripcion: firebase.firestore.FieldValue.serverTimestamp(),
+                    fecha_aprobacion: null,
+                    fecha_pago: null,
+                    fecha_publicacion: null,
+                    ultima_sincronizacion: null,
                     posicion: null
                 };
 

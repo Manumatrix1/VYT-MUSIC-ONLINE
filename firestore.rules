@@ -60,15 +60,15 @@ service cloud.firestore {
     
     // ===== REGLAS PARA TESTS (TEMPORAL) =====
     match /tests/{docId} {
-      allow read, write, create, delete: if true; // Permitir todo para testing automático
+      allow read, write, create, delete: if isAdmin(); // Solo admins pueden acceder
     }
     
     match /test_conexion/{docId} {
-      allow create: if true; // Permitir cualquier creación para tests
+      allow create: if isAdmin(); // Solo admins pueden crear tests
     }
     
     match /test_inscripciones/{docId} {
-      allow create: if true; // Permitir cualquier creación para tests
+      allow create: if isAdmin(); // Solo admins pueden crear tests
     }
     
     // ===== REGLAS PARA PARTICIPANTES PRESENCIALES =====

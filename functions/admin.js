@@ -526,11 +526,11 @@ exports.getParticipantStats = onCall(async (request) => {
     const db = admin.firestore();
     
     // Obtener conteos de participantes online
-    const onlineSnapshot = await db.collection('participantes_online').get();
+    const onlineSnapshot = await db.collection('participantes_online').limit(100).get();
     const onlineCount = onlineSnapshot.size;
     
     // Obtener conteos de participantes presenciales
-    const presencialSnapshot = await db.collection('participantes_presenciales').get();
+    const presencialSnapshot = await db.collection('participantes_presenciales').limit(100).get();
     const presencialCount = presencialSnapshot.size;
     
     // Obtener participantes aprobados

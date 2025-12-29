@@ -19,6 +19,12 @@ firebase-debug.*.log*
 .firebase/
 
 # Firebase config
+# Variables de entorno
+.env
+.env.local
+.env.*.local
+functions/.env
+functions/.env.local
 
 # Uncomment this if you'd like others to create their own Firebase project.
 # For a team working on the same Firebase project(s), it is recommended to leave
@@ -95,16 +101,27 @@ firebase-debug.*.log
 *-temp.html
 
 # Archivos de configuración local
-.vscode/settings.json
+# .vscode/settings.json - MANTENER para optimizaciones
 .vscode/launch.json
 
 # Archivos de datos temporales
 data-temp/
 backups/
+backup-versions/
 
-# Scripts de desarrollo
-*.bat
-*.ps1
+# Scripts de desarrollo (excepto optimización)
+# *.bat
+# *.ps1
+!OPTIMIZAR-VSCODE.ps1
+!ABRIR-VSCODE-OPTIMIZADO.bat
 crear-*.ps1
-ABRIR-*.bat
-SERVIDOR-*.bat
+deploy*.ps1
+update-*.ps1
+
+# Carpetas pesadas adicionales
+DOCS_Y_BACKUPS/**
+docs/**/*.png
+docs/**/*.jpg
+data-backup/**
+**/old-admin-versions/**
+deploy_output.txt
