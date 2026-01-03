@@ -391,16 +391,18 @@ try {
   console.log('🔄 Continuing with basic functions only');
 }
 
-// ===== FUNCIONES VYT-MONEY MINIMAL (LIGHTWEIGHT) =====
+// ===== FUNCIONES VYT-MONEY MINIMAL (LIGHTWEIGHT CON LAZY-LOAD) =====
 try {
   const vytMoneyMinimal = require('./vyt-money-minimal');
   
-  // Exportar solo funciones críticas (sin dependencias pesadas)
+  // Exportar funciones críticas con lazy-load de dependencias
   exports.voteWithVYTMoney = vytMoneyMinimal.voteWithVYTMoney;
   exports.getVYTMoneyBalance = vytMoneyMinimal.getVYTMoneyBalance;
   exports.getPrizePoolStatus = vytMoneyMinimal.getPrizePoolStatus;
+  exports.createVYTMoneyPayment = vytMoneyMinimal.createVYTMoneyPayment;
+  exports.sendVYTMoneyConfirmation = vytMoneyMinimal.sendVYTMoneyConfirmation;
   
-  console.log('✅ VYT Money MINIMAL functions loaded (3 core functions)');
+  console.log('✅ VYT Money MINIMAL functions loaded (5 functions: vote, balance, pool, payment, email)');
 } catch (error) {
   console.error('⚠️ Error loading VYT Money minimal functions:', error.message);
   console.log('🔄 Continuing without VYT Money system');
