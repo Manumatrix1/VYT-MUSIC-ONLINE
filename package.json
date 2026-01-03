@@ -24,6 +24,11 @@
   },
   "homepage": "https://github.com/Manumatrix1/VYT-MUSIC-ONLINE#readme",
   "devDependencies": {
+    "axios": "^1.13.2",
+    "firebase-admin": "^13.6.0",
     "tailwindcss": "^4.1.13"
+  },
+  "dependencies": {
+    "nodemailer": "^7.0.12"
   }
 }

@@ -93,9 +93,9 @@
   
   // Editor
   "editor.quickSuggestions": {
-    "comments": "off",
-    "strings": "off",
-    "other": "off"
+    "other": false,
+    "comments": false,
+    "strings": false
   },
   "editor.parameterHints.enabled": false,
   "editor.suggestOnTriggerCharacters": false,
