@@ -21,14 +21,6 @@ class PWAUpdater {
       this.registration = await navigator.serviceWorker.register('/service-worker.js');
       console.log('✅ Service Worker registrado');
 
-      // Escuchar mensajes del service worker
-      navigator.serviceWorker.addEventListener('message', event => {
-        if (event.data && event.data.type === 'SW_UPDATED') {
-          console.log(`🔄 Nueva versión disponible: ${event.data.version}`);
-          this.showUpdateNotification();
-        }
-      });
-
       // Detectar cuando hay un nuevo service worker esperando
       this.registration.addEventListener('updatefound', () => {
         const newWorker = this.registration.installing;
