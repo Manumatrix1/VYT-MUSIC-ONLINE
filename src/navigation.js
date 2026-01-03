@@ -28,21 +28,21 @@ class VYTNavigation {
         bottomNav.className = 'bottom-navigation';
         bottomNav.innerHTML = `
             <div class="bottom-nav-container">
-                <a href="principal.html" class="nav-item ${this.currentPage === 'principal' ? 'active' : ''}" data-page="principal">
+                <a href="/principal.html" class="nav-item ${this.currentPage === 'principal' ? 'active' : ''}" data-page="principal">
                     <div class="nav-icon">
                         <i class="fas fa-home"></i>
                     </div>
                     <span class="nav-label">Principal</span>
                 </a>
                 
-                <a href="certamenes.html" class="nav-item ${this.currentPage === 'certamenes' ? 'active' : ''}" data-page="certamenes">
+                <a href="/certamenes.html" class="nav-item ${this.currentPage === 'certamenes' ? 'active' : ''}" data-page="certamenes">
                     <div class="nav-icon">
                         <i class="fas fa-trophy"></i>
                     </div>
                     <span class="nav-label">Certámenes</span>
                 </a>
                 
-                <a href="ranking.html" class="nav-item ${this.currentPage === 'ranking' ? 'active' : ''}" data-page="ranking">
+                <a href="/ranking.html" class="nav-item ${this.currentPage === 'ranking' ? 'active' : ''}" data-page="ranking">
                     <div class="nav-icon">
                         <i class="fas fa-ranking-star"></i>
                     </div>
@@ -78,11 +78,11 @@ class VYTNavigation {
                 <div class="hamburger-body">
                     <div class="menu-section">
                         <h4>Principal</h4>
-                        <a href="crear-perfil-artista.html" class="menu-item">
+                        <a href="/crear-perfil-artista.html" class="menu-item">
                             <i class="fas fa-user-plus"></i>
                             <span>Crear Perfil de Artista</span>
                         </a>
-                        <a href="reglamento.html" class="menu-item">
+                        <a href="/reglamento.html" class="menu-item">
                             <i class="fas fa-file-alt"></i>
                             <span>Bases y Reglamento</span>
                         </a>
@@ -90,11 +90,11 @@ class VYTNavigation {
                     
                     <div class="menu-section">
                         <h4>Mi Cuenta</h4>
-                        <a href="perfil-artista.html" class="menu-item">
+                        <a href="/perfil-artista.html" class="menu-item">
                             <i class="fas fa-user-circle"></i>
                             <span>Perfil de Artista</span>
                         </a>
-                        <a href="login-artista.html" class="menu-item">
+                        <a href="/login-artista.html" class="menu-item">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>Iniciar Sesión</span>
                         </a>
@@ -102,7 +102,7 @@ class VYTNavigation {
                     
                     <div class="menu-section">
                         <h4>VYT Money</h4>
-                        <a href="comprar-vyt-money.html" class="menu-item">
+                        <a href="/comprar-vyt-money.html" class="menu-item">
                             <i class="fas fa-coins"></i>
                             <span>Comprar VYT Money</span>
                         </a>
@@ -110,11 +110,11 @@ class VYTNavigation {
                     
                     <div class="menu-section">
                         <h4>Información</h4>
-                        <a href="nosotros.html" class="menu-item">
+                        <a href="/nosotros.html" class="menu-item">
                             <i class="fas fa-info-circle"></i>
                             <span>Sobre Nosotros</span>
                         </a>
-                        <a href="index.html" class="menu-item">
+                        <a href="/index.html" class="menu-item">
                             <i class="fas fa-arrow-left"></i>
                             <span>Volver al Inicio</span>
                         </a>

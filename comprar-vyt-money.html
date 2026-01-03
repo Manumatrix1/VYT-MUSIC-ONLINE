@@ -118,27 +118,6 @@
     </style>
 </head>
 <body>
-    <!-- Navegación -->
-    <nav class="bg-black/50 backdrop-blur-sm fixed top-0 left-0 right-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
-            <a href="index.html" class="flex items-center space-x-3">
-                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full flex items-center justify-center">
-                    <span class="text-white font-bold">VYT</span>
-                </div>
-                <span class="text-xl font-bold text-white">VYT MUSIC</span>
-            </a>
-            
-            <div class="flex items-center space-x-4">
-                <div id="user-balance" class="hidden text-gray-300">
-                    <span class="text-sm">Balance:</span>
-                    <span id="balance-amount" class="font-bold text-yellow-400">0</span>
-                    <span class="text-xs">VYT</span>
-                </div>
-                <button id="logout-btn" class="hidden text-gray-300 hover:text-white">Salir</button>
-            </div>
-        </div>
-    </nav>
-
     <!-- Contenido principal -->
     <main class="pt-20 pb-8">
         <div class="container mx-auto px-4">
@@ -667,6 +646,15 @@
                 customAmountInput.focus();
             }
         }, 1000);
+    </script>
+    
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="/src/navigation-styles.css">
+    <script src="/src/navigation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new VYTNavigation();
+        });
     </script>
 </body>
 </html>

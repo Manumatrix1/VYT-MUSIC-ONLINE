@@ -570,59 +570,13 @@
         });
     </script>
 
-    <!-- MENÚ HAMBURGUESA -->
-    <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
-        <div class="menu-container" onclick="event.stopPropagation()">
-            <button class="menu-close" onclick="closeMenu()">×</button>
-            
-            <div class="menu-header">
-                <h3>🎵 VYT MUSIC</h3>
-            </div>
-
-            <a href="crear-perfil-artista.html" class="menu-item">
-                <span class="menu-icon">🎤</span>
-                <span>Crear Perfil de Artista</span>
-            </a>
-            <a href="reglamento.html" class="menu-item">
-                <span class="menu-icon">📋</span>
-                <span>Bases y Reglamento</span>
-            </a>
-            <a href="perfil-artista.html" class="menu-item">
-                <span class="menu-icon">👤</span>
-                <span>Perfil de Artista</span>
-            </a>
-            <a href="comprar-vyt-money.html" class="menu-item">
-                <span class="menu-icon">💰</span>
-                <span>Comprar VYTMoney</span>
-            </a>
-            <a href="principal.html" class="menu-item">
-                <span class="menu-icon">🏠</span>
-                <span>Inicio</span>
-            </a>
-
-        </div>
-    </div>
-
-    <!-- 🚨 NAVEGACIÓN INFERIOR CON ICONOS EMOJI (IGUAL QUE PRINCIPAL-SIMPLE) -->
-    <nav style="position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; background: rgba(15, 23, 42, 0.95) !important; backdrop-filter: blur(20px) !important; border-top: 1px solid rgba(59, 130, 246, 0.3) !important; z-index: 9999 !important; padding: 10px 0 !important;">
-        <div style="display: flex !important; justify-content: space-around !important; align-items: center !important; max-width: 600px !important; margin: 0 auto !important; padding: 0 20px !important;">
-            <a href="principal-simple.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
-                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">🏠</span>
-                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Principal</span>
-            </a>
-            <a href="certamenes.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
-                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">🏆</span>
-                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Certámenes</span>
-            </a>
-            <a href="ranking.html" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: #3B82F6 !important; background: rgba(59, 130, 246, 0.1) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important;">
-                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">📊</span>
-                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Ranking</span>
-            </a>
-            <button onclick="toggleMenu()" style="display: flex !important; flex-direction: column !important; align-items: center !important; text-decoration: none !important; color: rgba(255, 255, 255, 0.7) !important; padding: 8px 12px !important; border-radius: 8px !important; transition: all 0.2s ease !important; min-width: 60px !important; background: none !important; border: none !important; cursor: pointer !important; font-family: inherit !important;">
-                <span style="font-size: 18px !important; margin-bottom: 4px !important; display: block !important; line-height: 1 !important;">☰</span>
-                <span style="font-size: 10px !important; font-weight: 600 !important; text-align: center !important; white-space: nowrap !important;">Menú</span>
-            </button>
-        </div>
-    </nav>
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="/src/navigation-styles.css">
+    <script src="/src/navigation.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new VYTNavigation();
+        });
+    </script>
 </body>
 </html>
