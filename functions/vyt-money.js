@@ -6,7 +6,15 @@
 
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-const nodemailer = require('nodemailer');
+
+// Lazy-load nodemailer solo cuando se necesita (para emails)
+let nodemailer;
+const getNodemailer = () => {
+  if (!nodemailer) {
+    nodemailer = require('nodemailer');
+  }
+  return nodemailer;
+};
 
 // Configuración de constantes
 const gmailEmail = functions.config().gmail?.email || { value: () => 'test@gmail.com' };
@@ -180,6 +188,9 @@ async function sendVYTMoneyPurchaseConfirmation(userId, cantidadVYTMoney) {
     if (!userDoc.exists) return;
 
     const userData = userDoc.data();
+    
+    // Lazy-load nodemailer solo cuando se envía email
+    const nodemailer = getNodemailer();
     const transporter = nodemailer.createTransporter({
       service: 'gmail',
       auth: {
