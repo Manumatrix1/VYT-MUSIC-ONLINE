@@ -158,7 +158,10 @@ class PWAUpdater {
     }, 30000);
   }
 
-  applyCancelar auto-remove timer
+  applyUpdate() {
+    console.log('🔄 Aplicando actualización...');
+    
+    // Cancelar auto-remove timer
     if (this.autoRemoveTimer) {
       clearTimeout(this.autoRemoveTimer);
     }
@@ -177,10 +180,7 @@ class PWAUpdater {
     // Recargar la página después de 200ms
     setTimeout(() => {
       window.location.reload(true); // true = hard reload
-    }, 2ecargar la página después de 500ms
-    setTimeout(() => {
-      window.location.reload();
-    }, 500);
+    }, 200);
   }
 }
 
