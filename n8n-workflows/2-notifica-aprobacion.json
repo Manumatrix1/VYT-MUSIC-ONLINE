@@ -1,0 +1,151 @@
+{
+  "name": "VYT - Notificar Aprobación (Firebase → WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/2 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "trigger-cada-2min",
+      "name": "Cada 2 Minutos",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "notes": "Revisa cada 2 min si hay participantes aprobados sin notificar"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://firestore.googleapis.com/v1/projects/TU-PROYECTO-ID/databases/(default)/documents/participantes_online",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "consultar-firestore",
+      "name": "Consultar Firestore",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [470, 300],
+      "credentials": {
+        "googleApi": {
+          "id": "2",
+          "name": "Google API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Filtrar participantes aprobados sin notificar\nconst docs = $input.item.json.documents || [];\nconst pendientes = docs.filter(doc => {\n  const fields = doc.fields;\n  const aprobado = fields.aprobado?.booleanValue || false;\n  const notificado = fields.notificado_aprobacion?.booleanValue || false;\n  return aprobado && !notificado;\n});\n\n// Convertir a formato limpio\nreturn pendientes.map(doc => {\n  const fields = doc.fields;\n  return {\n    json: {\n      id: doc.name.split('/').pop(),\n      nombre_artista: fields.nombre_artista?.stringValue || '',\n      telefono_whatsapp: fields.telefono_whatsapp?.stringValue || '',\n      email: fields.email?.stringValue || '',\n      certamen: fields.certamen_id?.stringValue || '',\n      monto: fields.precio_inscripcion?.integerValue || 5000\n    }\n  };\n});"
+      },
+      "id": "filtrar-pendientes",
+      "name": "Filtrar Pendientes",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "whatsapp:{{$json.telefono_whatsapp}}",
+        "message": "🎉 *¡Felicitaciones {{$json.nombre_artista}}!*\n\nTu inscripción fue *APROBADA* ✅\n\n📝 *Próximo paso: Pagar Inscripción*\n💰 Monto: ${{$json.monto}} ARS\n\n🔗 *Link de Pago:*\nhttps://tu-dominio.web.app/pagar-inscripcion.html?participante={{$json.id}}\n\n⚡ Una vez pagado:\n- Tu video se publicará en YouTube automáticamente\n- Recibirás el link para compartir\n- ¡Empezarás a recibir votos!\n\n🏆 ¡Mucha suerte en el certamen!\n\n---\nVYT Music Online 🎤"
+      },
+      "id": "enviar-whatsapp-aprobacion",
+      "name": "Enviar WhatsApp Aprobación",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [910, 300],
+      "credentials": {
+        "twilioApi": {
+          "id": "1",
+          "name": "Twilio API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://firestore.googleapis.com/v1/projects/TU-PROYECTO-ID/databases/(default)/documents/participantes_online/{{$json.id}}?updateMask.fieldPaths=notificado_aprobacion",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fields.notificado_aprobacion.booleanValue",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "marcar-notificado",
+      "name": "Marcar Notificado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1130, 300],
+      "credentials": {
+        "googleApi": {
+          "id": "2",
+          "name": "Google API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada 2 Minutos": {
+      "main": [
+        [
+          {
+            "node": "Consultar Firestore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Firestore": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Pendientes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Pendientes": {
+      "main": [
+        [
+          {
+            "node": "Enviar WhatsApp Aprobación",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar WhatsApp Aprobación": {
+      "main": [
+        [
+          {
+            "node": "Marcar Notificado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

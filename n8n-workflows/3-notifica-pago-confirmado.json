@@ -1,0 +1,217 @@
+{
+  "name": "VYT - Notificar Pago Confirmado (Firebase → WhatsApp)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "*/3 * * * *"
+            }
+          ]
+        }
+      },
+      "id": "trigger-cada-3min",
+      "name": "Cada 3 Minutos",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [250, 300],
+      "notes": "Revisa si hay pagos confirmados sin notificar"
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "https://firestore.googleapis.com/v1/projects/TU-PROYECTO-ID/databases/(default)/documents/participantes_online",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "options": {}
+      },
+      "id": "consultar-firestore-pagos",
+      "name": "Consultar Firestore",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [470, 300],
+      "credentials": {
+        "googleApi": {
+          "id": "2",
+          "name": "Google API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "functionCode": "// Filtrar pagos confirmados sin notificar\nconst docs = $input.item.json.documents || [];\nconst pendientes = docs.filter(doc => {\n  const fields = doc.fields;\n  const pago = fields.pago_confirmado?.booleanValue || false;\n  const notificado = fields.notificado_pago?.booleanValue || false;\n  return pago && !notificado;\n});\n\n// Convertir a formato limpio\nreturn pendientes.map(doc => {\n  const fields = doc.fields;\n  return {\n    json: {\n      id: doc.name.split('/').pop(),\n      nombre_artista: fields.nombre_artista?.stringValue || '',\n      telefono_whatsapp: fields.telefono_whatsapp?.stringValue || '',\n      email: fields.email?.stringValue || '',\n      video_url: fields.video_url?.stringValue || '',\n      video_youtube_id: fields.video_youtube_id?.stringValue || null\n    }\n  };\n});"
+      },
+      "id": "filtrar-pagos-confirmados",
+      "name": "Filtrar Pagos Confirmados",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [690, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.video_youtube_id}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      },
+      "id": "if-video-publicado",
+      "name": "¿Video Publicado?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [910, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "whatsapp:{{$json.telefono_whatsapp}}",
+        "message": "✅ *¡Pago Confirmado {{$json.nombre_artista}}!*\n\n🎬 *Tu video YA ESTÁ en YouTube*\n\n🔗 *Link:*\nhttps://youtube.com/watch?v={{$json.video_youtube_id}}\n\n📢 *¡Ahora a difundir!*\n✨ Compartí el link en tus redes\n💬 Pedí que te voten con VYT Money\n📊 Mirá tu posición en el ranking\n\n🏆 *Ver Ranking:*\nhttps://tu-dominio.web.app/ranking.html\n\n💰 *¿Cómo votan por vos?*\n1. Compran VYT Money\n2. Votan por tu video\n3. ¡Sumás puntos!\n\n🚀 ¡Mucha suerte!\n\n---\nVYT Music Online 🎤"
+      },
+      "id": "enviar-con-youtube",
+      "name": "Enviar Con YouTube",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1130, 200],
+      "credentials": {
+        "twilioApi": {
+          "id": "1",
+          "name": "Twilio API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "whatsapp:{{$json.telefono_whatsapp}}",
+        "message": "✅ *¡Pago Confirmado {{$json.nombre_artista}}!*\n\n🎬 *Tu video está en proceso*\n\nEstamos subiendo tu video a YouTube...\n⏱️ Tiempo estimado: 10-30 minutos\n\n📲 Te enviaremos otro mensaje con el link cuando esté listo.\n\n🏆 Mientras tanto:\n▶️ Visitá tu perfil: https://tu-dominio.web.app/perfil-artista.html\n▶️ Mirá el ranking: https://tu-dominio.web.app/ranking.html\n\n---\nVYT Music Online 🎤"
+      },
+      "id": "enviar-sin-youtube",
+      "name": "Enviar Sin YouTube",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [1130, 400],
+      "credentials": {
+        "twilioApi": {
+          "id": "1",
+          "name": "Twilio API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "=https://firestore.googleapis.com/v1/projects/TU-PROYECTO-ID/databases/(default)/documents/participantes_online/{{$json.id}}?updateMask.fieldPaths=notificado_pago",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "googleApi",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "fields.notificado_pago.booleanValue",
+              "value": "true"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "marcar-pago-notificado",
+      "name": "Marcar Notificado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [1350, 300],
+      "credentials": {
+        "googleApi": {
+          "id": "2",
+          "name": "Google API"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Cada 3 Minutos": {
+      "main": [
+        [
+          {
+            "node": "Consultar Firestore",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar Firestore": {
+      "main": [
+        [
+          {
+            "node": "Filtrar Pagos Confirmados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtrar Pagos Confirmados": {
+      "main": [
+        [
+          {
+            "node": "¿Video Publicado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Video Publicado?": {
+      "main": [
+        [
+          {
+            "node": "Enviar Con YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Enviar Sin YouTube",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Con YouTube": {
+      "main": [
+        [
+          {
+            "node": "Marcar Notificado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Sin YouTube": {
+      "main": [
+        [
+          {
+            "node": "Marcar Notificado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

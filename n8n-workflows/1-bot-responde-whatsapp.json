@@ -1,0 +1,180 @@
+{
+  "name": "VYT - Bot WhatsApp Responde",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "whatsapp-webhook",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-whatsapp",
+      "name": "Webhook WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.Body.toLowerCase()}}",
+              "operation": "contains",
+              "value2": "hola"
+            }
+          ]
+        },
+        "combineOperation": "any"
+      },
+      "id": "if-es-saludo",
+      "name": "¿Es Saludo?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [470, 300]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "={{$node['Webhook WhatsApp'].json.From}}",
+        "message": "🎤 *¡Bienvenido a VYT Music Online!*\n\n¿Querés participar en el certamen?\n\n📝 *Pasos:*\n1️⃣ Creá tu perfil de artista\n2️⃣ Inscribite al certamen\n3️⃣ Pagá la inscripción\n4️⃣ ¡Listo! Tu video se publica en YouTube\n\n🔗 *Links:*\n▶️ Crear Perfil: https://tu-dominio.web.app/crear-perfil-artista.html\n▶️ Inscripción: https://tu-dominio.web.app/inscripcion-unificada.html\n\n💰 *Inversión:* $5000 ARS\n🏆 *Premios:* Hasta $500.000\n\n¿Alguna duda? Escribinos!"
+      },
+      "id": "enviar-bienvenida",
+      "name": "Enviar Bienvenida",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [690, 200],
+      "credentials": {
+        "twilioApi": {
+          "id": "1",
+          "name": "Twilio API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json.Body.toLowerCase()}}",
+              "operation": "contains",
+              "value2": "ayuda"
+            }
+          ]
+        }
+      },
+      "id": "if-es-ayuda",
+      "name": "¿Es Ayuda?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [690, 400]
+    },
+    {
+      "parameters": {
+        "resource": "message",
+        "operation": "send",
+        "from": "whatsapp:+14155238886",
+        "to": "={{$node['Webhook WhatsApp'].json.From}}",
+        "message": "📞 *Centro de Ayuda VYT*\n\n❓ *Preguntas frecuentes:*\n\n🎵 ¿Qué necesito?\n- Video de tu presentación (MP4)\n- DNI/Documento\n- Datos personales\n\n💳 ¿Cómo pago?\n- MercadoPago\n- Tarjeta o efectivo\n\n🏆 ¿Cuándo gano?\n- Votación online con VYT Money\n- Los más votados avanzan\n\n🔗 *Ver más:*\nhttps://tu-dominio.web.app/reglamento.html\n\n¿Necesitás algo más?"
+      },
+      "id": "enviar-ayuda",
+      "name": "Enviar Ayuda",
+      "type": "n8n-nodes-base.twilio",
+      "typeVersion": 1,
+      "position": [910, 300],
+      "credentials": {
+        "twilioApi": {
+          "id": "1",
+          "name": "Twilio API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "text",
+        "responseBody": "OK"
+      },
+      "id": "responder-ok",
+      "name": "Responder OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1130, 300]
+    }
+  ],
+  "connections": {
+    "Webhook WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "¿Es Saludo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es Saludo?": {
+      "main": [
+        [
+          {
+            "node": "Enviar Bienvenida",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "¿Es Ayuda?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Bienvenida": {
+      "main": [
+        [
+          {
+            "node": "Responder OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es Ayuda?": {
+      "main": [
+        [
+          {
+            "node": "Enviar Ayuda",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Responder OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enviar Ayuda": {
+      "main": [
+        [
+          {
+            "node": "Responder OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
