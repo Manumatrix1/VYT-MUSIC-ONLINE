@@ -28,7 +28,7 @@ class VYTNavigation {
         bottomNav.className = 'bottom-navigation';
         bottomNav.innerHTML = `
             <div class="bottom-nav-container">
-                <a href="/principal.html" class="nav-item ${this.currentPage === 'principal' ? 'active' : ''}" data-page="principal">
+                <a href="/index.html" class="nav-item ${this.currentPage === 'principal' ? 'active' : ''}" data-page="principal">
                     <div class="nav-icon">
                         <i class="fas fa-home"></i>
                     </div>

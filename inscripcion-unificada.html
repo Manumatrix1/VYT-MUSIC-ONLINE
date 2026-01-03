@@ -17,6 +17,10 @@
     <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
     
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="/src/navigation-styles.css">
+    <script src="/src/navigation.js"></script>
     <script src="/mobile-optimizations.js" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -880,6 +884,13 @@
             // Implementar notificación de éxito
             alert(message); // Temporal
         }
+    </script>
+    
+    <!-- Inicializar navegación -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new VYTNavigation();
+        });
     </script>
 </body>
 </html>

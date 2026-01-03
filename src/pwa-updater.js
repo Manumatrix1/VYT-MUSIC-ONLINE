@@ -57,6 +57,13 @@ class PWAUpdater {
   }
 
   showUpdateNotification() {
+    // Evitar duplicados - si ya existe, no mostrar otra
+    const existing = document.getElementById('pwa-update-notification');
+    if (existing) {
+      console.log('⚠️ Notificación ya existe, no duplicar');
+      return;
+    }
+
     // Crear notificación flotante
     const notification = document.createElement('div');
     notification.id = 'pwa-update-notification';

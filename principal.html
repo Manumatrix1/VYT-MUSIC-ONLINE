@@ -32,6 +32,10 @@
     <!-- PWA Auto-Updater -->
     <script src="/src/pwa-updater.js" defer></script>
     
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="/src/navigation-styles.css">
+    <script src="/src/navigation.js"></script>
+    
     <style>
         /* 🚨 TODO EL CSS INLINE - NO DEPENDE DE NADA EXTERNO */
         body {
@@ -405,6 +409,13 @@
             if (event.key === 'Escape') {
                 closeMenu();
             }
+        });
+    </script>
+    
+    <!-- Inicializar navegación -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new VYTNavigation();
         });
     </script>
 </body>

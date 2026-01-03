@@ -39,6 +39,10 @@
     
     <!-- PWA Auto-Updater -->
     <script src="/src/pwa-updater.js" defer></script>
+    
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="/src/navigation-styles.css">
+    <script src="/src/navigation.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -480,6 +484,13 @@
                 console.error('❌ Error cargando fondo:', error);
             }
         }
+    </script>
+    
+    <!-- Inicializar navegación -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new VYTNavigation();
+        });
     </script>
 </body>
 </html>

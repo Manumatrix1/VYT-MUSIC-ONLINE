@@ -1,6 +1,6 @@
 // VYT MUSIC - Service Worker con Actualización Automática v3.1
-const CACHE_NAME = 'vyt-music-cache-v3.1';
-const CACHE_VERSION = '3.1';
+const CACHE_NAME = 'vyt-music-cache-v3.2-icons-fix';
+const CACHE_VERSION = '3.2';
 
 // Recursos críticos
 const CRITICAL_RESOURCES = [
