@@ -1,6 +1,6 @@
 // VYT MUSIC - Service Worker con Actualización Automática v4.0
-const CACHE_NAME = 'vyt-music-v5-limpio';
-const CACHE_VERSION = '5.0';
+const CACHE_NAME = 'vyt-music-v6-final';
+const CACHE_VERSION = '6.0';
 
 // Recursos críticos
 const CRITICAL_RESOURCES = [

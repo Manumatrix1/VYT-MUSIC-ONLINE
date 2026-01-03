@@ -38,13 +38,7 @@ class PWAUpdater {
         });
       });
 
-      // Verificar actualizaciones cada 30 segundos
-      setInterval(() => {
-        console.log('🔍 Verificando actualizaciones...');
-        this.registration.update();
-      }, 30000);
-
-      // Verificar inmediatamente
+      // Verificar actualizaciones solo al cargar la página (no con interval constante)
       this.registration.update();
 
     } catch (error) {
@@ -177,11 +171,13 @@ class PWAUpdater {
   }
 }
 
-// Inicializar automáticamente cuando carga la página
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => {
+// Inicializar automáticamente cuando carga la página (SOLO UNA VEZ)
+if (!window.PWAUpdater) {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      window.PWAUpdater = new PWAUpdater();
+    });
+  } else {
     window.PWAUpdater = new PWAUpdater();
-  });
-} else {
-  window.PWAUpdater = new PWAUpdater();
+  }
 }
