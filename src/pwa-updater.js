@@ -46,10 +46,11 @@ class PWAUpdater {
         });
       });
 
-      // Verificar actualizaciones cada 30 segundos
+      // Verificar actualizaciones cada 10 segundos (temporal para forzar actualización)
       setInterval(() => {
+        console.log('🔍 Verificando actualizaciones...');
         this.registration.update();
-      }, 30000);
+      }, 10000);
 
       // Verificar inmediatamente
       this.registration.update();
