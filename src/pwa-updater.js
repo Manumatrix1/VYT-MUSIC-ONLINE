@@ -38,7 +38,10 @@ class PWAUpdater {
           if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
             console.log('✨ Nueva versión instalada');
             this.updateAvailable = true;
-            this.showUpdateNotification();
+            // Solo mostrar notificación si no hay una ya visible
+            if (!document.getElementById('pwa-update-notification')) {
+              this.showUpdateNotification();
+            }
           }
         });
       });
@@ -122,63 +125,48 @@ class PWAUpdater {
       </div>
     `;
 
-    // Agregar animación
-    const style = document.createElement('style');
-    style.textContent = `
-      @keyframes slideUp {
-        from {
-          transform: translateX(-50%) translateY(20px);
-          opacity: 0;
+    // Agregar animación solo si no existe
+    if (!document.getElementById('pwa-updater-style')) {
+      const style = document.createElement('style');
+      style.id = 'pwa-updater-style';
+      style.textContent = `
+        @keyframes slideUp {
+          from {
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+          }
         }
-        to {
-          transform: translateX(-50%) translateY(0);
-          opacity: 1;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-
-    // Remover notificación anterior si existe
-    const existing = document.getElementById('pwa-update-notification');
-    if (existing) existing.remove();
+      `;
+      document.head.appendChild(style);
+    }
 
     document.body.appendChild(notification);
 
     // Auto-remover después de 30 segundos si no se interactúa
-    setTimeout(() => {
-      if (notification.parentElement) {
-        notification.style.animation = 'slideUp 0.3s ease-out reverse';
-        setTimeout(() => notification.remove(), 300);
+    this.autoRemoveTimer = setTimeout(() => {
+      const notif = document.getElementById('pwa-update-notification');
+      if (notif && notif.parentElement) {
+        notif.style.animation = 'slideUp 0.3s ease-out reverse';
+        setTimeout(() => {
+          if (notif.parentElement) notif.remove();
+        }, 300);
       }
     }, 30000);
   }
 
-  applyUpdate() {
-    console.log('🔄 Aplicando actualización...');
+  applyCancelar auto-remove timer
+    if (this.autoRemoveTimer) {
+      clearTimeout(this.autoRemoveTimer);
+    }
     
-    // Mostrar loading
+    // Eliminar notificación inmediatamente
     const notification = document.getElementById('pwa-update-notification');
     if (notification) {
-      notification.innerHTML = `
-        <div style="
-          position: fixed;
-          bottom: 80px;
-          left: 50%;
-          transform: translateX(-50%);
-          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-          color: white;
-          padding: 16px 24px;
-          border-radius: 12px;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-          z-index: 99999;
-          text-align: center;
-          font-family: 'Roboto', sans-serif;
-        ">
-          <div style="font-size: 15px; font-weight: bold;">
-            ⏳ Actualizando...
-          </div>
-        </div>
-      `;
+      notification.remove();
     }
 
     // Enviar mensaje al service worker para activar inmediatamente
@@ -186,7 +174,10 @@ class PWAUpdater {
       this.registration.waiting.postMessage({ type: 'SKIP_WAITING' });
     }
 
-    // Recargar la página después de 500ms
+    // Recargar la página después de 200ms
+    setTimeout(() => {
+      window.location.reload(true); // true = hard reload
+    }, 2ecargar la página después de 500ms
     setTimeout(() => {
       window.location.reload();
     }, 500);
