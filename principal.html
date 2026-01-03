@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <title>VYT MUSIC - Principal</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="VYT Music - Plataforma de certámenes de canto online. Inscríbete, vota y gana premios.">
+    <meta name="description" content="VYT Music - Plataforma de certÃ¡menes de canto online. InscrÃ­bete, vota y gana premios.">
     <meta name="theme-color" content="#00d9ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -26,18 +26,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Sistema de fondos dinámicos -->
+    <!-- Sistema de fondos dinÃ¡micos -->
     <script src="src/dynamic-background.js" defer></script>
     
     <!-- PWA Auto-Updater -->
     <script src="/src/pwa-updater.js" defer></script>
     
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegaciÃ³n -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     
     <style>
-        /* 🚨 TODO EL CSS INLINE - NO DEPENDE DE NADA EXTERNO */
+        /* ðŸš¨ TODO EL CSS INLINE - NO DEPENDE DE NADA EXTERNO */
         body {
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
             background-size: cover;
@@ -79,7 +79,7 @@
             box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
         }
 
-        /* NAVEGACIÓN NEGRA TRANSPARENTE - ESTILO SPOTIFY */
+        /* NAVEGACIÃ“N NEGRA TRANSPARENTE - ESTILO SPOTIFY */
         .bottom-nav {
             position: fixed !important;
             bottom: 0 !important;
@@ -142,17 +142,17 @@
         }
 
         /* ICONOS SIN FONT-AWESOME - EMOJIS */
-        .icon-home::before { content: "🏠"; }
-        .icon-trophy::before { content: "🏆"; }
-        .icon-chart::before { content: "📊"; }
-        .icon-menu::before { content: "☰"; }
-        .icon-mic::before { content: "🎤"; }
+        .icon-home::before { content: "ðŸ "; }
+        .icon-trophy::before { content: "ðŸ†"; }
+        .icon-chart::before { content: "ðŸ“Š"; }
+        .icon-menu::before { content: "â˜°"; }
+        .icon-mic::before { content: "ðŸŽ¤"; }
 
         /* CONTENEDOR PRINCIPAL */
         .main-container {
             min-height: 100vh;
             padding: 20px;
-            padding-bottom: 100px; /* Espacio para navegación */
+            padding-bottom: 100px; /* Espacio para navegaciÃ³n */
         }
 
         .container {
@@ -161,8 +161,8 @@
             padding: 0 20px;
         }
 
-        /* MENÚ DESPLEGABLE */
-        /* MENÚ SIDEBAR DESDE LA DERECHA */
+        /* MENÃš DESPLEGABLE */
+        /* MENÃš SIDEBAR DESDE LA DERECHA */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -284,10 +284,10 @@
         <main class="container">
             <section class="hero-section">
                 <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
-                    <span class="icon-mic"></span> ¡Bienvenido a VYT Music!
+                    <span class="icon-mic"></span> Â¡Bienvenido a VYT Music!
                 </h1>
                 <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-                    La plataforma de certámenes de canto más grande de Argentina. Descubre talentos, 
+                    La plataforma de certÃ¡menes de canto mÃ¡s grande de Argentina. Descubre talentos, 
                     compite con los mejores y haz que tu voz se escuche.
                 </p>
 
@@ -305,7 +305,7 @@
         </main>
     </div>
 
-    <!-- NAVEGACIÓN INFERIOR CON EMOJIS -->
+    <!-- NAVEGACIÃ“N INFERIOR CON EMOJIS -->
     <nav class="bottom-nav">
         <div class="nav-container">
             <a href="principal-simple.html" class="nav-btn active">
@@ -314,7 +314,7 @@
             </a>
             <a href="certamenes.html" class="nav-btn">
                 <span class="nav-icon icon-trophy"></span>
-                <span class="nav-text">Certámenes</span>
+                <span class="nav-text">CertÃ¡menes</span>
             </a>
             <a href="ranking.html" class="nav-btn">
                 <span class="nav-icon icon-chart"></span>
@@ -322,38 +322,38 @@
             </a>
             <button class="nav-btn" onclick="toggleMenu()">
                 <span class="nav-icon icon-menu"></span>
-                <span class="nav-text">Menú</span>
+                <span class="nav-text">MenÃº</span>
             </button>
         </div>
     </nav>
 
-    <!-- MENÚ SIDEBAR DESDE LA DERECHA -->
+    <!-- MENÃš SIDEBAR DESDE LA DERECHA -->
     <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()">
         <div class="menu-container" onclick="event.stopPropagation()">
-            <button class="menu-close" onclick="closeMenu()">×</button>
+            <button class="menu-close" onclick="closeMenu()">Ã—</button>
             
             <div class="menu-header">
-                <h3>🎵 VYT MUSIC</h3>
+                <h3>ðŸŽµ VYT MUSIC</h3>
             </div>
 
             <a href="crear-perfil-artista.html" class="menu-item">
-                <span class="menu-icon">🎤</span>
+                <span class="menu-icon">ðŸŽ¤</span>
                 <span>Crear Perfil de Artista</span>
             </a>
             <a href="reglamento.html" class="menu-item">
-                <span class="menu-icon">�</span>
+                <span class="menu-icon">ï¿½</span>
                 <span>Bases y Reglamento</span>
             </a>
             <a href="perfil-artista.html" class="menu-item">
-                <span class="menu-icon">�</span>
+                <span class="menu-icon">ï¿½</span>
                 <span>Perfil de Artista</span>
             </a>
             <a href="comprar-vyt-money.html" class="menu-item">
-                <span class="menu-icon">💰</span>
+                <span class="menu-icon">ðŸ’°</span>
                 <span>Comprar VYTMoney</span>
             </a>
             <a href="principal.html" class="menu-item">
-                <span class="menu-icon">🏠</span>
+                <span class="menu-icon">ðŸ </span>
                 <span>Inicio</span>
             </a>
 
@@ -361,19 +361,19 @@
     </div>
 
     <script>
-        console.log('🎵 VYT MUSIC - Versión simple sin dependencias externas');
+        console.log('ðŸŽµ VYT MUSIC - VersiÃ³n simple sin dependencias externas');
         
-        // Verificar que la navegación se cargó
+        // Verificar que la navegaciÃ³n se cargÃ³
         setTimeout(() => {
             const nav = document.querySelector('.bottom-nav');
             if (nav) {
-                console.log('✅ Navegación cargada correctamente');
+                console.log('âœ… NavegaciÃ³n cargada correctamente');
             } else {
-                console.log('❌ Error: Navegación no encontrada');
+                console.log('âŒ Error: NavegaciÃ³n no encontrada');
             }
         }, 100);
 
-        // FUNCIONES DEL MENÚ
+        // FUNCIONES DEL MENÃš
         function toggleMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             if (menuOverlay.classList.contains('active')) {
@@ -387,24 +387,24 @@
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            console.log('🔽 Menú sidebar abierto desde la derecha');
+            console.log('ðŸ”½ MenÃº sidebar abierto desde la derecha');
         }
 
         function closeMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            console.log('🔼 Menú sidebar cerrado');
+            console.log('ðŸ”¼ MenÃº sidebar cerrado');
         }
 
         function showContact() {
-            alert('📞 Contacto VYT MUSIC\n\n📧 Email: info@vytmusic.com\n📱 WhatsApp: +54 9 11 1234-5678\n🌐 Web: vytmusic.com\n\n¡Estamos aquí para ayudarte!');
+            alert('ðŸ“ž Contacto VYT MUSIC\n\nðŸ“§ Email: info@vytmusic.com\nðŸ“± WhatsApp: +54 9 11 1234-5678\nðŸŒ Web: vytmusic.com\n\nÂ¡Estamos aquÃ­ para ayudarte!');
             closeMenu();
         }
 
 
 
-        // Cerrar menú con tecla ESC
+        // Cerrar menÃº con tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeMenu();
@@ -412,7 +412,7 @@
         });
     </script>
     
-    <!-- Inicializar navegación -->
+    <!-- Inicializar navegaciÃ³n -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             new VYTNavigation();
