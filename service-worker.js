@@ -1,5 +1,5 @@
 // VYT MUSIC - Service Worker Optimizado v2.0
-const CACHE_NAME = 'vyt-music-cache-v2.1';
+const CACHE_NAME = 'vyt-music-cache-v3.0-new-logo';
 
 // Recursos críticos
 const CRITICAL_RESOURCES = [

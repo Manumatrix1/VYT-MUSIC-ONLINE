@@ -32,7 +32,7 @@ class VYTNavigation {
                     <div class="nav-icon">
                         <i class="fas fa-home"></i>
                     </div>
-                    <span class="nav-label">Principal</span>
+                    <span class="nav-label">Inicio</span>
                 </a>
                 
                 <a href="/certamenes.html" class="nav-item ${this.currentPage === 'certamenes' ? 'active' : ''}" data-page="certamenes">
@@ -42,11 +42,25 @@ class VYTNavigation {
                     <span class="nav-label">Certámenes</span>
                 </a>
                 
+                <a href="/inscripcion-unificada.html" class="nav-item ${this.currentPage === 'inscripcion' ? 'active' : ''}" data-page="inscripcion">
+                    <div class="nav-icon">
+                        <i class="fas fa-pen-to-square"></i>
+                    </div>
+                    <span class="nav-label">Inscribirse</span>
+                </a>
+                
                 <a href="/ranking.html" class="nav-item ${this.currentPage === 'ranking' ? 'active' : ''}" data-page="ranking">
                     <div class="nav-icon">
                         <i class="fas fa-ranking-star"></i>
                     </div>
                     <span class="nav-label">Ranking</span>
+                </a>
+                
+                <a href="/perfil-artista.html" class="nav-item ${this.currentPage === 'perfil' ? 'active' : ''}" data-page="perfil">
+                    <div class="nav-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <span class="nav-label">Perfil</span>
                 </a>
                 
                 <button class="nav-item hamburger-trigger" id="hamburger-btn">
