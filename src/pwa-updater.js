@@ -17,6 +17,16 @@ class PWAUpdater {
     }
 
     try {
+      // PRIMERO: Desregistrar TODOS los Service Workers viejos
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const reg of registrations) {
+        const scope = reg.scope;
+        if (!scope.includes('sw-v6-clean.js')) {
+          console.log('🗑️ Desregistrando SW viejo:', scope);
+          await reg.unregister();
+        }
+      }
+
       // Registrar service worker CON NUEVO NOMBRE para forzar actualización
       this.registration = await navigator.serviceWorker.register('/sw-v6-clean.js');
       console.log('✅ Service Worker v6 registrado');
