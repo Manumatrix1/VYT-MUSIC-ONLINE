@@ -64,8 +64,14 @@
                     status.innerHTML += `<p>✅ Eliminado: ${name}</p>`;
                 }
 
+                // Limpiar localStorage y sessionStorage
+                localStorage.clear();
+                sessionStorage.clear();
+                status.innerHTML += '<p>✅ Storage limpiado</p>';
+
                 status.innerHTML += '<p style="color: #0f0; font-size: 20px;">✅ LIMPIEZA COMPLETA</p>';
-                status.innerHTML += '<p>🔄 Recarga la página manualmente (F5) para instalar versión limpia</p>';
+                status.innerHTML += '<p>⚠️ IMPORTANTE: Ahora CIERRA completamente Chrome (apps recientes → cerrar)</p>';
+                status.innerHTML += '<p>Después abre Chrome de nuevo y ve a vytonlineprueva.web.app</p>';
 
             } catch (error) {
                 status.innerHTML += `<p style="color: red;">❌ Error: ${error}</p>`;
