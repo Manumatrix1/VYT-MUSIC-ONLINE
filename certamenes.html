@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Version: 2026-01-04-19:15 UTC-8 -->
+    <!-- LIMPIEZA AGRESIVA DE SW VIEJOS -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+            regs.forEach(reg => {
+                if (!reg.active || !reg.active.scriptURL.includes('sw-simple.js')) {
+                    reg.unregister();
+                    console.log('🗑️ SW viejo eliminado:', reg.scope);
+                }
+            });
+        });
+        caches.keys().then(names => {
+            names.forEach(name => {
+                if (!name.includes('v3-force')) {
+                    caches.delete(name);
+                    console.log('🗑️ Caché viejo eliminado:', name);
+                }
+            });
+        });
+    }
+    </script>
+    <script src="/sw-register.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT Music - Certámenes</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Explora los certámenes de canto disponibles en VYT Music">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="VYT Music">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    
+    // Callback cuando Tawk.to se carga
+    Tawk_API.onLoad = function(){
+        console.log('Tawk.to widget cargado correctamente');
+    };
+    
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+</head>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Sistema de navegación -->
+    <link rel="stylesheet" href="/src/navigation-styles.css">
+    <script src="/src/navigation.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 🎵 TODO EL CSS INLINE - NAVEGACIÓN NEGRA TRANSPARENTE */
+        body {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Clase para fondo dinámico desde admin */
+        body.dynamic-background {
+            background: var(--dynamic-bg) !important;
+            background-size: var(--dynamic-bg-size, cover) !important;
+            background-attachment: fixed !important;
+            background-position: var(--dynamic-bg-position, center) !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(45, 212, 191, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .certamen-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+        }
+
+        .certamen-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Estilos del contenido */
+        .hero-section {
+
+        .menu-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .menu-overlay.active .menu-container {
+            transform: translateX(0);
+        }
+
+        .menu-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-header h3 {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .menu-icon {
+            margin-right: 16px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .menu-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .menu-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .main-container {
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 24px;
+            }
+            .btn-primary {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <header class="text-center mb-12">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" style="width: 128px; margin: 0 auto 16px; display: block;">
+            <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">VYT MUSIC</h1>
+        </header>
+
+        <main class="container">
+            <section class="hero-section">
+                <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
+                    🎵 Certámenes VYT Music
+                </h1>
+                <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
+                    Encuentra tu certamen perfecto y comienza tu carrera musical. Participa, compite y haz que tu 
+                    voz se escuche en toda Argentina.
+                </p>
+            </section>
+
+            <!-- Certámenes Activos -->
+            <section style="margin-bottom: 48px;">
+                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; text-align: center;">
+                    🎵 Certámenes Activos - ¡Inscríbete Ya!
+                </h2>
+                
+                <div class="certamen-card">
+                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 16px; color: #3B82F6;">
+                        Certamen Nacional de Pop
+                    </h3>
+                    <p style="margin-bottom: 16px; opacity: 0.9;">
+                        El certamen de música Pop más importante de Argentina. Participa con tu mejor interpretación y compite con 
+                        artistas de todo el país. Todos las edades pueden participar.
+                    </p>
+                    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
+                        <span style="background: rgba(34, 197, 94, 0.2); color: #22C55E; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                            Disponible
+                        </span>
+                        <span style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                            Pop
+                        </span>
+                        <span style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                            247 Inscritos
+                        </span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <a href="inscripcion-certamen.html" class="btn-primary">
+                            🎵“ Participar Ahora
+                        </a>
+                        <button class="btn-primary" style="background: linear-gradient(135deg, #6B7280, #4B5563);">
+                            🎵‘ï¸ Ver Reglamento
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Navegación unificada cargada por navigation.js -->
+
+    <script>
+        console.log('🎵 VYT MUSIC - Certámenes con navegación negra transparente');
+
+        // FUNCIONES DEL MENÚ
+        function toggleMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            if (menuOverlay.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+
+        function openMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            console.log('🎵”½ Menú abierto desde la derecha');
+        }
+
+        function closeMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            console.log('🎵”¼ Menú cerrado');
+        }
+
+
+
+        // Cerrar menú con tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+        });
+        
+        // Cargar fondo dinámico al inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDynamicBackground();
+        });
+        
+        // Sistema de fondos dinámicos desde Admin
+        function loadDynamicBackground() {
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'certamenes.html';
+                
+                console.log('🎵 Verificando configuración de fondo para:', currentPage);
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log('🎵 Aplicando fondo personalizado para certamenes.html');
+                    
+                    const config = backgroundConfig[currentPage];
+                    const position = config.position || 'center center';
+                    const scale = config.scale || 1;
+                    const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
+                    
+                    // Aplicar usando variables CSS
+                    document.documentElement.style.setProperty('--dynamic-bg', 
+                        `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('${config.imageData}')`);
+                    document.documentElement.style.setProperty('--dynamic-bg-size', backgroundSize);
+                    document.documentElement.style.setProperty('--dynamic-bg-position', position);
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log(`✅ Fondo aplicado: ${position}, escala: ${scale}`);
+                } else {
+                    console.log('🎵 Usando fondo predeterminado para certamenes.html');
+                }
+            } catch (error) {
+                console.error('☰Œ Error cargando fondo:', error);
+            }
+        }
+    </script>
+</body>
+</html>
