@@ -1,5 +1,5 @@
 // Service Worker SIMPLE - Sin auto-updates, sin notificaciones
-const CACHE_NAME = 'vyt-simple-v1';
+const CACHE_NAME = 'vyt-simple-v2';
 const urlsToCache = [
   '/',
   '/index.html',
