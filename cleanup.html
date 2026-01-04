@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DESINSTALAR SERVICE WORKERS VIEJOS</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #000;
+            color: #0f0;
+        }
+        h1 { color: #f00; }
+        button {
+            background: #f00;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+        }
+        #status {
+            margin-top: 20px;
+            padding: 15px;
+            background: #222;
+            border: 1px solid #0f0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔥 LIMPIEZA TOTAL DE SERVICE WORKERS</h1>
+    <p>Esta página desinstala TODOS los Service Workers y cachés viejos.</p>
+    
+    <button onclick="unregisterAll()">🗑️ DESINSTALAR TODO</button>
+    <button onclick="window.location.href='/'">🏠 Volver a Inicio</button>
+    
+    <div id="status"></div>
+
+    <script>
+        async function unregisterAll() {
+            const status = document.getElementById('status');
+            status.innerHTML = '<p>🔄 Procesando...</p>';
+
+            try {
+                // Desregistrar Service Workers
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                status.innerHTML += `<p>📋 Service Workers encontrados: ${registrations.length}</p>`;
+                
+                for (const reg of registrations) {
+                    await reg.unregister();
+                    status.innerHTML += `<p>✅ Desregistrado: ${reg.scope}</p>`;
+                }
+
+                // Eliminar cachés
+                const cacheNames = await caches.keys();
+                status.innerHTML += `<p>📦 Cachés encontrados: ${cacheNames.length}</p>`;
+                
+                for (const name of cacheNames) {
+                    await caches.delete(name);
+                    status.innerHTML += `<p>✅ Eliminado: ${name}</p>`;
+                }
+
+                status.innerHTML += '<p style="color: #0f0; font-size: 20px;">✅ LIMPIEZA COMPLETA</p>';
+                status.innerHTML += '<p>🔄 Recarga la página manualmente (F5) para instalar versión limpia</p>';
+
+            } catch (error) {
+                status.innerHTML += `<p style="color: red;">❌ Error: ${error}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

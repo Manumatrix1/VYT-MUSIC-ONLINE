@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
-<head>
+<head>`n    <script src="/sw-register.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VYT Music - Certámenes</title>
@@ -37,9 +37,6 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- PWA Auto-Updater -->
-    <script src="/src/pwa-updater.js" defer></script>
-    
     <!-- Sistema de navegación -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
@@ -48,7 +45,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* 🎵Ÿš¨ TODO EL CSS INLINE - NAVEGACIÃ“N NEGRA TRANSPARENTE */
+        /* 🎵š¨ TODO EL CSS INLINE - NAVEGACIÃ“N NEGRA TRANSPARENTE */
         body {
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
             background-size: cover;
@@ -311,7 +308,7 @@
         <main class="container">
             <section class="hero-section">
                 <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
-                    🎵Ÿ† Certámenes VYT Music
+                    🎵† Certámenes VYT Music
                 </h1>
                 <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
                     Encuentra tu certamen perfecto y comienza tu carrera musical. Participa, compite y haz que tu 
@@ -322,7 +319,7 @@
             <!-- Certámenes Activos -->
             <section style="margin-bottom: 48px;">
                 <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; text-align: center;">
-                    🎵Ÿ”¥ Certámenes Activos - ¡Inscríbete Ya!
+                    🎵”¥ Certámenes Activos - ¡Inscríbete Ya!
                 </h2>
                 
                 <div class="certamen-card">
@@ -346,10 +343,10 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <a href="inscripcion-certamen.html" class="btn-primary">
-                            🎵Ÿ“ Participar Ahora
+                            🎵“ Participar Ahora
                         </a>
                         <button class="btn-primary" style="background: linear-gradient(135deg, #6B7280, #4B5563);">
-                            🎵Ÿ‘ï¸ Ver Reglamento
+                            🎵‘ï¸ Ver Reglamento
                         </button>
                     </div>
                 </div>
@@ -360,7 +357,7 @@
     <!-- Navegación unificada cargada por navigation.js -->
 
     <script>
-        console.log('🎵ŸŽµ VYT MUSIC - Certámenes con navegación negra transparente');
+        console.log('🎵Žµ VYT MUSIC - Certámenes con navegación negra transparente');
 
         // FUNCIONES DEL MENÃš
         function toggleMenu() {
@@ -376,14 +373,14 @@
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            console.log('🎵Ÿ”½ Menú abierto desde la derecha');
+            console.log('🎵”½ Menú abierto desde la derecha');
         }
 
         function closeMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            console.log('🎵Ÿ”¼ Menú cerrado');
+            console.log('🎵”¼ Menú cerrado');
         }
 
 
@@ -406,10 +403,10 @@
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'certamenes.html';
                 
-                console.log('🎵ŸŽ¨ Verificando configuración de fondo para:', currentPage);
+                console.log('🎵Ž¨ Verificando configuración de fondo para:', currentPage);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('🎵Ÿ–¼ï¸ Aplicando fondo personalizado para certamenes.html');
+                    console.log('🎵–¼ï¸ Aplicando fondo personalizado para certamenes.html');
                     
                     const config = backgroundConfig[currentPage];
                     const position = config.position || 'center center';
@@ -425,7 +422,7 @@
                     
                     console.log(`☰œ… Fondo aplicado: ${position}, escala: ${scale}`);
                 } else {
-                    console.log('🎵Ÿ“ Usando fondo predeterminado para certamenes.html');
+                    console.log('🎵“ Usando fondo predeterminado para certamenes.html');
                 }
             } catch (error) {
                 console.error('☰Œ Error cargando fondo:', error);
