@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- LIMPIEZA AGRESIVA DE SW VIEJOS -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+            regs.forEach(reg => {
+                if (!reg.active || !reg.active.scriptURL.includes('sw-simple.js')) {
+                    reg.unregister();
+                    console.log('🗑️ SW viejo eliminado:', reg.scope);
+                }
+            });
+        });
+        caches.keys().then(names => {
+            names.forEach(name => {
+                if (!name.includes('v3-force')) {
+                    caches.delete(name);
+                    console.log('🗑️ Caché viejo eliminado:', name);
+                }
+            });
+        });
+    }
+    </script>
     <script src="/sw-register.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
