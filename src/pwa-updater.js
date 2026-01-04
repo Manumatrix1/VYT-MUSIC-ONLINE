@@ -17,9 +17,9 @@ class PWAUpdater {
     }
 
     try {
-      // Registrar service worker
-      this.registration = await navigator.serviceWorker.register('/service-worker.js');
-      console.log('✅ Service Worker registrado');
+      // Registrar service worker CON NUEVO NOMBRE para forzar actualización
+      this.registration = await navigator.serviceWorker.register('/sw-v6-clean.js');
+      console.log('✅ Service Worker v6 registrado');
 
       // Detectar cuando hay un nuevo service worker esperando
       this.registration.addEventListener('updatefound', () => {

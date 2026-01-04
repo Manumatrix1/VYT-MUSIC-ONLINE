@@ -3,7 +3,7 @@
   "short_name": "VYT Music",
   "version": "6.0.0",
   "description": "Plataforma de certámenes de canto online. Inscríbete, vota por tus artistas favoritos y gana premios.",
-  "start_url": "/?v=6.0",
+  "start_url": "/?v=6",
   "display": "standalone",
   "background_color": "#0d1117",
   "theme_color": "#00d9ff",
