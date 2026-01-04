@@ -1,12 +1,13 @@
 /**
- * PWA Auto-Updater
- * Detecta actualizaciones del Service Worker y notifica al usuario
+ * PWA Auto-Updater SIMPLIFICADO
+ * NO verifica actualizaciones automáticamente - solo al cargar la página
  */
 
 class PWAUpdater {
   constructor() {
     this.updateAvailable = false;
     this.registration = null;
+    this.notificationShown = false; // Prevenir duplicados
     this.init();
   }
 
@@ -17,42 +18,34 @@ class PWAUpdater {
     }
 
     try {
-      // PRIMERO: Desregistrar TODOS los Service Workers viejos
+      // LIMPIEZA: Desregistrar Service Workers viejos
       const registrations = await navigator.serviceWorker.getRegistrations();
       for (const reg of registrations) {
         const scope = reg.scope;
         if (!scope.includes('sw-v6-clean.js')) {
-          console.log('🗑️ Desregistrando SW viejo:', scope);
+          console.log('🗑️ Limpiando SW viejo');
           await reg.unregister();
         }
       }
 
-      // Registrar service worker CON NUEVO NOMBRE para forzar actualización
+      // Registrar Service Worker v6
       this.registration = await navigator.serviceWorker.register('/sw-v6-clean.js');
-      console.log('✅ Service Worker v6 registrado');
+      console.log('✅ SW v6 registrado');
 
-      // Detectar cuando hay un nuevo service worker esperando
+      // SOLO detectar nueva versión (sin verificación constante)
       this.registration.addEventListener('updatefound', () => {
         const newWorker = this.registration.installing;
-        console.log('🔍 Nueva versión detectada...');
         
         newWorker.addEventListener('statechange', () => {
-          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-            console.log('✨ Nueva versión instalada');
-            this.updateAvailable = true;
-            // Solo mostrar notificación si no hay una ya visible
-            if (!document.getElementById('pwa-update-notification')) {
-              this.showUpdateNotification();
-            }
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller && !this.notificationShown) {
+            this.notificationShown = true;
+            this.showUpdateNotification();
           }
         });
       });
 
-      // Verificar actualizaciones solo al cargar la página (no con interval constante)
-      this.registration.update();
-
     } catch (error) {
-      console.error('❌ Error registrando Service Worker:', error);
+      console.error('❌ Error:', error);
     }
   }
 
