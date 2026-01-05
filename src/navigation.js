@@ -266,7 +266,7 @@ class VYTNavigation {
         hamburgerBody.innerHTML = `
             <div class="menu-section">
                 <h4>Acceso</h4>
-                <a href="/login-artista.html" class="menu-item">
+                <a href="/login.html" class="menu-item">
                     <i class="fas fa-sign-in-alt"></i>
                     <span>Iniciar Sesión</span>
                 </a>
