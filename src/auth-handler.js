@@ -1,0 +1,295 @@
+// Sistema de Autenticación VYT Music
+// Maneja login con Email/Password, Google y Facebook
+// Diferencia entre usuarios Artista y Visitante
+
+class AuthHandler {
+    constructor() {
+        this.user = null;
+        this.userType = null; // 'artista' o 'visitante'
+        this.initialized = false;
+    }
+
+    // Inicializar listener de autenticación
+    init() {
+        if (!firebase || !firebase.auth) {
+            console.error('Firebase Auth no disponible');
+            return;
+        }
+
+        firebase.auth().onAuthStateChanged(async (user) => {
+            this.user = user;
+            if (user) {
+                await this.loadUserProfile();
+                this.updateUIForLoggedUser();
+            } else {
+                this.updateUIForGuest();
+            }
+            this.initialized = true;
+        });
+    }
+
+    // Cargar perfil del usuario desde Firestore
+    async loadUserProfile() {
+        try {
+            const userDoc = await db.collection('users').doc(this.user.uid).get();
+            if (userDoc.exists) {
+                const userData = userDoc.data();
+                this.userType = userData.userType || 'visitante';
+                
+                // Guardar en localStorage para acceso rápido
+                localStorage.setItem('userType', this.userType);
+                localStorage.setItem('userName', userData.displayName || this.user.displayName);
+            } else {
+                // Usuario nuevo - necesita seleccionar tipo
+                this.userType = null;
+            }
+        } catch (error) {
+            console.error('Error cargando perfil:', error);
+        }
+    }
+
+    // Login con Email y Password
+    async loginWithEmail(email, password) {
+        try {
+            const result = await firebase.auth().signInWithEmailAndPassword(email, password);
+            return { success: true, user: result.user };
+        } catch (error) {
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    // Login con Google
+    async loginWithGoogle() {
+        try {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            provider.addScope('email');
+            provider.addScope('profile');
+            
+            const result = await firebase.auth().signInWithPopup(provider);
+            
+            // Si es usuario nuevo, preguntar tipo
+            if (result.additionalUserInfo.isNewUser) {
+                await this.showUserTypeSelector(result.user);
+            }
+            
+            return { success: true, user: result.user };
+        } catch (error) {
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    // Login con Facebook
+    async loginWithFacebook() {
+        try {
+            const provider = new firebase.auth.FacebookAuthProvider();
+            provider.addScope('email');
+            provider.addScope('public_profile');
+            
+            const result = await firebase.auth().signInWithPopup(provider);
+            
+            // Si es usuario nuevo, preguntar tipo
+            if (result.additionalUserInfo.isNewUser) {
+                await this.showUserTypeSelector(result.user);
+            }
+            
+            return { success: true, user: result.user };
+        } catch (error) {
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    // Registro con Email y Password
+    async registerWithEmail(email, password, userType, displayName) {
+        try {
+            const result = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            
+            // Actualizar perfil
+            await result.user.updateProfile({ displayName });
+            
+            // Crear documento en Firestore
+            await this.createUserDocument(result.user, userType, displayName);
+            
+            return { success: true, user: result.user };
+        } catch (error) {
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    // Crear documento de usuario en Firestore
+    async createUserDocument(user, userType, displayName) {
+        try {
+            const userData = {
+                uid: user.uid,
+                email: user.email,
+                displayName: displayName || user.displayName || 'Usuario',
+                userType: userType, // 'artista' o 'visitante'
+                photoURL: user.photoURL || null,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                emailVerified: user.emailVerified
+            };
+
+            await db.collection('users').doc(user.uid).set(userData, { merge: true });
+            
+            // Si es artista, crear perfil de artista vacío
+            if (userType === 'artista') {
+                await db.collection('artist_profiles').doc(user.uid).set({
+                    userId: user.uid,
+                    artistName: displayName || user.displayName,
+                    profileComplete: false,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }, { merge: true });
+            }
+
+            this.userType = userType;
+        } catch (error) {
+            console.error('Error creando documento de usuario:', error);
+            throw error;
+        }
+    }
+
+    // Mostrar selector de tipo de usuario (para nuevos usuarios de redes sociales)
+    async showUserTypeSelector(user) {
+        return new Promise((resolve) => {
+            // Crear modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-2xl p-8 max-w-md w-full">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">¡Bienvenido a VYT Music! 🎵</h2>
+                    <p class="text-gray-600 mb-6">¿Cómo quieres usar la plataforma?</p>
+                    
+                    <div class="space-y-4">
+                        <button id="selectArtista" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105">
+                            <i class="fas fa-microphone mr-2"></i>
+                            Soy Artista
+                            <p class="text-sm font-normal mt-1 opacity-90">Participo en certámenes</p>
+                        </button>
+                        
+                        <button id="selectVisitante" class="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105">
+                            <i class="fas fa-star mr-2"></i>
+                            Soy Visitante
+                            <p class="text-sm font-normal mt-1 opacity-90">Voto y sigo certámenes</p>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+
+            // Handlers
+            document.getElementById('selectArtista').onclick = async () => {
+                await this.createUserDocument(user, 'artista', user.displayName);
+                modal.remove();
+                resolve('artista');
+            };
+
+            document.getElementById('selectVisitante').onclick = async () => {
+                await this.createUserDocument(user, 'visitante', user.displayName);
+                modal.remove();
+                resolve('visitante');
+            };
+        });
+    }
+
+    // Logout
+    async logout() {
+        try {
+            await firebase.auth().signOut();
+            localStorage.removeItem('userType');
+            localStorage.removeItem('userName');
+            this.user = null;
+            this.userType = null;
+            return { success: true };
+        } catch (error) {
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    // Actualizar UI según estado de autenticación
+    updateUIForLoggedUser() {
+        // Actualizar menú hamburguesa con opciones de usuario logueado
+        if (window.vytNavigation) {
+            window.vytNavigation.updateMenuForUser(this.userType, this.user);
+        }
+
+        // Ocultar botones de login
+        const loginButtons = document.querySelectorAll('.login-required');
+        loginButtons.forEach(btn => btn.classList.add('hidden'));
+
+        // Mostrar botones de usuario logueado
+        const userButtons = document.querySelectorAll('.user-logged');
+        userButtons.forEach(btn => btn.classList.remove('hidden'));
+    }
+
+    updateUIForGuest() {
+        // Actualizar menú para visitante no logueado
+        if (window.vytNavigation) {
+            window.vytNavigation.updateMenuForGuest();
+        }
+
+        // Mostrar botones de login
+        const loginButtons = document.querySelectorAll('.login-required');
+        loginButtons.forEach(btn => btn.classList.remove('hidden'));
+
+        // Ocultar botones de usuario
+        const userButtons = document.querySelectorAll('.user-logged');
+        userButtons.forEach(btn => btn.classList.add('hidden'));
+    }
+
+    // Verificar si usuario puede inscribirse (debe ser artista con perfil completo)
+    canInscribirse() {
+        if (!this.user) return false;
+        if (this.userType !== 'artista') return false;
+        // Aquí se puede agregar validación de perfil completo
+        return true;
+    }
+
+    // Mensajes de error en español
+    getErrorMessage(error) {
+        const messages = {
+            'auth/email-already-in-use': 'Este correo ya está registrado',
+            'auth/invalid-email': 'Correo electrónico inválido',
+            'auth/operation-not-allowed': 'Operación no permitida',
+            'auth/weak-password': 'La contraseña debe tener al menos 6 caracteres',
+            'auth/user-disabled': 'Esta cuenta ha sido deshabilitada',
+            'auth/user-not-found': 'No existe una cuenta con este correo',
+            'auth/wrong-password': 'Contraseña incorrecta',
+            'auth/popup-closed-by-user': 'Ventana de login cerrada',
+            'auth/cancelled-popup-request': 'Solicitud cancelada',
+            'auth/account-exists-with-different-credential': 'Ya existe una cuenta con este correo usando otro método de login'
+        };
+
+        return messages[error.code] || `Error: ${error.message}`;
+    }
+
+    // Helpers
+    isLoggedIn() {
+        return this.user !== null;
+    }
+
+    isArtista() {
+        return this.userType === 'artista';
+    }
+
+    isVisitante() {
+        return this.userType === 'visitante';
+    }
+}
+
+// Crear instancia global
+window.authHandler = new AuthHandler();
+
+// Auto-inicializar cuando Firebase esté listo
+if (typeof firebase !== 'undefined') {
+    window.authHandler.init();
+} else {
+    // Esperar a que Firebase se cargue
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(() => {
+            if (typeof firebase !== 'undefined') {
+                window.authHandler.init();
+            }
+        }, 1000);
+    });
+}

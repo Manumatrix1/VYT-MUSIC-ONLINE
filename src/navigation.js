@@ -42,11 +42,11 @@ class VYTNavigation {
                     <span class="nav-label">Certámenes</span>
                 </a>
                 
-                <a href="/inscripcion-unificada.html" class="nav-item ${this.currentPage === 'inscripcion' ? 'active' : ''}" data-page="inscripcion">
+                <a href="/comprar-vyt-money.html" class="nav-item ${this.currentPage === 'vyt-money' ? 'active' : ''}" data-page="vyt-money">
                     <div class="nav-icon">
-                        <i class="fas fa-pen-to-square"></i>
+                        <i class="fas fa-coins"></i>
                     </div>
-                    <span class="nav-label">Inscribirse</span>
+                    <span class="nav-label">VYT Money</span>
                 </a>
                 
                 <a href="/ranking.html" class="nav-item ${this.currentPage === 'ranking' ? 'active' : ''}" data-page="ranking">
@@ -54,13 +54,6 @@ class VYTNavigation {
                         <i class="fas fa-ranking-star"></i>
                     </div>
                     <span class="nav-label">Ranking</span>
-                </a>
-                
-                <a href="/perfil-artista.html" class="nav-item ${this.currentPage === 'perfil' ? 'active' : ''}" data-page="perfil">
-                    <div class="nav-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <span class="nav-label">Perfil</span>
                 </a>
                 
                 <button class="nav-item hamburger-trigger" id="hamburger-btn">
@@ -91,7 +84,11 @@ class VYTNavigation {
                 
                 <div class="hamburger-body">
                     <div class="menu-section">
-                        <h4>Principal</h4>
+                        <h4>Mi Cuenta</h4>
+                        <a href="/perfil-artista.html" class="menu-item">
+                            <i class="fas fa-user"></i>
+                            <span>Mi Perfil de Artista</span>
+                        </a>
                         <a href="/crear-perfil-artista.html" class="menu-item">
                             <i class="fas fa-user-plus"></i>
                             <span>Crear Perfil de Artista</span>
@@ -100,17 +97,17 @@ class VYTNavigation {
                             <i class="fas fa-file-alt"></i>
                             <span>Bases y Reglamento</span>
                         </a>
-                    </div>
-                    
-                    <div class="menu-section">
-                        <h4>Mi Cuenta</h4>
-                        <a href="/perfil-artista.html" class="menu-item">
-                            <i class="fas fa-user-circle"></i>
-                            <span>Perfil de Artista</span>
-                        </a>
                         <a href="/login-artista.html" class="menu-item">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>Iniciar Sesión</span>
+                        </a>
+                    </div>
+                    
+                    <div class="menu-section">
+                        <h4>Información</h4>
+                        <a href="/nosotros.html" class="menu-item">
+                            <i class="fas fa-info-circle"></i>
+                            <span>Sobre Nosotros</span>
                         </a>
                     </div>
                     
@@ -176,6 +173,122 @@ class VYTNavigation {
             });
         });
     }
+
+    // Actualizar menú para usuario logueado
+    updateMenuForUser(userType, user) {
+        const hamburgerBody = document.querySelector('.hamburger-body');
+        if (!hamburgerBody) return;
+
+        let menuHTML = '';
+
+        if (userType === 'artista') {
+            menuHTML = `
+                <div class="menu-section">
+                    <h4>Mi Perfil</h4>
+                    <a href="/perfil-artista.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil de Artista</span>
+                    </a>
+                    <a href="/inscripcion-unificada.html" class="menu-item">
+                        <i class="fas fa-pen-to-square"></i>
+                        <span>Inscribirme a Certamen</span>
+                    </a>
+                    <a href="/mis-inscripciones.html" class="menu-item">
+                        <i class="fas fa-list"></i>
+                        <span>Mis Inscripciones</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <h4>Información</h4>
+                    <a href="/reglamento.html" class="menu-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Bases y Reglamento</span>
+                    </a>
+                    <a href="/nosotros.html" class="menu-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Sobre Nosotros</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <h4>Cuenta</h4>
+                    <a href="#" onclick="window.authHandler.logout(); return false;" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                </div>
+            `;
+        } else if (userType === 'visitante') {
+            menuHTML = `
+                <div class="menu-section">
+                    <h4>Mi Cuenta</h4>
+                    <a href="/perfil.html" class="menu-item">
+                        <i class="fas fa-user"></i>
+                        <span>Mi Perfil</span>
+                    </a>
+                    <a href="/mis-votos.html" class="menu-item">
+                        <i class="fas fa-heart"></i>
+                        <span>Mis Votos</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <h4>Información</h4>
+                    <a href="/reglamento.html" class="menu-item">
+                        <i class="fas fa-file-alt"></i>
+                        <span>Bases y Reglamento</span>
+                    </a>
+                    <a href="/nosotros.html" class="menu-item">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Sobre Nosotros</span>
+                    </a>
+                </div>
+                
+                <div class="menu-section">
+                    <h4>Cuenta</h4>
+                    <a href="#" onclick="window.authHandler.logout(); return false;" class="menu-item">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Cerrar Sesión</span>
+                    </a>
+                </div>
+            `;
+        }
+
+        hamburgerBody.innerHTML = menuHTML;
+    }
+
+    // Actualizar menú para visitante no logueado
+    updateMenuForGuest() {
+        const hamburgerBody = document.querySelector('.hamburger-body');
+        if (!hamburgerBody) return;
+
+        hamburgerBody.innerHTML = `
+            <div class="menu-section">
+                <h4>Acceso</h4>
+                <a href="/login-artista.html" class="menu-item">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Iniciar Sesión</span>
+                </a>
+                <a href="/register.html" class="menu-item">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Registrarse</span>
+                </a>
+            </div>
+            
+            <div class="menu-section">
+                <h4>Información</h4>
+                <a href="/reglamento.html" class="menu-item">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Bases y Reglamento</span>
+                </a>
+                <a href="/nosotros.html" class="menu-item">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Sobre Nosotros</span>
+                </a>
+            </div>
+        `;
+    }
 }
 
 // Auto-initialize navigation if we're not on excluded pages
@@ -188,7 +301,7 @@ function initNavigation() {
     );
 
     if (shouldShowNav) {
-        new VYTNavigation();
+        window.vytNavigation = new VYTNavigation();
     }
 }
 
