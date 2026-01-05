@@ -363,19 +363,109 @@
                 console.log('🔐 Auth disponible:', typeof firebase?.auth !== 'undefined');
                 console.log('💾 DB disponible:', typeof db !== 'undefined');
                 
-                // Verificar si venimos de redirect de Google (antes de cargar auth-handler)
+                // Verificar si venimos de redirect de Google
                 if (typeof firebase !== 'undefined' && firebase.auth) {
                     firebase.auth().getRedirectResult().then(result => {
                         if (result.user) {
-                            console.log('✅ Redirect result:', result.user.email);
-                            // Redirigir según necesidad
-                            window.location.href = 'principal.html';
+                            console.log('✅ Usuario logueado desde Google:', result.user.email);
+                            
+                            // Verificar si es usuario nuevo
+                            if (result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
+                                console.log('👤 Usuario nuevo - Mostrar selector');
+                                showUserTypeModal(result.user);
+                            } else {
+                                console.log('👤 Usuario existente - Redirigiendo');
+                                // Usuario existente, redirigir directo
+                                showMessage('¡Bienvenido de nuevo!', 'success');
+                                setTimeout(() => {
+                                    window.location.href = 'principal.html';
+                                }, 800);
+                            }
+                        } else {
+                            console.log('ℹ️ No hay redirect result');
+                            // No hay resultado de redirect, continuar normal
+                            loadLoginPage();
                         }
                     }).catch(err => {
-                        console.error('Error redirect:', err);
+                        console.error('❌ Error redirect:', err);
+                        showMessage('Error: ' + err.message, 'error');
+                        loadLoginPage();
                     });
+                } else {
+                    loadLoginPage();
                 }
-                
+            }, 500);
+        });
+
+        // Mostrar modal de selección de tipo de usuario
+        function showUserTypeModal(user) {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            modal.innerHTML = `
+                <div style="background: white; border-radius: 20px; padding: 40px; max-width: 450px; width: 100%;">
+                    <h2 style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center;">¡Bienvenido a VYT Music! 🎵</h2>
+                    <p style="color: #666; margin-bottom: 30px; text-align: center;">¿Cómo quieres usar la plataforma?</p>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <button id="selectArtista" style="width: 100%; background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; font-weight: bold; padding: 20px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.3s;">
+                            🎤 Soy Artista
+                            <div style="font-size: 14px; font-weight: normal; margin-top: 5px;">Participo en certámenes</div>
+                        </button>
+                        
+                        <button id="selectVisitante" style="width: 100%; background: linear-gradient(135deg, #2196f3, #00bcd4); color: white; font-weight: bold; padding: 20px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.3s;">
+                            ⭐ Soy Visitante
+                            <div style="font-size: 14px; font-weight: normal; margin-top: 5px;">Voto y sigo certámenes</div>
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+
+            document.getElementById('selectArtista').onclick = async () => {
+                await createUserDocument(user, 'artista');
+                modal.remove();
+                window.location.href = 'crear-perfil-artista.html';
+            };
+
+            document.getElementById('selectVisitante').onclick = async () => {
+                await createUserDocument(user, 'visitante');
+                modal.remove();
+                window.location.href = 'principal.html';
+            };
+        }
+
+        // Crear documento de usuario en Firestore
+        async function createUserDocument(user, userType) {
+            try {
+                await db.collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || 'Usuario',
+                    userType: userType,
+                    photoURL: user.photoURL || null,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    emailVerified: user.emailVerified
+                }, { merge: true });
+
+                // Si es artista, crear perfil de artista
+                if (userType === 'artista') {
+                    await db.collection('artist_profiles').doc(user.uid).set({
+                        userId: user.uid,
+                        artistName: user.displayName,
+                        profileComplete: false,
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+                }
+
+                console.log('✅ Usuario creado en Firestore:', userType);
+            } catch (error) {
+                console.error('Error creando usuario:', error);
+            }
+        }
+
+        function loadLoginPage() {
                 // Cargar auth-handler después de verificar redirect
                 const script = document.createElement('script');
                 script.src = 'src/auth-handler.js';
@@ -384,8 +474,7 @@
                     initLoginPage();
                 };
                 document.body.appendChild(script);
-            }, 500);
-        });
+        }
 
         function initLoginPage() {
         document.getElementById('togglePassword').addEventListener('click', function() {
