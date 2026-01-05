@@ -365,33 +365,45 @@
                 
                 // Verificar si venimos de redirect de Google
                 if (typeof firebase !== 'undefined' && firebase.auth) {
+                    console.log('🔍 Verificando redirect result...');
                     firebase.auth().getRedirectResult().then(result => {
-                        if (result.user) {
+                        console.log('📥 Redirect result:', result);
+                        
+                        if (result && result.user) {
                             console.log('✅ Usuario logueado desde Google:', result.user.email);
+                            console.log('🆕 Es usuario nuevo?', result.additionalUserInfo?.isNewUser);
+                            
+                            // Mostrar mensaje inmediato
+                            const alert = document.getElementById('alertMessage');
+                            if (alert) {
+                                alert.textContent = '¡Autenticación exitosa!';
+                                alert.className = 'alert alert-success';
+                                alert.style.display = 'block';
+                            }
                             
                             // Verificar si es usuario nuevo
                             if (result.additionalUserInfo && result.additionalUserInfo.isNewUser) {
                                 console.log('👤 Usuario nuevo - Mostrar selector');
-                                showUserTypeModal(result.user);
+                                setTimeout(() => showUserTypeModal(result.user), 500);
                             } else {
-                                console.log('👤 Usuario existente - Redirigiendo');
-                                // Usuario existente, redirigir directo
+                                console.log('👤 Usuario existente - Redirigiendo a principal');
                                 showMessage('¡Bienvenido de nuevo!', 'success');
                                 setTimeout(() => {
+                                    console.log('🔄 Redirigiendo...');
                                     window.location.href = 'principal.html';
-                                }, 800);
+                                }, 1500);
                             }
                         } else {
-                            console.log('ℹ️ No hay redirect result');
-                            // No hay resultado de redirect, continuar normal
+                            console.log('ℹ️ No hay redirect result - Cargando página normal');
                             loadLoginPage();
                         }
                     }).catch(err => {
                         console.error('❌ Error redirect:', err);
-                        showMessage('Error: ' + err.message, 'error');
+                        alert('Error al procesar login: ' + err.message);
                         loadLoginPage();
                     });
                 } else {
+                    console.log('⚠️ Firebase no disponible');
                     loadLoginPage();
                 }
             }, 500);
