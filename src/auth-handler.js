@@ -150,6 +150,14 @@ class AuthHandler {
 
     // Mostrar selector de tipo de usuario (para nuevos usuarios de redes sociales)
     async showUserTypeSelector(user) {
+        // Verificar si hay tipo de usuario guardado temporalmente (desde página de registro)
+        const tempUserType = localStorage.getItem('tempUserType');
+        if (tempUserType) {
+            localStorage.removeItem('tempUserType');
+            await this.createUserDocument(user, tempUserType, user.displayName);
+            return tempUserType;
+        }
+
         return new Promise((resolve) => {
             // Crear modal
             const modal = document.createElement('div');
