@@ -65,15 +65,36 @@ class AuthHandler {
             provider.addScope('email');
             provider.addScope('profile');
             
-            const result = await firebase.auth().signInWithPopup(provider);
+            // Usar redirect en lugar de popup (más confiable)
+            await firebase.auth().signInWithRedirect(provider);
             
-            // Si es usuario nuevo, preguntar tipo
-            if (result.additionalUserInfo.isNewUser) {
-                await this.showUserTypeSelector(result.user);
+            // El resultado se maneja en getRedirectResult
+            return { success: true, redirecting: true };
+        } catch (error) {
+            console.error('Error login Google:', error);
+            return { success: false, error: this.getErrorMessage(error) };
+        }
+    }
+
+    // Manejar resultado del redirect de Google
+    async handleRedirectResult() {
+        try {
+            const result = await firebase.auth().getRedirectResult();
+            
+            if (result.user) {
+                console.log('✅ Login exitoso con Google:', result.user.email);
+                
+                // Si es usuario nuevo, preguntar tipo
+                if (result.additionalUserInfo?.isNewUser) {
+                    await this.showUserTypeSelector(result.user);
+                }
+                
+                return { success: true, user: result.user };
             }
             
-            return { success: true, user: result.user };
+            return { success: false, noResult: true };
         } catch (error) {
+            console.error('Error redirect result:', error);
             return { success: false, error: this.getErrorMessage(error) };
         }
     }
