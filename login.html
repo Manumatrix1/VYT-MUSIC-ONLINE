@@ -320,7 +320,7 @@
         <form id="loginForm">
             <div class="form-group">
                 <label for="email">Correo electrónico</label>
-                <input type="email" id="email" placeholder="tu@email.com" required>
+                <input type="email" id="email" placeholder="" required>
             </div>
 
             <div class="form-group">
@@ -362,34 +362,54 @@
                 
                 if (typeof firebase !== 'undefined' && firebase.auth) {
                     // Escuchar cambios de autenticación
-                    firebase.auth().onAuthStateChanged((user) => {
+                    firebase.auth().onAuthStateChanged(async (user) => {
                         if (user) {
                             console.log('✅ Usuario autenticado:', user.email);
-                            console.log('📧 Email verificado:', user.emailVerified);
                             
-                            // Usuario logueado - verificar si tiene documento en Firestore
-                            db.collection('users').doc(user.uid).get().then(doc => {
-                                if (doc.exists) {
-                                    const userData = doc.data();
-                                    console.log('👤 Usuario existente tipo:', userData.userType);
-                                    
-                                    // Redirigir según tipo
-                                    showMessage('¡Bienvenido ' + user.displayName + '!', 'success');
-                                    setTimeout(() => {
-                                        if (userData.userType === 'artista') {
-                                            window.location.href = 'perfil-artista.html';
-                                        } else {
-                                            window.location.href = 'principal.html';
-                                        }
-                                    }, 1000);
-                                } else {
-                                    console.log('🆕 Usuario nuevo - Mostrar selector');
-                                    // Usuario nuevo, mostrar selector
-                                    setTimeout(() => showUserTypeModal(user), 300);
-                                }
-                            });
+                            // Ocultar formularios de login
+                            document.getElementById('loginForm')?.classList.add('hidden');
+                            document.getElementById('btnGoogle')?.classList.add('hidden');
+                            document.getElementById('btnFacebook')?.classList.add('hidden');
+                            
+                            // Mostrar mensaje de bienvenida
+                            showMessage('¡Bienvenido ' + (user.displayName || user.email) + '! 🎉', 'success');
+                            
+                            // Verificar/crear usuario en Firestore
+                            const userDoc = await db.collection('users').doc(user.uid).get();
+                            
+                            if (!userDoc.exists) {
+                                console.log('🆕 Creando nuevo usuario en Firestore');
+                                // Usuario nuevo - crear automáticamente como visitante
+                                await db.collection('users').doc(user.uid).set({
+                                    uid: user.uid,
+                                    email: user.email,
+                                    displayName: user.displayName || user.email.split('@')[0],
+                                    userType: 'visitante', // Por defecto visitante
+                                    photoURL: user.photoURL || null,
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                                    emailVerified: user.emailVerified
+                                });
+                                console.log('✅ Usuario creado como visitante');
+                            } else {
+                                // Actualizar último login
+                                await db.collection('users').doc(user.uid).update({
+                                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                                });
+                            }
+                            
+                            // Redirigir a principal
+                            showMessage('Ingresando a la plataforma...', 'success');
+                            setTimeout(() => {
+                                window.location.href = 'principal.html';
+                            }, 1500);
+                            
                         } else {
-                            console.log('ℹ️ No hay usuario autenticado - Cargando página login');
+                            console.log('ℹ️ No hay usuario autenticado - Mostrar login');
+                            // Mostrar formularios de login
+                            document.getElementById('loginForm')?.classList.remove('hidden');
+                            document.getElementById('btnGoogle')?.classList.remove('hidden');
+                            document.getElementById('btnFacebook')?.classList.remove('hidden');
                             loadLoginPage();
                         }
                     });
