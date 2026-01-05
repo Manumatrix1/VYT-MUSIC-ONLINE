@@ -354,8 +354,27 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
-    <script src="src/auth-handler.js"></script>
     <script>
+        // Esperar a que Firebase se inicialice completamente
+        window.addEventListener('load', () => {
+            // Dar tiempo a Firebase para inicializar
+            setTimeout(() => {
+                console.log('🔥 Firebase disponible:', typeof firebase !== 'undefined');
+                console.log('🔐 Auth disponible:', typeof firebase?.auth !== 'undefined');
+                console.log('💾 DB disponible:', typeof db !== 'undefined');
+                
+                // Cargar auth-handler después de Firebase
+                const script = document.createElement('script');
+                script.src = 'src/auth-handler.js';
+                script.onload = () => {
+                    console.log('✅ Auth handler cargado');
+                    initLoginPage();
+                };
+                document.body.appendChild(script);
+            }, 500);
+        });
+
+        function initLoginPage() {
         // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
             const password = document.getElementById('password');
@@ -465,6 +484,7 @@
                 }, 3000);
             }
         }
+        } // Fin de initLoginPage
     </script>
 </body>
 </html>
