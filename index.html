@@ -469,6 +469,12 @@
             initCountdown();
             loadDynamicBackground();
             console.log('🎵 VYT MUSIC - Sistema iniciado correctamente');
+            
+            // Si viene de login.html (#login), abrir modal automáticamente
+            if (window.location.hash === '#login') {
+                openLoginModal();
+                history.replaceState(null, null, ' '); // Limpiar hash
+            }
         });
         
         // Sistema de fondos dinámicos desde Admin
