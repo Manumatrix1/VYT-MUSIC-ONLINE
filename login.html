@@ -355,113 +355,36 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script>
-        // Limpiar campos al cargar (evitar autocompletado) - MÚLTIPLES VECES
-        window.addEventListener('load', () => {
-            // Limpieza inmediata
-            const emailInput = document.getElementById('email');
-            const passwordInput = document.getElementById('password');
-            
-            if (emailInput) emailInput.value = '';
-            if (passwordInput) passwordInput.value = '';
-            
-            // Limpieza después de 100ms (por si el navegador autocompleta)
-            setTimeout(() => {
-                if (emailInput) emailInput.value = '';
-                if (passwordInput) passwordInput.value = '';
-            }, 100);
-            
-            // Limpieza después de 500ms (segunda vez)
-            setTimeout(() => {
-                if (emailInput) emailInput.value = '';
-                if (passwordInput) passwordInput.value = '';
-            }, 500);
-            
-            // Limpieza después de 1 segundo (última verificación)
-            setTimeout(() => {
-                if (emailInput) emailInput.value = '';
-                if (passwordInput) passwordInput.value = '';
-            }, 1000);
+        // 🔥 USAR onAuthStateChanged - Detecta usuario automáticamente
+        firebase.auth().onAuthStateChanged(async (user) => {
+            if (user) {
+                console.log('✅ Usuario detectado:', user.email);
+                console.log('🔄 Guardando en Firestore y redirigiendo...');
+                
+                // Crear/actualizar usuario en Firestore
+                const db = firebase.firestore();
+                await db.collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    email: user.email,
+                    displayName: user.displayName || user.email.split('@')[0],
+                    userType: 'visitante',
+                    photoURL: user.photoURL || '',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                    emailVerified: user.emailVerified
+                }, { merge: true });
+                
+                console.log('💾 Usuario guardado');
+                console.log('➡️ REDIRIGIENDO AHORA...');
+                
+                // REDIRECT INMEDIATO
+                window.location.replace('principal.html');
+            } else {
+                console.log('👤 No hay usuario - Mostrando formulario');
+                initLoginButtons();
+            }
         });
         
-        // Verificar usuario al cargar
-        window.addEventListener('load', async () => {
-            console.log('🔥 Página cargada, esperando Firebase...');
-            
-            // Esperar a que Firebase se inicialice
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            
-            console.log('🔐 Verificando autenticación...');
-            const currentUser = firebase.auth().currentUser;
-            
-            if (currentUser) {
-                console.log('✅ Ya hay usuario logueado:', currentUser.email);
-                handleUserLogin(currentUser);
-            } else {
-                console.log('ℹ️ No hay usuario, verificando redirect...');
-                
-                // Verificar resultado de redirect
-                try {
-                    const result = await firebase.auth().getRedirectResult();
-                    console.log('📥 Redirect result:', result);
-                    
-                    if (result && result.user) {
-                        console.log('✅ Usuario desde redirect:', result.user.email);
-                        handleUserLogin(result.user);
-                    } else {
-                        console.log('📝 Mostrando formulario de login');
-                        initLoginButtons();
-                    }
-                } catch (error) {
-                    console.error('❌ Error:', error);
-                    alert('Error: ' + error.message);
-                    initLoginButtons();
-                }
-            }
-        });
-
-        async function handleUserLogin(user) {
-            console.log('🎯 Procesando login de:', user.email);
-            
-            // Ocultar botones
-            const btnGoogle = document.getElementById('btnGoogle');
-            const btnFacebook = document.getElementById('btnFacebook');
-            const form = document.getElementById('loginForm');
-            if (btnGoogle) btnGoogle.style.display = 'none';
-            if (btnFacebook) btnFacebook.style.display = 'none';
-            if (form) form.style.display = 'none';
-            
-            // Mostrar mensaje
-            showMessage('¡Bienvenido ' + (user.displayName || user.email) + '! 🎉', 'success');
-            
-            try {
-                // Verificar/crear usuario
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                
-                if (!userDoc.exists) {
-                    console.log('🆕 Creando usuario nuevo');
-                    await db.collection('users').doc(user.uid).set({
-                        uid: user.uid,
-                        email: user.email,
-                        displayName: user.displayName || user.email.split('@')[0],
-                        userType: 'visitante',
-                        photoURL: user.photoURL,
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    });
-                }
-                
-                console.log('🔄 Redirigiendo a principal...');
-                showMessage('Ingresando...', 'success');
-                
-                setTimeout(() => {
-                    window.location.href = 'principal.html';
-                }, 1000);
-                
-            } catch (error) {
-                console.error('❌ Error:', error);
-                alert('Error al crear usuario: ' + error.message);
-            }
-        }
-
         function initLoginButtons() {
         document.getElementById('togglePassword').addEventListener('click', function() {
             const password = document.getElementById('password');
