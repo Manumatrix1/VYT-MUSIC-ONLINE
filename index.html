@@ -470,7 +470,32 @@
             loadDynamicBackground();
             console.log('🎵 VYT MUSIC - Sistema iniciado correctamente');
             
-            // Si viene de login.html (#login), abrir modal automáticamente
+            // VERIFICAR SI YA HAY USUARIO LOGUEADO
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    console.log('✅ Usuario ya logueado:', user.email);
+                    // Usuario logueado - Redirigir directo a la app
+                    const userDoc = await db.collection('users').doc(user.uid).get();
+                    if (userDoc.exists) {
+                        const userData = userDoc.data();
+                        console.log('➡️ Redirigiendo a la app...');
+                        
+                        if (userData.userType === 'artista') {
+                            window.location.replace('perfil-artista.html');
+                        } else {
+                            window.location.replace('principal.html');
+                        }
+                    }
+                } else {
+                    console.log('👤 Usuario no logueado - Mostrando modal de login');
+                    // NO hay usuario - Abrir modal automáticamente después de 1 segundo
+                    setTimeout(() => {
+                        openLoginModal();
+                    }, 1000);
+                }
+            });
+            
+            // Si viene de login.html (#login), abrir modal inmediatamente
             if (window.location.hash === '#login') {
                 openLoginModal();
                 history.replaceState(null, null, ' '); // Limpiar hash
