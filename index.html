@@ -601,19 +601,100 @@
                 }
             });
 
-            // Check redirect result
+            // Check redirect result - PRIMERO, antes de cualquier cosa
             firebase.auth().getRedirectResult().then(async (result) => {
                 if (result.user) {
-                    await db.collection('users').doc(result.user.uid).set({
-                        uid: result.user.uid,
-                        email: result.user.email,
-                        displayName: result.user.displayName,
-                        photoURL: result.user.photoURL,
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
-                    window.location.href = 'principal.html';
+                    console.log('✅ Usuario detectado después de redirect:', result.user.email);
+                    
+                    // Verificar si el usuario ya existe
+                    const userDoc = await db.collection('users').doc(result.user.uid).get();
+                    
+                    if (!userDoc.exists) {
+                        console.log('🆕 Usuario nuevo - Mostrando selector de tipo');
+                        // Usuario nuevo - preguntar tipo
+                        const userType = await showUserTypeSelector();
+                        
+                        // Crear documento completo
+                        await db.collection('users').doc(result.user.uid).set({
+                            uid: result.user.uid,
+                            email: result.user.email,
+                            displayName: result.user.displayName || result.user.email.split('@')[0],
+                            photoURL: result.user.photoURL || '',
+                            userType: userType,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                            emailVerified: result.user.emailVerified
+                        });
+                        
+                        console.log('💾 Usuario creado con tipo:', userType);
+                        
+                        // Redirigir según tipo
+                        if (userType === 'artista') {
+                            window.location.href = 'crear-perfil-artista.html';
+                        } else {
+                            window.location.href = 'principal.html';
+                        }
+                    } else {
+                        console.log('👤 Usuario existente - Actualizando lastLogin');
+                        // Usuario existente - solo actualizar login
+                        await db.collection('users').doc(result.user.uid).update({
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                        
+                        const userData = userDoc.data();
+                        
+                        // Redirigir según tipo
+                        if (userData.userType === 'artista') {
+                            window.location.href = 'perfil-artista.html';
+                        } else {
+                            window.location.href = 'principal.html';
+                        }
+                    }
                 }
-            }).catch(error => console.error('Redirect error:', error));
+            }).catch(error => {
+                console.error('❌ Error en redirect:', error);
+                showLoginAlert('Error: ' + error.message, 'error');
+            });
+
+            // Función para mostrar selector de tipo de usuario
+            function showUserTypeSelector() {
+                return new Promise((resolve) => {
+                    const modal = document.createElement('div');
+                    modal.className = 'fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-4';
+                    modal.innerHTML = `
+                        <div class="bg-gradient-to-br from-gray-900 to-black border-2 border-yellow-500 rounded-3xl p-8 max-w-md w-full">
+                            <h2 class="text-3xl font-bold text-white text-center mb-4">¡Bienvenido a VYT Music! 🎵</h2>
+                            <p class="text-gray-400 text-center mb-6">¿Cómo quieres usar la plataforma?</p>
+                            
+                            <div class="space-y-4">
+                                <button id="selectArtista" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105">
+                                    <i class="fas fa-microphone text-2xl mb-2 block"></i>
+                                    <span class="text-lg">Soy Artista</span>
+                                    <p class="text-sm font-normal mt-1 opacity-90">Participo en certámenes</p>
+                                </button>
+                                
+                                <button id="selectVisitante" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105">
+                                    <i class="fas fa-star text-2xl mb-2 block"></i>
+                                    <span class="text-lg">Soy Visitante</span>
+                                    <p class="text-sm font-normal mt-1 opacity-90">Voto y sigo certámenes</p>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(modal);
+
+                    document.getElementById('selectArtista').onclick = () => {
+                        modal.remove();
+                        resolve('artista');
+                    };
+
+                    document.getElementById('selectVisitante').onclick = () => {
+                        modal.remove();
+                        resolve('visitante');
+                    };
+                });
+            }
         });
     </script>
     
