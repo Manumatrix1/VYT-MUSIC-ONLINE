@@ -470,28 +470,33 @@
             loadDynamicBackground();
             console.log('🎵 VYT MUSIC - Sistema iniciado correctamente');
             
+            // Definir db
+            const db = firebase.firestore();
+            
             // VERIFICAR SI YA HAY USUARIO LOGUEADO
             firebase.auth().onAuthStateChanged(async (user) => {
                 if (user) {
                     console.log('✅ Usuario ya logueado:', user.email);
                     // Usuario logueado - Redirigir directo a la app
-                    const userDoc = await db.collection('users').doc(user.uid).get();
-                    if (userDoc.exists) {
-                        const userData = userDoc.data();
-                        console.log('➡️ Redirigiendo a la app...');
-                        
-                        if (userData.userType === 'artista') {
-                            window.location.replace('perfil-artista.html');
-                        } else {
-                            window.location.replace('principal.html');
+                    try {
+                        const userDoc = await db.collection('users').doc(user.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            console.log('➡️ Redirigiendo a la app...');
+                            
+                            if (userData.userType === 'artista') {
+                                window.location.replace('perfil-artista.html');
+                            } else {
+                                window.location.replace('principal.html');
+                            }
                         }
+                    } catch (error) {
+                        console.error('Error:', error);
                     }
                 } else {
                     console.log('👤 Usuario no logueado - Mostrando modal de login');
-                    // NO hay usuario - Abrir modal automáticamente después de 1 segundo
-                    setTimeout(() => {
-                        openLoginModal();
-                    }, 1000);
+                    // NO hay usuario - Abrir modal automáticamente
+                    openLoginModal();
                 }
             });
             
