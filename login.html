@@ -353,39 +353,54 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script>
-        const db = firebase.firestore();
-        
-        // 🔥 USAR onAuthStateChanged - Detecta usuario automáticamente
-        firebase.auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                console.log('✅ Usuario detectado:', user.email);
-                console.log('🔄 Guardando en Firestore y redirigiendo...');
-                
-                // Crear/actualizar usuario en Firestore
-                await db.collection('users').doc(user.uid).set({
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName || user.email.split('@')[0],
-                    userType: 'visitante',
-                    photoURL: user.photoURL || '',
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                    emailVerified: user.emailVerified
-                }, { merge: true });
-                
-                console.log('💾 Usuario guardado');
-                console.log('➡️ REDIRIGIENDO AHORA...');
-                
-                // REDIRECT INMEDIATO
-                window.location.replace('principal.html');
-            } else {
-                console.log('👤 No hay usuario - Mostrando formulario');
-                // Inicializar botones cuando NO hay usuario
-                setTimeout(initLoginButtons, 100);
-            }
+        // Esperar a que Firebase esté listo
+        window.addEventListener('firebaseReady', () => {
+            console.log('🚀 Firebase listo, configurando autenticación...');
+            setupAuth();
         });
+        
+        // Si firebase-config ya está listo, configurar inmediatamente
+        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
+            console.log('🔥 Firebase ya inicializado');
+            setupAuth();
+        }
+        
+        function setupAuth() {
+            const db = firebase.firestore();
+            
+            // 🔥 USAR onAuthStateChanged - Detecta usuario automáticamente
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    console.log('✅ Usuario detectado:', user.email);
+                    console.log('🔄 Guardando en Firestore y redirigiendo...');
+                    
+                    // Crear/actualizar usuario en Firestore
+                    await db.collection('users').doc(user.uid).set({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName || user.email.split('@')[0],
+                        userType: 'visitante',
+                        photoURL: user.photoURL || '',
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                        emailVerified: user.emailVerified
+                    }, { merge: true });
+                    
+                    console.log('💾 Usuario guardado');
+                    console.log('➡️ REDIRIGIENDO AHORA...');
+                    
+                    // REDIRECT INMEDIATO
+                    window.location.replace('principal.html');
+                } else {
+                    console.log('👤 No hay usuario - Mostrando formulario');
+                    // Inicializar botones cuando NO hay usuario
+                    setTimeout(initLoginButtons, 100);
+                }
+            });
+        }
         
         function initLoginButtons() {
             console.log('🎯 Inicializando botones de login');
