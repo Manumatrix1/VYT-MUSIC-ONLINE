@@ -371,32 +371,63 @@
         function setupAuth() {
             const db = firebase.firestore();
             
-            // 🔥 USAR onAuthStateChanged - Detecta usuario automáticamente
+            // 🔥 PRIMERO: Verificar si venimos de un redirect de Google
+            firebase.auth().getRedirectResult()
+                .then(async (result) => {
+                    console.log('📥 Verificando redirect result...');
+                    
+                    if (result && result.user) {
+                        console.log('✅ Usuario desde Google redirect:', result.user.email);
+                        
+                        // Crear/actualizar usuario en Firestore
+                        await db.collection('users').doc(result.user.uid).set({
+                            uid: result.user.uid,
+                            email: result.user.email,
+                            displayName: result.user.displayName || result.user.email.split('@')[0],
+                            userType: 'visitante',
+                            photoURL: result.user.photoURL || '',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                            emailVerified: result.user.emailVerified
+                        }, { merge: true });
+                        
+                        console.log('💾 Usuario guardado en Firestore');
+                        console.log('➡️ REDIRIGIENDO A PRINCIPAL...');
+                        
+                        // REDIRECT INMEDIATO
+                        window.location.replace('principal.html');
+                        return; // No continuar con el resto
+                    } else {
+                        console.log('ℹ️ No hay redirect result, configurando listeners...');
+                    }
+                })
+                .catch((error) => {
+                    console.error('❌ Error en getRedirectResult:', error);
+                });
+            
+            // SEGUNDO: Listener para cambios de autenticación
             firebase.auth().onAuthStateChanged(async (user) => {
                 if (user) {
-                    console.log('✅ Usuario detectado:', user.email);
-                    console.log('🔄 Guardando en Firestore y redirigiendo...');
+                    console.log('✅ Usuario detectado por onAuthStateChanged:', user.email);
                     
-                    // Crear/actualizar usuario en Firestore
-                    await db.collection('users').doc(user.uid).set({
-                        uid: user.uid,
-                        email: user.email,
-                        displayName: user.displayName || user.email.split('@')[0],
-                        userType: 'visitante',
-                        photoURL: user.photoURL || '',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                        emailVerified: user.emailVerified
-                    }, { merge: true });
-                    
-                    console.log('💾 Usuario guardado');
-                    console.log('➡️ REDIRIGIENDO AHORA...');
-                    
-                    // REDIRECT INMEDIATO
-                    window.location.replace('principal.html');
+                    // Verificar que no estemos ya redirigiendo
+                    if (window.location.pathname.includes('login.html')) {
+                        console.log('🔄 Guardando en Firestore...');
+                        
+                        await db.collection('users').doc(user.uid).set({
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: user.displayName || user.email.split('@')[0],
+                            userType: 'visitante',
+                            photoURL: user.photoURL || '',
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                        }, { merge: true });
+                        
+                        console.log('➡️ Redirigiendo...');
+                        window.location.replace('principal.html');
+                    }
                 } else {
                     console.log('👤 No hay usuario - Mostrando formulario');
-                    // Inicializar botones cuando NO hay usuario
                     setTimeout(initLoginButtons, 100);
                 }
             });
