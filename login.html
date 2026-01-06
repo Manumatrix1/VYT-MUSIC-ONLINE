@@ -355,10 +355,32 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script>
-        // Limpiar campos al cargar (evitar autocompletado)
+        // Limpiar campos al cargar (evitar autocompletado) - MÚLTIPLES VECES
         window.addEventListener('load', () => {
-            document.getElementById('email').value = '';
-            document.getElementById('password').value = '';
+            // Limpieza inmediata
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            
+            if (emailInput) emailInput.value = '';
+            if (passwordInput) passwordInput.value = '';
+            
+            // Limpieza después de 100ms (por si el navegador autocompleta)
+            setTimeout(() => {
+                if (emailInput) emailInput.value = '';
+                if (passwordInput) passwordInput.value = '';
+            }, 100);
+            
+            // Limpieza después de 500ms (segunda vez)
+            setTimeout(() => {
+                if (emailInput) emailInput.value = '';
+                if (passwordInput) passwordInput.value = '';
+            }, 500);
+            
+            // Limpieza después de 1 segundo (última verificación)
+            setTimeout(() => {
+                if (emailInput) emailInput.value = '';
+                if (passwordInput) passwordInput.value = '';
+            }, 1000);
         });
         
         // Verificar usuario al cargar
