@@ -355,151 +355,86 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script>
-        // Esperar a que Firebase se inicialice completamente
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                console.log('🔥 Firebase disponible:', typeof firebase !== 'undefined');
+        // Verificar usuario al cargar
+        window.addEventListener('load', async () => {
+            console.log('🔥 Página cargada, esperando Firebase...');
+            
+            // Esperar a que Firebase se inicialice
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            console.log('🔐 Verificando autenticación...');
+            const currentUser = firebase.auth().currentUser;
+            
+            if (currentUser) {
+                console.log('✅ Ya hay usuario logueado:', currentUser.email);
+                handleUserLogin(currentUser);
+            } else {
+                console.log('ℹ️ No hay usuario, verificando redirect...');
                 
-                if (typeof firebase !== 'undefined' && firebase.auth) {
-                    // Escuchar cambios de autenticación
-                    firebase.auth().onAuthStateChanged(async (user) => {
-                        if (user) {
-                            console.log('✅ Usuario autenticado:', user.email);
-                            
-                            // Ocultar formularios de login
-                            document.getElementById('loginForm')?.classList.add('hidden');
-                            document.getElementById('btnGoogle')?.classList.add('hidden');
-                            document.getElementById('btnFacebook')?.classList.add('hidden');
-                            
-                            // Mostrar mensaje de bienvenida
-                            showMessage('¡Bienvenido ' + (user.displayName || user.email) + '! 🎉', 'success');
-                            
-                            // Verificar/crear usuario en Firestore
-                            const userDoc = await db.collection('users').doc(user.uid).get();
-                            
-                            if (!userDoc.exists) {
-                                console.log('🆕 Creando nuevo usuario en Firestore');
-                                // Usuario nuevo - crear automáticamente como visitante
-                                await db.collection('users').doc(user.uid).set({
-                                    uid: user.uid,
-                                    email: user.email,
-                                    displayName: user.displayName || user.email.split('@')[0],
-                                    userType: 'visitante', // Por defecto visitante
-                                    photoURL: user.photoURL || null,
-                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                                    emailVerified: user.emailVerified
-                                });
-                                console.log('✅ Usuario creado como visitante');
-                            } else {
-                                // Actualizar último login
-                                await db.collection('users').doc(user.uid).update({
-                                    lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                                });
-                            }
-                            
-                            // Redirigir a principal
-                            showMessage('Ingresando a la plataforma...', 'success');
-                            setTimeout(() => {
-                                window.location.href = 'principal.html';
-                            }, 1500);
-                            
-                        } else {
-                            console.log('ℹ️ No hay usuario autenticado - Mostrar login');
-                            // Mostrar formularios de login
-                            document.getElementById('loginForm')?.classList.remove('hidden');
-                            document.getElementById('btnGoogle')?.classList.remove('hidden');
-                            document.getElementById('btnFacebook')?.classList.remove('hidden');
-                            loadLoginPage();
-                        }
-                    });
-                } else {
-                    console.log('⚠️ Firebase no disponible');
-                    loadLoginPage();
+                // Verificar resultado de redirect
+                try {
+                    const result = await firebase.auth().getRedirectResult();
+                    console.log('📥 Redirect result:', result);
+                    
+                    if (result && result.user) {
+                        console.log('✅ Usuario desde redirect:', result.user.email);
+                        handleUserLogin(result.user);
+                    } else {
+                        console.log('📝 Mostrando formulario de login');
+                        initLoginButtons();
+                    }
+                } catch (error) {
+                    console.error('❌ Error:', error);
+                    alert('Error: ' + error.message);
+                    initLoginButtons();
                 }
-            }, 500);
+            }
         });
 
-        // Mostrar modal de selección de tipo de usuario
-        function showUserTypeModal(user) {
-            const modal = document.createElement('div');
-            modal.className = 'fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4';
-            modal.innerHTML = `
-                <div style="background: white; border-radius: 20px; padding: 40px; max-width: 450px; width: 100%;">
-                    <h2 style="font-size: 24px; font-weight: bold; color: #333; margin-bottom: 15px; text-align: center;">¡Bienvenido a VYT Music! 🎵</h2>
-                    <p style="color: #666; margin-bottom: 30px; text-align: center;">¿Cómo quieres usar la plataforma?</p>
-                    
-                    <div style="display: flex; flex-direction: column; gap: 15px;">
-                        <button id="selectArtista" style="width: 100%; background: linear-gradient(135deg, #e91e63, #9c27b0); color: white; font-weight: bold; padding: 20px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.3s;">
-                            🎤 Soy Artista
-                            <div style="font-size: 14px; font-weight: normal; margin-top: 5px;">Participo en certámenes</div>
-                        </button>
-                        
-                        <button id="selectVisitante" style="width: 100%; background: linear-gradient(135deg, #2196f3, #00bcd4); color: white; font-weight: bold; padding: 20px; border-radius: 12px; border: none; cursor: pointer; transition: all 0.3s;">
-                            ⭐ Soy Visitante
-                            <div style="font-size: 14px; font-weight: normal; margin-top: 5px;">Voto y sigo certámenes</div>
-                        </button>
-                    </div>
-                </div>
-            `;
+        async function handleUserLogin(user) {
+            console.log('🎯 Procesando login de:', user.email);
             
-            document.body.appendChild(modal);
-
-            document.getElementById('selectArtista').onclick = async () => {
-                await createUserDocument(user, 'artista');
-                modal.remove();
-                window.location.href = 'crear-perfil-artista.html';
-            };
-
-            document.getElementById('selectVisitante').onclick = async () => {
-                await createUserDocument(user, 'visitante');
-                modal.remove();
-                window.location.href = 'principal.html';
-            };
-        }
-
-        // Crear documento de usuario en Firestore
-        async function createUserDocument(user, userType) {
+            // Ocultar botones
+            const btnGoogle = document.getElementById('btnGoogle');
+            const btnFacebook = document.getElementById('btnFacebook');
+            const form = document.getElementById('loginForm');
+            if (btnGoogle) btnGoogle.style.display = 'none';
+            if (btnFacebook) btnFacebook.style.display = 'none';
+            if (form) form.style.display = 'none';
+            
+            // Mostrar mensaje
+            showMessage('¡Bienvenido ' + (user.displayName || user.email) + '! 🎉', 'success');
+            
             try {
-                await db.collection('users').doc(user.uid).set({
-                    uid: user.uid,
-                    email: user.email,
-                    displayName: user.displayName || 'Usuario',
-                    userType: userType,
-                    photoURL: user.photoURL || null,
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                    lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                    emailVerified: user.emailVerified
-                }, { merge: true });
-
-                // Si es artista, crear perfil de artista
-                if (userType === 'artista') {
-                    await db.collection('artist_profiles').doc(user.uid).set({
-                        userId: user.uid,
-                        artistName: user.displayName,
-                        profileComplete: false,
+                // Verificar/crear usuario
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (!userDoc.exists) {
+                    console.log('🆕 Creando usuario nuevo');
+                    await db.collection('users').doc(user.uid).set({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName || user.email.split('@')[0],
+                        userType: 'visitante',
+                        photoURL: user.photoURL,
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }, { merge: true });
+                    });
                 }
-
-                console.log('✅ Usuario creado en Firestore:', userType);
+                
+                console.log('🔄 Redirigiendo a principal...');
+                showMessage('Ingresando...', 'success');
+                
+                setTimeout(() => {
+                    window.location.href = 'principal.html';
+                }, 1000);
+                
             } catch (error) {
-                console.error('Error creando usuario:', error);
+                console.error('❌ Error:', error);
+                alert('Error al crear usuario: ' + error.message);
             }
         }
 
-        function loadLoginPage() {
-                // Cargar auth-handler después de verificar redirect
-                const script = document.createElement('script');
-                script.src = 'src/auth-handler.js';
-                script.onload = () => {
-                    console.log('✅ Auth handler cargado');
-                    initLoginPage();
-                };
-                document.body.appendChild(script);
-        }
-
-        function initLoginPage() {
+        function initLoginButtons() {
         document.getElementById('togglePassword').addEventListener('click', function() {
             const password = document.getElementById('password');
             const icon = this.querySelector('i');
