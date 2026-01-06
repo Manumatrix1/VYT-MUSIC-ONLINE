@@ -355,6 +355,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="firebase-config.js"></script>
     <script>
+        const db = firebase.firestore();
+        
         // 🔥 USAR onAuthStateChanged - Detecta usuario automáticamente
         firebase.auth().onAuthStateChanged(async (user) => {
             if (user) {
@@ -362,7 +364,6 @@
                 console.log('🔄 Guardando en Firestore y redirigiendo...');
                 
                 // Crear/actualizar usuario en Firestore
-                const db = firebase.firestore();
                 await db.collection('users').doc(user.uid).set({
                     uid: user.uid,
                     email: user.email,
@@ -381,11 +382,14 @@
                 window.location.replace('principal.html');
             } else {
                 console.log('👤 No hay usuario - Mostrando formulario');
-                initLoginButtons();
+                // Inicializar botones cuando NO hay usuario
+                setTimeout(initLoginButtons, 100);
             }
         });
         
         function initLoginButtons() {
+            console.log('🎯 Inicializando botones de login');
+            
         document.getElementById('togglePassword').addEventListener('click', function() {
             const password = document.getElementById('password');
             const icon = this.querySelector('i');
