@@ -1038,6 +1038,22 @@
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎤 VYT MUSIC - Formulario de perfil de artista iniciado');
+            
+            // Verificar que el usuario esté autenticado
+            firebase.auth().onAuthStateChanged((user) => {
+                if (!user) {
+                    console.log('⚠️ Usuario no autenticado - Redirigiendo a login');
+                    alert('Debes iniciar sesión primero');
+                    window.location.href = 'index.html';
+                } else {
+                    console.log('✅ Usuario autenticado:', user.email);
+                    // Cargar los campos del formulario con datos del usuario si existen
+                    const emailInput = document.getElementById('email');
+                    if (emailInput && user.email) {
+                        emailInput.value = user.email;
+                    }
+                }
+            });
         });
     </script>
 

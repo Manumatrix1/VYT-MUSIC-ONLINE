@@ -57,6 +57,12 @@
     })();
     </script>
     <!--End of Tawk.to Script-->
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
 </head>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -290,9 +296,9 @@
                         </span>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="inscripcion-unificada.html" class="btn-primary">
+                        <button onclick="handleParticipar()" class="btn-primary" style="cursor: pointer; border: none;">
                             📝 Participar Ahora
-                        </a>
+                        </button>
                         <a href="reglamento.html" class="btn-primary" style="background: linear-gradient(135deg, #6B7280, #4B5563);">
                             👁️ Ver Reglamento
                         </a>
@@ -306,6 +312,59 @@
 
     <script>
         console.log('🎵 VYT MUSIC - Certámenes con navegación negra transparente');
+
+        // Función para manejar participación
+        async function handleParticipar() {
+            console.log('🎯 Clic en Participar Ahora');
+            
+            // Verificar si el usuario está autenticado
+            const user = firebase.auth().currentUser;
+            
+            if (!user) {
+                console.log('⚠️ Usuario no autenticado - Redirigiendo a login');
+                alert('¡Para participar debes iniciar sesión primero! 🎵');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            console.log('✅ Usuario autenticado:', user.email);
+            
+            // Verificar si el usuario es artista
+            try {
+                const db = firebase.firestore();
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                
+                if (!userDoc.exists) {
+                    alert('Error: No se encontró tu perfil. Por favor contacta soporte.');
+                    return;
+                }
+                
+                const userData = userDoc.data();
+                
+                if (userData.userType !== 'artista') {
+                    alert('Solo los artistas pueden participar en certámenes. 🎤\n\nSi sos artista, contactá con soporte para cambiar tu tipo de cuenta.');
+                    return;
+                }
+                
+                // Verificar si el artista tiene perfil creado
+                const artistDoc = await db.collection('artist_profiles').doc(user.uid).get();
+                
+                if (!artistDoc.exists) {
+                    console.log('⚠️ Artista sin perfil - Redirigiendo a crear perfil');
+                    if (confirm('Primero necesitás crear tu perfil de artista. ¿Querés hacerlo ahora?')) {
+                        window.location.href = 'crear-perfil-artista.html';
+                    }
+                    return;
+                }
+                
+                console.log('✅ Artista con perfil - Redirigiendo a inscripción');
+                window.location.href = 'inscripcion-unificada.html';
+                
+            } catch (error) {
+                console.error('❌ Error al verificar usuario:', error);
+                alert('Error al verificar tu perfil. Por favor intentá de nuevo.');
+            }
+        }
 
         // FUNCIONES DEL MENÚ
         function toggleMenu() {
