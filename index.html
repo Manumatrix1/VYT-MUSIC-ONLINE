@@ -267,15 +267,6 @@
             const action = urlParams.get('action');
             const forceLogin = action === 'login';
             
-            if (forceLogin) {
-                console.log('🎯 Parámetro action=login detectado - Abriendo modal INMEDIATAMENTE');
-                // Abrir modal ANTES de cualquier otra cosa
-                setTimeout(() => {
-                    openLoginModal();
-                }, 500); // Pequeño delay para que cargue el DOM
-                history.replaceState(null, null, window.location.pathname); // Limpiar URL
-            }
-            
             // Definir db
             const db = firebase.firestore();
             
@@ -283,7 +274,55 @@
             firebase.auth().onAuthStateChanged(async (user) => {
                 if (user) {
                     console.log('✅ Usuario ya logueado:', user.email);
-                    // Usuario logueado - Redirigir directo a la app
+                    
+                    // Si viene con action=login, NO redirigir, dejar que vea certámenes
+                    if (forceLogin) {
+                        console.log('⚠️ Usuario ya logueado pero viene de Participar Ahora');
+                        console.log('🔍 Verificando si tiene perfil de artista...');
+                        
+                        // Verificar si es artista
+                        const userDoc = await db.collection('users').doc(user.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            
+                            if (userData.userType === 'artista') {
+                                // Verificar si tiene perfil de artista
+                                const artistDoc = await db.collection('artist_profiles').doc(user.uid).get();
+                                
+                                if (!artistDoc.exists) {
+                                    console.log('❌ Artista sin perfil - Mostrando modal para crear');
+                                    const perfilData = await showCrearPerfilArtista(user);
+                                    
+                                    if (perfilData) {
+                                        // Guardar perfil
+                                        await db.collection('artist_profiles').doc(user.uid).set({
+                                            uid: user.uid,
+                                            email: user.email,
+                                            nombreArtistico: perfilData.nombreArtistico,
+                                            provincia: perfilData.provincia,
+                                            ciudad: perfilData.ciudad,
+                                            generoMusical: perfilData.generoMusical,
+                                            telefono: perfilData.telefono || '',
+                                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                            estado: 'activo'
+                                        });
+                                        
+                                        alert('✅ ¡Perfil creado! Ahora podés participar en certámenes 🎵');
+                                        window.location.href = 'inscripcion-unificada.html';
+                                    }
+                                } else {
+                                    console.log('✅ Artista con perfil - Redirigiendo a inscripción');
+                                    window.location.href = 'inscripcion-unificada.html';
+                                }
+                            } else {
+                                alert('Solo los artistas pueden participar en certámenes.\n\nSi sos artista, contactá con soporte.');
+                                window.location.href = 'certamenes.html';
+                            }
+                        }
+                        return; // NO continuar con el redirect normal
+                    }
+                    
+                    // Usuario logueado SIN action=login - Redirigir a la app normalmente
                     try {
                         const userDoc = await db.collection('users').doc(user.uid).get();
                         if (userDoc.exists) {
@@ -293,7 +332,7 @@
                             if (userData.userType === 'artista') {
                                 window.location.replace('perfil-artista.html');
                             } else {
-                                window.location.replace('principal.html');
+                                window.location.replace('certamenes.html');
                             }
                         }
                     } catch (error) {
@@ -302,9 +341,7 @@
                 } else {
                     console.log('👤 Usuario no logueado - Mostrando modal de login');
                     // NO hay usuario - Abrir modal automáticamente
-                    if (!forceLogin) { // Si ya se abrió con forceLogin, no abrir de nuevo
-                        openLoginModal();
-                    }
+                    openLoginModal();
                 }
             });
             
@@ -502,10 +539,10 @@
                                 });
                                 
                                 console.log('✅ Perfil de artista creado exitosamente');
-                                showLoginAlert('¡Perfil creado! Bienvenido a VYT Music 🎵', 'success');
+                                showLoginAlert('¡Perfil creado! Ya podés participar en certámenes 🎵', 'success');
                                 
                                 setTimeout(() => {
-                                    window.location.href = 'perfil-artista.html';
+                                    window.location.href = 'certamenes.html';
                                 }, 1500);
                             }
                         } else {

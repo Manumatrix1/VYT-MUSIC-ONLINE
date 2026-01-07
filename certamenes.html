@@ -322,50 +322,14 @@
             
             if (!user) {
                 console.log('⚠️ Usuario no autenticado - Redirigiendo a login');
-                alert('¡Para participar debes iniciar sesión primero! 🎵\n\nTe llevaremos a crear tu cuenta en 3 segundos...');
-                setTimeout(() => {
-                    window.location.href = 'index.html?action=login';
-                }, 2000);
+                window.location.href = 'index.html?action=login';
                 return;
             }
             
             console.log('✅ Usuario autenticado:', user.email);
             
-            // Verificar si el usuario es artista
-            try {
-                const db = firebase.firestore();
-                const userDoc = await db.collection('users').doc(user.uid).get();
-                
-                if (!userDoc.exists) {
-                    alert('Error: No se encontró tu perfil. Por favor contacta soporte.');
-                    return;
-                }
-                
-                const userData = userDoc.data();
-                
-                if (userData.userType !== 'artista') {
-                    alert('Solo los artistas pueden participar en certámenes. 🎤\n\nSi sos artista, contactá con soporte para cambiar tu tipo de cuenta.');
-                    return;
-                }
-                
-                // Verificar si el artista tiene perfil creado
-                const artistDoc = await db.collection('artist_profiles').doc(user.uid).get();
-                
-                if (!artistDoc.exists) {
-                    console.log('⚠️ Artista sin perfil - Redirigiendo a crear perfil');
-                    if (confirm('Primero necesitás crear tu perfil de artista. ¿Querés hacerlo ahora?')) {
-                        window.location.href = 'crear-perfil-artista.html';
-                    }
-                    return;
-                }
-                
-                console.log('✅ Artista con perfil - Redirigiendo a inscripción');
-                window.location.href = 'inscripcion-unificada.html';
-                
-            } catch (error) {
-                console.error('❌ Error al verificar usuario:', error);
-                alert('Error al verificar tu perfil. Por favor intentá de nuevo.');
-            }
+            // Si está logueado, también redirigir con action=login para que verifique perfil
+            window.location.href = 'index.html?action=login';
         }
 
         // FUNCIONES DEL MENÚ
