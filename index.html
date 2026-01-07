@@ -796,29 +796,26 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <script src="firebase-config.js"></script>
-    <script src="src/auth-handler.js"></script>
     
     <!-- Auto-Login Modal -->
     <script>
-    // Esperar a que auth-handler esté listo
-    function checkAuthAndShowLogin() {
-        if (!window.authHandler || !window.authHandler.initialized) {
-            setTimeout(checkAuthAndShowLogin, 100);
-            return;
-        }
-        
-        console.log('🔐 Verificando autenticación...');
-        
-        // Si NO está logueado, mostrar modal de login
-        if (!window.authHandler.isLoggedIn()) {
-            console.log('❌ Usuario NO logueado - Mostrando modal de login');
-            showLoginModal();
-        } else {
-            console.log('✅ Usuario ya logueado:', window.authHandler.user.email);
-        }
-    }
+    console.log('🚀 Iniciando verificación de autenticación...');
     
-    function showLoginModal() {
+    // Mostrar modal inmediatamente después de Firebase
+    setTimeout(() => {
+        firebase.auth().onAuthStateChanged((user) => {
+            console.log('🔥 Firebase Auth Ready - Usuario:', user ? user.email : 'NO logueado');
+            
+            if (!user) {
+                console.log('⚡ Mostrando modal de bienvenida...');
+                showWelcomeModal();
+            } else {
+                console.log('✅ Usuario ya logueado, no mostrar modal');
+            }
+        });
+    }, 500);
+    
+    function showWelcomeModal() {
         const modal = document.createElement('div');
         modal.id = 'welcomeModal';
         modal.innerHTML = `
@@ -961,14 +958,7 @@
         });
     }
     
-    // Iniciar verificación cuando el DOM esté listo
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            setTimeout(checkAuthAndShowLogin, 1000);
-        });
-    } else {
-        setTimeout(checkAuthAndShowLogin, 1000);
-    }
+    console.log('✅ Script de modal cargado');
     </script>
     
     <!-- PWA Installer -->
