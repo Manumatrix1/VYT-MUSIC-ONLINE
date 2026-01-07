@@ -288,18 +288,16 @@
                 if (user) {
                     console.log('✅ Usuario ya logueado:', user.email);
                     
-                    // Si viene con action=login, NO redirigir, dejar que vea certámenes
+                    // Si viene con action=login, verificar perfil
                     if (forceLogin) {
                         console.log('⚠️ Usuario ya logueado pero viene de Participar Ahora');
                         console.log('🔍 Verificando si tiene perfil de artista...');
                         
-                        // Verificar si es artista
                         const userDoc = await db.collection('users').doc(user.uid).get();
                         if (userDoc.exists) {
                             const userData = userDoc.data();
                             
                             if (userData.userType === 'artista') {
-                                // Verificar si tiene perfil de artista
                                 const artistDoc = await db.collection('artist_profiles').doc(user.uid).get();
                                 
                                 if (!artistDoc.exists) {
@@ -307,7 +305,6 @@
                                     const perfilData = await showCrearPerfilArtista(user);
                                     
                                     if (perfilData) {
-                                        // Guardar perfil
                                         await db.collection('artist_profiles').doc(user.uid).set({
                                             uid: user.uid,
                                             email: user.email,
@@ -332,10 +329,10 @@
                                 window.location.href = 'certamenes.html';
                             }
                         }
-                        return; // NO continuar con el redirect normal
+                        return;
                     }
                     
-                    // Usuario logueado SIN action=login - Redirigir a la app normalmente
+                    // Usuario logueado normal - redirigir
                     try {
                         const userDoc = await db.collection('users').doc(user.uid).get();
                         if (userDoc.exists) {
@@ -352,9 +349,15 @@
                         console.error('Error:', error);
                     }
                 } else {
-                    console.log('👤 Usuario no logueado - Mostrando modal de login');
-                    // NO hay usuario - Abrir modal automáticamente
-                    openLoginModal();
+                    console.log('👤 Usuario no logueado - Mostrando SELECTOR PRIMERO');
+                    // NO hay usuario - Mostrar SELECTOR PRIMERO, luego login
+                    showUserTypeSelector().then(async (selectedType) => {
+                        console.log('✅ Usuario eligió tipo:', selectedType);
+                        // Guardar tipo en localStorage temporalmente
+                        localStorage.setItem('pendingUserType', selectedType);
+                        // AHORA sí, abrir modal de login
+                        openLoginModal();
+                    });
                 }
             });
             
@@ -495,45 +498,52 @@
                 }
             });
 
-            // Check redirect result - PRIMERO, antes de cualquier cosa
+            // Check redirect result - Usuario vuelve de Google/Facebook
             firebase.auth().getRedirectResult().then(async (result) => {
                 if (result.user) {
                     console.log('✅ Usuario detectado después de redirect:', result.user.email);
                     
-                    // Verificar si el usuario ya existe
+                    // Recuperar el tipo que eligió ANTES del login
+                    const pendingType = localStorage.getItem('pendingUserType');
+                    localStorage.removeItem('pendingUserType');
+                    
+                    if (!pendingType) {
+                        console.log('⚠️ No hay tipo pendiente, usuario existente');
+                        return; // Es un usuario que ya existe
+                    }
+                    
+                    console.log('🆕 Usuario nuevo con tipo:', pendingType);
+                    
+                    // Verificar si ya existe en BD
                     const userDoc = await db.collection('users').doc(result.user.uid).get();
                     
                     if (!userDoc.exists) {
-                        console.log('🆕 Usuario nuevo - Mostrando selector de tipo');
-                        // Usuario nuevo - preguntar tipo
-                        const userType = await showUserTypeSelector();
-                        
-                        // Crear documento completo
+                        // Crear usuario en Firestore
                         await db.collection('users').doc(result.user.uid).set({
                             uid: result.user.uid,
                             email: result.user.email,
                             displayName: result.user.displayName || result.user.email.split('@')[0],
                             photoURL: result.user.photoURL || '',
-                            userType: userType,
+                            userType: pendingType,
                             createdAt: firebase.firestore.FieldValue.serverTimestamp(),
                             lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
                             emailVerified: result.user.emailVerified
                         });
                         
-                        console.log('💾 Usuario creado con tipo:', userType);
+                        console.log('💾 Usuario creado con tipo:', pendingType);
                         
-                        // Enviar email de verificación automáticamente
+                        // Email de verificación
                         if (!result.user.emailVerified) {
                             try {
                                 await result.user.sendEmailVerification();
-                                console.log('📧 Email de verificación enviado a:', result.user.email);
+                                console.log('📧 Email de verificación enviado');
                             } catch (emailError) {
                                 console.log('⚠️ No se pudo enviar email:', emailError);
                             }
                         }
                         
                         // Si es ARTISTA → Crear perfil INMEDIATAMENTE
-                        if (userType === 'artista') {
+                        if (pendingType === 'artista') {
                             console.log('🎤 ========================================');
                             console.log('🎤 ARTISTA NUEVO - MOSTRANDO MODAL PERFIL');
                             console.log('🎤 ========================================');
@@ -545,7 +555,6 @@
                             if (perfilData) {
                                 console.log('💾 Guardando perfil en Firestore...');
                                 
-                                // Guardar perfil de artista en Firestore
                                 await db.collection('artist_profiles').doc(result.user.uid).set({
                                     uid: result.user.uid,
                                     email: result.user.email,
@@ -570,29 +579,12 @@
                             }
                         } else {
                             console.log('👤 Visitante - Redirigiendo a certámenes');
-                            // Visitante → Directo a certámenes
                             window.location.href = 'certamenes.html';
-                        }
-                    } else {
-                        console.log('👤 Usuario existente - Actualizando lastLogin');
-                        // Usuario existente - solo actualizar login
-                        await db.collection('users').doc(result.user.uid).update({
-                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                        });
-                        
-                        const userData = userDoc.data();
-                        
-                        // Redirigir según tipo
-                        if (userData.userType === 'artista') {
-                            window.location.href = 'perfil-artista.html';
-                        } else {
-                            window.location.href = 'principal.html';
                         }
                     }
                 }
             }).catch(error => {
                 console.error('❌ Error en redirect:', error);
-                showLoginAlert('Error: ' + error.message, 'error');
             });
 
             // Función para mostrar selector de tipo de usuario - ULTRA SIMPLE
