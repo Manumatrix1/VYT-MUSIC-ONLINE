@@ -221,8 +221,28 @@
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Contraseña *</label>
-                            <input type="password" name="password" class="form-input" placeholder="Mínimo 6 caracteres" required>
+                            <div style="position: relative;">
+                                <input type="password" id="password" name="password" class="form-input" placeholder="Mínimo 6 caracteres" required style="padding-right: 50px;">
+                                <button type="button" id="togglePassword" 
+                                        style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); 
+                                               background: none; border: none; color: white; cursor: pointer; font-size: 20px;">
+                                    <i class="fas fa-eye" id="eyeIcon"></i>
+                                </button>
+                            </div>
                             <p class="text-gray-400 text-sm mt-1">Esta será tu contraseña para iniciar sesión</p>
+                        </div>
+                        
+                        <div class="form-group md:col-span-2">
+                            <label class="block text-white font-medium mb-2">Confirmar Contraseña *</label>
+                            <div style="position: relative;">
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Repetí tu contraseña" required style="padding-right: 50px;">
+                                <button type="button" id="toggleConfirmPassword" 
+                                        style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); 
+                                               background: none; border: none; color: white; cursor: pointer; font-size: 20px;">
+                                    <i class="fas fa-eye" id="eyeIconConfirm"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-400 text-sm mt-1" id="passwordMatch"></p>
                         </div>
                         
                         <div class="form-group">
@@ -854,7 +874,8 @@
             
             // VALIDACIÓN COMPLETA ANTES DE ENVIAR
             const email = document.querySelector('input[name="email"]').value.trim();
-            const password = document.querySelector('input[name="password"]')?.value; // Nuevo campo
+            const password = document.querySelector('input[name="password"]')?.value;
+            const confirmPassword = document.getElementById('confirmPassword')?.value;
             const whatsapp = document.querySelector('input[name="whatsapp"]').value.trim();
             const nombre = document.querySelector('input[name="nombre"]').value.trim();
             const apellido = document.querySelector('input[name="apellido"]').value.trim();
@@ -866,6 +887,14 @@
             if (!password || password.length < 6) {
                 alert('❌ La contraseña debe tener al menos 6 caracteres');
                 nextStep(1);
+                return;
+            }
+            
+            // Validar confirmación de contraseña
+            if (password !== confirmPassword) {
+                alert('❌ Las contraseñas no coinciden. Por favor, verificá que ambas sean iguales.');
+                nextStep(1);
+                document.getElementById('confirmPassword').focus();
                 return;
             }
             
@@ -1387,6 +1416,62 @@
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎤 VYT MUSIC - Formulario de perfil de artista iniciado');
+            
+            // 👁️ Toggle para mostrar/ocultar contraseña
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eyeIcon');
+            
+            if (togglePassword && passwordInput) {
+                togglePassword.addEventListener('click', () => {
+                    const type = passwordInput.type === 'password' ? 'text' : 'password';
+                    passwordInput.type = type;
+                    eyeIcon.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+                });
+            }
+            
+            // 👁️ Toggle para confirmar contraseña
+            const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const eyeIconConfirm = document.getElementById('eyeIconConfirm');
+            
+            if (toggleConfirmPassword && confirmPasswordInput) {
+                toggleConfirmPassword.addEventListener('click', () => {
+                    const type = confirmPasswordInput.type === 'password' ? 'text' : 'password';
+                    confirmPasswordInput.type = type;
+                    eyeIconConfirm.className = type === 'password' ? 'fas fa-eye' : 'fas fa-eye-slash';
+                });
+            }
+            
+            // ✅ Validación en tiempo real de contraseñas
+            const passwordMatch = document.getElementById('passwordMatch');
+            
+            if (confirmPasswordInput && passwordInput && passwordMatch) {
+                confirmPasswordInput.addEventListener('input', () => {
+                    if (confirmPasswordInput.value === '') {
+                        passwordMatch.textContent = '';
+                        passwordMatch.className = 'text-gray-400 text-sm mt-1';
+                    } else if (passwordInput.value === confirmPasswordInput.value) {
+                        passwordMatch.textContent = '✅ Las contraseñas coinciden';
+                        passwordMatch.className = 'text-green-400 text-sm mt-1';
+                    } else {
+                        passwordMatch.textContent = '❌ Las contraseñas no coinciden';
+                        passwordMatch.className = 'text-red-400 text-sm mt-1';
+                    }
+                });
+                
+                passwordInput.addEventListener('input', () => {
+                    if (confirmPasswordInput.value !== '') {
+                        if (passwordInput.value === confirmPasswordInput.value) {
+                            passwordMatch.textContent = '✅ Las contraseñas coinciden';
+                            passwordMatch.className = 'text-green-400 text-sm mt-1';
+                        } else {
+                            passwordMatch.textContent = '❌ Las contraseñas no coinciden';
+                            passwordMatch.className = 'text-red-400 text-sm mt-1';
+                        }
+                    }
+                });
+            }
             
             // NO verificar autenticación previa, permitir registro nuevo
             firebase.auth().onAuthStateChanged((user) => {
