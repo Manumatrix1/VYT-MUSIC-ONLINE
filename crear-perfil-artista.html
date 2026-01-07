@@ -886,14 +886,13 @@
             // Validar contraseña (nuevo)
             if (!password || password.length < 6) {
                 alert('❌ La contraseña debe tener al menos 6 caracteres');
-                nextStep(1);
+                document.getElementById('password').focus();
                 return;
             }
             
             // Validar confirmación de contraseña
             if (password !== confirmPassword) {
                 alert('❌ Las contraseñas no coinciden. Por favor, verificá que ambas sean iguales.');
-                nextStep(1);
                 document.getElementById('confirmPassword').focus();
                 return;
             }
@@ -901,7 +900,7 @@
             // Validar datos básicos
             if (!email || !whatsapp || !nombre || !apellido) {
                 alert('❌ Por favor, completa todos los datos básicos (Paso 1)');
-                nextStep(1);
+                document.querySelector('input[name="nombre"]').focus();
                 return;
             }
             
@@ -909,14 +908,14 @@
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
                 alert('❌ Por favor, ingresa un email válido');
-                nextStep(1);
+                document.querySelector('input[name="email"]').focus();
                 return;
             }
             
             // Validar nombre artístico
             if (!nombreArtistico) {
                 alert('❌ Por favor, ingresa tu nombre artístico (Paso 2)');
-                nextStep(2);
+                document.querySelector('input[name="nombre_artistico"]').focus();
                 return;
             }
             
