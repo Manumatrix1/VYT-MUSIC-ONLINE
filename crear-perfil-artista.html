@@ -923,14 +923,12 @@
             const selectedGenres = document.querySelectorAll('input[name="generos[]"]:checked');
             if (selectedGenres.length === 0) {
                 alert('❌ Por favor, selecciona al menos un género musical (Paso 2)');
-                nextStep(2);
                 return;
             }
             
             // Validar ubicación
             if (!provincia || !ciudad) {
                 alert('❌ Por favor, selecciona tu provincia y ciudad (Paso 3)');
-                nextStep(3);
                 return;
             }
             
