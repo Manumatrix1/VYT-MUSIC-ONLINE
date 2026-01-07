@@ -174,15 +174,11 @@
         
         <!-- Mensaje para usuarios NO logueados -->
         <div id="contenidoNoLogueado" class="text-center">
-            <p class="text-white text-2xl mb-6">👋 Para participar o votar, elegí cómo querés unirte:</p>
-            <div class="flex gap-4 justify-center flex-wrap">
-                <button id="btnIniciarSesionHome" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-5 px-10 rounded-2xl transition-all shadow-2xl transform hover:scale-105 text-xl">
-                    <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
-                </button>
-                <button id="btnRegistrarseHome" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-5 px-10 rounded-2xl transition-all shadow-2xl transform hover:scale-105 text-xl">
-                    <i class="fas fa-user-plus mr-2"></i> Registrarme
-                </button>
-            </div>
+            <p class="text-white text-2xl mb-8">👋 Para participar o votar, elegí cómo querés unirte:</p>
+            <button id="btnComenzar" class="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 text-white font-black py-6 px-16 rounded-2xl transition-all shadow-2xl transform hover:scale-105 text-2xl animate-pulse">
+                <i class="fas fa-rocket mr-3"></i> ¡COMENZAR AHORA!
+            </button>
+            <p class="text-white/70 text-sm mt-4">Elegí ser Artista o Visitante en el siguiente paso</p>
         </div>
     </div>
 
@@ -832,21 +828,13 @@
         });
     }, 500);
     
-    // Handler para botón Iniciar Sesión
+    // Handler para botón Comenzar
     document.addEventListener('DOMContentLoaded', () => {
-        const btnIniciar = document.getElementById('btnIniciarSesionHome');
-        const btnRegistro = document.getElementById('btnRegistrarseHome');
+        const btnComenzar = document.getElementById('btnComenzar');
         
-        if (btnIniciar) {
-            btnIniciar.addEventListener('click', () => {
-                console.log('🔐 Clic en Iniciar Sesión');
-                showWelcomeModal();
-            });
-        }
-        
-        if (btnRegistro) {
-            btnRegistro.addEventListener('click', () => {
-                console.log('📝 Clic en Registrarse');
+        if (btnComenzar) {
+            btnComenzar.addEventListener('click', () => {
+                console.log('🚀 Clic en COMENZAR AHORA');
                 showWelcomeModal();
             });
         }
