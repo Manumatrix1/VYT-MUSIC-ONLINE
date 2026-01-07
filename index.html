@@ -1,6 +1,11 @@
 ﻿<!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- FORCE CACHE CLEAR v20260107 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <script src="/sw-register.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -521,10 +526,17 @@
                         
                         // Si es ARTISTA → Crear perfil INMEDIATAMENTE
                         if (userType === 'artista') {
-                            console.log('🎤 Artista detectado - Mostrando formulario de perfil básico');
+                            console.log('🎤 ========================================');
+                            console.log('🎤 ARTISTA NUEVO - MOSTRANDO MODAL PERFIL');
+                            console.log('🎤 ========================================');
+                            
                             const perfilData = await showCrearPerfilArtista(result.user);
                             
+                            console.log('📝 Datos del perfil recibidos:', perfilData);
+                            
                             if (perfilData) {
+                                console.log('💾 Guardando perfil en Firestore...');
+                                
                                 // Guardar perfil de artista en Firestore
                                 await db.collection('artist_profiles').doc(result.user.uid).set({
                                     uid: result.user.uid,
@@ -539,13 +551,17 @@
                                 });
                                 
                                 console.log('✅ Perfil de artista creado exitosamente');
-                                showLoginAlert('¡Perfil creado! Ya podés participar en certámenes 🎵', 'success');
+                                alert('✅ ¡Perfil creado! Ya podés participar en certámenes 🎵');
                                 
                                 setTimeout(() => {
+                                    console.log('➡️ Redirigiendo a certamenes.html');
                                     window.location.href = 'certamenes.html';
-                                }, 1500);
+                                }, 1000);
+                            } else {
+                                console.log('❌ Usuario canceló la creación del perfil');
                             }
                         } else {
+                            console.log('👤 Visitante - Redirigiendo a certámenes');
                             // Visitante → Directo a certámenes
                             window.location.href = 'certamenes.html';
                         }
@@ -625,7 +641,14 @@
 
             // Función para crear perfil de artista INMEDIATAMENTE
             function showCrearPerfilArtista(user) {
+                console.log('🎨 ========================================');
+                console.log('🎨 FUNCIÓN showCrearPerfilArtista LLAMADA');
+                console.log('🎨 Usuario:', user.email);
+                console.log('🎨 ========================================');
+                
                 return new Promise((resolve) => {
+                    console.log('📦 Creando modal de perfil...');
+                    
                     const modal = document.createElement('div');
                     modal.className = 'fixed inset-0 bg-black/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 overflow-y-auto';
                     modal.innerHTML = `
@@ -732,11 +755,14 @@
                         </div>
                     `;
                     
+                    console.log('✅ Modal HTML creado, agregando al DOM...');
                     document.body.appendChild(modal);
+                    console.log('✅ Modal agregado al DOM - Debería ser VISIBLE ahora');
 
                     // Manejar envío del formulario
                     document.getElementById('formPerfilArtista').onsubmit = (e) => {
                         e.preventDefault();
+                        console.log('📝 Formulario enviado');
                         
                         const perfilData = {
                             nombreArtistico: document.getElementById('nombreArtistico').value.trim(),
