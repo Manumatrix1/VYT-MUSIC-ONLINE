@@ -309,16 +309,30 @@ class AuthHandler {
 // Crear instancia global
 window.authHandler = new AuthHandler();
 
-// Auto-inicializar cuando Firebase esté listo
-if (typeof firebase !== 'undefined') {
-    window.authHandler.init();
-} else {
-    // Esperar a que Firebase se cargue
-    document.addEventListener('DOMContentLoaded', () => {
-        setTimeout(() => {
-            if (typeof firebase !== 'undefined') {
-                window.authHandler.init();
-            }
-        }, 1000);
-    });
+// Función para inicializar cuando Firebase esté listo
+function initAuthHandler() {
+    if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+        console.log('✅ Firebase detectado, inicializando AuthHandler...');
+        window.authHandler.init();
+    } else {
+        console.log('⏳ Esperando a Firebase...');
+        setTimeout(initAuthHandler, 100);
+    }
 }
+
+// Escuchar evento de Firebase listo
+window.addEventListener('firebaseReady', () => {
+    console.log('🔥 Evento firebaseReady recibido');
+    initAuthHandler();
+});
+
+// Intentar inicializar inmediatamente
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        setTimeout(initAuthHandler, 500);
+    });
+} else {
+    setTimeout(initAuthHandler, 500);
+}
+
+console.log('📦 auth-handler.js cargado, esperando Firebase...');
