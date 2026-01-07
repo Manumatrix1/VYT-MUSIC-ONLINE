@@ -322,8 +322,10 @@
             
             if (!user) {
                 console.log('⚠️ Usuario no autenticado - Redirigiendo a login');
-                alert('¡Para participar debes iniciar sesión primero! 🎵');
-                window.location.href = 'index.html';
+                alert('¡Para participar debes iniciar sesión primero! 🎵\n\nTe llevaremos a crear tu cuenta en 3 segundos...');
+                setTimeout(() => {
+                    window.location.href = 'index.html?action=login';
+                }, 2000);
                 return;
             }
             

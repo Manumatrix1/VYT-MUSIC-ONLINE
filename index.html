@@ -262,6 +262,20 @@
             loadDynamicBackground();
             console.log('🎵 VYT MUSIC - Sistema iniciado correctamente');
             
+            // Verificar si viene con parámetro action=login
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+            const forceLogin = action === 'login';
+            
+            if (forceLogin) {
+                console.log('🎯 Parámetro action=login detectado - Abriendo modal INMEDIATAMENTE');
+                // Abrir modal ANTES de cualquier otra cosa
+                setTimeout(() => {
+                    openLoginModal();
+                }, 500); // Pequeño delay para que cargue el DOM
+                history.replaceState(null, null, window.location.pathname); // Limpiar URL
+            }
+            
             // Definir db
             const db = firebase.firestore();
             
@@ -288,7 +302,9 @@
                 } else {
                     console.log('👤 Usuario no logueado - Mostrando modal de login');
                     // NO hay usuario - Abrir modal automáticamente
-                    openLoginModal();
+                    if (!forceLogin) { // Si ya se abrió con forceLogin, no abrir de nuevo
+                        openLoginModal();
+                    }
                 }
             });
             
