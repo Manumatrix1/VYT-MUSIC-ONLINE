@@ -920,24 +920,35 @@
                 const user = userCredential.user;
                 console.log('✅ Usuario creado con UID:', user.uid);
                 
-                // 📧 PASO 2: ENVIAR EMAIL DE VERIFICACIÓN
-                console.log('📧 Enviando email de verificación...');
-                await user.sendEmailVerification();
-                console.log('✅ Email de verificación enviado a:', user.email);
-                
-                // Guardar datos temporalmente
+                // Guardar datos temporales en Firestore
                 const tempData = {
                     email, whatsapp, nombre, apellido, nombreArtistico, provincia, ciudad,
                     fechaNacimiento: document.querySelector('input[name="fecha_nacimiento"]').value,
                     dni: document.querySelector('input[name="dni"]')?.value || '',
                     generos: Array.from(selectedGenres).map(cb => cb.value),
                     biografia: document.querySelector('textarea[name="biografia"]')?.value || '',
-                    codigoPostal: document.querySelector('input[name="codigo_postal"]')?.value || ''
+                    codigoPostal: document.querySelector('input[name="codigo_postal"]')?.value || '',
+                    createdAt: new Date().toISOString()
                 };
                 
-                // Mostrar modal de verificación INMEDIATAMENTE
-                console.log('🎯 Mostrando modal de verificación...');
-                showEmailVerificationModal(user, tempData);
+                const db = firebase.firestore();
+                await db.collection('pending_registrations').doc(user.uid).set(tempData);
+                console.log('✅ Datos temporales guardados');
+                
+                // 📧 PASO 2: ENVIAR EMAIL CON LINK
+                console.log('📧 Enviando email de verificación...');
+                
+                // Configurar URL de retorno (completar-registro.html)
+                const actionCodeSettings = {
+                    url: window.location.origin + '/completar-registro.html',
+                    handleCodeInApp: true
+                };
+                
+                await user.sendEmailVerification(actionCodeSettings);
+                console.log('✅ Email enviado con link de verificación');
+                
+                // Mostrar modal simple
+                showEmailSentModal(user.email);
             
             // Datos básicos
             artistData.email = email;
@@ -1088,7 +1099,61 @@
             }
         });
         
-        // 📧 Función para mostrar modal de verificación de email
+        // 📧 Modal simple - Email enviado
+        function showEmailSentModal(emailAddress) {
+            const modal = document.createElement('div');
+            modal.id = 'emailSentModal';
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 24px; padding: 50px 40px; max-width: 550px; width: 100%; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.9);">
+                        
+                        <div style="font-size: 80px; margin-bottom: 25px; animation: bounce 2s infinite;">📧</div>
+                        
+                        <h2 style="color: white; font-size: 32px; font-weight: bold; margin-bottom: 20px;">
+                            ¡Email Enviado!
+                        </h2>
+                        
+                        <p style="color: rgba(255,255,255,0.95); font-size: 18px; margin-bottom: 30px; line-height: 1.7;">
+                            Te enviamos un email a:<br>
+                            <strong style="font-size: 20px; color: #FFD700;">${emailAddress}</strong>
+                        </p>
+                        
+                        <div style="background: rgba(255,255,255,0.15); border-radius: 16px; padding: 30px; margin-bottom: 30px; border: 2px solid rgba(255,255,255,0.2);">
+                            <p style="color: white; font-size: 16px; line-height: 2; font-weight: 500;">
+                                <strong style="font-size: 18px; display: block; margin-bottom: 15px;">📋 Próximos pasos:</strong>
+                                1️⃣ Abrí tu correo electrónico<br>
+                                2️⃣ Buscá el email de <strong>VYT MUSIC</strong><br>
+                                3️⃣ Hacé <strong>click en el link</strong><br>
+                                4️⃣ ¡Tu perfil se creará automáticamente! 🎉
+                            </p>
+                        </div>
+                        
+                        <div style="background: rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 2px solid rgba(16, 185, 129, 0.4);">
+                            <p style="color: #10b981; font-size: 15px; font-weight: 600;">
+                                ✨ Es muy simple: un click en el email y listo
+                            </p>
+                        </div>
+                        
+                        <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 20px;">
+                            💡 Si no ves el email, revisá tu carpeta de SPAM
+                        </p>
+                        
+                    </div>
+                </div>
+                
+                <style>
+                    @keyframes bounce {
+                        0%, 100% { transform: translateY(0); }
+                        50% { transform: translateY(-20px); }
+                    }
+                </style>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        // ELIMINAR funciones viejas del modal anterior
+        // Ya no necesitamos showEmailVerificationModal ni crearPerfilArtista
         async function showEmailVerificationModal(user, tempData) {
             const modal = document.createElement('div');
             modal.id = 'emailVerificationModal';
