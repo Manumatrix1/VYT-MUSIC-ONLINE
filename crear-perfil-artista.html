@@ -1085,19 +1085,84 @@
                 
             } catch (error) {
                 console.error('❌ Error al crear cuenta:', error);
-                let errorMessage = 'Error al crear la cuenta';
+                
+                // Rehabilitar botón
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Crear mi Perfil de Artista';
+                
+                let errorMessage = '';
+                let showLoginOption = false;
                 
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = '⚠️ Este email ya está registrado. ¿Querés iniciar sesión?';
+                    errorMessage = '⚠️ Este email ya está registrado';
+                    showLoginOption = true;
                 } else if (error.code === 'auth/invalid-email') {
                     errorMessage = '⚠️ Email inválido';
                 } else if (error.code === 'auth/weak-password') {
                     errorMessage = '⚠️ La contraseña debe tener al menos 6 caracteres';
+                } else {
+                    errorMessage = '❌ Error al crear la cuenta: ' + error.message;
                 }
                 
-                alert(errorMessage);
+                // Mostrar modal de error con opciones
+                showErrorModal(errorMessage, showLoginOption);
             }
         });
+        
+        // Modal de error con opciones
+        function showErrorModal(message, showLoginOption) {
+            const modal = document.createElement('div');
+            modal.id = 'errorModal';
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border-radius: 24px; padding: 40px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.9);">
+                        
+                        <div style="font-size: 64px; margin-bottom: 20px;">❌</div>
+                        
+                        <h2 style="color: white; font-size: 28px; font-weight: bold; margin-bottom: 15px;">
+                            ${message}
+                        </h2>
+                        
+                        ${showLoginOption ? `
+                            <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin-bottom: 25px; line-height: 1.6;">
+                                Parece que ya tenés una cuenta con este email.<br>
+                                ¿Querés iniciar sesión?
+                            </p>
+                            
+                            <div style="display: flex; gap: 15px; margin-top: 30px;">
+                                <a href="login.html" 
+                                   style="flex: 1; background: white; color: #ef4444; padding: 15px; border-radius: 12px; 
+                                          font-weight: bold; font-size: 16px; text-decoration: none; display: block;
+                                          transition: all 0.3s;">
+                                    <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
+                                </a>
+                                <a href="reset-password.html" 
+                                   style="flex: 1; background: rgba(255,255,255,0.2); color: white; padding: 15px; border-radius: 12px; 
+                                          font-weight: bold; font-size: 16px; text-decoration: none; display: block; border: 2px solid white;
+                                          transition: all 0.3s;">
+                                    <i class="fas fa-key mr-2"></i> Recuperar Contraseña
+                                </a>
+                            </div>
+                            
+                            <button onclick="document.getElementById('errorModal').remove()" 
+                                    style="width: 100%; background: rgba(255,255,255,0.15); color: white; padding: 12px; border-radius: 10px; 
+                                           border: none; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 15px;">
+                                Intentar con otro email
+                            </button>
+                        ` : `
+                            <button onclick="document.getElementById('errorModal').remove()" 
+                                    style="width: 100%; background: white; color: #ef4444; padding: 15px; border-radius: 12px; 
+                                           border: none; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 25px;">
+                                Cerrar
+                            </button>
+                        `}
+                        
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
         
         // 📧 Modal simple - Email enviado
         function showEmailSentModal(emailAddress) {
