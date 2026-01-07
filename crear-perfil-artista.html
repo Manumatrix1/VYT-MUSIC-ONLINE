@@ -908,6 +908,11 @@
             
             console.log('✅ Validación pasada, creando cuenta...');
             
+            // Deshabilitar botón submit
+            const submitBtn = document.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creando cuenta...';
+            
             // 🔥 PASO 1: CREAR CUENTA EN FIREBASE AUTH
             try {
                 console.log('🔐 Creando cuenta en Firebase Auth...');
@@ -915,22 +920,24 @@
                 const user = userCredential.user;
                 console.log('✅ Usuario creado con UID:', user.uid);
                 
-                // 📧 PASO 2: ENVIAR EMAIL DE VERIFICACIÓN AUTOMÁTICAMENTE
+                // 📧 PASO 2: ENVIAR EMAIL DE VERIFICACIÓN
                 console.log('📧 Enviando email de verificación...');
                 await user.sendEmailVerification();
                 console.log('✅ Email de verificación enviado a:', user.email);
                 
-                // Mostrar modal de verificación
-                showEmailVerificationModal(user, async () => {
-                    // Callback cuando verifica el email
-                    console.log('✅ Email verificado, continuando con el perfil...');
-                    
-                    // Recopilar datos del formulario
-                    const formData = new FormData(document.getElementById('artist-profile-form'));
-                    const artistData = {};
-                    
-                    // Agregar UID
-                    artistData.uid = user.uid;
+                // Guardar datos temporalmente
+                const tempData = {
+                    email, whatsapp, nombre, apellido, nombreArtistico, provincia, ciudad,
+                    fechaNacimiento: document.querySelector('input[name="fecha_nacimiento"]').value,
+                    dni: document.querySelector('input[name="dni"]')?.value || '',
+                    generos: Array.from(selectedGenres).map(cb => cb.value),
+                    biografia: document.querySelector('textarea[name="biografia"]')?.value || '',
+                    codigoPostal: document.querySelector('input[name="codigo_postal"]')?.value || ''
+                };
+                
+                // Mostrar modal de verificación INMEDIATAMENTE
+                console.log('🎯 Mostrando modal de verificación...');
+                showEmailVerificationModal(user, tempData);
             
             // Datos básicos
             artistData.email = email;
@@ -1082,7 +1089,7 @@
         });
         
         // 📧 Función para mostrar modal de verificación de email
-        function showEmailVerificationModal(user, onVerified) {
+        async function showEmailVerificationModal(user, tempData) {
             const modal = document.createElement('div');
             modal.id = 'emailVerificationModal';
             modal.innerHTML = `
@@ -1141,20 +1148,38 @@
             document.getElementById('btnCheckVerification').addEventListener('click', async () => {
                 console.log('🔍 Verificando estado del email...');
                 
+                const checkBtn = document.getElementById('btnCheckVerification');
+                checkBtn.disabled = true;
+                checkBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Verificando...';
+                
                 try {
                     // Recargar datos del usuario
                     await user.reload();
                     
                     if (user.emailVerified) {
                         console.log('✅ Email verificado correctamente');
-                        modal.remove();
-                        onVerified(); // Continuar con el flujo
+                        checkBtn.innerHTML = '<i class="fas fa-check mr-2"></i> ¡Verificado!';
+                        
+                        // Esperar 1 segundo y cerrar modal
+                        setTimeout(async () => {
+                            modal.remove();
+                            
+                            // AHORA SÍ CREAR EL PERFIL
+                            console.log('💾 Creando perfil de artista...');
+                            await crearPerfilArtista(user, tempData);
+                            
+                        }, 1000);
+                        
                     } else {
                         alert('⚠️ Aún no verificaste tu email. Por favor, hacé click en el link que te enviamos y volvé a intentar.');
+                        checkBtn.disabled = false;
+                        checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Ya Verifiqué Mi Email';
                     }
                 } catch (error) {
                     console.error('Error al verificar:', error);
                     alert('Error al verificar el email. Intentá nuevamente.');
+                    checkBtn.disabled = false;
+                    checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Ya Verifiqué Mi Email';
                 }
             });
             
@@ -1168,6 +1193,64 @@
                     alert('Error al reenviar el email. Esperá unos segundos e intentá nuevamente.');
                 }
             });
+        }
+        
+        // 💾 Función para crear el perfil después de verificar email
+        async function crearPerfilArtista(user, tempData) {
+            const artistData = {
+                uid: user.uid,
+                email: tempData.email,
+                whatsapp: tempData.whatsapp,
+                nombre: tempData.nombre,
+                apellido: tempData.apellido,
+                nombreArtistico: tempData.nombreArtistico,
+                provincia: tempData.provincia,
+                ciudad: tempData.ciudad,
+                fechaNacimiento: tempData.fechaNacimiento,
+                dni: tempData.dni,
+                generos: tempData.generos,
+                biografia: tempData.biografia,
+                codigoPostal: tempData.codigoPostal,
+                fechaCreacion: new Date().toISOString(),
+                estado: 'activo',
+                emailVerificado: true,
+                id: 'artist_' + Date.now()
+            };
+            
+            try {
+                const db = firebase.firestore();
+                
+                // Guardar en users (para autenticación)
+                await db.collection('users').doc(user.uid).set({
+                    uid: user.uid,
+                    email: user.email,
+                    nombreCompleto: `${tempData.nombre} ${tempData.apellido}`,
+                    userType: 'artista',
+                    nombreArtistico: tempData.nombreArtistico,
+                    emailVerificado: true,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                // Guardar en artist_profiles
+                await db.collection('artist_profiles').doc(user.uid).set(artistData);
+                
+                console.log('✅ Perfil creado exitosamente');
+                
+                // Guardar en localStorage
+                localStorage.setItem('artistData', JSON.stringify(artistData));
+                localStorage.setItem('artistData_persistent', JSON.stringify(artistData));
+                localStorage.setItem('userEmail', artistData.email);
+                
+                // Mostrar mensaje de éxito y redirigir
+                alert('🎉 ¡Perfil creado exitosamente! Bienvenido ' + artistData.nombreArtistico);
+                setTimeout(() => {
+                    window.location.href = 'perfil-artista.html';
+                }, 1500);
+                
+            } catch (error) {
+                console.error('❌ Error al crear perfil:', error);
+                alert('Error al guardar el perfil: ' + error.message);
+            }
         }
         });
 
