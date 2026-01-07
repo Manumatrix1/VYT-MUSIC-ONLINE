@@ -124,12 +124,36 @@
 
     <!-- Navegación unificada cargada por navigation.js -->
 
+    <!-- Firebase y Auth -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="src/auth-handler.js"></script>
+    
     <script>
         console.log('🎵 VYT MUSIC - Versión simple sin dependencias externas');
         
+        // PROTECCIÓN DE RUTA - Verificar autenticación
+        function checkAuth() {
+            if (window.authHandler && window.authHandler.initialized) {
+                if (!window.authHandler.isLoggedIn()) {
+                    console.log('⚠️ Usuario no autenticado, redirigiendo a login...');
+                    window.location.href = 'login.html';
+                } else {
+                    console.log('✅ Usuario autenticado:', window.authHandler.user.email);
+                    console.log('👤 Tipo de usuario:', window.authHandler.userType);
+                }
+            } else {
+                setTimeout(checkAuth, 100);
+            }
+        }
+        
+        checkAuth();
+        
         // Verificar que la navegación se cargó
         setTimeout(() => {
-            const nav = document.querySelector('.bottom-nav');
+            const nav = document.querySelector('.bottom-navigation');
             if (nav) {
                 console.log('✅ Navegación cargada correctamente');
             } else {

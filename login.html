@@ -359,89 +359,10 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
     <script src="firebase-config.js"></script>
+    <script src="src/auth-handler.js"></script>
     <script>
-        // Esperar a que Firebase esté listo
-        window.addEventListener('firebaseReady', () => {
-            console.log('🚀 Firebase listo, configurando autenticación...');
-            setupAuth();
-        });
-        
-        // Si firebase-config ya está listo, configurar inmediatamente
-        if (typeof firebase !== 'undefined' && firebase.apps.length > 0) {
-            console.log('🔥 Firebase ya inicializado');
-            setupAuth();
-        }
-        
-        function setupAuth() {
-            const db = firebase.firestore();
-            
-            // 🔥 PRIMERO: Verificar si venimos de un redirect de Google
-            firebase.auth().getRedirectResult()
-                .then(async (result) => {
-                    console.log('📥 Verificando redirect result...');
-                    
-                    if (result && result.user) {
-                        console.log('✅ Usuario desde Google redirect:', result.user.email);
-                        
-                        // Crear/actualizar usuario en Firestore
-                        await db.collection('users').doc(result.user.uid).set({
-                            uid: result.user.uid,
-                            email: result.user.email,
-                            displayName: result.user.displayName || result.user.email.split('@')[0],
-                            userType: 'visitante',
-                            photoURL: result.user.photoURL || '',
-                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
-                            emailVerified: result.user.emailVerified
-                        }, { merge: true });
-                        
-                        console.log('💾 Usuario guardado en Firestore');
-                        console.log('➡️ REDIRIGIENDO A PRINCIPAL...');
-                        
-                        // REDIRECT INMEDIATO
-                        window.location.replace('principal.html');
-                        return; // No continuar con el resto
-                    } else {
-                        console.log('ℹ️ No hay redirect result, configurando listeners...');
-                    }
-                })
-                .catch((error) => {
-                    console.error('❌ Error en getRedirectResult:', error);
-                });
-            
-            // SEGUNDO: Listener para cambios de autenticación
-            firebase.auth().onAuthStateChanged(async (user) => {
-                if (user) {
-                    console.log('✅ Usuario detectado por onAuthStateChanged:', user.email);
-                    
-                    // Verificar que no estemos ya redirigiendo
-                    if (window.location.pathname.includes('login.html')) {
-                        console.log('🔄 Guardando en Firestore...');
-                        
-                        await db.collection('users').doc(user.uid).set({
-                            uid: user.uid,
-                            email: user.email,
-                            displayName: user.displayName || user.email.split('@')[0],
-                            userType: 'visitante',
-                            photoURL: user.photoURL || '',
-                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
-                        }, { merge: true });
-                        
-                        console.log('➡️ Redirigiendo...');
-                        window.location.replace('principal.html');
-                    }
-                } else {
-                    console.log('👤 No hay usuario - Mostrando formulario');
-                    setTimeout(initLoginButtons, 100);
-                }
-            });
-        }
-        
-        function initLoginButtons() {
-            console.log('🎯 Inicializando botones de login');
-            
+        // Toggle password visibility
         document.getElementById('togglePassword').addEventListener('click', function() {
             const password = document.getElementById('password');
             const icon = this.querySelector('i');
@@ -457,82 +378,104 @@
             }
         });
 
-        // Login con email
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const btnLogin = document.getElementById('btnLogin');
-            const loginText = document.getElementById('loginText');
-            const loginSpinner = document.getElementById('loginSpinner');
-
-            btnLogin.disabled = true;
-            loginText.textContent = 'Iniciando...';
-            loginSpinner.style.display = 'inline-block';
-
-            const result = await window.authHandler.loginWithEmail(email, password);
-
-            if (result.success) {
-                showMessage('¡Bienvenido! Redirigiendo...', 'success');
-                setTimeout(() => {
-                    if (window.authHandler.isArtista()) {
-                        window.location.href = 'perfil-artista.html';
-                    } else {
-                        window.location.href = 'principal.html';
-                    }
-                }, 1000);
+        // Esperar a que authHandler esté listo
+        function waitForAuth() {
+            if (window.authHandler && window.authHandler.initialized) {
+                initLoginHandlers();
             } else {
-                showMessage(result.error, 'error');
-                btnLogin.disabled = false;
-                loginText.textContent = 'Iniciar Sesión';
-                loginSpinner.style.display = 'none';
+                setTimeout(waitForAuth, 100);
             }
-        });
+        }
 
-        // Login con Google (usando redirect)
-        document.getElementById('btnGoogle').addEventListener('click', async () => {
-            const btn = document.getElementById('btnGoogle');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Redirigiendo a Google...';
+        // Iniciar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', waitForAuth);
+        } else {
+            waitForAuth();
+        }
 
-            try {
-                const provider = new firebase.auth.GoogleAuthProvider();
-                provider.addScope('email');
-                provider.addScope('profile');
+        function initLoginHandlers() {
+            // Login con email
+            document.getElementById('loginForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
                 
-                await firebase.auth().signInWithRedirect(provider);
-            } catch (error) {
-                console.error('Error Google login:', error);
-                showMessage('Error al conectar con Google: ' + error.message, 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20"><path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/><path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/><path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/><path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/></svg> Continuar con Google';
-            }
-        });
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const btnLogin = document.getElementById('btnLogin');
+                const loginText = document.getElementById('loginText');
+                const loginSpinner = document.getElementById('loginSpinner');
 
-        // Login con Facebook
-        document.getElementById('btnFacebook').addEventListener('click', async () => {
-            const btn = document.getElementById('btnFacebook');
-            btn.disabled = true;
-            btn.innerHTML = '<span class="loading"></span> Conectando...';
+                btnLogin.disabled = true;
+                loginText.textContent = 'Iniciando...';
+                loginSpinner.style.display = 'inline-block';
 
-            const result = await window.authHandler.loginWithFacebook();
+                const result = await window.authHandler.loginWithEmail(email, password);
 
-            if (result.success) {
-                showMessage('¡Bienvenido! Redirigiendo...', 'success');
-                setTimeout(() => {
-                    if (window.authHandler.isArtista()) {
-                        window.location.href = 'perfil-artista.html';
-                    } else {
-                        window.location.href = 'principal.html';
-                    }
-                }, 1000);
-            } else {
-                showMessage(result.error, 'error');
-                btn.disabled = false;
-                btn.innerHTML = '<i class="fab fa-facebook-f"></i> Continuar con Facebook';
-            }
-        });
+                if (result.success) {
+                    showMessage('¡Bienvenido! Redirigiendo...', 'success');
+                    setTimeout(() => {
+                        if (window.authHandler.isArtista()) {
+                            window.location.href = 'perfil-artista.html';
+                        } else {
+                            window.location.href = 'perfil.html';
+                        }
+                    }, 1000);
+                } else {
+                    showMessage(result.error, 'error');
+                    btnLogin.disabled = false;
+                    loginText.textContent = 'Iniciar Sesión';
+                    loginSpinner.style.display = 'none';
+                }
+            });
+
+            // Login con Google
+            document.getElementById('btnGoogle').addEventListener('click', async () => {
+                const btn = document.getElementById('btnGoogle');
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loading"></span> Conectando...';
+
+                const result = await window.authHandler.loginWithGoogle();
+
+                if (result.success) {
+                    showMessage('¡Bienvenido! Redirigiendo...', 'success');
+                    setTimeout(() => {
+                        if (window.authHandler.isArtista()) {
+                            window.location.href = 'perfil-artista.html';
+                        } else {
+                            window.location.href = 'perfil.html';
+                        }
+                    }, 1000);
+                } else {
+                    showMessage(result.error, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 20 20"><path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/><path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/><path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/><path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/></svg> Continuar con Google';
+                }
+            });
+
+            // Login con Facebook
+            document.getElementById('btnFacebook').addEventListener('click', async () => {
+                const btn = document.getElementById('btnFacebook');
+                btn.disabled = true;
+                btn.innerHTML = '<span class="loading"></span> Conectando...';
+
+                const result = await window.authHandler.loginWithFacebook();
+
+                if (result.success) {
+                    showMessage('¡Bienvenido! Redirigiendo...', 'success');
+                    setTimeout(() => {
+                        if (window.authHandler.isArtista()) {
+                            window.location.href = 'perfil-artista.html';
+                        } else {
+                            window.location.href = 'perfil.html';
+                        }
+                    }, 1000);
+                } else {
+                    showMessage(result.error, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fab fa-facebook-f"></i> Continuar con Facebook';
+                }
+            });
+        }
 
         function showMessage(message, type) {
             const alert = document.getElementById('alertMessage');
@@ -546,7 +489,6 @@
                 }, 3000);
             }
         }
-        } // Fin de initLoginPage
     </script>
 </body>
 </html>
