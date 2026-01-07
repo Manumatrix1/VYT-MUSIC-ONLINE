@@ -915,12 +915,22 @@
                 const user = userCredential.user;
                 console.log('✅ Usuario creado con UID:', user.uid);
                 
-                // Recopilar datos del formulario
-                const formData = new FormData(this);
-                const artistData = {};
+                // 📧 PASO 2: ENVIAR EMAIL DE VERIFICACIÓN AUTOMÁTICAMENTE
+                console.log('📧 Enviando email de verificación...');
+                await user.sendEmailVerification();
+                console.log('✅ Email de verificación enviado a:', user.email);
                 
-                // Agregar UID
-                artistData.uid = user.uid;
+                // Mostrar modal de verificación
+                showEmailVerificationModal(user, async () => {
+                    // Callback cuando verifica el email
+                    console.log('✅ Email verificado, continuando con el perfil...');
+                    
+                    // Recopilar datos del formulario
+                    const formData = new FormData(document.getElementById('artist-profile-form'));
+                    const artistData = {};
+                    
+                    // Agregar UID
+                    artistData.uid = user.uid;
             
             // Datos básicos
             artistData.email = email;
@@ -1053,29 +1063,132 @@
                 // Mostrar mensaje de bienvenida y redirigir
                 showWelcomeAndRedirect(artistData);
                 
+                }); // Fin del callback de verificación
+                
             } catch (error) {
-                console.error('Error al crear perfil:', error);
-                alert('Error al crear el perfil. Por favor, intenta nuevamente.');
+                console.error('❌ Error al crear cuenta:', error);
+                let errorMessage = 'Error al crear la cuenta';
+                
+                if (error.code === 'auth/email-already-in-use') {
+                    errorMessage = '⚠️ Este email ya está registrado. ¿Querés iniciar sesión?';
+                } else if (error.code === 'auth/invalid-email') {
+                    errorMessage = '⚠️ Email inválido';
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = '⚠️ La contraseña debe tener al menos 6 caracteres';
+                }
+                
+                alert(errorMessage);
             }
+        });
+        
+        // 📧 Función para mostrar modal de verificación de email
+        function showEmailVerificationModal(user, onVerified) {
+            const modal = document.createElement('div');
+            modal.id = 'emailVerificationModal';
+            modal.innerHTML = `
+                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 24px; padding: 40px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.9);">
+                        
+                        <div style="font-size: 64px; margin-bottom: 20px;">📧</div>
+                        
+                        <h2 style="color: white; font-size: 28px; font-weight: bold; margin-bottom: 15px;">
+                            ¡Verificá tu Email!
+                        </h2>
+                        
+                        <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin-bottom: 25px; line-height: 1.6;">
+                            Te enviamos un email de verificación a:<br>
+                            <strong style="font-size: 18px;">${user.email}</strong>
+                        </p>
+                        
+                        <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                            <p style="color: white; font-size: 14px; line-height: 1.8;">
+                                <strong>Pasos:</strong><br>
+                                1️⃣ Abrí tu correo electrónico<br>
+                                2️⃣ Buscá el email de VYT MUSIC<br>
+                                3️⃣ Hacé click en el link de verificación<br>
+                                4️⃣ Volvé acá y clickeá "Ya Verifiqué"
+                            </p>
+                        </div>
+                        
+                        <button id="btnCheckVerification" 
+                                style="width: 100%; background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+                                       color: white; padding: 18px; border-radius: 12px; border: none; 
+                                       font-weight: bold; font-size: 18px; cursor: pointer; margin-bottom: 15px;
+                                       transition: all 0.3s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">
+                            <i class="fas fa-check-circle mr-2"></i> Ya Verifiqué Mi Email
+                        </button>
+                        
+                        <button id="btnResendEmail" 
+                                style="width: 100%; background: rgba(255,255,255,0.15); 
+                                       color: white; padding: 15px; border-radius: 12px; 
+                                       border: 2px solid rgba(255,255,255,0.3); 
+                                       font-weight: bold; font-size: 16px; cursor: pointer;
+                                       transition: all 0.3s;">
+                            <i class="fas fa-redo mr-2"></i> Reenviar Email
+                        </button>
+                        
+                        <p style="color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 20px;">
+                            Si no recibiste el email, revisá la carpeta de SPAM
+                        </p>
+                        
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Handler: Verificar email
+            document.getElementById('btnCheckVerification').addEventListener('click', async () => {
+                console.log('🔍 Verificando estado del email...');
+                
+                try {
+                    // Recargar datos del usuario
+                    await user.reload();
+                    
+                    if (user.emailVerified) {
+                        console.log('✅ Email verificado correctamente');
+                        modal.remove();
+                        onVerified(); // Continuar con el flujo
+                    } else {
+                        alert('⚠️ Aún no verificaste tu email. Por favor, hacé click en el link que te enviamos y volvé a intentar.');
+                    }
+                } catch (error) {
+                    console.error('Error al verificar:', error);
+                    alert('Error al verificar el email. Intentá nuevamente.');
+                }
+            });
+            
+            // Handler: Reenviar email
+            document.getElementById('btnResendEmail').addEventListener('click', async () => {
+                try {
+                    await user.sendEmailVerification();
+                    alert('✅ Email reenviado. Revisá tu bandeja de entrada.');
+                } catch (error) {
+                    console.error('Error al reenviar:', error);
+                    alert('Error al reenviar el email. Esperá unos segundos e intentá nuevamente.');
+                }
+            });
+        }
         });
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
             console.log('🎤 VYT MUSIC - Formulario de perfil de artista iniciado');
             
-            // Verificar que el usuario esté autenticado
+            // NO verificar autenticación previa, permitir registro nuevo
             firebase.auth().onAuthStateChanged((user) => {
-                if (!user) {
-                    console.log('⚠️ Usuario no autenticado - Redirigiendo a login');
-                    alert('Debes iniciar sesión primero');
-                    window.location.href = 'index.html';
-                } else {
-                    console.log('✅ Usuario autenticado:', user.email);
-                    // Cargar los campos del formulario con datos del usuario si existen
-                    const emailInput = document.getElementById('email');
+                if (user && user.emailVerified) {
+                    console.log('✅ Usuario ya autenticado y verificado:', user.email);
+                    // Pre-llenar email si existe
+                    const emailInput = document.querySelector('input[name="email"]');
                     if (emailInput && user.email) {
                         emailInput.value = user.email;
+                        emailInput.readOnly = true; // No permitir cambiar
                     }
+                } else if (user && !user.emailVerified) {
+                    console.log('⚠️ Usuario autenticado pero email NO verificado');
+                } else {
+                    console.log('📝 Formulario listo para nuevo registro');
                 }
             });
         });
