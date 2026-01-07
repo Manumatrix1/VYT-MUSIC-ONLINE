@@ -477,17 +477,40 @@
                             try {
                                 await result.user.sendEmailVerification();
                                 console.log('📧 Email de verificación enviado a:', result.user.email);
-                                showLoginAlert('¡Bienvenido! Te enviamos un email de confirmación.', 'success');
                             } catch (emailError) {
                                 console.log('⚠️ No se pudo enviar email:', emailError);
                             }
                         }
                         
-                        // Redirigir según tipo
+                        // Si es ARTISTA → Crear perfil INMEDIATAMENTE
                         if (userType === 'artista') {
-                            window.location.href = 'crear-perfil-artista.html';
+                            console.log('🎤 Artista detectado - Mostrando formulario de perfil básico');
+                            const perfilData = await showCrearPerfilArtista(result.user);
+                            
+                            if (perfilData) {
+                                // Guardar perfil de artista en Firestore
+                                await db.collection('artist_profiles').doc(result.user.uid).set({
+                                    uid: result.user.uid,
+                                    email: result.user.email,
+                                    nombreArtistico: perfilData.nombreArtistico,
+                                    provincia: perfilData.provincia,
+                                    ciudad: perfilData.ciudad,
+                                    generoMusical: perfilData.generoMusical,
+                                    telefono: perfilData.telefono || '',
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    estado: 'activo'
+                                });
+                                
+                                console.log('✅ Perfil de artista creado exitosamente');
+                                showLoginAlert('¡Perfil creado! Bienvenido a VYT Music 🎵', 'success');
+                                
+                                setTimeout(() => {
+                                    window.location.href = 'perfil-artista.html';
+                                }, 1500);
+                            }
                         } else {
-                            window.location.href = 'principal.html';
+                            // Visitante → Directo a certámenes
+                            window.location.href = 'certamenes.html';
                         }
                     } else {
                         console.log('👤 Usuario existente - Actualizando lastLogin');
@@ -559,6 +582,141 @@
                     document.getElementById('selectVisitante').onclick = () => {
                         modal.remove();
                         resolve('visitante');
+                    };
+                });
+            }
+
+            // Función para crear perfil de artista INMEDIATAMENTE
+            function showCrearPerfilArtista(user) {
+                return new Promise((resolve) => {
+                    const modal = document.createElement('div');
+                    modal.className = 'fixed inset-0 bg-black/95 backdrop-blur-md z-[100] flex items-center justify-center p-4 overflow-y-auto';
+                    modal.innerHTML = `
+                        <div class="bg-gradient-to-br from-gray-900 to-black border-4 border-purple-500 rounded-3xl p-10 max-w-2xl w-full shadow-2xl my-8">
+                            <h2 class="text-4xl font-bold text-white text-center mb-3">🎤 Completá tu Perfil</h2>
+                            <p class="text-gray-300 text-center mb-8 text-lg">Solo 4 datos básicos para empezar</p>
+                            
+                            <form id="formPerfilArtista" class="space-y-6">
+                                <!-- Nombre Artístico -->
+                                <div>
+                                    <label class="text-white font-bold mb-2 block text-lg">
+                                        <i class="fas fa-star text-yellow-400"></i> Nombre Artístico *
+                                    </label>
+                                    <input type="text" id="nombreArtistico" required 
+                                           class="w-full bg-white/10 border-2 border-white/20 rounded-xl px-4 py-4 text-white text-lg focus:border-purple-500 focus:outline-none"
+                                           placeholder="Ej: Juan Pérez, La Negra Sosa, etc.">
+                                </div>
+
+                                <!-- Provincia -->
+                                <div>
+                                    <label class="text-white font-bold mb-2 block text-lg">
+                                        <i class="fas fa-map-marked-alt text-blue-400"></i> Provincia *
+                                    </label>
+                                    <select id="provincia" required 
+                                            class="w-full bg-white/10 border-2 border-white/20 rounded-xl px-4 py-4 text-white text-lg focus:border-purple-500 focus:outline-none">
+                                        <option value="">Seleccioná tu provincia</option>
+                                        <option value="Buenos Aires">Buenos Aires</option>
+                                        <option value="CABA">CABA</option>
+                                        <option value="Catamarca">Catamarca</option>
+                                        <option value="Chaco">Chaco</option>
+                                        <option value="Chubut">Chubut</option>
+                                        <option value="Córdoba">Córdoba</option>
+                                        <option value="Corrientes">Corrientes</option>
+                                        <option value="Entre Ríos">Entre Ríos</option>
+                                        <option value="Formosa">Formosa</option>
+                                        <option value="Jujuy">Jujuy</option>
+                                        <option value="La Pampa">La Pampa</option>
+                                        <option value="La Rioja">La Rioja</option>
+                                        <option value="Mendoza">Mendoza</option>
+                                        <option value="Misiones">Misiones</option>
+                                        <option value="Neuquén">Neuquén</option>
+                                        <option value="Río Negro">Río Negro</option>
+                                        <option value="Salta">Salta</option>
+                                        <option value="San Juan">San Juan</option>
+                                        <option value="San Luis">San Luis</option>
+                                        <option value="Santa Cruz">Santa Cruz</option>
+                                        <option value="Santa Fe">Santa Fe</option>
+                                        <option value="Santiago del Estero">Santiago del Estero</option>
+                                        <option value="Tierra del Fuego">Tierra del Fuego</option>
+                                        <option value="Tucumán">Tucumán</option>
+                                    </select>
+                                </div>
+
+                                <!-- Ciudad -->
+                                <div>
+                                    <label class="text-white font-bold mb-2 block text-lg">
+                                        <i class="fas fa-city text-green-400"></i> Ciudad *
+                                    </label>
+                                    <input type="text" id="ciudad" required 
+                                           class="w-full bg-white/10 border-2 border-white/20 rounded-xl px-4 py-4 text-white text-lg focus:border-purple-500 focus:outline-none"
+                                           placeholder="Ej: Rosario, Buenos Aires, Córdoba">
+                                </div>
+
+                                <!-- Género Musical -->
+                                <div>
+                                    <label class="text-white font-bold mb-2 block text-lg">
+                                        <i class="fas fa-music text-pink-400"></i> Género Musical *
+                                    </label>
+                                    <select id="generoMusical" required 
+                                            class="w-full bg-white/10 border-2 border-white/20 rounded-xl px-4 py-4 text-white text-lg focus:border-purple-500 focus:outline-none">
+                                        <option value="">Seleccioná tu género</option>
+                                        <option value="Pop">Pop</option>
+                                        <option value="Rock">Rock</option>
+                                        <option value="Folklore">Folklore</option>
+                                        <option value="Tango">Tango</option>
+                                        <option value="Cumbia">Cumbia</option>
+                                        <option value="Cuarteto">Cuarteto</option>
+                                        <option value="Trap">Trap</option>
+                                        <option value="Reggaeton">Reggaeton</option>
+                                        <option value="Balada">Balada</option>
+                                        <option value="Jazz">Jazz</option>
+                                        <option value="Otro">Otro</option>
+                                    </select>
+                                </div>
+
+                                <!-- Teléfono (Opcional) -->
+                                <div>
+                                    <label class="text-white font-bold mb-2 block text-lg">
+                                        <i class="fas fa-phone text-yellow-400"></i> Teléfono (opcional)
+                                    </label>
+                                    <input type="tel" id="telefono" 
+                                           class="w-full bg-white/10 border-2 border-white/20 rounded-xl px-4 py-4 text-white text-lg focus:border-purple-500 focus:outline-none"
+                                           placeholder="Ej: +54 341 1234567">
+                                </div>
+
+                                <!-- Botones -->
+                                <div class="flex gap-4 mt-8">
+                                    <button type="submit" 
+                                            class="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 px-6 rounded-xl text-xl transition-all transform hover:scale-105 shadow-xl">
+                                        <i class="fas fa-check mr-2"></i> Guardar Perfil
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    `;
+                    
+                    document.body.appendChild(modal);
+
+                    // Manejar envío del formulario
+                    document.getElementById('formPerfilArtista').onsubmit = (e) => {
+                        e.preventDefault();
+                        
+                        const perfilData = {
+                            nombreArtistico: document.getElementById('nombreArtistico').value.trim(),
+                            provincia: document.getElementById('provincia').value,
+                            ciudad: document.getElementById('ciudad').value.trim(),
+                            generoMusical: document.getElementById('generoMusical').value,
+                            telefono: document.getElementById('telefono').value.trim()
+                        };
+                        
+                        // Validación
+                        if (!perfilData.nombreArtistico || !perfilData.provincia || !perfilData.ciudad || !perfilData.generoMusical) {
+                            alert('Por favor completá todos los campos obligatorios (*)');
+                            return;
+                        }
+                        
+                        modal.remove();
+                        resolve(perfilData);
                     };
                 });
             }
