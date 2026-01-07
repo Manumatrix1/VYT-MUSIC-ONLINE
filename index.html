@@ -163,13 +163,26 @@
             </div>
         </div>
 
-        <!-- Botón simple para explorar -->
-        <div class="text-center">
+        <!-- Botón simple para explorar - SOLO VISIBLE SI ESTÁ LOGUEADO -->
+        <div id="contenidoLogueado" class="text-center" style="display: none;">
             <p class="text-white/80 text-xl mb-6">¿Querés ver los certámenes activos?</p>
             <a href="certamenes.html" class="inline-flex items-center justify-center bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 text-xl shadow-2xl transform hover:scale-105">
                 <i class="fas fa-trophy mr-3 text-2xl"></i>
                 Ver Certámenes
             </a>
+        </div>
+        
+        <!-- Mensaje para usuarios NO logueados -->
+        <div id="contenidoNoLogueado" class="text-center">
+            <p class="text-white text-2xl mb-6">👋 Para participar o votar, elegí cómo querés unirte:</p>
+            <div class="flex gap-4 justify-center flex-wrap">
+                <button id="btnIniciarSesionHome" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-5 px-10 rounded-2xl transition-all shadow-2xl transform hover:scale-105 text-xl">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
+                </button>
+                <button id="btnRegistrarseHome" class="bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-5 px-10 rounded-2xl transition-all shadow-2xl transform hover:scale-105 text-xl">
+                    <i class="fas fa-user-plus mr-2"></i> Registrarme
+                </button>
+            </div>
         </div>
     </div>
 
@@ -799,21 +812,45 @@
     
     <!-- Auto-Login Modal -->
     <script>
-    console.log('🚀 Iniciando verificación de autenticación...');
+    console.log('🚀 INDEX.HTML: Script iniciado');
     
-    // Mostrar modal inmediatamente después de Firebase
+    // Mostrar modal INMEDIATAMENTE cuando Firebase esté listo
     setTimeout(() => {
+        console.log('⏰ Verificando autenticación...');
         firebase.auth().onAuthStateChanged((user) => {
             console.log('🔥 Firebase Auth Ready - Usuario:', user ? user.email : 'NO logueado');
             
             if (!user) {
-                console.log('⚡ Mostrando modal de bienvenida...');
-                showWelcomeModal();
+                console.log('❌ Usuario NO logueado');
+                document.getElementById('contenidoNoLogueado').style.display = 'block';
+                document.getElementById('contenidoLogueado').style.display = 'none';
             } else {
-                console.log('✅ Usuario ya logueado, no mostrar modal');
+                console.log('✅ Usuario logueado:', user.email);
+                document.getElementById('contenidoNoLogueado').style.display = 'none';
+                document.getElementById('contenidoLogueado').style.display = 'block';
             }
         });
     }, 500);
+    
+    // Handler para botón Iniciar Sesión
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnIniciar = document.getElementById('btnIniciarSesionHome');
+        const btnRegistro = document.getElementById('btnRegistrarseHome');
+        
+        if (btnIniciar) {
+            btnIniciar.addEventListener('click', () => {
+                console.log('🔐 Clic en Iniciar Sesión');
+                showWelcomeModal();
+            });
+        }
+        
+        if (btnRegistro) {
+            btnRegistro.addEventListener('click', () => {
+                console.log('📝 Clic en Registrarse');
+                showWelcomeModal();
+            });
+        }
+    });
     
     function showWelcomeModal() {
         const modal = document.createElement('div');
