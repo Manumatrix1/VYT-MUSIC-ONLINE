@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrarse como Visitante - VYT MUSIC</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Roboto', sans-serif;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <img src="https://i.ibb.co/TcFydZg/1-2-Logo.png" alt="VYT Music" class="w-24 h-24 mx-auto mb-4">
+            <h1 class="text-4xl font-black text-white mb-2">¡Bienvenido!</h1>
+            <p class="text-white/90 text-lg">Creá tu cuenta de Visitante</p>
+        </div>
+
+        <!-- Formulario -->
+        <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+            
+            <div id="alertContainer" class="hidden mb-4 p-4 rounded-xl text-center font-semibold"></div>
+
+            <form id="formRegistroVisitante">
+                
+                <!-- Nombre Completo -->
+                <div class="mb-5">
+                    <label class="block text-white font-bold mb-2 text-sm">
+                        <i class="fas fa-user mr-2"></i> Nombre Completo *
+                    </label>
+                    <input type="text" id="nombreCompleto" required 
+                           class="w-full px-4 py-3 rounded-xl bg-white/20 border-2 border-white/30 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all"
+                           placeholder="Ej: Juan Pérez">
+                </div>
+
+                <!-- Email -->
+                <div class="mb-5">
+                    <label class="block text-white font-bold mb-2 text-sm">
+                        <i class="fas fa-envelope mr-2"></i> Email *
+                    </label>
+                    <input type="email" id="email" required 
+                           class="w-full px-4 py-3 rounded-xl bg-white/20 border-2 border-white/30 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all"
+                           placeholder="tu@email.com">
+                </div>
+
+                <!-- Contraseña -->
+                <div class="mb-5">
+                    <label class="block text-white font-bold mb-2 text-sm">
+                        <i class="fas fa-lock mr-2"></i> Contraseña *
+                    </label>
+                    <input type="password" id="password" required 
+                           class="w-full px-4 py-3 rounded-xl bg-white/20 border-2 border-white/30 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all"
+                           placeholder="Mínimo 6 caracteres">
+                </div>
+
+                <!-- Confirmar Contraseña -->
+                <div class="mb-6">
+                    <label class="block text-white font-bold mb-2 text-sm">
+                        <i class="fas fa-lock mr-2"></i> Confirmar Contraseña *
+                    </label>
+                    <input type="password" id="confirmPassword" required 
+                           class="w-full px-4 py-3 rounded-xl bg-white/20 border-2 border-white/30 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all"
+                           placeholder="Repetí tu contraseña">
+                </div>
+
+                <!-- Botón Registrarse -->
+                <button type="submit" id="btnSubmit"
+                        class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg text-lg">
+                    <i class="fas fa-user-plus mr-2"></i> Crear Cuenta
+                </button>
+
+            </form>
+
+            <!-- Ya tengo cuenta -->
+            <div class="text-center mt-6 pt-6 border-t border-white/20">
+                <p class="text-white/80 mb-3">¿Ya tenés cuenta?</p>
+                <a href="login.html" class="text-white font-bold underline hover:text-white/80 transition-all">
+                    Iniciar Sesión
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+
+    <script>
+    console.log('📋 Registro Visitante - Iniciado');
+
+    const form = document.getElementById('formRegistroVisitante');
+    const btnSubmit = document.getElementById('btnSubmit');
+    const alertContainer = document.getElementById('alertContainer');
+
+    function showAlert(message, type = 'error') {
+        alertContainer.className = type === 'error' 
+            ? 'mb-4 p-4 rounded-xl text-center font-semibold bg-red-500/20 border-2 border-red-500 text-white'
+            : 'mb-4 p-4 rounded-xl text-center font-semibold bg-green-500/20 border-2 border-green-500 text-white';
+        alertContainer.textContent = message;
+        alertContainer.classList.remove('hidden');
+        
+        setTimeout(() => {
+            alertContainer.classList.add('hidden');
+        }, 5000);
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const nombreCompleto = document.getElementById('nombreCompleto').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        // Validaciones
+        if (!nombreCompleto || !email || !password) {
+            showAlert('⚠️ Por favor completá todos los campos obligatorios');
+            return;
+        }
+
+        if (password.length < 6) {
+            showAlert('⚠️ La contraseña debe tener al menos 6 caracteres');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            showAlert('⚠️ Las contraseñas no coinciden');
+            return;
+        }
+
+        // Deshabilitar botón
+        btnSubmit.disabled = true;
+        btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creando cuenta...';
+
+        try {
+            console.log('🔥 Creando usuario en Firebase Auth...');
+            
+            // 1. Crear usuario en Firebase Auth
+            const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+            const user = userCredential.user;
+            
+            console.log('✅ Usuario creado:', user.uid);
+
+            // 2. Crear documento en Firestore
+            const db = firebase.firestore();
+            await db.collection('users').doc(user.uid).set({
+                uid: user.uid,
+                email: email,
+                nombreCompleto: nombreCompleto,
+                userType: 'visitante',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                estado: 'activo'
+            });
+
+            console.log('✅ Documento Firestore creado');
+
+            // 3. Inicializar saldo VYT Money en 0
+            await db.collection('user_vyt_money').doc(user.uid).set({
+                uid: user.uid,
+                balance: 0,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+
+            console.log('✅ VYT Money inicializado');
+
+            showAlert('✅ ¡Cuenta creada exitosamente!', 'success');
+            
+            // Redirigir al perfil de visitante
+            setTimeout(() => {
+                window.location.href = 'perfil.html';
+            }, 1500);
+
+        } catch (error) {
+            console.error('❌ Error:', error);
+            
+            let errorMessage = 'Error al crear la cuenta';
+            
+            if (error.code === 'auth/email-already-in-use') {
+                errorMessage = '⚠️ Este email ya está registrado';
+            } else if (error.code === 'auth/invalid-email') {
+                errorMessage = '⚠️ Email inválido';
+            } else if (error.code === 'auth/weak-password') {
+                errorMessage = '⚠️ Contraseña muy débil';
+            }
+            
+            showAlert(errorMessage);
+            
+            // Rehabilitar botón
+            btnSubmit.disabled = false;
+            btnSubmit.innerHTML = '<i class="fas fa-user-plus mr-2"></i> Crear Cuenta';
+        }
+    });
+    </script>
+
+</body>
+</html>

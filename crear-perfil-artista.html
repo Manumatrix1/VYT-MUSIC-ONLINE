@@ -216,27 +216,33 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Email *</label>
-                            <input type="email" name="email" class="form-input" placeholder="tu@email.com">
+                            <input type="email" name="email" class="form-input" placeholder="tu@email.com" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="block text-white font-medium mb-2">Contraseña *</label>
+                            <input type="password" name="password" class="form-input" placeholder="Mínimo 6 caracteres" required>
+                            <p class="text-gray-400 text-sm mt-1">Esta será tu contraseña para iniciar sesión</p>
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">WhatsApp *</label>
-                            <input type="tel" name="whatsapp" class="form-input" placeholder="+54 9 11 1234-5678">
+                            <input type="tel" name="whatsapp" class="form-input" placeholder="+54 9 11 1234-5678" required>
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Nombre *</label>
-                            <input type="text" name="nombre" class="form-input" placeholder="Tu nombre">
+                            <input type="text" name="nombre" class="form-input" placeholder="Tu nombre" required>
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Apellido *</label>
-                            <input type="text" name="apellido" class="form-input" placeholder="Tu apellido">
+                            <input type="text" name="apellido" class="form-input" placeholder="Tu apellido" required>
                         </div>
                         
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">Fecha de Nacimiento *</label>
-                            <input type="date" name="fecha_nacimiento" class="form-input">
+                            <input type="date" name="fecha_nacimiento" class="form-input" required>
                         </div>
                         
                         <div class="form-group">
@@ -840,7 +846,7 @@
             }, 3000);
         }
 
-        // Manejo del formulario
+        // Manejo del formulario - AHORA CREA CUENTA + PERFIL
         document.getElementById('artist-profile-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -848,12 +854,20 @@
             
             // VALIDACIÓN COMPLETA ANTES DE ENVIAR
             const email = document.querySelector('input[name="email"]').value.trim();
+            const password = document.querySelector('input[name="password"]')?.value; // Nuevo campo
             const whatsapp = document.querySelector('input[name="whatsapp"]').value.trim();
             const nombre = document.querySelector('input[name="nombre"]').value.trim();
             const apellido = document.querySelector('input[name="apellido"]').value.trim();
             const nombreArtistico = document.querySelector('input[name="nombre_artistico"]').value.trim();
             const provincia = document.querySelector('select[name="provincia"]').value;
             const ciudad = document.querySelector('select[name="ciudad"]').value;
+            
+            // Validar contraseña (nuevo)
+            if (!password || password.length < 6) {
+                alert('❌ La contraseña debe tener al menos 6 caracteres');
+                nextStep(1);
+                return;
+            }
             
             // Validar datos básicos
             if (!email || !whatsapp || !nombre || !apellido) {
@@ -892,11 +906,21 @@
                 return;
             }
             
-            console.log('✅ Validación pasada, procesando datos...');
+            console.log('✅ Validación pasada, creando cuenta...');
             
-            // Recopilar datos del formulario
-            const formData = new FormData(this);
-            const artistData = {};
+            // 🔥 PASO 1: CREAR CUENTA EN FIREBASE AUTH
+            try {
+                console.log('🔐 Creando cuenta en Firebase Auth...');
+                const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
+                const user = userCredential.user;
+                console.log('✅ Usuario creado con UID:', user.uid);
+                
+                // Recopilar datos del formulario
+                const formData = new FormData(this);
+                const artistData = {};
+                
+                // Agregar UID
+                artistData.uid = user.uid;
             
             // Datos básicos
             artistData.email = email;
