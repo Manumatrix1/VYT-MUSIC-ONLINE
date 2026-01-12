@@ -264,60 +264,190 @@
     </style>
 </head>
 <body>
-    <div class="main-container">
-        <header class="text-center mb-12">
-            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" style="width: 128px; margin: 0 auto 16px; display: block;">
-            <h1 style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">VYT MUSIC</h1>
-        </header>
+    <!-- Hero Gamificado con Partículas -->
+    <section class="hero-animated" id="heroParticles" style="min-height: 60vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 3rem;">
+        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center; position: relative; z-index: 2;">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="bounce-in" style="width: 120px; margin: 0 auto 24px; display: block; filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));">
+            
+            <h1 class="fade-in-up" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 16px; line-height: 1.1; text-shadow: 0 4px 20px rgba(0,0,0,0.3);">
+                🎵 Certámenes VYT Music
+            </h1>
+            
+            <p class="fade-in-up" style="font-size: 1.3rem; margin-bottom: 40px; opacity: 0.95; max-width: 700px; margin-left: auto; margin-right: auto; animation-delay: 0.2s;">
+                Encuentra tu certamen perfecto y comienza tu carrera musical
+            </p>
+            
+            <!-- Stats Animados -->
+            <div style="display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-top: 32px;">
+                <div class="fade-in-up" style="animation-delay: 0.3s;">
+                    <div style="font-size: 3rem; font-weight: 900; color: #3B82F6;" data-counter="247">0</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 4px;">Participantes</div>
+                </div>
+                <div class="fade-in-up" style="animation-delay: 0.4s;">
+                    <div style="font-size: 3rem; font-weight: 900; color: #10B981;" data-counter="12">0</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 4px;">Certámenes</div>
+                </div>
+                <div class="fade-in-up" style="animation-delay: 0.5s;">
+                    <div style="font-size: 3rem; font-weight: 900; color: #F59E0B;" data-counter="23">0</div>
+                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 4px;">Provincias</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <main class="container">
-            <section class="hero-section">
-                <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
-                    🎵 Certámenes VYT Music
-                </h1>
-                <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-                    Encuentra tu certamen perfecto y comienza tu carrera musical. Participa, compite y haz que tu 
-                    voz se escuche en toda Argentina.
-                </p>
-            </section>
+    <!-- Filtros Tipo Spotify -->
+    <div style="max-width: 1200px; margin: 0 auto 40px; padding: 0 20px;">
+        <div style="display: flex; gap: 12px; overflow-x: auto; padding: 8px 0; -webkit-overflow-scrolling: touch;">
+            <button class="category-pill active" data-category="all">🎯 Todos</button>
+            <button class="category-pill" data-category="pop">🎤 Pop</button>
+            <button class="category-pill" data-category="rock">🎸 Rock</button>
+            <button class="category-pill" data-category="folklore">🪕 Folklore</button>
+            <button class="category-pill" data-category="tango">🎻 Tango</button>
+            <button class="category-pill" data-category="provincial">📍 Provincial</button>
+        </div>
+    </div>
 
-            <!-- Certámenes Activos -->
-            <section style="margin-bottom: 48px;">
-                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; text-align: center;">
-                    🎵 Certámenes Activos - ¡Inscríbete Ya!
-                </h2>
+    <!-- Grid de Certámenes Gamificados -->
+    <main style="max-width: 1200px; margin: 0 auto; padding: 0 20px 100px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px;">
+            
+            <!-- Card 1: Pop Nacional -->
+            <div class="certamen-card card-3d fade-in-up shine-effect" data-category="pop" style="animation-delay: 0.1s;">
+                <div style="position: absolute; top: 16px; right: 16px;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #10B981, #059669); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                        ⚡ Abierto
+                    </span>
+                </div>
                 
-                <div class="certamen-card">
-                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 16px; color: #3B82F6;">
+                <div style="margin-bottom: 16px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #3B82F6;">
                         Certamen Nacional de Pop
                     </h3>
-                    <p style="margin-bottom: 16px; opacity: 0.9;">
-                        El certamen de música Pop más importante de Argentina. Participa con tu mejor interpretación y compite con 
-                        artistas de todo el país. Todos las edades pueden participar.
+                    <p style="opacity: 0.85; font-size: 0.95rem; line-height: 1.5;">
+                        El certamen de música Pop más importante de Argentina. Compite con artistas de todo el país.
                     </p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
-                        <span style="background: rgba(34, 197, 94, 0.2); color: #22C55E; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                            Disponible
-                        </span>
-                        <span style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                            Pop
-                        </span>
-                        <span style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                            247 Inscritos
-                        </span>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span class="category-pill" style="background: rgba(59, 130, 246, 0.2); color: #60A5FA; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        🎤 Pop
+                    </span>
+                    <span class="category-pill" style="background: rgba(245, 158, 11, 0.2); color: #FBBF24; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        <span data-counter="247">247</span> inscritos
+                    </span>
+                </div>
+                
+                <!-- Barra de progreso -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
+                        <span style="opacity: 0.8;">Cupos disponibles</span>
+                        <span style="font-weight: 700; color: #3B82F6;"><span data-counter="82">82</span>%</span>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <button onclick="handleParticipar()" class="btn-primary" style="cursor: pointer; border: none;">
-                            📝 Participar Ahora
-                        </button>
-                        <a href="reglamento.html" class="btn-primary" style="background: linear-gradient(135deg, #6B7280, #4B5563);">
-                            👁️ Ver Reglamento
-                        </a>
+                    <div class="progress-bar" style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden;">
+                        <div style="height: 100%; background: linear-gradient(90deg, #3B82F6, #2DD4BF); border-radius: 10px; transition: width 1s ease;" data-progress="82"></div>
                     </div>
                 </div>
-            </section>
-        </main>
-    </div>
+                
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="handleParticipar()" class="btn-game" style="flex: 1; background: linear-gradient(135deg, #3B82F6, #2563EB); border: none; color: white; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;">
+                        📝 Participar
+                    </button>
+                    <a href="reglamento.html" class="btn-game" style="flex: 0.5; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 14px; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; font-size: 14px;">
+                        👁️
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: Rock Regional -->
+            <div class="certamen-card card-3d fade-in-up shine-effect" data-category="rock" style="animation-delay: 0.2s;">
+                <div style="position: absolute; top: 16px; right: 16px;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #F59E0B, #D97706); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+                        🔜 Próximamente
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #EF4444;">
+                        Certamen de Rock Regional
+                    </h3>
+                    <p style="opacity: 0.85; font-size: 0.95rem; line-height: 1.5;">
+                        Demuestra tu potencia sobre el escenario. Rock nacional con toda la energía.
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span class="category-pill" style="background: rgba(239, 68, 68, 0.2); color: #F87171; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        🎸 Rock
+                    </span>
+                    <span class="category-pill" style="background: rgba(107, 114, 128, 0.2); color: #9CA3AF; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        Inscripción pronta
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="padding: 12px; background: rgba(245, 158, 11, 0.1); border-radius: 8px; border-left: 3px solid #F59E0B;">
+                        <p style="font-size: 13px; margin: 0; opacity: 0.9;">📅 Abre: 20 de Enero 2026</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px;">
+                    <button disabled class="btn-game" style="flex: 1; background: rgba(107, 114, 128, 0.3); border: none; color: rgba(255, 255, 255, 0.5); padding: 14px; border-radius: 12px; font-weight: 700; cursor: not-allowed; font-size: 14px;">
+                        🔒 Próximamente
+                    </button>
+                    <a href="reglamento.html" class="btn-game" style="flex: 0.5; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 14px; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; font-size: 14px;">
+                        👁️
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 3: Folklore Tradicional -->
+            <div class="certamen-card card-3d fade-in-up shine-effect" data-category="folklore" style="animation-delay: 0.3s;">
+                <div style="position: absolute; top: 16px; right: 16px;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                        🎵 En Curso
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #8B5CF6;">
+                        Folklore Tradicional Argentino
+                    </h3>
+                    <p style="opacity: 0.85; font-size: 0.95rem; line-height: 1.5;">
+                        Celebra las raíces musicales de Argentina con zambas, chacareras y más.
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span class="category-pill" style="background: rgba(139, 92, 246, 0.2); color: #A78BFA; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        🪕 Folklore
+                    </span>
+                    <span class="category-pill" style="background: rgba(16, 185, 129, 0.2); color: #34D399; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        <span data-counter="156">156</span> votantes
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
+                        <span style="opacity: 0.8;">Fase de votación</span>
+                        <span style="font-weight: 700; color: #8B5CF6;"><span data-counter="45">45</span>%</span>
+                    </div>
+                    <div class="progress-bar" style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden;">
+                        <div style="height: 100%; background: linear-gradient(90deg, #8B5CF6, #A78BFA); border-radius: 10px; transition: width 1s ease;" data-progress="45"></div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="handleParticipar()" class="btn-game" style="flex: 1; background: linear-gradient(135deg, #8B5CF6, #7C3AED); border: none; color: white; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;">
+                        🗳️ Votar
+                    </button>
+                    <a href="reglamento.html" class="btn-game" style="flex: 0.5; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 14px; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; font-size: 14px;">
+                        👁️
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
 
     <!-- Navegación unificada cargada por navigation.js -->
 
