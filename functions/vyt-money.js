@@ -552,3 +552,158 @@ async function updateRealTimeMetrics(poolId, poolData) {
 
 // Exportar función auxiliar para confirmación de compra
 exports.sendVYTMoneyPurchaseConfirmation = sendVYTMoneyPurchaseConfirmation;
+
+// ===== VOTACIÓN CON VALIDACIÓN DE VIDEO ACTIVO =====
+
+/**
+ * Registrar voto por artista (solo si video está activo)
+ */
+exports.registrarVoto = onCall(async (request) => {
+  try {
+    const { participacion_id, monto } = request.data;
+    const userId = request.auth?.uid;
+
+    // Validar autenticación
+    if (!userId) {
+      throw new functions.https.HttpsError('unauthenticated', 'Usuario no autenticado');
+    }
+
+    // Validar datos
+    if (!participacion_id || !monto || monto <= 0) {
+      throw new functions.https.HttpsError('invalid-argument', 'Datos de voto inválidos');
+    }
+
+    const db = admin.firestore();
+
+    // Obtener participación
+    const participacionRef = db.collection('participaciones').doc(participacion_id);
+    const participacionDoc = await participacionRef.get();
+
+    if (!participacionDoc.exists) {
+      throw new functions.https.HttpsError('not-found', 'Participación no encontrada');
+    }
+
+    const participacionData = participacionDoc.data();
+
+    // VALIDAR QUE EL VIDEO ESTÉ ACTIVO
+    if (!participacionData.video_activo) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'El video aún no está activo. Espera a que termine de procesarse.'
+      );
+    }
+
+    // VALIDAR QUE EXISTA LINK DE YOUTUBE
+    if (!participacionData.youtube_link) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        'El video aún no tiene link de YouTube asignado.'
+      );
+    }
+
+    // Obtener saldo del usuario
+    const saldoRef = db.collection('user_vyt_money').doc(userId);
+    const saldoDoc = await saldoRef.get();
+
+    if (!saldoDoc.exists) {
+      throw new functions.https.HttpsError('not-found', 'Saldo no encontrado');
+    }
+
+    const saldoActual = saldoDoc.data().saldo || 0;
+
+    // Validar saldo suficiente
+    if (saldoActual < monto) {
+      throw new functions.https.HttpsError(
+        'failed-precondition',
+        `Saldo insuficiente. Tienes ${saldoActual} VYT Money, necesitas ${monto}`
+      );
+    }
+
+    // Obtener configuración del pozo
+    const configRef = db.collection('system_config').doc('pricing');
+    const configDoc = await configRef.get();
+    const config = configDoc.exists ? configDoc.data() : { porcentaje_pozo: 10 };
+
+    // Calcular contribución al pozo
+    const precio_vyt_unitario = config.precio_100_vyt_money / 100; // Precio de 1 VYT Money en ARS
+    const valor_monetario_voto = monto * precio_vyt_unitario;
+    const contribucion_pozo = (valor_monetario_voto * config.porcentaje_pozo) / 100;
+
+    // TRANSACCIÓN ATÓMICA
+    const result = await db.runTransaction(async (transaction) => {
+      // 1. Descontar VYT Money del usuario
+      transaction.update(saldoRef, {
+        saldo: saldoActual - monto,
+        gastado_total: admin.firestore.FieldValue.increment(monto),
+        updated_at: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      // 2. Incrementar votos del artista
+      transaction.update(participacionRef, {
+        votos: admin.firestore.FieldValue.increment(1),
+        vyt_money_recibido: admin.firestore.FieldValue.increment(monto),
+        valor_monetario_votos: admin.firestore.FieldValue.increment(valor_monetario_voto)
+      });
+
+      // 3. Registrar el voto en historial
+      const votoRef = db.collection('votos').doc();
+      transaction.set(votoRef, {
+        user_id: userId,
+        participacion_id: participacion_id,
+        artista_id: participacionData.userId,
+        monto_vyt: monto,
+        valor_monetario: valor_monetario_voto,
+        contribucion_pozo: contribucion_pozo,
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
+        tipo: 'vyt_money',
+        estado: 'completado'
+      });
+
+      // 4. Actualizar pozo de premios
+      const pozoRef = db.collection('pozo_premios').doc('general');
+      transaction.set(
+        pozoRef,
+        {
+          monto_actual: admin.firestore.FieldValue.increment(contribucion_pozo),
+          total_contribuciones: admin.firestore.FieldValue.increment(1),
+          updated_at: admin.firestore.FieldValue.serverTimestamp()
+        },
+        { merge: true }
+      );
+
+      // 5. Crear notificación para el artista
+      const notificacionRef = db.collection('notificaciones').doc();
+      transaction.set(notificacionRef, {
+        userId: participacionData.userId,
+        tipo: 'nuevo_voto',
+        titulo: '¡Nuevo voto recibido!',
+        mensaje: `Recibiste ${monto} VYT Money en tu participación "${participacionData.cancion}"`,
+        leida: false,
+        participacion_id: participacion_id,
+        timestamp: admin.firestore.FieldValue.serverTimestamp()
+      });
+
+      return {
+        success: true,
+        nuevo_saldo: saldoActual - monto,
+        votos_totales: (participacionData.votos || 0) + 1,
+        vyt_money_total: (participacionData.vyt_money_recibido || 0) + monto
+      };
+    });
+
+    console.log(`✅ Voto registrado: ${userId} → ${participacion_id} (${monto} VYT Money)`);
+
+    return result;
+
+  } catch (error) {
+    console.error('❌ Error registrando voto:', error);
+    
+    // Si es un error conocido de HttpsError, re-lanzarlo
+    if (error instanceof functions.https.HttpsError) {
+      throw error;
+    }
+    
+    // Si no, lanzar error genérico
+    throw new functions.https.HttpsError('internal', 'Error procesando voto: ' + error.message);
+  }
+});

@@ -81,9 +81,16 @@
     <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Sistema de navegación -->
-    <link rel="stylesheet" href="/src/navigation-styles.css">
-    <script src="/src/navigation.js"></script>
+    <!-- Sistema de Navegación Unificado -->
+    <script src="/src/navigation-component.js"></script>
+    
+    <!-- Sistema de Gamificación Mejorado -->
+    <script src="/src/gamification-enhanced.js"></script>
+    
+    <!-- Sistema de Multimedia Dinámica -->
+    <link rel="stylesheet" href="/src/dynamic-assets-styles.css">
+    <script src="/src/dynamic-assets-manager.js" defer></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -264,50 +271,30 @@
     </style>
 </head>
 <body>
-    <!-- Hero Gamificado con Partículas -->
-    <section class="hero-animated" id="heroParticles" style="min-height: 60vh; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; margin-bottom: 3rem;">
-        <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px; text-align: center; position: relative; z-index: 2;">
-            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="bounce-in" style="width: 120px; margin: 0 auto 24px; display: block; filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.5));">
-            
-            <h1 class="fade-in-up" style="font-size: 3.5rem; font-weight: 900; margin-bottom: 16px; line-height: 1.1; text-shadow: 0 4px 20px rgba(0,0,0,0.3);">
-                🎵 Certámenes VYT Music
+    <!-- Contenedor principal de certámenes estilo Spotify -->
+    <div class="vyt-certamenes-container">
+        
+        <!-- Encabezado con título y descripción -->
+        <div class="vyt-certamenes-header">
+            <h1 class="vyt-certamenes-title">
+                🎵 Explora los Certámenes
             </h1>
-            
-            <p class="fade-in-up" style="font-size: 1.3rem; margin-bottom: 40px; opacity: 0.95; max-width: 700px; margin-left: auto; margin-right: auto; animation-delay: 0.2s;">
+            <p style="font-size: 1.125rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; text-align: center;">
                 Encuentra tu certamen perfecto y comienza tu carrera musical
             </p>
-            
-            <!-- Stats Animados -->
-            <div style="display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-top: 32px;">
-                <div class="fade-in-up" style="animation-delay: 0.3s;">
-                    <div style="font-size: 3rem; font-weight: 900; color: #3B82F6;" data-counter="247">0</div>
-                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 4px;">Participantes</div>
-                </div>
-                <div class="fade-in-up" style="animation-delay: 0.4s;">
-                    <div style="font-size: 3rem; font-weight: 900; color: #10B981;" data-counter="12">0</div>
-                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 4px;">Certámenes</div>
-                </div>
-                <div class="fade-in-up" style="animation-delay: 0.5s;">
-                    <div style="font-size: 3rem; font-weight: 900; color: #F59E0B;" data-counter="23">0</div>
-                    <div style="font-size: 0.9rem; opacity: 0.8; margin-top: 4px;">Provincias</div>
-                </div>
-            </div>
         </div>
-    </section>
 
-    <!-- Filtros Tipo Spotify -->
-    <div style="max-width: 1200px; margin: 0 auto 40px; padding: 0 20px;">
-        <div style="display: flex; gap: 12px; overflow-x: auto; padding: 8px 0; -webkit-overflow-scrolling: touch;">
-            <button class="category-pill active" data-category="all">🎯 Todos</button>
-            <button class="category-pill" data-category="pop">🎤 Pop</button>
-            <button class="category-pill" data-category="rock">🎸 Rock</button>
-            <button class="category-pill" data-category="folklore">🪕 Folklore</button>
-            <button class="category-pill" data-category="tango">🎻 Tango</button>
-            <button class="category-pill" data-category="provincial">📍 Provincial</button>
+        <!-- Chips de filtrado por categoría -->
+        <div id="vyt-filter-chips" class="vyt-filter-chips">
+            <!-- Se generarán dinámicamente desde dynamic-assets-manager.js -->
         </div>
+
+        <!-- Grilla de certámenes -->
+        <div id="vyt-certamenes-grid" class="vyt-certamenes-grid">
+            <!-- Se cargarán dinámicamente desde Firestore -->
+        </div>
+
     </div>
-
-    <!-- Grid de Certámenes Gamificados -->
     <main style="max-width: 1200px; margin: 0 auto; padding: 0 20px 100px;">
         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px;">
             
@@ -536,12 +523,17 @@
                     
                     console.log(`✅ Fondo aplicado: ${position}, escala: ${scale}`);
                 } else {
-                    console.log('🎵 Usando fondo predeterminado para certamenes.html');
+                    console.log('🎨 Usando fondo predeterminado para certamenes.html');
                 }
             } catch (error) {
-                console.error('☰Œ Error cargando fondo:', error);
+                console.error('❌ Error cargando fondo:', error);
             }
         }
+        
+        // Cargar fondo dinámico al inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDynamicBackground();
+        });
     </script>
 </body>
 </html>

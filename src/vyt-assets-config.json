@@ -1,0 +1,141 @@
+{
+  "_meta": {
+    "version": "1.0.0",
+    "lastUpdate": "2026-01-12T00:00:00Z",
+    "description": "Configuración dinámica de assets multimedia para VYT-MUSIC-ONLINE"
+  },
+  
+  "banners": [
+    {
+      "id": "banner-1",
+      "title": "Concierto en Vivo",
+      "description": "La experiencia musical más increíble",
+      "imageUrl": "https://images.unsplash.com/photo-1514525253361-bee8718a747c?w=1920&q=80",
+      "linkUrl": "/certamenes.html",
+      "linkText": "Ver Certámenes",
+      "active": true,
+      "order": 1,
+      "overlayColor": "rgba(0, 0, 0, 0.4)",
+      "textColor": "#ffffff"
+    },
+    {
+      "id": "banner-2",
+      "title": "Tu Voz, Tu Pasión",
+      "description": "Únete a la revolución musical de Argentina",
+      "imageUrl": "https://images.unsplash.com/photo-1493225255756-d9584f8606e9?w=1920&q=80",
+      "linkUrl": "/inscripcion-unificada.html",
+      "linkText": "Inscribirse Ahora",
+      "active": true,
+      "order": 2,
+      "overlayColor": "rgba(102, 126, 234, 0.6)",
+      "textColor": "#ffffff"
+    },
+    {
+      "id": "banner-3",
+      "title": "Gana Premios Increíbles",
+      "description": "Participa en certámenes y lleva tu carrera al siguiente nivel",
+      "imageUrl": "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1920&q=80",
+      "linkUrl": "/ranking.html",
+      "linkText": "Ver Ranking",
+      "active": true,
+      "order": 3,
+      "overlayColor": "rgba(255, 215, 0, 0.5)",
+      "textColor": "#000000"
+    }
+  ],
+  
+  "videos": {
+    "presentacion": {
+      "title": "VYT MUSIC - Plataforma Oficial",
+      "description": "Descubre cómo funciona nuestra plataforma de certámenes",
+      "youtubeId": "dQw4w9WgXcQ",
+      "thumbnail": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "autoplay": false,
+      "showInPages": ["index", "nosotros"],
+      "active": true
+    },
+    "tutorial": {
+      "title": "Cómo Participar - Tutorial Paso a Paso",
+      "description": "Guía completa para inscribirte en un certamen",
+      "youtubeId": "dQw4w9WgXcQ",
+      "thumbnail": "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+      "autoplay": false,
+      "showInPages": ["certamenes"],
+      "active": false
+    }
+  },
+  
+  "redesSociales": {
+    "instagram": {
+      "enabled": true,
+      "username": "@vytmusic_oficial",
+      "url": "https://instagram.com/vytmusic_oficial",
+      "followers": "12.5K",
+      "icon": "fab fa-instagram",
+      "color": "#E4405F"
+    },
+    "tiktok": {
+      "enabled": true,
+      "username": "@vytmusic",
+      "url": "https://tiktok.com/@vytmusic",
+      "followers": "8.2K",
+      "icon": "fab fa-tiktok",
+      "color": "#000000"
+    },
+    "facebook": {
+      "enabled": true,
+      "username": "VYT Music Argentina",
+      "url": "https://facebook.com/vytmusicargentina",
+      "followers": "15.3K",
+      "icon": "fab fa-facebook",
+      "color": "#1877F2"
+    },
+    "youtube": {
+      "enabled": true,
+      "username": "VYT Music",
+      "url": "https://youtube.com/@vytmusic",
+      "followers": "25.1K",
+      "icon": "fab fa-youtube",
+      "color": "#FF0000"
+    },
+    "twitter": {
+      "enabled": false,
+      "username": "@vytmusic",
+      "url": "https://twitter.com/vytmusic",
+      "followers": "5.8K",
+      "icon": "fab fa-twitter",
+      "color": "#1DA1F2"
+    }
+  },
+  
+  "branding": {
+    "logoUrl": "https://i.ibb.co/Ldwq7cNx/logo-blanco.png",
+    "logoAlt": "VYT Music Logo",
+    "faviconUrl": "/images/icons/icon-32x32.png",
+    "primaryColor": "#667eea",
+    "secondaryColor": "#ffd700",
+    "accentColor": "#764ba2"
+  },
+  
+  "sliderConfig": {
+    "autoplay": true,
+    "interval": 5000,
+    "transitionDuration": 800,
+    "transitionEffect": "fade",
+    "showIndicators": true,
+    "showArrows": true,
+    "pauseOnHover": true,
+    "loop": true
+  },
+  
+  "performance": {
+    "lazyLoadBanners": true,
+    "lazyLoadVideos": true,
+    "preloadFirstBanner": true,
+    "imageSizes": {
+      "mobile": "w=768",
+      "tablet": "w=1024",
+      "desktop": "w=1920"
+    }
+  }
+}

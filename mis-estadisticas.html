@@ -1,0 +1,1089 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Estadísticas - VYT Music</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Revisa tus estadísticas y progreso en VYT Music">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="VYT Music">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="/firebase-config.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Navegación y Gamificación -->
+    <script src="/src/navigation-component.js"></script>
+    <script src="/src/gamification-enhanced.js"></script>
+    
+    <!-- Firebase Integration Centralizado -->
+    <script src="/src/firebase-integration.js" defer></script>
+    <script src="/src/firebase-integration.js" defer></script>
+    
+    <!-- Estilos dinámicos -->
+    <link rel="stylesheet" href="/src/dynamic-assets-styles.css">
+    
+    <style>
+        body {
+            background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.9)), url('https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Circular', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            color: white;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Header del dashboard */
+        .dashboard-header {
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff, #1ed760);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .dashboard-subtitle {
+            color: #b3b3b3;
+            font-size: 1.125rem;
+        }
+
+        /* Grid de estadísticas */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Tarjeta de estadística */
+        .stat-card {
+            background: #181818;
+            border-radius: 12px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--card-color), transparent);
+        }
+
+        .stat-card.votos {
+            --card-color: #1ed760;
+        }
+
+        .stat-card.ranking {
+            --card-color: #ffd700;
+        }
+
+        .stat-card.vyt-money {
+            --card-color: #00d4ff;
+        }
+
+        /* Icono de la tarjeta */
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .votos .stat-icon {
+            background: rgba(30, 215, 96, 0.2);
+            color: #1ed760;
+        }
+
+        .ranking .stat-icon {
+            background: rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+
+        .vyt-money .stat-icon {
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+        }
+
+        /* Título de la tarjeta */
+        .stat-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            color: #b3b3b3;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Número principal */
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 900;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        .votos .stat-number {
+            color: #1ed760;
+        }
+
+        .ranking .stat-number {
+            color: #ffd700;
+        }
+
+        .vyt-money .stat-number {
+            color: #00d4ff;
+        }
+
+        /* Cambio/trend */
+        .stat-trend {
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #1ed760;
+        }
+
+        .stat-trend.negative {
+            color: #ff4444;
+        }
+
+        /* Barra de progreso */
+        .stat-progress {
+            background: rgba(255, 255, 255, 0.1);
+            height: 8px;
+            border-radius: 4px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .stat-progress-bar {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 1.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .votos .stat-progress-bar {
+            background: linear-gradient(90deg, #1ed760, #1fdf64);
+        }
+
+        .ranking .stat-progress-bar {
+            background: linear-gradient(90deg, #ffd700, #ffed4e);
+        }
+
+        .vyt-money .stat-progress-bar {
+            background: linear-gradient(90deg, #00d4ff, #4ce3ff);
+        }
+
+        /* Sección de videos */
+        .videos-section {
+            background: #181818;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .videos-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: #282828;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .video-card:hover {
+            background: #3e3e3e;
+            transform: translateY(-4px);
+        }
+
+        .video-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            background: #000;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .video-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.875rem;
+            color: #b3b3b3;
+        }
+
+        .video-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        /* Botón de acción */
+        .action-btn {
+            background: #1ed760;
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .action-btn:hover {
+            background: #1fdf64;
+            transform: scale(1.05);
+        }
+
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #b3b3b3;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #282828;
+        }
+
+        /* Loading skeleton */
+        .skeleton {
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.05) 0%,
+                rgba(255, 255, 255, 0.1) 50%,
+                rgba(255, 255, 255, 0.05) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 8px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 0 1rem;
+            }
+
+            .dashboard-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* ======= FASE 11: FEEDBACK DEL JURADO ======= */
+        .feedback-jurado-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(139, 92, 246, 0.05));
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feedback-jurado-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #A855F7, #8B5CF6);
+        }
+        
+        .feedback-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .feedback-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(168, 85, 247, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: #A855F7;
+        }
+        
+        .feedback-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .puntaje-container {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .puntaje-display {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .puntaje-numero {
+            font-size: 3rem;
+            font-weight: 900;
+            color: #FBBF24;
+            display: flex;
+            align-items: baseline;
+        }
+        
+        .puntaje-numero .max {
+            font-size: 1.5rem;
+            color: #b3b3b3;
+            margin-left: 0.25rem;
+        }
+        
+        .puntaje-estrellas {
+            display: flex;
+            gap: 0.25rem;
+            font-size: 1.5rem;
+        }
+        
+        .puntaje-estrellas .fa-star {
+            color: #FBBF24;
+        }
+        
+        .puntaje-estrellas .fa-star.empty {
+            color: rgba(251, 191, 36, 0.3);
+        }
+        
+        .comentario-jurado {
+            background: rgba(0, 0, 0, 0.3);
+            border-left: 4px solid #A855F7;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            color: #e5e5e5;
+        }
+        
+        .comentario-jurado .label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #A855F7;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feedback-metadata {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.875rem;
+            color: #b3b3b3;
+        }
+        
+        .metadata-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .metadata-item i {
+            color: #A855F7;
+        }
+        
+        .categoria-badge {
+            display: inline-block;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #A855F7;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .mensaje-motivacional {
+            background: linear-gradient(135deg, rgba(30, 215, 96, 0.1), rgba(29, 185, 84, 0.05));
+            border: 1px solid rgba(30, 215, 96, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .mensaje-motivacional .icon {
+            font-size: 2rem;
+        }
+        
+        .mensaje-motivacional .text {
+            flex: 1;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #1ed760;
+        }
+        
+        .mensaje-sin-feedback {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #b3b3b3;
+        }
+        
+        .mensaje-sin-feedback i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+        
+        .mensaje-sin-feedback p {
+            font-size: 1rem;
+            margin: 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">
+                <i class="fas fa-chart-line"></i> Mis Estadísticas
+            </h1>
+            <p class="dashboard-subtitle" id="welcomeMessage">
+                Cargando datos...
+            </p>
+        </div>
+
+        <!-- Grid de estadísticas principales -->
+        <div class="stats-grid" id="statsGrid">
+            <!-- Tarjeta de Votos -->
+            <div class="stat-card votos">
+                <div class="stat-icon">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="stat-title">Total de Votos</div>
+                <div class="stat-number" data-target="0" id="votosNumber">0</div>
+                <div class="stat-trend">
+                    <i class="fas fa-arrow-up"></i>
+                    <span id="votosTrend">+0 esta semana</span>
+                </div>
+                <div class="stat-progress">
+                    <div class="stat-progress-bar" id="votosProgress" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de Ranking -->
+            <div class="stat-card ranking">
+                <div class="stat-icon">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="stat-title">Posición en Ranking</div>
+                <div class="stat-number" id="rankingNumber">#--</div>
+                <div class="stat-trend">
+                    <i class="fas fa-medal"></i>
+                    <span id="rankingTrend">Sin cambios</span>
+                </div>
+                <div class="stat-progress">
+                    <div class="stat-progress-bar" id="rankingProgress" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <!-- Tarjeta de VYT Money -->
+            <div class="stat-card vyt-money">
+                <div class="stat-icon">
+                    <i class="fas fa-coins"></i>
+                </div>
+                <div class="stat-title">VYT Money Disponible</div>
+                <div class="stat-number" id="vytMoneyNumber">0</div>
+                <div class="stat-trend">
+                    <i class="fas fa-wallet"></i>
+                    <span id="vytMoneyTrend">Listo para usar</span>
+                </div>
+                <div class="stat-progress">
+                    <div class="stat-progress-bar" id="vytMoneyProgress" style="width: 100%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FASE 11: Sección de Feedback del Jurado -->
+        <div id="feedbackJuradoSection" style="display: none;">
+            <!-- Se llenará dinámicamente con loadFeedbackJurado() -->
+        </div>
+
+        <!-- Botones de acción -->
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
+            <a href="/subir-video.html" class="action-btn">
+                <i class="fas fa-video"></i> Subir Nuevo Video
+            </a>
+            <a href="/comprar-vyt-money.html" class="action-btn" style="background: #00d4ff;">
+                <i class="fas fa-shopping-cart"></i> Comprar VYT Money
+            </a>
+        </div>
+
+        <!-- Sección de videos -->
+        <div class="videos-section">
+            <h2 class="videos-title">
+                <i class="fas fa-play-circle"></i> Mis Videos
+            </h2>
+            <div class="videos-grid" id="videosGrid">
+                <!-- Se llenará dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales
+        let currentUser = null;
+        let db = null;
+        let unsubscribeVotos = null;
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', async () => {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    showToast('Debes iniciar sesión para ver tus estadísticas', 'error', 3000);
+                    setTimeout(() => {
+                        window.location.href = '/index.html#comenzar-ahora';
+                    }, 1500);
+                    return;
+                }
+
+                currentUser = user;
+                db = firebase.firestore();
+                
+                // Actualizar mensaje de bienvenida
+                document.getElementById('welcomeMessage').textContent = 
+                    `Hola, ${user.displayName || user.email}! Aquí está tu progreso.`;
+
+                // Cargar estadísticas
+                await loadStatistics();
+                
+                // FASE 11: Cargar feedback del jurado
+                await loadFeedbackJurado();
+                
+                // Configurar listeners en tiempo real
+                setupRealtimeListeners();
+            });
+        });
+
+        // Cargar estadísticas
+        async function loadStatistics() {
+            try {
+                showLoading('Cargando estadísticas...');
+
+                // Usar firebase-integration.js si está disponible
+                if (window.FirebaseIntegration && FirebaseIntegration.isAuthenticated()) {
+                    const stats = await FirebaseIntegration.getUserStatistics(currentUser.uid);
+                    displayStatistics(stats);
+
+                    // Setup listeners en tiempo real
+                    FirebaseIntegration.subscribeToUserVotes(currentUser.uid, (data) => {
+                        // Actualizar número si cambió
+                        const currentNumber = parseInt(document.getElementById('votosNumber').textContent) || 0;
+                        if (data.totalVotos !== currentNumber) {
+                            animateNumber('votosNumber', data.totalVotos, 800);
+                            showToast('¡Recibiste nuevos votos!', 'success', 2000);
+                        }
+                    });
+                } else {
+                    // Fallback: cargar directamente
+                    const [votosData, rankingData, vytMoneyData, videosData] = await Promise.all([
+                        getVotosCount(),
+                        getRankingPosition(),
+                        getVYTMoney(),
+                        getUserVideos()
+                    ]);
+
+                    displayStatistics({
+                        votos: votosData.total,
+                        votosSemana: votosData.semana,
+                        ranking: rankingData.position,
+                        rankingTotal: rankingData.total,
+                        vytMoney: vytMoneyData,
+                        videos: videosData
+                    });
+
+                    // Setup listeners en tiempo real (fallback)
+                    setupRealtimeListeners();
+                }
+
+                hideLoading();
+            } catch (error) {
+                console.error('❌ Error cargando estadísticas:', error);
+                hideLoading();
+                showToast('Error al cargar estadísticas', 'error', 3000);
+            }
+        }
+
+        // Mostrar estadísticas con animación
+        function displayStatistics(stats) {
+            // Animar números
+            animateNumber('votosNumber', stats.votos || 0, 1500);
+            animateNumber('vytMoneyNumber', stats.vytMoney || 0, 1500);
+
+            // Ranking
+            document.getElementById('rankingNumber').textContent = 
+                stats.ranking ? `#${stats.ranking}` : '#--';
+
+            // Trends
+            document.getElementById('votosTrend').textContent = 
+                `+${stats.votosSemana || 0} esta semana`;
+
+            if (stats.ranking && stats.rankingTotal) {
+                const percentile = ((stats.rankingTotal - stats.ranking) / stats.rankingTotal * 100).toFixed(0);
+                document.getElementById('rankingTrend').textContent = 
+                    `Top ${percentile}% de artistas`;
+            }
+
+            // Barras de progreso
+            setTimeout(() => {
+                const maxVotos = 1000; // Meta de votos
+                const votosPercent = Math.min((stats.votos / maxVotos) * 100, 100);
+                document.getElementById('votosProgress').style.width = `${votosPercent}%`;
+
+                if (stats.ranking && stats.rankingTotal) {
+                    const rankingPercent = ((stats.rankingTotal - stats.ranking + 1) / stats.rankingTotal) * 100;
+                    document.getElementById('rankingProgress').style.width = `${rankingPercent}%`;
+                }
+            }, 500);
+
+            // Renderizar videos
+            renderVideos(stats.videos || []);
+
+            // Confetti si tiene muchos votos
+            if (stats.votos > 100) {
+                setTimeout(() => celebrate(), 1000);
+            }
+        }
+
+        // Animar número con count-up
+        function animateNumber(elementId, target, duration) {
+            const element = document.getElementById(elementId);
+            const start = parseInt(element.textContent) || 0;
+            const increment = (target - start) / (duration / 16);
+            let current = start;
+
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= target) || (increment < 0 && current <= target)) {
+                    element.textContent = Math.round(target);
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.round(current);
+                }
+            }, 16);
+        }
+
+        // Obtener conteo de votos
+        async function getVotosCount() {
+            const snapshot = await db.collection('participaciones')
+                .where('userId', '==', currentUser.uid)
+                .get();
+
+            let total = 0;
+            let semana = 0;
+            const oneWeekAgo = new Date();
+            oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                total += data.votos || 0;
+                
+                if (data.fechaSubida && data.fechaSubida.toDate() > oneWeekAgo) {
+                    semana += data.votos || 0;
+                }
+            });
+
+            return { total, semana };
+        }
+
+        // Obtener posición en ranking
+        async function getRankingPosition() {
+            // Obtener todos los artistas ordenados por votos
+            const snapshot = await db.collection('artist_profiles')
+                .orderBy('totalVotos', 'desc')
+                .get();
+
+            let position = 0;
+            let found = false;
+
+            snapshot.forEach((doc, index) => {
+                if (doc.data().userId === currentUser.uid) {
+                    position = index + 1;
+                    found = true;
+                }
+            });
+
+            return {
+                position: found ? position : null,
+                total: snapshot.size
+            };
+        }
+
+        // Obtener VYT Money
+        async function getVYTMoney() {
+            try {
+                const doc = await db.collection('user_vyt_money')
+                    .doc(currentUser.uid)
+                    .get();
+
+                return doc.exists ? (doc.data().balance || 0) : 0;
+            } catch (error) {
+                console.error('Error obteniendo VYT Money:', error);
+                return 0;
+            }
+        }
+
+        // Obtener videos del usuario
+        async function getUserVideos() {
+            const snapshot = await db.collection('participaciones')
+                .where('userId', '==', currentUser.uid)
+                .orderBy('fechaSubida', 'desc')
+                .limit(6)
+                .get();
+
+            return snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+        }
+
+        // Renderizar videos
+        function renderVideos(videos) {
+            const grid = document.getElementById('videosGrid');
+
+            if (!videos || videos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-video-slash"></i>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">No has subido videos aún</h3>
+                        <p>Comienza a participar subiendo tu primer video</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = videos.map(video => `
+                <div class="video-card" onclick="window.open('https://youtube.com/watch?v=${video.videoId}', '_blank')">
+                    <img 
+                        src="https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg" 
+                        alt="${video.titulo}"
+                        class="video-thumbnail"
+                    >
+                    <div class="video-info">
+                        <div class="video-title">${video.titulo}</div>
+                        <div class="video-stats">
+                            <div class="video-stat">
+                                <i class="fas fa-heart"></i>
+                                <span>${video.votos || 0}</span>
+                            </div>
+                            <div class="video-stat">
+                                <i class="fas fa-eye"></i>
+                                <span>${video.vistas || 0}</span>
+                            </div>
+                            <div class="video-stat">
+                                <i class="fas fa-tag"></i>
+                                <span>${video.categoria}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Configurar listeners en tiempo real
+        function setupRealtimeListeners() {
+            // Escuchar cambios en votos en tiempo real
+            unsubscribeVotos = db.collection('participaciones')
+                .where('userId', '==', currentUser.uid)
+                .onSnapshot((snapshot) => {
+                    let totalVotos = 0;
+                    snapshot.forEach(doc => {
+                        totalVotos += doc.data().votos || 0;
+                    });
+
+                    // Actualizar número si cambió
+                    const currentNumber = parseInt(document.getElementById('votosNumber').textContent) || 0;
+                    if (totalVotos !== currentNumber) {
+                        animateNumber('votosNumber', totalVotos, 800);
+                        showToast('¡Recibiste nuevos votos!', 'success', 2000);
+                    }
+                });
+        }
+
+        // Cleanup al salir
+        window.addEventListener('beforeunload', () => {
+            if (window.FirebaseIntegration) {
+                FirebaseIntegration.unsubscribeAll();
+            } else if (unsubscribeVotos) {
+                unsubscribeVotos();
+            }
+        });
+        
+        // ======= FASE 11: FEEDBACK DEL JURADO =======
+        async function loadFeedbackJurado() {
+            try {
+                const feedbackSection = document.getElementById('feedbackJuradoSection');
+                
+                // Buscar participación activa del usuario con feedback_jurado
+                const snapshot = await db.collection('participaciones')
+                    .where('uid', '==', currentUser.uid)
+                    .where('estado', '==', 'activo')
+                    .limit(1)
+                    .get();
+                
+                if (snapshot.empty) {
+                    feedbackSection.style.display = 'none';
+                    return;
+                }
+                
+                const participacion = snapshot.docs[0].data();
+                const feedback = participacion.feedback_jurado;
+                
+                // Si tiene feedback, mostrar card
+                if (feedback && feedback.puntaje) {
+                    feedbackSection.style.display = 'block';
+                    feedbackSection.innerHTML = renderFeedbackCard(feedback, participacion);
+                } else {
+                    // Si no tiene feedback pero es aspirante, mostrar mensaje motivacional
+                    if (participacion.ready_for_next_round) {
+                        feedbackSection.style.display = 'block';
+                        feedbackSection.innerHTML = renderMensajeSinFeedback(true);
+                    } else {
+                        feedbackSection.style.display = 'none';
+                    }
+                }
+                
+                console.log('✅ Feedback del jurado cargado');
+            } catch (error) {
+                console.error('❌ Error cargando feedback del jurado:', error);
+            }
+        }
+        
+        function renderFeedbackCard(feedback, participacion) {
+            const { puntaje, comentario, categoria, evaluadoPor, fecha } = feedback;
+            
+            // Calcular estrellas (puntaje de 10 convertir a 5 estrellas)
+            const estrellasFull = Math.floor(puntaje / 2);
+            const estrellasEmpty = 5 - estrellasFull;
+            const estrellasHTML = '⭐'.repeat(estrellasFull) + 
+                                 '<i class="fas fa-star empty"></i>'.repeat(estrellasEmpty);
+            
+            // Formatear fecha
+            let fechaTexto = 'Recientemente';
+            if (fecha && fecha.toDate) {
+                const fechaObj = fecha.toDate();
+                fechaTexto = fechaObj.toLocaleDateString('es-AR', { 
+                    day: 'numeric', 
+                    month: 'long', 
+                    year: 'numeric' 
+                });
+            }
+            
+            // Mapear categoría a icono y texto
+            const categorias = {
+                'vocal': { icon: '🎤', nombre: 'Técnica Vocal' },
+                'interpretacion': { icon: '🎭', nombre: 'Interpretación' },
+                'presencia': { icon: '⭐', nombre: 'Presencia Escénica' },
+                'originalidad': { icon: '💡', nombre: 'Originalidad' }
+            };
+            
+            const catInfo = categorias[categoria] || { icon: '🎵', nombre: categoria || 'General' };
+            
+            // Mensaje motivacional si es aspirante
+            let mensajeMotivacional = '';
+            if (participacion.ready_for_next_round) {
+                mensajeMotivacional = `
+                    <div class="mensaje-motivacional">
+                        <div class="icon">🌟</div>
+                        <div class="text">
+                            <strong>¡Sigue sumando!</strong> Estás preparándote para la próxima etapa. 
+                            Practica con el feedback recibido y vuelve más fuerte.
+                        </div>
+                    </div>
+                `;
+            }
+            
+            return `
+                <div class="feedback-jurado-card">
+                    <div class="feedback-header">
+                        <div class="feedback-icon">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                        <div>
+                            <h2 class="feedback-title">🎭 Evaluación del Jurado</h2>
+                            <p style="color: #b3b3b3; font-size: 0.9rem;">Feedback profesional para tu mejora</p>
+                        </div>
+                    </div>
+                    
+                    <div class="puntaje-container">
+                        <div class="puntaje-display">
+                            <div>
+                                <div style="font-size: 0.875rem; color: #b3b3b3; margin-bottom: 0.5rem;">Puntaje Total</div>
+                                <div class="puntaje-numero">
+                                    ${puntaje}<span class="max">/10</span>
+                                </div>
+                            </div>
+                            <div class="puntaje-estrellas">
+                                ${estrellasHTML}
+                            </div>
+                        </div>
+                        <span class="categoria-badge">
+                            ${catInfo.icon} ${catInfo.nombre}
+                        </span>
+                    </div>
+                    
+                    <div class="comentario-jurado">
+                        <div class="label">💬 Comentario del Jurado</div>
+                        <p>${comentario || 'Sin comentario adicional.'}</p>
+                    </div>
+                    
+                    <div class="feedback-metadata">
+                        <div class="metadata-item">
+                            <i class="fas fa-calendar"></i>
+                            <span>Evaluado el ${fechaTexto}</span>
+                        </div>
+                        ${evaluadoPor ? `
+                            <div class="metadata-item">
+                                <i class="fas fa-user-tie"></i>
+                                <span>${evaluadoPor}</span>
+                            </div>
+                        ` : ''}
+                    </div>
+                    
+                    ${mensajeMotivacional}
+                </div>
+            `;
+        }
+        
+        function renderMensajeSinFeedback(esAspirante = false) {
+            if (esAspirante) {
+                return `
+                    <div class="feedback-jurado-card">
+                        <div class="mensaje-sin-feedback">
+                            <i class="fas fa-hourglass-half"></i>
+                            <p><strong>Tu video aún no ha sido evaluado por el jurado</strong></p>
+                            <p style="font-size: 0.9rem;">El jurado revisará tu video pronto. Mientras tanto, ¡sigue practicando!</p>
+                        </div>
+                        <div class="mensaje-motivacional">
+                            <div class="icon">🌟</div>
+                            <div class="text">
+                                <strong>¡Eres aspirante!</strong> Sigue sumando votos y mejorando tu técnica. 
+                                Cada voto cuenta para la próxima etapa.
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                return `
+                    <div class="feedback-jurado-card">
+                        <div class="mensaje-sin-feedback">
+                            <i class="fas fa-hourglass-half"></i>
+                            <p><strong>Tu video aún no ha sido evaluado por el jurado</strong></p>
+                            <p style="font-size: 0.9rem;">El jurado revisará tu video pronto.</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+    </script>
+
+</body>
+</html>

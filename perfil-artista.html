@@ -39,6 +39,11 @@
     <script src="firebase-config.js"></script>
     <script src="src/auth-handler.js"></script>
     
+    <!-- Sistema de Gamificación -->
+    <script type="module" src="/src/jackpot-widget.js"></script>
+    <script type="module" src="/src/avatar-helper.js"></script>
+    <script type="module" src="/src/vyt-guide.js"></script>
+    
     <style>
     body {
         background: radial-gradient(circle at top left, #58a6ff30, #121212 40%);
@@ -724,13 +729,13 @@
             // Actualizar teléfono
             document.getElementById('phoneNumber').textContent = artistaData.whatsapp || artistaData.telefono || 'No especificado';
             
-            // 🔥 ACTUALIZAR FOTO DE PERFIL - Soportar múltiples campos
+            // 🔥 ACTUALIZAR FOTO DE PERFIL - Soportar múltiples campos + Avatares DiceBear
             const fotoURL = artistaData.foto_perfil || artistaData.fotoURL || artistaData.photoURL;
+            const profilePhoto = document.getElementById('profilePhoto');
+            const defaultAvatar = document.getElementById('defaultAvatar');
             
             if (fotoURL) {
                 console.log('✅ Cargando foto de perfil:', fotoURL.substring(0, 100) + '...');
-                const profilePhoto = document.getElementById('profilePhoto');
-                const defaultAvatar = document.getElementById('defaultAvatar');
                 
                 if (profilePhoto && defaultAvatar) {
                     profilePhoto.src = fotoURL;
@@ -741,7 +746,28 @@
                     console.error('❌ No se encontraron elementos de foto de perfil en el DOM');
                 }
             } else {
-                console.log('ℹ️ No hay foto de perfil guardada en ningún campo');
+                // 🎭 GENERAR AVATAR DICEBEAR SI NO HAY FOTO
+                console.log('ℹ️ No hay foto de perfil, generando avatar DiceBear...');
+                
+                // Importar avatar-helper dinámicamente
+                import('/src/avatar-helper.js').then(({ avatarHelper }) => {
+                    // Preparar datos del usuario para el avatar
+                    const userData = {
+                        uid: artistaData.firestoreId || artistaData.email || Date.now().toString(),
+                        nombre_artista: artistName,
+                        fotoUrl: null // Explícitamente null para forzar generación
+                    };
+                    
+                    // Generar y aplicar avatar
+                    if (profilePhoto && defaultAvatar) {
+                        avatarHelper.setAvatarToElement(profilePhoto, userData, 200);
+                        profilePhoto.classList.remove('hidden');
+                        defaultAvatar.classList.add('hidden');
+                        console.log('🎭 Avatar DiceBear aplicado correctamente');
+                    }
+                }).catch(err => {
+                    console.error('❌ Error cargando avatar-helper:', err);
+                });
             }
             
             // Actualizar sección de video y redes sociales
@@ -883,17 +909,34 @@
                 videoContainer.style.display = 'none';
             }
             
-            // Verificar y mostrar redes sociales
+            // Verificar y mostrar redes sociales con iconos de marca
             const redes = [];
-            if (artistaData.instagram) redes.push({name: 'Instagram', url: artistaData.instagram, icon: '📱', color: 'bg-pink-600'});
-            if (artistaData.facebook) redes.push({name: 'Facebook', url: artistaData.facebook, icon: '📘', color: 'bg-blue-600'});
-            if (artistaData.tiktok) redes.push({name: 'TikTok', url: artistaData.tiktok, icon: '🎬', color: 'bg-gray-800'});
+            if (artistaData.instagram) redes.push({
+                name: 'Instagram', 
+                url: artistaData.instagram, 
+                icon: 'fab fa-instagram', 
+                class: 'vyt-social-icon instagram'
+            });
+            if (artistaData.facebook) redes.push({
+                name: 'Facebook', 
+                url: artistaData.facebook, 
+                icon: 'fab fa-facebook-f', 
+                class: 'vyt-social-icon facebook'
+            });
+            if (artistaData.tiktok) redes.push({
+                name: 'TikTok', 
+                url: artistaData.tiktok, 
+                icon: 'fab fa-tiktok', 
+                class: 'vyt-social-icon tiktok'
+            });
             
             if (redes.length > 0) {
-                socialLinks.innerHTML = redes.map(red => `
-                    <a href="${red.url}" target="_blank" class="${red.color} hover:opacity-80 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2">
-                        <span>${red.icon}</span>
-                        <span>${red.name}</span>
+                socialLinks.innerHTML = `<link rel="stylesheet" href="/src/dynamic-assets-styles.css">` + redes.map(red => `
+                    <a href="${red.url}" target="_blank" rel="noopener noreferrer" 
+                       class="${red.class}" 
+                       aria-label="${red.name}" 
+                       title="Sígueme en ${red.name}">
+                        <i class="${red.icon}"></i>
                     </a>
                 `).join('');
                 socialLinksContainer.style.display = 'block';

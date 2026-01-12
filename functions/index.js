@@ -822,3 +822,14 @@ exports.calcularClasificados = functions.https.onRequest(async (req, res) => {
     });
   }
 });
+
+// ===== AUTOMATIZACIÓN YOUTUBE CON N8N =====
+const youtubeAutomation = require('./youtube-automation');
+exports.triggerYouTubeUpload = youtubeAutomation.triggerYouTubeUpload;
+exports.youtubeUploadCallback = youtubeAutomation.youtubeUploadCallback;
+exports.retryYouTubeUpload = youtubeAutomation.retryYouTubeUpload;
+exports.checkYouTubeUploadStatus = youtubeAutomation.checkYouTubeUploadStatus;
+
+// ===== VOTACIÓN CON VYT MONEY (CON VALIDACIÓN VIDEO ACTIVO) =====
+const vytMoneyModule = require('./vyt-money');
+exports.registrarVoto = vytMoneyModule.registrarVoto;

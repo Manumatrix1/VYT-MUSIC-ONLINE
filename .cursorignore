@@ -1,0 +1,21 @@
+# Carpetas pesadas
+node_modules/
+.git/
+.firebase/
+dist/
+build/
+
+# Evitar que la IA lea el historial de optimización
+OPTIMIZAR-VSCODE.ps1
+SOLUCIONES-VSCODE-LENTO.txt
+
+# Evitar que la IA procese archivos multimedia pesados
+*.mp3
+*.mp4
+*.wav
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.ico
+*.svg

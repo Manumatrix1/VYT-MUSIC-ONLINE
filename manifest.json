@@ -65,6 +65,13 @@
       "description": "Ver ranking de artistas",
       "url": "/ranking.html",
       "icons": [{ "src": "images/icons/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Admin",
+      "short_name": "Admin",
+      "description": "Panel de administración súper admin",
+      "url": "/admin-multimedia.html",
+      "icons": [{ "src": "images/icons/icon-192x192.png", "sizes": "192x192" }]
     }
   ],
   "prefer_related_applications": false,

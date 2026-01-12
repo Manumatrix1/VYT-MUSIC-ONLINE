@@ -35,9 +35,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="icon-control.css?v=20250929">
     
-    <!-- Sistema de navegación -->
-    <link rel="stylesheet" href="/src/navigation-styles.css">
-    <script src="/src/navigation.js"></script>
+    <!-- Sistema de Navegación Unificado -->
+    <script src="/src/navigation-component.js"></script>
+    
+    <!-- Sistema de Gamificación Mejorado -->
+    <script src="/src/gamification-enhanced.js"></script>
     
     <!-- Sistema de fondos dinámicos -->
     <script src="src/dynamic-background.js"></script>
@@ -141,6 +143,105 @@
             border-radius: 12px;
             padding: 20px;
             text-align: center;
+        }
+        
+        /* ======= BADGES FASE 11: CLASIFICADOS/ASPIRANTES ======= */
+        .badge-clasificado {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            color: #FFD700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge-aspirante {
+            display: inline-block;
+            background: linear-gradient(135deg, rgba(30, 215, 96, 0.2), rgba(29, 185, 84, 0.2));
+            border: 1px solid rgba(30, 215, 96, 0.5);
+            color: #1ed760;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+        
+        .badge-zona {
+            display: inline-block;
+            background: rgba(59, 130, 246, 0.2);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            color: #3B82F6;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            margin-right: 6px;
+        }
+        
+        .puntaje-jurado {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(168, 85, 247, 0.2);
+            border: 1px solid rgba(168, 85, 247, 0.4);
+            color: #A855F7;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 4px;
+        }
+        
+        .puntaje-jurado i {
+            margin-right: 4px;
+            color: #FBBF24;
+        }
+        
+        /* Filtros de estado y zona */
+        .filter-section {
+            margin-bottom: 20px;
+        }
+        
+        .filter-section h3 {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 12px;
+        }
+        
+        .filter-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .filter-btn {
+            background: rgba(75, 85, 99, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover {
+            background: rgba(75, 85, 99, 0.8);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+        
+        .filter-btn.active {
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
         
         /* ======= MENÚ HAMBURGUESA ======= */
@@ -276,23 +377,41 @@
                 </div>
             </div>
 
-            <!-- Filtros -->
-            <div class="flex flex-wrap gap-4 justify-center mb-8">
-                <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors" onclick="filterRanking('todos')">
-                    Todos
-                </button>
-                <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-full font-medium transition-colors" onclick="filterRanking('pop')">
-                    Pop
-                </button>
-                <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-full font-medium transition-colors" onclick="filterRanking('rock')">
-                    Rock
-                </button>
-                <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-full font-medium transition-colors" onclick="filterRanking('folclore')">
-                    Folclore
-                </button>
-                <button class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-full font-medium transition-colors" onclick="filterRanking('urbano')">
-                    Urbano
-                </button>
+            <!-- Filtros Fase 11: Sistema Federal -->
+            <div class="filter-section">
+                <h3>🎯 Filtrar por Estado</h3>
+                <div class="filter-row">
+                    <button class="filter-btn active" onclick="filterByEstado('todos')" data-filter="todos">
+                        📊 Todos
+                    </button>
+                    <button class="filter-btn" onclick="filterByEstado('clasificados')" data-filter="clasificados">
+                        🏆 Clasificados (Top 30)
+                    </button>
+                    <button class="filter-btn" onclick="filterByEstado('aspirantes')" data-filter="aspirantes">
+                        🌟 Aspirantes
+                    </button>
+                </div>
+            </div>
+            
+            <div class="filter-section mb-8">
+                <h3>📍 Filtrar por Zona</h3>
+                <div class="filter-row">
+                    <button class="filter-btn active" onclick="filterByZona('todas')" data-zona="todas">
+                        🗺️ Todas las zonas
+                    </button>
+                    <button class="filter-btn" onclick="filterByZona('norte')" data-zona="norte">
+                        Norte
+                    </button>
+                    <button class="filter-btn" onclick="filterByZona('sur')" data-zona="sur">
+                        Sur
+                    </button>
+                    <button class="filter-btn" onclick="filterByZona('oeste')" data-zona="oeste">
+                        Oeste
+                    </button>
+                    <button class="filter-btn" onclick="filterByZona('centro')" data-zona="centro">
+                        Centro
+                    </button>
+                </div>
             </div>
 
             <!-- Podium Top 3 -->
@@ -347,23 +466,38 @@
             console.log(`Actualizando votos para artista ${artistId}`);
         }
 
-        function filterRanking(genre) {
-            // Cambiar estilo de botones
-            document.querySelectorAll('button[onclick*="filterRanking"]').forEach(btn => {
-                btn.className = 'bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-full font-medium transition-colors';
+        // Variables globales de filtros (Fase 11)
+        let currentEstadoFiltro = 'todos';
+        let currentZonaFiltro = 'todas';
+        
+        function filterByEstado(estado) {
+            currentEstadoFiltro = estado;
+            
+            // Actualizar estilos de botones
+            document.querySelectorAll('[data-filter]').forEach(btn => {
+                btn.classList.remove('active');
             });
+            event.target.classList.add('active');
             
-            event.target.className = 'bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors';
+            console.log(`🎯 Filtrando por estado: ${estado}`);
             
-            // Filtrar artistas por género
-            console.log(`Filtrando por género: ${genre}`);
+            // Recargar ranking con filtros aplicados
+            loadRankingData();
+        }
+        
+        function filterByZona(zona) {
+            currentZonaFiltro = zona;
             
-            // Aquí implementarías la lógica de filtrado real
-            if (genre === 'todos') {
-                document.querySelectorAll('.ranking-card').forEach(card => card.style.display = 'block');
-            } else {
-                // Lógica de filtrado específica
-            }
+            // Actualizar estilos de botones
+            document.querySelectorAll('[data-zona]').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log(`📍 Filtrando por zona: ${zona}`);
+            
+            // Recargar ranking con filtros aplicados
+            loadRankingData();
         }
 
         function loadMoreArtists() {
@@ -387,12 +521,26 @@
             try {
                 const db = firebase.firestore();
                 
-                // Obtener participantes ordenados por votos
-                const snapshot = await db.collection('inscripciones')
-                    .where('estado', '==', 'activo')
-                    .orderBy('votos_totales', 'desc')
-                    .limit(50)
-                    .get();
+                // Construir query con filtros de Fase 11
+                let query = db.collection('participaciones')
+                    .where('estado', '==', 'activo');
+                
+                // Filtro por estado (clasificados/aspirantes)
+                if (currentEstadoFiltro === 'clasificados') {
+                    query = query.where('clasificado', '==', true);
+                } else if (currentEstadoFiltro === 'aspirantes') {
+                    query = query.where('ready_for_next_round', '==', true);
+                }
+                
+                // Filtro por zona
+                if (currentZonaFiltro !== 'todas') {
+                    query = query.where('zona', '==', currentZonaFiltro);
+                }
+                
+                // Ordenar por votos y limitar
+                query = query.orderBy('votos', 'desc').limit(50);
+                
+                const snapshot = await query.get();
                 
                 if (snapshot.empty) {
                     document.getElementById('ranking-list').innerHTML = `
@@ -457,13 +605,34 @@
                 const pos = positions[index];
                 const card = document.createElement('div');
                 card.className = `ranking-card ${pos.class} text-center ${pos.order}`;
+                
+                // Badges de Fase 11
+                let estadoBadge = '';
+                if (artista.clasificado) {
+                    estadoBadge = '<span class="badge-clasificado">🏆 Clasificado</span>';
+                } else if (artista.ready_for_next_round) {
+                    estadoBadge = '<span class="badge-aspirante">🌟 Aspirante</span>';
+                }
+                
+                let zonaBadge = artista.zona ? `<span class="badge-zona">📍 ${artista.zona.charAt(0).toUpperCase() + artista.zona.slice(1)}</span>` : '';
+                
+                let puntajeJurado = '';
+                if (artista.feedback_jurado && artista.feedback_jurado.puntaje) {
+                    puntajeJurado = `<div class="puntaje-jurado"><i class="fas fa-star"></i> ${artista.feedback_jurado.puntaje}/10 (Jurado)</div>`;
+                }
+                
                 card.innerHTML = `
                     <div class="position-badge ${pos.badge} mx-auto mb-4">${index + 1}</div>
-                    <img src="${artista.foto_perfil || 'https://via.placeholder.com/150'}" alt="${artista.nombre_artistico}" class="artist-photo mx-auto mb-4">
-                    <h3 class="text-xl font-bold mb-2">${artista.nombre_artistico || 'Sin nombre'}</h3>
-                    <p class="text-gray-300 mb-2">${(artista.generos || []).join(' / ') || 'Sin género'}</p>
-                    <p class="${pos.color} font-bold text-lg mb-4">${artista.votos_totales || 0} votos</p>
-                    <button class="vote-button w-full" onclick="voteArtist('${artista.id}')">
+                    <img src="${artista.foto_perfil || artista.fotoUrl || 'https://via.placeholder.com/150'}" alt="${artista.nombreArtista || artista.nombre_artistico}" class="artist-photo mx-auto mb-4">
+                    <h3 class="text-xl font-bold mb-2">
+                        ${artista.nombreArtista || artista.nombre_artistico || 'Sin nombre'}
+                        ${estadoBadge}
+                    </h3>
+                    <div class="mb-2">${zonaBadge}</div>
+                    <p class="text-gray-300 mb-2">${artista.cancion || artista.titulo_cancion || 'Sin título'}</p>
+                    <p class="${pos.color} font-bold text-lg mb-2">${artista.votos || artista.votos_totales || 0} votos</p>
+                    ${puntajeJurado}
+                    <button class="vote-button w-full mt-4" onclick="voteArtist('${artista.id}')">
                         <i class="fas fa-heart mr-2"></i>Votar
                     </button>
                 `;
@@ -489,15 +658,35 @@
                 const position = index + 4; // Porque top 3 ya está en podium
                 const card = document.createElement('div');
                 card.className = 'ranking-card';
+                
+                // Badges de Fase 11
+                let estadoBadge = '';
+                if (artista.clasificado) {
+                    estadoBadge = '<span class="badge-clasificado">🏆 Clasificado</span>';
+                } else if (artista.ready_for_next_round) {
+                    estadoBadge = '<span class="badge-aspirante">🌟 Aspirante</span>';
+                }
+                
+                let zonaBadge = artista.zona ? `<span class="badge-zona">📍 ${artista.zona.charAt(0).toUpperCase() + artista.zona.slice(1)}</span>` : '';
+                
+                let puntajeJurado = '';
+                if (artista.feedback_jurado && artista.feedback_jurado.puntaje) {
+                    puntajeJurado = `<span class="puntaje-jurado"><i class="fas fa-star"></i> ${artista.feedback_jurado.puntaje}/10</span>`;
+                }
+                
                 card.innerHTML = `
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-4">
                             <div class="position-badge regular">${position}</div>
-                            <img src="${artista.foto_perfil || 'https://via.placeholder.com/150'}" alt="${artista.nombre_artistico}" class="artist-photo">
+                            <img src="${artista.foto_perfil || artista.fotoUrl || 'https://via.placeholder.com/150'}" alt="${artista.nombreArtista || artista.nombre_artistico}" class="artist-photo">
                             <div>
-                                <h3 class="text-lg font-bold">${artista.nombre_artistico || 'Sin nombre'}</h3>
-                                <p class="text-gray-400 text-sm">${(artista.generos || []).join(' / ') || 'Sin género'}</p>
-                                <p class="text-blue-400 font-semibold">${artista.votos_totales || 0} votos</p>
+                                <h3 class="text-lg font-bold">
+                                    ${artista.nombreArtista || artista.nombre_artistico || 'Sin nombre'}
+                                    ${estadoBadge}
+                                </h3>
+                                <div class="mb-1">${zonaBadge} ${puntajeJurado}</div>
+                                <p class="text-gray-400 text-sm">${artista.cancion || artista.titulo_cancion || 'Sin título'}</p>
+                                <p class="text-blue-400 font-semibold">${artista.votos || artista.votos_totales || 0} votos</p>
                             </div>
                         </div>
                         <div class="text-right">

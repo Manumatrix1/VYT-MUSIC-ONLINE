@@ -1,0 +1,924 @@
+/**
+ * VYT MUSIC - Estilos para Assets Dinámicos
+ * Slider de banners + Video embeds + Redes sociales
+ * Optimizado para performance y responsive
+ */
+
+/* ========================================
+   SLIDER DE BANNERS
+   ======================================== */
+
+.vyt-slider-wrapper {
+    position: relative;
+    width: 100%;
+    height: 600px;
+    overflow: hidden;
+    border-radius: 0;
+    background: #000;
+}
+
+@media (max-width: 768px) {
+    .vyt-slider-wrapper {
+        height: 400px;
+    }
+}
+
+.vyt-slider-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.vyt-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transform: scale(1.1);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+    pointer-events: none;
+}
+
+.vyt-slide.active {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: all;
+    z-index: 1;
+}
+
+.vyt-slide-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.vyt-slide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.vyt-slide-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 2;
+    max-width: 800px;
+    padding: 2rem;
+}
+
+.vyt-slide-title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    animation: slideInDown 0.8s ease;
+}
+
+@media (max-width: 768px) {
+    .vyt-slide-title {
+        font-size: 2rem;
+    }
+}
+
+.vyt-slide-description {
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
+    animation: slideInUp 0.8s ease;
+}
+
+@media (max-width: 768px) {
+    .vyt-slide-description {
+        font-size: 1rem;
+    }
+}
+
+.vyt-slide-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 1s ease 0.3s both;
+}
+
+.vyt-slide-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Flechas de navegación */
+.vyt-slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+}
+
+.vyt-slider-arrow:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-50%) scale(1.1);
+}
+
+.vyt-slider-prev {
+    left: 2rem;
+}
+
+.vyt-slider-next {
+    right: 2rem;
+}
+
+@media (max-width: 768px) {
+    .vyt-slider-arrow {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .vyt-slider-prev {
+        left: 1rem;
+    }
+
+    .vyt-slider-next {
+        right: 1rem;
+    }
+}
+
+/* Indicadores */
+.vyt-slider-indicators {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    gap: 0.75rem;
+}
+
+.vyt-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.vyt-indicator:hover {
+    background: rgba(255, 255, 255, 0.6);
+    transform: scale(1.2);
+}
+
+.vyt-indicator.active {
+    background: #ffd700;
+    border-color: #ffd700;
+    width: 32px;
+    border-radius: 6px;
+}
+
+/* ========================================
+   VIDEO EMBEDS (YouTube Responsive 16:9)
+   ======================================== */
+
+.vyt-video-wrapper {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+.vyt-video-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.vyt-video-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffd700;
+    margin-bottom: 0.5rem;
+}
+
+.vyt-video-description {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.vyt-video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%; /* Aspect ratio 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    background: #000;
+}
+
+.vyt-video-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ========================================
+   REDES SOCIALES
+   ======================================== */
+
+.vyt-social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 1rem;
+}
+
+.vyt-social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.875rem 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    color: white;
+}
+
+.vyt-social-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.vyt-social-link i {
+    font-size: 1.5rem;
+}
+
+.vyt-social-username {
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.vyt-social-followers {
+    font-size: 0.875rem;
+    opacity: 0.8;
+    padding-left: 0.5rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@media (max-width: 768px) {
+    .vyt-social-link {
+        padding: 0.625rem 1rem;
+        gap: 0.5rem;
+    }
+
+    .vyt-social-link i {
+        font-size: 1.25rem;
+    }
+
+    .vyt-social-username {
+        font-size: 0.875rem;
+    }
+
+    .vyt-social-followers {
+        display: none;
+    }
+}
+
+/* ========================================
+   ANIMACIONES
+   ======================================== */
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.vyt-fade-in {
+    animation: fadeIn 0.8s ease;
+}
+
+/* ========================================
+   OPTIMIZACIONES DE PERFORMANCE
+   ======================================== */
+
+/* Hardware acceleration */
+.vyt-slide,
+.vyt-slider-arrow,
+.vyt-indicator,
+.vyt-social-link {
+    will-change: transform;
+}
+
+/* Reducir repaints */
+.vyt-slide-image {
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Lazy loading visual feedback */
+.vyt-slide-image[loading="lazy"] {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* ========================================
+   CONTENEDOR PRINCIPAL PARA INDEX
+   ======================================== */
+
+#vyt-banner-slider {
+    margin-bottom: 4rem;
+}
+
+[data-vyt-video] {
+    margin: 3rem 0;
+}
+
+#vyt-social-media {
+    padding: 3rem 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    margin: 2rem 0;
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+    .vyt-video-wrapper {
+        background: rgba(0, 0, 0, 0.5);
+    }
+}
+
+/* ========================================
+   ACCESIBILIDAD
+   ======================================== */
+
+.vyt-slider-arrow:focus,
+.vyt-indicator:focus,
+.vyt-social-link:focus {
+    outline: 2px solid #ffd700;
+    outline-offset: 4px;
+}
+
+/* Reducir movimiento para usuarios con preferencias */
+@media (prefers-reduced-motion: reduce) {
+    .vyt-slide,
+    .vyt-slider-arrow,
+    .vyt-indicator,
+    .vyt-social-link,
+    .vyt-slide-title,
+    .vyt-slide-description,
+    .vyt-slide-btn {
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* ========================================
+   GRILLA DE CERTÁMENES ESTILO SPOTIFY
+   ======================================== */
+
+/* Contenedor principal */
+.vyt-certamenes-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+/* Encabezado con filtros */
+.vyt-certamenes-header {
+    margin-bottom: 2rem;
+}
+
+.vyt-certamenes-title {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #fff, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Chips de Filtrado */
+.vyt-filter-chips {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.vyt-chip {
+    padding: 0.625rem 1.25rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.vyt-chip:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-2px);
+}
+
+.vyt-chip.active {
+    background: #1ed760;
+    border-color: #1ed760;
+    color: #000;
+    font-weight: 700;
+}
+
+.vyt-chip i {
+    margin-right: 0.5rem;
+}
+
+/* Grilla de Tarjetas */
+.vyt-certamenes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+@media (max-width: 768px) {
+    .vyt-certamenes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 1rem;
+    }
+}
+
+/* Tarjeta Individual Estilo Spotify */
+.vyt-certamen-card {
+    position: relative;
+    background: #181818;
+    border-radius: 12px;
+    padding: 1rem;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    cursor: pointer;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.vyt-certamen-card:hover {
+    background: #282828;
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Imagen del Certamen */
+.vyt-certamen-image {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.vyt-certamen-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.vyt-certamen-card:hover .vyt-certamen-image img {
+    transform: scale(1.05);
+}
+
+/* Badge de Estado */
+.vyt-certamen-badge {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 50px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+    z-index: 2;
+}
+
+.vyt-certamen-badge.en-curso {
+    background: rgba(30, 215, 96, 0.9);
+    color: #000;
+}
+
+.vyt-certamen-badge.proximo {
+    background: rgba(255, 215, 0, 0.9);
+    color: #000;
+}
+
+.vyt-certamen-badge.finalizado {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* Botón Play/Inscribirse */
+.vyt-play-button {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #1ed760;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 8px 24px rgba(30, 215, 96, 0.5);
+    z-index: 3;
+}
+
+.vyt-certamen-card:hover .vyt-play-button {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.vyt-play-button:hover {
+    background: #1fdf64;
+    transform: scale(1.1);
+}
+
+/* Contenido de la Tarjeta */
+.vyt-certamen-content {
+    padding: 0 0.25rem;
+}
+
+.vyt-certamen-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    line-height: 1.3;
+    min-height: 2.6em;
+}
+
+.vyt-certamen-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: #b3b3b3;
+}
+
+.vyt-certamen-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.vyt-certamen-category i {
+    font-size: 0.75rem;
+}
+
+.vyt-certamen-dates {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+}
+
+.vyt-certamen-stats {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vyt-stat {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    color: #b3b3b3;
+}
+
+.vyt-stat i {
+    font-size: 0.875rem;
+    color: #1ed760;
+}
+
+/* Estado Vacío */
+.vyt-empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #b3b3b3;
+}
+
+.vyt-empty-state i {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    color: #282828;
+}
+
+.vyt-empty-state h3 {
+    font-size: 1.5rem;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.vyt-empty-state p {
+    font-size: 1rem;
+}
+
+/* Loading Shimmer */
+.vyt-certamen-skeleton {
+    background: #181818;
+    border-radius: 12px;
+    padding: 1rem;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+.vyt-skeleton-image {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.05) 0%,
+        rgba(255, 255, 255, 0.1) 50%,
+        rgba(255, 255, 255, 0.05) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+.vyt-skeleton-text {
+    height: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: -200% 0;
+    }
+    100% {
+        background-position: 200% 0;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.6;
+    }
+}
+
+/* Glassmorphism consistente */
+.vyt-certamen-card,
+.vyt-chip,
+.vyt-certamen-badge {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+/* ========================================
+   REDES SOCIALES - BRANDING CORPORATIVO
+   ======================================== */
+
+/* Estilos base para iconos de redes sociales */
+.vyt-social-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: white;
+    font-size: 1.5rem;
+    text-decoration: none;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.vyt-social-icon:hover {
+    transform: scale(1.2) rotate(5deg);
+    border-color: transparent;
+}
+
+/* Instagram - Gradiente púrpura a amarillo con cristal */
+.vyt-social-icon.instagram:hover {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    box-shadow: 0 8px 30px rgba(253, 105, 73, 0.6), 
+                0 0 20px rgba(214, 36, 159, 0.4) inset;
+    color: white;
+}
+
+.vyt-social-icon.instagram:hover::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: instagram-shine 2s infinite;
+}
+
+@keyframes instagram-shine {
+    0% {
+        transform: rotate(0deg) translateX(-100%);
+    }
+    100% {
+        transform: rotate(0deg) translateX(100%);
+    }
+}
+
+/* TikTok - Efecto glitch con sombras cian y roja */
+.vyt-social-icon.tiktok:hover {
+    background: #000000;
+    color: white;
+    box-shadow: -3px -3px 0 #00f2ea, 
+                3px 3px 0 #ff0050,
+                0 0 30px rgba(0, 242, 234, 0.5);
+    animation: tiktok-glitch 0.3s infinite;
+}
+
+@keyframes tiktok-glitch {
+    0%, 100% {
+        text-shadow: -2px 0 #00f2ea, 2px 0 #ff0050;
+    }
+    25% {
+        text-shadow: 2px 0 #00f2ea, -2px 0 #ff0050;
+    }
+    50% {
+        text-shadow: -2px 2px #00f2ea, 2px -2px #ff0050;
+    }
+    75% {
+        text-shadow: 2px 2px #00f2ea, -2px -2px #ff0050;
+    }
+}
+
+/* Facebook - Azul oficial */
+.vyt-social-icon.facebook:hover {
+    background: #1877F2;
+    box-shadow: 0 8px 30px rgba(24, 119, 242, 0.6),
+                0 0 20px rgba(24, 119, 242, 0.4) inset;
+    color: white;
+}
+
+/* YouTube - Rojo intenso con neón */
+.vyt-social-icon.youtube:hover {
+    background: #FF0000;
+    box-shadow: 0 0 20px #FF0000,
+                0 0 40px rgba(255, 0, 0, 0.6),
+                0 0 60px rgba(255, 0, 0, 0.4),
+                0 8px 30px rgba(255, 0, 0, 0.5) inset;
+    color: white;
+    animation: youtube-neon 1.5s infinite alternate;
+}
+
+@keyframes youtube-neon {
+    0% {
+        box-shadow: 0 0 20px #FF0000,
+                    0 0 40px rgba(255, 0, 0, 0.6),
+                    0 0 60px rgba(255, 0, 0, 0.4);
+    }
+    100% {
+        box-shadow: 0 0 30px #FF0000,
+                    0 0 60px rgba(255, 0, 0, 0.8),
+                    0 0 90px rgba(255, 0, 0, 0.6);
+    }
+}
+
+/* X (Twitter) - Negro con borde blanco */
+.vyt-social-icon.x-twitter:hover {
+    background: #000000;
+    border-color: white;
+    box-shadow: 0 8px 30px rgba(255, 255, 255, 0.4),
+                0 0 20px rgba(255, 255, 255, 0.2) inset;
+    color: white;
+}
+
+/* Contenedor de redes sociales en menú/footer */
+.vyt-social-icons-container {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 1.5rem 0;
+}
+
+/* Responsive para iconos pequeños */
+@media (max-width: 768px) {
+    .vyt-social-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 1.25rem;
+    }
+}
+
+/* Separador visual en menú */
+.vyt-social-separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    margin: 1.5rem 0;
+}
+
+/* Título de sección redes sociales */
+.vyt-social-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+

@@ -333,7 +333,25 @@
                         <!-- Upload de video -->
                         <div class="mb-8">
                             <label class="block text-white font-medium mb-2">Video de tu presentación *</label>
-                            <div class="border-2 border-dashed border-white/30 rounded-lg p-8 text-center">
+                            
+                            <!-- Tabs para elegir modo -->
+                            <div class="flex gap-2 mb-4">
+                                <button 
+                                    id="tab-upload" 
+                                    onclick="switchVideoMode('upload')" 
+                                    class="flex-1 px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold transition-colors">
+                                    <i class="fas fa-upload"></i> Subir Archivo
+                                </button>
+                                <button 
+                                    id="tab-youtube" 
+                                    onclick="switchVideoMode('youtube')" 
+                                    class="flex-1 px-4 py-2 rounded-lg bg-white/10 text-white font-semibold transition-colors">
+                                    <i class="fab fa-youtube"></i> Link de YouTube
+                                </button>
+                            </div>
+                            
+                            <!-- Modo Upload -->
+                            <div id="mode-upload" class="border-2 border-dashed border-white/30 rounded-lg p-8 text-center">
                                 <input type="file" id="video-upload" accept="video/*" class="hidden" onchange="handleVideoUpload(event)">
                                 <div id="upload-area" onclick="document.getElementById('video-upload').click()" class="cursor-pointer">
                                     <i class="fas fa-cloud-upload-alt text-4xl text-white/50 mb-4"></i>
@@ -342,6 +360,47 @@
                                 </div>
                                 <div id="video-preview" class="hidden mt-4">
                                     <!-- Se llenará con JS -->
+                                </div>
+                            </div>
+                            
+                            <!-- Modo YouTube URL -->
+                            <div id="mode-youtube" class="hidden">
+                                <div class="mb-4">
+                                    <input 
+                                        type="url" 
+                                        id="youtube-url" 
+                                        placeholder="https://youtube.com/watch?v=..." 
+                                        class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-blue-400"
+                                        onblur="handleYouTubeURL()"
+                                        onchange="handleYouTubeURL()">
+                                    <p class="text-white/50 text-sm mt-2">
+                                        <i class="fas fa-info-circle"></i> Pega el link de tu video de YouTube
+                                    </p>
+                                </div>
+                                
+                                <!-- Preview de YouTube -->
+                                <div id="youtube-preview" class="hidden">
+                                    <div class="bg-gray-800/50 rounded-lg p-4">
+                                        <div class="aspect-video bg-gray-900 rounded-lg overflow-hidden mb-3">
+                                            <iframe 
+                                                id="youtube-iframe" 
+                                                width="100%" 
+                                                height="100%" 
+                                                frameborder="0" 
+                                                allowfullscreen>
+                                            </iframe>
+                                        </div>
+                                        <div class="flex items-center justify-between">
+                                            <span class="text-green-400 text-sm">
+                                                <i class="fas fa-check-circle"></i> Vista previa lista
+                                            </span>
+                                            <button 
+                                                onclick="clearYouTubeURL()" 
+                                                class="text-red-400 hover:text-red-300 text-sm">
+                                                <i class="fas fa-times"></i> Cambiar video
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -400,6 +459,8 @@
             tituloCancion: '',
             artistaOriginal: '',
             videoFile: null,
+            youtubeUrl: null,
+            youtubeId: null,
             modalidad: 'online' // Por defecto online, se puede cambiar basado en ubicación
         };
 
@@ -640,8 +701,118 @@
             if (step === 1) {
                 btn.disabled = !inscriptionData.categoria || inscriptionData.generos.length === 0;
             } else if (step === 2) {
-                btn.disabled = !inscriptionData.tituloCancion || !inscriptionData.videoFile;
+                btn.disabled = !inscriptionData.tituloCancion || (!inscriptionData.videoFile && !inscriptionData.youtubeUrl);
             }
+        }
+
+        // Cambiar modo de video (upload vs youtube)
+        let currentVideoMode = 'upload';
+        function switchVideoMode(mode) {
+            currentVideoMode = mode;
+            
+            // Update tabs
+            const tabUpload = document.getElementById('tab-upload');
+            const tabYoutube = document.getElementById('tab-youtube');
+            const modeUpload = document.getElementById('mode-upload');
+            const modeYoutube = document.getElementById('mode-youtube');
+            
+            if (mode === 'upload') {
+                tabUpload.classList.remove('bg-white/10');
+                tabUpload.classList.add('bg-blue-600');
+                tabYoutube.classList.remove('bg-blue-600');
+                tabYoutube.classList.add('bg-white/10');
+                modeUpload.classList.remove('hidden');
+                modeYoutube.classList.add('hidden');
+                
+                // Clear YouTube data
+                inscriptionData.youtubeUrl = null;
+                inscriptionData.youtubeId = null;
+            } else {
+                tabYoutube.classList.remove('bg-white/10');
+                tabYoutube.classList.add('bg-blue-600');
+                tabUpload.classList.remove('bg-blue-600');
+                tabUpload.classList.add('bg-white/10');
+                modeYoutube.classList.remove('hidden');
+                modeUpload.classList.add('hidden');
+                
+                // Clear upload data
+                inscriptionData.videoFile = null;
+                document.getElementById('video-upload').value = '';
+                document.getElementById('video-preview').classList.add('hidden');
+            }
+            
+            updateNextButton(2);
+        }
+
+        // Extraer ID de YouTube
+        function extractYouTubeId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+                /youtube\.com\/embed\/([a-zA-Z0-9_-]{11})/,
+                /youtube\.com\/v\/([a-zA-Z0-9_-]{11})/
+            ];
+
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+
+            return null;
+        }
+
+        // Manejar URL de YouTube
+        function handleYouTubeURL() {
+            const input = document.getElementById('youtube-url');
+            const url = input.value.trim();
+            
+            if (!url) {
+                document.getElementById('youtube-preview').classList.add('hidden');
+                inscriptionData.youtubeUrl = null;
+                inscriptionData.youtubeId = null;
+                updateNextButton(2);
+                return;
+            }
+
+            const videoId = extractYouTubeId(url);
+            
+            if (videoId) {
+                // Mostrar preview
+                const iframe = document.getElementById('youtube-iframe');
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                document.getElementById('youtube-preview').classList.remove('hidden');
+                
+                // Guardar datos
+                inscriptionData.youtubeUrl = url;
+                inscriptionData.youtubeId = videoId;
+                
+                // Mostrar éxito
+                input.classList.remove('border-red-500');
+                input.classList.add('border-green-500');
+                
+                updateNextButton(2);
+            } else {
+                // URL inválida
+                input.classList.remove('border-green-500');
+                input.classList.add('border-red-500');
+                document.getElementById('youtube-preview').classList.add('hidden');
+                inscriptionData.youtubeUrl = null;
+                inscriptionData.youtubeId = null;
+                
+                if (url.length > 0) {
+                    showError('URL de YouTube inválida. Verifica el formato.');
+                }
+                
+                updateNextButton(2);
+            }
+        }
+
+        // Limpiar URL de YouTube
+        function clearYouTubeURL() {
+            document.getElementById('youtube-url').value = '';
+            document.getElementById('youtube-preview').classList.add('hidden');
+            inscriptionData.youtubeUrl = null;
+            inscriptionData.youtubeId = null;
+            updateNextButton(2);
         }
 
         // Manejar subida de video

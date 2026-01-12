@@ -60,9 +60,19 @@ build/Release
 
 # Dependency directories
 node_modules/
+dist/
+build/
 
 # Optional npm cache directory
 .npm
+
+# Datos temporales de extensiones de IA
+.clinedata/
+.roocodedata/
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
 
 # Optional eslint cache
 .eslintcache

@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video de Participación - VYT Music</title>
+    
+    <!-- Design Tokens -->
+    <link rel="stylesheet" href="/design-tokens.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Video Player Component Styles -->
+    <link rel="stylesheet" href="/src/video-player-styles.css">
+    
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1e2e 0%, #2a2a3e 100%);
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(147, 51, 234, 0.2) 100%);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .breadcrumb {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .breadcrumb a {
+            color: var(--primary-color, #ff6b35);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .breadcrumb a:hover {
+            color: #ff8c42;
+        }
+
+        .loading-skeleton {
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="page-header">
+        <div class="container mx-auto px-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button onclick="goBack()" class="bg-white/10 hover:bg-white/20 text-white p-2 rounded-lg transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <div>
+                        <div class="breadcrumb">
+                            <a href="/principal.html"><i class="fas fa-home"></i> Inicio</a>
+                            <span>/</span>
+                            <a href="/ranking.html">Ranking</a>
+                            <span>/</span>
+                            <span>Video</span>
+                        </div>
+                        <h1 class="text-2xl font-bold text-white font-display">
+                            <i class="fas fa-play-circle"></i> Video de Participación
+                        </h1>
+                    </div>
+                </div>
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="h-12">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pb-8">
+        <!-- Loading State (while Firebase loads) -->
+        <div id="loading-container" class="text-center py-12">
+            <div class="loading-skeleton inline-block">
+                <i class="fas fa-spinner fa-spin text-6xl text-blue-500"></i>
+            </div>
+            <p class="mt-4 text-xl text-gray-300">Cargando participación...</p>
+        </div>
+
+        <!-- Video Player Container -->
+        <div id="video-player-container"></div>
+
+        <!-- Error State -->
+        <div id="error-container" style="display: none;" class="text-center py-12">
+            <div class="error-icon inline-block w-24 h-24 bg-red-500/20 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-red-500 mb-2">Error cargando video</h2>
+            <p class="text-gray-300 mb-6">No se pudo cargar la participación solicitada.</p>
+            <a href="/ranking.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
+                <i class="fas fa-trophy"></i> Ver Ranking
+            </a>
+        </div>
+
+        <!-- Additional Info -->
+        <div id="additional-info" style="display: none;" class="mt-8 grid md:grid-cols-2 gap-6">
+            <!-- Información del Certamen -->
+            <div class="bg-white/5 backdrop-filter backdrop-blur-lg rounded-xl p-6 border border-white/10">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-trophy text-yellow-500"></i>
+                    Certamen
+                </h3>
+                <div id="certamen-info" class="space-y-3 text-gray-300">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+
+            <!-- Progreso del Artista -->
+            <div class="bg-white/5 backdrop-filter backdrop-blur-lg rounded-xl p-6 border border-white/10">
+                <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                    <i class="fas fa-chart-line text-green-500"></i>
+                    Progreso
+                </h3>
+                <div id="progreso-info" class="space-y-3 text-gray-300">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Ranking Preview -->
+        <div id="ranking-preview" style="display: none;" class="mt-8 bg-white/5 backdrop-filter backdrop-blur-lg rounded-xl p-6 border border-white/10">
+            <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+                <i class="fas fa-medal text-orange-500"></i>
+                Top 5 en esta Zona
+            </h3>
+            <div id="top-5-container" class="space-y-3">
+                <!-- Populated by JS -->
+            </div>
+            <div class="text-center mt-4">
+                <a href="/ranking.html" class="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors">
+                    Ver ranking completo <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase SDK v8 (CDN) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-functions.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="/firebase-config.js"></script>
+
+    <!-- Video Player Component -->
+    <script src="/src/video-player-component.js"></script>
+
+    <!-- Page Logic -->
+    <script>
+        let videoPlayerInstance = null;
+
+        // Get participacion ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const participacionId = urlParams.get('id');
+
+        if (!participacionId) {
+            showError('No se especificó ID de participación');
+        } else {
+            initializePage();
+        }
+
+        async function initializePage() {
+            try {
+                // Wait for Firebase to initialize
+                await new Promise(resolve => {
+                    if (firebase.apps.length > 0) {
+                        resolve();
+                    } else {
+                        setTimeout(resolve, 1000);
+                    }
+                });
+
+                // Initialize video player component
+                videoPlayerInstance = new VideoPlayerComponent('#video-player-container');
+                window.videoPlayerInstance = videoPlayerInstance; // Global reference for functions
+
+                await videoPlayerInstance.init(participacionId);
+
+                // Hide loading, show content
+                document.getElementById('loading-container').style.display = 'none';
+                document.getElementById('video-player-container').style.display = 'block';
+                document.getElementById('additional-info').style.display = 'block';
+
+                // Load additional info
+                await loadAdditionalInfo();
+                await loadRankingPreview();
+
+            } catch (error) {
+                console.error('Error initializing page:', error);
+                showError(error.message);
+            }
+        }
+
+        async function loadAdditionalInfo() {
+            const data = videoPlayerInstance.videoData;
+            if (!data) return;
+
+            // Información del certamen
+            const certamenInfo = document.getElementById('certamen-info');
+            certamenInfo.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>📍 Zona:</span>
+                    <span class="font-bold text-white">${data.zona_nombre || 'N/A'}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span>🏙️ Provincia:</span>
+                    <span class="font-bold text-white">${data.provincia_nombre || 'N/A'}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span>🎭 Ciudad:</span>
+                    <span class="font-bold text-white">${data.ciudad || 'N/A'}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span>🎵 Género:</span>
+                    <span class="font-bold text-white">${data.genero || 'N/A'}</span>
+                </div>
+            `;
+
+            // Progreso del artista
+            const progresoInfo = document.getElementById('progreso-info');
+            const votos = data.votos || 0;
+            const vytMoney = data.vyt_money_recibido || 0;
+            const valorMonetario = data.valor_monetario_votos || 0;
+
+            progresoInfo.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span>❤️ Total votos:</span>
+                    <span class="font-bold text-white text-xl">${votos}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span>💎 VYT Money:</span>
+                    <span class="font-bold text-white text-xl">${vytMoney.toLocaleString()}</span>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span>💰 Valor:</span>
+                    <span class="font-bold text-green-400 text-xl">$${valorMonetario.toFixed(2)}</span>
+                </div>
+                ${data.clasificado ? '<div class="bg-yellow-500/20 border border-yellow-500 rounded-lg p-3 text-center mt-2"><strong>🏆 CLASIFICADO</strong></div>' : ''}
+                ${data.ready_for_next_round && !data.clasificado ? '<div class="bg-blue-500/20 border border-blue-500 rounded-lg p-3 text-center mt-2"><strong>🌟 ASPIRANTE</strong></div>' : ''}
+            `;
+        }
+
+        async function loadRankingPreview() {
+            const data = videoPlayerInstance.videoData;
+            if (!data || !data.zona) return;
+
+            try {
+                const db = firebase.firestore();
+                const top5 = await db.collection('participaciones')
+                    .where('zona', '==', data.zona)
+                    .where('video_activo', '==', true)
+                    .orderBy('votos', 'desc')
+                    .limit(5)
+                    .get();
+
+                if (top5.empty) {
+                    document.getElementById('ranking-preview').style.display = 'none';
+                    return;
+                }
+
+                const container = document.getElementById('top-5-container');
+                container.innerHTML = top5.docs.map((doc, index) => {
+                    const d = doc.data();
+                    const isCurrentVideo = doc.id === participacionId;
+                    const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+                    
+                    return `
+                        <div class="flex items-center justify-between p-3 rounded-lg ${isCurrentVideo ? 'bg-blue-500/20 border border-blue-500' : 'bg-white/5'} hover:bg-white/10 transition-colors">
+                            <div class="flex items-center gap-3">
+                                <span class="text-2xl">${medals[index]}</span>
+                                <div>
+                                    <p class="font-bold ${isCurrentVideo ? 'text-blue-400' : 'text-white'}">${d.nombreArtista || 'Artista'}</p>
+                                    <p class="text-sm text-gray-400">${d.cancion || 'Sin título'}</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="font-bold text-lg text-white">${d.votos || 0} votos</p>
+                                <p class="text-xs text-gray-400">💎 ${d.vyt_money_recibido || 0} VYT</p>
+                            </div>
+                            ${!isCurrentVideo ? `<a href="/ver-video.html?id=${doc.id}" class="ml-3 text-blue-400 hover:text-blue-300"><i class="fas fa-play-circle"></i></a>` : '<span class="ml-3 text-blue-400">🎯 Estás aquí</span>'}
+                        </div>
+                    `;
+                }).join('');
+
+                document.getElementById('ranking-preview').style.display = 'block';
+
+            } catch (error) {
+                console.error('Error loading ranking preview:', error);
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('loading-container').style.display = 'none';
+            document.getElementById('error-container').style.display = 'block';
+            document.querySelector('#error-container p').textContent = message;
+        }
+
+        function goBack() {
+            if (document.referrer && document.referrer.includes(window.location.host)) {
+                window.history.back();
+            } else {
+                window.location.href = '/ranking.html';
+            }
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (videoPlayerInstance) {
+                videoPlayerInstance.destroy();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -58,6 +58,71 @@ service cloud.firestore {
       allow update: if isAdmin();
     }
     
+    // ===== REGLAS PARA PARTICIPACIONES (SISTEMA FEDERAL - FASE 11) =====
+    match /participaciones/{participacionId} {
+      // Lectura pública de participaciones activas
+      allow read: if true;
+      
+      // Los artistas pueden crear su propia participación
+      allow create: if request.auth != null && 
+        request.resource.data.uid == request.auth.uid;
+      
+      // Los artistas pueden actualizar campos propios (NO clasificación ni feedback)
+      allow update: if request.auth != null && 
+        request.auth.uid == resource.data.uid &&
+        !request.resource.data.diff(resource.data).affectedKeys()
+          .hasAny(['clasificado', 'ready_for_next_round', 'feedback_jurado', 
+                   'posicion_zona', 'posicion_global', 'estado']);
+      
+      // Solo admins pueden actualizar clasificación, feedback y estado
+      allow update: if isAdmin();
+      
+      // Solo admins pueden eliminar
+      allow delete: if isAdmin();
+    }
+    
+    // ===== REGLAS PARA SYSTEM CONFIG (ETAPAS Y CONFIGURACIÓN FEDERAL) =====
+    match /system_config/{docId} {
+      // Lectura pública de configuración de etapas
+      allow read: if true;
+      
+      // Solo admins pueden escribir configuración
+      allow write: if isAdmin();
+    }
+    
+    // ===== REGLAS PARA NOTIFICACIONES (SISTEMA FEDERAL) =====
+    match /notificaciones/{notificacionId} {
+      // Los usuarios pueden leer solo sus propias notificaciones
+      allow read: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Los usuarios pueden marcar como leídas
+      allow update: if request.auth != null && 
+        resource.data.userId == request.auth.uid &&
+        request.resource.data.diff(resource.data).affectedKeys() == ['leida'].toSet();
+      
+      // Solo admins y sistema pueden crear notificaciones
+      allow create: if isAdmin();
+    }
+    
+    // ===== REGLAS PARA HISTORIAL DE ETAPAS =====
+    match /etapas_historial/{etapaId} {
+      // Lectura pública del historial
+      allow read: if true;
+      
+      // Solo admins pueden escribir
+      allow write: if isAdmin();
+    }
+    
+    // ===== REGLAS PARA ESTADÍSTICAS GENERALES (JACKPOT) =====
+    match /estadisticas_generales/{docId} {
+      // Lectura pública
+      allow read: if true;
+      
+      // Solo admins y sistema pueden escribir
+      allow write: if isAdmin();
+    }
+    
     // ===== REGLAS PARA TESTS (TEMPORAL) =====
     match /tests/{docId} {
       allow read, write, create, delete: if isAdmin(); // Solo admins pueden acceder

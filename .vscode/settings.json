@@ -24,7 +24,11 @@
     "**/temp-dev": true,
     "**/*.log": true,
     "**/deploy_output.txt": true,
-    "**/.vscode-test": true
+    "**/.vscode-test": true,
+    "**/.clinedata": true,
+    "**/.roocodedata": true,
+    "**/dist": true,
+    "**/build": true
   },
   
   // Búsquedas - Ignorar todo lo posible
@@ -45,7 +49,11 @@
     "**/temp-dev": true,
     "**/*.log": true,
     "**/*.json.backup": true,
-    "**/package-lock.json": true
+    "**/package-lock.json": true,
+    "**/.clinedata": true,
+    "**/.roocodedata": true,
+    "**/dist": true,
+    "**/build": true
   },
   
   // File Watcher - CRÍTICO para rendimiento
@@ -66,7 +74,11 @@
     "**/temp-dev/**": true,
     "**/*.log": true,
     "**/images/**": true,
-    "**/assets/icons/**": true
+    "**/assets/icons/**": true,
+    "**/.clinedata/**": true,
+    "**/.roocodedata/**": true,
+    "**/dist/**": true,
+    "**/build/**": true
   },
   
   // ===== DESACTIVAR FEATURES PESADAS =====
@@ -129,6 +141,31 @@
   // Workbench
   "workbench.enableExperiments": false,
   "workbench.settings.enableNaturalLanguageSearch": false,
+  
+  // ===== LÍMITES DE MEMORIA Y CPU =====
+  
+  // Límite de memoria para procesos de extensiones (2GB = 2048MB)
+  "extensions.experimental.affinity": {
+    "ms-vscode.references-view": 1,
+    "GitHub.copilot": 1,
+    "GitHub.copilot-chat": 1
+  },
+  
+  // Limitar watcher de archivos (reduce CPU)
+  "files.watcherInclude": {
+    "**/*.html": true,
+    "**/*.js": true,
+    "**/*.css": true,
+    "**/*.json": true
+  },
+  
+  // Desactivar sincronización de configuración
+  "settingsSync.ignoredExtensions": [],
+  "settingsSync.keybindingsPerPlatform": false,
+  
+  // Reducir historial de terminal
+  "terminal.integrated.scrollback": 100,
+  "terminal.integrated.enablePersistentSessions": false,
   
   // Copilot (si está instalado)
   "github.copilot.enable": {

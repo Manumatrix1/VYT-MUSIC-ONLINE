@@ -1,0 +1,1823 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Súper Admin - VYT MUSIC</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Panel de administración súper admin para VYT Music">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="/firebase-config.js"></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Gamification -->
+    <script src="/src/gamification-enhanced.js"></script>
+    
+    <!-- Automation Bridge (Webhooks n8n) -->
+    <script src="/src/automation-bridge.js"></script>
+    
+    <!-- Jurado Panel (Sistema Federal) -->
+    <script src="/src/jurado-panel.js"></script>
+    
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            background: #0a0a0f;
+            color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            min-height: 100vh;
+            padding-bottom: 80px; /* espacio para bottom nav */
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Header minimalista */
+        .admin-header {
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1rem 1.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 40;
+        }
+
+        .admin-header h1 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin: 0;
+            letter-spacing: -0.02em;
+        }
+
+        /* Tabs superiores deslizables */
+        .tabs-container {
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 65px;
+            z-index: 39;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+
+        .tabs-container::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tabs-wrapper {
+            display: flex;
+            gap: 0;
+            padding: 0 1rem;
+            min-width: max-content;
+        }
+
+        .tab-btn {
+            flex-shrink: 0;
+            padding: 1rem 1.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .tab-btn.active {
+            color: #ffd700;
+            border-bottom-color: #ffd700;
+        }
+
+        .tab-btn i {
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+
+        /* Content container mobile-first */
+        .content-container {
+            padding: 1.5rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Cards minimalistas */
+        .admin-card {
+            background: rgba(20, 20, 25, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Moderación Cards - Mobile First */
+        .video-card-mobile {
+            background: rgba(20, 20, 25, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .video-card-mobile:active {
+            transform: scale(0.98);
+        }
+
+        .video-thumbnail-mobile {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 12px;
+            background: #1a1a1f;
+            margin-bottom: 1rem;
+        }
+
+        .video-info-mobile {
+            margin-bottom: 1rem;
+        }
+
+        .video-title-mobile {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+
+        .video-meta-mobile {
+            font-size: 0.813rem;
+            color: rgba(255, 255, 255, 0.5);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .badge-mobile {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-pendiente {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffc107;
+        }
+
+        .badge-activo {
+            background: rgba(30, 215, 96, 0.15);
+            color: #1ed760;
+        }
+
+        .badge-rechazado {
+            background: rgba(220, 38, 38, 0.15);
+            color: #dc2626;
+        }
+
+        /* Botones touch-friendly */
+        .btn-group-mobile {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.75rem;
+        }
+
+        .btn-mobile {
+            padding: 1rem;
+            border-radius: 12px;
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            min-height: 48px; /* touch target */
+        }
+
+        .btn-mobile:active {
+            transform: scale(0.95);
+        }
+
+        .btn-view {
+            background: rgba(100, 100, 110, 0.2);
+            color: #fff;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #1ed760, #15a34a);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .btn-reject {
+            background: linear-gradient(135deg, #dc2626, #991b1b);
+            color: #fff;
+            font-weight: 700;
+        }
+
+        /* Stat cards mobile */
+        .stat-cards-mobile {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .stat-card-mobile {
+            background: rgba(20, 20, 25, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1rem 0.75rem;
+            text-align: center;
+        }
+
+        .stat-value-mobile {
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 0.375rem;
+        }
+
+        .stat-label-mobile {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+        }
+
+        .stat-icon-mobile {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+        }
+
+        /* Filter chips mobile */
+        .filter-chips-mobile {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding: 0.5rem 0;
+            margin-bottom: 1rem;
+            scrollbar-width: none;
+        }
+
+        .filter-chips-mobile::-webkit-scrollbar {
+            display: none;
+        }
+
+        .chip-mobile {
+            flex-shrink: 0;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+            border: 1px solid transparent;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .chip-mobile.active {
+            background: rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 20, 0.98);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 0.5rem 0 calc(0.5rem + env(safe-area-inset-bottom));
+            z-index: 50;
+        }
+
+        .bottom-nav-items {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .bottom-nav-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .bottom-nav-item.active {
+            color: #ffd700;
+        }
+
+        .bottom-nav-item i {
+            font-size: 1.25rem;
+        }
+
+        /* Input mobile-friendly */
+        .admin-input-mobile {
+            background: rgba(30, 30, 35, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            padding: 0.875rem;
+            border-radius: 12px;
+            width: 100%;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .admin-input-mobile:focus {
+            outline: none;
+            border-color: #ffd700;
+            background: rgba(30, 30, 35, 1);
+        }
+
+        .admin-input-mobile::placeholder {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Empty state */
+        .empty-state-mobile {
+            text-align: center;
+            padding: 3rem 1.5rem;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .empty-state-mobile i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-mobile h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.5rem;
+        }
+
+        /* FAB (Floating Action Button) */
+        .fab-mobile {
+            position: fixed;
+            bottom: 90px;
+            right: 1rem;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            border: none;
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 40;
+        }
+
+        .fab-mobile:active {
+            transform: scale(0.9);
+        }
+
+        /* Toast mobile */
+        .toast {
+            position: fixed;
+            top: auto;
+            bottom: 100px;
+            left: 1rem;
+            right: 1rem;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 1rem 1.5rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 10000;
+            transform: translateY(150%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            backdrop-filter: blur(20px);
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        .toast.success {
+            background: rgba(30, 215, 96, 0.95);
+        }
+
+        .toast.error {
+            background: rgba(220, 38, 38, 0.95);
+        }
+
+        .toast.info {
+            background: rgba(59, 130, 246, 0.95);
+        }
+
+        /* Responsive Desktop */
+        @media (min-width: 768px) {
+            body {
+                padding-bottom: 0;
+            }
+
+            .bottom-nav {
+                display: none;
+            }
+
+            .tabs-container {
+                position: sticky;
+                top: 65px;
+            }
+
+            .content-container {
+                padding: 2rem;
+            }
+
+            .video-card-mobile {
+                display: grid;
+                grid-template-columns: 280px 1fr auto;
+                gap: 1.5rem;
+                align-items: center;
+            }
+
+            .video-thumbnail-mobile {
+                margin-bottom: 0;
+                width: 280px;
+            }
+
+            .video-info-mobile {
+                margin-bottom: 0;
+            }
+
+            .btn-group-mobile {
+                grid-template-columns: repeat(3, auto);
+                width: auto;
+            }
+
+            .stat-cards-mobile {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 1.5rem;
+            }
+
+            .fab-mobile {
+                bottom: 2rem;
+                right: 2rem;
+            }
+
+            .toast {
+                bottom: 2rem;
+                right: 2rem;
+                left: auto;
+                max-width: 400px;
+            }
+        }
+        
+        /* ===================================
+           ESTILOS PANEL DE JURADO (FASE 11)
+           =================================== */
+        
+        .clasificado-card {
+            background: rgba(20, 20, 25, 0.7);
+            border-radius: 16px;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+        
+        .posicion-badge {
+            background: linear-gradient(135deg, #ffd700, #ffaa00);
+            color: #000;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+        
+        .zona-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .zona-norte { background: rgba(255, 107, 107, 0.2); color: #ff6b6b; }
+        .zona-sur { background: rgba(78, 205, 196, 0.2); color: #4ecdc4; }
+        .zona-oeste { background: rgba(255, 230, 109, 0.2); color: #ffe66d; }
+        .zona-centro { background: rgba(168, 218, 220, 0.2); color: #a8dadc; }
+        
+        .card-content {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .video-thumbnail {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(0, 0, 0, 0.5);
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .video-thumbnail:hover .play-overlay {
+            opacity: 1;
+        }
+        
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(30, 215, 96, 0.9);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            text-decoration: none;
+            transition: transform 0.3s;
+        }
+        
+        .play-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .artista-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .artista-nombre {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .cancion-titulo {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin: 0;
+            font-style: italic;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+        
+        .stat-icon {
+            font-size: 1.25rem;
+        }
+        
+        .stat-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .stat-label {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .evaluation-form {
+            margin-top: 1rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(30, 215, 96, 0.2);
+        }
+        
+        .evaluation-form h4 {
+            font-size: 0.9375rem;
+            font-weight: 600;
+            margin: 0 0 1rem 0;
+            color: #1ed760;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .score-input {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .score-input-field {
+            flex: 1;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f5f5f5;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .score-display {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 600;
+        }
+        
+        .categoria-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f5f5f5;
+            font-size: 0.9375rem;
+        }
+        
+        .comentario-textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #f5f5f5;
+            font-size: 0.875rem;
+            resize: vertical;
+            min-height: 100px;
+            font-family: inherit;
+        }
+        
+        .char-counter {
+            text-align: right;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 0.25rem;
+        }
+        
+        .feedback-metadata {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+        
+        .btn-save {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: linear-gradient(135deg, #1ed760, #17c653);
+            color: #000;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-save:active {
+            transform: scale(0.95);
+        }
+        
+        .btn-view {
+            padding: 0.75rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #f5f5f5;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-view:active {
+            transform: scale(0.95);
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+        
+        .empty-icon {
+            font-size: 4rem;
+            opacity: 0.3;
+            margin-bottom: 1rem;
+        }
+        
+        .empty-state h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0 0 0.5rem 0;
+        }
+        
+        .empty-state p {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin: 0;
+        }
+        
+        @media (min-width: 768px) {
+            .clasificado-card {
+                padding: 1.5rem;
+            }
+            
+            .card-content {
+                grid-template-columns: 300px 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header minimalista -->
+    <div class="admin-header">
+        <h1><i class="fas fa-crown" style="color: #ffd700; margin-right: 0.5rem;"></i>Súper Admin</h1>
+    </div>
+
+    <!-- Tabs superiores deslizables -->
+    <div class="tabs-container">
+        <div class="tabs-wrapper">
+            <button class="tab-btn active" onclick="showTab('moderacion')" id="tab-moderacion">
+                <i class="fas fa-video"></i> Moderación
+            </button>
+            <button class="tab-btn" onclick="showTab('assets')" id="tab-assets">
+                <i class="fas fa-image"></i> Assets
+            </button>
+            <button class="tab-btn" onclick="showTab('redes')" id="tab-redes">
+                <i class="fas fa-share-alt"></i> Redes
+            </button>
+            <button class="tab-btn" onclick="showTab('config')" id="tab-config">
+                <i class="fas fa-cog"></i> Config
+            </button>
+            <button class="tab-btn" onclick="showTab('jurado')" id="tab-jurado">
+                <i class="fas fa-gavel"></i> Jurado
+            </button>
+        </div>
+    </div>
+
+    <!-- Content Container -->
+    <div class="content-container">
+        
+        <!-- TAB: MODERACIÓN (por defecto) -->
+        <div id="content-moderacion" class="tab-content">
+            <!-- Stat Cards Mobile -->
+            <div class="stat-cards-mobile">
+                <div class="stat-card-mobile">
+                    <div class="stat-icon-mobile" style="color: #ffc107;">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-value-mobile" id="pendingCount" style="color: #ffc107;">0</div>
+                    <div class="stat-label-mobile">Pendientes</div>
+                </div>
+                <div class="stat-card-mobile">
+                    <div class="stat-icon-mobile" style="color: #1ed760;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-value-mobile" id="approvedCount" style="color: #1ed760;">0</div>
+                    <div class="stat-label-mobile">Aprobados</div>
+                </div>
+                <div class="stat-card-mobile">
+                    <div class="stat-icon-mobile" style="color: #dc2626;">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                    <div class="stat-value-mobile" id="rejectedCount" style="color: #dc2626;">0</div>
+                    <div class="stat-label-mobile">Rechazados</div>
+                </div>
+            </div>
+
+            <!-- Filter Chips Mobile -->
+            <div class="filter-chips-mobile">
+                <div class="chip-mobile active" id="filter-chip-pendiente" onclick="filterVideos('pendiente')">
+                    <i class="fas fa-clock"></i> Pendientes
+                </div>
+                <div class="chip-mobile" id="filter-chip-all" onclick="filterVideos('all')">
+                    Todos
+                </div>
+                <div class="chip-mobile" id="filter-chip-activo" onclick="filterVideos('activo')">
+                    <i class="fas fa-check"></i> Aprobados
+                </div>
+                <div class="chip-mobile" id="filter-chip-rechazado" onclick="filterVideos('rechazado')">
+                    <i class="fas fa-times"></i> Rechazados
+                </div>
+            </div>
+
+            <!-- Videos Grid Mobile -->
+            <div id="videosGrid"></div>
+        </div>
+
+        <!-- TAB: ASSETS WEB -->
+        <div id="content-assets" class="tab-content" style="display: none;">
+            <div class="admin-card">
+                <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                    <i class="fas fa-image" style="color: #ffd700; margin-right: 0.5rem;"></i>
+                    Banners del Slider
+                </h2>
+                <div id="banners-list"></div>
+                <button onclick="addNewBanner()" class="btn-mobile btn-approve" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-plus"></i> Agregar Banner
+                </button>
+            </div>
+            
+            <div class="admin-card" style="margin-top: 1rem;">
+                <h2 style="font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem;">
+                    <i class="fas fa-play-circle" style="color: #dc2626; margin-right: 0.5rem;"></i>
+                    Videos Institucionales
+                </h2>
+                <div id="videos-list"></div>
+            </div>
+        </div>
+
+        <!-- TAB: REDES SOCIALES GLOBALES -->
+        <div id="content-redes" class="tab-content" style="display: none;">
+            <div class="admin-card">
+                <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem; font-size: 0.875rem;">
+                    <i class="fas fa-info-circle" style="color: #3b82f6; margin-right: 0.375rem;"></i>
+                    Redes sociales de la plataforma VYT Music (footer y menú).
+                </p>
+            </div>
+            <div id="social-list"></div>
+        </div>
+
+        <!-- TAB: CONFIGURACIÓN -->
+        <div id="content-config" class="tab-content" style="display: none;">
+            <div class="admin-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Configuración del Slider</h3>
+                <div style="display: grid; gap: 1rem;">
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.7);">Autoplay</label>
+                        <select id="config-autoplay" class="admin-input-mobile">
+                            <option value="true">Activado</option>
+                            <option value="false">Desactivado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.7);">Intervalo (ms)</label>
+                        <input type="number" id="config-interval" class="admin-input-mobile" value="5000">
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.7);">Mostrar Flechas</label>
+                        <select id="config-arrows" class="admin-input-mobile">
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.7);">Mostrar Indicadores</label>
+                        <select id="config-indicators" class="admin-input-mobile">
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Acciones rápidas -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
+                <button onclick="clearCacheAndReload()" class="btn-mobile btn-reject">
+                    <i class="fas fa-trash"></i> Limpiar Caché
+                </button>
+                <button onclick="downloadConfig()" class="btn-mobile btn-approve">
+                    <i class="fas fa-download"></i> Descargar JSON
+                </button>
+            </div>
+        </div>
+
+        <!-- TAB: VOTACIÓN JURADO -->
+        <div id="content-jurado" class="tab-content" style="display: none;">
+            <div class="admin-card">
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">🎭 Votación del Jurado</h3>
+                <p style="font-size: 0.875rem; color: rgba(255,255,255,0.7); margin-bottom: 1rem;">Evalúa a los clasificados de cada zona</p>
+            </div>
+
+            <!-- Filtros por Zona -->
+            <div class="filter-chips-mobile" style="margin-bottom: 1rem;">
+                <div class="chip-mobile active zona-filter-btn" data-zona="todas" onclick="juradoPanelInstance && juradoPanelInstance.filterByZona('todas')">
+                    📍 Todas
+                </div>
+                <div class="chip-mobile zona-filter-btn" data-zona="norte" onclick="juradoPanelInstance && juradoPanelInstance.filterByZona('norte')">
+                    Norte
+                </div>
+                <div class="chip-mobile zona-filter-btn" data-zona="sur" onclick="juradoPanelInstance && juradoPanelInstance.filterByZona('sur')">
+                    Sur
+                </div>
+                <div class="chip-mobile zona-filter-btn" data-zona="oeste" onclick="juradoPanelInstance && juradoPanelInstance.filterByZona('oeste')">
+                    Oeste
+                </div>
+                <div class="chip-mobile zona-filter-btn" data-zona="centro" onclick="juradoPanelInstance && juradoPanelInstance.filterByZona('centro')">
+                    Centro
+                </div>
+            </div>
+
+            <!-- Container de Clasificados -->
+            <div id="clasificados-container" style="display: grid; gap: 1rem;">
+                <!-- Se llena dinámicamente con jurado-panel.js -->
+                <div class="admin-card" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; opacity: 0.5;">⏳</div>
+                    <p style="color: rgba(255,255,255,0.7);">Cargando clasificados...</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FAB - Botón Guardar Flotante -->
+    <button class="fab-mobile" onclick="saveConfig()" title="Guardar cambios">
+        <i class="fas fa-save"></i>
+    </button>
+
+    <!-- Bottom Navigation (solo móvil) -->
+    <nav class="bottom-nav">
+        <div class="bottom-nav-items">
+            <a class="bottom-nav-item active" onclick="event.preventDefault(); showTab('moderacion');" href="#">
+                <i class="fas fa-video"></i>
+                <span>Moderación</span>
+            </a>
+            <a class="bottom-nav-item" onclick="event.preventDefault(); showTab('assets');" href="#">
+                <i class="fas fa-image"></i>
+                <span>Assets</span>
+            </a>
+            <a class="bottom-nav-item" onclick="event.preventDefault(); showTab('redes');" href="#">
+                <i class="fas fa-share-alt"></i>
+                <span>Redes</span>
+            </a>
+            <a class="bottom-nav-item" onclick="event.preventDefault(); showTab('config');" href="#">
+                <i class="fas fa-cog"></i>
+                <span>Config</span>
+            </a>
+            <a class="bottom-nav-item" onclick="event.preventDefault(); showTab('jurado');" href="#">
+                <i class="fas fa-gavel"></i>
+                <span>Jurado</span>
+            </a>
+        </div>
+    </nav>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Autoplay</label>
+                        <select id="config-autoplay" class="admin-input">
+                            <option value="true">Activado</option>
+                            <option value="false">Desactivado</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Intervalo (ms)</label>
+                        <input type="number" id="config-interval" class="admin-input" value="5000">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Mostrar Flechas</label>
+                        <select id="config-arrows" class="admin-input">
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold mb-2">Mostrar Indicadores</label>
+                        <select id="config-indicators" class="admin-input">
+                            <option value="true">Sí</option>
+                            <option value="false">No</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Guardar Cambios -->
+        <div class="fixed bottom-8 right-8">
+            <button onclick="saveConfig()" class="bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-8 rounded-full shadow-2xl transition transform hover:scale-105">
+                <i class="fas fa-save mr-2"></i> Guardar Cambios
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let currentConfig = null;
+        let currentUser = null;
+        let db = null;
+        let allVideos = [];
+        let currentFilter = 'pendiente';
+
+        // 🔒 CONFIGURACIÓN DE SEGURIDAD - CORREO AUTORIZADO
+        const AUTHORIZED_EMAIL = 'vytmusiconline@gmail.com'; // ← CAMBIAR POR TU EMAIL
+        
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', () => {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (!user) {
+                    console.warn('❌ No hay usuario autenticado');
+                    alert('Debes iniciar sesión como administrador');
+                    window.location.href = '/admin.html';
+                    return;
+                }
+                
+                // 🔐 SEGURIDAD: Verificar email autorizado
+                if (user.email !== AUTHORIZED_EMAIL) {
+                    console.error('🚫 Acceso denegado para:', user.email);
+                    alert('🚫 Acceso denegado. Este panel es solo para administradores autorizados.');
+                    await firebase.auth().signOut();
+                    window.location.href = '/index.html';
+                    return;
+                }
+                
+                currentUser = user;
+                db = firebase.firestore();
+                
+                // Verificar permisos de admin (doble verificación)
+                const isAdmin = await checkAdminStatus();
+                if (!isAdmin) {
+                    console.error('🚫 Usuario sin permisos de admin');
+                    alert('No tienes permisos de administrador');
+                    window.location.href = '/index.html';
+                    return;
+                }
+                
+                console.log('✅ Admin autenticado:', user.email);
+                console.log('🔑 UID:', user.uid);
+                
+                // Cargar configuración multimedia
+                await loadCurrentConfig();
+                
+                // Cargar videos de moderación
+                await loadAllVideos();
+                
+                // Setup listeners en tiempo real
+                setupRealtimeListeners();
+            });
+        });
+        
+        // Verificar status de admin
+        async function checkAdminStatus() {
+            try {
+                const idTokenResult = await currentUser.getIdTokenResult();
+                return idTokenResult.claims.admin === true;
+            } catch (error) {
+                console.error('Error verificando admin:', error);
+                return false;
+            }
+        }
+
+        // ============================================
+        // SECCIÓN: ASSETS WEB (Multimedia)
+        // ============================================
+        
+        // Cargar configuración al inicio
+        async function loadCurrentConfig() {
+            try {
+                showToast('Cargando configuración...', 'info');
+                
+                const timestamp = Date.now();
+                const response = await fetch(`/src/vyt-assets-config.json?v=${timestamp}`);
+                currentConfig = await response.json();
+                
+                renderBanners();
+                renderVideos();
+                renderSocial();
+                renderSliderConfig();
+                
+                showToast('✅ Configuración cargada', 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('❌ Error cargando configuración', 'error');
+            }
+        }
+
+        // Renderizar banners
+        function renderBanners() {
+            const container = document.getElementById('banners-list');
+            if (!currentConfig || !currentConfig.banners) return;
+
+            container.innerHTML = currentConfig.banners.map((banner, index) => `
+                <div class="admin-card">
+                    <div class="flex justify-between items-start mb-4">
+                        <h3 class="text-xl font-bold">Banner ${index + 1}</h3>
+                        <div class="flex gap-2">
+                            <button onclick="moveBanner(${index}, 'up')" class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                            <button onclick="moveBanner(${index}, 'down')" class="px-3 py-1 bg-blue-600 rounded hover:bg-blue-700">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                            <button onclick="deleteBanner(${index})" class="px-3 py-1 bg-red-600 rounded hover:bg-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Título</label>
+                            <input type="text" class="admin-input" value="${banner.title}" 
+                                   onchange="updateBanner(${index}, 'title', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Descripción</label>
+                            <input type="text" class="admin-input" value="${banner.description}"
+                                   onchange="updateBanner(${index}, 'description', this.value)">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold mb-2">URL de Imagen (Unsplash o propia)</label>
+                            <input type="url" class="admin-input" value="${banner.imageUrl}"
+                                   onchange="updateBanner(${index}, 'imageUrl', this.value); updatePreview${index}(this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Link Destino</label>
+                            <input type="text" class="admin-input" value="${banner.linkUrl}"
+                                   onchange="updateBanner(${index}, 'linkUrl', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Texto del Botón</label>
+                            <input type="text" class="admin-input" value="${banner.linkText}"
+                                   onchange="updateBanner(${index}, 'linkText', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Estado</label>
+                            <select class="admin-input" onchange="updateBanner(${index}, 'active', this.value === 'true')">
+                                <option value="true" ${banner.active ? 'selected' : ''}>Activo</option>
+                                <option value="false" ${!banner.active ? 'selected' : ''}>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="banner-preview" id="preview${index}" style="background-image: url('${banner.imageUrl}')">
+                        <div class="banner-overlay-preview" style="background: ${banner.overlayColor};">
+                            <h3 style="color: ${banner.textColor}; font-size: 2rem; font-weight: bold;">${banner.title}</h3>
+                            <p style="color: ${banner.textColor};">${banner.description}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function updatePreview${index}(url) {
+                        document.getElementById('preview${index}').style.backgroundImage = "url('" + url + "')";
+                    }
+                <\/script>
+            `).join('');
+        }
+
+        // Renderizar videos
+        function renderVideos() {
+            const container = document.getElementById('videos-list');
+            if (!currentConfig || !currentConfig.videos) return;
+
+            container.innerHTML = Object.entries(currentConfig.videos).map(([key, video]) => `
+                <div class="admin-card">
+                    <h3 class="text-xl font-bold mb-4">Video: ${key}</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Título</label>
+                            <input type="text" class="admin-input" value="${video.title}"
+                                   onchange="updateVideo('${key}', 'title', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">YouTube ID</label>
+                            <input type="text" class="admin-input" value="${video.youtubeId}"
+                                   onchange="updateVideo('${key}', 'youtubeId', this.value)">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-semibold mb-2">Descripción</label>
+                            <input type="text" class="admin-input" value="${video.description}"
+                                   onchange="updateVideo('${key}', 'description', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Estado</label>
+                            <select class="admin-input" onchange="updateVideo('${key}', 'active', this.value === 'true')">
+                                <option value="true" ${video.active ? 'selected' : ''}>Activo</option>
+                                <option value="false" ${!video.active ? 'selected' : ''}>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 aspect-video rounded-lg overflow-hidden">
+                        <iframe width="100%" height="100%" 
+                                src="https://www.youtube.com/embed/${video.youtubeId}"
+                                frameborder="0" allowfullscreen></iframe>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Renderizar redes sociales
+        function renderSocial() {
+            const container = document.getElementById('social-list');
+            if (!currentConfig || !currentConfig.redesSociales) return;
+
+            container.innerHTML = Object.entries(currentConfig.redesSociales).map(([key, network]) => `
+                <div class="admin-card">
+                    <div class="flex items-center gap-4 mb-4">
+                        <i class="${network.icon} text-3xl" style="color: ${network.color};"></i>
+                        <h3 class="text-xl font-bold capitalize">${key}</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Username</label>
+                            <input type="text" class="admin-input" value="${network.username}"
+                                   onchange="updateSocial('${key}', 'username', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">URL</label>
+                            <input type="url" class="admin-input" value="${network.url}"
+                                   onchange="updateSocial('${key}', 'url', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Seguidores</label>
+                            <input type="text" class="admin-input" value="${network.followers}"
+                                   onchange="updateSocial('${key}', 'followers', this.value)">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold mb-2">Estado</label>
+                            <select class="admin-input" onchange="updateSocial('${key}', 'enabled', this.value === 'true')">
+                                <option value="true" ${network.enabled ? 'selected' : ''}>Habilitado</option>
+                                <option value="false" ${!network.enabled ? 'selected' : ''}>Deshabilitado</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Renderizar config del slider
+        function renderSliderConfig() {
+            if (!currentConfig || !currentConfig.sliderConfig) return;
+
+            const config = currentConfig.sliderConfig;
+            document.getElementById('config-autoplay').value = config.autoplay;
+            document.getElementById('config-interval').value = config.interval;
+            document.getElementById('config-arrows').value = config.showArrows;
+            document.getElementById('config-indicators').value = config.showIndicators;
+        }
+
+        // Actualizar banner
+        function updateBanner(index, field, value) {
+            currentConfig.banners[index][field] = value;
+        }
+
+        // Actualizar video
+        function updateVideo(key, field, value) {
+            currentConfig.videos[key][field] = value;
+        }
+
+        // Actualizar red social
+        function updateSocial(key, field, value) {
+            currentConfig.redesSociales[key][field] = value;
+        }
+
+        // Mover banner
+        function moveBanner(index, direction) {
+            const newIndex = direction === 'up' ? index - 1 : index + 1;
+            if (newIndex < 0 || newIndex >= currentConfig.banners.length) return;
+
+            [currentConfig.banners[index], currentConfig.banners[newIndex]] = 
+            [currentConfig.banners[newIndex], currentConfig.banners[index]];
+
+            currentConfig.banners.forEach((b, i) => b.order = i + 1);
+            renderBanners();
+        }
+
+        // Eliminar banner
+        function deleteBanner(index) {
+            if (!confirm('¿Eliminar este banner?')) return;
+            currentConfig.banners.splice(index, 1);
+            renderBanners();
+        }
+
+        // Agregar nuevo banner
+        function addNewBanner() {
+            currentConfig.banners.push({
+                id: `banner-${Date.now()}`,
+                title: 'Nuevo Banner',
+                description: 'Descripción',
+                imageUrl: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1920&q=80',
+                linkUrl: '/',
+                linkText: 'Ver más',
+                active: true,
+                order: currentConfig.banners.length + 1,
+                overlayColor: 'rgba(0, 0, 0, 0.4)',
+                textColor: '#ffffff'
+            });
+            renderBanners();
+        }
+
+        // Guardar configuración
+        async function saveConfig() {
+            try {
+                // Actualizar slider config
+                currentConfig.sliderConfig.autoplay = document.getElementById('config-autoplay').value === 'true';
+                currentConfig.sliderConfig.interval = parseInt(document.getElementById('config-interval').value);
+                currentConfig.sliderConfig.showArrows = document.getElementById('config-arrows').value === 'true';
+                currentConfig.sliderConfig.showIndicators = document.getElementById('config-indicators').value === 'true';
+
+                // Actualizar timestamp
+                currentConfig._meta.lastUpdate = new Date().toISOString();
+
+                // Mostrar JSON en consola para copiarlo manualmente
+                console.log('📋 Copiar este JSON y guardarlo en src/vyt-assets-config.json:');
+                console.log(JSON.stringify(currentConfig, null, 2));
+
+                showToast('✅ Config actualizada - Ver consola para copiar JSON', 'success');
+
+                // Limpiar cache automáticamente
+                localStorage.removeItem('vyt_assets_cache_v1');
+                
+                // Ofrecer descarga
+                downloadConfig();
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('❌ Error guardando configuración', 'error');
+            }
+        }
+
+        // Descargar config como JSON
+        function downloadConfig() {
+            const dataStr = JSON.stringify(currentConfig, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(dataBlob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'vyt-assets-config.json';
+            link.click();
+            URL.revokeObjectURL(url);
+            showToast('📥 Archivo descargado', 'success');
+        }
+
+        // Limpiar cache y recargar
+        async function clearCacheAndReload() {
+            localStorage.removeItem('vyt_assets_cache_v1');
+            showToast('🗑️ Caché limpiado', 'success');
+            await loadCurrentConfig();
+        }
+
+        // Mostrar tabs
+        // Mostrar tabs (sincroniza top tabs y bottom nav)
+        function showTab(tab) {
+            // Ocultar todos los contenidos
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Mostrar contenido seleccionado
+            document.getElementById(`content-${tab}`).style.display = 'block';
+            
+            // Actualizar tabs superiores
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            
+            // Actualizar bottom navigation
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            const navItems = document.querySelectorAll('.bottom-nav-item');
+            const tabIndex = {'moderacion': 0, 'assets': 1, 'redes': 2, 'config': 3, 'jurado': 4};
+            if (navItems[tabIndex[tab]]) {
+                navItems[tabIndex[tab]].classList.add('active');
+            }
+            
+            // Inicializar panel de jurado si es necesario
+            if (tab === 'jurado' && window.juradoPanelInstance) {
+                console.log('🎭 Cargando panel de jurado...');
+                window.juradoPanelInstance.loadClasificados(window.juradoPanelInstance.currentZona || 'todas');
+            }
+        }
+
+        // Filtrar videos con chips mobile
+        function filterVideos(filter) {
+            currentFilter = filter;
+            
+            // Update chips
+            document.querySelectorAll('.chip-mobile').forEach(chip => {
+                chip.classList.remove('active');
+            });
+            document.getElementById(`filter-chip-${filter}`).classList.add('active');
+            
+            let filtered;
+            if (filter === 'all') {
+                filtered = allVideos;
+            } else if (filter === 'pendiente') {
+                filtered = allVideos.filter(v => v.estado === 'pendiente' || v.estado === 'pendiente_revision');
+            } else {
+                filtered = allVideos.filter(v => v.estado === filter);
+            }
+            
+            renderModeracionVideos(filtered);
+        }
+
+        // ============================================
+        // SECCIÓN: MODERACIÓN DE CERTÁMENES
+        // ============================================
+        
+        // Cargar todos los videos
+        async function loadAllVideos() {
+            showLoading('Cargando videos...');
+            
+            try {
+                const snapshot = await db.collection('participaciones')
+                    .orderBy('fechaSubida', 'desc')
+                    .get();
+                
+                allVideos = [];
+                snapshot.forEach(doc => {
+                    allVideos.push({
+                        id: doc.id,
+                        ...doc.data()
+                    });
+                });
+                
+                updateStats();
+                filterVideos(currentFilter);
+                hideLoading();
+                
+            } catch (error) {
+                console.error('Error cargando videos:', error);
+                hideLoading();
+                showToast('Error al cargar videos', 'error', 3000);
+            }
+        }
+        
+        // Actualizar estadísticas
+        function updateStats() {
+            const pending = allVideos.filter(v => v.estado === 'pendiente' || v.estado === 'pendiente_revision').length;
+            const approved = allVideos.filter(v => v.estado === 'activo').length;
+            const rejected = allVideos.filter(v => v.estado === 'rechazado').length;
+            
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('approvedCount').textContent = approved;
+            document.getElementById('rejectedCount').textContent = rejected;
+        }
+        
+        // Filtrar videos
+        function filterVideos(filter) {
+            currentFilter = filter;
+            
+            // Update active button
+            document.querySelectorAll('[id^="filter-"]').forEach(btn => {
+                btn.classList.remove('ring-2', 'ring-white');
+            });
+            document.getElementById(`filter-${filter}`).classList.add('ring-2', 'ring-white');
+            
+            let filtered;
+            if (filter === 'all') {
+                filtered = allVideos;
+            } else if (filter === 'pendiente') {
+                filtered = allVideos.filter(v => v.estado === 'pendiente' || v.estado === 'pendiente_revision');
+            } else {
+                filtered = allVideos.filter(v => v.estado === filter);
+            }
+            
+            renderModeracionVideos(filtered);
+        }
+        
+        // Renderizar videos de moderación
+        // Renderizar videos de moderación (Mobile-First)
+        function renderModeracionVideos(videos) {
+            const grid = document.getElementById('videosGrid');
+            
+            if (!videos || videos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state-mobile">
+                        <i class="fas fa-video-slash"></i>
+                        <h3>No hay videos</h3>
+                        <p>Los videos ${currentFilter === 'all' ? 'aparecerán aquí' : currentFilter + 's aparecerán aquí'}</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            grid.innerHTML = videos.map(video => createVideoCardMobile(video)).join('');
+        }
+        
+        // Crear card de video mobile-first
+        function createVideoCardMobile(video) {
+            const statusBadge = {
+                'pendiente': { class: 'badge-pendiente', text: 'Pendiente', icon: 'clock' },
+                'pendiente_revision': { class: 'badge-pendiente', text: 'Pendiente', icon: 'clock' },
+                'activo': { class: 'badge-activo', text: 'Aprobado', icon: 'check' },
+                'rechazado': { class: 'badge-rechazado', text: 'Rechazado', icon: 'times' }
+            };
+            
+            const status = statusBadge[video.estado] || statusBadge['pendiente'];
+            const isPending = video.estado === 'pendiente' || video.estado === 'pendiente_revision';
+            
+            return `
+                <div class="video-card-mobile">
+                    <img 
+                        src="https://img.youtube.com/vi/${video.videoId}/mqdefault.jpg" 
+                        alt="${video.titulo}"
+                        class="video-thumbnail-mobile"
+                        onerror="this.src='https://via.placeholder.com/400x225/1a1a1f/666?text=Video'"
+                    >
+                    
+                    <div class="video-info-mobile">
+                        <h3 class="video-title-mobile">${video.titulo}</h3>
+                        
+                        <div class="video-meta-mobile">
+                            <span class="badge-mobile ${status.class}">
+                                <i class="fas fa-${status.icon}"></i> ${status.text}
+                            </span>
+                            ${video.categoria ? `<span><i class="fas fa-tag"></i> ${video.categoria}</span>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div class="btn-group-mobile">
+                        <button 
+                            onclick="window.open('https://youtube.com/watch?v=${video.videoId}', '_blank')"
+                            class="btn-mobile btn-view"
+                        >
+                            <i class="fas fa-play"></i>
+                        </button>
+                        
+                        ${isPending ? `
+                            <button 
+                                onclick="approveVideo('${video.id}')"
+                                class="btn-mobile btn-approve"
+                            >
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button 
+                                onclick="rejectVideo('${video.id}')"
+                                class="btn-mobile btn-reject"
+                            >
+                                <i class="fas fa-times"></i>
+                            </button>
+                        ` : `
+                            <div style="grid-column: span 2; display: flex; align-items: center; justify-content: center; color: rgba(255, 255, 255, 0.4); font-size: 0.875rem;">
+                                <i class="fas fa-info-circle" style="margin-right: 0.5rem;"></i>
+                                ${status.text}
+                            </div>
+                        `}
+                    </div>
+                </div>
+            `;
+        } 
+                                onclick="rejectVideo('${video.id}')"
+                                class="btn-rechazar text-sm"
+                                title="Rechazar"
+                            >
+                                <i class="fas fa-times"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Aprobar video (con webhook para pago)
+        async function approveVideo(videoId) {
+            if (!confirm('¿Aprobar este video para el certamen?\n\nSe enviará el link de pago al artista.')) return;
+            
+            showLoading('Aprobando video y generando link de pago...');
+            
+            try {
+                // 1. Obtener datos completos del video y artista
+                const videoDoc = await db.collection('participaciones').doc(videoId).get();
+                const videoData = { id: videoId, ...videoDoc.data() };
+                
+                // Obtener datos del artista
+                const artistaDoc = await db.collection('artist_profiles').doc(videoData.uid).get();
+                const userData = artistaDoc.exists() ? artistaDoc.data() : {
+                    uid: videoData.uid,
+                    nombre_artista: videoData.nombreArtista,
+                    email: videoData.email,
+                    telefono: videoData.telefono
+                };
+                
+                // 2. Cambiar estado a "waiting_payment" primero
+                await db.collection('participaciones').doc(videoId).update({
+                    estado: 'waiting_payment',
+                    fechaAprobacion: firebase.firestore.FieldValue.serverTimestamp(),
+                    aprobadoPor: currentUser.uid,
+                    aprobadoPorEmail: currentUser.email
+                });
+                
+                console.log('✅ Estado cambiado a waiting_payment');
+                
+                // 3. Disparar webhook de n8n para generar link de pago
+                if (window.automationBridge) {
+                    console.log('🔌 Disparando webhook de aprobación...');
+                    const webhookResult = await window.automationBridge.onVideoApproved(videoData, userData);
+                    
+                    if (webhookResult.success) {
+                        console.log('✅ Webhook ejecutado:', webhookResult);
+                        
+                        hideLoading();
+                        showToast('¡Video aprobado! Link de pago enviado al artista 💳', 'success', 4000);
+                        celebrate();
+                        
+                        // Mostrar link de pago si existe
+                        if (webhookResult.payment_link) {
+                            console.log('💳 Link de pago:', webhookResult.payment_link);
+                            
+                            // Opcional: Mostrar modal con link
+                            if (confirm('¿Quieres copiar el link de pago al portapapeles?')) {
+                                navigator.clipboard.writeText(webhookResult.payment_link);
+                                showToast('Link copiado al portapapeles', 'info', 2000);
+                            }
+                        }
+                    } else {
+                        console.warn('⚠️ Webhook falló:', webhookResult.error);
+                        showToast('Video aprobado, pero el webhook falló. Envía link manualmente.', 'warning', 4000);
+                    }
+                } else {
+                    console.warn('⚠️ Automation Bridge no disponible');
+                    hideLoading();
+                    showToast('Video aprobado (webhooks desactivados)', 'success', 3000);
+                }
+                
+                // 4. Recargar lista
+                await loadAllVideos();
+                
+            } catch (error) {
+                console.error('❌ Error aprobando video:', error);
+                hideLoading();
+                showToast('Error al aprobar video: ' + error.message, 'error', 4000);
+            }
+        }
+        
+        // Rechazar video (con webhook para notificación)
+        async function rejectVideo(videoId) {
+            const motivo = prompt('Motivo del rechazo (será enviado al artista):');
+            if (motivo === null) return; // Usuario canceló
+            
+            if (!motivo.trim()) {
+                alert('Debes especificar un motivo de rechazo');
+                return;
+            }
+            
+            showLoading('Rechazando video y notificando al artista...');
+            
+            try {
+                // 1. Obtener datos del video y artista
+                const videoDoc = await db.collection('participaciones').doc(videoId).get();
+                const videoData = { id: videoId, ...videoDoc.data() };
+                
+                const artistaDoc = await db.collection('artist_profiles').doc(videoData.uid).get();
+                const userData = artistaDoc.exists() ? artistaDoc.data() : {
+                    uid: videoData.uid,
+                    nombre_artista: videoData.nombreArtista,
+                    email: videoData.email,
+                    telefono: videoData.telefono
+                };
+                
+                // 2. Actualizar estado a rechazado
+                await db.collection('participaciones').doc(videoId).update({
+                    estado: 'rechazado',
+                    fechaRechazo: firebase.firestore.FieldValue.serverTimestamp(),
+                    rechazadoPor: currentUser.uid,
+                    rechazadoPorEmail: currentUser.email,
+                    motivoRechazo: motivo.trim()
+                });
+                
+                console.log('✅ Estado cambiado a rechazado');
+                
+                // 3. Disparar webhook para notificar al artista
+                if (window.automationBridge) {
+                    console.log('🔌 Disparando webhook de rechazo...');
+                    const webhookResult = await window.automationBridge.onVideoRejected(videoData, userData, motivo);
+                    
+                    if (webhookResult.success) {
+                        console.log('✅ Webhook ejecutado:', webhookResult);
+                        hideLoading();
+                        showToast('Video rechazado. Artista notificado por email/WhatsApp', 'info', 4000);
+                    } else {
+                        console.warn('⚠️ Webhook falló:', webhookResult.error);
+                        hideLoading();
+                        showToast('Video rechazado (webhook falló, notifica manualmente)', 'warning', 4000);
+                    }
+                } else {
+                    console.warn('⚠️ Automation Bridge no disponible');
+                    hideLoading();
+                    showToast('Video rechazado (webhooks desactivados)', 'error', 2000);
+                }
+                
+                // 4. Recargar lista
+                await loadAllVideos();
+                
+            } catch (error) {
+                console.error('❌ Error rechazando video:', error);
+                hideLoading();
+                showToast('Error al rechazar video: ' + error.message, 'error', 4000);
+            }
+        }
+        
+        // Setup realtime listeners
+        function setupRealtimeListeners() {
+            db.collection('participaciones')
+                .where('estado', 'in', ['pendiente', 'pendiente_revision'])
+                .onSnapshot((snapshot) => {
+                    snapshot.docChanges().forEach((change) => {
+                        if (change.type === 'added') {
+                            showToast('Nuevo video pendiente de revisión', 'info', 3000);
+                            loadAllVideos();
+                        }
+                    });
+                });
+        }
+
+        // Toast notification
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `<span style="font-weight: 600;">${message}</span>`;
+            document.body.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 3000);
+        }
+
+        // Cargar al iniciar
+        loadCurrentConfig();
+    </script>
+</body>
+</html>
