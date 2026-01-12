@@ -155,8 +155,7 @@ exports.triggerYouTubeUpload = onDocumentUpdated('participaciones/{participacion
         });
       }
     }
-  }
-});
+  });
 
 // ===== ENDPOINT 2: WEBHOOK DE ENTRADA (n8n → Firebase) =====
 
