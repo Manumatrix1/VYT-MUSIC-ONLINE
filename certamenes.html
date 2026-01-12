@@ -313,8 +313,8 @@
             
             <!-- Card 1: Pop Nacional -->
             <div class="certamen-card card-3d fade-in-up shine-effect" data-category="pop" style="animation-delay: 0.1s;">
-                <div style="position: absolute; top: 16px; right: 16px;">
-                    <span class="status-badge" style="background: linear-gradient(135deg, #10B981, #059669); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #10B981, #059669); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25); backdrop-filter: blur(8px);">
                         ⚡ Abierto
                     </span>
                 </div>
@@ -360,8 +360,8 @@
 
             <!-- Card 2: Rock Regional -->
             <div class="certamen-card card-3d fade-in-up shine-effect" data-category="rock" style="animation-delay: 0.2s;">
-                <div style="position: absolute; top: 16px; right: 16px;">
-                    <span class="status-badge" style="background: linear-gradient(135deg, #F59E0B, #D97706); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+                <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #F59E0B, #D97706); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25); backdrop-filter: blur(8px);">
                         🔜 Próximamente
                     </span>
                 </div>
@@ -402,8 +402,8 @@
 
             <!-- Card 3: Folklore Tradicional -->
             <div class="certamen-card card-3d fade-in-up shine-effect" data-category="folklore" style="animation-delay: 0.3s;">
-                <div style="position: absolute; top: 16px; right: 16px;">
-                    <span class="status-badge" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);">
+                <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25); backdrop-filter: blur(8px);">
                         🎵 En Curso
                     </span>
                 </div>
@@ -462,15 +462,15 @@
             const user = firebase.auth().currentUser;
             
             if (!user) {
-                console.log('⚠️ Usuario no autenticado - Redirigiendo a login');
-                window.location.href = 'index.html?action=login';
+                console.log('⚠️ Usuario no autenticado - Redirigiendo a Comenzar Ahora');
+                window.location.href = 'index.html#comenzar-ahora';
                 return;
             }
             
             console.log('✅ Usuario autenticado:', user.email);
             
-            // Si está logueado, también redirigir con action=login para que verifique perfil
-            window.location.href = 'index.html?action=login';
+            // Si está logueado, verificar perfil y continuar con inscripción
+            window.location.href = 'inscripcion-unificada.html';
         }
 
         // FUNCIONES DEL MENÚ
