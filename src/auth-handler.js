@@ -238,8 +238,10 @@ class AuthHandler {
     // Actualizar UI según estado de autenticación
     updateUIForLoggedUser() {
         // Actualizar menú hamburguesa con opciones de usuario logueado
-        if (window.vytNavigation) {
+        if (typeof window.vytNavigation !== 'undefined' && window.vytNavigation) {
             window.vytNavigation.updateMenuForUser(this.userType, this.user);
+        } else {
+            console.warn('⚠️ vytNavigation no está disponible aún');
         }
 
         // Ocultar botones de login

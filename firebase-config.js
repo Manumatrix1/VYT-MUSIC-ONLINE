@@ -74,8 +74,14 @@ function initializeFirebase() {
         }
 
         try {
-            storage = firebase.storage();
-            console.log('✅ Firebase Storage inicializado');
+            if (typeof firebase.storage === 'function') {
+                storage = firebase.storage();
+                console.log('✅ Firebase Storage inicializado');
+                // Exponer globalmente para evitar errores "is not a function"
+                window.firebaseStorage = storage;
+            } else {
+                console.warn('⚠️ Firebase Storage no disponible en este SDK');
+            }
         } catch (storageError) {
             console.error('❌ Error al inicializar Storage:', storageError);
         }
