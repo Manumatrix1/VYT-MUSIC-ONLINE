@@ -4,15 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VYT Music - Iniciar Sesión</title>
-    <script>
-        // Redirigir al index que tiene el modal de login completo
-        window.location.replace('index.html#login');
-    </script>
-</head>
-<body>
-    <p style="text-align: center; padding: 50px; color: #666;">Redirigiendo...</p>
-</body>
-</html>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Inicia sesión en VYT Music">
+    <meta name="theme-color" content="#667eea">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    
+    <!-- Design Tokens - Sistema Unificado -->
+    <link rel="stylesheet" href="/design-tokens.css">
+    
+    <!-- Google Analytics 4 - Descomentar y configurar ID -->
+    <!-- <script src="/src/google-analytics.js"></script> -->
+    <!-- <script src="/src/recaptcha.js"></script> -->
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
         body {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -292,12 +300,9 @@
 
     <div class="login-container">
         <div class="logo-section">
-            <img src="https://i.ibb.co/TcFydZg/1-2-Logo.png" alt="VYT Music">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" style="filter: brightness(0);">
             <h1>¡Bienvenido! 🎵</h1>
             <p>Inicia sesión para continuar</p>
-            <div style="background: #00ff00; color: #000; padding: 10px; margin-top: 10px; border-radius: 8px; font-weight: bold; text-align: center;">
-                ✅ VERSIÓN ACTUALIZADA - 7 ENE 2026 - 15:30
-            </div>
         </div>
 
         <!-- Alerta de mensajes -->

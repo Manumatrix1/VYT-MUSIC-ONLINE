@@ -14,6 +14,9 @@
     <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
     <link rel="manifest" href="/manifest.json">
     
+    <!-- Design Tokens - Sistema Unificado -->
+    <link rel="stylesheet" href="/design-tokens.css">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,13 +32,25 @@
     
     <style>
         body {
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
             font-family: 'Roboto', sans-serif;
             color: white;
             overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        /* Fondo mejorado con imagen y overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(26, 26, 46, 0.92) 0%, rgba(0, 0, 0, 0.85) 100%),
+                url('https://i.ibb.co/VwjC8mq/fondo-vyt.jpg') center/cover no-repeat fixed;
+            z-index: -1;
         }
 
         .form-card {
@@ -173,14 +188,36 @@
             background: rgba(59, 130, 246, 0.2);
             border-color: #3B82F6;
         }
+        
+        /* Animación del logo */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .logo-header {
+            animation: fadeInDown 0.8s ease-out;
+        }
     </style>
 </head>
 <body>
     <div class="min-h-screen py-8">
         <!-- Header -->
-        <header class="text-center mb-12">
-            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-32 mx-auto mb-4">
-            <h1 class="text-4xl font-bold text-white mb-4">🎤 Crear tu Perfil de Artista</h1>
+        <header class="text-center mb-12 logo-header">
+            <div class="relative inline-block mb-6">
+                <div class="absolute inset-0 bg-purple-500/30 blur-3xl rounded-full"></div>
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-40 h-40 mx-auto relative z-10 drop-shadow-2xl">
+            </div>
+            <h1 class="text-5xl font-black text-white mb-4 drop-shadow-lg" style="font-family: 'Montserrat', sans-serif;">
+                <i class="fas fa-microphone-alt mr-3 text-purple-400"></i>
+                Crear tu Perfil de Artista
+            </h1>
             <p class="text-gray-300 text-lg max-w-2xl mx-auto">
                 Completa tu perfil para participar en los certámenes de VYT Music. 
                 Tus datos nos ayudan a conocer la demanda de cada ciudad.
@@ -204,6 +241,9 @@
                     <span>Ubicación</span>
                 </div>
             </div>
+
+            <!-- Contenedor de alertas -->
+            <div id="alertContainer" class="hidden mb-4 p-4 rounded-xl text-center font-semibold"></div>
 
             <form id="artist-profile-form">
                 <!-- Sección 1: Datos Básicos -->
@@ -477,7 +517,8 @@
         // Sistema de pasos
         let currentStep = 1;
 
-        function nextStep(step) {
+        // Hacer funciones globales
+        window.nextStep = function(step) {
             // Validar paso actual antes de continuar
             if (currentStep === 1 && step === 2) {
                 // Validar paso 1: Datos Básicos
@@ -531,7 +572,7 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function prevStep(step) {
+        window.prevStep = function(step) {
             document.getElementById(`step-${currentStep}`).classList.add('hidden');
             document.getElementById(`step-${step}`).classList.remove('hidden');
             
@@ -866,6 +907,33 @@
             }, 3000);
         }
 
+        // Función para mostrar alertas
+        const alertContainer = document.getElementById('alertContainer');
+        console.log('🎯 alertContainer encontrado:', !!alertContainer);
+        
+        function showAlert(message, type = 'error') {
+            console.log('🔔 showAlert llamada con:', message, type);
+            console.log('📦 alertContainer existe:', !!alertContainer);
+            
+            if (!alertContainer) {
+                console.error('❌ alertContainer NO EXISTE!');
+                alert(message); // Fallback a alert nativo
+                return;
+            }
+            
+            alertContainer.className = type === 'error' 
+                ? 'mb-4 p-4 rounded-xl text-center font-semibold bg-red-500/20 border-2 border-red-500 text-white'
+                : 'mb-4 p-4 rounded-xl text-center font-semibold bg-green-500/20 border-2 border-green-500 text-white';
+            alertContainer.textContent = message;
+            alertContainer.classList.remove('hidden');
+            console.log('✅ Alerta mostrada, clases:', alertContainer.className);
+            
+            // Auto-ocultar después de 5 segundos
+            setTimeout(() => {
+                alertContainer.classList.add('hidden');
+            }, 5000);
+        }
+
         // Manejo del formulario - AHORA CREA CUENTA + PERFIL
         document.getElementById('artist-profile-form').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -975,6 +1043,9 @@
                 
                 // Mostrar modal simple
                 showEmailSentModal(user.email);
+            } catch (emailError) {
+                console.warn('Error enviando email de verificación:', emailError);
+            }
             
             // Datos básicos
             artistData.email = email;
@@ -1117,11 +1188,36 @@
                 submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Crear mi Perfil de Artista';
                 
                 let errorMessage = '';
-                let showLoginOption = false;
                 
                 if (error.code === 'auth/email-already-in-use') {
-                    errorMessage = '⚠️ Este email ya está registrado';
-                    showLoginOption = true;
+                    console.log('🚨🚨🚨 EMAIL YA REGISTRADO:', email);
+                    console.log('🚨 Error completo:', error);
+                    errorMessage = '⚠️ Este email ya está registrado. Si ya tienes cuenta, puedes iniciar sesión o recuperar tu contraseña.';
+                    console.log('🔔 Llamando a showAlert...');
+                    showAlert(errorMessage);
+                    console.log('✅ showAlert ejecutado');
+                    
+                    // Agregar botones de acción debajo de la alerta
+                    setTimeout(() => {
+                        const actionButtons = document.createElement('div');
+                        actionButtons.className = 'flex gap-3 justify-center mt-4 mb-4';
+                        actionButtons.innerHTML = `
+                            <a href="login.html" 
+                               class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl transition-all">
+                                <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
+                            </a>
+                            <a href="reset-password.html" 
+                               class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl transition-all">
+                                <i class="fas fa-key mr-2"></i> Recuperar Contraseña
+                            </a>
+                        `;
+                        alertContainer.parentNode.insertBefore(actionButtons, alertContainer.nextSibling);
+                        
+                        // Remover botones después de 10 segundos
+                        setTimeout(() => actionButtons.remove(), 10000);
+                    }, 100);
+                    
+                    return;
                 } else if (error.code === 'auth/invalid-email') {
                     errorMessage = '⚠️ Email inválido';
                 } else if (error.code === 'auth/weak-password') {
@@ -1130,65 +1226,10 @@
                     errorMessage = '❌ Error al crear la cuenta: ' + error.message;
                 }
                 
-                // Mostrar modal de error con opciones
-                showErrorModal(errorMessage, showLoginOption);
+                // Mostrar alerta de error
+                showAlert(errorMessage);
             }
         });
-        
-        // Modal de error con opciones
-        function showErrorModal(message, showLoginOption) {
-            const modal = document.createElement('div');
-            modal.id = 'errorModal';
-            modal.innerHTML = `
-                <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
-                    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); border-radius: 24px; padding: 40px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.9);">
-                        
-                        <div style="font-size: 64px; margin-bottom: 20px;">❌</div>
-                        
-                        <h2 style="color: white; font-size: 28px; font-weight: bold; margin-bottom: 15px;">
-                            ${message}
-                        </h2>
-                        
-                        ${showLoginOption ? `
-                            <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin-bottom: 25px; line-height: 1.6;">
-                                Parece que ya tenés una cuenta con este email.<br>
-                                ¿Querés iniciar sesión?
-                            </p>
-                            
-                            <div style="display: flex; gap: 15px; margin-top: 30px;">
-                                <a href="login.html" 
-                                   style="flex: 1; background: white; color: #ef4444; padding: 15px; border-radius: 12px; 
-                                          font-weight: bold; font-size: 16px; text-decoration: none; display: block;
-                                          transition: all 0.3s;">
-                                    <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
-                                </a>
-                                <a href="reset-password.html" 
-                                   style="flex: 1; background: rgba(255,255,255,0.2); color: white; padding: 15px; border-radius: 12px; 
-                                          font-weight: bold; font-size: 16px; text-decoration: none; display: block; border: 2px solid white;
-                                          transition: all 0.3s;">
-                                    <i class="fas fa-key mr-2"></i> Recuperar Contraseña
-                                </a>
-                            </div>
-                            
-                            <button onclick="document.getElementById('errorModal').remove()" 
-                                    style="width: 100%; background: rgba(255,255,255,0.15); color: white; padding: 12px; border-radius: 10px; 
-                                           border: none; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 15px;">
-                                Intentar con otro email
-                            </button>
-                        ` : `
-                            <button onclick="document.getElementById('errorModal').remove()" 
-                                    style="width: 100%; background: white; color: #ef4444; padding: 15px; border-radius: 12px; 
-                                           border: none; font-weight: bold; font-size: 18px; cursor: pointer; margin-top: 25px;">
-                                Cerrar
-                            </button>
-                        `}
-                        
-                    </div>
-                </div>
-            `;
-            
-            document.body.appendChild(modal);
-        }
         
         // 📧 Modal simple - Email enviado
         function showEmailSentModal(emailAddress) {
@@ -1470,18 +1511,30 @@
                 });
             }
             
-            // NO verificar autenticación previa, permitir registro nuevo
+            // Verificar si ya hay usuario autenticado y redirigir
             firebase.auth().onAuthStateChanged((user) => {
                 if (user && user.emailVerified) {
                     console.log('✅ Usuario ya autenticado y verificado:', user.email);
-                    // Pre-llenar email si existe
-                    const emailInput = document.querySelector('input[name="email"]');
-                    if (emailInput && user.email) {
-                        emailInput.value = user.email;
-                        emailInput.readOnly = true; // No permitir cambiar
-                    }
+                    // Verificar si ya tiene perfil de artista
+                    firebase.firestore().collection('artist_profiles').doc(user.uid).get()
+                        .then(doc => {
+                            if (doc.exists) {
+                                console.log('Usuario ya tiene perfil, redirigiendo...');
+                                alert('✅ Ya tenés un perfil de artista creado.\n\nTe vamos a redirigir a tu perfil.');
+                                window.location.href = 'perfil-artista.html';
+                            } else {
+                                console.log('Usuario sin perfil, puede crear uno nuevo');
+                                // Pre-llenar email
+                                const emailInput = document.querySelector('input[name="email"]');
+                                if (emailInput && user.email) {
+                                    emailInput.value = user.email;
+                                    emailInput.readOnly = true;
+                                }
+                            }
+                        });
                 } else if (user && !user.emailVerified) {
                     console.log('⚠️ Usuario autenticado pero email NO verificado');
+                    alert('⚠️ Tu email aún no está verificado.\n\nPor favor, revisá tu correo y hacé click en el link de verificación.');
                 } else {
                     console.log('📝 Formulario listo para nuevo registro');
                 }

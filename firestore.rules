@@ -191,6 +191,18 @@ service cloud.firestore {
       allow read, write: if true;
     }
     
+    // ===== REGLAS PARA VYT MONEY =====
+    match /user_vyt_money/{userId} {
+      // Los usuarios pueden leer solo su propio balance
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Solo el sistema (Cloud Functions) puede escribir
+      allow write: if false;
+      
+      // Los admins pueden leer todos los balances
+      allow read: if isAdmin();
+    }
+    
     // ===== FUNCIONES AUXILIARES =====
     
     // Verificar si el usuario es administrador

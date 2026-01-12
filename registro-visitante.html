@@ -4,15 +4,66 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrarse como Visitante - VYT MUSIC</title>
+    
+    <!-- Design Tokens - Sistema Unificado -->
+    <link rel="stylesheet" href="/design-tokens.css">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             font-family: 'Roboto', sans-serif;
             min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Fondo con imagen y overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%),
+                url('https://i.ibb.co/VwjC8mq/fondo-vyt.jpg') center/cover no-repeat;
+            z-index: -1;
+        }
+        
+        /* Logo con efecto */
+        .logo-container {
+            animation: fadeInDown 0.8s ease-out;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Formulario con animación */
+        .form-container {
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -20,14 +71,17 @@
 
     <div class="w-full max-w-md">
         <!-- Logo -->
-        <div class="text-center mb-8">
-            <img src="https://i.ibb.co/TcFydZg/1-2-Logo.png" alt="VYT Music" class="w-24 h-24 mx-auto mb-4">
-            <h1 class="text-4xl font-black text-white mb-2">¡Bienvenido!</h1>
-            <p class="text-white/90 text-lg">Creá tu cuenta de Visitante</p>
+        <div class="text-center mb-8 logo-container">
+            <div class="relative inline-block">
+                <div class="absolute inset-0 bg-white/20 blur-2xl rounded-full"></div>
+                <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-32 h-32 mx-auto mb-4 relative z-10 drop-shadow-2xl">
+            </div>
+            <h1 class="text-5xl font-black text-white mb-3 drop-shadow-lg" style="font-family: 'Montserrat', sans-serif;">¡Bienvenido!</h1>
+            <p class="text-white/90 text-xl font-medium">Creá tu cuenta de Visitante</p>
         </div>
 
         <!-- Formulario -->
-        <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20">
+        <div class="bg-white/10 backdrop-blur-lg rounded-3xl p-8 shadow-2xl border border-white/20 form-container">
             
             <div id="alertContainer" class="hidden mb-4 p-4 rounded-xl text-center font-semibold"></div>
 
