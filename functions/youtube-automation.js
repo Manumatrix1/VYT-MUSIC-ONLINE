@@ -5,23 +5,31 @@
  * Flujo: Firebase Storage → n8n → YouTube → Firestore → Activación de votos
  * 
  * Fecha: 12 de Enero 2026
- * Versión: 1.0.0
+ * Versión: 1.0.0 - Compatible con Functions v7
  */
 
-const functions = require('firebase-functions');
+const { onRequest, onCall } = require('firebase-functions/v2/https');
+const { onDocumentUpdated } = require('firebase-functions/v2/firestore');
+const { defineString } = require('firebase-functions/params');
 const admin = require('firebase-admin');
 const axios = require('axios');
 const crypto = require('crypto');
 
 const db = admin.firestore();
 
-// ===== CONFIGURACIÓN =====
+// ===== CONFIGURACIÓN (Environment Parameters v2) =====
 
-// URL del webhook de n8n (se configurará en variables de entorno)
-const N8N_WEBHOOK_URL = functions.config().n8n?.webhook_url || process.env.N8N_WEBHOOK_URL || 'https://n8n.vyt-music.com/webhook/youtube-upload';
+// URL del webhook de n8n
+const N8N_WEBHOOK_URL = defineString('N8N_WEBHOOK_URL', {
+  description: 'URL del webhook de n8n para subir videos a YouTube',
+  default: 'https://n8n.vyt-music.com/webhook/youtube-upload'
+});
 
-// Token secreto para autenticar callbacks desde n8n
-const N8N_SECRET_TOKEN = functions.config().n8n?.secret_token || process.env.N8N_SECRET_TOKEN || 'CHANGE_ME_IN_PRODUCTION';
+// Token secreto para autenticar callbacks
+const N8N_SECRET_TOKEN = defineString('N8N_SECRET_TOKEN', {
+  description: 'Token secreto para firmar webhooks de n8n',
+  default: 'CHANGE_ME_IN_PRODUCTION'
+});
 
 // ===== FUNCIONES DE UTILIDAD =====
 
@@ -58,11 +66,11 @@ function validateWebhookSignature(payload, signature, secret) {
  * 3. Envía datos a n8n: nombre, video_url, zona, email
  * 4. n8n descarga el video, lo sube a YouTube y llama al callback
  */
-exports.triggerYouTubeUpload = functions.firestore
-  .document('participaciones/{participacionId}')
-  .onUpdate(async (change, context) => {
-    const antes = change.before.data();
-    const despues = change.after.data();
+exports.triggerYouTubeUpload = onDocumentUpdated('participaciones/{participacionId}', async (event) => {
+  const change = event.data;
+  const context = event;
+  const antes = change.before.data();
+  const despues = change.after.data();
     
     // Solo disparar cuando el estado cambie de 'waiting_payment' a 'paid'
     if (antes.estado === 'waiting_payment' && despues.estado === 'paid') {
@@ -98,10 +106,10 @@ exports.triggerYouTubeUpload = functions.firestore
         };
         
         // Generar firma de seguridad
-        const signature = generateWebhookSignature(payload, N8N_SECRET_TOKEN);
+        const signature = generateWebhookSignature(payload, N8N_SECRET_TOKEN.value());
         
         // Enviar a n8n
-        const response = await axios.post(N8N_WEBHOOK_URL, payload, {
+        const response = await axios.post(N8N_WEBHOOK_URL.value(), payload, {
           headers: {
             'Content-Type': 'application/json',
             'X-Webhook-Signature': signature,
@@ -147,7 +155,8 @@ exports.triggerYouTubeUpload = functions.firestore
         });
       }
     }
-  });
+  }
+});
 
 // ===== ENDPOINT 2: WEBHOOK DE ENTRADA (n8n → Firebase) =====
 
@@ -162,16 +171,7 @@ exports.triggerYouTubeUpload = functions.firestore
  * 4. Esta función actualiza Firestore
  * 5. El video se activa automáticamente en la web
  */
-exports.youtubeUploadCallback = functions.https.onRequest(async (req, res) => {
-  // Configurar CORS
-  res.set('Access-Control-Allow-Origin', '*');
-  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.set('Access-Control-Allow-Headers', 'Content-Type, X-Webhook-Signature, X-VYT-Source');
-  
-  if (req.method === 'OPTIONS') {
-    res.status(204).send('');
-    return;
-  }
+exports.youtubeUploadCallback = onRequest({ cors: true }, async (req, res) => {
   
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Método no permitido' });
@@ -189,7 +189,7 @@ exports.youtubeUploadCallback = functions.https.onRequest(async (req, res) => {
     
     // Validar que la firma sea correcta
     try {
-      const isValid = validateWebhookSignature(req.body, signature, N8N_SECRET_TOKEN);
+      const isValid = validateWebhookSignature(req.body, signature, N8N_SECRET_TOKEN.value());
       if (!isValid) {
         console.error('❌ Firma de webhook inválida');
         res.status(401).json({ error: 'Firma inválida' });
@@ -315,22 +315,25 @@ exports.youtubeUploadCallback = functions.https.onRequest(async (req, res) => {
  * FUNCIÓN ADMIN: Permite reintentar la subida de un video manualmente
  * Útil si el webhook falló o si se necesita re-procesar un video
  */
-exports.retryYouTubeUpload = functions.https.onCall(async (data, context) => {
+exports.retryYouTubeUpload = onCall(async (request) => {
+  const data = request.data;
+  const context = request;
+  
   // Validar autenticación
   if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'Debes estar autenticado');
+    throw new Error('Debes estar autenticado');
   }
   
   // Validar que sea admin
   const userDoc = await db.collection('users').doc(context.auth.uid).get();
   if (!userDoc.exists || !userDoc.data().admin) {
-    throw new functions.https.HttpsError('permission-denied', 'Solo admins pueden reintentar subidas');
+    throw new Error('Solo admins pueden reintentar subidas');
   }
   
   const { participacion_id } = data;
   
   if (!participacion_id) {
-    throw new functions.https.HttpsError('invalid-argument', 'participacion_id es requerido');
+    throw new Error('participacion_id es requerido');
   }
   
   try {
@@ -339,7 +342,7 @@ exports.retryYouTubeUpload = functions.https.onCall(async (data, context) => {
     // Obtener documento
     const participacionDoc = await db.collection('participaciones').doc(participacion_id).get();
     if (!participacionDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Participación no encontrada');
+      throw new Error('Participación no encontrada');
     }
     
     const participacionData = participacionDoc.data();
@@ -361,10 +364,10 @@ exports.retryYouTubeUpload = functions.https.onCall(async (data, context) => {
       retry_by: context.auth.email
     };
     
-    const signature = generateWebhookSignature(payload, N8N_SECRET_TOKEN);
+    const signature = generateWebhookSignature(payload, N8N_SECRET_TOKEN.value());
     
     // Enviar a n8n
-    const response = await axios.post(N8N_WEBHOOK_URL, payload, {
+    const response = await axios.post(N8N_WEBHOOK_URL.value(), payload, {
       headers: {
         'Content-Type': 'application/json',
         'X-Webhook-Signature': signature,
@@ -390,7 +393,7 @@ exports.retryYouTubeUpload = functions.https.onCall(async (data, context) => {
     
   } catch (error) {
     console.error('❌ Error en retry:', error.message);
-    throw new functions.https.HttpsError('internal', `Error: ${error.message}`);
+    throw new Error(`Error: ${error.message}`);
   }
 });
 
@@ -400,23 +403,26 @@ exports.retryYouTubeUpload = functions.https.onCall(async (data, context) => {
  * FUNCIÓN PÚBLICA: Permite verificar el estado de procesamiento de un video
  * Útil para mostrar progreso en tiempo real en la UI
  */
-exports.checkYouTubeUploadStatus = functions.https.onCall(async (data, context) => {
+exports.checkYouTubeUploadStatus = onCall(async (request) => {
+  const data = request.data;
+  const context = request;
+  
   // Validar autenticación
   if (!context.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'Debes estar autenticado');
+    throw new Error('Debes estar autenticado');
   }
   
   const { participacion_id } = data;
   
   if (!participacion_id) {
-    throw new functions.https.HttpsError('invalid-argument', 'participacion_id es requerido');
+    throw new Error('participacion_id es requerido');
   }
   
   try {
     const participacionDoc = await db.collection('participaciones').doc(participacion_id).get();
     
     if (!participacionDoc.exists) {
-      throw new functions.https.HttpsError('not-found', 'Participación no encontrada');
+      throw new Error('Participación no encontrada');
     }
     
     const participacionData = participacionDoc.data();
@@ -427,7 +433,7 @@ exports.checkYouTubeUploadStatus = functions.https.onCall(async (data, context) 
     const isAdmin = userDoc.exists && userDoc.data().admin;
     
     if (!isOwner && !isAdmin) {
-      throw new functions.https.HttpsError('permission-denied', 'No tienes permiso para ver este video');
+      throw new Error('No tienes permiso para ver este video');
     }
     
     return {
@@ -442,18 +448,22 @@ exports.checkYouTubeUploadStatus = functions.https.onCall(async (data, context) 
     
   } catch (error) {
     console.error('❌ Error verificando estado:', error);
-    throw new functions.https.HttpsError('internal', `Error: ${error.message}`);
+    throw new Error(`Error: ${error.message}`);
   }
 });
 
 // ===== CONFIGURACIÓN DE VARIABLES DE ENTORNO =====
 
 /**
- * Para configurar las variables de entorno:
+ * Para configurar las variables de entorno en Functions v2:
  * 
- * firebase functions:config:set n8n.webhook_url="https://n8n.vyt-music.com/webhook/youtube-upload"
- * firebase functions:config:set n8n.secret_token="tu-token-super-secreto-aqui"
+ * 1. Definir en .env file:
+ *    N8N_WEBHOOK_URL="https://n8n.vyt-music.com/webhook/youtube-upload"
+ *    N8N_SECRET_TOKEN="tu-token-super-secreto-aqui"
  * 
- * Para ver la configuración actual:
- * firebase functions:config:get
+ * 2. O configurar en Firebase Console:
+ *    Functions → Configuration → Environment variables
+ * 
+ * 3. Para desarrollo local:
+ *    firebase functions:config:set (ya no se usa en v2)
  */
