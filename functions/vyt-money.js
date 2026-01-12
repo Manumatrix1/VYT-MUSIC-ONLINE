@@ -16,10 +16,10 @@ const getNodemailer = () => {
   return nodemailer;
 };
 
-// Configuración de constantes
-const gmailEmail = functions.config().gmail?.email || { value: () => 'test@gmail.com' };
-const gmailPassword = functions.config().gmail?.password || { value: () => 'test_password' };
-const siteUrl = functions.config().site?.url || { value: () => 'https://vyt-music-online.web.app' };
+// Configuración de constantes - TEMPORALMENTE DESHABILITADAS (migrar a params)
+// const gmailEmail = functions.config().gmail?.email || { value: () => 'test@gmail.com' };
+// const gmailPassword = functions.config().gmail?.password || { value: () => 'test_password' };
+// const siteUrl = functions.config().site?.url || { value: () => 'https://vyt-music-online.web.app' };
 
 const { onCall } = require('firebase-functions/v2/https');
 const { onDocumentUpdated } = require('firebase-functions/v2/firestore');
