@@ -109,6 +109,10 @@ class VYTNavigation {
                             <i class="fas fa-info-circle"></i>
                             <span>Sobre Nosotros</span>
                         </a>
+                        <a href="/reglamento.html" class="menu-item">
+                            <i class="fas fa-file-contract"></i>
+                            <span>Bases y Reglamento</span>
+                        </a>
                     </div>
                     
                     <div class="menu-section">
@@ -116,18 +120,6 @@ class VYTNavigation {
                         <a href="/comprar-vyt-money.html" class="menu-item">
                             <i class="fas fa-coins"></i>
                             <span>Comprar VYT Money</span>
-                        </a>
-                    </div>
-                    
-                    <div class="menu-section">
-                        <h4>Información</h4>
-                        <a href="/nosotros.html" class="menu-item">
-                            <i class="fas fa-info-circle"></i>
-                            <span>Sobre Nosotros</span>
-                        </a>
-                        <a href="/index.html" class="menu-item">
-                            <i class="fas fa-arrow-left"></i>
-                            <span>Volver al Inicio</span>
                         </a>
                     </div>
                 </div>
