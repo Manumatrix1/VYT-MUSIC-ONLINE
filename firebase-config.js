@@ -76,14 +76,20 @@ function initializeFirebase() {
         try {
             if (typeof firebase.storage === 'function') {
                 storage = firebase.storage();
-                console.log('✅ Firebase Storage inicializado');
-                // Exponer globalmente para evitar errores "is not a function"
                 window.firebaseStorage = storage;
+                console.log('✅ Firebase Storage inicializado correctamente');
             } else {
-                console.warn('⚠️ Firebase Storage no disponible en este SDK');
+                console.warn('⚠️ Firebase Storage CDN no cargado. Verifica la inclusión del script en HTML.');
+                // Fallback: intentar cargar Storage dinámicamente
+                if (typeof firebase !== 'undefined' && firebase.storage) {
+                    storage = firebase.storage();
+                    window.firebaseStorage = storage;
+                    console.log('✅ Firebase Storage cargado mediante fallback');
+                }
             }
         } catch (storageError) {
-            console.error('❌ Error al inicializar Storage:', storageError);
+            console.error('❌ Error crítico al inicializar Storage:', storageError);
+            console.warn('💡 Asegúrate de incluir: <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>');
         }
         
         // Analytics (opcional)

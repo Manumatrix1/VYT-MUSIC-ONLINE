@@ -1,4 +1,4 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <script src="/sw-register.js"></script>
@@ -7,7 +7,7 @@
     <title>VYT MUSIC - Principal</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="VYT Music - Plataforma de cert√°menes de canto online. Inscr√≠bete, vota y gana premios.">
+    <meta name="description" content="VYT Music - Plataforma de cert·menes de canto online. InscrÌbete, vota y gana premios.">
     <meta name="theme-color" content="#00d9ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/icon-32x32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768273951">
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
@@ -31,21 +31,21 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Empty States -->
-    <link rel="stylesheet" href="/src/empty-states.css?v=1768273333">
+    <link rel="stylesheet" href="/src/empty-states.css?v=1768273951">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Sistema de fondos din√°micos -->
+    <!-- Sistema de fondos din·micos -->
     <script src="src/dynamic-background.js" defer></script>
     
-    <!-- Sistema de navegaci√≥n -->
+    <!-- Sistema de navegaciÛn -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     
     <style>
-        /* üö® TODO EL CSS INLINE - NO DEPENDE DE NADA EXTERNO */
+        /* ?? TODO EL CSS INLINE - NO DEPENDE DE NADA EXTERNO */
         body {
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
             background-size: cover;
@@ -107,10 +107,10 @@
         <main class="container">
             <section class="hero-section">
                 <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
-                    <span class="icon-mic"></span> ¬°Bienvenido a VYT Music!
+                    <span class="icon-mic"></span> °Bienvenido a VYT Music!
                 </h1>
                 <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-                    La plataforma de cert√°menes de canto m√°s grande de Argentina. Descubre talentos, 
+                    La plataforma de cert·menes de canto m·s grande de Argentina. Descubre talentos, 
                     compite con los mejores y haz que tu voz se escuche.
                 </p>
 
@@ -128,29 +128,29 @@
         </main>
     </div>
 
-    <!-- Navegaci√≥n unificada cargada por navigation.js -->
+    <!-- NavegaciÛn unificada cargada por navigation.js -->
 
     <!-- Firebase y Auth -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js?v=1768273333"></script>
-    <script src="src/auth-handler.js?v=1768273333"></script>
-    <script src="/src/auth-guard.js?v=1768273333"></script>
-    <script src="/src/empty-states.js?v=1768273333"></script>
+    <script src="firebase-config.js?v=1768273951"></script>
+    <script src="src/auth-handler.js?v=1768273951"></script>
+    <script src="/src/auth-guard.js?v=1768273951"></script>
+    <script src="/src/empty-states.js?v=1768273951"></script>
     
     <script>
-        console.log('üéµ VYT MUSIC - Versi√≥n simple sin dependencias externas');
+        console.log('?? VYT MUSIC - VersiÛn simple sin dependencias externas');
         
-        // PROTECCI√ìN DE RUTA - Verificar autenticaci√≥n
+        // PROTECCI”N DE RUTA - Verificar autenticaciÛn
         function checkAuth() {
             if (window.authHandler && window.authHandler.initialized) {
                 if (!window.authHandler.isLoggedIn()) {
-                    console.log('‚ö†Ô∏è Usuario no autenticado, redirigiendo a login...');
+                    console.log('?? Usuario no autenticado, redirigiendo a login...');
                     window.location.href = 'login.html';
                 } else {
-                    console.log('‚úÖ Usuario autenticado:', window.authHandler.user.email);
-                    console.log('üë§ Tipo de usuario:', window.authHandler.userType);
+                    console.log('? Usuario autenticado:', window.authHandler.user.email);
+                    console.log('?? Tipo de usuario:', window.authHandler.userType);
                 }
             } else {
                 setTimeout(checkAuth, 100);
@@ -159,17 +159,17 @@
         
         checkAuth();
         
-        // Verificar que la navegaci√≥n se carg√≥
+        // Verificar que la navegaciÛn se cargÛ
         setTimeout(() => {
             const nav = document.querySelector('.bottom-navigation');
             if (nav) {
-                console.log('‚úÖ Navegaci√≥n cargada correctamente');
+                console.log('? NavegaciÛn cargada correctamente');
             } else {
-                console.log('‚ùå Error: Navegaci√≥n no encontrada');
+                console.log('? Error: NavegaciÛn no encontrada');
             }
         }, 100);
 
-        // FUNCIONES DEL MEN√ö
+        // FUNCIONES DEL MEN⁄
         function toggleMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             if (menuOverlay.classList.contains('active')) {
@@ -183,24 +183,24 @@
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            console.log('üîΩ Men√∫ sidebar abierto desde la derecha');
+            console.log('?? Men˙ sidebar abierto desde la derecha');
         }
 
         function closeMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            console.log('üîº Men√∫ sidebar cerrado');
+            console.log('?? Men˙ sidebar cerrado');
         }
 
         function showContact() {
-            alert('üìû Contacto VYT MUSIC\n\nüìß Email: info@vytmusic.com\nüì± WhatsApp: +54 9 11 1234-5678\nüåê Web: vytmusic.com\n\n¬°Estamos aqu√≠ para ayudarte!');
+            alert('?? Contacto VYT MUSIC\n\n?? Email: info@vytmusic.com\n?? WhatsApp: +54 9 11 1234-5678\n?? Web: vytmusic.com\n\n°Estamos aquÌ para ayudarte!');
             closeMenu();
         }
 
 
 
-        // Cerrar men√∫ con tecla ESC
+        // Cerrar men˙ con tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeMenu();
@@ -208,7 +208,7 @@
         });
     </script>
     
-    <!-- Sistema de Gamificaci√≥n VYT -->
+    <!-- Sistema de GamificaciÛn VYT -->
     <script type="module" src="/src/jackpot-widget.js"></script>
     <script type="module" src="/src/vyt-guide.js"></script>
 </body>
