@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Súmate al Certamen</title>
+    <title>VYT MUSIC - Smate al Certamen</title>
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
@@ -23,7 +23,7 @@
             min-height: 100vh;
         }
 
-        /* CSS para fondos dinámicos */
+        /* CSS para fondos dinmicos */
         .dynamic-background {
             background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), var(--dynamic-bg, url('images/fotos/inscripcion-background.png'));
             background-size: var(--dynamic-bg-size, cover);
@@ -82,7 +82,7 @@
 </head>
 <body>
     <div class="min-h-screen py-8">
-        <!-- Header con navegación -->
+        <!-- Header con navegacin -->
         <div class="container mx-auto px-4 mb-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
@@ -93,8 +93,8 @@
                         <i class="fas fa-home"></i> Principal
                     </a>
                     <div>
-                        <h1 class="text-2xl font-bold text-white font-display" id="certamen-titulo">Súmate al Certamen</h1>
-                        <p class="text-blue-200">Envía tu video y forma parte de la competencia</p>
+                        <h1 class="text-2xl font-bold text-white font-display" id="certamen-titulo">Smate al Certamen</h1>
+                        <p class="text-blue-200">Enva tu video y forma parte de la competencia</p>
                     </div>
                 </div>
                 <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="h-12">
@@ -104,16 +104,16 @@
         <div class="container mx-auto px-4">
             <div class="max-w-4xl mx-auto">
                 
-                <!-- Información del Certamen -->
+                <!-- Informacin del Certamen -->
                 <div class="form-card mb-8">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <h2 class="text-xl font-bold text-white mb-4" id="certamen-nombre">Certamen Rosario 2025</h2>
-                            <p class="text-gray-300 mb-4" id="certamen-descripcion">El certamen de canto más importante de Rosario</p>
+                            <p class="text-gray-300 mb-4" id="certamen-descripcion">El certamen de canto ms importante de Rosario</p>
                             
                             <div class="space-y-3">
                                 <div class="flex justify-between">
-                                    <span class="text-gray-400">Categoría:</span>
+                                    <span class="text-gray-400">Categora:</span>
                                     <span class="badge status-badge" id="certamen-categoria">Regional</span>
                                 </div>
                                 <div class="flex justify-between">
@@ -140,7 +140,7 @@
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-green-400 mr-2"></i>
-                                    Duración: máximo 5 minutos
+                                    Duracin: mximo 5 minutos
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-green-400 mr-2"></i>
@@ -152,18 +152,18 @@
                                 </li>
                                 <li class="flex items-center">
                                     <i class="fas fa-check text-green-400 mr-2"></i>
-                                    Pago de inscripción tras aprobación
+                                    Pago de inscripcin tras aprobacin
                                 </li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Formulario de Inscripción -->
+                <!-- Formulario de Inscripcin -->
                 <div class="form-card">
                     <h2 class="text-2xl font-bold text-white mb-6">
                         <i class="fas fa-video text-red-500 mr-3"></i>
-                        Envía tu Video de YouTube
+                        Enva tu Video de YouTube
                     </h2>
 
                     <form id="inscripcion-form" class="space-y-6">
@@ -193,35 +193,35 @@
                             <div class="youtube-preview" id="video-preview">
                                 <div class="text-center">
                                     <i class="fas fa-play-circle text-4xl text-white/50 mb-2"></i>
-                                    <p class="text-white/70">Vista previa del video aparecerá aquí</p>
+                                    <p class="text-white/70">Vista previa del video aparecer aqu</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Título de la Canción -->
+                        <!-- Ttulo de la Cancin -->
                         <div>
                             <label class="block text-white font-medium mb-2">
                                 <i class="fas fa-music text-purple-500 mr-2"></i>
-                                Título de la Canción *
+                                Ttulo de la Cancin *
                             </label>
                             <input 
                                 type="text" 
                                 id="song-title" 
                                 name="songTitle"
                                 class="form-input w-full px-4 py-3 rounded-lg"
-                                placeholder="Nombre de la canción que interpretas"
+                                placeholder="Nombre de la cancin que interpretas"
                                 required
                             >
                         </div>
 
-                        <!-- Género Musical -->
+                        <!-- Gnero Musical -->
                         <div>
                             <label class="block text-white font-medium mb-2">
                                 <i class="fas fa-guitar text-orange-500 mr-2"></i>
-                                Género Musical *
+                                Gnero Musical *
                             </label>
                             <select id="genre" name="genre" class="form-input w-full px-4 py-3 rounded-lg" required>
-                                <option value="">Selecciona un género</option>
+                                <option value="">Selecciona un gnero</option>
                                 <option value="pop">Pop</option>
                                 <option value="rock">Rock</option>
                                 <option value="folk">Folk</option>
@@ -230,7 +230,7 @@
                                 <option value="reggae">Reggae</option>
                                 <option value="country">Country</option>
                                 <option value="rap">Rap/Hip Hop</option>
-                                <option value="electronica">Electrónica</option>
+                                <option value="electronica">Electrnica</option>
                                 <option value="balada">Balada</option>
                                 <option value="cumbia">Cumbia</option>
                                 <option value="tango">Tango</option>
@@ -238,46 +238,46 @@
                             </select>
                         </div>
 
-                        <!-- Descripción -->
+                        <!-- Descripcin -->
                         <div>
                             <label class="block text-white font-medium mb-2">
                                 <i class="fas fa-align-left text-blue-500 mr-2"></i>
-                                Descripción del Video (Opcional)
+                                Descripcin del Video (Opcional)
                             </label>
                             <textarea 
                                 id="description" 
                                 name="description"
                                 rows="3"
                                 class="form-input w-full px-4 py-3 rounded-lg resize-none"
-                                placeholder="Cuéntanos algo sobre tu interpretación..."
+                                placeholder="Cuntanos algo sobre tu interpretacin..."
                             ></textarea>
                         </div>
 
-                        <!-- Términos y Condiciones -->
+                        <!-- Trminos y Condiciones -->
                         <div class="bg-gray-800/30 p-4 rounded-lg">
                             <label class="flex items-start space-x-3 cursor-pointer">
                                 <input type="checkbox" id="terms" name="terms" class="mt-1" required>
                                 <div class="text-sm text-gray-300">
-                                    Acepto los <a href="/terminos-condiciones.html" class="text-blue-400 hover:underline">términos y condiciones</a> del certamen. 
-                                    Entiendo que mi video será revisado por el equipo de VYT Music y, si es aprobado, 
-                                    podré proceder con el pago de la inscripción para participar oficialmente.
+                                    Acepto los <a href="/terminos-condiciones.html" class="text-blue-400 hover:underline">trminos y condiciones</a> del certamen. 
+                                    Entiendo que mi video ser revisado por el equipo de VYT Music y, si es aprobado, 
+                                    podr proceder con el pago de la inscripcin para participar oficialmente.
                                 </div>
                             </label>
                         </div>
 
-                        <!-- Estado del envío -->
+                        <!-- Estado del envo -->
                         <div id="submission-status" class="hidden">
-                            <!-- Se mostrará dinámicamente -->
+                            <!-- Se mostrar dinmicamente -->
                         </div>
 
-                        <!-- Botón de Envío -->
+                        <!-- Botn de Envo -->
                         <div class="text-center pt-4">
                             <button type="submit" id="submit-btn" class="bg-gradient-to-r from-green-600 to-green-800 hover:from-green-700 hover:to-green-900 text-white font-bold py-4 px-8 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg">
                                 <i class="fas fa-paper-plane mr-2"></i>
-                                Enviar Video para Revisión
+                                Enviar Video para Revisin
                             </button>
                             <p class="text-gray-400 text-sm mt-3">
-                                Tu video será revisado en un plazo de 24-48 horas
+                                Tu video ser revisado en un plazo de 24-48 horas
                             </p>
                         </div>
                     </form>
@@ -287,15 +287,15 @@
     </div>
 
     <script>
-        // Datos del certamen (se cargarán dinámicamente)
+        // Datos del certamen (se cargarn dinmicamente)
         let certamenActual = null;
         
-        // Datos de ejemplo de certámenes
+        // Datos de ejemplo de certmenes
         const certamenesData = {
             'certamen-rosario-2025': {
                 id: 'certamen-rosario-2025',
                 nombre: 'Certamen Rosario 2025',
-                descripcion: 'El certamen de canto más importante de Rosario',
+                descripcion: 'El certamen de canto ms importante de Rosario',
                 fechaCierre: '2025-10-15',
                 categoria: 'Regional',
                 premio: '$50,000',
@@ -315,7 +315,7 @@
             'certamen-santa-fe-2025': {
                 id: 'certamen-santa-fe-2025',
                 nombre: 'Certamen Provincial Santa Fe',
-                descripción: 'Para todos los artistas de la provincia',
+                descripcin: 'Para todos los artistas de la provincia',
                 fechaCierre: '2025-10-31',
                 categoria: 'Provincial',
                 premio: '$75,000',
@@ -324,7 +324,7 @@
             }
         };
 
-        // Cargar información del certamen
+        // Cargar informacin del certamen
         function loadCertamenInfo() {
             const urlParams = new URLSearchParams(window.location.search);
             const certamenId = urlParams.get('id') || 'certamen-rosario-2025';
@@ -337,8 +337,8 @@
                 return;
             }
 
-            // Actualizar información en la página
-            document.getElementById('certamen-titulo').textContent = `Súmate al ${certamenActual.nombre}`;
+            // Actualizar informacin en la pgina
+            document.getElementById('certamen-titulo').textContent = `Smate al ${certamenActual.nombre}`;
             document.getElementById('certamen-nombre').textContent = certamenActual.nombre;
             document.getElementById('certamen-descripcion').textContent = certamenActual.descripcion;
             document.getElementById('certamen-categoria').textContent = certamenActual.categoria;
@@ -352,7 +352,7 @@
             document.getElementById('certamen-inscripciones').textContent = `${certamenActual.inscripciones}/${certamenActual.maxInscripciones}`;
         }
 
-        // Función para validar y mostrar preview de YouTube
+        // Funcin para validar y mostrar preview de YouTube
         function validateYouTubeURL(url) {
             const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
             const match = url.match(regex);
@@ -399,56 +399,56 @@
                 }
             });
 
-            // Manejar envío del formulario
+            // Manejar envo del formulario
             document.getElementById('inscripcion-form').addEventListener('submit', function(e) {
                 e.preventDefault();
                 enviarVideoParaRevision();
             });
         });
 
-        // Función para enviar video para revisión
+        // Funcin para enviar video para revisin
         function enviarVideoParaRevision() {
             const form = document.getElementById('inscripcion-form');
             const submitBtn = document.getElementById('submit-btn');
             const statusDiv = document.getElementById('submission-status');
 
-            // Deshabilitar botón
+            // Deshabilitar botn
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
 
-            // Simular envío
+            // Simular envo
             setTimeout(() => {
-                // Mostrar estado de PENDIENTE DE APROBACIÓN
+                // Mostrar estado de PENDIENTE DE APROBACIN
                 statusDiv.innerHTML = `
                     <div class="bg-blue-600/20 border border-blue-500/30 rounded-lg p-4 text-center">
                         <i class="fas fa-clock text-blue-400 text-2xl mb-3"></i>
-                        <h3 class="text-lg font-bold text-white mb-2">¡Video Enviado!</h3>
+                        <h3 class="text-lg font-bold text-white mb-2">Video Enviado!</h3>
                         <p class="text-gray-300 mb-4">
                             Tu video "<strong>${document.getElementById('titulo-cancion').value}</strong>" ha sido enviado correctamente.
                         </p>
                         <div class="bg-yellow-600/20 border border-yellow-500/30 rounded-lg p-3 mb-4">
                             <p class="text-yellow-300 font-semibold">
                                 <i class="fas fa-hourglass-half mr-2"></i>
-                                Estado: PENDIENTE DE APROBACIÓN
+                                Estado: PENDIENTE DE APROBACIN
                             </p>
                             <p class="text-yellow-200 text-sm mt-2">
-                                Nuestro equipo revisará tu video en las próximas 24-48 horas.
+                                Nuestro equipo revisar tu video en las prximas 24-48 horas.
                             </p>
                         </div>
                         <div class="bg-blue-600/20 border border-blue-500/30 rounded p-3 mt-4">
-                            <h4 class="font-semibold text-blue-300 mb-1">Próximos pasos:</h4>
+                            <h4 class="font-semibold text-blue-300 mb-1">Prximos pasos:</h4>
                             <ul class="text-sm text-gray-300 text-left space-y-1">
-                                <li>• ✅ Video enviado y almacenado</li>
-                                <li>• 🔄 En revisión por nuestro equipo</li>
-                                <li>• 📧 Te notificaremos el resultado por email</li>
-                                <li>• 💳 Una vez aprobado, podrás pagar la inscripción</li>
-                                <li>• 🏆 Tu video aparecerá en el certamen público</li>
+                                <li>  Video enviado y almacenado</li>
+                                <li>  En revisin por nuestro equipo</li>
+                                <li>  Te notificaremos el resultado por email</li>
+                                <li>  Una vez aprobado, podrs pagar la inscripcin</li>
+                                <li>  Tu video aparecer en el certamen pblico</li>
                             </ul>
                         </div>
                     </div>
                 `;
                 
-                // Simular guardado en sistema de aprobación para que el admin lo vea
+                // Simular guardado en sistema de aprobacin para que el admin lo vea
                 const datosVideo = {
                     id: 'video_' + Date.now(),
                     titulo: document.getElementById('titulo-cancion').value,
@@ -468,7 +468,7 @@
                 statusDiv.classList.remove('hidden');
                 form.style.display = 'none';
 
-                // Aquí iría la integración con Firebase para guardar los datos
+                // Aqu ira la integracin con Firebase para guardar los datos
                 console.log('Datos del video enviados:', {
                     certamenId: certamenActual.id,
                     youtubeUrl: document.getElementById('youtube-url').value,
@@ -483,22 +483,22 @@
         }
 
         function goBack() {
-            if (confirm('¿Seguro que quieres salir? Se perderán los datos ingresados.')) {
+            if (confirm('Seguro que quieres salir? Se perdern los datos ingresados.')) {
                 window.location.href = 'perfil-simple.html';
             }
         }
 
         // Cargar fondo personalizado desde admin
         function loadDynamicBackground() {
-            console.log('🎨 [Certamen Individual] Cargando fondo dinámico...');
+            console.log(' [Certamen Individual] Cargando fondo dinmico...');
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'certamen-individual';
                 
-                console.log('📋 [Certamen Individual] Configuración disponible:', backgroundConfig);
+                console.log(' [Certamen Individual] Configuracin disponible:', backgroundConfig);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('✅ [Certamen Individual] Aplicando fondo personalizado');
+                    console.log(' [Certamen Individual] Aplicando fondo personalizado');
                     
                     // Aplicar CSS variables
                     document.documentElement.style.setProperty('--dynamic-bg', `url('${backgroundConfig[currentPage].imageData}')`);
@@ -512,15 +512,15 @@
                         document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
                     }
                     
-                    // Agregar clase de fondo dinámico
+                    // Agregar clase de fondo dinmico
                     document.body.classList.add('dynamic-background');
                     
-                    console.log('🎯 [Certamen Individual] Fondo dinámico aplicado exitosamente');
+                    console.log(' [Certamen Individual] Fondo dinmico aplicado exitosamente');
                 } else {
-                    console.log('ℹ️ [Certamen Individual] Sin configuración personalizada, usando fondo predeterminado');
+                    console.log(' [Certamen Individual] Sin configuracin personalizada, usando fondo predeterminado');
                 }
             } catch (error) {
-                console.error('❌ [Certamen Individual] Error al cargar fondo dinámico:', error);
+                console.error(' [Certamen Individual] Error al cargar fondo dinmico:', error);
             }
         }
 

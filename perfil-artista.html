@@ -6,7 +6,7 @@
     <title>VYT MUSIC - Mi Perfil de Artista</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Administra tu perfil de artista en VYT Music. Videos, fotos y estadísticas.">
+    <meta name="description" content="Administra tu perfil de artista en VYT Music. Videos, fotos y estadsticas.">
     <meta name="theme-color" content="#00d9ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -14,7 +14,7 @@
     <meta name="apple-mobile-web-app-title" content="VYT Music">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/icon-32x32.png">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
@@ -24,7 +24,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     <script src="/mobile-optimizations.js" defer></script>
@@ -39,7 +39,7 @@
     <script src="firebase-config.js"></script>
     <script src="src/auth-handler.js"></script>
     
-    <!-- Sistema de Gamificación -->
+    <!-- Sistema de Gamificacin -->
     <script type="module" src="/src/jackpot-widget.js"></script>
     <script type="module" src="/src/avatar-helper.js"></script>
     <script type="module" src="/src/vyt-guide.js"></script>
@@ -53,7 +53,7 @@
         min-height: 100vh;
     }
     
-    /* Clase para fondo dinámico desde admin */
+    /* Clase para fondo dinmico desde admin */
     body.dynamic-background {
         background: var(--dynamic-bg) !important;
         background-size: var(--dynamic-bg-size, cover) !important;
@@ -128,7 +128,7 @@
     </style>
 </head>
 <body>
-    <!-- 🚨 MODAL EMERGENTE OBLIGATORIO DE VERIFICACIÓN -->
+    <!--  MODAL EMERGENTE OBLIGATORIO DE VERIFICACIN -->
     <div id="emailVerificationModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4" style="display: none;">
         <div class="bg-gradient-to-br from-red-900 to-red-800 border-2 border-red-500 rounded-xl max-w-md w-full p-8 text-center shadow-2xl">
             <div class="mb-6">
@@ -136,32 +136,32 @@
                     <i class="fas fa-exclamation-triangle text-red-400 text-3xl"></i>
                 </div>
                 <h2 class="text-2xl font-bold text-white mb-2">
-                    🔐 ¡VERIFICACIÓN REQUERIDA!
+                     VERIFICACIN REQUERIDA!
                 </h2>
                 <p class="text-red-200 text-lg">
-                    Tu email <strong>NO está verificado</strong>
+                    Tu email <strong>NO est verificado</strong>
                 </p>
             </div>
             
             <div class="bg-red-800/50 rounded-lg p-4 mb-6 text-left">
-                <h3 class="font-bold text-red-300 mb-2">⚠️ Sin verificación NO podrás:</h3>
+                <h3 class="font-bold text-red-300 mb-2"> Sin verificacin NO podrs:</h3>
                 <ul class="text-red-200 space-y-1 text-sm">
-                    <li>🚫 Recibir notificaciones de certámenes</li>
-                    <li>🚫 Enterarte de eventos en tu ciudad</li>
-                    <li>🚫 Participar en concursos especiales</li>
-                    <li>🚫 Acceder a funciones VIP</li>
+                    <li> Recibir notificaciones de certmenes</li>
+                    <li> Enterarte de eventos en tu ciudad</li>
+                    <li> Participar en concursos especiales</li>
+                    <li> Acceder a funciones VIP</li>
                 </ul>
             </div>
             
             <div class="space-y-3">
                 <button onclick="resendVerificationEmail()" class="w-full bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-bold text-white text-lg transition-colors">
-                    📧 ENVIAR EMAIL DE VERIFICACIÓN
+                     ENVIAR EMAIL DE VERIFICACIN
                 </button>
                 <button onclick="checkEmailVerification()" class="w-full bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-semibold text-white transition-colors">
-                    🔄 YA VERIFIQUÉ - COMPROBAR
+                     YA VERIFIQU - COMPROBAR
                 </button>
                 <button onclick="closeVerificationModal()" class="w-full bg-gray-600 hover:bg-gray-700 px-6 py-2 rounded-lg text-white transition-colors">
-                    ❌ Cerrar (Funcionalidad Limitada)
+                     Cerrar (Funcionalidad Limitada)
                 </button>
             </div>
             
@@ -169,11 +169,11 @@
         </div>
     </div>
 
-    <!-- 🚨 BANNER PERMANENTE DE ALERTA -->
+    <!--  BANNER PERMANENTE DE ALERTA -->
     <div id="emailWarningBanner" class="fixed top-0 left-0 right-0 bg-gradient-to-r from-red-600 to-red-700 text-white p-3 text-center z-40 shadow-lg" style="display: none;">
         <div class="flex items-center justify-center space-x-4">
             <i class="fas fa-exclamation-triangle text-yellow-300 animate-pulse"></i>
-            <span class="font-semibold">⚠️ EMAIL NO VERIFICADO - No recibirás notificaciones de certámenes</span>
+            <span class="font-semibold"> EMAIL NO VERIFICADO - No recibirs notificaciones de certmenes</span>
             <button onclick="openVerificationModal()" class="bg-white/20 hover:bg-white/30 px-4 py-1 rounded text-sm transition-colors">
                 VERIFICAR AHORA
             </button>
@@ -198,14 +198,14 @@
                     </button>
                 </div>
                 
-                <!-- Información del Artista -->
+                <!-- Informacin del Artista -->
                 <div class="flex-1 text-center md:text-left">
                     <h1 class="text-3xl font-bold mb-2" id="artistName">Cargando...</h1>
                     <p class="text-blue-300 text-lg mb-4" id="realName">Nombre real</p>
                     
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                         <div class="bg-gray-800/50 rounded-lg p-3">
-                            <div class="text-blue-400 text-sm">Género Musical</div>
+                            <div class="text-blue-400 text-sm">Gnero Musical</div>
                             <div class="font-bold" id="musicGenre">-</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-lg p-3">
@@ -213,25 +213,25 @@
                             <div class="font-bold" id="cityName">-</div>
                         </div>
                         <div class="bg-gray-800/50 rounded-lg p-3">
-                            <div class="text-blue-400 text-sm">Teléfono</div>
+                            <div class="text-blue-400 text-sm">Telfono</div>
                             <div class="font-bold" id="phoneNumber">-</div>
                         </div>
                     </div>
                     
-                    <!-- Acciones Rápidas -->
+                    <!-- Acciones Rpidas -->
                     <div class="flex flex-wrap gap-3">
                         <a href="#" onclick="editProfile()" class="btn-secondary">
                             <i class="fas fa-edit"></i> Editar Perfil
                         </a>
                         <a href="#" onclick="viewCertamenes()" class="btn-primary">
-                            <i class="fas fa-trophy"></i> Ver Certámenes
+                            <i class="fas fa-trophy"></i> Ver Certmenes
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- 🔐 SECCIÓN DE VERIFICACIÓN DE EMAIL -->
+        <!--  SECCIN DE VERIFICACIN DE EMAIL -->
         <div id="emailVerificationSection" class="bg-red-900/20 border border-red-500/30 rounded-xl p-6 mb-8" style="display: none;">
             <div class="flex items-start space-x-4">
                 <div class="bg-red-500/20 rounded-full p-3">
@@ -239,11 +239,11 @@
                 </div>
                 <div class="flex-1">
                     <h3 class="text-red-400 font-bold text-lg mb-2">
-                        🔐 Email No Verificado
+                         Email No Verificado
                     </h3>
                     <p class="text-gray-300 mb-4">
-                        Para acceder a todas las funciones de VYT Music y recibir notificaciones de certámenes, 
-                        necesitas verificar tu dirección de email.
+                        Para acceder a todas las funciones de VYT Music y recibir notificaciones de certmenes, 
+                        necesitas verificar tu direccin de email.
                     </p>
                     <div class="flex flex-wrap gap-3">
                         <button onclick="checkEmailVerification()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg font-semibold text-white transition-colors">
@@ -258,7 +258,7 @@
             </div>
         </div>
 
-        <!-- ✅ SECCIÓN DE EMAIL VERIFICADO -->
+        <!--  SECCIN DE EMAIL VERIFICADO -->
         <div id="emailVerifiedSection" class="bg-green-900/20 border border-green-500/30 rounded-xl p-6 mb-8" style="display: none;">
             <div class="flex items-center space-x-4">
                 <div class="bg-green-500/20 rounded-full p-3">
@@ -266,10 +266,10 @@
                 </div>
                 <div class="flex-1">
                     <h3 class="text-green-400 font-bold text-lg">
-                        ✅ Email Verificado
+                         Email Verificado
                     </h3>
                     <p class="text-gray-300">
-                        ¡Perfecto! Recibirás notificaciones de nuevos certámenes y tendrás acceso completo a la plataforma.
+                        Perfecto! Recibirs notificaciones de nuevos certmenes y tendrs acceso completo a la plataforma.
                     </p>
                 </div>
             </div>
@@ -277,27 +277,27 @@
 
         <!-- Video y Redes Sociales -->
         <div class="bg-gray-800/50 rounded-xl p-6 mb-8" id="videoRedesSection">
-            <h3 class="text-xl font-bold mb-4 text-white">🎵 Video Musical y Redes Sociales</h3>
+            <h3 class="text-xl font-bold mb-4 text-white"> Video Musical y Redes Sociales</h3>
             
             <!-- Video -->
             <div id="videoContainer" class="mb-6" style="display: none;">
                 <div class="bg-gray-700/50 rounded-lg p-4">
-                    <h4 class="text-white font-semibold mb-3">🎬 Mi Video Musical</h4>
+                    <h4 class="text-white font-semibold mb-3"> Mi Video Musical</h4>
                     <div id="videoEmbed" class="aspect-video bg-gray-600 rounded-lg flex items-center justify-content"></div>
                 </div>
             </div>
             
             <!-- Redes Sociales -->
             <div id="socialLinksContainer" style="display: none;">
-                <h4 class="text-white font-semibold mb-3">📱 Sígueme en mis redes</h4>
+                <h4 class="text-white font-semibold mb-3"> Sgueme en mis redes</h4>
                 <div class="flex flex-wrap gap-4" id="socialLinks">
-                    <!-- Los enlaces se cargarán dinámicamente -->
+                    <!-- Los enlaces se cargarn dinmicamente -->
                 </div>
             </div>
             
             <!-- Mensaje cuando no hay contenido -->
             <div id="noContentMessage" class="text-center py-8">
-                <div class="text-6xl mb-4">🎵</div>
+                <div class="text-6xl mb-4"></div>
                 <p class="text-gray-400 mb-4">Agrega tu video musical y redes sociales</p>
                 <button onclick="editProfile()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white transition-colors">
                     <i class="fas fa-plus"></i> Agregar Contenido
@@ -305,25 +305,25 @@
             </div>
         </div>
 
-        <!-- Estadísticas -->
+        <!-- Estadsticas -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div class="stat-card">
-                <div class="text-3xl mb-2">🏆</div>
+                <div class="text-3xl mb-2"></div>
                 <div class="text-2xl font-bold" id="certamenCount">0</div>
-                <div class="text-sm text-gray-400">Certámenes</div>
+                <div class="text-sm text-gray-400">Certmenes</div>
             </div>
             <div class="stat-card">
-                <div class="text-3xl mb-2">⭐</div>
+                <div class="text-3xl mb-2"></div>
                 <div class="text-2xl font-bold" id="votesCount">0</div>
                 <div class="text-sm text-gray-400">Votos Recibidos</div>
             </div>
             <div class="stat-card">
-                <div class="text-3xl mb-2">🎵</div>
+                <div class="text-3xl mb-2"></div>
                 <div class="text-2xl font-bold" id="songsCount">0</div>
                 <div class="text-sm text-gray-400">Canciones</div>
             </div>
             <div class="stat-card">
-                <div class="text-3xl mb-2">👥</div>
+                <div class="text-3xl mb-2"></div>
                 <div class="text-2xl font-bold" id="followersCount">0</div>
                 <div class="text-sm text-gray-400">Seguidores</div>
             </div>
@@ -332,16 +332,16 @@
         <!-- Acciones Principales -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             <div class="bg-gradient-to-br from-green-600/20 to-green-800/20 border border-green-500/30 rounded-xl p-6 text-center hover:from-green-600/30 hover:to-green-800/30 transition-all duration-300">
-                <div class="text-4xl mb-4">🎤</div>
+                <div class="text-4xl mb-4"></div>
                 <h3 class="text-xl font-bold mb-2">Inscribirme a Certamen</h3>
-                <p class="text-gray-300 mb-4">Participa en los certámenes activos</p>
+                <p class="text-gray-300 mb-4">Participa en los certmenes activos</p>
                 <a href="#" onclick="joinCertamen()" class="btn-primary">
                     Inscribirme
                 </a>
             </div>
             
             <div class="bg-gradient-to-br from-blue-600/20 to-blue-800/20 border border-blue-500/30 rounded-xl p-6 text-center hover:from-blue-600/30 hover:to-blue-800/30 transition-all duration-300">
-                <div class="text-4xl mb-4">📹</div>
+                <div class="text-4xl mb-4"></div>
                 <h3 class="text-xl font-bold mb-2">Subir Video</h3>
                 <p class="text-gray-300 mb-4">Comparte tu talento con la comunidad</p>
                 <a href="#" onclick="uploadVideo()" class="btn-secondary">
@@ -350,19 +350,19 @@
             </div>
             
             <div class="bg-gradient-to-br from-purple-600/20 to-purple-800/20 border border-purple-500/30 rounded-xl p-6 text-center hover:from-purple-600/30 hover:to-purple-800/30 transition-all duration-300">
-                <div class="text-4xl mb-4">📊</div>
-                <h3 class="text-xl font-bold mb-2">Mis Estadísticas</h3>
+                <div class="text-4xl mb-4"></div>
+                <h3 class="text-xl font-bold mb-2">Mis Estadsticas</h3>
                 <p class="text-gray-300 mb-4">Ve tu progreso y rendimiento</p>
                 <a href="#" onclick="viewStats()" class="btn-secondary">
-                    Ver Estadísticas
+                    Ver Estadsticas
                 </a>
             </div>
         </div>
 
-        <!-- 📧 SECCIÓN DE NOTIFICACIONES DE CERTÁMENES -->
+        <!--  SECCIN DE NOTIFICACIONES DE CERTMENES -->
         <div class="bg-gradient-to-r from-blue-900/20 to-purple-900/20 border border-blue-500/30 rounded-xl p-6 mb-8">
             <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-bold text-blue-400">📧 Notificaciones de Certámenes</h2>
+                <h2 class="text-xl font-bold text-blue-400"> Notificaciones de Certmenes</h2>
                 <button onclick="toggleEmailNotifications()" id="notificationToggle" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors">
                     <i class="fas fa-bell"></i> <span id="notificationText">Activar</span>
                 </button>
@@ -371,37 +371,37 @@
             <div id="notificationStatus" class="mb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                    <span class="text-gray-300">Verificación de email requerida para recibir notificaciones</span>
+                    <span class="text-gray-300">Verificacin de email requerida para recibir notificaciones</span>
                 </div>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                 <div class="bg-gray-800/30 rounded-lg p-4">
-                    <h4 class="font-semibold text-blue-400 mb-2">📅 Nuevos Certámenes</h4>
-                    <p class="text-gray-300">Te avisaremos cuando se abran inscripciones para nuevos certámenes</p>
+                    <h4 class="font-semibold text-blue-400 mb-2"> Nuevos Certmenes</h4>
+                    <p class="text-gray-300">Te avisaremos cuando se abran inscripciones para nuevos certmenes</p>
                 </div>
                 <div class="bg-gray-800/30 rounded-lg p-4">
-                    <h4 class="font-semibold text-purple-400 mb-2">🏆 Resultados</h4>
+                    <h4 class="font-semibold text-purple-400 mb-2"> Resultados</h4>
                     <p class="text-gray-300">Recibe notificaciones de resultados y rankings actualizados</p>
                 </div>
                 <div class="bg-gray-800/30 rounded-lg p-4">
-                    <h4 class="font-semibold text-green-400 mb-2">💰 VYT Money</h4>
+                    <h4 class="font-semibold text-green-400 mb-2"> VYT Money</h4>
                     <p class="text-gray-300">Alertas sobre cambios en tu balance y nuevas formas de ganar</p>
                 </div>
                 <div class="bg-gray-800/30 rounded-lg p-4">
-                    <h4 class="font-semibold text-yellow-400 mb-2">🎵 Eventos Especiales</h4>
+                    <h4 class="font-semibold text-yellow-400 mb-2"> Eventos Especiales</h4>
                     <p class="text-gray-300">Invitaciones a eventos exclusivos y colaboraciones</p>
                 </div>
             </div>
         </div>
 
-        <!-- Certámenes Activos -->
+        <!-- Certmenes Activos -->
         <div class="bg-gray-800/50 rounded-xl p-6">
-            <h2 class="text-2xl font-bold mb-6">🏆 Certámenes Disponibles</h2>
+            <h2 class="text-2xl font-bold mb-6"> Certmenes Disponibles</h2>
             <div id="certamenesContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div class="text-center py-8">
-                    <div class="text-6xl mb-4">🔍</div>
-                    <p class="text-gray-400">Cargando certámenes disponibles...</p>
+                    <div class="text-6xl mb-4"></div>
+                    <p class="text-gray-400">Cargando certmenes disponibles...</p>
                 </div>
             </div>
         </div>
@@ -409,29 +409,29 @@
 
     <!-- JavaScript -->
     <script>
-        console.log('🚀 Perfil Artista - JavaScript iniciado');
+        console.log(' Perfil Artista - JavaScript iniciado');
         
         // Variables globales para los datos del artista
         let artistaData = {};
         
         // NO redeclarar variables de Firebase - usar las del firebase-config.js
-        // auth, db, storage ya están disponibles globalmente desde firebase-config.js
+        // auth, db, storage ya estn disponibles globalmente desde firebase-config.js
         
-        console.log('🔗 Esperando inicialización de Firebase...');
+        console.log(' Esperando inicializacin de Firebase...');
         
-        // Esperar a que Firebase esté listo
+        // Esperar a que Firebase est listo
         window.addEventListener('firebaseReady', () => {
-            console.log('✅ Firebase listo en perfil-artista');
+            console.log(' Firebase listo en perfil-artista');
         });
 
-        // ⚡ FUNCIONES GLOBALES (deben estar disponibles desde el inicio)
+        //  FUNCIONES GLOBALES (deben estar disponibles desde el inicio)
         window.changePhoto = function() {
-            console.log('📸 changePhoto() ejecutado');
+            console.log(' changePhoto() ejecutado');
             showPhotoModal();
         };
 
         window.editProfile = function() {
-            console.log('✏️ editProfile() ejecutado');
+            console.log(' editProfile() ejecutado');
             showEditModal();
         };
 
@@ -444,7 +444,7 @@
 
         window.joinCertamen = function(certamenId = null, certamenData = null) {
             if (certamenId) {
-                alert(`Inscribiéndote al certamen: ${certamenData?.titulo || 'Certamen'}`);
+                alert(`Inscribindote al certamen: ${certamenData?.titulo || 'Certamen'}`);
             } else {
                 const container = document.querySelector('#certamenesContainer');
                 if (container) {
@@ -454,14 +454,14 @@
         };
 
         window.uploadVideo = function() {
-            alert('Función de subida de video en desarrollo');
+            alert('Funcin de subida de video en desarrollo');
         };
 
         window.viewStats = function() {
-            alert('Función de estadísticas en desarrollo');
+            alert('Funcin de estadsticas en desarrollo');
         };
 
-        // 🔐 FUNCIONES DE MODAL Y BANNER OBLIGATORIO
+        //  FUNCIONES DE MODAL Y BANNER OBLIGATORIO
         function openVerificationModal() {
             document.getElementById('emailVerificationModal').style.display = 'flex';
         }
@@ -495,11 +495,11 @@
             statusDiv.textContent = message;
         }
 
-        // �🔐 FUNCIONES DE VERIFICACIÓN DE EMAIL
+        //  FUNCIONES DE VERIFICACIN DE EMAIL
         async function checkEmailVerification() {
             if (!auth || !auth.currentUser) {
-                showVerificationStatus('❌ No hay usuario autenticado', 'error');
-                showModalVerificationStatus('❌ No hay usuario autenticado', 'error');
+                showVerificationStatus(' No hay usuario autenticado', 'error');
+                showModalVerificationStatus(' No hay usuario autenticado', 'error');
                 return;
             }
 
@@ -508,41 +508,41 @@
                 await auth.currentUser.reload();
                 const user = auth.currentUser;
                 
-                console.log('📧 Estado de verificación:', user.emailVerified);
+                console.log(' Estado de verificacin:', user.emailVerified);
                 
                 if (user.emailVerified) {
                     showEmailVerifiedSection();
                     closeVerificationModal(); // Cerrar modal
                     hideEmailWarningBanner(); // Ocultar banner
-                    showVerificationStatus('✅ Email verificado correctamente', 'success');
-                    showModalVerificationStatus('✅ ¡PERFECTO! Email verificado', 'success');
+                    showVerificationStatus(' Email verificado correctamente', 'success');
+                    showModalVerificationStatus(' PERFECTO! Email verificado', 'success');
                 } else {
-                    showVerificationStatus('⏳ Email aún no verificado. Revisa tu bandeja de entrada.', 'warning');
-                    showModalVerificationStatus('⏳ Aún no verificado. Revisa tu email.', 'warning');
+                    showVerificationStatus(' Email an no verificado. Revisa tu bandeja de entrada.', 'warning');
+                    showModalVerificationStatus(' An no verificado. Revisa tu email.', 'warning');
                 }
             } catch (error) {
-                console.error('❌ Error verificando email:', error);
-                showVerificationStatus('❌ Error al verificar. Intenta nuevamente.', 'error');
-                showModalVerificationStatus('❌ Error al verificar. Intenta nuevamente.', 'error');
+                console.error(' Error verificando email:', error);
+                showVerificationStatus(' Error al verificar. Intenta nuevamente.', 'error');
+                showModalVerificationStatus(' Error al verificar. Intenta nuevamente.', 'error');
             }
         }
 
         async function resendVerificationEmail() {
             if (!auth || !auth.currentUser) {
-                showVerificationStatus('❌ No hay usuario autenticado', 'error');
-                showModalVerificationStatus('❌ No hay usuario autenticado', 'error');
+                showVerificationStatus(' No hay usuario autenticado', 'error');
+                showModalVerificationStatus(' No hay usuario autenticado', 'error');
                 return;
             }
 
             try {
                 await auth.currentUser.sendEmailVerification();
-                showVerificationStatus('📧 Email de verificación reenviado. Revisa tu bandeja de entrada.', 'success');
-                showModalVerificationStatus('📧 ¡Email enviado! Revisa tu bandeja de entrada y spam.', 'success');
-                console.log('✅ Email de verificación reenviado');
+                showVerificationStatus(' Email de verificacin reenviado. Revisa tu bandeja de entrada.', 'success');
+                showModalVerificationStatus(' Email enviado! Revisa tu bandeja de entrada y spam.', 'success');
+                console.log(' Email de verificacin reenviado');
             } catch (error) {
-                console.error('❌ Error reenviando email:', error);
-                showVerificationStatus('❌ Error al reenviar email. Intenta más tarde.', 'error');
-                showModalVerificationStatus('❌ Error al reenviar. Intenta más tarde.', 'error');
+                console.error(' Error reenviando email:', error);
+                showVerificationStatus(' Error al reenviar email. Intenta ms tarde.', 'error');
+                showModalVerificationStatus(' Error al reenviar. Intenta ms tarde.', 'error');
             }
         }
 
@@ -568,21 +568,21 @@
             statusDiv.textContent = message;
         }
 
-        // Cargar información del perfil desde FIREBASE FIRESTORE
+        // Cargar informacin del perfil desde FIREBASE FIRESTORE
         async function loadProfile() {
-            console.log('🔄 Cargando perfil desde Firebase...');
+            console.log(' Cargando perfil desde Firebase...');
             
-            // Cargar fondo dinámico
+            // Cargar fondo dinmico
             loadDynamicBackground();
             
-            // 🔥 PRIMERO: Intentar cargar desde localStorage SIEMPRE (es más rápido)
+            //  PRIMERO: Intentar cargar desde localStorage SIEMPRE (es ms rpido)
             const persistentData = localStorage.getItem('artistData_persistent');
             const tempData = localStorage.getItem('artistData');
             
             if (persistentData || tempData) {
                 try {
                     artistaData = JSON.parse(persistentData || tempData);
-                    console.log('✅ Datos encontrados en localStorage:', {
+                    console.log(' Datos encontrados en localStorage:', {
                         nombre: artistaData.nombreArtistico,
                         email: artistaData.email,
                         tieneFoto: !!(artistaData.foto_perfil || artistaData.fotoURL)
@@ -594,7 +594,7 @@
                     // Guardar como persistente si solo estaba en temporal
                     if (!persistentData && tempData) {
                         localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
-                        console.log('💾 Datos promovidos a persistentes');
+                        console.log(' Datos promovidos a persistentes');
                     }
                     
                     // Guardar email si no existe
@@ -605,24 +605,24 @@
                     return; // Salir temprano - datos cargados exitosamente
                     
                 } catch (error) {
-                    console.error('❌ Error parseando datos locales:', error);
+                    console.error(' Error parseando datos locales:', error);
                 }
             }
             
-            // 🔥 SEGUNDO: Si no hay datos locales, intentar Firebase
+            //  SEGUNDO: Si no hay datos locales, intentar Firebase
             try {
                 const userEmail = localStorage.getItem('userEmail');
                 
                 if (!userEmail) {
-                    console.warn('⚠️ No hay email ni datos locales');
-                    showErrorMessage('No se encontró tu perfil. Por favor, crea tu perfil primero.');
+                    console.warn(' No hay email ni datos locales');
+                    showErrorMessage('No se encontr tu perfil. Por favor, crea tu perfil primero.');
                     setTimeout(() => {
                         window.location.href = 'crear-perfil-artista.html';
                     }, 2000);
                     return;
                 }
                 
-                console.log('📧 Buscando perfil en Firebase con email:', userEmail);
+                console.log(' Buscando perfil en Firebase con email:', userEmail);
                 
                 // Buscar perfil en Firestore por email
                 if (!db) db = firebase.firestore();
@@ -633,8 +633,8 @@
                     .get();
                 
                 if (querySnapshot.empty) {
-                    console.warn('⚠️ No se encontró perfil en Firebase');
-                    showErrorMessage('No se encontró tu perfil en la base de datos.');
+                    console.warn(' No se encontr perfil en Firebase');
+                    showErrorMessage('No se encontr tu perfil en la base de datos.');
                     return;
                 }
                 
@@ -644,30 +644,30 @@
                 artistaData = firestoreData;
                 artistaData.firestoreId = doc.id;
                 
-                console.log('✅ Perfil cargado desde Firestore');
+                console.log(' Perfil cargado desde Firestore');
                 
-                // Guardar en localStorage para próximas visitas
+                // Guardar en localStorage para prximas visitas
                 localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
                 
                 // Actualizar interfaz
                 updateProfileDisplay();
                 
             } catch (error) {
-                console.error('❌ Error cargando perfil:', error);
-                showErrorMessage('Error al cargar tu perfil. Por favor, intenta más tarde.');
+                console.error(' Error cargando perfil:', error);
+                showErrorMessage('Error al cargar tu perfil. Por favor, intenta ms tarde.');
             }
         }
         
         // Cargar perfil desde localStorage (respaldo)
         function loadProfileFromLocalStorage() {
-            console.log('🔄 Cargando perfil desde localStorage...');
+            console.log(' Cargando perfil desde localStorage...');
             
             const persistentData = localStorage.getItem('artistData_persistent');
             
             if (persistentData) {
                 try {
                     artistaData = JSON.parse(persistentData);
-                    console.log('✅ Datos encontrados en localStorage:', {
+                    console.log(' Datos encontrados en localStorage:', {
                         nombre: artistaData.nombreArtistico || artistaData.nombre_artista,
                         tieneFoto: !!(artistaData.foto_perfil || artistaData.fotoURL),
                         ciudad: artistaData.ciudad
@@ -677,11 +677,11 @@
                     return;
                     
                 } catch (error) {
-                    console.error('❌ Error cargando datos locales:', error);
+                    console.error(' Error cargando datos locales:', error);
                 }
             }
             
-            // Si no hay datos, mostrar perfil vacío
+            // Si no hay datos, mostrar perfil vaco
             artistaData = {
                 nombreArtistico: 'Artista Sin Nombre',
                 nombre: '',
@@ -694,14 +694,14 @@
             };
             
             updateProfileDisplay();
-            console.log('⚠️ No se encontraron datos, mostrando perfil vacío');
+            console.log(' No se encontraron datos, mostrando perfil vaco');
         }
         
-        // Actualizar visualización del perfil
+        // Actualizar visualizacin del perfil
         function updateProfileDisplay() {
-            console.log('🖼️ Actualizando visualización del perfil...');
+            console.log(' Actualizando visualizacin del perfil...');
             
-            // Actualizar nombre artístico
+            // Actualizar nombre artstico
             const artistName = artistaData.nombreArtistico || artistaData.nombre_artista || 'Artista Sin Nombre';
             document.getElementById('artistName').textContent = artistName;
             
@@ -709,7 +709,7 @@
             const nombreCompleto = `${artistaData.nombre || ''} ${artistaData.apellido || ''}`.trim();
             document.getElementById('realName').textContent = nombreCompleto || 'Nombre no disponible';
             
-            // Actualizar género musical
+            // Actualizar gnero musical
             let genero = 'No especificado';
             if (Array.isArray(artistaData.generos) && artistaData.generos.length > 0) {
                 genero = artistaData.generos.join(', ');
@@ -726,36 +726,36 @@
             const ubicacion = provincia ? `${ciudad}, ${provincia}` : ciudad;
             document.getElementById('cityName').textContent = ubicacion;
             
-            // Actualizar teléfono
+            // Actualizar telfono
             document.getElementById('phoneNumber').textContent = artistaData.whatsapp || artistaData.telefono || 'No especificado';
             
-            // 🔥 ACTUALIZAR FOTO DE PERFIL - Soportar múltiples campos + Avatares DiceBear
+            //  ACTUALIZAR FOTO DE PERFIL - Soportar mltiples campos + Avatares DiceBear
             const fotoURL = artistaData.foto_perfil || artistaData.fotoURL || artistaData.photoURL;
             const profilePhoto = document.getElementById('profilePhoto');
             const defaultAvatar = document.getElementById('defaultAvatar');
             
             if (fotoURL) {
-                console.log('✅ Cargando foto de perfil:', fotoURL.substring(0, 100) + '...');
+                console.log(' Cargando foto de perfil:', fotoURL.substring(0, 100) + '...');
                 
                 if (profilePhoto && defaultAvatar) {
                     profilePhoto.src = fotoURL;
                     profilePhoto.classList.remove('hidden');
                     defaultAvatar.classList.add('hidden');
-                    console.log('📸 Foto de perfil aplicada correctamente');
+                    console.log(' Foto de perfil aplicada correctamente');
                 } else {
-                    console.error('❌ No se encontraron elementos de foto de perfil en el DOM');
+                    console.error(' No se encontraron elementos de foto de perfil en el DOM');
                 }
             } else {
-                // 🎭 GENERAR AVATAR DICEBEAR SI NO HAY FOTO
-                console.log('ℹ️ No hay foto de perfil, generando avatar DiceBear...');
+                //  GENERAR AVATAR DICEBEAR SI NO HAY FOTO
+                console.log(' No hay foto de perfil, generando avatar DiceBear...');
                 
-                // Importar avatar-helper dinámicamente
+                // Importar avatar-helper dinmicamente
                 import('/src/avatar-helper.js').then(({ avatarHelper }) => {
                     // Preparar datos del usuario para el avatar
                     const userData = {
                         uid: artistaData.firestoreId || artistaData.email || Date.now().toString(),
                         nombre_artista: artistName,
-                        fotoUrl: null // Explícitamente null para forzar generación
+                        fotoUrl: null // Explcitamente null para forzar generacin
                     };
                     
                     // Generar y aplicar avatar
@@ -763,21 +763,21 @@
                         avatarHelper.setAvatarToElement(profilePhoto, userData, 200);
                         profilePhoto.classList.remove('hidden');
                         defaultAvatar.classList.add('hidden');
-                        console.log('🎭 Avatar DiceBear aplicado correctamente');
+                        console.log(' Avatar DiceBear aplicado correctamente');
                     }
                 }).catch(err => {
-                    console.error('❌ Error cargando avatar-helper:', err);
+                    console.error(' Error cargando avatar-helper:', err);
                 });
             }
             
-            // Actualizar sección de video y redes sociales
+            // Actualizar seccin de video y redes sociales
             updateVideoAndSocial();
             
-            // 🔐 VERIFICAR ESTADO DEL EMAIL
+            //  VERIFICAR ESTADO DEL EMAIL
             checkEmailVerificationStatus();
         }
 
-        // 🔐 FUNCIÓN PARA VERIFICAR ESTADO DE EMAIL AL CARGAR
+        //  FUNCIN PARA VERIFICAR ESTADO DE EMAIL AL CARGAR
         async function checkEmailVerificationStatus() {
             try {
                 if (auth && auth.currentUser) {
@@ -788,15 +788,15 @@
                         showEmailVerifiedSection();
                         hideEmailWarningBanner(); // Ocultar banner
                         updateNotificationUI(); // Actualizar UI de notificaciones
-                        console.log('✅ Usuario tiene email verificado');
+                        console.log(' Usuario tiene email verificado');
                     } else {
                         showEmailNotVerifiedSection();
-                        // 🚨 MOSTRAR MODAL OBLIGATORIO
+                        //  MOSTRAR MODAL OBLIGATORIO
                         setTimeout(() => {
                             openVerificationModal();
-                        }, 2000); // Esperar 2 segundos después de cargar
+                        }, 2000); // Esperar 2 segundos despus de cargar
                         updateNotificationUI(); // Actualizar UI de notificaciones
-                        console.log('⚠️ Usuario necesita verificar email - MOSTRANDO MODAL');
+                        console.log(' Usuario necesita verificar email - MOSTRANDO MODAL');
                     }
                 } else {
                     // Si no hay usuario autenticado, ocultar ambas secciones
@@ -804,17 +804,17 @@
                     document.getElementById('emailVerifiedSection').style.display = 'none';
                     hideEmailWarningBanner(); // Ocultar banner si no hay usuario
                     updateNotificationUI(); // Actualizar UI de notificaciones
-                    console.log('ℹ️ No hay usuario autenticado');
+                    console.log(' No hay usuario autenticado');
                 }
             } catch (error) {
-                console.error('❌ Error verificando estado de email:', error);
-                // En caso de error, mostrar sección de no verificado
+                console.error(' Error verificando estado de email:', error);
+                // En caso de error, mostrar seccin de no verificado
                 showEmailNotVerifiedSection();
                 updateNotificationUI(); // Actualizar UI de notificaciones
             }
         }
 
-        // 📧 FUNCIONES DE NOTIFICACIONES
+        //  FUNCIONES DE NOTIFICACIONES
         function toggleEmailNotifications() {
             const notificationStatus = localStorage.getItem('emailNotifications');
             const newStatus = notificationStatus === 'enabled' ? 'disabled' : 'enabled';
@@ -822,10 +822,10 @@
             localStorage.setItem('emailNotifications', newStatus);
             updateNotificationUI();
             
-            // Mostrar mensaje de confirmación
+            // Mostrar mensaje de confirmacin
             const message = newStatus === 'enabled' ? 
-                '✅ Notificaciones activadas. Recibirás emails sobre nuevos certámenes.' :
-                '❌ Notificaciones desactivadas. No recibirás emails automáticos.';
+                ' Notificaciones activadas. Recibirs emails sobre nuevos certmenes.' :
+                ' Notificaciones desactivadas. No recibirs emails automticos.';
             
             showNotificationMessage(message);
         }
@@ -842,7 +842,7 @@
                 statusDiv.innerHTML = `
                     <div class="flex items-center space-x-3">
                         <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                        <span class="text-green-400">✅ Notificaciones activadas - Recibirás emails sobre certámenes</span>
+                        <span class="text-green-400"> Notificaciones activadas - Recibirs emails sobre certmenes</span>
                     </div>
                 `;
             } else {
@@ -851,7 +851,7 @@
                 statusDiv.innerHTML = `
                     <div class="flex items-center space-x-3">
                         <div class="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
-                        <span class="text-gray-300">Verificación de email requerida para recibir notificaciones</span>
+                        <span class="text-gray-300">Verificacin de email requerida para recibir notificaciones</span>
                     </div>
                 `;
             }
@@ -869,7 +869,7 @@
             
             messageDiv.textContent = message;
             
-            // Remover después de 3 segundos
+            // Remover despus de 3 segundos
             setTimeout(() => {
                 if (messageDiv.parentNode) {
                     messageDiv.parentNode.removeChild(messageDiv);
@@ -877,7 +877,7 @@
             }, 3000);
         }
 
-        // Función para actualizar la sección de video y redes sociales
+        // Funcin para actualizar la seccin de video y redes sociales
         function updateVideoAndSocial() {
             const videoContainer = document.getElementById('videoContainer');
             const socialLinksContainer = document.getElementById('socialLinksContainer');
@@ -935,7 +935,7 @@
                     <a href="${red.url}" target="_blank" rel="noopener noreferrer" 
                        class="${red.class}" 
                        aria-label="${red.name}" 
-                       title="Sígueme en ${red.name}">
+                       title="Sgueme en ${red.name}">
                         <i class="${red.icon}"></i>
                     </a>
                 `).join('');
@@ -949,18 +949,18 @@
             noContentMessage.style.display = hasContent ? 'none' : 'block';
         }
         
-        // Función para extraer ID de video de YouTube
+        // Funcin para extraer ID de video de YouTube
         function extractVideoId(url) {
             const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
             const match = url.match(regex);
             return match ? match[1] : null;
         }
 
-        // Cargar certámenes disponibles
+        // Cargar certmenes disponibles
         async function loadCertamenes() {
             try {
                 if (!db) {
-                    console.log('📝 Firebase no disponible, mostrando certámenes de ejemplo');
+                    console.log(' Firebase no disponible, mostrando certmenes de ejemplo');
                     showExampleCertamenes();
                     return;
                 }
@@ -975,9 +975,9 @@
                 if (snapshot.empty) {
                     container.innerHTML = `
                         <div class="col-span-full text-center py-8">
-                            <div class="text-6xl mb-4">🎭</div>
-                            <h3 class="text-xl font-bold text-white mb-2">No hay certámenes activos</h3>
-                            <p class="text-gray-400">¡Pronto habrá nuevos certámenes disponibles!</p>
+                            <div class="text-6xl mb-4"></div>
+                            <h3 class="text-xl font-bold text-white mb-2">No hay certmenes activos</h3>
+                            <p class="text-gray-400">Pronto habr nuevos certmenes disponibles!</p>
                         </div>
                     `;
                     return;
@@ -990,9 +990,9 @@
                     certamenDiv.className = 'bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer';
                     certamenDiv.innerHTML = `
                         <div class="text-center">
-                            <div class="text-3xl mb-2">🏆</div>
+                            <div class="text-3xl mb-2"></div>
                             <h4 class="font-bold text-white mb-2">${certamen.titulo || 'Certamen'}</h4>
-                            <p class="text-gray-400 text-sm mb-3">${certamen.descripcion || 'Descripción del certamen'}</p>
+                            <p class="text-gray-400 text-sm mb-3">${certamen.descripcion || 'Descripcin del certamen'}</p>
                             <div class="flex justify-between items-center text-xs">
                                 <span class="bg-green-500 text-white px-2 py-1 rounded-full">Activo</span>
                                 <span class="text-gray-400">${certamen.participantes || 0} participantes</span>
@@ -1008,18 +1008,18 @@
                 });
 
             } catch (error) {
-                console.error('Error cargando certámenes:', error);
+                console.error('Error cargando certmenes:', error);
                 showExampleCertamenes();
             }
         }
 
-        // Función para mostrar certámenes de ejemplo cuando Firebase no está disponible
+        // Funcin para mostrar certmenes de ejemplo cuando Firebase no est disponible
         function showExampleCertamenes() {
             const container = document.getElementById('certamenesContainer');
             container.innerHTML = `
                 <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
                     <div class="text-center">
-                        <div class="text-3xl mb-2">🏆</div>
+                        <div class="text-3xl mb-2"></div>
                         <h4 class="font-bold text-white mb-2">Certamen Nacional VYT 2025</h4>
                         <p class="text-gray-400 text-sm mb-3">Gran certamen nacional de talentos musicales</p>
                         <div class="flex justify-between items-center text-xs">
@@ -1030,7 +1030,7 @@
                 </div>
                 <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
                     <div class="text-center">
-                        <div class="text-3xl mb-2">🎤</div>
+                        <div class="text-3xl mb-2"></div>
                         <h4 class="font-bold text-white mb-2">Voces del Futuro</h4>
                         <p class="text-gray-400 text-sm mb-3">Certamen para nuevos talentos vocales</p>
                         <div class="flex justify-between items-center text-xs">
@@ -1041,11 +1041,11 @@
                 </div>
                 <div class="bg-gray-700/50 rounded-lg p-4 border border-gray-600 hover:border-blue-500 transition-colors cursor-pointer">
                     <div class="text-center">
-                        <div class="text-3xl mb-2">🎸</div>
+                        <div class="text-3xl mb-2"></div>
                         <h4 class="font-bold text-white mb-2">Instrumental Challenge</h4>
                         <p class="text-gray-400 text-sm mb-3">Competencia de instrumentos solistas</p>
                         <div class="flex justify-between items-center text-xs">
-                            <span class="bg-yellow-500 text-white px-2 py-1 rounded-full">Próximamente</span>
+                            <span class="bg-yellow-500 text-white px-2 py-1 rounded-full">Prximamente</span>
                             <span class="text-gray-400">0 participantes</span>
                         </div>
                     </div>
@@ -1063,7 +1063,7 @@
                 localStorage.removeItem('artistData');
                 window.location.href = 'index.html';
             } catch (error) {
-                console.error('Error al cerrar sesión:', error);
+                console.error('Error al cerrar sesin:', error);
                 // Forzar logout local aunque falle Firebase
                 localStorage.removeItem('artistaLogueado');
                 localStorage.removeItem('artistData');
@@ -1071,7 +1071,7 @@
             }
         };
 
-        // Función para mostrar el modal de cambio de foto
+        // Funcin para mostrar el modal de cambio de foto
         function showPhotoModal() {
             const modal = document.createElement('div');
             modal.id = 'photoModal';
@@ -1101,7 +1101,7 @@
                 ">
                     <div style="padding: 2rem;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                            <h2 style="color: #3b82f6; font-size: 1.5rem; font-weight: bold;">📸 Cambiar Foto de Perfil</h2>
+                            <h2 style="color: #3b82f6; font-size: 1.5rem; font-weight: bold;"> Cambiar Foto de Perfil</h2>
                             <button onclick="closePhotoModal()" style="
                                 background: none;
                                 border: none;
@@ -1183,7 +1183,7 @@
                             
                             <p style="color: #9ca3af; font-size: 0.875rem;">
                                 Formatos soportados: JPG, PNG, WebP<br>
-                                Tamaño máximo: 5MB
+                                Tamao mximo: 5MB
                             </p>
                         </div>
                         
@@ -1220,21 +1220,21 @@
             });
         }
 
-        // Variables globales para la cámara
+        // Variables globales para la cmara
         let currentStream = null;
         let selectedPhoto = null;
 
-        // Función para manejar la selección de foto
+        // Funcin para manejar la seleccin de foto
         function handlePhotoSelection(file) {
             if (!file) return;
             
             // Validar tipo de archivo
             if (!file.type.startsWith('image/')) {
-                alert('Por favor selecciona una imagen válida');
+                alert('Por favor selecciona una imagen vlida');
                 return;
             }
             
-            // Validar tamaño (5MB máximo)
+            // Validar tamao (5MB mximo)
             if (file.size > 5 * 1024 * 1024) {
                 alert('La imagen es muy grande. Por favor selecciona una imagen menor a 5MB');
                 return;
@@ -1248,7 +1248,7 @@
                 const preview = document.getElementById('photoPreview');
                 preview.innerHTML = `<img src="${e.target.result}" style="width: 100%; height: 100%; object-fit: cover;" alt="Preview">`;
                 
-                // Habilitar botón de guardar
+                // Habilitar botn de guardar
                 const saveBtn = document.getElementById('savePhotoBtn');
                 saveBtn.disabled = false;
                 saveBtn.style.opacity = '1';
@@ -1256,7 +1256,7 @@
             reader.readAsDataURL(file);
         }
 
-        // Función para activar la cámara
+        // Funcin para activar la cmara
         window.takePhoto = async function() {
             try {
                 currentStream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -1264,12 +1264,12 @@
                 video.srcObject = currentStream;
                 document.getElementById('cameraContainer').style.display = 'block';
             } catch (error) {
-                alert('No se pudo acceder a la cámara. Asegúrate de dar permisos.');
+                alert('No se pudo acceder a la cmara. Asegrate de dar permisos.');
                 console.error('Error accessing camera:', error);
             }
         };
 
-        // Función para capturar foto desde la cámara
+        // Funcin para capturar foto desde la cmara
         window.capturePhoto = function() {
             const video = document.getElementById('cameraVideo');
             const canvas = document.createElement('canvas');
@@ -1286,17 +1286,17 @@
                 const preview = document.getElementById('photoPreview');
                 preview.innerHTML = `<img src="${canvas.toDataURL()}" style="width: 100%; height: 100%; object-fit: cover;" alt="Preview">`;
                 
-                // Habilitar botón de guardar
+                // Habilitar botn de guardar
                 const saveBtn = document.getElementById('savePhotoBtn');
                 saveBtn.disabled = false;
                 saveBtn.style.opacity = '1';
                 
-                // Ocultar cámara
+                // Ocultar cmara
                 stopCamera();
             }, 'image/jpeg', 0.8);
         };
 
-        // Función para detener la cámara
+        // Funcin para detener la cmara
         window.stopCamera = function() {
             if (currentStream) {
                 currentStream.getTracks().forEach(track => track.stop());
@@ -1305,40 +1305,40 @@
             document.getElementById('cameraContainer').style.display = 'none';
         };
 
-        // 🖼️ FUNCIÓN ULTRA-ROBUSTA PARA CUALQUIER FORMATO DE IMAGEN
+        //  FUNCIN ULTRA-ROBUSTA PARA CUALQUIER FORMATO DE IMAGEN
         function resizeImage(file, maxWidth = 600, maxHeight = 600, quality = 0.6) {
             return new Promise((resolve) => {
                 // Validar que sea un archivo
                 if (!file) {
-                    console.error('❌ No hay archivo seleccionado');
+                    console.error(' No hay archivo seleccionado');
                     alert('Por favor selecciona un archivo');
                     resolve(null);
                     return;
                 }
                 
-                // Mostrar información detallada del archivo SIN validar tipo
+                // Mostrar informacin detallada del archivo SIN validar tipo
                 const fileSizeMB = file.size / 1024 / 1024;
-                console.log(`📏 Archivo detectado:`, {
+                console.log(` Archivo detectado:`, {
                     nombre: file.name,
                     tipo: file.type || 'Tipo no detectado', 
-                    tamaño: `${fileSizeMB.toFixed(2)}MB`,
+                    tamao: `${fileSizeMB.toFixed(2)}MB`,
                     fechaModificacion: file.lastModified ? new Date(file.lastModified).toLocaleString() : 'Desconocida'
                 });
                 
-                // 🔥 MÉTODO ALTERNATIVO: Usar FileReader primero para validar
+                //  MTODO ALTERNATIVO: Usar FileReader primero para validar
                 const reader = new FileReader();
                 
                 reader.onload = function(e) {
-                    console.log('✅ Archivo leído exitosamente por FileReader');
+                    console.log(' Archivo ledo exitosamente por FileReader');
                     
                     // Crear imagen desde el resultado del FileReader
                     const img = new Image();
                     
                     img.onload = function() {
                         try {
-                            console.log(`✅ Imagen cargada exitosamente: ${img.width}x${img.height}px`);
+                            console.log(` Imagen cargada exitosamente: ${img.width}x${img.height}px`);
                             
-                            // Calcular nuevas dimensiones manteniendo proporción
+                            // Calcular nuevas dimensiones manteniendo proporcin
                             let { width, height } = img;
                             const aspectRatio = width / height;
                             
@@ -1352,7 +1352,7 @@
                                 width = height * aspectRatio;
                             }
                             
-                            // Asegurar que no exceda ninguna dimensión
+                            // Asegurar que no exceda ninguna dimensin
                             if (width > maxWidth) {
                                 width = maxWidth;
                                 height = width / aspectRatio;
@@ -1368,7 +1368,7 @@
                             canvas.width = Math.round(width);
                             canvas.height = Math.round(height);
                             
-                            console.log(`🎯 Redimensionando a: ${canvas.width}x${canvas.height}px`);
+                            console.log(` Redimensionando a: ${canvas.width}x${canvas.height}px`);
                             
                             // Mejorar la calidad del redimensionado
                             ctx.imageSmoothingEnabled = true;
@@ -1377,18 +1377,18 @@
                             // Dibujar imagen redimensionada
                             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                             
-                            // 🔥 CALIDAD ADAPTATIVA
+                            //  CALIDAD ADAPTATIVA
                             let finalQuality = quality;
                             if (fileSizeMB > 20) finalQuality = 0.3; // MUY grande -> calidad muy baja
                             else if (fileSizeMB > 10) finalQuality = 0.4; // Grande -> calidad baja
                             else if (fileSizeMB > 5) finalQuality = 0.5; // Normal -> calidad media
                             
-                            console.log(`🎨 Aplicando calidad: ${Math.round(finalQuality*100)}%`);
+                            console.log(` Aplicando calidad: ${Math.round(finalQuality*100)}%`);
                             
                             // Convertir a blob con calidad adaptativa
                             canvas.toBlob((blob) => {
                                 if (!blob) {
-                                    console.error('❌ Error al generar blob desde canvas');
+                                    console.error(' Error al generar blob desde canvas');
                                     alert('Error al procesar la imagen. Intenta con otra imagen.');
                                     resolve(null);
                                     return;
@@ -1396,10 +1396,10 @@
                                 
                                 const newSizeMB = blob.size / 1024 / 1024;
                                 const newSizeKB = Math.round(blob.size / 1024);
-                                console.log(`✅ Optimización completada:`, {
+                                console.log(` Optimizacin completada:`, {
                                     original: `${fileSizeMB.toFixed(2)}MB`,
                                     optimizada: `${newSizeKB}KB`,
-                                    reducción: `${(((fileSizeMB*1024) - newSizeKB) / (fileSizeMB*1024) * 100).toFixed(1)}%`,
+                                    reduccin: `${(((fileSizeMB*1024) - newSizeKB) / (fileSizeMB*1024) * 100).toFixed(1)}%`,
                                     dimensiones: `${canvas.width}x${canvas.height}px`,
                                     calidad: `${Math.round(finalQuality*100)}%`
                                 });
@@ -1408,15 +1408,15 @@
                             }, 'image/jpeg', finalQuality);
                             
                         } catch (canvasError) {
-                            console.error('❌ Error en canvas:', canvasError);
+                            console.error(' Error en canvas:', canvasError);
                             alert('Error al procesar la imagen en canvas. El archivo puede estar corrupto.');
                             resolve(null);
                         }
                     };
                     
                     img.onerror = function(event) {
-                        console.error('❌ Error al cargar imagen desde FileReader:', event);
-                        alert(`Error: El archivo "${file.name}" no es una imagen válida o está corrupto. Intenta con otra imagen.`);
+                        console.error(' Error al cargar imagen desde FileReader:', event);
+                        alert(`Error: El archivo "${file.name}" no es una imagen vlida o est corrupto. Intenta con otra imagen.`);
                         resolve(null);
                     };
                     
@@ -1425,18 +1425,18 @@
                 };
                 
                 reader.onerror = function(event) {
-                    console.error('❌ Error en FileReader:', event);
+                    console.error(' Error en FileReader:', event);
                     alert(`Error al leer el archivo "${file.name}". El archivo puede estar corrupto.`);
                     resolve(null);
                 };
                 
-                // 🔥 LEER COMO DATA URL (más compatible que createObjectURL)
-                console.log('🔗 Iniciando lectura del archivo...');
+                //  LEER COMO DATA URL (ms compatible que createObjectURL)
+                console.log(' Iniciando lectura del archivo...');
                 reader.readAsDataURL(file);
             });
         }
 
-        // Función para guardar la foto - CON REDIMENSIONADO AUTOMÁTICO
+        // Funcin para guardar la foto - CON REDIMENSIONADO AUTOMTICO
         window.savePhoto = async function() {
             if (!selectedPhoto) {
                 alert('Por favor selecciona una foto primero');
@@ -1448,15 +1448,15 @@
             saveBtn.disabled = true;
             
             try {
-                console.log('📸 Iniciando subida de foto a Firebase Storage...');
+                console.log(' Iniciando subida de foto a Firebase Storage...');
                 
-                // 🔥 SUBIR A FIREBASE STORAGE
+                //  SUBIR A FIREBASE STORAGE
                 if (!storage) storage = firebase.storage();
                 const timestamp = Date.now();
                 const fileName = `perfil_${timestamp}_${selectedPhoto.name}`;
                 const storageRef = storage.ref(`perfiles/${fileName}`);
                 
-                console.log('📤 Subiendo archivo:', fileName);
+                console.log(' Subiendo archivo:', fileName);
                 
                 // Subir foto con progreso
                 const uploadTask = storageRef.put(selectedPhoto);
@@ -1465,10 +1465,10 @@
                     (snapshot) => {
                         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         saveBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Subiendo ${Math.round(progress)}%`;
-                        console.log(`📊 Progreso: ${Math.round(progress)}%`);
+                        console.log(` Progreso: ${Math.round(progress)}%`);
                     },
                     (error) => {
-                        console.error('❌ Error subiendo foto:', error);
+                        console.error(' Error subiendo foto:', error);
                         alert('Error al subir la foto: ' + error.message);
                         saveBtn.innerHTML = 'Guardar Foto';
                         saveBtn.disabled = false;
@@ -1477,13 +1477,13 @@
                         try {
                             // Obtener URL de descarga
                             const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                            console.log('✅ Foto subida exitosamente:', downloadURL);
+                            console.log(' Foto subida exitosamente:', downloadURL);
                             
                             // Actualizar datos del artista
                             artistaData.foto_perfil = downloadURL;
                             artistaData.fotoURL = downloadURL; // Mantener compatibilidad
                             
-                            // 💾 GUARDAR EN FIRESTORE SI HAY ID
+                            //  GUARDAR EN FIRESTORE SI HAY ID
                             if (artistaData.firestoreId) {
                                 if (!db) db = firebase.firestore();
                                 await db.collection('artist_profiles').doc(artistaData.firestoreId).update({
@@ -1491,9 +1491,9 @@
                                     fotoURL: downloadURL,
                                     fecha_actualizacion_foto: new Date().toISOString()
                                 });
-                                console.log('✅ Foto actualizada en Firestore');
+                                console.log(' Foto actualizada en Firestore');
                             } else {
-                                console.warn('⚠️ No hay firestoreId, solo guardando localmente');
+                                console.warn(' No hay firestoreId, solo guardando localmente');
                             }
                             
                             // Guardar en localStorage
@@ -1510,13 +1510,13 @@
                             }
                             
                             closePhotoModal();
-                            showSuccessMessage('✅ Foto actualizada exitosamente');
+                            showSuccessMessage(' Foto actualizada exitosamente');
                             
                             saveBtn.innerHTML = 'Guardar Foto';
                             saveBtn.disabled = false;
                             
                         } catch (error) {
-                            console.error('❌ Error obteniendo URL:', error);
+                            console.error(' Error obteniendo URL:', error);
                             alert('Error al obtener URL de la foto');
                             saveBtn.innerHTML = 'Guardar Foto';
                             saveBtn.disabled = false;
@@ -1525,14 +1525,14 @@
                 );
                 
             } catch (error) {
-                console.error('❌ Error al guardar la foto:', error);
+                console.error(' Error al guardar la foto:', error);
                 alert('Error al guardar la foto: ' + error.message);
                 saveBtn.innerHTML = 'Guardar Foto';
                 saveBtn.disabled = false;
             }
         };
 
-        // Función para cerrar el modal de foto
+        // Funcin para cerrar el modal de foto
         window.closePhotoModal = function() {
             stopCamera();
             const modal = document.getElementById('photoModal');
@@ -1541,7 +1541,7 @@
             }
         };
 
-        // Función para mostrar mensajes de éxito
+        // Funcin para mostrar mensajes de xito
         function showSuccessMessage(message) {
             const successDiv = document.createElement('div');
             successDiv.style.cssText = `
@@ -1565,7 +1565,7 @@
             }, 3000);
         }
 
-        // Función para mostrar mensajes de error
+        // Funcin para mostrar mensajes de error
         function showErrorMessage(message) {
             const errorDiv = document.createElement('div');
             errorDiv.style.cssText = `
@@ -1589,7 +1589,7 @@
             }, 5000);
         }
 
-        // Función para mostrar el modal de edición
+        // Funcin para mostrar el modal de edicin
         function showEditModal() {
             const modal = document.createElement('div');
             modal.id = 'editModal';
@@ -1635,7 +1635,7 @@
                         <form id="editProfileForm">
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                                 <div>
-                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Nombre Artístico</label>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Nombre Artstico</label>
                                     <input type="text" id="editNombreArtistico" value="${artistaData.nombre_artista || ''}" style="
                                         width: 100%;
                                         padding: 0.75rem;
@@ -1701,8 +1701,8 @@
                                     ">
                                 </div>
                                 <div>
-                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Teléfono</label>
-                                    <input type="text" id="editTelefono" value="${artistaData.telefono || ''}" placeholder="Tu número de teléfono" style="
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Telfono</label>
+                                    <input type="text" id="editTelefono" value="${artistaData.telefono || ''}" placeholder="Tu nmero de telfono" style="
                                         width: 100%;
                                         padding: 0.75rem;
                                         background: rgba(55, 65, 81, 0.5);
@@ -1715,7 +1715,7 @@
                             </div>
                             
                             <div style="margin-bottom: 1rem;">
-                                <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Género Musical</label>
+                                <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Gnero Musical</label>
                                 <select id="editGeneroMusical" style="
                                     width: 100%;
                                     padding: 0.75rem;
@@ -1725,7 +1725,7 @@
                                     color: white;
                                     outline: none;
                                 ">
-                                    <option value="">Selecciona tu género musical</option>
+                                    <option value="">Selecciona tu gnero musical</option>
                                     <option value="Pop">Pop</option>
                                     <option value="Rock">Rock</option>
                                     <option value="Reggaeton">Reggaeton</option>
@@ -1736,7 +1736,7 @@
                                     <option value="Hip Hop">Hip Hop</option>
                                     <option value="Trap">Trap</option>
                                     <option value="Balada">Balada</option>
-                                    <option value="Electrónica">Electrónica</option>
+                                    <option value="Electrnica">Electrnica</option>
                                     <option value="Jazz">Jazz</option>
                                     <option value="Blues">Blues</option>
                                     <option value="Country">Country</option>
@@ -1744,9 +1744,9 @@
                                 </select>
                             </div>
                             
-                            <!-- Sección de Video y Redes Sociales -->
+                            <!-- Seccin de Video y Redes Sociales -->
                             <div style="margin-bottom: 1rem;">
-                                <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">🎵 Video Musical (YouTube/Vimeo)</label>
+                                <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;"> Video Musical (YouTube/Vimeo)</label>
                                 <input type="url" id="editVideoURL" value="${artistaData.video_url || ''}" placeholder="https://youtube.com/watch?v=..." style="
                                     width: 100%;
                                     padding: 0.75rem;
@@ -1760,7 +1760,7 @@
                             
                             <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                                 <div>
-                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">📱 Instagram</label>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;"> Instagram</label>
                                     <input type="url" id="editInstagram" value="${artistaData.instagram || ''}" placeholder="https://instagram.com/usuario" style="
                                         width: 100%;
                                         padding: 0.75rem;
@@ -1772,7 +1772,7 @@
                                     ">
                                 </div>
                                 <div>
-                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">📘 Facebook</label>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;"> Facebook</label>
                                     <input type="url" id="editFacebook" value="${artistaData.facebook || ''}" placeholder="https://facebook.com/usuario" style="
                                         width: 100%;
                                         padding: 0.75rem;
@@ -1784,7 +1784,7 @@
                                     ">
                                 </div>
                                 <div>
-                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">🎬 TikTok</label>
+                                    <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;"> TikTok</label>
                                     <input type="url" id="editTikTok" value="${artistaData.tiktok || ''}" placeholder="https://tiktok.com/@usuario" style="
                                         width: 100%;
                                         padding: 0.75rem;
@@ -1798,8 +1798,8 @@
                             </div>
                             
                             <div style="margin-bottom: 1rem;">
-                                <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Biografía</label>
-                                <textarea id="editBiografia" rows="4" placeholder="Cuéntanos sobre ti..." style="
+                                <label style="display: block; color: white; font-weight: 500; margin-bottom: 0.5rem;">Biografa</label>
+                                <textarea id="editBiografia" rows="4" placeholder="Cuntanos sobre ti..." style="
                                     width: 100%;
                                     padding: 0.75rem;
                                     background: rgba(55, 65, 81, 0.5);
@@ -1838,7 +1838,7 @@
             
             document.body.appendChild(modal);
             
-            // Configurar el valor del select del género musical
+            // Configurar el valor del select del gnero musical
             const generoSelect = document.getElementById('editGeneroMusical');
             if (generoSelect && artistaData.genero_musical) {
                 generoSelect.value = artistaData.genero_musical;
@@ -1851,7 +1851,7 @@
             });
         }
 
-        // Función para cerrar el modal de edición
+        // Funcin para cerrar el modal de edicin
         window.closeEditModal = function() {
             const modal = document.getElementById('editModal');
             if (modal) {
@@ -1859,7 +1859,7 @@
             }
         };
 
-        // Función para guardar los cambios del perfil
+        // Funcin para guardar los cambios del perfil
         function saveProfileChanges() {
             const nombreArtistico = document.getElementById('editNombreArtistico').value;
             const whatsapp = document.getElementById('editWhatsapp').value;
@@ -1889,9 +1889,9 @@
             artistaData.tiktok = tiktok;
             artistaData.fechaActualizacion = new Date().toISOString();
             
-            // 🔥 SISTEMA SIMPLE: Solo guardar local persistente
+            //  SISTEMA SIMPLE: Solo guardar local persistente
             localStorage.setItem('artistData_persistent', JSON.stringify(artistaData));
-            console.log('� Datos guardados persistentemente:', artistaData);
+            console.log(' Datos guardados persistentemente:', artistaData);
             
             // Actualizar la interfaz
             updateProfileDisplay();
@@ -1899,24 +1899,24 @@
             // Cerrar el modal
             closeEditModal();
             
-            // Mostrar mensaje de éxito SIMPLE
-            showSuccessMessage('✅ Perfil guardado PERMANENTEMENTE (modo offline)');
+            // Mostrar mensaje de xito SIMPLE
+            showSuccessMessage(' Perfil guardado PERMANENTEMENTE (modo offline)');
         }
 
-        // Función para guardar datos en Firebase de forma persistente
+        // Funcin para guardar datos en Firebase de forma persistente
         async function saveToFirebase(data) {
             try {
-                console.log('💾 Guardando perfil en Firebase...');
+                console.log(' Guardando perfil en Firebase...');
                 
                 if (!db) {
-                    console.warn('⚠️ Firebase no disponible, solo guardado local');
+                    console.warn(' Firebase no disponible, solo guardado local');
                     return;
                 }
                 
                 // Buscar el documento existente por email
                 const email = data.email || localStorage.getItem('userEmail');
                 if (!email) {
-                    console.error('❌ No se encontró email para identificar el usuario');
+                    console.error(' No se encontr email para identificar el usuario');
                     return;
                 }
                 
@@ -1945,20 +1945,20 @@
                         fotoURL: data.fotoURL || null
                     });
                     
-                    console.log('✅ Perfil actualizado en Firebase');
-                    showSuccessMessage('✅ Perfil guardado permanentemente en Firebase');
+                    console.log(' Perfil actualizado en Firebase');
+                    showSuccessMessage(' Perfil guardado permanentemente en Firebase');
                 } else {
-                    console.warn('⚠️ No se encontró el perfil del artista en Firebase');
-                    showSuccessMessage('⚠️ Guardado solo localmente (no se encontró en Firebase)');
+                    console.warn(' No se encontr el perfil del artista en Firebase');
+                    showSuccessMessage(' Guardado solo localmente (no se encontr en Firebase)');
                 }
                 
             } catch (error) {
-                console.error('❌ Error guardando en Firebase:', error);
-                showSuccessMessage('⚠️ Error guardando en Firebase, datos guardados localmente');
+                console.error(' Error guardando en Firebase:', error);
+                showSuccessMessage(' Error guardando en Firebase, datos guardados localmente');
             }
         }
         
-        // Función helper para mostrar mensajes de éxito
+        // Funcin helper para mostrar mensajes de xito
         function showSuccessMessage(message) {
             const existing = document.querySelector('.success-message');
             if (existing) existing.remove();
@@ -1985,22 +1985,22 @@
             }, 4000);
         }
 
-        // Inicializar página
+        // Inicializar pgina
         document.addEventListener('DOMContentLoaded', () => {
             loadProfile();
             loadCertamenes();
         });
         
-        // Sistema de fondos dinámicos desde Admin
+        // Sistema de fondos dinmicos desde Admin
         function loadDynamicBackground() {
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'perfil-artista.html';
                 
-                console.log('🎨 Verificando configuración de fondo para:', currentPage);
+                console.log(' Verificando configuracin de fondo para:', currentPage);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('🖼️ Aplicando fondo personalizado para perfil-artista.html');
+                    console.log(' Aplicando fondo personalizado para perfil-artista.html');
                     
                     const config = backgroundConfig[currentPage];
                     const position = config.position || 'center center';
@@ -2014,17 +2014,17 @@
                     document.documentElement.style.setProperty('--dynamic-bg-position', position);
                     document.body.classList.add('dynamic-background');
                     
-                    console.log(`✅ Fondo aplicado: ${position}, escala: ${scale}`);
+                    console.log(` Fondo aplicado: ${position}, escala: ${scale}`);
                 } else {
-                    console.log('📝 Usando fondo predeterminado para perfil-artista.html');
+                    console.log(' Usando fondo predeterminado para perfil-artista.html');
                 }
             } catch (error) {
-                console.error('❌ Error cargando fondo:', error);
+                console.error(' Error cargando fondo:', error);
             }
         }
         
-        console.log('✅ Perfil Artista - Todas las funciones cargadas');
-        console.log('📋 Funciones disponibles:', {
+        console.log(' Perfil Artista - Todas las funciones cargadas');
+        console.log(' Funciones disponibles:', {
             editProfile: typeof window.editProfile,
             changePhoto: typeof window.changePhoto,
             viewCertamenes: typeof window.viewCertamenes,

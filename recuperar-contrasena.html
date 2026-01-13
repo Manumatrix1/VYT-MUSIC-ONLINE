@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recuperar Contraseña - VYT MUSIC</title>
+    <title>Recuperar Contrasea - VYT MUSIC</title>
     
     <!-- PWA Meta Tags -->
     <meta name="theme-color" content="#1a1a2e">
@@ -14,7 +14,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="firebase-config.js"></script>
     
-    <!-- Sistema de Navegación Unificado -->
+    <!-- Sistema de Navegacin Unificado -->
     <script src="/src/navigation-component.js"></script>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -40,7 +40,7 @@
                 <div class="w-20 h-20 bg-white/20 rounded-full mx-auto mb-4 flex items-center justify-center">
                     <i class="fas fa-key text-4xl text-white"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-white mb-2">Recuperar Contraseña</h1>
+                <h1 class="text-3xl font-bold text-white mb-2">Recuperar Contrasea</h1>
                 <p class="text-white/80">Te enviaremos un enlace a tu email</p>
             </div>
 
@@ -65,7 +65,7 @@
                     type="submit" 
                     id="submitBtn"
                     class="w-full bg-white text-purple-600 font-bold py-4 rounded-xl hover:bg-white/90 transition-all transform hover:scale-105 shadow-lg">
-                    <i class="fas fa-paper-plane mr-2"></i> Enviar Enlace de Recuperación
+                    <i class="fas fa-paper-plane mr-2"></i> Enviar Enlace de Recuperacin
                 </button>
             </form>
 
@@ -97,24 +97,24 @@
             // Validar formato email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                showAlert('Por favor ingresa un email válido', 'error');
+                showAlert('Por favor ingresa un email vlido', 'error');
                 return;
             }
 
-            // Deshabilitar botón
+            // Deshabilitar botn
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enviando...';
 
             try {
-                // Enviar email de recuperación
+                // Enviar email de recuperacin
                 await firebase.auth().sendPasswordResetEmail(email);
                 
-                showAlert('✅ Email enviado! Revisa tu bandeja de entrada', 'success');
+                showAlert(' Email enviado! Revisa tu bandeja de entrada', 'success');
                 
                 // Limpiar form
                 resetForm.reset();
                 
-                // Redirigir después de 3 segundos
+                // Redirigir despus de 3 segundos
                 setTimeout(() => {
                     window.location.href = '/index.html';
                 }, 3000);
@@ -129,17 +129,17 @@
                         errorMessage = 'No existe una cuenta con ese email';
                         break;
                     case 'auth/invalid-email':
-                        errorMessage = 'Email inválido';
+                        errorMessage = 'Email invlido';
                         break;
                     case 'auth/too-many-requests':
-                        errorMessage = 'Demasiados intentos. Intenta más tarde';
+                        errorMessage = 'Demasiados intentos. Intenta ms tarde';
                         break;
                 }
                 
                 showAlert(errorMessage, 'error');
             } finally {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Enviar Enlace de Recuperación';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Enviar Enlace de Recuperacin';
             }
         });
 

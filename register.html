@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -38,7 +38,7 @@
             color: var(--color-texto-principal);
         }
 
-        /* CSS para fondos dinámicos */
+        /* CSS para fondos dinmicos */
         .dynamic-background {
             background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.5)), var(--dynamic-bg, linear-gradient(135deg, var(--color-fondo) 0%, var(--color-fondo-secundario) 100%));
             background-size: var(--dynamic-bg-size, cover);
@@ -107,7 +107,7 @@
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
     
-    <!-- Navegación superior -->
+    <!-- Navegacin superior -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3">
@@ -117,7 +117,7 @@
                 <span class="text-xl font-bold text-white">VYT MUSIC</span>
             </a>
             <a href="login.html" class="text-gray-300 hover:text-white transition-colors">
-                ¿Ya tienes cuenta? Iniciar sesión
+                Ya tienes cuenta? Iniciar sesin
             </a>
         </div>
     </header>
@@ -125,7 +125,7 @@
     <!-- Contenedor principal -->
     <div class="login-container w-full max-w-md p-8 mt-16">
         
-        <!-- Logo y título -->
+        <!-- Logo y ttulo -->
         <div class="text-center mb-8">
             <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span class="text-white font-bold text-2xl">VYT</span>
@@ -134,7 +134,7 @@
             <p class="text-gray-400">Unite a la comunidad de VYT MUSIC</p>
         </div>
 
-        <!-- Mensajes de error/éxito -->
+        <!-- Mensajes de error/xito -->
         <div id="message-container" class="mb-6 hidden">
             <div id="error-message" class="error-message p-3 rounded-lg mb-3 hidden">
                 <div class="flex items-center">
@@ -195,7 +195,7 @@
             </div>
 
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Contraseña</label>
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-1">Contrasea</label>
                 <div class="relative">
                     <input 
                         type="password" 
@@ -203,7 +203,7 @@
                         name="password" 
                         required 
                         class="form-input w-full px-3 py-2 rounded-lg pr-10"
-                        placeholder="••••••••"
+                        placeholder=""
                         autocomplete="new-password"
                     >
                     <button 
@@ -222,19 +222,19 @@
                 </div>
                 <div class="password-strength" id="password-strength"></div>
                 <p class="text-xs text-gray-400 mt-1" id="password-hint">
-                    Mínimo 6 caracteres, incluye números y letras
+                    Mnimo 6 caracteres, incluye nmeros y letras
                 </p>
             </div>
 
             <div>
-                <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-1">Confirmar Contraseña</label>
+                <label for="confirmPassword" class="block text-sm font-medium text-gray-300 mb-1">Confirmar Contrasea</label>
                 <input 
                     type="password" 
                     id="confirmPassword" 
                     name="confirmPassword" 
                     required 
                     class="form-input w-full px-3 py-2 rounded-lg"
-                    placeholder="••••••••"
+                    placeholder=""
                     autocomplete="new-password"
                 >
             </div>
@@ -248,30 +248,30 @@
                 </select>
             </div>
 
-            <!-- Información de ubicación -->
+            <!-- Informacin de ubicacin -->
             <div>
                 <label for="location" class="block text-sm font-medium text-gray-300 mb-1">
-                    📍 Ubicación
+                     Ubicacin
                     <span class="text-xs text-blue-400">(importante para modalidades)</span>
                 </label>
                 <select id="location" name="location" class="form-input w-full px-3 py-2 rounded-lg">
                     <option value="">Seleccionar provincia...</option>
-                    <option value="rosario" class="font-bold text-yellow-400">🏆 Rosario, Santa Fe (Presencial + Online)</option>
+                    <option value="rosario" class="font-bold text-yellow-400"> Rosario, Santa Fe (Presencial + Online)</option>
                     <option value="buenos_aires">Buenos Aires</option>
                     <option value="catamarca">Catamarca</option>
                     <option value="chaco">Chaco</option>
                     <option value="chubut">Chubut</option>
-                    <option value="cordoba">Córdoba</option>
+                    <option value="cordoba">Crdoba</option>
                     <option value="corrientes">Corrientes</option>
-                    <option value="entre_rios">Entre Ríos</option>
+                    <option value="entre_rios">Entre Ros</option>
                     <option value="formosa">Formosa</option>
                     <option value="jujuy">Jujuy</option>
                     <option value="la_pampa">La Pampa</option>
                     <option value="la_rioja">La Rioja</option>
                     <option value="mendoza">Mendoza</option>
                     <option value="misiones">Misiones</option>
-                    <option value="neuquen">Neuquén</option>
-                    <option value="rio_negro">Río Negro</option>
+                    <option value="neuquen">Neuqun</option>
+                    <option value="rio_negro">Ro Negro</option>
                     <option value="salta">Salta</option>
                     <option value="san_juan">San Juan</option>
                     <option value="san_luis">San Luis</option>
@@ -279,7 +279,7 @@
                     <option value="santa_fe">Santa Fe</option>
                     <option value="santiago_del_estero">Santiago del Estero</option>
                     <option value="tierra_del_fuego">Tierra del Fuego</option>
-                    <option value="tucuman">Tucumán</option>
+                    <option value="tucuman">Tucumn</option>
                     <option value="extranjero">Extranjero</option>
                 </select>
             </div>
@@ -287,25 +287,25 @@
             <!-- Modalidad preferida -->
             <div>
                 <label for="preferredModality" class="block text-sm font-medium text-gray-300 mb-1">
-                    🎯 Modalidad preferida
+                     Modalidad preferida
                 </label>
                 <select id="preferredModality" name="preferredModality" class="form-input w-full px-3 py-2 rounded-lg">
                     <option value="">Seleccionar modalidad...</option>
-                    <option value="online">🌐 Online (desde cualquier lugar)</option>
-                    <option value="presencial">🎤 Presencial (solo Rosario)</option>
-                    <option value="both">✨ Ambas modalidades</option>
+                    <option value="online"> Online (desde cualquier lugar)</option>
+                    <option value="presencial"> Presencial (solo Rosario)</option>
+                    <option value="both"> Ambas modalidades</option>
                 </select>
             </div>
 
-            <!-- Información del artista (solo visible para artistas) -->
+            <!-- Informacin del artista (solo visible para artistas) -->
             <div id="artist-info" class="space-y-4 hidden">
                 <div class="border-t border-gray-600 pt-4">
-                    <h3 class="text-lg font-semibold text-blue-400 mb-3">🎵 Información del Artista</h3>
+                    <h3 class="text-lg font-semibold text-blue-400 mb-3"> Informacin del Artista</h3>
                     
                     <div>
-                        <label for="musicalGenre" class="block text-sm font-medium text-gray-300 mb-1">Género Musical Principal</label>
+                        <label for="musicalGenre" class="block text-sm font-medium text-gray-300 mb-1">Gnero Musical Principal</label>
                         <select id="musicalGenre" name="musicalGenre" class="form-input w-full px-3 py-2 rounded-lg">
-                            <option value="">Seleccionar género...</option>
+                            <option value="">Seleccionar gnero...</option>
                             <option value="pop">Pop</option>
                             <option value="rock">Rock</option>
                             <option value="folk">Folclore</option>
@@ -316,7 +316,7 @@
                             <option value="hip_hop">Hip Hop</option>
                             <option value="blues">Blues</option>
                             <option value="jazz">Jazz</option>
-                            <option value="electronica">Electrónica</option>
+                            <option value="electronica">Electrnica</option>
                             <option value="balada">Balada</option>
                             <option value="indie">Indie</option>
                             <option value="metal">Metal</option>
@@ -329,11 +329,11 @@
                         <label for="experience" class="block text-sm font-medium text-gray-300 mb-1">Experiencia Musical</label>
                         <select id="experience" name="experience" class="form-input w-full px-3 py-2 rounded-lg">
                             <option value="">Seleccionar experiencia...</option>
-                            <option value="beginner">🌱 Principiante (menos de 1 año)</option>
-                            <option value="amateur">🎵 Amateur (1-3 años)</option>
-                            <option value="intermediate">🎤 Intermedio (3-5 años)</option>
-                            <option value="advanced">⭐ Avanzado (5-10 años)</option>
-                            <option value="professional">🏆 Profesional (más de 10 años)</option>
+                            <option value="beginner"> Principiante (menos de 1 ao)</option>
+                            <option value="amateur"> Amateur (1-3 aos)</option>
+                            <option value="intermediate"> Intermedio (3-5 aos)</option>
+                            <option value="advanced"> Avanzado (5-10 aos)</option>
+                            <option value="professional"> Profesional (ms de 10 aos)</option>
                         </select>
                     </div>
 
@@ -344,13 +344,13 @@
                             id="instruments" 
                             name="instruments" 
                             class="form-input w-full px-3 py-2 rounded-lg text-sm"
-                            placeholder="Ej: Guitarra, Piano, Canto, Composición..."
+                            placeholder="Ej: Guitarra, Piano, Canto, Composicin..."
                         >
                     </div>
                 </div>
             </div>
 
-            <!-- Términos y condiciones -->
+            <!-- Trminos y condiciones -->
             <div class="flex items-start space-x-3">
                 <input 
                     type="checkbox" 
@@ -361,9 +361,9 @@
                 >
                 <label for="terms" class="text-sm text-gray-300">
                     Acepto los 
-                    <a href="/terminos-condiciones.html" class="text-blue-400 hover:text-blue-300">términos y condiciones</a>
+                    <a href="/terminos-condiciones.html" class="text-blue-400 hover:text-blue-300">trminos y condiciones</a>
                     y su
-                    <a href="/politica-privacidad.html" class="text-blue-400 hover:text-blue-300">política de privacidad</a>
+                    <a href="/politica-privacidad.html" class="text-blue-400 hover:text-blue-300">poltica de privacidad</a>
                 </label>
             </div>
 
@@ -380,7 +380,7 @@
                 </label>
             </div>
 
-            <!-- Botón de registro -->
+            <!-- Botn de registro -->
             <button 
                 type="submit" 
                 id="register-btn"
@@ -400,9 +400,9 @@
         <!-- Enlace a login -->
         <div class="text-center mt-6 pt-4 border-t border-gray-600">
             <p class="text-gray-400">
-                ¿Ya tienes cuenta? 
+                Ya tienes cuenta? 
                 <a href="login.html" class="text-blue-400 hover:text-blue-300 font-semibold">
-                    Iniciar sesión
+                    Iniciar sesin
                 </a>
             </p>
         </div>
@@ -431,7 +431,7 @@
         const passwordStrength = document.getElementById('password-strength');
         const passwordHint = document.getElementById('password-hint');
 
-        // Toggle mostrar/ocultar contraseña
+        // Toggle mostrar/ocultar contrasea
         togglePassword.addEventListener('click', () => {
             const type = passwordInput.type === 'password' ? 'text' : 'password';
             passwordInput.type = type;
@@ -440,26 +440,26 @@
             eyeClosed.classList.toggle('hidden');
         });
 
-        // Validar fortaleza de contraseña
+        // Validar fortaleza de contrasea
         passwordInput.addEventListener('input', (e) => {
             const password = e.target.value;
             const strength = calculatePasswordStrength(password);
             updatePasswordStrength(strength);
         });
 
-        // Validar que las contraseñas coincidan
+        // Validar que las contraseas coincidan
         confirmPasswordInput.addEventListener('input', (e) => {
             const password = passwordInput.value;
             const confirmPassword = e.target.value;
             
             if (confirmPassword && password !== confirmPassword) {
-                e.target.setCustomValidity('Las contraseñas no coinciden');
+                e.target.setCustomValidity('Las contraseas no coinciden');
             } else {
                 e.target.setCustomValidity('');
             }
         });
 
-        // Manejar envío del formulario
+        // Manejar envo del formulario
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -468,23 +468,23 @@
 
             // Validaciones
             if (data.password !== data.confirmPassword) {
-                showMessage('Las contraseñas no coinciden', 'error');
+                showMessage('Las contraseas no coinciden', 'error');
                 return;
             }
 
             if (data.password.length < 6) {
-                showMessage('La contraseña debe tener al menos 6 caracteres', 'error');
+                showMessage('La contrasea debe tener al menos 6 caracteres', 'error');
                 return;
             }
 
             if (!data.terms) {
-                showMessage('Debes aceptar los términos y condiciones', 'error');
+                showMessage('Debes aceptar los trminos y condiciones', 'error');
                 return;
             }
 
             // Validaciones adicionales
             if (!data.location) {
-                showMessage('Por favor selecciona tu ubicación', 'error');
+                showMessage('Por favor selecciona tu ubicacin', 'error');
                 return;
             }
 
@@ -493,10 +493,10 @@
                 return;
             }
 
-            // Validaciones específicas para artistas
+            // Validaciones especficas para artistas
             if (data.userType === 'artist' || data.userType === 'artist_group') {
                 if (!data.musicalGenre) {
-                    showMessage('Por favor selecciona tu género musical', 'error');
+                    showMessage('Por favor selecciona tu gnero musical', 'error');
                     return;
                 }
                 
@@ -557,12 +557,12 @@
                     }
                 });
 
-                // Enviar email de verificación
+                // Enviar email de verificacin
                 await sendEmailVerification(user);
 
-                showMessage('¡Cuenta creada exitosamente! Revisa tu email para verificar tu cuenta.', 'success');
+                showMessage('Cuenta creada exitosamente! Revisa tu email para verificar tu cuenta.', 'success');
                 
-                // Redirigir después de 3 segundos
+                // Redirigir despus de 3 segundos
                 setTimeout(() => {
                     window.location.href = 'login.html';
                 }, 3000);
@@ -573,13 +573,13 @@
                 
                 switch (error.code) {
                     case 'auth/email-already-in-use':
-                        errorMessage = 'Este email ya está registrado';
+                        errorMessage = 'Este email ya est registrado';
                         break;
                     case 'auth/weak-password':
-                        errorMessage = 'La contraseña es muy débil';
+                        errorMessage = 'La contrasea es muy dbil';
                         break;
                     case 'auth/invalid-email':
-                        errorMessage = 'Email inválido';
+                        errorMessage = 'Email invlido';
                         break;
                     default:
                         errorMessage = 'Error: ' + error.message;
@@ -591,7 +591,7 @@
             }
         });
 
-        // Manejar mostrar/ocultar información de artista
+        // Manejar mostrar/ocultar informacin de artista
         const userTypeSelect = document.getElementById('userType');
         const artistInfoSection = document.getElementById('artist-info');
         const locationSelect = document.getElementById('location');
@@ -613,7 +613,7 @@
             }
         });
 
-        // Actualizar opciones de modalidad según ubicación
+        // Actualizar opciones de modalidad segn ubicacin
         locationSelect.addEventListener('change', function() {
             const location = this.value;
             const modalityOptions = modalitySelect.querySelectorAll('option');
@@ -624,7 +624,7 @@
                     option.style.display = 'block';
                     option.disabled = false;
                 });
-                showMessage('🎉 ¡Genial! En Rosario puedes participar en modalidad presencial y online', 'success');
+                showMessage(' Genial! En Rosario puedes participar en modalidad presencial y online', 'success');
             } else if (location && location !== '') {
                 // Fuera de Rosario: solo online
                 modalityOptions.forEach(option => {
@@ -642,7 +642,7 @@
                     modalitySelect.value = 'online';
                 }
                 
-                showMessage('📍 Desde tu ubicación puedes participar en modalidad online', 'success');
+                showMessage(' Desde tu ubicacin puedes participar en modalidad online', 'success');
             }
         });
 
@@ -663,8 +663,8 @@
         function updatePasswordStrength(strength) {
             const classes = ['strength-weak', 'strength-fair', 'strength-good', 'strength-strong'];
             const messages = [
-                'Muy débil',
-                'Débil', 
+                'Muy dbil',
+                'Dbil', 
                 'Aceptable',
                 'Buena',
                 'Muy fuerte'
@@ -675,7 +675,7 @@
                 passwordStrength.classList.add(classes[strength - 1]);
             }
             
-            passwordHint.textContent = strength > 0 ? `Fortaleza: ${messages[strength]}` : 'Mínimo 6 caracteres, incluye números y letras';
+            passwordHint.textContent = strength > 0 ? `Fortaleza: ${messages[strength]}` : 'Mnimo 6 caracteres, incluye nmeros y letras';
         }
 
         function setLoading(loading) {
@@ -716,22 +716,22 @@
 
             messageContainer.classList.remove('hidden');
 
-            // Auto-ocultar después de 8 segundos
+            // Auto-ocultar despus de 8 segundos
             setTimeout(() => {
                 messageContainer.classList.add('hidden');
             }, 8000);
         }
 
         function loadDynamicBackground() {
-            console.log('🎨 [Register] Cargando fondo dinámico...');
+            console.log(' [Register] Cargando fondo dinmico...');
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'register';
                 
-                console.log('📋 [Register] Configuración disponible:', backgroundConfig);
+                console.log(' [Register] Configuracin disponible:', backgroundConfig);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('✅ [Register] Aplicando fondo personalizado');
+                    console.log(' [Register] Aplicando fondo personalizado');
                     
                     // Aplicar CSS variables
                     document.documentElement.style.setProperty('--dynamic-bg', `url('${backgroundConfig[currentPage].imageData}')`);
@@ -745,19 +745,19 @@
                         document.documentElement.style.setProperty('--dynamic-bg-size', `${scaleValue * 100}%`);
                     }
                     
-                    // Agregar clase de fondo dinámico
+                    // Agregar clase de fondo dinmico
                     document.body.classList.add('dynamic-background');
                     
-                    console.log('🎯 [Register] Fondo dinámico aplicado exitosamente');
+                    console.log(' [Register] Fondo dinmico aplicado exitosamente');
                 } else {
-                    console.log('ℹ️ [Register] Sin configuración personalizada, usando fondo predeterminado');
+                    console.log(' [Register] Sin configuracin personalizada, usando fondo predeterminado');
                 }
             } catch (error) {
-                console.error('❌ [Register] Error al cargar fondo dinámico:', error);
+                console.error(' [Register] Error al cargar fondo dinmico:', error);
             }
         }
 
-        // Auto-focus en el nombre al cargar y cargar fondo dinámico
+        // Auto-focus en el nombre al cargar y cargar fondo dinmico
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicBackground();
             document.getElementById('firstName').focus();

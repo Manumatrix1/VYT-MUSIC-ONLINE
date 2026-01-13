@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Pagar Inscripción</title>
+    <title>VYT MUSIC - Pagar Inscripcin</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Completa el pago de tu inscripción al certamen">
+    <meta name="description" content="Completa el pago de tu inscripcin al certamen">
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="VYT Music">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     <link rel="manifest" href="/manifest.json">
     
     <!-- Design Tokens - Sistema Unificado -->
@@ -225,7 +225,7 @@
         <!-- Header -->
         <div class="header-pago">
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music">
-            <h1>Completa tu Inscripción</h1>
+            <h1>Completa tu Inscripcin</h1>
             <p>Tu video fue aprobado. Paga para comenzar a competir.</p>
         </div>
 
@@ -241,7 +241,7 @@
             </div>
 
             <div class="resumen-item">
-                <label>Canción</label>
+                <label>Cancin</label>
                 <span class="valor" id="cancion-nombre">-</span>
             </div>
 
@@ -251,30 +251,30 @@
             </div>
 
             <div class="resumen-item total">
-                <label>Costo de Inscripción</label>
+                <label>Costo de Inscripcin</label>
                 <span class="valor">$15,000 ARS</span>
             </div>
 
             <div class="desglose">
                 <div class="desglose-item">
-                    <span>💰 Al pozo de premios:</span>
+                    <span> Al pozo de premios:</span>
                     <strong>$4,500</strong>
                 </div>
                 <div class="desglose-item">
-                    <span>⚙️ Operación del certamen:</span>
+                    <span> Operacin del certamen:</span>
                     <strong>$10,500</strong>
                 </div>
             </div>
 
             <div class="pozo-info" id="pozo-info">
-                <strong>💎 Pozo Actual: Cargando...</strong>
-                <div>🥇 1er lugar: -</div>
-                <div>🥈 2do lugar: -</div>
-                <div>🥉 3er lugar: -</div>
+                <strong> Pozo Actual: Cargando...</strong>
+                <div> 1er lugar: -</div>
+                <div> 2do lugar: -</div>
+                <div> 3er lugar: -</div>
             </div>
         </div>
 
-        <!-- Botón Pagar -->
+        <!-- Botn Pagar -->
         <button class="btn-pagar" id="pagar-btn" onclick="procesarPago()">
             <i class="fas fa-credit-card"></i> Pagar con MercadoPago
         </button>
@@ -287,7 +287,7 @@
 
         <!-- Advertencia de Timeout -->
         <div class="timeout-warning">
-            ⏰ <strong>Tienes 48 horas</strong> para completar el pago o tu aprobación expirará.
+             <strong>Tienes 48 horas</strong> para completar el pago o tu aprobacin expirar.
         </div>
     </div>
 
@@ -337,11 +337,11 @@
 
                 // Verificar estado
                 if (participanteData.estado !== 'aprobado_pendiente_pago') {
-                    mostrarError('Este participante no está en estado válido para pago');
+                    mostrarError('Este participante no est en estado vlido para pago');
                     return;
                 }
 
-                // Llenar datos en la página
+                // Llenar datos en la pgina
                 document.getElementById('certamen-nombre').textContent = certamenData.nombre || 'Sin nombre';
                 document.getElementById('cancion-nombre').textContent = participanteData.nombre_cancion || '-';
                 document.getElementById('artista-nombre').textContent = participanteData.nombre_artistico || '-';
@@ -349,10 +349,10 @@
                 // Actualizar info del pozo
                 const pozoActual = certamenData.pozo_actual || 0;
                 document.getElementById('pozo-info').innerHTML = `
-                    <strong>💎 Pozo Actual: $${pozoActual.toLocaleString('es-AR')}</strong>
-                    <div>🥇 1er lugar: $${(pozoActual * 0.5).toLocaleString('es-AR')} (50%)</div>
-                    <div>🥈 2do lugar: $${(pozoActual * 0.3).toLocaleString('es-AR')} (30%)</div>
-                    <div>🥉 3er lugar: $${(pozoActual * 0.2).toLocaleString('es-AR')} (20%)</div>
+                    <strong> Pozo Actual: $${pozoActual.toLocaleString('es-AR')}</strong>
+                    <div> 1er lugar: $${(pozoActual * 0.5).toLocaleString('es-AR')} (50%)</div>
+                    <div> 2do lugar: $${(pozoActual * 0.3).toLocaleString('es-AR')} (30%)</div>
+                    <div> 3er lugar: $${(pozoActual * 0.2).toLocaleString('es-AR')} (20%)</div>
                 `;
 
             } catch (error) {
@@ -405,7 +405,7 @@
         }
     </script>
     
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     </body>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -23,7 +23,7 @@
         min-height: 100vh;
     }
     
-    /* Clase para fondo dinámico que sobreescribe el fondo por defecto */
+    /* Clase para fondo dinmico que sobreescribe el fondo por defecto */
     body.dynamic-background {
         background: var(--dynamic-bg) !important;
         background-size: cover !important;
@@ -106,14 +106,14 @@
             <!-- Formulario de Login -->
             <form id="loginForm" class="space-y-6">
                 <div>
-                    <label class="block text-sm font-medium mb-2">Correo Electrónico</label>
+                    <label class="block text-sm font-medium mb-2">Correo Electrnico</label>
                     <input type="email" id="email" required class="form-input w-full p-3 rounded-lg" placeholder="tu@email.com">
                 </div>
 
                 <div>
-                    <label class="block text-sm font-medium mb-2">Contraseña</label>
+                    <label class="block text-sm font-medium mb-2">Contrasea</label>
                     <div class="relative">
-                        <input type="password" id="password" required class="form-input w-full p-3 rounded-lg pr-12" placeholder="Tu contraseña">
+                        <input type="password" id="password" required class="form-input w-full p-3 rounded-lg pr-12" placeholder="Tu contrasea">
                         <button type="button" onclick="togglePassword()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
                             <i class="fas fa-eye" id="toggleIcon"></i>
                         </button>
@@ -124,11 +124,11 @@
                 <div id="errorMessage" class="hidden bg-red-500/20 border border-red-500/50 text-red-200 p-3 rounded-lg text-center">
                 </div>
 
-                <!-- Mensaje de éxito -->
+                <!-- Mensaje de xito -->
                 <div id="successMessage" class="hidden bg-green-500/20 border border-green-500/50 text-green-200 p-3 rounded-lg text-center">
                 </div>
 
-                <!-- Botón de Login -->
+                <!-- Botn de Login -->
                 <button type="submit" class="btn-primary w-full py-4 text-lg flex items-center justify-center space-x-2" id="loginBtn">
                     <span id="loginText">Ingresar a mi Perfil</span>
                     <div id="loginSpinner" class="loading-spinner hidden"></div>
@@ -138,10 +138,10 @@
             <!-- Enlaces adicionales -->
             <div class="text-center mt-6 space-y-3">
                 <a href="#" onclick="showForgotPassword()" class="text-blue-200 hover:text-blue-100 text-sm">
-                    ¿Olvidaste tu contraseña?
+                    Olvidaste tu contrasea?
                 </a>
                 <div class="border-t border-white/20 pt-4">
-                    <p class="text-sm text-blue-100 mb-3">¿Aún no eres artista?</p>
+                    <p class="text-sm text-blue-100 mb-3">An no eres artista?</p>
                     <a href="crear-perfil-artista.html" class="bg-blue-600/50 hover:bg-blue-600/70 text-white px-6 py-2 rounded-lg transition-colors">
                         Registrarme como Artista
                     </a>
@@ -150,11 +150,11 @@
         </div>
     </div>
 
-    <!-- Modal para Reset de Contraseña -->
+    <!-- Modal para Reset de Contrasea -->
     <div id="resetModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center">
         <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-6 max-w-md mx-4">
-            <h3 class="text-xl font-bold mb-4">Recuperar Contraseña</h3>
-            <p class="text-blue-100 mb-4">Ingresa tu correo y te enviaremos un link para restablecer tu contraseña</p>
+            <h3 class="text-xl font-bold mb-4">Recuperar Contrasea</h3>
+            <p class="text-blue-100 mb-4">Ingresa tu correo y te enviaremos un link para restablecer tu contrasea</p>
             <form id="resetForm">
                 <input type="email" id="resetEmail" required class="form-input w-full p-3 rounded-lg mb-4" placeholder="tu@email.com">
                 <div class="flex space-x-3">
@@ -173,7 +173,7 @@
         import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
         import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
 
-        // Configuración Firebase
+        // Configuracin Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
             authDomain: "vytonlineprueva.firebaseapp.com",
@@ -201,7 +201,7 @@
         const resetForm = document.getElementById('resetForm');
         const resetEmail = document.getElementById('resetEmail');
 
-        // Función para mostrar errores
+        // Funcin para mostrar errores
         function showError(message) {
             errorMessage.textContent = message;
             errorMessage.classList.remove('hidden');
@@ -211,14 +211,14 @@
             }, 5000);
         }
 
-        // Función para mostrar éxito
+        // Funcin para mostrar xito
         function showSuccess(message) {
             successMessage.textContent = message;
             successMessage.classList.remove('hidden');
             errorMessage.classList.add('hidden');
         }
 
-        // Función para mostrar loading
+        // Funcin para mostrar loading
         function setLoading(loading) {
             if (loading) {
                 loginText.textContent = 'Verificando...';
@@ -266,7 +266,7 @@
                             ...userData
                         }));
 
-                        showSuccess('¡Bienvenido/a de vuelta! Redirigiendo...');
+                        showSuccess('Bienvenido/a de vuelta! Redirigiendo...');
                         
                         // Redireccionar al perfil del artista
                         setTimeout(() => {
@@ -295,7 +295,7 @@
                         emailVerified: user.emailVerified
                     }));
                     
-                    showSuccess('¡Acceso exitoso! Redirigiendo...');
+                    showSuccess('Acceso exitoso! Redirigiendo...');
                     setTimeout(() => {
                         window.location.href = 'perfil-artista.html';
                     }, 1500);
@@ -306,42 +306,42 @@
                 
                 switch (error.code) {
                     case 'auth/user-not-found':
-                        showError('No existe una cuenta con este correo electrónico');
+                        showError('No existe una cuenta con este correo electrnico');
                         break;
                     case 'auth/wrong-password':
-                        showError('Contraseña incorrecta');
+                        showError('Contrasea incorrecta');
                         break;
                     case 'auth/invalid-email':
-                        showError('El correo electrónico no es válido');
+                        showError('El correo electrnico no es vlido');
                         break;
                     case 'auth/too-many-requests':
-                        showError('Demasiados intentos fallidos. Intenta más tarde');
+                        showError('Demasiados intentos fallidos. Intenta ms tarde');
                         break;
                     default:
-                        showError('Error al iniciar sesión. Verifica tus credenciales');
+                        showError('Error al iniciar sesin. Verifica tus credenciales');
                 }
             } finally {
                 setLoading(false);
             }
         });
 
-        // Reset de contraseña
+        // Reset de contrasea
         resetForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const email = resetEmail.value.trim();
             
             if (!email) {
-                showError('Ingresa tu correo electrónico');
+                showError('Ingresa tu correo electrnico');
                 return;
             }
 
             try {
                 await sendPasswordResetEmail(auth, email);
-                showSuccess('Correo de recuperación enviado. Revisa tu bandeja de entrada.');
+                showSuccess('Correo de recuperacin enviado. Revisa tu bandeja de entrada.');
                 hideResetModal();
             } catch (error) {
-                showError('Error al enviar correo de recuperación');
+                showError('Error al enviar correo de recuperacin');
             }
         });
 
@@ -361,31 +361,31 @@
             resetEmail.value = '';
         };
 
-        // Sistema de fondos dinámicos desde Admin
+        // Sistema de fondos dinmicos desde Admin
         function loadDynamicBackground() {
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'login-artista.html';
                 
-                console.log('🎨 Verificando configuración de fondo para:', currentPage);
-                console.log('📋 Configuración completa:', backgroundConfig);
+                console.log(' Verificando configuracin de fondo para:', currentPage);
+                console.log(' Configuracin completa:', backgroundConfig);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('🖼️ Aplicando fondo personalizado para login-artista.html');
+                    console.log(' Aplicando fondo personalizado para login-artista.html');
                     
                     const config = backgroundConfig[currentPage];
                     const position = config.position || 'center center';
                     const scale = config.scale || 1;
                     const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
                     
-                    console.log(`📍 Posición: ${position}, Escala: ${scale}`);
+                    console.log(` Posicin: ${position}, Escala: ${scale}`);
                     
-                    // Método 1: Usar variable CSS y clase
+                    // Mtodo 1: Usar variable CSS y clase
                     document.documentElement.style.setProperty('--dynamic-bg', 
                         `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('${config.imageData}')`);
                     document.body.classList.add('dynamic-background');
                     
-                    // Método 2: Aplicar directamente con !important como backup
+                    // Mtodo 2: Aplicar directamente con !important como backup
                     setTimeout(() => {
                         document.body.style.setProperty('background', 
                             `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('${config.imageData}')`, 'important');
@@ -394,25 +394,25 @@
                         document.body.style.setProperty('background-position', position, 'important');
                         document.body.style.setProperty('background-repeat', 'no-repeat', 'important');
                         
-                        console.log('✅ Fondo aplicado exitosamente');
+                        console.log(' Fondo aplicado exitosamente');
                     }, 100);
                     
-                    console.log(`✅ Fondo personalizado aplicado con posición: ${position} y escala: ${scale}`);
+                    console.log(` Fondo personalizado aplicado con posicin: ${position} y escala: ${scale}`);
                 } else {
-                    console.log('📝 No hay fondo personalizado configurado para esta página');
-                    console.log('💡 Para configurar un fondo, ve al admin y sube una imagen para login-artista.html');
+                    console.log(' No hay fondo personalizado configurado para esta pgina');
+                    console.log(' Para configurar un fondo, ve al admin y sube una imagen para login-artista.html');
                 }
             } catch (error) {
-                console.error('❌ Error cargando fondo personalizado:', error);
+                console.error(' Error cargando fondo personalizado:', error);
             }
         }
 
-        // Cargar fondo dinámico al cargar la página
+        // Cargar fondo dinmico al cargar la pgina
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicBackground();
         });
 
-        // También cargar si la página ya está cargada
+        // Tambin cargar si la pgina ya est cargada
         if (document.readyState === 'complete') {
             loadDynamicBackground();
         }

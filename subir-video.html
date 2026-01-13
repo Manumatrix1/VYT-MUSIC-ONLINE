@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -6,7 +6,7 @@
     <title>Subir Video - VYT Music</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Sube tu video para participar en los certámenes de VYT Music">
+    <meta name="description" content="Sube tu video para participar en los certmenes de VYT Music">
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -26,7 +26,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Navegación y Gamificación -->
+    <!-- Navegacin y Gamificacin -->
     <script src="/src/navigation-component.js"></script>
     <script src="/src/gamification-enhanced.js"></script>
     
@@ -34,7 +34,7 @@
     <script src="/src/firebase-integration.js" defer></script>
     <script src="/src/firebase-integration.js" defer></script>
     
-    <!-- Estilos dinámicos -->
+    <!-- Estilos dinmicos -->
     <link rel="stylesheet" href="/src/dynamic-assets-styles.css">
     
     <style>
@@ -64,7 +64,7 @@
             box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
         }
 
-        /* Título estilo Spotify */
+        /* Ttulo estilo Spotify */
         .upload-title {
             font-size: 2.5rem;
             font-weight: 900;
@@ -140,7 +140,7 @@
             border: none;
         }
 
-        /* Botón de acción */
+        /* Botn de accin */
         .btn-upload {
             background: #1ed760;
             color: #000;
@@ -234,13 +234,13 @@
                 <i class="fas fa-video"></i> Subir Video
             </h1>
             <p style="color: #b3b3b3; margin-bottom: 2rem;">
-                Comparte tu talento con el mundo. Sube tu video de YouTube para participar en los certámenes.
+                Comparte tu talento con el mundo. Sube tu video de YouTube para participar en los certmenes.
             </p>
 
-            <!-- Información importante -->
+            <!-- Informacin importante -->
             <div class="info-card">
                 <i class="fas fa-info-circle"></i>
-                <strong>Importante:</strong> Asegúrate de que tu video de YouTube sea público o no listado. Los videos privados no podrán ser visualizados.
+                <strong>Importante:</strong> Asegrate de que tu video de YouTube sea pblico o no listado. Los videos privados no podrn ser visualizados.
             </div>
 
             <!-- Formulario -->
@@ -262,49 +262,49 @@
                     </small>
                 </div>
 
-                <!-- Categoría -->
+                <!-- Categora -->
                 <div class="input-group">
                     <label class="input-label" for="categoria">
-                        <i class="fas fa-tags"></i> Categoría del Video
+                        <i class="fas fa-tags"></i> Categora del Video
                     </label>
                     <select id="categoria" class="input-field" required>
-                        <option value="">Selecciona una categoría</option>
-                        <option value="pop">🎤 Pop</option>
-                        <option value="rock">🎸 Rock</option>
-                        <option value="folklore">🪕 Folklore</option>
-                        <option value="tango">🎻 Tango</option>
-                        <option value="balada">💕 Balada</option>
-                        <option value="cumbia">🎺 Cumbia</option>
-                        <option value="trap">🎧 Trap/Urbano</option>
-                        <option value="otro">🎵 Otro</option>
+                        <option value="">Selecciona una categora</option>
+                        <option value="pop"> Pop</option>
+                        <option value="rock"> Rock</option>
+                        <option value="folklore"> Folklore</option>
+                        <option value="tango"> Tango</option>
+                        <option value="balada"> Balada</option>
+                        <option value="cumbia"> Cumbia</option>
+                        <option value="trap"> Trap/Urbano</option>
+                        <option value="otro"> Otro</option>
                     </select>
                 </div>
 
-                <!-- Título del video -->
+                <!-- Ttulo del video -->
                 <div class="input-group">
                     <label class="input-label" for="tituloVideo">
-                        <i class="fas fa-heading"></i> Título del Video
+                        <i class="fas fa-heading"></i> Ttulo del Video
                     </label>
                     <input 
                         type="text" 
                         id="tituloVideo" 
                         class="input-field" 
-                        placeholder="Mi interpretación de..."
+                        placeholder="Mi interpretacin de..."
                         required
                         maxlength="100"
                     >
                 </div>
 
-                <!-- Descripción -->
+                <!-- Descripcin -->
                 <div class="input-group">
                     <label class="input-label" for="descripcion">
-                        <i class="fas fa-align-left"></i> Descripción (Opcional)
+                        <i class="fas fa-align-left"></i> Descripcin (Opcional)
                     </label>
                     <textarea 
                         id="descripcion" 
                         class="input-field" 
                         rows="4"
-                        placeholder="Cuéntanos sobre tu interpretación..."
+                        placeholder="Cuntanos sobre tu interpretacin..."
                         maxlength="500"
                         style="resize: vertical;"
                     ></textarea>
@@ -322,7 +322,7 @@
                 <div id="errorMessage" class="error-message"></div>
                 <div id="successMessage" class="success-message"></div>
 
-                <!-- Botón de subir -->
+                <!-- Botn de subir -->
                 <button type="submit" class="btn-upload" id="submitBtn">
                     <i class="fas fa-cloud-upload-alt"></i> Subir Video
                 </button>
@@ -337,10 +337,10 @@
 
         // Inicializar Firebase
         document.addEventListener('DOMContentLoaded', async () => {
-            // Verificar autenticación
+            // Verificar autenticacin
             firebase.auth().onAuthStateChanged(async (user) => {
                 if (!user) {
-                    showToast('Debes iniciar sesión para subir videos', 'error', 3000);
+                    showToast('Debes iniciar sesin para subir videos', 'error', 3000);
                     setTimeout(() => {
                         window.location.href = '/index.html#comenzar-ahora';
                     }, 1500);
@@ -349,7 +349,7 @@
 
                 currentUser = user;
                 db = firebase.firestore();
-                console.log('✅ Usuario autenticado:', user.email);
+                console.log(' Usuario autenticado:', user.email);
             });
 
             // Event listeners
@@ -394,7 +394,7 @@
                 preview.classList.add('active');
                 hideError();
             } else {
-                showError('URL de YouTube inválida. Verifica el formato.');
+                showError('URL de YouTube invlida. Verifica el formato.');
                 preview.classList.remove('active');
             }
         }
@@ -420,7 +420,7 @@
             e.preventDefault();
 
             if (!currentUser) {
-                showError('Debes iniciar sesión para continuar');
+                showError('Debes iniciar sesin para continuar');
                 return;
             }
 
@@ -437,10 +437,10 @@
                 // Validar URL
                 const videoId = extractYouTubeId(youtubeUrl);
                 if (!videoId) {
-                    throw new Error('URL de YouTube inválida');
+                    throw new Error('URL de YouTube invlida');
                 }
 
-                // Usar firebase-integration.js si está disponible
+                // Usar firebase-integration.js si est disponible
                 if (window.FirebaseIntegration) {
                     await FirebaseIntegration.saveVideoSubmission({
                         userId: currentUser.uid,
@@ -469,7 +469,7 @@
                 }
 
                 hideLoading();
-                showSuccess('¡Video subido exitosamente! Será revisado por nuestro equipo.');
+                showSuccess('Video subido exitosamente! Ser revisado por nuestro equipo.');
                 celebrate(); // Confetti!
 
                 // Limpiar formulario
@@ -477,13 +477,13 @@
                 document.getElementById('videoPreview').classList.remove('active');
                 document.getElementById('charCount').textContent = '0';
 
-                // Redirigir después de 3 segundos
+                // Redirigir despus de 3 segundos
                 setTimeout(() => {
                     window.location.href = '/mis-estadisticas.html';
                 }, 3000);
 
             } catch (error) {
-                console.error('❌ Error subiendo video:', error);
+                console.error(' Error subiendo video:', error);
                 hideLoading();
                 showError('Error al subir el video: ' + error.message);
             } finally {

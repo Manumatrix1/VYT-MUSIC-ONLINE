@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video de Participación - VYT Music</title>
+    <title>Video de Participacin - VYT Music</title>
     
     <!-- Design Tokens -->
     <link rel="stylesheet" href="/design-tokens.css">
@@ -83,7 +83,7 @@
                             <span>Video</span>
                         </div>
                         <h1 class="text-2xl font-bold text-white font-display">
-                            <i class="fas fa-play-circle"></i> Video de Participación
+                            <i class="fas fa-play-circle"></i> Video de Participacin
                         </h1>
                     </div>
                 </div>
@@ -99,7 +99,7 @@
             <div class="loading-skeleton inline-block">
                 <i class="fas fa-spinner fa-spin text-6xl text-blue-500"></i>
             </div>
-            <p class="mt-4 text-xl text-gray-300">Cargando participación...</p>
+            <p class="mt-4 text-xl text-gray-300">Cargando participacin...</p>
         </div>
 
         <!-- Video Player Container -->
@@ -111,7 +111,7 @@
                 <i class="fas fa-exclamation-triangle text-4xl text-red-500"></i>
             </div>
             <h2 class="text-2xl font-bold text-red-500 mb-2">Error cargando video</h2>
-            <p class="text-gray-300 mb-6">No se pudo cargar la participación solicitada.</p>
+            <p class="text-gray-300 mb-6">No se pudo cargar la participacin solicitada.</p>
             <a href="/ranking.html" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg transition-colors">
                 <i class="fas fa-trophy"></i> Ver Ranking
             </a>
@@ -119,7 +119,7 @@
 
         <!-- Additional Info -->
         <div id="additional-info" style="display: none;" class="mt-8 grid md:grid-cols-2 gap-6">
-            <!-- Información del Certamen -->
+            <!-- Informacin del Certamen -->
             <div class="bg-white/5 backdrop-filter backdrop-blur-lg rounded-xl p-6 border border-white/10">
                 <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
                     <i class="fas fa-trophy text-yellow-500"></i>
@@ -180,7 +180,7 @@
         const participacionId = urlParams.get('id');
 
         if (!participacionId) {
-            showError('No se especificó ID de participación');
+            showError('No se especific ID de participacin');
         } else {
             initializePage();
         }
@@ -221,23 +221,23 @@
             const data = videoPlayerInstance.videoData;
             if (!data) return;
 
-            // Información del certamen
+            // Informacin del certamen
             const certamenInfo = document.getElementById('certamen-info');
             certamenInfo.innerHTML = `
                 <div class="flex items-center justify-between">
-                    <span>📍 Zona:</span>
+                    <span> Zona:</span>
                     <span class="font-bold text-white">${data.zona_nombre || 'N/A'}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span>🏙️ Provincia:</span>
+                    <span> Provincia:</span>
                     <span class="font-bold text-white">${data.provincia_nombre || 'N/A'}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span>🎭 Ciudad:</span>
+                    <span> Ciudad:</span>
                     <span class="font-bold text-white">${data.ciudad || 'N/A'}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span>🎵 Género:</span>
+                    <span> Gnero:</span>
                     <span class="font-bold text-white">${data.genero || 'N/A'}</span>
                 </div>
             `;
@@ -250,19 +250,19 @@
 
             progresoInfo.innerHTML = `
                 <div class="flex items-center justify-between">
-                    <span>❤️ Total votos:</span>
+                    <span> Total votos:</span>
                     <span class="font-bold text-white text-xl">${votos}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span>💎 VYT Money:</span>
+                    <span> VYT Money:</span>
                     <span class="font-bold text-white text-xl">${vytMoney.toLocaleString()}</span>
                 </div>
                 <div class="flex items-center justify-between">
-                    <span>💰 Valor:</span>
+                    <span> Valor:</span>
                     <span class="font-bold text-green-400 text-xl">$${valorMonetario.toFixed(2)}</span>
                 </div>
-                ${data.clasificado ? '<div class="bg-yellow-500/20 border border-yellow-500 rounded-lg p-3 text-center mt-2"><strong>🏆 CLASIFICADO</strong></div>' : ''}
-                ${data.ready_for_next_round && !data.clasificado ? '<div class="bg-blue-500/20 border border-blue-500 rounded-lg p-3 text-center mt-2"><strong>🌟 ASPIRANTE</strong></div>' : ''}
+                ${data.clasificado ? '<div class="bg-yellow-500/20 border border-yellow-500 rounded-lg p-3 text-center mt-2"><strong> CLASIFICADO</strong></div>' : ''}
+                ${data.ready_for_next_round && !data.clasificado ? '<div class="bg-blue-500/20 border border-blue-500 rounded-lg p-3 text-center mt-2"><strong> ASPIRANTE</strong></div>' : ''}
             `;
         }
 
@@ -288,7 +288,7 @@
                 container.innerHTML = top5.docs.map((doc, index) => {
                     const d = doc.data();
                     const isCurrentVideo = doc.id === participacionId;
-                    const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+                    const medals = ['', '', '', '4', '5'];
                     
                     return `
                         <div class="flex items-center justify-between p-3 rounded-lg ${isCurrentVideo ? 'bg-blue-500/20 border border-blue-500' : 'bg-white/5'} hover:bg-white/10 transition-colors">
@@ -296,14 +296,14 @@
                                 <span class="text-2xl">${medals[index]}</span>
                                 <div>
                                     <p class="font-bold ${isCurrentVideo ? 'text-blue-400' : 'text-white'}">${d.nombreArtista || 'Artista'}</p>
-                                    <p class="text-sm text-gray-400">${d.cancion || 'Sin título'}</p>
+                                    <p class="text-sm text-gray-400">${d.cancion || 'Sin ttulo'}</p>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <p class="font-bold text-lg text-white">${d.votos || 0} votos</p>
-                                <p class="text-xs text-gray-400">💎 ${d.vyt_money_recibido || 0} VYT</p>
+                                <p class="text-xs text-gray-400"> ${d.vyt_money_recibido || 0} VYT</p>
                             </div>
-                            ${!isCurrentVideo ? `<a href="/ver-video.html?id=${doc.id}" class="ml-3 text-blue-400 hover:text-blue-300"><i class="fas fa-play-circle"></i></a>` : '<span class="ml-3 text-blue-400">🎯 Estás aquí</span>'}
+                            ${!isCurrentVideo ? `<a href="/ver-video.html?id=${doc.id}" class="ml-3 text-blue-400 hover:text-blue-300"><i class="fas fa-play-circle"></i></a>` : '<span class="ml-3 text-blue-400"> Ests aqu</span>'}
                         </div>
                     `;
                 }).join('');

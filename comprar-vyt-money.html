@@ -19,10 +19,16 @@
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/icon-32x32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Mobile Fixes -->
+    <link rel="stylesheet" href="/mobile-fixes.css">
     
     <!-- Google Analytics 4 - Descomentar y configurar ID -->
     <!-- <script src="/src/google-analytics.js"></script> -->
@@ -135,11 +141,11 @@
                     COMPRAR VYT-MONEY
                 </h1>
                 <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-                    Compra VYT-MONEY para votar por tus artistas favoritos y ganar increíbles premios
+                    Compra VYT-MONEY para votar por tus artistas favoritos y ganar increbles premios
                 </p>
             </div>
 
-            <!-- Información del sistema -->
+            <!-- Informacin del sistema -->
             <div class="gradient-card p-6 mb-8 max-w-4xl mx-auto">
                 <div class="grid md:grid-cols-3 gap-6 text-center">
                     <div>
@@ -152,14 +158,14 @@
                     </div>
                     <div>
                         <div class="text-3xl font-bold text-yellow-400 mb-2">DESCUENTOS</div>
-                        <p class="text-gray-400">Más compras = más descuentos disponibles</p>
+                        <p class="text-gray-400">Ms compras = ms descuentos disponibles</p>
                     </div>
                 </div>
             </div>
 
             <!-- Mensaje promocional -->
             <div id="promo-message" class="max-w-4xl mx-auto">
-                <!-- Se llenará dinámicamente -->
+                <!-- Se llenar dinmicamente -->
             </div>
 
             <!-- Paquetes de VYT-MONEY -->
@@ -167,7 +173,7 @@
                 <h2 class="text-2xl font-bold text-center mb-8">Elige tu paquete</h2>
                 
                 <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6" id="packages-container">
-                    <!-- Los paquetes se cargarán dinámicamente -->
+                    <!-- Los paquetes se cargarn dinmicamente -->
                 </div>
             </div>
 
@@ -185,7 +191,7 @@
                             id="custom-amount" 
                             min="100" 
                             step="50"
-                            placeholder="Mínimo 100"
+                            placeholder="Mnimo 100"
                             class="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white focus:border-blue-500 focus:outline-none"
                         >
                     </div>
@@ -215,31 +221,31 @@
                 </div>
             </div>
 
-            <!-- Información adicional -->
+            <!-- Informacin adicional -->
             <div class="max-w-4xl mx-auto mt-12 grid md:grid-cols-2 gap-8">
                 <div class="gradient-card p-6">
-                    <h3 class="text-xl font-bold mb-4">¿Cómo funciona?</h3>
+                    <h3 class="text-xl font-bold mb-4">Cmo funciona?</h3>
                     <ul class="space-y-2 text-gray-300">
-                        <li>✅ Compra VYT-MONEY de forma segura</li>
-                        <li>✅ Vota por tus artistas favoritos</li>
-                        <li>✅ Gana premios si votas por los ganadores</li>
-                        <li>✅ Participa en sorteos exclusivos</li>
+                        <li> Compra VYT-MONEY de forma segura</li>
+                        <li> Vota por tus artistas favoritos</li>
+                        <li> Gana premios si votas por los ganadores</li>
+                        <li> Participa en sorteos exclusivos</li>
                     </ul>
                 </div>
                 
                 <div class="gradient-card p-6">
-                    <h3 class="text-xl font-bold mb-4">Métodos de pago</h3>
+                    <h3 class="text-xl font-bold mb-4">Mtodos de pago</h3>
                     <div class="space-y-2 text-gray-300">
                         <div class="flex items-center">
-                            <span class="mr-2">💳</span>
-                            <span>Tarjetas de crédito y débito</span>
+                            <span class="mr-2"></span>
+                            <span>Tarjetas de crdito y dbito</span>
                         </div>
                         <div class="flex items-center">
-                            <span class="mr-2">🏦</span>
+                            <span class="mr-2"></span>
                             <span>Transferencia bancaria</span>
                         </div>
                         <div class="flex items-center">
-                            <span class="mr-2">📱</span>
+                            <span class="mr-2"></span>
                             <span>MercadoPago</span>
                         </div>
                     </div>
@@ -267,15 +273,15 @@
         let paymentConfig = null;
         let selectedPackage = null;
 
-        // Configuración de paquetes predefinidos
+        // Configuracin de paquetes predefinidos
         const PREDEFINED_PACKAGES = [
-            { amount: 100, label: 'Básico', popular: false },
+            { amount: 100, label: 'Bsico', popular: false },
             { amount: 500, label: 'Popular', popular: true },
             { amount: 1000, label: 'Premium', popular: false },
             { amount: 2000, label: 'VIP', popular: false }
         ];
 
-        // Inicializar cuando el usuario esté autenticado
+        // Inicializar cuando el usuario est autenticado
         onAuthStateChanged(auth, async (user) => {
             if (user) {
                 currentUser = user;
@@ -284,7 +290,7 @@
                 renderPackages();
                 showUserElements();
             } else {
-                // Redirigir al login si no está autenticado
+                // Redirigir al login si no est autenticado
                 window.location.href = 'login.html';
             }
         });
@@ -298,7 +304,7 @@
                     const balance = userData.vyt_money_balance || 0;
                     balanceAmount.textContent = balance.toLocaleString();
                     
-                    // Actualizar balance en página principal si está disponible
+                    // Actualizar balance en pgina principal si est disponible
                     if (window.updateBalanceDisplay) {
                         window.updateBalanceDisplay(balance);
                     }
@@ -308,30 +314,30 @@
             }
         }
 
-        // Cargar configuración de pagos
+        // Cargar configuracin de pagos
         async function loadPaymentConfig() {
             try {
-                // Intentar cargar configuración desde Firebase Functions
-                console.log('🔄 Intentando cargar configuración de pagos VYT-MONEY...');
+                // Intentar cargar configuracin desde Firebase Functions
+                console.log(' Intentando cargar configuracin de pagos VYT-MONEY...');
                 const getConfig = httpsCallable(functions, 'getPaymentConfig');
                 const result = await getConfig({ tipo: 'vyt_money' });
                 paymentConfig = result.data;
-                console.log('✅ Configuración cargada desde Firebase Functions:', paymentConfig);
+                console.log(' Configuracin cargada desde Firebase Functions:', paymentConfig);
                 showNotification('Sistema de pagos MercadoPago activo', 'success');
             } catch (error) {
-                console.log('⚠️ Firebase Functions no disponible, intentando con función específica VYT-MONEY:', error);
+                console.log(' Firebase Functions no disponible, intentando con funcin especfica VYT-MONEY:', error);
                 
                 try {
-                    // Intentar con función específica de precios
+                    // Intentar con funcin especfica de precios
                     const getPricing = httpsCallable(functions, 'getPricingConfig');
                     const result = await getPricing({ tipo: 'vyt_money' });
                     paymentConfig = result.data;
-                    console.log('✅ Configuración cargada desde getPricingConfig:', paymentConfig);
+                    console.log(' Configuracin cargada desde getPricingConfig:', paymentConfig);
                     showNotification('Sistema de pagos VYT-MONEY activo', 'success');
                 } catch (error2) {
-                    console.log('⚠️ Functions no disponibles, usando configuración local:', error2);
+                    console.log(' Functions no disponibles, usando configuracin local:', error2);
                     
-                    // Configuración local solo para mostrar precios, NO para procesar pagos
+                    // Configuracin local solo para mostrar precios, NO para procesar pagos
                     paymentConfig = {
                         precio_por_100: 50,    // $50 ARS por 100 VYT-MONEY
                         moneda: 'ARS',
@@ -343,19 +349,19 @@
                         },
                         metodos_pago: ['mercadopago'],
                         habilitado: true,
-                        mensaje_promocional: '⚠️ IMPORTANTE: Solo se aceptan pagos reales vía MercadoPago. No hay modo de prueba.'
+                        mensaje_promocional: ' IMPORTANTE: Solo se aceptan pagos reales va MercadoPago. No hay modo de prueba.'
                     };
                     
-                    console.log('🔧 Configuración de precios cargada (solo pagos reales):', paymentConfig);
-                    showNotification('⚠️ Sistema configurado: Solo pagos reales vía MercadoPago', 'warning');
+                    console.log(' Configuracin de precios cargada (solo pagos reales):', paymentConfig);
+                    showNotification(' Sistema configurado: Solo pagos reales va MercadoPago', 'warning');
                 }
             }
             
-            // Actualizar interfaz con la configuración cargada
+            // Actualizar interfaz con la configuracin cargada
             updatePaymentInterface();
         }
 
-        // Nueva función para actualizar la interfaz con la configuración
+        // Nueva funcin para actualizar la interfaz con la configuracin
         function updatePaymentInterface() {
             // Mostrar mensaje promocional si existe
             if (paymentConfig.mensaje_promocional) {
@@ -364,9 +370,9 @@
                     promoContainer.innerHTML = `
                         <div class="bg-gradient-to-r from-green-500/10 to-blue-500/10 border border-green-400/30 rounded-xl p-4 mb-6">
                             <div class="flex items-center gap-3">
-                                <div class="text-2xl">🎉</div>
+                                <div class="text-2xl"></div>
                                 <div>
-                                    <h3 class="font-bold text-green-400">¡Promoción Especial!</h3>
+                                    <h3 class="font-bold text-green-400">Promocin Especial!</h3>
                                     <p class="text-gray-300 text-sm">${paymentConfig.mensaje_promocional}</p>
                                 </div>
                             </div>
@@ -379,7 +385,7 @@
             updatePriceDisplay();
         }
 
-        // Función para mostrar notificaciones
+        // Funcin para mostrar notificaciones
         function showNotification(message, type = 'info') {
             const colors = {
                 info: 'bg-blue-500/10 border-blue-400/30 text-blue-400',
@@ -392,7 +398,7 @@
             notification.className = `fixed top-4 right-4 z-50 ${colors[type]} border rounded-xl p-4 max-w-sm`;
             notification.innerHTML = `
                 <div class="flex items-center gap-2">
-                    <div class="text-lg">ℹ️</div>
+                    <div class="text-lg"></div>
                     <p class="text-sm">${message}</p>
                 </div>
             `;
@@ -448,7 +454,7 @@
             div.dataset.amount = pkg.amount;
             
             div.innerHTML = `
-                ${pkg.popular ? '<div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-1 rounded-full text-sm font-bold">MÁS POPULAR</div>' : ''}
+                ${pkg.popular ? '<div class="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-1 rounded-full text-sm font-bold">MS POPULAR</div>' : ''}
                 
                 <div class="text-center">
                     <div class="vyt-money-icon mx-auto mb-4 w-12 h-12 text-base">VYT</div>
@@ -479,7 +485,7 @@
 
         // Seleccionar paquete
         function selectPackage(amount) {
-            // Remover selección anterior
+            // Remover seleccin anterior
             document.querySelectorAll('.package-card').forEach(card => {
                 card.classList.remove('selected');
             });
@@ -550,8 +556,8 @@
                 showNotification('Procesando pago...', 'info');
                 
                 try {
-                    // PRIMERA OPCIÓN: Intentar función específica de VYT-MONEY
-                    console.log('🔄 Intentando pago real con función específica VYT-MONEY...');
+                    // PRIMERA OPCIN: Intentar funcin especfica de VYT-MONEY
+                    console.log(' Intentando pago real con funcin especfica VYT-MONEY...');
                     const createVYTPayment = httpsCallable(functions, 'createVYTMoneyPayment');
                     const result = await createVYTPayment({
                         cantidad: amount,
@@ -560,7 +566,7 @@
                         user_name: currentUser.displayName || currentUser.email
                     });
                     
-                    console.log('✅ Preferencia MercadoPago creada:', result.data);
+                    console.log(' Preferencia MercadoPago creada:', result.data);
                     showNotification('Redirigiendo a MercadoPago...', 'success');
                     
                     // Redirigir a MercadoPago
@@ -568,10 +574,10 @@
                     return;
                     
                 } catch (error1) {
-                    console.log('⚠️ Función específica no disponible, intentando función unificada:', error1);
+                    console.log(' Funcin especfica no disponible, intentando funcin unificada:', error1);
                     
                     try {
-                        // SEGUNDA OPCIÓN: Intentar función unificada
+                        // SEGUNDA OPCIN: Intentar funcin unificada
                         const createPayment = httpsCallable(functions, 'createUnifiedPaymentPreference');
                         const result = await createPayment({
                             tipo_pago: 'vyt_money',
@@ -583,7 +589,7 @@
                             user_email: currentUser.email
                         });
                         
-                        console.log('✅ Preferencia unificada creada:', result.data);
+                        console.log(' Preferencia unificada creada:', result.data);
                         showNotification('Redirigiendo a MercadoPago...', 'success');
                         
                         // Redirigir a MercadoPago
@@ -591,29 +597,29 @@
                         return;
                         
                     } catch (error2) {
-                        console.error('❌ Error: Sistema de pagos no disponible:', error2);
+                        console.error(' Error: Sistema de pagos no disponible:', error2);
                         
                         // NO HAY MODO SIMULADO - Solo mostrar error
-                        showNotification('❌ Error: Sistema de pagos no disponible. Contacta al administrador.', 'error');
+                        showNotification(' Error: Sistema de pagos no disponible. Contacta al administrador.', 'error');
                         
                         // Mostrar mensaje explicativo al usuario
                         const errorDiv = document.createElement('div');
                         errorDiv.className = 'bg-red-900/50 border border-red-500 rounded-lg p-4 mt-4';
                         errorDiv.innerHTML = `
-                            <h3 class="text-red-400 font-bold mb-2">🚫 Sistema de Pagos Temporalmente No Disponible</h3>
+                            <h3 class="text-red-400 font-bold mb-2"> Sistema de Pagos Temporalmente No Disponible</h3>
                             <p class="text-red-200 mb-2">
-                                Lo sentimos, el sistema de pagos con MercadoPago no está funcionando en este momento.
+                                Lo sentimos, el sistema de pagos con MercadoPago no est funcionando en este momento.
                             </p>
                             <p class="text-red-200 text-sm">
-                                Por favor, contacta al administrador o intenta más tarde.
+                                Por favor, contacta al administrador o intenta ms tarde.
                             </p>
                         `;
                         
-                        // Insertar mensaje después del botón
+                        // Insertar mensaje despus del botn
                         const button = event.target;
                         button.parentNode.insertBefore(errorDiv, button.nextSibling);
                         
-                        // Remover mensaje después de 10 segundos
+                        // Remover mensaje despus de 10 segundos
                         setTimeout(() => {
                             if (errorDiv.parentNode) {
                                 errorDiv.parentNode.removeChild(errorDiv);
@@ -631,7 +637,7 @@
             }
         }
 
-        // ===== FUNCIONES DE CÁLCULO DE PRECIOS =====
+        // ===== FUNCIONES DE CLCULO DE PRECIOS =====
 
         // Mostrar elementos del usuario autenticado
         function showUserElements() {
@@ -654,7 +660,7 @@
         }, 1000);
     </script>
     
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     </body>

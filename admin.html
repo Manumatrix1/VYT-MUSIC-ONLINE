@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT MUSIC - Panel de Administración</title>
+    <title>VYT MUSIC - Panel de Administracin</title>
     
     <!-- PWA Meta Tags -->
     <meta name="description" content="Panel administrativo VYT Music">
@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="VYT Admin">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     <link rel="manifest" href="/manifest.json">
     
     <!-- Design Tokens - Sistema Unificado -->
@@ -56,7 +56,7 @@
         // Alias para db global
         window.db = window.firebaseDB;
         
-        console.log('✅ Firebase inicializado en admin');
+        console.log(' Firebase inicializado en admin');
     </script>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -93,12 +93,12 @@
     </style>
 </head>
 <body>
-    <!-- Sección de Login -->
+    <!-- Seccin de Login -->
     <div id="login-section" class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 to-purple-700">
         <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800 mb-2">VYT MUSIC</h1>
-                <p class="text-gray-600">Panel de Administración</p>
+                <p class="text-gray-600">Panel de Administracin</p>
             </div>
             
             <form id="login-form" class="space-y-6">
@@ -109,14 +109,14 @@
                 </div>
                 
                 <div>
-                    <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
+                    <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">Contrasea</label>
                     <input type="password" id="admin-password" required 
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
                 <button type="button" id="login-btn" 
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesión
+                    <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesin
                 </button>
                 
                 <div id="login-error" class="hidden bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded text-sm"></div>
@@ -134,7 +134,7 @@
                         <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT MUSIC Logo" class="w-10 h-10">
                         <div>
                             <h1 class="text-2xl font-bold text-gray-900">VYT MUSIC</h1>
-                            <p class="text-sm text-gray-600">Panel de administración</p>
+                            <p class="text-sm text-gray-600">Panel de administracin</p>
                         </div>
                     </a>
                     <span class="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
@@ -150,13 +150,13 @@
                         <i class="fas fa-broom mr-1"></i>Limpiar Datos
                     </button>
                     <button id="logout-btn" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-sign-out-alt mr-1"></i>Cerrar Sesión
+                        <i class="fas fa-sign-out-alt mr-1"></i>Cerrar Sesin
                     </button>
                 </div>
             </div>
         </header>
 
-        <!-- Navegación -->
+        <!-- Navegacin -->
         <nav class="bg-gray-50 border-b">
             <div class="px-6 py-3">
                 <div class="flex flex-wrap gap-2">
@@ -178,10 +178,10 @@
                         <i class="fas fa-tools mr-1"></i>Constructor
                     </button>
                     <button onclick="showPage('certamenes')" class="admin-nav-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-trophy mr-1"></i>Certámenes
+                        <i class="fas fa-trophy mr-1"></i>Certmenes
                     </button>
                     <button onclick="window.location.href='configuracion-sistema.html'" class="admin-nav-btn bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-cog mr-1"></i>⚙️ Configuración
+                        <i class="fas fa-cog mr-1"></i> Configuracin
                     </button>
                     <button onclick="showPage('vyt-money')" class="admin-nav-btn bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-coins mr-1"></i>VYT Money
@@ -198,7 +198,7 @@
 
         <!-- Contenido Principal -->
         <main class="p-6">
-            <!-- Sección Inicio -->
+            <!-- Seccin Inicio -->
             <section id="inicio-section" class="admin-section active">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Dashboard General</h2>
@@ -257,7 +257,7 @@
                     <div class="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-500 rounded-xl p-8 mb-8">
                         <div class="flex items-center justify-between">
                             <div>
-                                <h3 class="text-3xl font-bold text-green-700 mb-2">💰 Pozo del Certamen</h3>
+                                <h3 class="text-3xl font-bold text-green-700 mb-2"> Pozo del Certamen</h3>
                                 <p class="text-green-600">Actualizado en tiempo real</p>
                             </div>
                             <button onclick="calcularPozoAdmin()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition">
@@ -272,15 +272,15 @@
                             </div>
                             <div class="bg-gradient-to-br from-yellow-100 to-yellow-200 rounded-lg p-6 text-center">
                                 <div class="text-2xl font-bold text-yellow-700 mb-2" id="admin-premio-1">$0</div>
-                                <div class="text-xs text-yellow-700">🥇 1º Lugar (50%)</div>
+                                <div class="text-xs text-yellow-700"> 1 Lugar (50%)</div>
                             </div>
                             <div class="bg-gradient-to-br from-gray-100 to-gray-200 rounded-lg p-6 text-center">
                                 <div class="text-2xl font-bold text-gray-700 mb-2" id="admin-premio-2">$0</div>
-                                <div class="text-xs text-gray-700">🥈 2º Lugar (30%)</div>
+                                <div class="text-xs text-gray-700"> 2 Lugar (30%)</div>
                             </div>
                             <div class="bg-gradient-to-br from-orange-100 to-orange-200 rounded-lg p-6 text-center">
                                 <div class="text-2xl font-bold text-orange-700 mb-2" id="admin-premio-3">$0</div>
-                                <div class="text-xs text-orange-700">🥉 3º Lugar (20%)</div>
+                                <div class="text-xs text-orange-700"> 3 Lugar (20%)</div>
                             </div>
                         </div>
                         
@@ -300,7 +300,7 @@
                         </div>
                     </div>
 
-                    <!-- Segunda fila de estadísticas -->
+                    <!-- Segunda fila de estadsticas -->
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
                             <div class="flex items-center">
@@ -308,7 +308,7 @@
                                     <i class="fas fa-trophy text-2xl text-amber-500"></i>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-500">Certámenes Activos</p>
+                                    <p class="text-sm font-medium text-gray-500">Certmenes Activos</p>
                                     <p class="text-2xl font-semibold text-gray-900" id="total-certamenes">0</p>
                                 </div>
                             </div>
@@ -352,7 +352,7 @@
                     </div>
 
                     <div class="bg-white p-6 rounded-lg shadow-sm border">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones Rpidas</h3>
                         <div class="flex flex-wrap gap-3">
                             <button onclick="loadParticipantesOnline()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                                 <i class="fas fa-sync mr-1"></i>Cargar Online
@@ -368,13 +368,13 @@
                 </div>
             </section>
 
-            <!-- Nueva Sección Participantes Unificada -->
+            <!-- Nueva Seccin Participantes Unificada -->
             <section id="participantes-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-900">
                             <i class="fas fa-users mr-2 text-blue-600"></i>
-                            Gestión de Participantes
+                            Gestin de Participantes
                         </h2>
                         <div class="flex gap-3">
                             <button onclick="loadAllParticipantes()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
@@ -386,7 +386,7 @@
                         </div>
                     </div>
 
-                    <!-- Filtros y Estadísticas -->
+                    <!-- Filtros y Estadsticas -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                         <div class="bg-white p-4 rounded-lg shadow-sm border">
                             <div class="flex items-center justify-between">
@@ -418,7 +418,7 @@
                         <div class="bg-white p-4 rounded-lg shadow-sm border">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-600">Por Región</p>
+                                    <p class="text-sm font-medium text-gray-600">Por Regin</p>
                                     <p class="text-2xl font-bold text-purple-600" id="regiones-participantes">0</p>
                                 </div>
                                 <i class="fas fa-map-marker-alt text-purple-500 text-xl"></i>
@@ -442,17 +442,17 @@
                                 <label class="block text-sm font-medium text-gray-700 mb-1">Modalidad</label>
                                 <select id="filtro-modalidad" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                                     <option value="">Todas</option>
-                                    <option value="online">Online (por región)</option>
+                                    <option value="online">Online (por regin)</option>
                                     <option value="presencial">Presencial</option>
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Región</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Regin</label>
                                 <select id="filtro-region" class="w-full px-3 py-2 border border-gray-300 rounded-lg">
                                     <option value="">Todas</option>
                                     <option value="capital-federal">Capital Federal</option>
                                     <option value="buenos-aires">Buenos Aires</option>
-                                    <option value="cordoba">Córdoba</option>
+                                    <option value="cordoba">Crdoba</option>
                                     <option value="santa-fe">Santa Fe</option>
                                     <option value="otras">Otras provincias</option>
                                 </select>
@@ -481,13 +481,13 @@
             </section>
 
             <!-- SECCIONES OBSOLETAS - Mantenidas para compatibilidad pero ocultas -->
-            <!-- Sección Participantes Online -->
+            <!-- Seccin Participantes Online -->
             <section id="participantes-online-section" class="admin-section" style="display: none;">
                 <div class="max-w-7xl mx-auto">
                     <div class="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-4">
                         <p class="text-yellow-800">
                             <i class="fas fa-exclamation-triangle mr-2"></i>
-                            <strong>SECCIÓN OBSOLETA:</strong> Esta sección ha sido reemplazada por "Participantes" unificado.
+                            <strong>SECCIN OBSOLETA:</strong> Esta seccin ha sido reemplazada por "Participantes" unificado.
                         </p>
                     </div>
                 <div class="max-w-7xl mx-auto">
@@ -503,7 +503,7 @@
                             <div class="p-4 border-b bg-yellow-50">
                                 <h3 class="font-semibold text-gray-900 flex items-center">
                                     <i class="fas fa-clock text-yellow-500 mr-2"></i>
-                                    Pendientes de Aprobación
+                                    Pendientes de Aprobacin
                                 </h3>
                             </div>
                             <div id="participantes-online-pendientes" class="p-4">
@@ -516,8 +516,8 @@
                                 <div id="videos-pendientes-lista">
                                     <div class="text-center py-8 text-gray-500">
                                         <i class="fas fa-video text-4xl mb-4"></i>
-                                        <p>No hay videos pendientes de aprobación</p>
-                                        <p class="text-sm mt-2">Los videos enviados por artistas aparecerán aquí</p>
+                                        <p>No hay videos pendientes de aprobacin</p>
+                                        <p class="text-sm mt-2">Los videos enviados por artistas aparecern aqu</p>
                                     </div>
                                 </div>
                             </div>
@@ -541,13 +541,13 @@
                 </div>
             </section>
 
-            <!-- Sección Participantes Presenciales -->
+            <!-- Seccin Participantes Presenciales -->
             <section id="participantes-presenciales-section" class="admin-section" style="display: none;">
                 <div class="max-w-7xl mx-auto">
                     <div class="bg-yellow-100 border border-yellow-400 rounded-lg p-4 mb-4">
                         <p class="text-yellow-800">
                             <i class="fas fa-exclamation-triangle mr-2"></i>
-                            <strong>SECCIÓN OBSOLETA:</strong> Esta sección ha sido reemplazada por "Participantes" unificado.
+                            <strong>SECCIN OBSOLETA:</strong> Esta seccin ha sido reemplazada por "Participantes" unificado.
                         </p>
                     </div>
                     <div class="flex justify-between items-center mb-6">
@@ -562,7 +562,7 @@
                             <div class="p-4 border-b bg-yellow-50">
                                 <h3 class="font-semibold text-gray-900 flex items-center">
                                     <i class="fas fa-clock text-yellow-500 mr-2"></i>
-                                    Pendientes de Aprobación
+                                    Pendientes de Aprobacin
                                 </h3>
                             </div>
                             <div id="participantes-presenciales-pendientes" class="p-4">
@@ -591,16 +591,16 @@
                 </div>
             </section>
 
-            <!-- Sección Constructor -->
+            <!-- Seccin Constructor -->
             <section id="constructor-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Constructor de Páginas</h2>
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6">Constructor de Pginas</h2>
                     
                     <div class="bg-white p-6 rounded-lg shadow-sm border mb-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Seleccionar Página</h3>
+                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Seleccionar Pgina</h3>
                         <div class="flex gap-4 items-center">
                             <select id="page-selector" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                                <option value="index">Página Principal (index.html)</option>
+                                <option value="index">Pgina Principal (index.html)</option>
                                 <option value="principal">Dashboard (principal.html)</option>
                             </select>
                             <button id="load-page-content" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
@@ -618,19 +618,19 @@
                         <!-- Mensaje de bienvenida -->
                         <div id="editor-welcome" class="text-center py-12 text-gray-500">
                             <i class="fas fa-code text-4xl mb-4"></i>
-                            <p class="text-lg">Selecciona una página y haz clic en "Cargar Contenido" para comenzar a editar</p>
+                            <p class="text-lg">Selecciona una pgina y haz clic en "Cargar Contenido" para comenzar a editar</p>
                         </div>
                         
                         <!-- Panel del editor -->
                         <div id="content-editor-panel" class="hidden">
                             <div id="page-info" class="bg-blue-50 p-4 rounded-lg mb-4">
-                                <h4 class="font-semibold text-blue-900">Información de la página</h4>
-                                <p class="text-blue-700 text-sm" id="page-description">Descripción de la página</p>
+                                <h4 class="font-semibold text-blue-900">Informacin de la pgina</h4>
+                                <p class="text-blue-700 text-sm" id="page-description">Descripcin de la pgina</p>
                             </div>
                             
                             <textarea id="page-content-editor" rows="20" 
                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm"
-                                      placeholder="El contenido de la página aparecerá aquí..."></textarea>
+                                      placeholder="El contenido de la pgina aparecer aqu..."></textarea>
                             <div class="mt-4">
                                 <button id="save-page-content" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-lg transition-colors">
                                     <i class="fas fa-save mr-1"></i>Guardar Cambios
@@ -642,17 +642,17 @@
                 </div>
             </section>
 
-            <!-- Sección Gestión de Certámenes -->
+            <!-- Seccin Gestin de Certmenes -->
             <section id="certamenes-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Gestión de Certámenes</h2>
+                        <h2 class="text-2xl font-bold text-gray-900">Gestin de Certmenes</h2>
                         <button onclick="openCreateCertamenModal()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors">
                             <i class="fas fa-plus mr-1"></i>Crear Certamen
                         </button>
                     </div>
 
-                    <!-- Formulario de creación de certamen -->
+                    <!-- Formulario de creacin de certamen -->
                     <div id="create-certamen-form" class="bg-white p-6 rounded-lg shadow-sm border mb-6 hidden">
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Nuevo Certamen</h3>
                         <form id="certamen-form" class="space-y-4">
@@ -666,12 +666,12 @@
                                     <select id="certamen-provincia" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                         <option value="">Seleccionar provincia</option>
                                         <option value="Buenos Aires">Buenos Aires</option>
-                                        <option value="Córdoba">Córdoba</option>
+                                        <option value="Crdoba">Crdoba</option>
                                         <option value="Santa Fe">Santa Fe</option>
                                         <option value="Mendoza">Mendoza</option>
-                                        <option value="Tucumán">Tucumán</option>
+                                        <option value="Tucumn">Tucumn</option>
                                         <option value="Salta">Salta</option>
-                                        <option value="Entre Ríos">Entre Ríos</option>
+                                        <option value="Entre Ros">Entre Ros</option>
                                         <option value="Misiones">Misiones</option>
                                         <option value="Corrientes">Corrientes</option>
                                         <option value="Jujuy">Jujuy</option>
@@ -679,8 +679,8 @@
                                         <option value="Chaco">Chaco</option>
                                         <option value="San Juan">San Juan</option>
                                         <option value="Formosa">Formosa</option>
-                                        <option value="Neuquén">Neuquén</option>
-                                        <option value="Río Negro">Río Negro</option>
+                                        <option value="Neuqun">Neuqun</option>
+                                        <option value="Ro Negro">Ro Negro</option>
                                         <option value="Chubut">Chubut</option>
                                         <option value="San Luis">San Luis</option>
                                         <option value="Catamarca">Catamarca</option>
@@ -693,7 +693,7 @@
                             </div>
                             
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Descripcin</label>
                                 <textarea id="certamen-descripcion" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"></textarea>
                             </div>
                             
@@ -731,7 +731,7 @@
                                     <input type="file" id="certamen-imagen" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de Inscripción</label>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de Inscripcin</label>
                                     <input type="url" id="certamen-url-inscripcion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://...">
                                 </div>
                             </div>
@@ -747,11 +747,11 @@
                         </form>
                     </div>
 
-                    <!-- Lista de certámenes existentes -->
+                    <!-- Lista de certmenes existentes -->
                     <div class="bg-white rounded-lg shadow-sm border">
                         <div class="p-4 border-b">
                             <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-gray-900">Certámenes Existentes</h3>
+                                <h3 class="font-semibold text-gray-900">Certmenes Existentes</h3>
                                 <div class="flex gap-2">
                                     <button onclick="loadCertamenes()" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm transition-colors">
                                         <i class="fas fa-sync mr-1"></i>Actualizar
@@ -768,19 +768,19 @@
                         <div id="certamenes-list" class="p-4">
                             <div class="text-center py-8 text-gray-500">
                                 <i class="fas fa-trophy text-4xl mb-4"></i>
-                                <p>Haz clic en "Actualizar" para cargar certámenes</p>
+                                <p>Haz clic en "Actualizar" para cargar certmenes</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Sección VYT Money -->
+            <!-- Seccin VYT Money -->
             <section id="vyt-money-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">Sistema VYT Money</h2>
                     
-                    <!-- Estadísticas VYT Money -->
+                    <!-- Estadsticas VYT Money -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
                             <div class="flex items-center">
@@ -788,7 +788,7 @@
                                     <i class="fas fa-coins text-2xl text-green-500"></i>
                                 </div>
                                 <div class="ml-4">
-                                    <p class="text-sm font-medium text-gray-500">Total en Circulación</p>
+                                    <p class="text-sm font-medium text-gray-500">Total en Circulacin</p>
                                     <p class="text-2xl font-semibold text-gray-900" id="vyt-circulacion">$0</p>
                                 </div>
                             </div>
@@ -819,10 +819,10 @@
                         </div>
                     </div>
 
-                    <!-- Herramientas de gestión VYT Money -->
+                    <!-- Herramientas de gestin VYT Money -->
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Gestión de Saldo</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Gestin de Saldo</h3>
                             <form class="space-y-4">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Email del Usuario</label>
@@ -834,7 +834,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Motivo</label>
-                                    <input type="text" id="vyt-reason" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Motivo de la transacción">
+                                    <input type="text" id="vyt-reason" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="Motivo de la transaccin">
                                 </div>
                                 <div class="flex gap-2">
                                     <button type="button" onclick="addVytMoney()" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors flex-1">
@@ -848,7 +848,7 @@
                         </div>
 
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
-                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones Rápidas</h3>
+                            <h3 class="text-lg font-semibold text-gray-900 mb-4">Acciones Rpidas</h3>
                             <div class="space-y-3">
                                 <button onclick="loadVytTransactions()" class="w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors">
                                     <i class="fas fa-list mr-2"></i>Ver Todas las Transacciones
@@ -860,7 +860,7 @@
                                     <i class="fas fa-chart-bar mr-2"></i>Generar Reporte
                                 </button>
                                 <button onclick="refreshVytStats()" class="w-full bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg transition-colors">
-                                    <i class="fas fa-sync mr-2"></i>Actualizar Estadísticas
+                                    <i class="fas fa-sync mr-2"></i>Actualizar Estadsticas
                                 </button>
                             </div>
                         </div>
@@ -874,8 +874,8 @@
                         <div id="vyt-transactions-list" class="p-4">
                             <div class="text-center py-12 text-gray-500">
                                 <i class="fas fa-inbox text-5xl mb-4 text-gray-300"></i>
-                                <p class="text-lg font-medium text-gray-700 mb-2">No hay transacciones VYT Money aún</p>
-                                <p class="text-sm text-gray-500 mb-4">Las transacciones aparecerán aquí cuando los usuarios compren VYT Money</p>
+                                <p class="text-lg font-medium text-gray-700 mb-2">No hay transacciones VYT Money an</p>
+                                <p class="text-sm text-gray-500 mb-4">Las transacciones aparecern aqu cuando los usuarios compren VYT Money</p>
                                 <button onclick="loadVytTransactions()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors text-sm">
                                     <i class="fas fa-sync mr-2"></i>Recargar Transacciones
                                 </button>
@@ -885,11 +885,11 @@
                 </div>
             </section>
 
-            <!-- Sección Pagos -->
+            <!-- Seccin Pagos -->
             <section id="pagos-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">Gestión de Pagos</h2>
+                        <h2 class="text-2xl font-bold text-gray-900">Gestin de Pagos</h2>
                         <div class="flex items-center gap-3">
                             <div id="mercadopago-status" class="flex items-center px-3 py-1 rounded-full bg-green-100 text-green-800">
                                 <i class="fas fa-check-circle mr-2"></i>
@@ -901,7 +901,7 @@
                         </div>
                     </div>
                     
-                    <!-- Estadísticas de pagos -->
+                    <!-- Estadsticas de pagos -->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
                         <div class="bg-white p-6 rounded-lg shadow-sm border">
                             <div class="flex items-center">
@@ -965,7 +965,7 @@
                             </select>
                             
                             <select id="pago-metodo-filter" class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                                <option value="">Todos los métodos</option>
+                                <option value="">Todos los mtodos</option>
                                 <option value="mercadopago">MercadoPago</option>
                                 <option value="transferencia">Transferencia</option>
                                 <option value="efectivo">Efectivo</option>
@@ -998,27 +998,27 @@
                 </div>
             </section>
 
-            <!-- Sección Gestión de Fondos -->
+            <!-- Seccin Gestin de Fondos -->
             <section id="fondos-section" class="admin-section">
                 <div class="max-w-7xl mx-auto">
                     <h2 class="text-2xl font-bold text-gray-900 mb-6">
                         <i class="fas fa-images mr-2 text-pink-500"></i>
-                        Gestión de Fondos
+                        Gestin de Fondos
                     </h2>
                     
                     <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
                         <p class="text-gray-600 mb-4">
-                            Administra las imágenes de fondo de las diferentes páginas del sitio web de forma visual y sencilla.
+                            Administra las imgenes de fondo de las diferentes pginas del sitio web de forma visual y sencilla.
                         </p>
                         
-                        <!-- Lista de páginas -->
+                        <!-- Lista de pginas -->
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             
-                            <!-- Página Principal (Index) -->
+                            <!-- Pgina Principal (Index) -->
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-home text-blue-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">Página Principal</h3>
+                                    <h3 class="font-semibold text-gray-900">Pgina Principal</h3>
                                 </div>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-index" src="images/fotos/chica-feliz-grabando-una-cancion.jpg" 
@@ -1034,18 +1034,18 @@
                                         class="w-full bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
                                     <i class="fas fa-upload mr-1"></i>Cambiar Fondo
                                 </button>
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
 
-                            <!-- Perfil de Artista (Formulario de Inscripción) -->
+                            <!-- Perfil de Artista (Formulario de Inscripcin) -->
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-user-circle text-purple-500 mr-2"></i>
                                     <h3 class="font-semibold text-gray-900">Perfil de Artista</h3>
-                                    <span class="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Formulario de Inscripción</span>
+                                    <span class="ml-2 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Formulario de Inscripcin</span>
                                 </div>
-                                <p class="text-sm text-gray-600 mb-3">Página donde los artistas se inscriben y completan su perfil</p>
+                                <p class="text-sm text-gray-600 mb-3">Pgina donde los artistas se inscriben y completan su perfil</p>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-perfil" src="images/fotos/inscripcion-background.png" 
                                          alt="Fondo actual" class="h-full w-full object-cover rounded-lg"
@@ -1062,7 +1062,7 @@
                                 </button>
                                 <button onclick="openPositionEditor('perfil-artista.html')" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
 
@@ -1088,7 +1088,7 @@
                                 </button>
                                 <button onclick="openPositionEditor('login-artista.html')" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
 
@@ -1114,7 +1114,7 @@
                                 </button>
                                 <button onclick="openPositionEditor('fan-mode.html')" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
 
@@ -1140,15 +1140,15 @@
                                 </button>
                                 <button onclick="openPositionEditor('admin.html')" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
 
-                            <!-- Inscripción a Certamen -->
+                            <!-- Inscripcin a Certamen -->
                             <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors">
                                 <div class="flex items-center mb-3">
                                     <i class="fas fa-trophy text-yellow-500 mr-2"></i>
-                                    <h3 class="font-semibold text-gray-900">Inscripción a Certamen</h3>
+                                    <h3 class="font-semibold text-gray-900">Inscripcin a Certamen</h3>
                                 </div>
                                 <div class="bg-gray-100 rounded-lg h-32 mb-3 flex items-center justify-center">
                                     <img id="preview-certamen" src="" 
@@ -1166,7 +1166,7 @@
                                 </button>
                                 <button onclick="openPositionEditor('certamenes.html')" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
 
@@ -1192,7 +1192,7 @@
                                 </button>
                                 <button onclick="openPositionEditor('certamen-individual.html')" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
 
@@ -1218,7 +1218,7 @@
                                 </button>
                                 <button onclick="openPositionEditor('ranking.html')" 
                                         class="w-full bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded-lg text-sm font-medium transition-colors">
-                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posición
+                                    <i class="fas fa-crosshairs mr-1"></i>Ajustar Posicin
                                 </button>
                             </div>
                         </div>
@@ -1237,10 +1237,10 @@
                                 <i class="fas fa-info-circle mr-1"></i>Instrucciones
                             </h4>
                             <ul class="text-sm text-blue-800 space-y-1">
-                                <li>• Las imágenes se redimensionan automáticamente</li>
-                                <li>• Formatos soportados: JPG, PNG, GIF</li>
-                                <li>• Tamaño recomendado: 1920x1080px (Full HD)</li>
-                                <li>• Los cambios se aplican inmediatamente</li>
+                                <li> Las imgenes se redimensionan automticamente</li>
+                                <li> Formatos soportados: JPG, PNG, GIF</li>
+                                <li> Tamao recomendado: 1920x1080px (Full HD)</li>
+                                <li> Los cambios se aplican inmediatamente</li>
                             </ul>
                         </div>
                     </div>
@@ -1251,7 +1251,7 @@
 
     <!-- Scripts -->
     <script>
-        // Función global para mostrar secciones
+        // Funcin global para mostrar secciones
         function showPage(pageId) {
             document.querySelectorAll('.admin-section').forEach(section => {
                 section.classList.remove('active');
@@ -1270,11 +1270,11 @@
         window.showPage = showPage;
         window.aprobarParticipante = function(id, collection) {
             console.log('Aprobar participante:', id, collection);
-            // Esta función será implementada por admin-simple.js
+            // Esta funcin ser implementada por admin-simple.js
         };
         window.rechazarParticipante = function(id, collection) {
             console.log('Rechazar participante:', id, collection);
-            // Esta función será implementada por admin-simple.js
+            // Esta funcin ser implementada por admin-simple.js
         };
         window.desaprobarParticipante = function(id, collection) {
             console.log('Desaprobar participante:', id, collection);
@@ -1302,14 +1302,14 @@
             console.log('Exportar datos');
         };
 
-        // Acceso rápido para desarrollador
+        // Acceso rpido para desarrollador
         document.addEventListener('DOMContentLoaded', function() {
             const devAccessBtn = document.getElementById('dev-access-btn');
             const loginSection = document.getElementById('login-section');
             const adminDashboard = document.getElementById('admin-dashboard');
             const adminUserEmail = document.getElementById('admin-user-email');
             
-            // ✨ VERIFICAR SESIÓN GUARDADA AL CARGAR
+            //  VERIFICAR SESIN GUARDADA AL CARGAR
             const savedSession = localStorage.getItem('admin_session');
             if (savedSession) {
                 try {
@@ -1318,9 +1318,9 @@
                     const now = new Date().getTime();
                     const hoursSinceLogin = (now - loginTime) / (1000 * 60 * 60);
                     
-                    // Mantener sesión activa por 24 horas
+                    // Mantener sesin activa por 24 horas
                     if (hoursSinceLogin < 24 && session.isAdmin) {
-                        console.log('✅ Sesión activa encontrada - auto-login');
+                        console.log(' Sesin activa encontrada - auto-login');
                         loginSection.classList.add('hidden');
                         adminDashboard.classList.remove('hidden');
                         adminUserEmail.textContent = session.email;
@@ -1332,44 +1332,44 @@
                         }, 500);
                         
                         initializeWithRealData().catch((error) => {
-                            console.warn('⚠️ Error cargando datos:', error.message);
+                            console.warn(' Error cargando datos:', error.message);
                         });
                     } else {
-                        // Sesión expirada
+                        // Sesin expirada
                         localStorage.removeItem('admin_session');
-                        console.log('⏰ Sesión expirada');
+                        console.log(' Sesin expirada');
                     }
                 } catch (e) {
-                    console.error('Error leyendo sesión:', e);
+                    console.error('Error leyendo sesin:', e);
                     localStorage.removeItem('admin_session');
                 }
             }
             
             if (devAccessBtn) {
                 devAccessBtn.addEventListener('click', function() {
-                    console.log('🔧 Acceso desarrollador activado');
+                    console.log(' Acceso desarrollador activado');
                     
                     // Simular login exitoso
                     loginSection.classList.add('hidden');
                     adminDashboard.classList.remove('hidden');
                     adminUserEmail.textContent = 'Desarrollador (modo local)';
                     
-                    // Mostrar la sección de inicio
+                    // Mostrar la seccin de inicio
                     showPage('inicio');
                     
                     // Intentar cargar datos reales primero, luego simulados
-                    console.log('🔍 Intentando cargar datos reales...');
+                    console.log(' Intentando cargar datos reales...');
                     
-                    // Intentar conexión rápida con Firebase
+                    // Intentar conexin rpida con Firebase
                     setTimeout(() => {
                         tryQuickFirebaseConnection();
                     }, 1000);
                     
                     initializeWithRealData().then(() => {
-                        console.log('✅ Datos reales cargados exitosamente');
+                        console.log(' Datos reales cargados exitosamente');
                     }).catch((error) => {
-                        console.warn('⚠️ Error cargando datos reales:', error.message);
-                        console.log('📊 Fallback: Usando datos simulados realistas');
+                        console.warn(' Error cargando datos reales:', error.message);
+                        console.log(' Fallback: Usando datos simulados realistas');
                         loadSimulatedData();
                     });
                     
@@ -1377,42 +1377,42 @@
                     setTimeout(() => {
                         loadFromFirebase().then((config) => {
                             if (config) {
-                                console.log('🎨 Configuraciones de fondos cargadas desde Firebase');
+                                console.log(' Configuraciones de fondos cargadas desde Firebase');
                                 updatePreviewsFromConfig(config);
                             }
                         }).catch((error) => {
-                            console.log('⚠️ No se pudieron cargar configuraciones de Firebase:', error.message);
+                            console.log(' No se pudieron cargar configuraciones de Firebase:', error.message);
                         });
                     }, 2000);
                     
-                    console.log('✅ Admin cargado en modo desarrollador');
+                    console.log(' Admin cargado en modo desarrollador');
                 });
             }
             
-            // También agregar funcionalidad al botón de logout
+            // Tambin agregar funcionalidad al botn de logout
             const logoutBtn = document.getElementById('logout-btn');
             if (logoutBtn) {
                 logoutBtn.addEventListener('click', function() {
-                    // Limpiar sesión guardada
+                    // Limpiar sesin guardada
                     localStorage.removeItem('admin_session');
                     
                     adminDashboard.classList.add('hidden');
                     loginSection.classList.remove('hidden');
-                    console.log('🚪 Sesión cerrada y limpiada');
+                    console.log(' Sesin cerrada y limpiada');
                 });
             }
             
-            // Agregar funcionalidad al botón de reinicio de datos
+            // Agregar funcionalidad al botn de reinicio de datos
             const resetDataBtn = document.getElementById('reset-data-btn');
             if (resetDataBtn) {
                 resetDataBtn.addEventListener('click', function() {
-                    if (confirm('⚠️ ¿Estás seguro de que quieres LIMPIAR TODOS LOS DATOS?\n\nEsto eliminará:\n• Configuraciones de fondos\n• Datos de localStorage\n• Configuraciones guardadas\n\n⚠️ ESTA ACCIÓN NO SE PUEDE DESHACER')) {
+                    if (confirm(' Ests seguro de que quieres LIMPIAR TODOS LOS DATOS?\n\nEsto eliminar:\n Configuraciones de fondos\n Datos de localStorage\n Configuraciones guardadas\n\n ESTA ACCIN NO SE PUEDE DESHACER')) {
                         resetAllData();
                     }
                 });
             }
             
-            // Agregar funcionalidad al botón de login principal
+            // Agregar funcionalidad al botn de login principal
             const loginBtn = document.getElementById('login-btn');
             if (loginBtn) {
                 loginBtn.addEventListener('click', function() {
@@ -1420,11 +1420,11 @@
                     const password = document.getElementById('admin-password').value;
                     const errorDiv = document.getElementById('login-error');
                     
-                    // Credenciales básicas
+                    // Credenciales bsicas
                     if (email === 'admin@vyt.com' && password === 'vytonline') {
-                        console.log('✅ Login exitoso con credenciales básicas');
+                        console.log(' Login exitoso con credenciales bsicas');
                         
-                        // Guardar sesión en localStorage
+                        // Guardar sesin en localStorage
                         localStorage.setItem('admin_session', JSON.stringify({
                             email: email,
                             loginTime: new Date().getTime(),
@@ -1436,22 +1436,22 @@
                         adminDashboard.classList.remove('hidden');
                         adminUserEmail.textContent = email;
                         
-                        // Mostrar la sección de inicio
+                        // Mostrar la seccin de inicio
                         showPage('inicio');
                         
                         // Intentar cargar datos reales primero, luego simulados
-                        console.log('🔍 Intentando cargar datos reales...');
+                        console.log(' Intentando cargar datos reales...');
                         
-                        // Intentar conexión rápida con Firebase
+                        // Intentar conexin rpida con Firebase
                         setTimeout(() => {
                             tryQuickFirebaseConnection();
                         }, 1000);
                         
                         initializeWithRealData().then(() => {
-                            console.log('✅ Datos reales cargados exitosamente');
+                            console.log(' Datos reales cargados exitosamente');
                         }).catch((error) => {
-                            console.warn('⚠️ Error cargando datos reales:', error.message);
-                            console.log('📊 Fallback: Usando datos simulados realistas');
+                            console.warn(' Error cargando datos reales:', error.message);
+                            console.log(' Fallback: Usando datos simulados realistas');
                             loadSimulatedData();
                         });
                         
@@ -1459,19 +1459,19 @@
                         setTimeout(() => {
                             loadFromFirebase().then((config) => {
                                 if (config) {
-                                    console.log('🎨 Configuraciones de fondos cargadas desde Firebase');
+                                    console.log(' Configuraciones de fondos cargadas desde Firebase');
                                     // Actualizar previews si es necesario
                                     updatePreviewsFromConfig(config);
                                 }
                             }).catch((error) => {
-                                console.log('⚠️ No se pudieron cargar configuraciones de Firebase:', error.message);
+                                console.log(' No se pudieron cargar configuraciones de Firebase:', error.message);
                             });
                         }, 2000);
                         
                         errorDiv.classList.add('hidden');
-                        console.log('✅ Admin cargado exitosamente');
+                        console.log(' Admin cargado exitosamente');
                     } else {
-                        console.log('❌ Credenciales incorrectas');
+                        console.log(' Credenciales incorrectas');
                         errorDiv.textContent = 'Credenciales incorrectas. Usa: admin@vyt.com / vytonline';
                         errorDiv.classList.remove('hidden');
                     }
@@ -1479,29 +1479,29 @@
             }
         });
 
-        // Función para cargar datos reales
+        // Funcin para cargar datos reales
         async function loadRealData() {
             try {
-                console.log('🔄 Intentando cargar datos reales de Firebase...');
+                console.log(' Intentando cargar datos reales de Firebase...');
                 
-                // Esperar a que Firebase esté disponible
+                // Esperar a que Firebase est disponible
                 if (typeof window.firebaseDB !== 'undefined') {
                     db = window.firebaseDB;
                     firebaseConnected = true;
                     
-                    // Cargar estadísticas reales
+                    // Cargar estadsticas reales
                     await loadRealStats();
-                    console.log('✅ Datos reales cargados desde Firebase');
+                    console.log(' Datos reales cargados desde Firebase');
                 } else {
                     throw new Error('Firebase no disponible');
                 }
             } catch (error) {
-                console.error('❌ Error cargando datos reales:', error);
+                console.error(' Error cargando datos reales:', error);
                 throw error;
             }
         }
 
-        // Función para cargar estadísticas reales
+        // Funcin para cargar estadsticas reales
         async function loadRealStats() {
             try {
                 if (!db || !window.firestoreQuery) {
@@ -1518,7 +1518,7 @@
                 const participantesPresencialRef = collection(db, 'participantes_presencial');
                 const participantesPresencialSnapshot = await getDocs(participantesPresencialRef);
 
-                // Cargar certámenes
+                // Cargar certmenes
                 const certamenesRef = collection(db, 'certamenes');
                 const certamenesSnapshot = await getDocs(certamenesRef);
 
@@ -1530,7 +1530,7 @@
                 const pagosRef = collection(db, 'payment_transactions');
                 const pagosSnapshot = await getDocs(pagosRef);
 
-                // Actualizar estadísticas con datos reales
+                // Actualizar estadsticas con datos reales
                 const totalOnline = participantesOnlineSnapshot.size;
                 const totalPresencial = participantesPresencialSnapshot.size;
                 const totalParticipantes = totalOnline + totalPresencial;
@@ -1609,7 +1609,7 @@
                 document.getElementById('total-pagos').textContent = '$' + pagosTotal.toLocaleString();
                 document.getElementById('transacciones-hoy').textContent = transaccionesHoy;
 
-                // Actualizar estadísticas específicas de VYT Money
+                // Actualizar estadsticas especficas de VYT Money
                 if (document.getElementById('vyt-circulacion')) {
                     document.getElementById('vyt-circulacion').textContent = '$' + vytMoneyTotal.toLocaleString();
                 }
@@ -1620,7 +1620,7 @@
                     document.getElementById('vyt-usuarios-activos').textContent = totalParticipantes;
                 }
 
-                // Actualizar estadísticas específicas de pagos
+                // Actualizar estadsticas especficas de pagos
                 if (document.getElementById('pagos-total')) {
                     document.getElementById('pagos-total').textContent = '$' + pagosTotal.toLocaleString();
                 }
@@ -1634,7 +1634,7 @@
                     document.getElementById('pagos-rechazados').textContent = pagosRechazados;
                 }
 
-                console.log('📊 Estadísticas reales cargadas:', {
+                console.log(' Estadsticas reales cargadas:', {
                     participantes: totalParticipantes,
                     online: totalOnline,
                     presencial: totalPresencial,
@@ -1649,7 +1649,7 @@
                 calcularPozoAdmin();
 
             } catch (error) {
-                console.error('❌ Error cargando estadísticas reales:', error);
+                console.error(' Error cargando estadsticas reales:', error);
                 throw error;
             }
         }
@@ -1657,18 +1657,18 @@
         // Calcular pozo del certamen en admin
         async function calcularPozoAdmin() {
             try {
-                // Obtener configuración
+                // Obtener configuracin
                 const configRef = firebase.firestore().collection('configuracion_sistema').doc('config_principal');
                 const configDoc = await configRef.get();
                 
                 if (!configDoc.exists) {
-                    console.log('No hay configuración');
+                    console.log('No hay configuracin');
                     return;
                 }
                 
                 const config = configDoc.data();
                 
-                // Precios y configuración
+                // Precios y configuracin
                 const precioInscripcion = config.precios?.inscripcion_online || 1500;
                 const precioVoto = (config.precios?.precio_vyt_money || 1500) / 1000;
                 const pctInscripcion = config.distribucion?.inscripcion_pozo || 30;
@@ -1715,7 +1715,7 @@
                 document.getElementById('admin-votos-count').textContent = totalVotos.toLocaleString();
                 document.getElementById('admin-ingresos-totales').textContent = formatPesos(ingresosTotales);
                 
-                console.log('💰 Pozo calculado:', { totalInscripciones, totalVotos, pozoTotal, premioPrimero, premioSegundo, premioTercero });
+                console.log(' Pozo calculado:', { totalInscripciones, totalVotos, pozoTotal, premioPrimero, premioSegundo, premioTercero });
             } catch (error) {
                 console.error('Error calculando pozo:', error);
             }
@@ -1730,13 +1730,13 @@
             }).format(monto);
         }
 
-        // Función de respaldo con datos simulados realistas
+        // Funcin de respaldo con datos simulados realistas
         function loadSimulatedData() {
-            console.log('📊 Cargando datos simulados realistas basados en tu Firebase...');
+            console.log(' Cargando datos simulados realistas basados en tu Firebase...');
             
-            // Datos más realistas para VYT Music (comenzando pequeño)
+            // Datos ms realistas para VYT Music (comenzando pequeo)
             const fecha = new Date();
-            const baseParticipantes = Math.floor(Math.random() * 20) + 5; // Entre 5-25 (más realista para inicio)
+            const baseParticipantes = Math.floor(Math.random() * 20) + 5; // Entre 5-25 (ms realista para inicio)
             const baseOnline = Math.floor(baseParticipantes * 0.7); // 70% online
             const basePresencial = baseParticipantes - baseOnline;
             const baseAprobados = Math.floor(baseParticipantes * 0.6); // 60% aprobados
@@ -1747,11 +1747,11 @@
             document.getElementById('total-presencial').textContent = basePresencial.toString();
             document.getElementById('total-aprobados').textContent = baseAprobados.toString();
             
-            // Certámenes (empezando con pocos)
-            const certamenesActivos = Math.floor(Math.random() * 3) + 1; // 1-4 certámenes
+            // Certmenes (empezando con pocos)
+            const certamenesActivos = Math.floor(Math.random() * 3) + 1; // 1-4 certmenes
             document.getElementById('total-certamenes').textContent = certamenesActivos.toString();
             
-            // VYT Money (cantidades más pequeñas y realistas)
+            // VYT Money (cantidades ms pequeas y realistas)
             const vytMoneyTotal = (Math.floor(Math.random() * 10000) + 1000).toLocaleString(); // 1k-11k
             document.getElementById('vyt-money-total').textContent = '$' + vytMoneyTotal;
             
@@ -1763,52 +1763,52 @@
             const transaccionesHoy = Math.floor(Math.random() * 10) + 2; // 2-12
             document.getElementById('transacciones-hoy').textContent = transaccionesHoy.toString();
             
-            console.log(`✅ Datos simulados realistas: ${baseParticipantes} participantes, ${certamenesActivos} certámenes`);
+            console.log(` Datos simulados realistas: ${baseParticipantes} participantes, ${certamenesActivos} certmenes`);
             
-            // Cargar datos de demostración en las secciones
+            // Cargar datos de demostracin en las secciones
             setTimeout(() => {
                 loadDemoData();
             }, 500);
         }
 
-        // Función para intentar conexión rápida con Firebase
+        // Funcin para intentar conexin rpida con Firebase
         async function tryQuickFirebaseConnection() {
-            console.log('⚡ Intentando conexión rápida con Firebase...');
+            console.log(' Intentando conexin rpida con Firebase...');
             
             try {
-                // Verificar si admin-simple.js ya configuró Firebase
+                // Verificar si admin-simple.js ya configur Firebase
                 if (window.db && window.auth) {
-                    console.log('🔥 Firebase ya está configurado por admin-simple.js');
+                    console.log(' Firebase ya est configurado por admin-simple.js');
                     
-                    // Intentar una consulta simple y rápida
+                    // Intentar una consulta simple y rpida
                     const { collection, getDocs, limit, query } = window.firestoreQuery || {};
                     
                     if (collection && getDocs) {
-                        // Probar con una consulta rápida
+                        // Probar con una consulta rpida
                         const testQuery = query(collection(window.db, 'participantes_online'), limit(1));
                         const snapshot = await getDocs(testQuery);
                         
-                        console.log('✅ Conexión Firebase exitosa!');
+                        console.log(' Conexin Firebase exitosa!');
                         
-                        // Cargar estadísticas reales rápidas
+                        // Cargar estadsticas reales rpidas
                         loadQuickRealStats();
                         
                         return true;
                     }
                 }
                 
-                console.log('⚠️ Firebase no está completamente inicializado');
+                console.log(' Firebase no est completamente inicializado');
                 return false;
                 
             } catch (error) {
-                console.log('❌ Conexión rápida falló:', error.message);
+                console.log(' Conexin rpida fall:', error.message);
                 return false;
             }
         }
 
-        // Función para cargar estadísticas reales rápidas
+        // Funcin para cargar estadsticas reales rpidas
         async function loadQuickRealStats() {
-            console.log('📊 Cargando estadísticas reales rápidas...');
+            console.log(' Cargando estadsticas reales rpidas...');
             
             try {
                 const { collection, getDocs, query, where } = window.firestoreQuery;
@@ -1839,18 +1839,18 @@
                 document.getElementById('total-aprobados').textContent = totalAprobados.toString();
                 document.getElementById('total-certamenes').textContent = totalCertamenes.toString();
                 
-                console.log(`✅ Estadísticas reales cargadas: ${totalParticipantes} participantes, ${totalCertamenes} certámenes`);
+                console.log(` Estadsticas reales cargadas: ${totalParticipantes} participantes, ${totalCertamenes} certmenes`);
                 
-                // Marcar que Firebase está funcionando
+                // Marcar que Firebase est funcionando
                 firebaseConnected = true;
                 
             } catch (error) {
-                console.error('❌ Error cargando estadísticas rápidas:', error);
+                console.error(' Error cargando estadsticas rpidas:', error);
                 throw error;
             }
         }
 
-        // Función para cargar datos de demostración
+        // Funcin para cargar datos de demostracin
         function loadDemoData() {
             const pendientesOnline = document.getElementById('participantes-online-pendientes');
             const aprobadosOnline = document.getElementById('participantes-online-aprobados');
@@ -1862,10 +1862,10 @@
                 loadDemoParticipants(pendientesOnline, aprobadosOnline, pendientesPresencial, aprobadosPresencial);
             }
             
-            console.log('📊 Datos de demostración cargados');
+            console.log(' Datos de demostracin cargados');
         }
 
-        // Función para cargar participantes demo
+        // Funcin para cargar participantes demo
         function loadDemoParticipants(pendientesOnline, aprobadosOnline, pendientesPresencial, aprobadosPresencial) {
             // Datos demo para participantes online pendientes
             if (pendientesOnline) {
@@ -1873,14 +1873,14 @@
                     <div class="space-y-4">
                         <div class="bg-yellow-50 border border-yellow-200 p-4 rounded-lg">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="font-semibold text-gray-900">María González</h4>
+                                <h4 class="font-semibold text-gray-900">Mara Gonzlez</h4>
                                 <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded">Pendiente</span>
                             </div>
-                            <p class="text-sm text-gray-600 mb-2">📧 maria.gonzalez@email.com</p>
-                            <p class="text-sm text-gray-600 mb-3">📍 Buenos Aires, Argentina</p>
+                            <p class="text-sm text-gray-600 mb-2"> maria.gonzalez@email.com</p>
+                            <p class="text-sm text-gray-600 mb-3"> Buenos Aires, Argentina</p>
                             <div class="flex gap-2">
-                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">✅ Aprobar</button>
-                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">❌ Rechazar</button>
+                                <button class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm"> Aprobar</button>
+                                <button class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"> Rechazar</button>
                             </div>
                         </div>
                     </div>
@@ -1892,14 +1892,14 @@
                     <div class="space-y-4">
                         <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
                             <div class="flex items-center justify-between mb-2">
-                                <h4 class="font-semibold text-gray-900">Ana Martínez</h4>
+                                <h4 class="font-semibold text-gray-900">Ana Martnez</h4>
                                 <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded">Aprobado</span>
                             </div>
-                            <p class="text-sm text-gray-600 mb-2">📧 ana.martinez@email.com</p>
-                            <p class="text-sm text-gray-600 mb-3">📍 Mendoza, Argentina</p>
+                            <p class="text-sm text-gray-600 mb-2"> ana.martinez@email.com</p>
+                            <p class="text-sm text-gray-600 mb-3"> Mendoza, Argentina</p>
                             <div class="flex gap-2">
-                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">📝 Editar</button>
-                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">⏸️ Desaprobar</button>
+                                <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"> Editar</button>
+                                <button class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm"> Desaprobar</button>
                             </div>
                         </div>
                     </div>
@@ -1907,7 +1907,7 @@
             }
         }
 
-        // Función para cargar participantes reales de Firebase
+        // Funcin para cargar participantes reales de Firebase
         async function loadRealParticipants() {
             if (!db || !window.firestoreQuery) {
                 console.log('Firebase no disponible, usando datos demo');
@@ -1924,14 +1924,14 @@
                 // Cargar participantes presenciales
                 await loadRealParticipantesPresenciales();
 
-                console.log('✅ Participantes reales cargados');
+                console.log(' Participantes reales cargados');
             } catch (error) {
-                console.error('❌ Error cargando participantes reales:', error);
+                console.error(' Error cargando participantes reales:', error);
                 loadDemoData();
             }
         }
 
-        // Función para cargar participantes online reales
+        // Funcin para cargar participantes online reales
         async function loadRealParticipantesOnline() {
             if (!db || !window.firestoreQuery) return;
 
@@ -1985,16 +1985,16 @@
                     }
                 }
 
-                console.log(`📊 Participantes online cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
+                console.log(` Participantes online cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
 
             } catch (error) {
-                console.error('❌ Error cargando participantes online:', error);
+                console.error(' Error cargando participantes online:', error);
                 if (pendientesOnline) pendientesOnline.innerHTML = '<p class="text-center text-red-500 py-8">Error cargando datos</p>';
                 if (aprobadosOnline) aprobadosOnline.innerHTML = '<p class="text-center text-red-500 py-8">Error cargando datos</p>';
             }
         }
 
-        // Función para cargar participantes presenciales reales
+        // Funcin para cargar participantes presenciales reales
         async function loadRealParticipantesPresenciales() {
             if (!db || !window.firestoreQuery) return;
 
@@ -2048,16 +2048,16 @@
                     }
                 }
 
-                console.log(`📊 Participantes presencial cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
+                console.log(` Participantes presencial cargados: ${pendientesSnapshot.size} pendientes, ${aprobadosSnapshot.size} aprobados`);
 
             } catch (error) {
-                console.error('❌ Error cargando participantes presencial:', error);
+                console.error(' Error cargando participantes presencial:', error);
                 if (pendientesPresencial) pendientesPresencial.innerHTML = '<p class="text-center text-red-500 py-8">Error cargando datos</p>';
                 if (aprobadosPresencial) aprobadosPresencial.innerHTML = '<p class="text-center text-red-500 py-8">Error cargando datos</p>';
             }
         }
 
-        // Función para renderizar una tarjeta de participante
+        // Funcin para renderizar una tarjeta de participante
         function renderParticipantCard(id, data, collection, isApproved) {
             const nombre = data.nombre_artista || data.nombreArtista || data.nombre || 'Sin nombre';
             const email = data.email || data.correo || 'Sin email';
@@ -2073,17 +2073,17 @@
                             ${isApproved ? 'Aprobado' : 'Pendiente'}
                         </span>
                     </div>
-                    <p class="text-sm text-gray-600 mb-2">📧 ${email}</p>
-                    <p class="text-sm text-gray-600 mb-2">📍 ${provincia}</p>
-                    <p class="text-xs text-gray-400 mb-3">📅 ${fechaInscripcion}</p>
-                    ${videoLink ? `<p class="text-sm text-blue-600 mb-3"><a href="${videoLink}" target="_blank">🎥 Ver video</a></p>` : ''}
+                    <p class="text-sm text-gray-600 mb-2"> ${email}</p>
+                    <p class="text-sm text-gray-600 mb-2"> ${provincia}</p>
+                    <p class="text-xs text-gray-400 mb-3"> ${fechaInscripcion}</p>
+                    ${videoLink ? `<p class="text-sm text-blue-600 mb-3"><a href="${videoLink}" target="_blank"> Ver video</a></p>` : ''}
                     <div class="flex gap-2">
                         ${!isApproved ? `
-                            <button onclick="aprobarYEnviarAPagar('${id}', '${collection}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm" title="Aprobar y enviar email para pagar">✅ Aprobar + 💳 Pagar</button>
-                            <button onclick="rechazarParticipanteReal('${id}', '${collection}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">❌ Rechazar</button>
+                            <button onclick="aprobarYEnviarAPagar('${id}', '${collection}')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm" title="Aprobar y enviar email para pagar"> Aprobar +  Pagar</button>
+                            <button onclick="rechazarParticipanteReal('${id}', '${collection}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm"> Rechazar</button>
                         ` : `
-                            <button onclick="editarParticipanteReal('${id}', '${collection}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">📝 Editar</button>
-                            <button onclick="desaprobarParticipanteReal('${id}', '${collection}')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm">⏸️ Desaprobar</button>
+                            <button onclick="editarParticipanteReal('${id}', '${collection}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm"> Editar</button>
+                            <button onclick="desaprobarParticipanteReal('${id}', '${collection}')" class="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-sm"> Desaprobar</button>
                         `}
                     </div>
                     <p class="text-xs text-gray-400 mt-2">ID: ${id}</p>
@@ -2105,7 +2105,7 @@
                     fecha_aprobacion: new Date()
                 });
                 
-                console.log(`✅ Participante ${id} aprobado`);
+                console.log(` Participante ${id} aprobado`);
                 alert('Participante aprobado exitosamente');
                 
                 // Recargar datos
@@ -2115,18 +2115,18 @@
                     loadRealParticipantesPresenciales();
                 }
                 
-                // Actualizar estadísticas
+                // Actualizar estadsticas
                 loadRealStats();
                 
             } catch (error) {
-                console.error('❌ Error aprobando participante:', error);
+                console.error(' Error aprobando participante:', error);
                 alert('Error al aprobar participante: ' + error.message);
             }
         };
 
-        // ⭐ NUEVA FUNCIÓN - TAREA 4: Aprobar y enviar a pagar
+        //  NUEVA FUNCIN - TAREA 4: Aprobar y enviar a pagar
         window.aprobarYEnviarAPagar = async function(participante_id, collection) {
-            if (!confirm('¿Estás seguro de que quieres aprobar y enviar a pagar?\n\nEl participante recibirá un email con el link de pago.')) {
+            if (!confirm('Ests seguro de que quieres aprobar y enviar a pagar?\n\nEl participante recibir un email con el link de pago.')) {
                 return;
             }
 
@@ -2138,7 +2138,7 @@
             try {
                 const { doc, updateDoc, getDoc } = window.firestoreQuery;
                 
-                console.log(`🔄 Aprobando y enviando a pagar participante: ${participante_id}`);
+                console.log(` Aprobando y enviando a pagar participante: ${participante_id}`);
                 
                 // 1. Cambiar estado a "aprobado_pendiente_pago"
                 await updateDoc(doc(db, collection, participante_id), {
@@ -2147,7 +2147,7 @@
                     fecha_envio_pago: new Date()
                 });
                 
-                console.log(`✅ Estado actualizado a aprobado_pendiente_pago`);
+                console.log(` Estado actualizado a aprobado_pendiente_pago`);
                 
                 // 2. Obtener datos del participante para enviar email
                 const docRef = doc(db, collection, participante_id);
@@ -2159,13 +2159,13 @@
                     const linkPago = `https://vytonlineprueva.web.app/pagar-inscripcion.html?pid=${participante_id}`;
                     
                     // 4. Mostrar info al admin
-                    console.log(`📧 Link de pago: ${linkPago}`);
-                    console.log(`📧 Enviando a: ${participanteData.email}`);
+                    console.log(` Link de pago: ${linkPago}`);
+                    console.log(` Enviando a: ${participanteData.email}`);
                     
                     // Mostrar instrucciones al admin
-                    alert(`✅ Participante aprobado!\n\n📧 Link de pago:\n${linkPago}\n\n👤 Artista: ${participanteData.nombre_artistico || 'Sin nombre'}\n📧 Email: ${participanteData.email}\n\nTienes 48 horas para completar el pago.`);
+                    alert(` Participante aprobado!\n\n Link de pago:\n${linkPago}\n\n Artista: ${participanteData.nombre_artistico || 'Sin nombre'}\n Email: ${participanteData.email}\n\nTienes 48 horas para completar el pago.`);
                 } else {
-                    alert('✅ Participante aprobado para pago, pero no se encontró email para notificación.');
+                    alert(' Participante aprobado para pago, pero no se encontr email para notificacin.');
                 }
                 
                 // 5. Recargar datos
@@ -2175,19 +2175,19 @@
                     loadRealParticipantesPresenciales();
                 }
                 
-                // Actualizar estadísticas
+                // Actualizar estadsticas
                 loadRealStats();
                 
-                console.log(`✅ Proceso completado exitosamente`);
+                console.log(` Proceso completado exitosamente`);
                 
             } catch (error) {
-                console.error('❌ Error aprobando y enviando a pagar:', error);
+                console.error(' Error aprobando y enviando a pagar:', error);
                 alert('Error: ' + error.message);
             }
         };
 
         window.rechazarParticipanteReal = async function(id, collection) {
-            if (!confirm('¿Estás seguro de que quieres rechazar este participante?')) {
+            if (!confirm('Ests seguro de que quieres rechazar este participante?')) {
                 return;
             }
 
@@ -2203,7 +2203,7 @@
                     fecha_rechazo: new Date()
                 });
                 
-                console.log(`❌ Participante ${id} rechazado`);
+                console.log(` Participante ${id} rechazado`);
                 alert('Participante rechazado');
                 
                 // Recargar datos
@@ -2213,17 +2213,17 @@
                     loadRealParticipantesPresenciales();
                 }
                 
-                // Actualizar estadísticas
+                // Actualizar estadsticas
                 loadRealStats();
                 
             } catch (error) {
-                console.error('❌ Error rechazando participante:', error);
+                console.error(' Error rechazando participante:', error);
                 alert('Error al rechazar participante: ' + error.message);
             }
         };
 
         window.desaprobarParticipanteReal = async function(id, collection) {
-            if (!confirm('¿Estás seguro de que quieres desaprobar este participante?')) {
+            if (!confirm('Ests seguro de que quieres desaprobar este participante?')) {
                 return;
             }
 
@@ -2238,7 +2238,7 @@
                     estado: 'pendiente'
                 });
                 
-                console.log(`⏸️ Participante ${id} desaprobado`);
+                console.log(` Participante ${id} desaprobado`);
                 alert('Participante movido a pendientes');
                 
                 // Recargar datos
@@ -2248,34 +2248,34 @@
                     loadRealParticipantesPresenciales();
                 }
                 
-                // Actualizar estadísticas
+                // Actualizar estadsticas
                 loadRealStats();
                 
             } catch (error) {
-                console.error('❌ Error desaprobando participante:', error);
+                console.error(' Error desaprobando participante:', error);
                 alert('Error al desaprobar participante: ' + error.message);
             }
         };
 
         window.editarParticipanteReal = function(id, collection) {
-            alert(`Función de edición para participante ${id} en desarrollo`);
+            alert(`Funcin de edicin para participante ${id} en desarrollo`);
         };
 
         // Actualizar las funciones de carga para usar datos reales
         window.loadParticipantesOnline = function() {
-            console.log('🔄 Cargando participantes online...');
+            console.log(' Cargando participantes online...');
             loadRealParticipantesOnline();
         };
 
         window.loadParticipantesPresenciales = function() {
-            console.log('🔄 Cargando participantes presenciales...');
+            console.log(' Cargando participantes presenciales...');
             loadRealParticipantesPresenciales();
         };
 
-        // Función para cargar datos reales de certámenes
+        // Funcin para cargar datos reales de certmenes
         async function loadRealCertamenes() {
             if (!db || !window.firestoreQuery) {
-                console.log('Firebase no disponible, usando datos demo de certámenes');
+                console.log('Firebase no disponible, usando datos demo de certmenes');
                 loadDemoCertamenes();
                 return;
             }
@@ -2294,9 +2294,9 @@
                 if (certamenesSnapshot.empty) {
                     certamenesContainer.innerHTML = `
                         <div class="text-center py-8">
-                            <p class="text-gray-500 mb-4">No hay certámenes creados</p>
+                            <p class="text-gray-500 mb-4">No hay certmenes creados</p>
                             <button onclick="showCreateCertamen()" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-                                📝 Crear Primer Certamen
+                                 Crear Primer Certamen
                             </button>
                         </div>
                     `;
@@ -2310,18 +2310,18 @@
                     certamenesContainer.innerHTML = certamenesHTML;
                 }
 
-                console.log(`📊 Certámenes cargados: ${certamenesSnapshot.size} certámenes`);
+                console.log(` Certmenes cargados: ${certamenesSnapshot.size} certmenes`);
 
             } catch (error) {
-                console.error('❌ Error cargando certámenes:', error);
+                console.error(' Error cargando certmenes:', error);
                 loadDemoCertamenes();
             }
         }
 
-        // Función para renderizar tarjeta de certamen real
+        // Funcin para renderizar tarjeta de certamen real
         function renderCertamenCardReal(id, data) {
             const nombre = data.nombre || 'Sin nombre';
-            const descripcion = data.descripcion || 'Sin descripción';
+            const descripcion = data.descripcion || 'Sin descripcin';
             const estado = data.estado || 'activo';
             const provincia = data.provincia || 'Sin provincia';
             const participantesCount = data.participantes_count || 0;
@@ -2338,15 +2338,15 @@
                     <div class="flex justify-between items-start mb-2">
                         <div>
                             <h4 class="font-semibold text-gray-900">${nombre}</h4>
-                            <p class="text-sm text-gray-600">${provincia} • ${estadoTexto}</p>
+                            <p class="text-sm text-gray-600">${provincia}  ${estadoTexto}</p>
                         </div>
                         <span class="bg-${estadoColor}-100 text-${estadoColor}-800 px-2 py-1 rounded text-xs">${estadoTexto}</span>
                     </div>
                     <p class="text-sm text-gray-700 mb-3">${descripcion}</p>
                     <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                        <span>📅 ${fechaInicio} - ${fechaFin}</span>
-                        <span>💰 $${premio}</span>
-                        <span>👥 ${participantesCount} inscriptos</span>
+                        <span> ${fechaInicio} - ${fechaFin}</span>
+                        <span> $${premio}</span>
+                        <span> ${participantesCount} inscriptos</span>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="editCertamen('${id}')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
@@ -2364,12 +2364,12 @@
             `;
         }
 
-        // Función para cargar datos demo de certámenes
+        // Funcin para cargar datos demo de certmenes
         function loadDemoCertamenes() {
             const certamenesContainer = document.getElementById('certamenes-list');
             if (!certamenesContainer) return;
             
-            // Usar la función existente que ya está definida
+            // Usar la funcin existente que ya est definida
             if (window.loadCertamenes && typeof window.loadCertamenes === 'function') {
                 window.loadCertamenes();
             } else {
@@ -2379,15 +2379,15 @@
                             <div class="flex justify-between items-start mb-2">
                                 <div>
                                     <h4 class="font-semibold text-gray-900">VYT Music Contest 2024</h4>
-                                    <p class="text-sm text-gray-600">Buenos Aires • Activo</p>
+                                    <p class="text-sm text-gray-600">Buenos Aires  Activo</p>
                                 </div>
                                 <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Activo</span>
                             </div>
-                            <p class="text-sm text-gray-700 mb-3">Certamen principal de canto del año 2024</p>
+                            <p class="text-sm text-gray-700 mb-3">Certamen principal de canto del ao 2024</p>
                             <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                                <span>📅 15/01/2024 - 30/03/2024</span>
-                                <span>💰 $5,000</span>
-                                <span>👥 45 inscriptos</span>
+                                <span> 15/01/2024 - 30/03/2024</span>
+                                <span> $5,000</span>
+                                <span> 45 inscriptos</span>
                             </div>
                             <div class="flex gap-2">
                                 <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
@@ -2403,7 +2403,7 @@
             }
         }
 
-        // ===== FUNCIONES PARA GESTIÓN DE CERTÁMENES =====
+        // ===== FUNCIONES PARA GESTIN DE CERTMENES =====
         window.openCreateCertamenModal = function() {
             const form = document.getElementById('create-certamen-form');
             form.classList.remove('hidden');
@@ -2417,46 +2417,46 @@
         };
 
         window.loadCertamenes = function() {
-            console.log('🔄 Cargando certámenes...');
+            console.log(' Cargando certmenes...');
             loadRealCertamenes();
         };
 
         window.exportCertamenes = function() {
-            console.log('📤 Exportando certámenes...');
-            alert('Función de exportación de certámenes - Próximamente');
+            console.log(' Exportando certmenes...');
+            alert('Funcin de exportacin de certmenes - Prximamente');
         };
 
         window.editCertamen = function(id) {
-            console.log('✏️ Editando certamen:', id);
-            alert('Función de edición de certamen - ID: ' + id);
+            console.log(' Editando certamen:', id);
+            alert('Funcin de edicin de certamen - ID: ' + id);
         };
 
         window.toggleCertamen = function(id) {
-            console.log('⏸️ Pausando/Activando certamen:', id);
+            console.log(' Pausando/Activando certamen:', id);
             alert('Certamen pausado/activado - ID: ' + id);
         };
 
         window.deleteCertamen = function(id) {
-            if (confirm('¿Estás seguro de que quieres eliminar este certamen?')) {
-                console.log('🗑️ Eliminando certamen:', id);
+            if (confirm('Ests seguro de que quieres eliminar este certamen?')) {
+                console.log(' Eliminando certamen:', id);
                 alert('Certamen eliminado - ID: ' + id);
                 loadCertamenes(); // Recargar lista
             }
         };
 
-        // ===== FUNCIÓN PARA CALCULAR CLASIFICADOS 40% =====
+        // ===== FUNCIN PARA CALCULAR CLASIFICADOS 40% =====
         window.calcularClasificados40 = async function() {
-            if (!confirm('⚠️ Esto calculará el 40% de clasificados por región.\n\n¿Estás seguro de ejecutar este proceso?\n\n(Solo ejecutar al finalizar Fase 2 - Clasificación)')) {
+            if (!confirm(' Esto calcular el 40% de clasificados por regin.\n\nEsts seguro de ejecutar este proceso?\n\n(Solo ejecutar al finalizar Fase 2 - Clasificacin)')) {
                 return;
             }
             
             const certamenId = prompt('Ingresa el ID del certamen (ej: santafe_2025):', 'santafe_2025');
             if (!certamenId) return;
             
-            const fase = prompt('Ingresa el número de fase (2 para calcular 40%):', '2');
+            const fase = prompt('Ingresa el nmero de fase (2 para calcular 40%):', '2');
             if (!fase) return;
             
-            console.log('🎯 Calculando clasificados...');
+            console.log(' Calculando clasificados...');
             
             try {
                 // Mostrar loading
@@ -2483,23 +2483,23 @@
                 btn.innerHTML = originalText;
                 
                 if (result.success) {
-                    let mensaje = `✅ Clasificación completada!\n\n`;
+                    let mensaje = ` Clasificacin completada!\n\n`;
                     mensaje += `Total de semifinalistas: ${result.totalClasificados}\n\n`;
                     
                     for (const [region, datos] of Object.entries(result.resultados)) {
-                        mensaje += `📍 ${region.toUpperCase()}: ${datos.clasificados}/${datos.total} (${datos.porcentaje}%)\n`;
+                        mensaje += ` ${region.toUpperCase()}: ${datos.clasificados}/${datos.total} (${datos.porcentaje}%)\n`;
                     }
                     
                     alert(mensaje);
                     loadCertamenes(); // Recargar
                 } else {
-                    alert('❌ Error: ' + (result.error || 'Error desconocido'));
+                    alert(' Error: ' + (result.error || 'Error desconocido'));
                 }
             } catch (error) {
-                console.error('Error ejecutando cálculo:', error);
-                alert('❌ Error al calcular clasificados: ' + error.message);
+                console.error('Error ejecutando clculo:', error);
+                alert(' Error al calcular clasificados: ' + error.message);
                 
-                // Restaurar botón
+                // Restaurar botn
                 const btn = event.target;
                 btn.disabled = false;
                 btn.innerHTML = '<i class="fas fa-calculator mr-1"></i>Calcular 40%';
@@ -2517,7 +2517,7 @@
                 return;
             }
             
-            console.log('💰 Agregando VYT Money:', { email, amount, reason });
+            console.log(' Agregando VYT Money:', { email, amount, reason });
             alert(`Se agregaron $${amount} VYT Money a ${email}`);
         };
 
@@ -2531,7 +2531,7 @@
                 return;
             }
             
-            console.log('💸 Restando VYT Money:', { email, amount, reason });
+            console.log(' Restando VYT Money:', { email, amount, reason });
             alert(`Se restaron $${amount} VYT Money de ${email}`);
         };
 
@@ -2539,13 +2539,13 @@
             const list = document.getElementById('vyt-transactions-list');
             
             try {
-                console.log('💳 Cargando transacciones VYT Money reales...');
+                console.log(' Cargando transacciones VYT Money reales...');
                 
                 if (!db) {
                     throw new Error('Firebase no disponible');
                 }
                 
-                // Cargar últimas 10 transacciones de VYT Money
+                // Cargar ltimas 10 transacciones de VYT Money
                 const snapshot = await db.collection('vyt_money_transactions')
                     .orderBy('fecha', 'desc')
                     .limit(10)
@@ -2555,11 +2555,11 @@
                     list.innerHTML = `
                         <div class="text-center py-12 text-gray-500">
                             <i class="fas fa-inbox text-5xl mb-4 text-gray-300"></i>
-                            <p class="text-lg font-medium text-gray-700 mb-2">No hay transacciones VYT Money aún</p>
-                            <p class="text-sm text-gray-500">Las transacciones aparecerán aquí cuando los usuarios compren VYT Money</p>
+                            <p class="text-lg font-medium text-gray-700 mb-2">No hay transacciones VYT Money an</p>
+                            <p class="text-sm text-gray-500">Las transacciones aparecern aqu cuando los usuarios compren VYT Money</p>
                         </div>
                     `;
-                    console.log('📭 No hay transacciones VYT Money en la base de datos');
+                    console.log(' No hay transacciones VYT Money en la base de datos');
                     return;
                 }
                 
@@ -2570,7 +2570,7 @@
                     const tipo = data.tipo || 'credito';
                     const monto = data.cantidad || data.monto || 0;
                     const usuario = data.usuario || data.email || 'Usuario';
-                    const descripcion = data.descripcion || data.motivo || 'Transacción VYT Money';
+                    const descripcion = data.descripcion || data.motivo || 'Transaccin VYT Money';
                     const fecha = data.fecha ? data.fecha.toDate() : new Date();
                     const fechaTexto = formatTimeAgo(fecha);
                     
@@ -2594,10 +2594,10 @@
                 html += '</div>';
                 
                 list.innerHTML = html;
-                console.log(`✅ ${snapshot.size} transacciones VYT Money cargadas`);
+                console.log(` ${snapshot.size} transacciones VYT Money cargadas`);
                 
             } catch (error) {
-                console.error('❌ Error cargando transacciones:', error);
+                console.error(' Error cargando transacciones:', error);
                 list.innerHTML = `
                     <div class="text-center py-12 text-gray-500">
                         <i class="fas fa-exclamation-circle text-5xl mb-4 text-red-300"></i>
@@ -2611,7 +2611,7 @@
             }
         };
 
-        // Función helper para formatear tiempo relativo
+        // Funcin helper para formatear tiempo relativo
         function formatTimeAgo(date) {
             const now = new Date();
             const diff = Math.floor((now - date) / 1000); // diferencia en segundos
@@ -2619,27 +2619,27 @@
             if (diff < 60) return 'Hace unos segundos';
             if (diff < 3600) return `Hace ${Math.floor(diff / 60)} minutos`;
             if (diff < 86400) return `Hace ${Math.floor(diff / 3600)} horas`;
-            if (diff < 604800) return `Hace ${Math.floor(diff / 86400)} días`;
+            if (diff < 604800) return `Hace ${Math.floor(diff / 86400)} das`;
             return date.toLocaleDateString();
         }
 
         window.exportVytData = function() {
-            console.log('📤 Exportando datos VYT Money...');
-            alert('Función de exportación VYT Money - Próximamente');
+            console.log(' Exportando datos VYT Money...');
+            alert('Funcin de exportacin VYT Money - Prximamente');
         };
 
         window.generateVytReport = function() {
-            console.log('📊 Generando reporte VYT Money...');
-            alert('Función de reporte VYT Money - Próximamente');
+            console.log(' Generando reporte VYT Money...');
+            alert('Funcin de reporte VYT Money - Prximamente');
         };
 
         window.refreshVytStats = function() {
-            console.log('🔄 Actualizando estadísticas VYT Money...');
+            console.log(' Actualizando estadsticas VYT Money...');
             // Simular nuevos datos
             document.getElementById('vyt-circulacion').textContent = '$' + (Math.floor(Math.random() * 50000) + 100000).toLocaleString();
             document.getElementById('vyt-transacciones-hoy').textContent = Math.floor(Math.random() * 50) + 20;
             document.getElementById('vyt-usuarios-activos').textContent = Math.floor(Math.random() * 100) + 200;
-            alert('Estadísticas VYT Money actualizadas');
+            alert('Estadsticas VYT Money actualizadas');
         };
 
         // ===== FUNCIONES PARA PAGOS =====
@@ -2656,10 +2656,10 @@
                             <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Pendiente</span>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
-                            <span>💰 $5,000</span>
-                            <span>💳 MercadoPago</span>
-                            <span>📅 22/09/2025</span>
-                            <span>🎯 Inscripción Online</span>
+                            <span> $5,000</span>
+                            <span> MercadoPago</span>
+                            <span> 22/09/2025</span>
+                            <span> Inscripcin Online</span>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="approvePago('pay1')" class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded text-sm">
@@ -2683,10 +2683,10 @@
                             <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Aprobado</span>
                         </div>
                         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
-                            <span>💰 $8,000</span>
-                            <span>💳 Transferencia</span>
-                            <span>📅 21/09/2025</span>
-                            <span>🎯 Inscripción Presencial</span>
+                            <span> $8,000</span>
+                            <span> Transferencia</span>
+                            <span> 21/09/2025</span>
+                            <span> Inscripcin Presencial</span>
                         </div>
                         <div class="flex gap-2">
                             <button onclick="viewPago('pay2')" class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
@@ -2699,42 +2699,42 @@
                     </div>
                 </div>
             `;
-            console.log('💳 Pagos cargados');
+            console.log(' Pagos cargados');
         };
 
         window.exportPagos = function() {
-            console.log('📤 Exportando pagos...');
-            alert('Función de exportación de pagos - Próximamente');
+            console.log(' Exportando pagos...');
+            alert('Funcin de exportacin de pagos - Prximamente');
         };
 
         window.approvePago = function(id) {
-            console.log('✅ Aprobando pago:', id);
+            console.log(' Aprobando pago:', id);
             alert('Pago aprobado - ID: ' + id);
             loadPagos(); // Recargar lista
         };
 
         window.rejectPago = function(id) {
-            if (confirm('¿Estás seguro de que quieres rechazar este pago?')) {
-                console.log('❌ Rechazando pago:', id);
+            if (confirm('Ests seguro de que quieres rechazar este pago?')) {
+                console.log(' Rechazando pago:', id);
                 alert('Pago rechazado - ID: ' + id);
                 loadPagos(); // Recargar lista
             }
         };
 
         window.viewPago = function(id) {
-            console.log('👁️ Viendo detalles del pago:', id);
-            alert('Detalles del pago - ID: ' + id + '\n\nFunción próximamente');
+            console.log(' Viendo detalles del pago:', id);
+            alert('Detalles del pago - ID: ' + id + '\n\nFuncin prximamente');
         };
 
         window.refundPago = function(id) {
-            if (confirm('¿Estás seguro de que quieres reembolsar este pago?')) {
-                console.log('💸 Reembolsando pago:', id);
+            if (confirm('Ests seguro de que quieres reembolsar este pago?')) {
+                console.log(' Reembolsando pago:', id);
                 alert('Pago reembolsado - ID: ' + id);
                 loadPagos(); // Recargar lista
             }
         };
 
-        // Función para cargar datos reales de VYT Money
+        // Funcin para cargar datos reales de VYT Money
         async function loadRealVytMoney() {
             if (!db || !window.firestoreQuery) {
                 console.log('Firebase no disponible, usando datos demo de VYT Money');
@@ -2766,26 +2766,26 @@
                     vytMoneyContainer.innerHTML = transaccionesHTML;
                 }
 
-                console.log(`💰 Transacciones VYT Money cargadas: ${transaccionesSnapshot.size} transacciones`);
+                console.log(` Transacciones VYT Money cargadas: ${transaccionesSnapshot.size} transacciones`);
 
             } catch (error) {
-                console.error('❌ Error cargando VYT Money:', error);
+                console.error(' Error cargando VYT Money:', error);
                 loadDemoVytMoney();
             }
         }
 
-        // Función para renderizar tarjeta de transacción VYT Money real
+        // Funcin para renderizar tarjeta de transaccin VYT Money real
         function renderVytMoneyTransactionCardReal(id, data) {
             const usuario = data.usuario_email || data.usuario || 'Usuario desconocido';
             const tipo = data.tipo || 'unknown';
             const monto = data.monto || 0;
             const fecha = data.fecha ? new Date(data.fecha.seconds * 1000).toLocaleString() : 'Sin fecha';
             const estado = data.estado || 'completado';
-            const descripcion = data.descripcion || 'Sin descripción';
+            const descripcion = data.descripcion || 'Sin descripcin';
             
             const tipoColor = tipo === 'compra' ? 'green' : tipo === 'gasto' ? 'red' : 'blue';
             const tipoTexto = tipo === 'compra' ? 'Compra' : tipo === 'gasto' ? 'Gasto' : 'Otro';
-            const tipoIcon = tipo === 'compra' ? '💰' : tipo === 'gasto' ? '💸' : '🔄';
+            const tipoIcon = tipo === 'compra' ? '' : tipo === 'gasto' ? '' : '';
             
             return `
                 <div class="border border-gray-200 rounded-lg p-4">
@@ -2798,8 +2798,8 @@
                     </div>
                     <p class="text-sm text-gray-600">${usuario}</p>
                     <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                        <span>💰 ${monto} VYT Money</span>
-                        <span>📅 ${fecha}</span>
+                        <span> ${monto} VYT Money</span>
+                        <span> ${fecha}</span>
                     </div>
                     <p class="text-sm text-gray-700 mb-3">${descripcion}</p>
                     <div class="flex gap-2">
@@ -2812,7 +2812,7 @@
             `;
         }
 
-        // Función para cargar datos demo de VYT Money
+        // Funcin para cargar datos demo de VYT Money
         function loadDemoVytMoney() {
             const vytMoneyContainer = document.getElementById('vyt-money-list');
             if (!vytMoneyContainer) return;
@@ -2822,15 +2822,15 @@
                     <div class="border border-gray-200 rounded-lg p-4">
                         <div class="flex justify-between items-start mb-2">
                             <div class="flex items-center gap-2">
-                                <span class="text-lg">💰</span>
+                                <span class="text-lg"></span>
                                 <h4 class="font-semibold text-gray-900">Compra VYT Money</h4>
                             </div>
                             <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Completado</span>
                         </div>
                         <p class="text-sm text-gray-600">ana.martinez@email.com</p>
                         <div class="flex gap-2 text-sm text-gray-600 mb-3">
-                            <span>💰 100 VYT Money</span>
-                            <span>📅 ${new Date().toLocaleString()}</span>
+                            <span> 100 VYT Money</span>
+                            <span> ${new Date().toLocaleString()}</span>
                         </div>
                         <p class="text-sm text-gray-700 mb-3">Compra de VYT Money para votaciones</p>
                         <div class="flex gap-2">
@@ -2843,7 +2843,7 @@
             `;
         }
 
-        // Función para cargar datos reales de pagos
+        // Funcin para cargar datos reales de pagos
         async function loadRealPagos() {
             if (!db || !window.firestoreQuery) {
                 console.log('Firebase no disponible, usando datos demo de pagos');
@@ -2875,15 +2875,15 @@
                     pagosContainer.innerHTML = pagosHTML;
                 }
 
-                console.log(`💳 Transacciones de pago cargadas: ${pagosSnapshot.size} transacciones`);
+                console.log(` Transacciones de pago cargadas: ${pagosSnapshot.size} transacciones`);
 
             } catch (error) {
-                console.error('❌ Error cargando pagos:', error);
+                console.error(' Error cargando pagos:', error);
                 loadDemoPagos();
             }
         }
 
-        // Función para renderizar tarjeta de transacción de pago real
+        // Funcin para renderizar tarjeta de transaccin de pago real
         function renderPaymentTransactionCardReal(id, data) {
             const usuario = data.usuario_email || data.email || 'Usuario desconocido';
             const monto = data.monto || data.amount || 0;
@@ -2897,8 +2897,8 @@
                                estado === 'pending' || estado === 'pendiente' ? 'yellow' : 'red';
             const estadoTexto = estado === 'approved' || estado === 'completado' ? 'Aprobado' : 
                                estado === 'pending' || estado === 'pendiente' ? 'Pendiente' : 'Rechazado';
-            const estadoIcon = estado === 'approved' || estado === 'completado' ? '✅' : 
-                              estado === 'pending' || estado === 'pendiente' ? '⏳' : '❌';
+            const estadoIcon = estado === 'approved' || estado === 'completado' ? '' : 
+                              estado === 'pending' || estado === 'pendiente' ? '' : '';
             
             return `
                 <div class="border border-gray-200 rounded-lg p-4">
@@ -2911,10 +2911,10 @@
                     </div>
                     <p class="text-sm text-gray-600">${usuario}</p>
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-600 mb-3">
-                        <span>💰 $${monto}</span>
-                        <span>💳 ${metodo}</span>
-                        <span>📅 ${fecha}</span>
-                        <span>🎯 ${concepto}</span>
+                        <span> $${monto}</span>
+                        <span> ${metodo}</span>
+                        <span> ${fecha}</span>
+                        <span> ${concepto}</span>
                     </div>
                     <div class="flex gap-2">
                         ${estado === 'pending' || estado === 'pendiente' ? `
@@ -2939,22 +2939,22 @@
             `;
         }
 
-        // Función para cargar datos demo de pagos
+        // Funcin para cargar datos demo de pagos
         function loadDemoPagos() {
             const pagosContainer = document.getElementById('pagos-list');
             if (!pagosContainer) return;
             
-            // Usar la función existente si está disponible
+            // Usar la funcin existente si est disponible
             if (window.loadPagos && typeof window.loadPagos === 'function') {
-                // Evitar recursión infinita
+                // Evitar recursin infinita
                 const originalLoadPagos = window.loadPagos;
                 window.loadPagos = function() {
-                    console.log('🔄 Cargando pagos...');
+                    console.log(' Cargando pagos...');
                     loadRealPagos();
                 };
                 originalLoadPagos();
                 window.loadPagos = function() {
-                    console.log('🔄 Cargando pagos...');
+                    console.log(' Cargando pagos...');
                     loadRealPagos();
                 };
             }
@@ -2963,48 +2963,48 @@
         // Actualizar las funciones principales para usar datos reales
         const originalLoadVytMoney = window.loadVytMoney;
         window.loadVytMoney = function() {
-            console.log('🔄 Cargando VYT Money...');
+            console.log(' Cargando VYT Money...');
             loadRealVytMoney();
         };
 
         const originalLoadPagos = window.loadPagos;
         window.loadPagos = function() {
-            console.log('🔄 Cargando pagos...');
+            console.log(' Cargando pagos...');
             loadRealPagos();
         };
 
-        // Función para inicializar con datos reales
+        // Funcin para inicializar con datos reales
         async function initializeWithRealData() {
-            console.log('🚀 Inicializando con datos reales...');
+            console.log(' Inicializando con datos reales...');
             
             try {
-                // Verificar si Firebase está disponible con timeout
-                console.log('🔍 Verificando disponibilidad de Firebase...');
+                // Verificar si Firebase est disponible con timeout
+                console.log(' Verificando disponibilidad de Firebase...');
                 
                 const timeoutPromise = new Promise((_, reject) => {
                     setTimeout(() => reject(new Error('Timeout: Firebase no responde')), 10000);
                 });
                 
-                // Esperar a que Firebase esté realmente disponible
+                // Esperar a que Firebase est realmente disponible
                 let attempts = 0;
-                const maxAttempts = 20; // 10 segundos máximo
+                const maxAttempts = 20; // 10 segundos mximo
                 
                 while (attempts < maxAttempts) {
                     if (window.firebaseDB && window.firestoreQuery) {
-                        console.log('✅ Firebase detectado después de', attempts * 500, 'ms');
+                        console.log(' Firebase detectado despus de', attempts * 500, 'ms');
                         break;
                     }
                     
-                    console.log('⏳ Esperando Firebase... intento', attempts + 1);
+                    console.log(' Esperando Firebase... intento', attempts + 1);
                     await new Promise(resolve => setTimeout(resolve, 500));
                     attempts++;
                 }
                 
                 if (!window.firebaseDB || !window.firestoreQuery) {
-                    throw new Error('Firebase no está disponible después de ' + (attempts * 500) + 'ms');
+                    throw new Error('Firebase no est disponible despus de ' + (attempts * 500) + 'ms');
                 }
                 
-                console.log('📊 Cargando datos reales...');
+                console.log(' Cargando datos reales...');
                 
                 // Cargar datos reales en paralelo con timeout
                 await Promise.race([
@@ -3018,20 +3018,20 @@
                     timeoutPromise
                 ]);
                 
-                console.log('✅ Todos los datos reales cargados exitosamente');
+                console.log(' Todos los datos reales cargados exitosamente');
                 firebaseConnected = true;
                 
                 return true;
                 
             } catch (error) {
-                console.error('❌ Error cargando datos reales:', error.message);
+                console.error(' Error cargando datos reales:', error.message);
                 firebaseConnected = false;
                 throw error;
             }
         }
 
         // ========================
-        // GESTIÓN DE FONDOS
+        // GESTIN DE FONDOS
         // ========================
         document.addEventListener('DOMContentLoaded', function() {
             // Configurar manejadores para todos los inputs de archivo
@@ -3109,18 +3109,18 @@
                 <div class="bg-white rounded-lg p-6 max-w-lg mx-4">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">
                         <i class="fas fa-info-circle text-blue-500 mr-2"></i>
-                        Cómo Aplicar la Nueva Imagen
+                        Cmo Aplicar la Nueva Imagen
                     </h3>
                     <p class="text-gray-600 mb-4">
-                        La imagen está lista para usar. Para aplicarla automáticamente:
+                        La imagen est lista para usar. Para aplicarla automticamente:
                     </p>
                     <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                         <p class="text-blue-800 text-sm mb-2">
-                            <strong>Opción Recomendada:</strong> Guarda la imagen manualmente
+                            <strong>Opcin Recomendada:</strong> Guarda la imagen manualmente
                         </p>
                         <ol class="text-sm text-blue-700 space-y-1">
                             <li>1. Guarda la imagen en <code>images/fotos/</code></li>
-                            <li>2. Nómbrala como quieras (ej: <code>nuevo-fondo.jpg</code>)</li>
+                            <li>2. Nmbrala como quieras (ej: <code>nuevo-fondo.jpg</code>)</li>
                             <li>3. Actualiza la referencia en <code>${fileName}</code></li>
                         </ol>
                     </div>
@@ -3140,11 +3140,11 @@
         }
 
         function downloadImage(event) {
-            // Esta función permitiría descargar la imagen procesada
+            // Esta funcin permitira descargar la imagen procesada
             console.log('Descarga de imagen solicitada');
         }
 
-        // Nueva función para aplicar cambios automáticamente
+        // Nueva funcin para aplicar cambios automticamente
         let currentImageData = null;
         let currentConfig = null;
 
@@ -3154,7 +3154,7 @@
 
             // Validar tipo de archivo
             if (!file.type.startsWith('image/')) {
-                alert('Por favor selecciona un archivo de imagen válido');
+                alert('Por favor selecciona un archivo de imagen vlido');
                 return;
             }
 
@@ -3189,7 +3189,7 @@
                         statusDiv.innerHTML = `
                             <div class="flex items-center text-green-600">
                                 <i class="fas fa-check-circle mr-2"></i>
-                                <span>¡Vista previa lista! Haz clic en "Guardar y Aplicar" para confirmar.</span>
+                                <span>Vista previa lista! Haz clic en "Guardar y Aplicar" para confirmar.</span>
                             </div>
                         `;
                         
@@ -3217,17 +3217,17 @@
             }
 
             try {
-                console.log('🔄 Iniciando procesamiento de fondo...');
+                console.log(' Iniciando procesamiento de fondo...');
                 
-                // 🎯 REDIMENSIONAR LA IMAGEN DE FONDO AUTOMÁTICAMENTE
+                //  REDIMENSIONAR LA IMAGEN DE FONDO AUTOMTICAMENTE
                 const optimizedImage = await resizeBackgroundImage(currentImageData);
                 
                 if (!optimizedImage) {
-                    alert('Error al procesar la imagen. Intenta con una imagen más pequeña.');
+                    alert('Error al procesar la imagen. Intenta con una imagen ms pequea.');
                     return;
                 }
                 
-                // Crear nombre único para el archivo
+                // Crear nombre nico para el archivo
                 const timestamp = Date.now();
                 const extension = currentImageData.name.split('.').pop();
                 const newFileName = `bg-${currentConfig.file.replace('.html', '')}-${timestamp}.${extension}`;
@@ -3238,9 +3238,9 @@
                     const imageData = e.target.result;
                     const sizeKB = Math.round(imageData.length / 1024);
                     
-                    console.log(`📸 Fondo optimizado: ${sizeKB}KB`);
+                    console.log(` Fondo optimizado: ${sizeKB}KB`);
                     
-                    // Guardar configuración en localStorage
+                    // Guardar configuracin en localStorage
                     const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                     backgroundConfig[currentConfig.file] = {
                         imageData: imageData,
@@ -3250,13 +3250,13 @@
                     };
                     localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
                     
-                    // Aplicar inmediatamente si estamos en la página correspondiente
+                    // Aplicar inmediatamente si estamos en la pgina correspondiente
                     applyBackgroundToCurrentPage(currentConfig.file, imageData);
                     
-                    // 🔥 TAMBIÉN APLICAR A OTRAS PÁGINAS ABIERTAS
+                    //  TAMBIN APLICAR A OTRAS PGINAS ABIERTAS
                     notifyOtherPages(currentConfig.file, imageData);
                     
-                    // Mostrar mensaje de éxito
+                    // Mostrar mensaje de xito
                     showSuccessMessage(`Fondo optimizado aplicado a ${currentConfig.file} (${sizeKB}KB)`);
                 };
                 reader.readAsDataURL(optimizedImage);
@@ -3267,16 +3267,16 @@
             }
         }
 
-        // 🖼️ FUNCIÓN PARA REDIMENSIONAR FONDOS - SIN LÍMITES
+        //  FUNCIN PARA REDIMENSIONAR FONDOS - SIN LMITES
         function resizeBackgroundImage(file, maxWidth = 1920, maxHeight = 1080, quality = 0.7) {
             return new Promise((resolve) => {
-                // Mostrar el tamaño original sin restricciones
+                // Mostrar el tamao original sin restricciones
                 const fileSizeMB = file.size / 1024 / 1024;
-                console.log(`📏 Fondo original: ${fileSizeMB.toFixed(2)}MB - Optimizando automáticamente...`);
+                console.log(` Fondo original: ${fileSizeMB.toFixed(2)}MB - Optimizando automticamente...`);
                 
-                // ✅ SIN LÍMITE - ACEPTAR CUALQUIER TAMAÑO
+                //  SIN LMITE - ACEPTAR CUALQUIER TAMAO
                 if (fileSizeMB > 50) {
-                    console.warn('⚠️ Imagen de fondo muy grande, esto puede tomar unos segundos...');
+                    console.warn(' Imagen de fondo muy grande, esto puede tomar unos segundos...');
                 }
                 
                 const canvas = document.createElement('canvas');
@@ -3284,10 +3284,10 @@
                 const img = new Image();
                 
                 img.onload = function() {
-                    // Calcular nuevas dimensiones manteniendo proporción
+                    // Calcular nuevas dimensiones manteniendo proporcin
                     let { width, height } = img;
                     
-                    // Para fondos, mantener buena resolución pero optimizar
+                    // Para fondos, mantener buena resolucin pero optimizar
                     const aspectRatio = width / height;
                     
                     if (aspectRatio > 1) {
@@ -3311,7 +3311,7 @@
                     // Dibujar imagen redimensionada
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                     
-                    // 🔥 CALIDAD ADAPTATIVA para fondos
+                    //  CALIDAD ADAPTATIVA para fondos
                     let finalQuality = quality;
                     if (fileSizeMB > 30) finalQuality = 0.5; // Muy grande -> calidad media
                     else if (fileSizeMB > 15) finalQuality = 0.6; // Grande -> calidad media-alta
@@ -3321,15 +3321,15 @@
                     canvas.toBlob((blob) => {
                         const newSizeMB = blob.size / 1024 / 1024;
                         const newSizeKB = Math.round(blob.size / 1024);
-                        console.log(`✅ Fondo optimizado: ${fileSizeMB.toFixed(2)}MB → ${newSizeKB}KB (${canvas.width}x${canvas.height}px, calidad: ${Math.round(finalQuality*100)}%)`);
+                        console.log(` Fondo optimizado: ${fileSizeMB.toFixed(2)}MB  ${newSizeKB}KB (${canvas.width}x${canvas.height}px, calidad: ${Math.round(finalQuality*100)}%)`);
                         
                         resolve(new File([blob], file.name, { type: 'image/jpeg' }));
                     }, 'image/jpeg', finalQuality);
                 };
                 
                 img.onerror = function() {
-                    console.error('❌ Error al cargar imagen de fondo');
-                    alert('Error al procesar la imagen de fondo. Verifica que sea un archivo de imagen válido (JPG, PNG, etc.).');
+                    console.error(' Error al cargar imagen de fondo');
+                    alert('Error al procesar la imagen de fondo. Verifica que sea un archivo de imagen vlido (JPG, PNG, etc.).');
                     resolve(null);
                 };
                 
@@ -3338,7 +3338,7 @@
             });
         }
 
-        // 🔔 NOTIFICAR A OTRAS PÁGINAS SOBRE CAMBIO DE FONDO
+        //  NOTIFICAR A OTRAS PGINAS SOBRE CAMBIO DE FONDO
         function notifyOtherPages(targetFile, imageData) {
             // Usar localStorage como sistema de messaging
             const message = {
@@ -3350,25 +3350,25 @@
             
             localStorage.setItem('background_message', JSON.stringify(message));
             
-            // Limpiar el mensaje después de un segundo
+            // Limpiar el mensaje despus de un segundo
             setTimeout(() => {
                 localStorage.removeItem('background_message');
             }, 1000);
         }
 
         function applyBackgroundToCurrentPage(targetFile, imageData) {
-            // Detectar página actual
+            // Detectar pgina actual
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
             
             if (currentPage === targetFile) {
-                // Aplicar el fondo inmediatamente a la página actual
+                // Aplicar el fondo inmediatamente a la pgina actual
                 document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${imageData}')`;
                 document.body.style.backgroundSize = 'cover';
                 document.body.style.backgroundAttachment = 'fixed';
                 document.body.style.backgroundPosition = 'center top';
                 document.body.style.backgroundRepeat = 'no-repeat';
                 
-                console.log('✅ Fondo aplicado a la página actual');
+                console.log(' Fondo aplicado a la pgina actual');
             }
         }
 
@@ -3382,27 +3382,27 @@
                 </div>
             `;
             
-            // Ocultar después de 5 segundos
+            // Ocultar despus de 5 segundos
             setTimeout(() => {
                 successDiv.classList.add('hidden');
             }, 5000);
         }
 
-        // Aplicar fondos guardados al cargar la página
+        // Aplicar fondos guardados al cargar la pgina
         document.addEventListener('DOMContentLoaded', function() {
             const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
             const currentPage = window.location.pathname.split('/').pop() || 'index.html';
             
             if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                console.log('🎨 Aplicando fondo guardado para:', currentPage);
+                console.log(' Aplicando fondo guardado para:', currentPage);
                 applyBackgroundToCurrentPage(currentPage, backgroundConfig[currentPage].imageData);
             }
         });
     </script>
 
-    <!-- Sistema de Aprobación de Videos -->
+    <!-- Sistema de Aprobacin de Videos -->
     <script>
-        // ===== SISTEMA DE APROBACIÓN DE VIDEOS =====
+        // ===== SISTEMA DE APROBACIN DE VIDEOS =====
         function cargarVideosPendientes() {
             const videosParaAprobacion = JSON.parse(localStorage.getItem('videosParaAprobacion') || '[]');
             const container = document.getElementById('videos-pendientes-lista');
@@ -3411,8 +3411,8 @@
                 container.innerHTML = `
                     <div class="text-center py-8 text-gray-500">
                         <i class="fas fa-video text-4xl mb-4"></i>
-                        <p>No hay videos pendientes de aprobación</p>
-                        <p class="text-sm mt-2">Los videos enviados por artistas aparecerán aquí</p>
+                        <p>No hay videos pendientes de aprobacin</p>
+                        <p class="text-sm mt-2">Los videos enviados por artistas aparecern aqu</p>
                     </div>
                 `;
                 return;
@@ -3450,7 +3450,7 @@
                     <div class="mt-3 bg-yellow-100 border border-yellow-300 rounded p-2">
                         <p class="text-yellow-800 text-sm">
                             <i class="fas fa-clock mr-1"></i>
-                            <strong>Estado:</strong> Pendiente de aprobación
+                            <strong>Estado:</strong> Pendiente de aprobacin
                         </p>
                     </div>
                 </div>
@@ -3487,7 +3487,7 @@
                 // Recargar lista
                 cargarVideosPendientes();
                 
-                console.log('✅ Video aprobado:', video);
+                console.log(' Video aprobado:', video);
             }
         }
 
@@ -3524,7 +3524,7 @@
                 // Recargar lista
                 cargarVideosPendientes();
                 
-                console.log('❌ Video rechazado:', video);
+                console.log(' Video rechazado:', video);
             }
         }
 
@@ -3539,16 +3539,16 @@
             }, 1000);
         });
 
-        // ===== SISTEMA DE POSICIONAMIENTO DE IMÁGENES =====
+        // ===== SISTEMA DE POSICIONAMIENTO DE IMGENES =====
         let currentEditingPage = '';
         let currentPosition = 'center center';
         let currentScale = 1;
 
         window.openPositionEditor = function(pageName) {
-            console.log('📐 Abriendo editor de posicionamiento para:', pageName);
+            console.log(' Abriendo editor de posicionamiento para:', pageName);
             currentEditingPage = pageName;
             
-            // Obtener configuración actual
+            // Obtener configuracin actual
             const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
             const pageConfig = backgroundConfig[pageName] || {};
             
@@ -3562,7 +3562,7 @@
             const scaleSpan = document.getElementById('current-scale');
             const scaleSlider = document.getElementById('scale-slider');
             
-            // Mostrar información actual
+            // Mostrar informacin actual
             positionSpan.textContent = currentPosition;
             scaleSpan.textContent = currentScale + 'x';
             scaleSlider.value = currentScale;
@@ -3572,7 +3572,7 @@
             
             if (pageConfig.imageData) {
                 imageUrl = pageConfig.imageData;
-                console.log('✅ Imagen encontrada en localStorage para:', pageName);
+                console.log(' Imagen encontrada en localStorage para:', pageName);
             } else {
                 // Intentar obtener imagen del preview del admin
                 const pageMappings = {
@@ -3591,7 +3591,7 @@
                     const previewImg = document.getElementById(previewId);
                     if (previewImg && previewImg.src && previewImg.src !== window.location.href) {
                         imageUrl = previewImg.src;
-                        console.log('✅ Imagen obtenida del preview del admin:', previewId);
+                        console.log(' Imagen obtenida del preview del admin:', previewId);
                     }
                 }
             }
@@ -3602,7 +3602,7 @@
                 previewElement.style.backgroundSize = currentScale > 1 ? `${currentScale * 100}%` : 'cover';
                 previewElement.style.backgroundRepeat = 'no-repeat';
                 previewElement.innerHTML = ''; // Limpiar cualquier mensaje
-                console.log('🖼️ Imagen aplicada al preview:', imageUrl.substring(0, 50) + '...');
+                console.log(' Imagen aplicada al preview:', imageUrl.substring(0, 50) + '...');
             } else {
                 previewElement.style.backgroundImage = 'none';
                 previewElement.innerHTML = `
@@ -3614,7 +3614,7 @@
                         </div>
                     </div>
                 `;
-                console.log('⚠️ No se encontró imagen para:', pageName);
+                console.log(' No se encontr imagen para:', pageName);
             }
             
             modal.classList.remove('hidden');
@@ -3623,19 +3623,19 @@
         window.closePositionEditor = function() {
             const modal = document.getElementById('position-modal');
             modal.classList.add('hidden');
-            console.log('❌ Editor de posicionamiento cerrado');
+            console.log(' Editor de posicionamiento cerrado');
         };
 
         window.setPosition = function(position) {
             currentPosition = position;
             updatePreview();
-            console.log('📍 Posición actualizada a:', position);
+            console.log(' Posicin actualizada a:', position);
         };
 
         window.updateScale = function(scale) {
             currentScale = parseFloat(scale);
             updatePreview();
-            console.log('🔍 Escala actualizada a:', scale + 'x');
+            console.log(' Escala actualizada a:', scale + 'x');
         };
 
         window.adjustPosition = function(direction) {
@@ -3685,7 +3685,7 @@
             
             currentPosition = `${newX} ${newY}`;
             updatePreview();
-            console.log('🎯 Ajuste fino aplicado:', currentPosition);
+            console.log(' Ajuste fino aplicado:', currentPosition);
         };
 
         function updatePreview() {
@@ -3700,11 +3700,11 @@
             positionSpan.textContent = currentPosition;
             scaleSpan.textContent = currentScale + 'x';
             
-            // Actualizar indicador visual de posición
+            // Actualizar indicador visual de posicin
             if (positionIndicator) {
                 const [x, y] = currentPosition.split(' ');
                 
-                // Convertir posición a porcentajes
+                // Convertir posicin a porcentajes
                 let leftPercent = 50;
                 let topPercent = 50;
                 
@@ -3721,7 +3721,7 @@
                 positionIndicator.style.left = leftPercent + '%';
                 positionIndicator.style.top = topPercent + '%';
                 
-                // Animación de feedback
+                // Animacin de feedback
                 positionIndicator.style.transform = 'translate(-50%, -50%) scale(1.3)';
                 setTimeout(() => {
                     positionIndicator.style.transform = 'translate(-50%, -50%) scale(1)';
@@ -3729,9 +3729,9 @@
             }
         }
 
-        // Función para actualizar previews desde configuración
+        // Funcin para actualizar previews desde configuracin
         function updatePreviewsFromConfig(config) {
-            console.log('🖼️ Actualizando previews desde configuración...');
+            console.log(' Actualizando previews desde configuracin...');
             
             const pageMappings = {
                 'index.html': 'preview-index',
@@ -3750,26 +3750,26 @@
                     if (previewElement) {
                         previewElement.src = pageConfig.imageData;
                         previewElement.style.display = 'block';
-                        console.log(`✅ Preview actualizado para ${pageName}`);
+                        console.log(` Preview actualizado para ${pageName}`);
                     }
                 }
             });
         }
 
-        // Función para guardar en Firebase
+        // Funcin para guardar en Firebase
         async function saveToFirebase(pageName, pageConfig) {
-            console.log('💾 Guardando en Firebase:', pageName, pageConfig);
+            console.log(' Guardando en Firebase:', pageName, pageConfig);
             
             try {
-                // Verificar si Firebase está disponible
+                // Verificar si Firebase est disponible
                 if (typeof window.firebaseDB === 'undefined' || !window.firestoreQuery) {
-                    throw new Error('Firebase no está disponible');
+                    throw new Error('Firebase no est disponible');
                 }
                 
                 const { doc, setDoc } = window.firestoreQuery;
                 const db = window.firebaseDB;
                 
-                // Crear documento en la colección 'background_configs'
+                // Crear documento en la coleccin 'background_configs'
                 const docRef = doc(db, 'background_configs', pageName.replace('.html', ''));
                 
                 // Datos a guardar
@@ -3785,22 +3785,22 @@
                 // Guardar en Firestore
                 await setDoc(docRef, dataToSave);
                 
-                console.log('✅ Guardado exitosamente en Firebase:', pageName);
+                console.log(' Guardado exitosamente en Firebase:', pageName);
                 return true;
                 
             } catch (error) {
-                console.error('❌ Error guardando en Firebase:', error);
+                console.error(' Error guardando en Firebase:', error);
                 throw error;
             }
         }
 
-        // Función para cargar desde Firebase
+        // Funcin para cargar desde Firebase
         async function loadFromFirebase() {
-            console.log('📥 Cargando configuraciones desde Firebase...');
+            console.log(' Cargando configuraciones desde Firebase...');
             
             try {
                 if (typeof window.firebaseDB === 'undefined' || !window.firestoreQuery) {
-                    console.log('⚠️ Firebase no disponible, usando localStorage');
+                    console.log(' Firebase no disponible, usando localStorage');
                     return;
                 }
                 
@@ -3828,22 +3828,22 @@
                 // Actualizar localStorage con datos de Firebase
                 localStorage.setItem('backgroundConfig', JSON.stringify(mergedConfig));
                 
-                console.log('✅ Configuraciones cargadas desde Firebase:', Object.keys(firebaseConfig));
+                console.log(' Configuraciones cargadas desde Firebase:', Object.keys(firebaseConfig));
                 return mergedConfig;
                 
             } catch (error) {
-                console.error('❌ Error cargando desde Firebase:', error);
+                console.error(' Error cargando desde Firebase:', error);
                 return null;
             }
         }
 
-        // Función para reiniciar todos los datos
+        // Funcin para reiniciar todos los datos
         async function resetAllData() {
-            console.log('🧹 Iniciando limpieza completa de datos...');
+            console.log(' Iniciando limpieza completa de datos...');
             
             try {
                 // 1. Limpiar localStorage
-                console.log('🗑️ Limpiando localStorage...');
+                console.log(' Limpiando localStorage...');
                 const keysToRemove = [
                     'backgroundConfig',
                     'vyt-backgrounds',
@@ -3854,12 +3854,12 @@
                 
                 keysToRemove.forEach(key => {
                     localStorage.removeItem(key);
-                    console.log(`✅ Eliminado: ${key}`);
+                    console.log(` Eliminado: ${key}`);
                 });
                 
-                // 2. Limpiar Firebase (si está disponible)
+                // 2. Limpiar Firebase (si est disponible)
                 if (typeof window.firebaseDB !== 'undefined' && window.firestoreQuery) {
-                    console.log('🔥 Limpiando datos de Firebase...');
+                    console.log(' Limpiando datos de Firebase...');
                     try {
                         const { collection, getDocs, deleteDoc } = window.firestoreQuery;
                         const db = window.firebaseDB;
@@ -3874,14 +3874,14 @@
                         });
                         
                         await Promise.all(deletePromises);
-                        console.log(`✅ Eliminados ${deletePromises.length} documentos de Firebase`);
+                        console.log(` Eliminados ${deletePromises.length} documentos de Firebase`);
                     } catch (firebaseError) {
-                        console.warn('⚠️ Error limpiando Firebase:', firebaseError);
+                        console.warn(' Error limpiando Firebase:', firebaseError);
                     }
                 }
                 
                 // 3. Limpiar previews del admin
-                console.log('🖼️ Limpiando previews...');
+                console.log(' Limpiando previews...');
                 const previewIds = [
                     'preview-index', 'preview-inscripcion', 'preview-perfil',
                     'preview-login', 'preview-fan', 'preview-admin',
@@ -3900,7 +3900,7 @@
                 });
                 
                 // 4. Resetear inputs de archivo
-                console.log('📁 Limpiando inputs...');
+                console.log(' Limpiando inputs...');
                 const fileInputIds = [
                     'upload-index', 'upload-inscripcion', 'upload-perfil',
                     'upload-login', 'upload-fan', 'upload-admin',
@@ -3914,31 +3914,31 @@
                     }
                 });
                 
-                console.log('✅ Limpieza completa finalizada');
+                console.log(' Limpieza completa finalizada');
                 
-                // Mostrar confirmación
-                alert(`🧹 ¡DATOS LIMPIADOS EXITOSAMENTE!
+                // Mostrar confirmacin
+                alert(` DATOS LIMPIADOS EXITOSAMENTE!
 
-✅ localStorage limpiado
-✅ Firebase limpiado  
-✅ Previews restaurados
-✅ Inputs resetados
+ localStorage limpiado
+ Firebase limpiado  
+ Previews restaurados
+ Inputs resetados
 
-💡 El sistema está listo para datos reales.`);
+ El sistema est listo para datos reales.`);
                 
             } catch (error) {
-                console.error('❌ Error durante la limpieza:', error);
-                alert('❌ Error durante la limpieza. Ver consola para detalles.');
+                console.error(' Error durante la limpieza:', error);
+                alert(' Error durante la limpieza. Ver consola para detalles.');
             }
         }
 
         window.savePosition = async function() {
-            console.log('💾 Guardando posición para:', currentEditingPage);
+            console.log(' Guardando posicin para:', currentEditingPage);
             
-            // Obtener configuración actual
+            // Obtener configuracin actual
             const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
             
-            // Actualizar configuración
+            // Actualizar configuracin
             if (!backgroundConfig[currentEditingPage]) {
                 backgroundConfig[currentEditingPage] = {};
             }
@@ -3949,12 +3949,12 @@
             // Guardar en localStorage (fallback)
             localStorage.setItem('backgroundConfig', JSON.stringify(backgroundConfig));
             
-            // NUEVO: Guardar también en Firebase para persistencia
+            // NUEVO: Guardar tambin en Firebase para persistencia
             try {
                 await saveToFirebase(currentEditingPage, backgroundConfig[currentEditingPage]);
             } catch (error) {
-                console.warn('⚠️ Error guardando en Firebase:', error);
-                console.log('📦 Guardado en localStorage como fallback');
+                console.warn(' Error guardando en Firebase:', error);
+                console.log(' Guardado en localStorage como fallback');
             }
             
             // Aplicar cambios inmediatamente
@@ -3963,41 +3963,41 @@
                 const saveStatusElement = document.getElementById('save-status');
                 if (saveStatusElement) {
                     saveStatusElement.classList.remove('hidden');
-                    saveStatusElement.innerHTML = '✅ Guardando en Firebase...';
+                    saveStatusElement.innerHTML = ' Guardando en Firebase...';
                     
                     setTimeout(() => {
-                        saveStatusElement.innerHTML = '✅ ¡Guardado en Firebase exitosamente!';
+                        saveStatusElement.innerHTML = ' Guardado en Firebase exitosamente!';
                     }, 1000);
                 }
                 
-                console.log('🎨 Aplicando nueva posición:', currentPosition, 'con escala:', currentScale);
+                console.log(' Aplicando nueva posicin:', currentPosition, 'con escala:', currentScale);
                 
-                // Mostrar confirmación mejorada
-                const mensaje = `🎯 ¡Configuración guardada exitosamente!
+                // Mostrar confirmacin mejorada
+                const mensaje = ` Configuracin guardada exitosamente!
 
-📄 Página: ${currentEditingPage}
-📍 Posición: ${currentPosition}
-🔍 Escala: ${currentScale}x
-💾 Guardado: localStorage + Firebase
+ Pgina: ${currentEditingPage}
+ Posicin: ${currentPosition}
+ Escala: ${currentScale}x
+ Guardado: localStorage + Firebase
 
-💡 La configuración es persistente y se aplicará automáticamente.`;
+ La configuracin es persistente y se aplicar automticamente.`;
                 
                 alert(mensaje);
             } else {
-                alert('⚠️ Primero debes subir una imagen para esta página');
+                alert(' Primero debes subir una imagen para esta pgina');
                 return; // No cerrar el modal si no hay imagen
             }
             
             closePositionEditor();
         };
 
-        // Función de debug para verificar imágenes
+        // Funcin de debug para verificar imgenes
         window.debugImages = function() {
-            console.log('🔍 DEBUG: Verificando imágenes disponibles...');
+            console.log(' DEBUG: Verificando imgenes disponibles...');
             
             // Verificar localStorage
             const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
-            console.log('📦 localStorage backgroundConfig:', backgroundConfig);
+            console.log(' localStorage backgroundConfig:', backgroundConfig);
             
             // Verificar previews del admin
             const pageMappings = {
@@ -4011,7 +4011,7 @@
                 'certamen-individual.html': 'preview-certamen-individual'
             };
             
-            console.log('🖼️ Previews del admin:');
+            console.log(' Previews del admin:');
             Object.entries(pageMappings).forEach(([page, previewId]) => {
                 const previewImg = document.getElementById(previewId);
                 if (previewImg) {
@@ -4021,9 +4021,9 @@
                 }
             });
             
-            // Mostrar en alert también
-            let debugInfo = 'Debug de Imágenes:\n\n';
-            debugInfo += `localStorage: ${Object.keys(backgroundConfig).length} páginas configuradas\n\n`;
+            // Mostrar en alert tambin
+            let debugInfo = 'Debug de Imgenes:\n\n';
+            debugInfo += `localStorage: ${Object.keys(backgroundConfig).length} pginas configuradas\n\n`;
             
             Object.entries(pageMappings).forEach(([page, previewId]) => {
                 const previewImg = document.getElementById(previewId);
@@ -4031,8 +4031,8 @@
                 const hasSrc = previewImg && previewImg.src && previewImg.src !== window.location.href;
                 
                 debugInfo += `${page}:\n`;
-                debugInfo += `  - localStorage: ${hasLocalStorage ? '✅' : '❌'}\n`;
-                debugInfo += `  - Preview img: ${hasSrc ? '✅' : '❌'}\n\n`;
+                debugInfo += `  - localStorage: ${hasLocalStorage ? '' : ''}\n`;
+                debugInfo += `  - Preview img: ${hasSrc ? '' : ''}\n\n`;
             });
             
             alert(debugInfo);
@@ -4050,7 +4050,7 @@
                         
                         currentPosition = `${x.toFixed(1)}% ${y.toFixed(1)}%`;
                         updatePreview();
-                        console.log('🖱️ Posición actualizada por clic:', currentPosition);
+                        console.log(' Posicin actualizada por clic:', currentPosition);
                     });
                 }
             }, 500);
@@ -4067,7 +4067,7 @@
                 </h3>
                 <div class="flex items-center space-x-2">
                     <button onclick="debugImages()" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-sm">
-                        🔍 Debug
+                         Debug
                     </button>
                     <button onclick="closePositionEditor()" class="text-white hover:text-gray-300">
                         <i class="fas fa-times text-xl"></i>
@@ -4083,9 +4083,9 @@
                         <div id="position-preview" class="relative border-2 border-gray-300 rounded-lg overflow-hidden bg-gray-100" style="height: 300px;">
                             <div id="preview-background" class="w-full h-full bg-center bg-no-repeat bg-cover cursor-move"></div>
                             
-                            <!-- Guías de zonas seguras -->
+                            <!-- Guas de zonas seguras -->
                             <div class="absolute inset-0 pointer-events-none">
-                                <!-- Zona segura central (60% del área) -->
+                                <!-- Zona segura central (60% del rea) -->
                                 <div class="absolute border-2 border-green-400 bg-green-100 bg-opacity-20" 
                                      style="top: 20%; left: 20%; right: 20%; bottom: 20%;">
                                     <div class="absolute top-1 left-1 text-xs font-bold text-green-600 bg-green-100 px-1 rounded">
@@ -4093,7 +4093,7 @@
                                     </div>
                                 </div>
                                 
-                                <!-- Líneas de guía -->
+                                <!-- Lneas de gua -->
                                 <div class="absolute w-full h-0.5 bg-blue-300 opacity-50" style="top: 33.33%;"></div>
                                 <div class="absolute w-full h-0.5 bg-blue-300 opacity-50" style="top: 66.66%;"></div>
                                 <div class="absolute h-full w-0.5 bg-blue-300 opacity-50" style="left: 33.33%;"></div>
@@ -4104,37 +4104,37 @@
                                      style="top: 50%; left: 50%;">
                                 </div>
                                 
-                                <!-- Indicador de posición actual -->
+                                <!-- Indicador de posicin actual -->
                                 <div id="position-indicator" class="absolute w-3 h-3 bg-yellow-400 border-2 border-yellow-600 rounded-full transform -translate-x-1/2 -translate-y-1/2 transition-all duration-200" 
                                      style="top: 50%; left: 50%;"></div>
                             </div>
                         </div>
                         
-                        <!-- Información de posición actual -->
+                        <!-- Informacin de posicin actual -->
                         <div class="bg-blue-50 p-3 rounded text-sm">
-                            <strong>Posición:</strong> <span id="current-position">center center</span><br>
+                            <strong>Posicin:</strong> <span id="current-position">center center</span><br>
                             <strong>Escala:</strong> <span id="current-scale">1x</span><br>
                             <div class="mt-2 text-xs text-gray-600">
-                                🟢 Verde = Zona segura • 🔵 Azul = Líneas guía • 🔴 Rojo = Centro • 🟡 Amarillo = Posición actual
+                                 Verde = Zona segura   Azul = Lneas gua   Rojo = Centro   Amarillo = Posicin actual
                             </div>
                         </div>
                     </div>
                     
                     <!-- Controles de posicionamiento -->
                     <div class="space-y-4">
-                        <h4 class="font-semibold text-gray-700">Controles de Posición</h4>
+                        <h4 class="font-semibold text-gray-700">Controles de Posicin</h4>
                         
-                        <!-- Controles de posición rápida -->
+                        <!-- Controles de posicin rpida -->
                         <div class="grid grid-cols-3 gap-2">
-                            <button onclick="setPosition('left top')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">↖ Superior Izq.</button>
-                            <button onclick="setPosition('center top')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">↑ Superior Centro</button>
-                            <button onclick="setPosition('right top')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">↗ Superior Der.</button>
-                            <button onclick="setPosition('left center')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">← Centro Izq.</button>
-                            <button onclick="setPosition('center center')" class="p-2 bg-blue-500 text-white hover:bg-blue-600 rounded text-sm font-semibold">🎯 Centro</button>
-                            <button onclick="setPosition('right center')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">→ Centro Der.</button>
-                            <button onclick="setPosition('left bottom')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">↙ Inferior Izq.</button>
-                            <button onclick="setPosition('center bottom')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">↓ Inferior Centro</button>
-                            <button onclick="setPosition('right bottom')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">↘ Inferior Der.</button>
+                            <button onclick="setPosition('left top')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Superior Izq.</button>
+                            <button onclick="setPosition('center top')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Superior Centro</button>
+                            <button onclick="setPosition('right top')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Superior Der.</button>
+                            <button onclick="setPosition('left center')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Centro Izq.</button>
+                            <button onclick="setPosition('center center')" class="p-2 bg-blue-500 text-white hover:bg-blue-600 rounded text-sm font-semibold"> Centro</button>
+                            <button onclick="setPosition('right center')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Centro Der.</button>
+                            <button onclick="setPosition('left bottom')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Inferior Izq.</button>
+                            <button onclick="setPosition('center bottom')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Inferior Centro</button>
+                            <button onclick="setPosition('right bottom')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Inferior Der.</button>
                         </div>
                         
                         <!-- Control de escala -->
@@ -4153,40 +4153,40 @@
                         <div class="space-y-2">
                             <label class="block text-sm font-medium text-gray-700">Ajuste fino:</label>
                             <div class="grid grid-cols-2 gap-2">
-                                <button onclick="adjustPosition('up')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">⬆ Subir</button>
-                                <button onclick="adjustPosition('down')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">⬇ Bajar</button>
-                                <button onclick="adjustPosition('left')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">⬅ Izquierda</button>
-                                <button onclick="adjustPosition('right')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm">➡ Derecha</button>
+                                <button onclick="adjustPosition('up')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Subir</button>
+                                <button onclick="adjustPosition('down')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Bajar</button>
+                                <button onclick="adjustPosition('left')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Izquierda</button>
+                                <button onclick="adjustPosition('right')" class="p-2 bg-gray-200 hover:bg-gray-300 rounded text-sm"> Derecha</button>
                             </div>
                         </div>
                         
-                        <!-- Botón de guardado rápido -->
+                        <!-- Botn de guardado rpido -->
                         <div class="mt-4">
                             <button onclick="savePosition()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-bold text-lg transition-colors shadow-lg">
-                                <i class="fas fa-save mr-2"></i>💾 GUARDAR POSICIÓN
+                                <i class="fas fa-save mr-2"></i> GUARDAR POSICIN
                             </button>
                         </div>
                         
                         <!-- Instrucciones mejoradas -->
                         <div class="bg-gradient-to-r from-blue-50 to-green-50 p-4 rounded-lg text-sm border-l-4 border-blue-400">
-                            <p class="font-semibold text-blue-800 mb-2">🎯 Guía de Zonas:</p>
+                            <p class="font-semibold text-blue-800 mb-2"> Gua de Zonas:</p>
                             <ul class="text-blue-700 space-y-1 text-xs">
-                                <li>🟢 <strong>Zona Verde:</strong> Área segura para contenido importante</li>
-                                <li>🔵 <strong>Líneas Azules:</strong> Guías de tercios (composición)</li>
-                                <li>🔴 <strong>Punto Rojo:</strong> Centro exacto de la imagen</li>
-                                <li>🟡 <strong>Punto Amarillo:</strong> Tu posición actual</li>
+                                <li> <strong>Zona Verde:</strong> rea segura para contenido importante</li>
+                                <li> <strong>Lneas Azules:</strong> Guas de tercios (composicin)</li>
+                                <li> <strong>Punto Rojo:</strong> Centro exacto de la imagen</li>
+                                <li> <strong>Punto Amarillo:</strong> Tu posicin actual</li>
                             </ul>
                             <p class="mt-2 text-xs text-blue-600 font-medium">
-                                💡 <strong>Tip:</strong> Mantén elementos importantes en la zona verde
+                                 <strong>Tip:</strong> Mantn elementos importantes en la zona verde
                             </p>
                         </div>
                     </div>
                 </div>
                 
-                <!-- Botones de acción principales -->
+                <!-- Botones de accin principales -->
                 <div class="bg-gradient-to-r from-gray-100 to-gray-200 px-6 py-5 flex justify-between items-center border-t">
                     <div class="text-sm text-gray-600">
-                        <span id="save-status" class="hidden">✅ Cambios guardados</span>
+                        <span id="save-status" class="hidden"> Cambios guardados</span>
                     </div>
                     <div class="flex space-x-3">
                         <button onclick="closePositionEditor()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg font-medium transition-colors">
@@ -4201,30 +4201,30 @@
         </div>
     </div>
     
-    <!-- 🔥 SCRIPTS PARA SUBIDA DE FONDOS -->
+    <!--  SCRIPTS PARA SUBIDA DE FONDOS -->
     <script>
-        // Función genérica para subir fondo de una página
+        // Funcin genrica para subir fondo de una pgina
         async function subirFondoPagina(pagina, inputElement) {
             const file = inputElement.files[0];
             if (!file) {
-                console.log('No se seleccionó archivo');
+                console.log('No se seleccion archivo');
                 return;
             }
             
             // Validar que sea imagen
             if (!file.type.startsWith('image/')) {
-                alert('❌ Por favor selecciona una imagen válida');
+                alert(' Por favor selecciona una imagen vlida');
                 return;
             }
             
-            // Validar tamaño (máximo 5MB)
+            // Validar tamao (mximo 5MB)
             if (file.size > 5 * 1024 * 1024) {
-                alert('❌ La imagen no puede superar 5MB');
+                alert(' La imagen no puede superar 5MB');
                 return;
             }
             
             try {
-                console.log(`📤 Subiendo fondo de ${pagina}...`);
+                console.log(` Subiendo fondo de ${pagina}...`);
                 
                 // Mostrar estado de carga
                 const statusDiv = document.getElementById('upload-status');
@@ -4244,7 +4244,7 @@
                 const uploadTask = await storageRef.put(file);
                 const downloadURL = await uploadTask.ref.getDownloadURL();
                 
-                console.log(`✅ Fondo subido: ${downloadURL}`);
+                console.log(` Fondo subido: ${downloadURL}`);
                 
                 // Guardar URL en Firestore
                 const db = firebase.firestore();
@@ -4253,7 +4253,7 @@
                     [`${pagina}_updated`]: firebase.firestore.FieldValue.serverTimestamp()
                 }, { merge: true });
                 
-                console.log(`✅ URL guardada en Firestore para ${pagina}`);
+                console.log(` URL guardada en Firestore para ${pagina}`);
                 
                 // Actualizar preview
                 const previewImg = document.getElementById(`preview-${pagina}`);
@@ -4263,19 +4263,19 @@
                     previewImg.style.display = 'block';
                 }
                 
-                // Mostrar éxito
+                // Mostrar xito
                 if (statusDiv) {
                     statusDiv.className = 'mt-4 p-4 rounded-lg bg-green-100 text-green-800';
-                    statusDiv.innerHTML = '<i class="fas fa-check-circle mr-2"></i>¡Fondo actualizado exitosamente!';
+                    statusDiv.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Fondo actualizado exitosamente!';
                     setTimeout(() => {
                         statusDiv.classList.add('hidden');
                     }, 3000);
                 }
                 
-                alert(`✅ Fondo de ${pagina} actualizado exitosamente`);
+                alert(` Fondo de ${pagina} actualizado exitosamente`);
                 
             } catch (error) {
-                console.error('❌ Error subiendo fondo:', error);
+                console.error(' Error subiendo fondo:', error);
                 
                 const statusDiv = document.getElementById('upload-status');
                 if (statusDiv) {
@@ -4283,11 +4283,11 @@
                     statusDiv.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i>Error: ${error.message}`;
                 }
                 
-                alert(`❌ Error al subir el fondo: ${error.message}`);
+                alert(` Error al subir el fondo: ${error.message}`);
             }
         }
         
-        // Función específica para index
+        // Funcin especfica para index
         async function handleIndexImageUpload(inputElement) {
             await subirFondoPagina('index', inputElement);
         }
@@ -4358,10 +4358,10 @@
                 });
             }
             
-            console.log('✅ Event listeners de fondos configurados');
+            console.log(' Event listeners de fondos configurados');
         });
         
-        // Función para cargar fondos existentes desde Firestore
+        // Funcin para cargar fondos existentes desde Firestore
         async function cargarFondosExistentes() {
             try {
                 const db = firebase.firestore();
@@ -4369,7 +4369,7 @@
                 
                 if (fondosDoc.exists) {
                     const fondos = fondosDoc.data();
-                    console.log('📂 Fondos cargados:', fondos);
+                    console.log(' Fondos cargados:', fondos);
                     
                     // Actualizar previews
                     Object.keys(fondos).forEach(pagina => {
@@ -4383,7 +4383,7 @@
                     });
                 }
             } catch (error) {
-                console.log('⚠️ No se pudieron cargar fondos existentes:', error.message);
+                console.log(' No se pudieron cargar fondos existentes:', error.message);
             }
         }
         
@@ -4393,7 +4393,7 @@
         }
     </script>
     
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     </body>

@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscripción a Certamen - VYT MUSIC</title>
+    <title>Inscripcin a Certamen - VYT MUSIC</title>
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
@@ -61,7 +61,7 @@
 </head>
 <body>
     <div class="min-h-screen py-8">
-        <!-- Header con navegación -->
+        <!-- Header con navegacin -->
         <div class="container mx-auto px-4 mb-8">
             <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-4">
@@ -69,18 +69,18 @@
                         <i class="fas fa-arrow-left"></i>
                     </button>
                     <div>
-                        <h1 class="text-2xl font-bold text-white font-display">Inscripción al Certamen</h1>
-                        <p class="text-blue-200">Completa tu inscripción paso a paso</p>
+                        <h1 class="text-2xl font-bold text-white font-display">Inscripcin al Certamen</h1>
+                        <p class="text-blue-200">Completa tu inscripcin paso a paso</p>
                     </div>
                 </div>
                 <div class="text-right">
-                    <p class="text-white text-sm">¿Necesitas ayuda?</p>
+                    <p class="text-white text-sm">Necesitas ayuda?</p>
                     <p class="text-blue-300 text-sm">Contacta nuestro soporte</p>
                 </div>
             </div>
         </div>
 
-        <!-- Verificación de perfil -->
+        <!-- Verificacin de perfil -->
         <div class="container mx-auto px-4">
             <div id="profile-check" class="step-card p-8 rounded-2xl mb-8">
                 <div class="text-center">
@@ -105,7 +105,7 @@
                             <h3 class="text-xl font-bold text-yellow-300 mb-2">Perfil Incompleto</h3>
                             <p class="text-yellow-100 mb-4">
                                 Para inscribirte al certamen necesitas completar tu perfil de artista, 
-                                especialmente tu ubicación (provincia y ciudad).
+                                especialmente tu ubicacin (provincia y ciudad).
                             </p>
                             <div class="flex space-x-4">
                                 <button onclick="goToProfile()" class="bg-yellow-500 hover:bg-yellow-600 text-black px-6 py-2 rounded-lg font-semibold transition-colors">
@@ -121,81 +121,81 @@
                 </div>
             </div>
 
-            <!-- Información de ubicación del usuario -->
+            <!-- Informacin de ubicacin del usuario -->
             <div id="location-display" class="hidden">
                 <div class="location-info">
                     <div class="flex items-center space-x-3 mb-4">
                         <i class="fas fa-map-marker-alt text-teal-400 text-xl"></i>
-                        <h3 class="text-lg font-semibold text-white">Tu Ubicación</h3>
+                        <h3 class="text-lg font-semibold text-white">Tu Ubicacin</h3>
                     </div>
                     <div id="user-location" class="text-teal-100">
-                        <!-- Se llenará con JS -->
+                        <!-- Se llenar con JS -->
                     </div>
                     <div class="mt-3 p-3 bg-teal-500/20 rounded-lg">
                         <p class="text-sm text-teal-100">
                             <i class="fas fa-info-circle mr-2"></i>
-                            Basándose en tu ubicación, determinaremos automáticamente si organizamos 
+                            Basndose en tu ubicacin, determinaremos automticamente si organizamos 
                             eventos presenciales en tu zona cuando haya suficientes participantes.
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Formulario de inscripción -->
+            <!-- Formulario de inscripcin -->
             <div id="inscription-form" class="hidden">
                 <!-- Indicador de pasos -->
                 <div class="step-indicator mb-8">
                     <div class="step step-active">
                         <div class="step-number">1</div>
-                        <span class="text-white font-medium">Categoría</span>
+                        <span class="text-white font-medium">Categora</span>
                     </div>
                     <div class="step">
                         <div class="step-number">2</div>
-                        <span class="text-white font-medium">Canción</span>
+                        <span class="text-white font-medium">Cancin</span>
                     </div>
                     <div class="step">
                         <div class="step-number">3</div>
-                        <span class="text-white font-medium">Confirmación</span>
+                        <span class="text-white font-medium">Confirmacin</span>
                     </div>
                 </div>
 
-                <!-- PASO 1: Selección de Categoría -->
+                <!-- PASO 1: Seleccin de Categora -->
                 <div id="step1" class="step-content">
                     <div class="step-card p-8 rounded-2xl">
-                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Elige tu Categoría</h2>
+                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Elige tu Categora</h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <!-- Categoría Local -->
+                            <!-- Categora Local -->
                             <div onclick="selectCategoria('local')" class="categoria-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-yellow-400 hover:bg-yellow-500/10 transition-all duration-300">
                                 <div class="text-center">
-                                    <div class="text-4xl mb-3">🏘️</div>
+                                    <div class="text-4xl mb-3"></div>
                                     <h3 class="text-xl font-bold text-white mb-2">Local</h3>
                                     <p class="text-yellow-200 text-sm">Barrio / Localidad</p>
                                 </div>
                             </div>
                             
-                            <!-- Categoría Regional -->
+                            <!-- Categora Regional -->
                             <div onclick="selectCategoria('regional')" class="categoria-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-orange-400 hover:bg-orange-500/10 transition-all duration-300">
                                 <div class="text-center">
-                                    <div class="text-4xl mb-3">🏙️</div>
+                                    <div class="text-4xl mb-3"></div>
                                     <h3 class="text-xl font-bold text-white mb-2">Regional</h3>
                                     <p class="text-orange-200 text-sm">Provincia</p>
                                 </div>
                             </div>
                             
-                            <!-- Categoría Nacional -->
+                            <!-- Categora Nacional -->
                             <div onclick="selectCategoria('nacional')" class="categoria-option cursor-pointer p-6 rounded-xl border-2 border-white/20 hover:border-purple-400 hover:bg-purple-500/10 transition-all duration-300">
                                 <div class="text-center">
-                                    <div class="text-4xl mb-3">🇦🇷</div>
+                                    <div class="text-4xl mb-3"></div>
                                     <h3 class="text-xl font-bold text-white mb-2">Nacional</h3>
                                     <p class="text-purple-200 text-sm">Toda Argentina</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Géneros musicales -->
+                        <!-- Gneros musicales -->
                         <div class="mt-8">
-                            <h3 class="text-xl font-bold text-white mb-4">Género Musical</h3>
+                            <h3 class="text-xl font-bold text-white mb-4">Gnero Musical</h3>
                             <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 <label class="flex items-center space-x-2 cursor-pointer">
                                     <input type="checkbox" name="genero" value="pop" class="w-4 h-4 text-blue-600">
@@ -240,14 +240,14 @@
                     </div>
                 </div>
 
-                <!-- PASO 2: Subida de canción -->
+                <!-- PASO 2: Subida de cancin -->
                 <div id="step2" class="step-content hidden">
                     <div class="step-card p-8 rounded-2xl">
-                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Sube tu Canción</h2>
+                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Sube tu Cancin</h2>
                         
                         <div class="mb-8">
-                            <label class="block text-white font-medium mb-2">Título de la canción *</label>
-                            <input type="text" id="song-title" placeholder="Ingresa el título de tu canción" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-blue-400">
+                            <label class="block text-white font-medium mb-2">Ttulo de la cancin *</label>
+                            <input type="text" id="song-title" placeholder="Ingresa el ttulo de tu cancin" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-white/50 focus:outline-none focus:border-blue-400">
                         </div>
 
                         <div class="mb-8">
@@ -257,16 +257,16 @@
 
                         <!-- Upload de video -->
                         <div class="mb-8">
-                            <label class="block text-white font-medium mb-2">Video de tu presentación *</label>
+                            <label class="block text-white font-medium mb-2">Video de tu presentacin *</label>
                             <div class="border-2 border-dashed border-white/30 rounded-lg p-8 text-center">
                                 <input type="file" id="video-upload" accept="video/*" class="hidden" onchange="handleVideoUpload(event)">
                                 <div id="upload-area" onclick="document.getElementById('video-upload').click()" class="cursor-pointer">
                                     <i class="fas fa-cloud-upload-alt text-4xl text-white/50 mb-4"></i>
                                     <p class="text-white/70 mb-2">Haz clic para subir tu video</p>
-                                    <p class="text-white/50 text-sm">Formato: MP4, MOV, AVI (máx. 100MB)</p>
+                                    <p class="text-white/50 text-sm">Formato: MP4, MOV, AVI (mx. 100MB)</p>
                                 </div>
                                 <div id="video-preview" class="hidden mt-4">
-                                    <!-- Se llenará con JS -->
+                                    <!-- Se llenar con JS -->
                                 </div>
                             </div>
                         </div>
@@ -282,22 +282,22 @@
                     </div>
                 </div>
 
-                <!-- PASO 3: Confirmación -->
+                <!-- PASO 3: Confirmacin -->
                 <div id="step3" class="step-content hidden">
                     <div class="step-card p-8 rounded-2xl">
-                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Confirma tu Inscripción</h2>
+                        <h2 class="text-3xl font-bold text-white mb-6 text-center font-display">Confirma tu Inscripcin</h2>
                         
                         <div id="confirmation-details" class="space-y-4 mb-8">
-                            <!-- Se llenará con JS -->
+                            <!-- Se llenar con JS -->
                         </div>
 
                         <div class="bg-green-500/20 border border-green-500/30 rounded-lg p-6 mb-8">
                             <h3 class="text-green-300 font-semibold mb-2">
                                 <i class="fas fa-check-circle mr-2"></i>
-                                Modalidad de Participación
+                                Modalidad de Participacin
                             </h3>
                             <p class="text-green-100 text-sm" id="modalidad-info">
-                                <!-- Se llenará automáticamente basado en la ubicación -->
+                                <!-- Se llenar automticamente basado en la ubicacin -->
                             </p>
                         </div>
 
@@ -306,7 +306,7 @@
                                 <i class="fas fa-arrow-left mr-2"></i> Anterior
                             </button>
                             <button onclick="submitInscription()" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors" id="submit-btn">
-                                <i class="fas fa-paper-plane mr-2"></i> Confirmar Inscripción
+                                <i class="fas fa-paper-plane mr-2"></i> Confirmar Inscripcin
                             </button>
                         </div>
                     </div>
@@ -325,13 +325,13 @@
             tituloCancion: '',
             artistaOriginal: '',
             videoFile: null,
-            modalidad: 'online' // Por defecto online, se puede cambiar basado en ubicación
+            modalidad: 'online' // Por defecto online, se puede cambiar basado en ubicacin
         };
 
-        // Verificar autenticación al cargar
+        // Verificar autenticacin al cargar
         window.onload = async function() {
             try {
-                // Verificar si el usuario está autenticado
+                // Verificar si el usuario est autenticado
                 const user = firebase.auth().currentUser;
                 if (!user) {
                     await checkAuthState();
@@ -341,11 +341,11 @@
                 await loadUserProfile();
             } catch (error) {
                 console.error('Error al cargar:', error);
-                showError('Error al cargar la aplicación');
+                showError('Error al cargar la aplicacin');
             }
         };
 
-        // Verificar estado de autenticación
+        // Verificar estado de autenticacin
         function checkAuthState() {
             return new Promise((resolve) => {
                 firebase.auth().onAuthStateChanged(async (user) => {
@@ -374,13 +374,13 @@
                 if (profileDoc.exists) {
                     userData = profileDoc.data();
                     
-                    // Verificar si el perfil está completo
+                    // Verificar si el perfil est completo
                     if (!userData.provincia || !userData.ciudad) {
                         showIncompleteProfile();
                         return;
                     }
                     
-                    // Mostrar información de ubicación
+                    // Mostrar informacin de ubicacin
                     showLocationInfo();
                     showInscriptionForm();
                 } else {
@@ -399,7 +399,7 @@
             document.getElementById('incomplete-profile').classList.remove('hidden');
         }
 
-        // Mostrar información de ubicación
+        // Mostrar informacin de ubicacin
         function showLocationInfo() {
             const locationDisplay = document.getElementById('location-display');
             const userLocationDiv = document.getElementById('user-location');
@@ -418,44 +418,44 @@
             
             locationDisplay.classList.remove('hidden');
             
-            // Determinar modalidad basada en ubicación
+            // Determinar modalidad basada en ubicacin
             determineModalidad();
         }
 
-        // Determinar modalidad basada en ubicación
+        // Determinar modalidad basada en ubicacin
         function determineModalidad() {
             // Zonas donde se pueden organizar eventos presenciales
             const zonasPresenciales = [
                 'Santa Fe', 
                 'Buenos Aires', 
-                'Córdoba',
+                'Crdoba',
                 'Mendoza',
-                'Tucumán'
+                'Tucumn'
             ];
             
             const ciudadesPresenciales = [
                 'Rosario',
                 'Ciudad de Buenos Aires',
                 'La Plata',
-                'Córdoba',
+                'Crdoba',
                 'Mendoza',
-                'San Miguel de Tucumán'
+                'San Miguel de Tucumn'
             ];
             
-            let modalidadTexto = 'Participarás de forma <strong>online</strong>. ';
+            let modalidadTexto = 'Participars de forma <strong>online</strong>. ';
             
             if (zonasPresenciales.includes(userData.provincia) || 
                 ciudadesPresenciales.includes(userData.ciudad)) {
-                modalidadTexto = `Podrías participar de forma <strong>presencial</strong> si organizamos un evento en tu zona. 
-                    De lo contrario, participarás online. Te notificaremos si se confirma un evento presencial en tu área.`;
+                modalidadTexto = `Podras participar de forma <strong>presencial</strong> si organizamos un evento en tu zona. 
+                    De lo contrario, participars online. Te notificaremos si se confirma un evento presencial en tu rea.`;
                 inscriptionData.modalidad = 'presencial-potencial';
             }
             
-            // Guardar para mostrar en confirmación
+            // Guardar para mostrar en confirmacin
             inscriptionData.modalidadTexto = modalidadTexto;
         }
 
-        // Mostrar formulario de inscripción
+        // Mostrar formulario de inscripcin
         function showInscriptionForm() {
             document.getElementById('inscription-form').classList.remove('hidden');
         }
@@ -465,31 +465,31 @@
             window.location.href = 'crear-perfil-artista.html';
         }
 
-        // Cambiar ubicación
+        // Cambiar ubicacin
         function changeLocation() {
             window.location.href = 'crear-perfil-artista.html';
         }
 
-        // Volver atrás
+        // Volver atrs
         function goBack() {
             window.history.back();
         }
 
-        // Seleccionar categoría
+        // Seleccionar categora
         function selectCategoria(categoria) {
-            // Remover selección anterior
+            // Remover seleccin anterior
             document.querySelectorAll('.categoria-option').forEach(el => {
                 el.classList.remove('step-active');
             });
             
-            // Agregar selección actual
+            // Agregar seleccin actual
             event.target.closest('.categoria-option').classList.add('step-active');
             
             inscriptionData.categoria = categoria;
             updateNextButton(1);
         }
 
-        // Manejar géneros
+        // Manejar gneros
         document.addEventListener('change', function(e) {
             if (e.target.name === 'genero') {
                 const generos = Array.from(document.querySelectorAll('input[name="genero"]:checked'))
@@ -499,7 +499,7 @@
             }
         });
 
-        // Actualizar botón siguiente
+        // Actualizar botn siguiente
         function updateNextButton(step) {
             const btn = document.getElementById(`next-btn-${step}`);
             if (step === 1) {
@@ -514,9 +514,9 @@
             const file = event.target.files[0];
             if (!file) return;
 
-            // Verificar tamaño (100MB máximo)
+            // Verificar tamao (100MB mximo)
             if (file.size > 100 * 1024 * 1024) {
-                showError('El archivo es demasiado grande. Máximo 100MB.');
+                showError('El archivo es demasiado grande. Mximo 100MB.');
                 return;
             }
 
@@ -561,7 +561,7 @@
             }
         });
 
-        // Navegación entre pasos
+        // Navegacin entre pasos
         function nextStep() {
             if (currentStep < 3) {
                 // Ocultar paso actual
@@ -606,7 +606,7 @@
             });
         }
 
-        // Mostrar detalles de confirmación
+        // Mostrar detalles de confirmacin
         function showConfirmationDetails() {
             const detailsDiv = document.getElementById('confirmation-details');
             const modalidaInfo = document.getElementById('modalidad-info');
@@ -614,15 +614,15 @@
             detailsDiv.innerHTML = `
                 <div class="bg-white/5 rounded-lg p-6 space-y-4">
                     <div class="flex justify-between items-center">
-                        <span class="text-white/70">Categoría:</span>
+                        <span class="text-white/70">Categora:</span>
                         <span class="text-white font-semibold capitalize">${inscriptionData.categoria}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-white/70">Géneros:</span>
+                        <span class="text-white/70">Gneros:</span>
                         <span class="text-white font-semibold">${inscriptionData.generos.join(', ')}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-white/70">Canción:</span>
+                        <span class="text-white/70">Cancin:</span>
                         <span class="text-white font-semibold">${inscriptionData.tituloCancion}</span>
                     </div>
                     ${inscriptionData.artistaOriginal ? `
@@ -636,7 +636,7 @@
                         <span class="text-white font-semibold">${inscriptionData.videoFile.name}</span>
                     </div>
                     <div class="flex justify-between items-center">
-                        <span class="text-white/70">Ubicación:</span>
+                        <span class="text-white/70">Ubicacin:</span>
                         <span class="text-white font-semibold">${userData.ciudad}, ${userData.provincia}</span>
                     </div>
                 </div>
@@ -645,7 +645,7 @@
             modalidaInfo.innerHTML = inscriptionData.modalidadTexto;
         }
 
-        // Enviar inscripción
+        // Enviar inscripcin
         async function submitInscription() {
             try {
                 const submitBtn = document.getElementById('submit-btn');
@@ -659,7 +659,7 @@
                 const uploadTask = await videoRef.put(inscriptionData.videoFile);
                 const videoURL = await uploadTask.ref.getDownloadURL();
 
-                // Crear documento de inscripción
+                // Crear documento de inscripcin
                 const inscriptionDoc = {
                     userId: user.uid,
                     userEmail: user.email,
@@ -681,32 +681,32 @@
                     .collection('inscripciones')
                     .add(inscriptionDoc);
 
-                // Mostrar éxito
-                showSuccess('¡Inscripción completada exitosamente!');
+                // Mostrar xito
+                showSuccess('Inscripcin completada exitosamente!');
                 
-                // Redirigir después de 2 segundos
+                // Redirigir despus de 2 segundos
                 setTimeout(() => {
                     window.location.href = 'perfil-artista.html';
                 }, 2000);
 
             } catch (error) {
-                console.error('Error al enviar inscripción:', error);
-                showError('Error al procesar tu inscripción. Por favor intenta nuevamente.');
+                console.error('Error al enviar inscripcin:', error);
+                showError('Error al procesar tu inscripcin. Por favor intenta nuevamente.');
                 
                 const submitBtn = document.getElementById('submit-btn');
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Confirmar Inscripción';
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane mr-2"></i> Confirmar Inscripcin';
             }
         }
 
         // Funciones de utilidad
         function showError(message) {
-            // Implementar notificación de error
+            // Implementar notificacin de error
             alert(message); // Temporal
         }
 
         function showSuccess(message) {
-            // Implementar notificación de éxito
+            // Implementar notificacin de xito
             alert(message); // Temporal
         }
     </script>

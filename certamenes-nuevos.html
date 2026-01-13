@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -10,7 +10,7 @@
             regs.forEach(reg => {
                 if (!reg.active || !reg.active.scriptURL.includes('sw-simple.js')) {
                     reg.unregister();
-                    console.log('🗑️ SW viejo eliminado:', reg.scope);
+                    console.log(' SW viejo eliminado:', reg.scope);
                 }
             });
         });
@@ -18,7 +18,7 @@
             names.forEach(name => {
                 if (!name.includes('v3-force')) {
                     caches.delete(name);
-                    console.log('🗑️ Caché viejo eliminado:', name);
+                    console.log(' Cach viejo eliminado:', name);
                 }
             });
         });
@@ -27,18 +27,18 @@
     <script src="/sw-register.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VYT Music - Certámenes</title>
+    <title>VYT Music - Certmenes</title>
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Explora los certámenes de canto disponibles en VYT Music">
+    <meta name="description" content="Explora los certmenes de canto disponibles en VYT Music">
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="VYT Music">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     <link rel="manifest" href="/manifest.json">
     
     <!--Start of Tawk.to Script-->
@@ -67,7 +67,7 @@
     <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -75,7 +75,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
     <style>
-        /* 🎵 TODO EL CSS INLINE - NAVEGACIÓN NEGRA TRANSPARENTE */
+        /*  TODO EL CSS INLINE - NAVEGACIN NEGRA TRANSPARENTE */
         body {
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
             background-size: cover;
@@ -88,7 +88,7 @@
             padding: 0;
         }
         
-        /* Clase para fondo dinámico desde admin */
+        /* Clase para fondo dinmico desde admin */
         body.dynamic-background {
             background: var(--dynamic-bg) !important;
             background-size: var(--dynamic-bg-size, cover) !important;
@@ -259,7 +259,7 @@
         <main class="container">
             <section class="hero-section">
                 <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
-                    🎵 Certámenes VYT Music
+                     Certmenes VYT Music
                 </h1>
                 <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
                     Encuentra tu certamen perfecto y comienza tu carrera musical. Participa, compite y haz que tu 
@@ -267,10 +267,10 @@
                 </p>
             </section>
 
-            <!-- Certámenes Activos -->
+            <!-- Certmenes Activos -->
             <section style="margin-bottom: 48px;">
                 <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; text-align: center;">
-                    🎵 Certámenes Activos - ¡Inscríbete Ya!
+                     Certmenes Activos - Inscrbete Ya!
                 </h2>
                 
                 <div class="certamen-card">
@@ -278,8 +278,8 @@
                         Certamen Nacional de Pop
                     </h3>
                     <p style="margin-bottom: 16px; opacity: 0.9;">
-                        El certamen de música Pop más importante de Argentina. Participa con tu mejor interpretación y compite con 
-                        artistas de todo el país. Todos las edades pueden participar.
+                        El certamen de msica Pop ms importante de Argentina. Participa con tu mejor interpretacin y compite con 
+                        artistas de todo el pas. Todos las edades pueden participar.
                     </p>
                     <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
                         <span style="background: rgba(34, 197, 94, 0.2); color: #22C55E; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
@@ -294,10 +294,10 @@
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <a href="inscripcion-certamen.html" class="btn-primary">
-                            🎵“ Participar Ahora
+                             Participar Ahora
                         </a>
                         <button class="btn-primary" style="background: linear-gradient(135deg, #6B7280, #4B5563);">
-                            🎵‘ï¸ Ver Reglamento
+                             Ver Reglamento
                         </button>
                     </div>
                 </div>
@@ -305,12 +305,12 @@
         </main>
     </div>
 
-    <!-- Navegación unificada cargada por navigation.js -->
+    <!-- Navegacin unificada cargada por navigation.js -->
 
     <script>
-        console.log('🎵 VYT MUSIC - Certámenes con navegación negra transparente');
+        console.log(' VYT MUSIC - Certmenes con navegacin negra transparente');
 
-        // FUNCIONES DEL MENÚ
+        // FUNCIONES DEL MEN
         function toggleMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             if (menuOverlay.classList.contains('active')) {
@@ -324,40 +324,40 @@
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            console.log('🎵”½ Menú abierto desde la derecha');
+            console.log(' Men abierto desde la derecha');
         }
 
         function closeMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            console.log('🎵”¼ Menú cerrado');
+            console.log(' Men cerrado');
         }
 
 
 
-        // Cerrar menú con tecla ESC
+        // Cerrar men con tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeMenu();
             }
         });
         
-        // Cargar fondo dinámico al inicializar
+        // Cargar fondo dinmico al inicializar
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicBackground();
         });
         
-        // Sistema de fondos dinámicos desde Admin
+        // Sistema de fondos dinmicos desde Admin
         function loadDynamicBackground() {
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'certamenes.html';
                 
-                console.log('🎵 Verificando configuración de fondo para:', currentPage);
+                console.log(' Verificando configuracin de fondo para:', currentPage);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log('🎵 Aplicando fondo personalizado para certamenes.html');
+                    console.log(' Aplicando fondo personalizado para certamenes.html');
                     
                     const config = backgroundConfig[currentPage];
                     const position = config.position || 'center center';
@@ -371,12 +371,12 @@
                     document.documentElement.style.setProperty('--dynamic-bg-position', position);
                     document.body.classList.add('dynamic-background');
                     
-                    console.log(`✅ Fondo aplicado: ${position}, escala: ${scale}`);
+                    console.log(` Fondo aplicado: ${position}, escala: ${scale}`);
                 } else {
-                    console.log('🎵 Usando fondo predeterminado para certamenes.html');
+                    console.log(' Usando fondo predeterminado para certamenes.html');
                 }
             } catch (error) {
-                console.error('☰Œ Error cargando fondo:', error);
+                console.error(' Error cargando fondo:', error);
             }
         }
     </script>

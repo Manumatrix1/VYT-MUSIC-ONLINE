@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Súper Admin - VYT MUSIC</title>
+    <title>Sper Admin - VYT MUSIC</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Panel de administración súper admin para VYT Music">
+    <meta name="description" content="Panel de administracin sper admin para VYT Music">
     <meta name="theme-color" content="#0a0a0f">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -128,7 +128,7 @@
             margin-bottom: 1rem;
         }
 
-        /* Moderación Cards - Mobile First */
+        /* Moderacin Cards - Mobile First */
         .video-card-mobile {
             background: rgba(20, 20, 25, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -823,14 +823,14 @@
 <body>
     <!-- Header minimalista -->
     <div class="admin-header">
-        <h1><i class="fas fa-crown" style="color: #ffd700; margin-right: 0.5rem;"></i>Súper Admin</h1>
+        <h1><i class="fas fa-crown" style="color: #ffd700; margin-right: 0.5rem;"></i>Sper Admin</h1>
     </div>
 
     <!-- Tabs superiores deslizables -->
     <div class="tabs-container">
         <div class="tabs-wrapper">
             <button class="tab-btn active" onclick="showTab('moderacion')" id="tab-moderacion">
-                <i class="fas fa-video"></i> Moderación
+                <i class="fas fa-video"></i> Moderacin
             </button>
             <button class="tab-btn" onclick="showTab('assets')" id="tab-assets">
                 <i class="fas fa-image"></i> Assets
@@ -850,7 +850,7 @@
     <!-- Content Container -->
     <div class="content-container">
         
-        <!-- TAB: MODERACIÓN (por defecto) -->
+        <!-- TAB: MODERACIN (por defecto) -->
         <div id="content-moderacion" class="tab-content">
             <!-- Stat Cards Mobile -->
             <div class="stat-cards-mobile">
@@ -924,16 +924,16 @@
             <div class="admin-card">
                 <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1rem; font-size: 0.875rem;">
                     <i class="fas fa-info-circle" style="color: #3b82f6; margin-right: 0.375rem;"></i>
-                    Redes sociales de la plataforma VYT Music (footer y menú).
+                    Redes sociales de la plataforma VYT Music (footer y men).
                 </p>
             </div>
             <div id="social-list"></div>
         </div>
 
-        <!-- TAB: CONFIGURACIÓN -->
+        <!-- TAB: CONFIGURACIN -->
         <div id="content-config" class="tab-content" style="display: none;">
             <div class="admin-card">
-                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Configuración del Slider</h3>
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 1rem;">Configuracin del Slider</h3>
                 <div style="display: grid; gap: 1rem;">
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.7);">Autoplay</label>
@@ -949,24 +949,24 @@
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.7);">Mostrar Flechas</label>
                         <select id="config-arrows" class="admin-input-mobile">
-                            <option value="true">Sí</option>
+                            <option value="true">S</option>
                             <option value="false">No</option>
                         </select>
                     </div>
                     <div>
                         <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: rgba(255, 255, 255, 0.7);">Mostrar Indicadores</label>
                         <select id="config-indicators" class="admin-input-mobile">
-                            <option value="true">Sí</option>
+                            <option value="true">S</option>
                             <option value="false">No</option>
                         </select>
                     </div>
                 </div>
             </div>
             
-            <!-- Acciones rápidas -->
+            <!-- Acciones rpidas -->
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 1rem;">
                 <button onclick="clearCacheAndReload()" class="btn-mobile btn-reject">
-                    <i class="fas fa-trash"></i> Limpiar Caché
+                    <i class="fas fa-trash"></i> Limpiar Cach
                 </button>
                 <button onclick="downloadConfig()" class="btn-mobile btn-approve">
                     <i class="fas fa-download"></i> Descargar JSON
@@ -974,17 +974,17 @@
             </div>
         </div>
 
-        <!-- TAB: VOTACIÓN JURADO -->
+        <!-- TAB: VOTACIN JURADO -->
         <div id="content-jurado" class="tab-content" style="display: none;">
             <div class="admin-card">
-                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;">🎭 Votación del Jurado</h3>
-                <p style="font-size: 0.875rem; color: rgba(255,255,255,0.7); margin-bottom: 1rem;">Evalúa a los clasificados de cada zona</p>
+                <h3 style="font-size: 1.125rem; font-weight: 600; margin-bottom: 0.5rem;"> Votacin del Jurado</h3>
+                <p style="font-size: 0.875rem; color: rgba(255,255,255,0.7); margin-bottom: 1rem;">Evala a los clasificados de cada zona</p>
             </div>
 
             <!-- Filtros por Zona -->
             <div class="filter-chips-mobile" style="margin-bottom: 1rem;">
                 <div class="chip-mobile active zona-filter-btn" data-zona="todas" onclick="juradoPanelInstance && juradoPanelInstance.filterByZona('todas')">
-                    📍 Todas
+                     Todas
                 </div>
                 <div class="chip-mobile zona-filter-btn" data-zona="norte" onclick="juradoPanelInstance && juradoPanelInstance.filterByZona('norte')">
                     Norte
@@ -1002,9 +1002,9 @@
 
             <!-- Container de Clasificados -->
             <div id="clasificados-container" style="display: grid; gap: 1rem;">
-                <!-- Se llena dinámicamente con jurado-panel.js -->
+                <!-- Se llena dinmicamente con jurado-panel.js -->
                 <div class="admin-card" style="text-align: center; padding: 2rem;">
-                    <div style="font-size: 3rem; opacity: 0.5;">⏳</div>
+                    <div style="font-size: 3rem; opacity: 0.5;"></div>
                     <p style="color: rgba(255,255,255,0.7);">Cargando clasificados...</p>
                 </div>
             </div>
@@ -1012,17 +1012,17 @@
 
     </div>
 
-    <!-- FAB - Botón Guardar Flotante -->
+    <!-- FAB - Botn Guardar Flotante -->
     <button class="fab-mobile" onclick="saveConfig()" title="Guardar cambios">
         <i class="fas fa-save"></i>
     </button>
 
-    <!-- Bottom Navigation (solo móvil) -->
+    <!-- Bottom Navigation (solo mvil) -->
     <nav class="bottom-nav">
         <div class="bottom-nav-items">
             <a class="bottom-nav-item active" onclick="event.preventDefault(); showTab('moderacion');" href="#">
                 <i class="fas fa-video"></i>
-                <span>Moderación</span>
+                <span>Moderacin</span>
             </a>
             <a class="bottom-nav-item" onclick="event.preventDefault(); showTab('assets');" href="#">
                 <i class="fas fa-image"></i>
@@ -1056,14 +1056,14 @@
                     <div>
                         <label class="block text-sm font-semibold mb-2">Mostrar Flechas</label>
                         <select id="config-arrows" class="admin-input">
-                            <option value="true">Sí</option>
+                            <option value="true">S</option>
                             <option value="false">No</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm font-semibold mb-2">Mostrar Indicadores</label>
                         <select id="config-indicators" class="admin-input">
-                            <option value="true">Sí</option>
+                            <option value="true">S</option>
                             <option value="false">No</option>
                         </select>
                     </div>
@@ -1086,23 +1086,23 @@
         let allVideos = [];
         let currentFilter = 'pendiente';
 
-        // 🔒 CONFIGURACIÓN DE SEGURIDAD - CORREO AUTORIZADO
-        const AUTHORIZED_EMAIL = 'vytmusiconline@gmail.com'; // ← CAMBIAR POR TU EMAIL
+        //  CONFIGURACIN DE SEGURIDAD - CORREO AUTORIZADO
+        const AUTHORIZED_EMAIL = 'vytmusiconline@gmail.com'; //  CAMBIAR POR TU EMAIL
         
-        // Inicialización
+        // Inicializacin
         document.addEventListener('DOMContentLoaded', () => {
             firebase.auth().onAuthStateChanged(async (user) => {
                 if (!user) {
-                    console.warn('❌ No hay usuario autenticado');
-                    alert('Debes iniciar sesión como administrador');
+                    console.warn(' No hay usuario autenticado');
+                    alert('Debes iniciar sesin como administrador');
                     window.location.href = '/admin.html';
                     return;
                 }
                 
-                // 🔐 SEGURIDAD: Verificar email autorizado
+                //  SEGURIDAD: Verificar email autorizado
                 if (user.email !== AUTHORIZED_EMAIL) {
-                    console.error('🚫 Acceso denegado para:', user.email);
-                    alert('🚫 Acceso denegado. Este panel es solo para administradores autorizados.');
+                    console.error(' Acceso denegado para:', user.email);
+                    alert(' Acceso denegado. Este panel es solo para administradores autorizados.');
                     await firebase.auth().signOut();
                     window.location.href = '/index.html';
                     return;
@@ -1111,22 +1111,22 @@
                 currentUser = user;
                 db = firebase.firestore();
                 
-                // Verificar permisos de admin (doble verificación)
+                // Verificar permisos de admin (doble verificacin)
                 const isAdmin = await checkAdminStatus();
                 if (!isAdmin) {
-                    console.error('🚫 Usuario sin permisos de admin');
+                    console.error(' Usuario sin permisos de admin');
                     alert('No tienes permisos de administrador');
                     window.location.href = '/index.html';
                     return;
                 }
                 
-                console.log('✅ Admin autenticado:', user.email);
-                console.log('🔑 UID:', user.uid);
+                console.log(' Admin autenticado:', user.email);
+                console.log(' UID:', user.uid);
                 
-                // Cargar configuración multimedia
+                // Cargar configuracin multimedia
                 await loadCurrentConfig();
                 
-                // Cargar videos de moderación
+                // Cargar videos de moderacin
                 await loadAllVideos();
                 
                 // Setup listeners en tiempo real
@@ -1146,13 +1146,13 @@
         }
 
         // ============================================
-        // SECCIÓN: ASSETS WEB (Multimedia)
+        // SECCIN: ASSETS WEB (Multimedia)
         // ============================================
         
-        // Cargar configuración al inicio
+        // Cargar configuracin al inicio
         async function loadCurrentConfig() {
             try {
-                showToast('Cargando configuración...', 'info');
+                showToast('Cargando configuracin...', 'info');
                 
                 const timestamp = Date.now();
                 const response = await fetch(`/src/vyt-assets-config.json?v=${timestamp}`);
@@ -1163,10 +1163,10 @@
                 renderSocial();
                 renderSliderConfig();
                 
-                showToast('✅ Configuración cargada', 'success');
+                showToast(' Configuracin cargada', 'success');
             } catch (error) {
                 console.error('Error:', error);
-                showToast('❌ Error cargando configuración', 'error');
+                showToast(' Error cargando configuracin', 'error');
             }
         }
 
@@ -1194,12 +1194,12 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Título</label>
+                            <label class="block text-sm font-semibold mb-2">Ttulo</label>
                             <input type="text" class="admin-input" value="${banner.title}" 
                                    onchange="updateBanner(${index}, 'title', this.value)">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Descripción</label>
+                            <label class="block text-sm font-semibold mb-2">Descripcin</label>
                             <input type="text" class="admin-input" value="${banner.description}"
                                    onchange="updateBanner(${index}, 'description', this.value)">
                         </div>
@@ -1214,7 +1214,7 @@
                                    onchange="updateBanner(${index}, 'linkUrl', this.value)">
                         </div>
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Texto del Botón</label>
+                            <label class="block text-sm font-semibold mb-2">Texto del Botn</label>
                             <input type="text" class="admin-input" value="${banner.linkText}"
                                    onchange="updateBanner(${index}, 'linkText', this.value)">
                         </div>
@@ -1253,7 +1253,7 @@
                     <h3 class="text-xl font-bold mb-4">Video: ${key}</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-semibold mb-2">Título</label>
+                            <label class="block text-sm font-semibold mb-2">Ttulo</label>
                             <input type="text" class="admin-input" value="${video.title}"
                                    onchange="updateVideo('${key}', 'title', this.value)">
                         </div>
@@ -1263,7 +1263,7 @@
                                    onchange="updateVideo('${key}', 'youtubeId', this.value)">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-semibold mb-2">Descripción</label>
+                            <label class="block text-sm font-semibold mb-2">Descripcin</label>
                             <input type="text" class="admin-input" value="${video.description}"
                                    onchange="updateVideo('${key}', 'description', this.value)">
                         </div>
@@ -1364,7 +1364,7 @@
 
         // Eliminar banner
         function deleteBanner(index) {
-            if (!confirm('¿Eliminar este banner?')) return;
+            if (!confirm('Eliminar este banner?')) return;
             currentConfig.banners.splice(index, 1);
             renderBanners();
         }
@@ -1374,10 +1374,10 @@
             currentConfig.banners.push({
                 id: `banner-${Date.now()}`,
                 title: 'Nuevo Banner',
-                description: 'Descripción',
+                description: 'Descripcin',
                 imageUrl: 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=1920&q=80',
                 linkUrl: '/',
-                linkText: 'Ver más',
+                linkText: 'Ver ms',
                 active: true,
                 order: currentConfig.banners.length + 1,
                 overlayColor: 'rgba(0, 0, 0, 0.4)',
@@ -1386,7 +1386,7 @@
             renderBanners();
         }
 
-        // Guardar configuración
+        // Guardar configuracin
         async function saveConfig() {
             try {
                 // Actualizar slider config
@@ -1399,19 +1399,19 @@
                 currentConfig._meta.lastUpdate = new Date().toISOString();
 
                 // Mostrar JSON en consola para copiarlo manualmente
-                console.log('📋 Copiar este JSON y guardarlo en src/vyt-assets-config.json:');
+                console.log(' Copiar este JSON y guardarlo en src/vyt-assets-config.json:');
                 console.log(JSON.stringify(currentConfig, null, 2));
 
-                showToast('✅ Config actualizada - Ver consola para copiar JSON', 'success');
+                showToast(' Config actualizada - Ver consola para copiar JSON', 'success');
 
-                // Limpiar cache automáticamente
+                // Limpiar cache automticamente
                 localStorage.removeItem('vyt_assets_cache_v1');
                 
                 // Ofrecer descarga
                 downloadConfig();
             } catch (error) {
                 console.error('Error:', error);
-                showToast('❌ Error guardando configuración', 'error');
+                showToast(' Error guardando configuracin', 'error');
             }
         }
 
@@ -1425,13 +1425,13 @@
             link.download = 'vyt-assets-config.json';
             link.click();
             URL.revokeObjectURL(url);
-            showToast('📥 Archivo descargado', 'success');
+            showToast(' Archivo descargado', 'success');
         }
 
         // Limpiar cache y recargar
         async function clearCacheAndReload() {
             localStorage.removeItem('vyt_assets_cache_v1');
-            showToast('🗑️ Caché limpiado', 'success');
+            showToast(' Cach limpiado', 'success');
             await loadCurrentConfig();
         }
 
@@ -1464,7 +1464,7 @@
             
             // Inicializar panel de jurado si es necesario
             if (tab === 'jurado' && window.juradoPanelInstance) {
-                console.log('🎭 Cargando panel de jurado...');
+                console.log(' Cargando panel de jurado...');
                 window.juradoPanelInstance.loadClasificados(window.juradoPanelInstance.currentZona || 'todas');
             }
         }
@@ -1492,7 +1492,7 @@
         }
 
         // ============================================
-        // SECCIÓN: MODERACIÓN DE CERTÁMENES
+        // SECCIN: MODERACIN DE CERTMENES
         // ============================================
         
         // Cargar todos los videos
@@ -1523,7 +1523,7 @@
             }
         }
         
-        // Actualizar estadísticas
+        // Actualizar estadsticas
         function updateStats() {
             const pending = allVideos.filter(v => v.estado === 'pendiente' || v.estado === 'pendiente_revision').length;
             const approved = allVideos.filter(v => v.estado === 'activo').length;
@@ -1556,8 +1556,8 @@
             renderModeracionVideos(filtered);
         }
         
-        // Renderizar videos de moderación
-        // Renderizar videos de moderación (Mobile-First)
+        // Renderizar videos de moderacin
+        // Renderizar videos de moderacin (Mobile-First)
         function renderModeracionVideos(videos) {
             const grid = document.getElementById('videosGrid');
             
@@ -1566,7 +1566,7 @@
                     <div class="empty-state-mobile">
                         <i class="fas fa-video-slash"></i>
                         <h3>No hay videos</h3>
-                        <p>Los videos ${currentFilter === 'all' ? 'aparecerán aquí' : currentFilter + 's aparecerán aquí'}</p>
+                        <p>Los videos ${currentFilter === 'all' ? 'aparecern aqu' : currentFilter + 's aparecern aqu'}</p>
                     </div>
                 `;
                 return;
@@ -1652,7 +1652,7 @@
         
         // Aprobar video (con webhook para pago)
         async function approveVideo(videoId) {
-            if (!confirm('¿Aprobar este video para el certamen?\n\nSe enviará el link de pago al artista.')) return;
+            if (!confirm('Aprobar este video para el certamen?\n\nSe enviar el link de pago al artista.')) return;
             
             showLoading('Aprobando video y generando link de pago...');
             
@@ -1678,36 +1678,36 @@
                     aprobadoPorEmail: currentUser.email
                 });
                 
-                console.log('✅ Estado cambiado a waiting_payment');
+                console.log(' Estado cambiado a waiting_payment');
                 
                 // 3. Disparar webhook de n8n para generar link de pago
                 if (window.automationBridge) {
-                    console.log('🔌 Disparando webhook de aprobación...');
+                    console.log(' Disparando webhook de aprobacin...');
                     const webhookResult = await window.automationBridge.onVideoApproved(videoData, userData);
                     
                     if (webhookResult.success) {
-                        console.log('✅ Webhook ejecutado:', webhookResult);
+                        console.log(' Webhook ejecutado:', webhookResult);
                         
                         hideLoading();
-                        showToast('¡Video aprobado! Link de pago enviado al artista 💳', 'success', 4000);
+                        showToast('Video aprobado! Link de pago enviado al artista ', 'success', 4000);
                         celebrate();
                         
                         // Mostrar link de pago si existe
                         if (webhookResult.payment_link) {
-                            console.log('💳 Link de pago:', webhookResult.payment_link);
+                            console.log(' Link de pago:', webhookResult.payment_link);
                             
                             // Opcional: Mostrar modal con link
-                            if (confirm('¿Quieres copiar el link de pago al portapapeles?')) {
+                            if (confirm('Quieres copiar el link de pago al portapapeles?')) {
                                 navigator.clipboard.writeText(webhookResult.payment_link);
                                 showToast('Link copiado al portapapeles', 'info', 2000);
                             }
                         }
                     } else {
-                        console.warn('⚠️ Webhook falló:', webhookResult.error);
-                        showToast('Video aprobado, pero el webhook falló. Envía link manualmente.', 'warning', 4000);
+                        console.warn(' Webhook fall:', webhookResult.error);
+                        showToast('Video aprobado, pero el webhook fall. Enva link manualmente.', 'warning', 4000);
                     }
                 } else {
-                    console.warn('⚠️ Automation Bridge no disponible');
+                    console.warn(' Automation Bridge no disponible');
                     hideLoading();
                     showToast('Video aprobado (webhooks desactivados)', 'success', 3000);
                 }
@@ -1716,16 +1716,16 @@
                 await loadAllVideos();
                 
             } catch (error) {
-                console.error('❌ Error aprobando video:', error);
+                console.error(' Error aprobando video:', error);
                 hideLoading();
                 showToast('Error al aprobar video: ' + error.message, 'error', 4000);
             }
         }
         
-        // Rechazar video (con webhook para notificación)
+        // Rechazar video (con webhook para notificacin)
         async function rejectVideo(videoId) {
-            const motivo = prompt('Motivo del rechazo (será enviado al artista):');
-            if (motivo === null) return; // Usuario canceló
+            const motivo = prompt('Motivo del rechazo (ser enviado al artista):');
+            if (motivo === null) return; // Usuario cancel
             
             if (!motivo.trim()) {
                 alert('Debes especificar un motivo de rechazo');
@@ -1756,24 +1756,24 @@
                     motivoRechazo: motivo.trim()
                 });
                 
-                console.log('✅ Estado cambiado a rechazado');
+                console.log(' Estado cambiado a rechazado');
                 
                 // 3. Disparar webhook para notificar al artista
                 if (window.automationBridge) {
-                    console.log('🔌 Disparando webhook de rechazo...');
+                    console.log(' Disparando webhook de rechazo...');
                     const webhookResult = await window.automationBridge.onVideoRejected(videoData, userData, motivo);
                     
                     if (webhookResult.success) {
-                        console.log('✅ Webhook ejecutado:', webhookResult);
+                        console.log(' Webhook ejecutado:', webhookResult);
                         hideLoading();
                         showToast('Video rechazado. Artista notificado por email/WhatsApp', 'info', 4000);
                     } else {
-                        console.warn('⚠️ Webhook falló:', webhookResult.error);
+                        console.warn(' Webhook fall:', webhookResult.error);
                         hideLoading();
-                        showToast('Video rechazado (webhook falló, notifica manualmente)', 'warning', 4000);
+                        showToast('Video rechazado (webhook fall, notifica manualmente)', 'warning', 4000);
                     }
                 } else {
-                    console.warn('⚠️ Automation Bridge no disponible');
+                    console.warn(' Automation Bridge no disponible');
                     hideLoading();
                     showToast('Video rechazado (webhooks desactivados)', 'error', 2000);
                 }
@@ -1782,7 +1782,7 @@
                 await loadAllVideos();
                 
             } catch (error) {
-                console.error('❌ Error rechazando video:', error);
+                console.error(' Error rechazando video:', error);
                 hideLoading();
                 showToast('Error al rechazar video: ' + error.message, 'error', 4000);
             }
@@ -1795,7 +1795,7 @@
                 .onSnapshot((snapshot) => {
                     snapshot.docChanges().forEach((change) => {
                         if (change.type === 'added') {
-                            showToast('Nuevo video pendiente de revisión', 'info', 3000);
+                            showToast('Nuevo video pendiente de revisin', 'info', 3000);
                             loadAllVideos();
                         }
                     });

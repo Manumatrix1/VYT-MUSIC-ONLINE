@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -50,7 +50,7 @@
             }
         }
         
-        /* Formulario con animación */
+        /* Formulario con animacin */
         .form-container {
             animation: fadeInUp 0.8s ease-out 0.2s both;
         }
@@ -76,8 +76,8 @@
                 <div class="absolute inset-0 bg-white/20 blur-2xl rounded-full"></div>
                 <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-32 h-32 mx-auto mb-4 relative z-10 drop-shadow-2xl">
             </div>
-            <h1 class="text-5xl font-black text-white mb-3 drop-shadow-lg" style="font-family: 'Montserrat', sans-serif;">¡Bienvenido!</h1>
-            <p class="text-white/90 text-xl font-medium">Creá tu cuenta de Visitante</p>
+            <h1 class="text-5xl font-black text-white mb-3 drop-shadow-lg" style="font-family: 'Montserrat', sans-serif;">Bienvenido!</h1>
+            <p class="text-white/90 text-xl font-medium">Cre tu cuenta de Visitante</p>
         </div>
 
         <!-- Formulario -->
@@ -94,7 +94,7 @@
                     </label>
                     <input type="text" id="nombreCompleto" required 
                            class="w-full px-4 py-3 rounded-xl bg-white/20 border-2 border-white/30 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all"
-                           placeholder="Ej: Juan Pérez">
+                           placeholder="Ej: Juan Prez">
                 </div>
 
                 <!-- Email -->
@@ -107,27 +107,27 @@
                            placeholder="tu@email.com">
                 </div>
 
-                <!-- Contraseña -->
+                <!-- Contrasea -->
                 <div class="mb-5">
                     <label class="block text-white font-bold mb-2 text-sm">
-                        <i class="fas fa-lock mr-2"></i> Contraseña *
+                        <i class="fas fa-lock mr-2"></i> Contrasea *
                     </label>
                     <input type="password" id="password" required 
                            class="w-full px-4 py-3 rounded-xl bg-white/20 border-2 border-white/30 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all"
-                           placeholder="Mínimo 6 caracteres">
+                           placeholder="Mnimo 6 caracteres">
                 </div>
 
-                <!-- Confirmar Contraseña -->
+                <!-- Confirmar Contrasea -->
                 <div class="mb-6">
                     <label class="block text-white font-bold mb-2 text-sm">
-                        <i class="fas fa-lock mr-2"></i> Confirmar Contraseña *
+                        <i class="fas fa-lock mr-2"></i> Confirmar Contrasea *
                     </label>
                     <input type="password" id="confirmPassword" required 
                            class="w-full px-4 py-3 rounded-xl bg-white/20 border-2 border-white/30 text-white placeholder-white/60 focus:border-white focus:outline-none transition-all"
-                           placeholder="Repetí tu contraseña">
+                           placeholder="Repet tu contrasea">
                 </div>
 
-                <!-- Botón Registrarse -->
+                <!-- Botn Registrarse -->
                 <button type="submit" id="btnSubmit"
                         class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold py-4 px-6 rounded-xl transition-all transform hover:scale-105 shadow-lg text-lg">
                     <i class="fas fa-user-plus mr-2"></i> Crear Cuenta
@@ -137,9 +137,9 @@
 
             <!-- Ya tengo cuenta -->
             <div class="text-center mt-6 pt-6 border-t border-white/20">
-                <p class="text-white/80 mb-3">¿Ya tenés cuenta?</p>
+                <p class="text-white/80 mb-3">Ya tens cuenta?</p>
                 <a href="login.html" class="text-white font-bold underline hover:text-white/80 transition-all">
-                    Iniciar Sesión
+                    Iniciar Sesin
                 </a>
             </div>
 
@@ -153,7 +153,7 @@
     <script src="firebase-config.js"></script>
 
     <script>
-    console.log('📋 Registro Visitante - Iniciado');
+    console.log(' Registro Visitante - Iniciado');
 
     const form = document.getElementById('formRegistroVisitante');
     const btnSubmit = document.getElementById('btnSubmit');
@@ -181,32 +181,32 @@
 
         // Validaciones
         if (!nombreCompleto || !email || !password) {
-            showAlert('⚠️ Por favor completá todos los campos obligatorios');
+            showAlert(' Por favor complet todos los campos obligatorios');
             return;
         }
 
         if (password.length < 6) {
-            showAlert('⚠️ La contraseña debe tener al menos 6 caracteres');
+            showAlert(' La contrasea debe tener al menos 6 caracteres');
             return;
         }
 
         if (password !== confirmPassword) {
-            showAlert('⚠️ Las contraseñas no coinciden');
+            showAlert(' Las contraseas no coinciden');
             return;
         }
 
-        // Deshabilitar botón
+        // Deshabilitar botn
         btnSubmit.disabled = true;
         btnSubmit.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creando cuenta...';
 
         try {
-            console.log('🔥 Creando usuario en Firebase Auth...');
+            console.log(' Creando usuario en Firebase Auth...');
             
             // 1. Crear usuario en Firebase Auth
             const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
             const user = userCredential.user;
             
-            console.log('✅ Usuario creado:', user.uid);
+            console.log(' Usuario creado:', user.uid);
 
             // 2. Crear documento en Firestore
             const db = firebase.firestore();
@@ -219,7 +219,7 @@
                 estado: 'activo'
             });
 
-            console.log('✅ Documento Firestore creado');
+            console.log(' Documento Firestore creado');
 
             // 3. Inicializar saldo VYT Money en 0
             await db.collection('user_vyt_money').doc(user.uid).set({
@@ -228,9 +228,9 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             });
 
-            console.log('✅ VYT Money inicializado');
+            console.log(' VYT Money inicializado');
 
-            showAlert('✅ ¡Cuenta creada exitosamente!', 'success');
+            showAlert(' Cuenta creada exitosamente!', 'success');
             
             // Redirigir al perfil de visitante
             setTimeout(() => {
@@ -238,21 +238,21 @@
             }, 1500);
 
         } catch (error) {
-            console.error('❌ Error:', error);
+            console.error(' Error:', error);
             
             let errorMessage = 'Error al crear la cuenta';
             
             if (error.code === 'auth/email-already-in-use') {
-                errorMessage = '⚠️ Este email ya está registrado';
+                errorMessage = ' Este email ya est registrado';
             } else if (error.code === 'auth/invalid-email') {
-                errorMessage = '⚠️ Email inválido';
+                errorMessage = ' Email invlido';
             } else if (error.code === 'auth/weak-password') {
-                errorMessage = '⚠️ Contraseña muy débil';
+                errorMessage = ' Contrasea muy dbil';
             }
             
             showAlert(errorMessage);
             
-            // Rehabilitar botón
+            // Rehabilitar botn
             btnSubmit.disabled = false;
             btnSubmit.innerHTML = '<i class="fas fa-user-plus mr-2"></i> Crear Cuenta';
         }

@@ -11,7 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="VYT Music">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     <link rel="manifest" href="/manifest.json">
     
     <!-- Design Tokens - Sistema Unificado -->
@@ -189,7 +189,7 @@
             border-color: #3B82F6;
         }
         
-        /* Animación del logo */
+        /* Animacin del logo */
         @keyframes fadeInDown {
             from {
                 opacity: 0;
@@ -219,7 +219,7 @@
                 Crear tu Perfil de Artista
             </h1>
             <p class="text-gray-300 text-lg max-w-2xl mx-auto">
-                Completa tu perfil para participar en los certámenes de VYT Music. 
+                Completa tu perfil para participar en los certmenes de VYT Music. 
                 Tus datos nos ayudan a conocer la demanda de cada ciudad.
             </p>
         </header>
@@ -230,15 +230,15 @@
             <div class="step-indicator">
                 <div class="step active">
                     <div class="step-number">1</div>
-                    <span>Datos Básicos</span>
+                    <span>Datos Bsicos</span>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
-                    <span>Perfil Artístico</span>
+                    <span>Perfil Artstico</span>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
-                    <span>Ubicación</span>
+                    <span>Ubicacin</span>
                 </div>
             </div>
 
@@ -246,11 +246,11 @@
             <div id="alertContainer" class="hidden mb-4 p-4 rounded-xl text-center font-semibold"></div>
 
             <form id="artist-profile-form">
-                <!-- Sección 1: Datos Básicos -->
+                <!-- Seccin 1: Datos Bsicos -->
                 <div class="form-card" id="step-1">
                     <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
                         <i class="fas fa-user mr-3"></i>
-                        Datos Básicos
+                        Datos Bsicos
                     </h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -260,22 +260,22 @@
                         </div>
                         
                         <div class="form-group">
-                            <label class="block text-white font-medium mb-2">Contraseña *</label>
+                            <label class="block text-white font-medium mb-2">Contrasea *</label>
                             <div style="position: relative;">
-                                <input type="password" id="password" name="password" class="form-input" placeholder="Mínimo 6 caracteres" required style="padding-right: 50px;">
+                                <input type="password" id="password" name="password" class="form-input" placeholder="Mnimo 6 caracteres" required style="padding-right: 50px;">
                                 <button type="button" id="togglePassword" 
                                         style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); 
                                                background: none; border: none; color: white; cursor: pointer; font-size: 20px;">
                                     <i class="fas fa-eye" id="eyeIcon"></i>
                                 </button>
                             </div>
-                            <p class="text-gray-400 text-sm mt-1">Esta será tu contraseña para iniciar sesión</p>
+                            <p class="text-gray-400 text-sm mt-1">Esta ser tu contrasea para iniciar sesin</p>
                         </div>
                         
                         <div class="form-group md:col-span-2">
-                            <label class="block text-white font-medium mb-2">Confirmar Contraseña *</label>
+                            <label class="block text-white font-medium mb-2">Confirmar Contrasea *</label>
                             <div style="position: relative;">
-                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Repetí tu contraseña" required style="padding-right: 50px;">
+                                <input type="password" id="confirmPassword" name="confirmPassword" class="form-input" placeholder="Repet tu contrasea" required style="padding-right: 50px;">
                                 <button type="button" id="toggleConfirmPassword" 
                                         style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); 
                                                background: none; border: none; color: white; cursor: pointer; font-size: 20px;">
@@ -308,95 +308,95 @@
                         <div class="form-group">
                             <label class="block text-white font-medium mb-2">DNI (Opcional)</label>
                             <input type="text" name="dni" class="form-input" placeholder="12345678">
-                            <p class="text-gray-400 text-sm mt-1">Campo opcional - solo si te sientes cómodo compartiéndolo</p>
+                            <p class="text-gray-400 text-sm mt-1">Campo opcional - solo si te sientes cmodo compartindolo</p>
                         </div>
                     </div>
                     
                     <button type="button" class="btn-primary mt-6" onclick="nextStep(2)">
-                        Continuar →
+                        Continuar 
                     </button>
                 </div>
 
-                <!-- Sección 2: Perfil Artístico -->
+                <!-- Seccin 2: Perfil Artstico -->
                 <div class="form-card hidden" id="step-2">
                     <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
                         <i class="fas fa-music mr-3"></i>
-                        Perfil Artístico
+                        Perfil Artstico
                     </h2>
                     
                     <div class="form-group">
-                        <label class="block text-white font-medium mb-2">Nombre Artístico *</label>
-                        <input type="text" name="nombre_artistico" class="form-input" placeholder="Tu nombre artístico">
+                        <label class="block text-white font-medium mb-2">Nombre Artstico *</label>
+                        <input type="text" name="nombre_artistico" class="form-input" placeholder="Tu nombre artstico">
                     </div>
                     
                     <div class="form-group">
-                        <label class="block text-white font-medium mb-2">Géneros Musicales (selecciona todos los que manejes) *</label>
+                        <label class="block text-white font-medium mb-2">Gneros Musicales (selecciona todos los que manejes) *</label>
                         <div class="genre-grid">
                             <div>
                                 <input type="checkbox" id="pop" name="generos[]" value="pop" class="genre-checkbox">
-                                <label for="pop" class="genre-label">🎤 Pop</label>
+                                <label for="pop" class="genre-label"> Pop</label>
                             </div>
                             <div>
                                 <input type="checkbox" id="rock" name="generos[]" value="rock" class="genre-checkbox">
-                                <label for="rock" class="genre-label">🎸 Rock</label>
+                                <label for="rock" class="genre-label"> Rock</label>
                             </div>
                             <div>
                                 <input type="checkbox" id="folclore" name="generos[]" value="folclore" class="genre-checkbox">
-                                <label for="folclore" class="genre-label">🪕 Folclore</label>
+                                <label for="folclore" class="genre-label"> Folclore</label>
                             </div>
                             <div>
                                 <input type="checkbox" id="tango" name="generos[]" value="tango" class="genre-checkbox">
-                                <label for="tango" class="genre-label">💃 Tango</label>
+                                <label for="tango" class="genre-label"> Tango</label>
                             </div>
                             <div>
                                 <input type="checkbox" id="cumbia" name="generos[]" value="cumbia" class="genre-checkbox">
-                                <label for="cumbia" class="genre-label">🎺 Cumbia</label>
+                                <label for="cumbia" class="genre-label"> Cumbia</label>
                             </div>
                             <div>
                                 <input type="checkbox" id="balada" name="generos[]" value="balada" class="genre-checkbox">
-                                <label for="balada" class="genre-label">❤️ Balada</label>
+                                <label for="balada" class="genre-label"> Balada</label>
                             </div>
                             <div>
                                 <input type="checkbox" id="urbano" name="generos[]" value="urbano" class="genre-checkbox">
-                                <label for="urbano" class="genre-label">🎵 Urbano</label>
+                                <label for="urbano" class="genre-label"> Urbano</label>
                             </div>
                             <div>
                                 <input type="checkbox" id="tropical" name="generos[]" value="tropical" class="genre-checkbox">
-                                <label for="tropical" class="genre-label">🌴 Tropical</label>
+                                <label for="tropical" class="genre-label"> Tropical</label>
                             </div>
                         </div>
                     </div>
                     
                     <div class="form-group">
-                        <label class="block text-white font-medium mb-2">Biografía Artística</label>
+                        <label class="block text-white font-medium mb-2">Biografa Artstica</label>
                         <textarea name="biografia" class="form-textarea" placeholder="Contanos sobre tu trayectoria musical, experiencia, logros, etc..."></textarea>
                     </div>
                     
                     <div class="flex gap-4">
                         <button type="button" class="btn-primary bg-gray-600 hover:bg-gray-700" onclick="prevStep(1)">
-                            ← Anterior
+                             Anterior
                         </button>
                         <button type="button" class="btn-primary" onclick="nextStep(3)">
-                            Continuar →
+                            Continuar 
                         </button>
                     </div>
                 </div>
 
-                <!-- Sección 3: Ubicación -->
+                <!-- Seccin 3: Ubicacin -->
                 <div class="form-card hidden" id="step-3">
                     <h2 class="text-2xl font-bold text-white mb-6 flex items-center">
                         <i class="fas fa-map-marker-alt mr-3"></i>
-                        Ubicación Geográfica
+                        Ubicacin Geogrfica
                     </h2>
                     
                     <div class="bg-blue-900/20 border border-blue-400/30 rounded-xl p-4 mb-6">
                         <h3 class="text-blue-300 font-semibold mb-2">
                             <i class="fas fa-info-circle mr-2"></i>
-                            ¿Por qué necesitamos tu ubicación?
+                            Por qu necesitamos tu ubicacin?
                         </h3>
                         <p class="text-blue-100 text-sm">
-                            Tu ubicación nos ayuda a medir la demanda en cada ciudad. Si hay suficientes artistas en tu zona, 
-                            organizaremos certámenes presenciales allí. ¡Podrías ser parte del primer certamen presencial de tu ciudad!
+                            Tu ubicacin nos ayuda a medir la demanda en cada ciudad. Si hay suficientes artistas en tu zona, 
+                            organizaremos certmenes presenciales all. Podras ser parte del primer certamen presencial de tu ciudad!
                         </p>
                     </div>
                     
@@ -406,29 +406,29 @@
                             <select name="provincia" class="form-select" required onchange="loadCities(this.value)">
                                 <option value="">Selecciona tu provincia</option>
                                 <option value="buenos_aires">Buenos Aires</option>
-                                <option value="caba">Ciudad Autónoma de Buenos Aires</option>
+                                <option value="caba">Ciudad Autnoma de Buenos Aires</option>
                                 <option value="catamarca">Catamarca</option>
                                 <option value="chaco">Chaco</option>
                                 <option value="chubut">Chubut</option>
-                                <option value="cordoba">Córdoba</option>
+                                <option value="cordoba">Crdoba</option>
                                 <option value="corrientes">Corrientes</option>
-                                <option value="entre_rios">Entre Ríos</option>
+                                <option value="entre_rios">Entre Ros</option>
                                 <option value="formosa">Formosa</option>
                                 <option value="jujuy">Jujuy</option>
                                 <option value="la_pampa">La Pampa</option>
                                 <option value="la_rioja">La Rioja</option>
                                 <option value="mendoza">Mendoza</option>
                                 <option value="misiones">Misiones</option>
-                                <option value="neuquen">Neuquén</option>
-                                <option value="rio_negro">Río Negro</option>
+                                <option value="neuquen">Neuqun</option>
+                                <option value="rio_negro">Ro Negro</option>
                                 <option value="salta">Salta</option>
                                 <option value="san_juan">San Juan</option>
                                 <option value="san_luis">San Luis</option>
                                 <option value="santa_cruz">Santa Cruz</option>
                                 <option value="santa_fe">Santa Fe</option>
                                 <option value="santiago_del_estero">Santiago del Estero</option>
-                                <option value="tierra_del_fuego">Tierra del Fuego, Antártida e Islas del Atlántico Sur</option>
-                                <option value="tucuman">Tucumán</option>
+                                <option value="tierra_del_fuego">Tierra del Fuego, Antrtida e Islas del Atlntico Sur</option>
+                                <option value="tucuman">Tucumn</option>
                             </select>
                         </div>
                         
@@ -440,14 +440,14 @@
                         </div>
                         
                         <div class="form-group md:col-span-2">
-                            <label class="block text-white font-medium mb-2">Código Postal</label>
+                            <label class="block text-white font-medium mb-2">Cdigo Postal</label>
                             <input type="text" name="codigo_postal" class="form-input" placeholder="1234">
                         </div>
                     </div>
                     
                     <div class="flex gap-4">
                         <button type="button" class="btn-primary bg-gray-600 hover:bg-gray-700" onclick="prevStep(2)">
-                            ← Anterior
+                             Anterior
                         </button>
                         <button type="submit" class="btn-primary">
                             <i class="fas fa-check mr-2"></i>
@@ -459,9 +459,9 @@
         </main>
     </div>
 
-    <!-- Scripts de navegación y funcionalidad -->
+    <!-- Scripts de navegacin y funcionalidad -->
     <script>
-        // Funciones del menú hamburguesa
+        // Funciones del men hamburguesa
         function toggleMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             if (menuOverlay.style.opacity === '1') {
@@ -479,7 +479,7 @@
             menuOverlay.style.visibility = 'visible';
             menuPanel.style.transform = 'translateX(0)';
             document.body.style.overflow = 'hidden';
-            console.log('🔽 Menú abierto desde la derecha');
+            console.log(' Men abierto desde la derecha');
         }
 
         function closeMenu() {
@@ -490,19 +490,19 @@
             menuOverlay.style.visibility = 'hidden';
             menuPanel.style.transform = 'translateX(100%)';
             document.body.style.overflow = '';
-            console.log('🔼 Menú cerrado');
+            console.log(' Men cerrado');
         }
 
 
 
-        // Cerrar menú con tecla ESC
+        // Cerrar men con tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeMenu();
             }
         });
 
-        // Cerrar menú al hacer clic fuera (solo si el elemento existe)
+        // Cerrar men al hacer clic fuera (solo si el elemento existe)
         const menuOverlayElement = document.getElementById('menuOverlay');
         if (menuOverlayElement) {
             menuOverlayElement.addEventListener('click', function(event) {
@@ -521,7 +521,7 @@
         window.nextStep = function(step) {
             // Validar paso actual antes de continuar
             if (currentStep === 1 && step === 2) {
-                // Validar paso 1: Datos Básicos
+                // Validar paso 1: Datos Bsicos
                 const email = document.querySelector('input[name="email"]').value;
                 const whatsapp = document.querySelector('input[name="whatsapp"]').value;
                 const nombre = document.querySelector('input[name="nombre"]').value;
@@ -535,23 +535,23 @@
                 // Validar formato de email
                 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(email)) {
-                    alert('Por favor, ingresa un email válido');
+                    alert('Por favor, ingresa un email vlido');
                     return;
                 }
             }
             
             if (currentStep === 2 && step === 3) {
-                // Validar paso 2: Perfil Artístico
+                // Validar paso 2: Perfil Artstico
                 const nombreArtistico = document.querySelector('input[name="nombre_artistico"]').value;
                 const generosSeleccionados = document.querySelectorAll('input[name="generos[]"]:checked');
                 
                 if (!nombreArtistico) {
-                    alert('Por favor, ingresa tu nombre artístico');
+                    alert('Por favor, ingresa tu nombre artstico');
                     return;
                 }
                 
                 if (generosSeleccionados.length === 0) {
-                    alert('Por favor, selecciona al menos un género musical');
+                    alert('Por favor, selecciona al menos un gnero musical');
                     return;
                 }
             }
@@ -594,21 +594,21 @@
             "buenos_aires": {
                 name: "Buenos Aires",
                 cities: [
-                    "La Plata", "Mar del Plata", "Bahía Blanca", "Tandil", "Quilmes", "Avellaneda", 
-                    "Lanús", "San Isidro", "Vicente López", "Tigre", "San Fernando", "Morón", 
-                    "Tres de Febrero", "San Martín", "Malvinas Argentinas", "Pilar", "Escobar", 
-                    "Campana", "Zárate", "Luján", "Mercedes", "Chivilcoy", "Pergamino", "Junín", 
-                    "Lincoln", "General Pico", "Trenque Lauquen", "Pehuajó", "Carlos Casares", 
-                    "Bolivar", "Olavarría", "Azul", "Necochea", "Balcarce", "General Madariaga", 
-                    "Villa Gesell", "Pinamar", "Coronel Dorrego", "Tres Arroyos", "González Chaves"
+                    "La Plata", "Mar del Plata", "Baha Blanca", "Tandil", "Quilmes", "Avellaneda", 
+                    "Lans", "San Isidro", "Vicente Lpez", "Tigre", "San Fernando", "Morn", 
+                    "Tres de Febrero", "San Martn", "Malvinas Argentinas", "Pilar", "Escobar", 
+                    "Campana", "Zrate", "Lujn", "Mercedes", "Chivilcoy", "Pergamino", "Junn", 
+                    "Lincoln", "General Pico", "Trenque Lauquen", "Pehuaj", "Carlos Casares", 
+                    "Bolivar", "Olavarra", "Azul", "Necochea", "Balcarce", "General Madariaga", 
+                    "Villa Gesell", "Pinamar", "Coronel Dorrego", "Tres Arroyos", "Gonzlez Chaves"
                 ]
             },
             "caba": {
-                name: "Ciudad Autónoma de Buenos Aires",
+                name: "Ciudad Autnoma de Buenos Aires",
                 cities: [
-                    "Puerto Madero", "San Nicolás", "Retiro", "San Telmo", "Montserrat", 
-                    "Constitución", "Recoleta", "Balvanera", "Barracas", "La Boca", "Palermo", 
-                    "Belgrano", "Núñez", "Villa Urquiza", "Villa Pueyrredón", "Coghlan", 
+                    "Puerto Madero", "San Nicols", "Retiro", "San Telmo", "Montserrat", 
+                    "Constitucin", "Recoleta", "Balvanera", "Barracas", "La Boca", "Palermo", 
+                    "Belgrano", "Nez", "Villa Urquiza", "Villa Pueyrredn", "Coghlan", 
                     "Saavedra", "Villa Crespo", "Almagro", "Boedo", "Caballito", "Flores", 
                     "Floresta", "Parque Chacabuco", "Villa Soldati", "Nueva Pompeya", 
                     "Parque Patricios", "Villa Lugano", "Liniers", "Mataderos", "Versalles"
@@ -617,16 +617,16 @@
             "catamarca": {
                 name: "Catamarca",
                 cities: [
-                    "San Fernando del Valle de Catamarca", "Andalgalá", "Tinogasta", "Belén", 
-                    "Santa María", "Fiambalá", "Londres", "Recreo", "Valle Viejo", "Fray Mamerto Esquiú"
+                    "San Fernando del Valle de Catamarca", "Andalgal", "Tinogasta", "Beln", 
+                    "Santa Mara", "Fiambal", "Londres", "Recreo", "Valle Viejo", "Fray Mamerto Esqui"
                 ]
             },
             "chaco": {
                 name: "Chaco",
                 cities: [
-                    "Resistencia", "Barranqueras", "Fontana", "Puerto Vilelas", "Sáenz Peña", 
-                    "Villa Ángela", "Charata", "General José de San Martín", "Machagai", 
-                    "Quitilipi", "Las Breñas", "Castelli", "Villa Berthet"
+                    "Resistencia", "Barranqueras", "Fontana", "Puerto Vilelas", "Senz Pea", 
+                    "Villa ngela", "Charata", "General Jos de San Martn", "Machagai", 
+                    "Quitilipi", "Las Breas", "Castelli", "Villa Berthet"
                 ]
             },
             "chubut": {
@@ -634,47 +634,47 @@
                 cities: [
                     "Rawson", "Puerto Madryn", "Comodoro Rivadavia", "Trelew", "Esquel", 
                     "Puerto Deseado", "Caleta Olivia", "Dolavon", "Gaiman", "Rada Tilly", 
-                    "Sarmiento", "El Bolsón", "Lago Puelo"
+                    "Sarmiento", "El Bolsn", "Lago Puelo"
                 ]
             },
             "cordoba": {
-                name: "Córdoba",
+                name: "Crdoba",
                 cities: [
-                    "Córdoba", "Villa Carlos Paz", "Río Cuarto", "Villa María", "San Francisco", 
-                    "Alta Gracia", "Cosquín", "La Falda", "Jesus María", "Unquillo", "Salsipuedes", 
-                    "Villa Allende", "Río Ceballos", "Capilla del Monte", "Cruz del Eje", 
-                    "Dean Funes", "Bell Ville", "Marcos Juárez", "Villa Nueva", "Arroyito", 
-                    "Laboulaye", "General Cabrera", "Huinca Renancó", "Vicuña Mackenna"
+                    "Crdoba", "Villa Carlos Paz", "Ro Cuarto", "Villa Mara", "San Francisco", 
+                    "Alta Gracia", "Cosqun", "La Falda", "Jesus Mara", "Unquillo", "Salsipuedes", 
+                    "Villa Allende", "Ro Ceballos", "Capilla del Monte", "Cruz del Eje", 
+                    "Dean Funes", "Bell Ville", "Marcos Jurez", "Villa Nueva", "Arroyito", 
+                    "Laboulaye", "General Cabrera", "Huinca Renanc", "Vicua Mackenna"
                 ]
             },
             "corrientes": {
                 name: "Corrientes",
                 cities: [
-                    "Corrientes", "Goya", "Paso de los Libres", "Mercedes", "Curuzú Cuatiá", 
-                    "Esquina", "Monte Caseros", "Santo Tomé", "Bella Vista", "Saladas", 
-                    "Empedrado", "Itatí", "San Roque", "Lavalle"
+                    "Corrientes", "Goya", "Paso de los Libres", "Mercedes", "Curuz Cuati", 
+                    "Esquina", "Monte Caseros", "Santo Tom", "Bella Vista", "Saladas", 
+                    "Empedrado", "Itat", "San Roque", "Lavalle"
                 ]
             },
             "entre_rios": {
-                name: "Entre Ríos",
+                name: "Entre Ros",
                 cities: [
-                    "Paraná", "Concordia", "Gualeguaychú", "Concepción del Uruguay", "Villaguay", 
-                    "Victoria", "Chajarí", "Federación", "Colón", "San José de Feliciano", 
-                    "La Paz", "Nogoyá", "Crespo", "Basavilbaso", "Hernandarias"
+                    "Paran", "Concordia", "Gualeguaych", "Concepcin del Uruguay", "Villaguay", 
+                    "Victoria", "Chajar", "Federacin", "Coln", "San Jos de Feliciano", 
+                    "La Paz", "Nogoy", "Crespo", "Basavilbaso", "Hernandarias"
                 ]
             },
             "formosa": {
                 name: "Formosa",
                 cities: [
-                    "Formosa", "Clorinda", "Pirané", "El Colorado", "Ingeniero Juárez", 
-                    "Las Lomitas", "Comandante Fontana", "Misión Tacaaglé", "General Mosconi", 
+                    "Formosa", "Clorinda", "Piran", "El Colorado", "Ingeniero Jurez", 
+                    "Las Lomitas", "Comandante Fontana", "Misin Tacaagl", "General Mosconi", 
                     "Villa Dos Trece"
                 ]
             },
             "jujuy": {
                 name: "Jujuy",
                 cities: [
-                    "San Salvador de Jujuy", "Palpalá", "San Pedro", "Libertador General San Martín", 
+                    "San Salvador de Jujuy", "Palpal", "San Pedro", "Libertador General San Martn", 
                     "Perico", "El Carmen", "Monterrico", "Fraile Pintado", "Calilegua", 
                     "San Antonio", "Purmamarca", "Tilcara", "Humahuaca", "La Quiaca"
                 ]
@@ -682,59 +682,59 @@
             "la_pampa": {
                 name: "La Pampa",
                 cities: [
-                    "Santa Rosa", "General Pico", "Toay", "Realicó", "Intendente Alvear", 
-                    "General Acha", "Eduardo Castex", "Macachín", "Catriló", "Victorica", 
+                    "Santa Rosa", "General Pico", "Toay", "Realic", "Intendente Alvear", 
+                    "General Acha", "Eduardo Castex", "Macachn", "Catril", "Victorica", 
                     "Ingeniero Luiggi", "Winifreda", "Doblas"
                 ]
             },
             "la_rioja": {
                 name: "La Rioja",
                 cities: [
-                    "La Rioja", "Chilecito", "Aimogasta", "Chamical", "Chepes", "Villa Unión", 
-                    "Famatina", "Sanagasta", "Patquía", "Nonogasta", "Vinchina", "Villa Castelli"
+                    "La Rioja", "Chilecito", "Aimogasta", "Chamical", "Chepes", "Villa Unin", 
+                    "Famatina", "Sanagasta", "Patqua", "Nonogasta", "Vinchina", "Villa Castelli"
                 ]
             },
             "mendoza": {
                 name: "Mendoza",
                 cities: [
-                    "Mendoza", "San Rafael", "Godoy Cruz", "Guaymallén", "Maipú", "Las Heras", 
-                    "Luján de Cuyo", "Rivadavia", "Junín", "La Paz", "Santa Rosa", "Lavalle", 
-                    "General Alvear", "Tupungato", "Tunuyán", "San Carlos", "Malargüe", 
-                    "San Martín", "Palmira", "Russell"
+                    "Mendoza", "San Rafael", "Godoy Cruz", "Guaymalln", "Maip", "Las Heras", 
+                    "Lujn de Cuyo", "Rivadavia", "Junn", "La Paz", "Santa Rosa", "Lavalle", 
+                    "General Alvear", "Tupungato", "Tunuyn", "San Carlos", "Malarge", 
+                    "San Martn", "Palmira", "Russell"
                 ]
             },
             "misiones": {
                 name: "Misiones",
                 cities: [
-                    "Posadas", "Oberá", "Eldorado", "Puerto Iguazú", "Apóstoles", "Leandro N. Alem", 
-                    "Puerto Rico", "Montecarlo", "Garupá", "Candelaria", "Jardín América", 
-                    "Aristóbulo del Valle", "Campo Grande", "Puerto Esperanza", "Wanda", 
+                    "Posadas", "Ober", "Eldorado", "Puerto Iguaz", "Apstoles", "Leandro N. Alem", 
+                    "Puerto Rico", "Montecarlo", "Garup", "Candelaria", "Jardn Amrica", 
+                    "Aristbulo del Valle", "Campo Grande", "Puerto Esperanza", "Wanda", 
                     "25 de Mayo", "Corpus", "San Ignacio"
                 ]
             },
             "neuquen": {
-                name: "Neuquén",
+                name: "Neuqun",
                 cities: [
-                    "Neuquén", "Cipolletti", "San Martín de los Andes", "Villa La Angostura", 
-                    "Cutral Có", "Plottier", "Centenario", "Zapala", "Chos Malal", "Junín de los Andes", 
-                    "Rincón de los Sauces", "Plaza Huincul", "Senillosa", "Vista Alegre", 
-                    "Piedra del Águila", "Picún Leufú"
+                    "Neuqun", "Cipolletti", "San Martn de los Andes", "Villa La Angostura", 
+                    "Cutral C", "Plottier", "Centenario", "Zapala", "Chos Malal", "Junn de los Andes", 
+                    "Rincn de los Sauces", "Plaza Huincul", "Senillosa", "Vista Alegre", 
+                    "Piedra del guila", "Picn Leuf"
                 ]
             },
             "rio_negro": {
-                name: "Río Negro",
+                name: "Ro Negro",
                 cities: [
                     "Viedma", "San Carlos de Bariloche", "General Roca", "Cipolletti", "Villa Regina", 
-                    "Río Colorado", "Allen", "Choele Choel", "Catriel", "Luis Beltrán", 
-                    "Fernández Oro", "Campo Grande", "Darwin", "General Conesa", "Lamarque", 
+                    "Ro Colorado", "Allen", "Choele Choel", "Catriel", "Luis Beltrn", 
+                    "Fernndez Oro", "Campo Grande", "Darwin", "General Conesa", "Lamarque", 
                     "Cinco Saltos", "Villa Regina", "Ingeniero Huergo"
                 ]
             },
             "salta": {
                 name: "Salta",
                 cities: [
-                    "Salta", "San Ramón de la Nueva Orán", "Tartagal", "Metán", "Güemes", 
-                    "Cafayate", "Rosario de Lerma", "Joaquín V. González", "Embarcación", 
+                    "Salta", "San Ramn de la Nueva Orn", "Tartagal", "Metn", "Gemes", 
+                    "Cafayate", "Rosario de Lerma", "Joaqun V. Gonzlez", "Embarcacin", 
                     "General Mosconi", "Pichanal", "El Carril", "Cerrillos", "La Merced", 
                     "Coronel Moldes", "Campo Santo", "Apolinario Saravia"
                 ]
@@ -742,9 +742,9 @@
             "san_juan": {
                 name: "San Juan",
                 cities: [
-                    "San Juan", "Chimbas", "Rawson", "Rivadavia", "Santa Lucía", "Pocito", 
-                    "9 de Julio", "Albardón", "Angaco", "Calingasta", "Capital", "Caucete", 
-                    "Iglesia", "Jáchal", "San Martín", "Sarmiento", "Ullum", "Valle Fértil", 
+                    "San Juan", "Chimbas", "Rawson", "Rivadavia", "Santa Luca", "Pocito", 
+                    "9 de Julio", "Albardn", "Angaco", "Calingasta", "Capital", "Caucete", 
+                    "Iglesia", "Jchal", "San Martn", "Sarmiento", "Ullum", "Valle Frtil", 
                     "Zonda", "25 de Mayo"
                 ]
             },
@@ -752,50 +752,50 @@
                 name: "San Luis",
                 cities: [
                     "San Luis", "Villa Mercedes", "Merlo", "Justo Daract", "La Toma", 
-                    "Concarán", "Villa de la Quebrada", "Tilisarao", "Santa Rosa del Conlara", 
+                    "Concarn", "Villa de la Quebrada", "Tilisarao", "Santa Rosa del Conlara", 
                     "Quines", "Candelaria", "Villa General Roca", "Naschel", "Nueva Galia"
                 ]
             },
             "santa_cruz": {
                 name: "Santa Cruz",
                 cities: [
-                    "Río Gallegos", "Caleta Olivia", "Pico Truncado", "Puerto Deseado", 
-                    "Puerto San Julián", "El Calafate", "28 de Noviembre", "Las Heras", 
+                    "Ro Gallegos", "Caleta Olivia", "Pico Truncado", "Puerto Deseado", 
+                    "Puerto San Julin", "El Calafate", "28 de Noviembre", "Las Heras", 
                     "Comandante Luis Piedra Buena", "Gobernador Gregores", "Puerto Santa Cruz", 
-                    "Perito Moreno", "Los Antiguos", "El Chaltén"
+                    "Perito Moreno", "Los Antiguos", "El Chaltn"
                 ]
             },
             "santa_fe": {
                 name: "Santa Fe",
                 cities: [
                     "Santa Fe", "Rosario", "Rafaela", "Reconquista", "Venado Tuerto", "Esperanza", 
-                    "Santo Tomé", "San Lorenzo", "Casilda", "Villa Gobernador Gálvez", "Funes", 
-                    "Pérez", "Roldán", "Capitán Bermúdez", "Puerto General San Martín", 
-                    "Villa Constitución", "Firmat", "Cañada de Gómez", "Las Rosas", 
+                    "Santo Tom", "San Lorenzo", "Casilda", "Villa Gobernador Glvez", "Funes", 
+                    "Prez", "Roldn", "Capitn Bermdez", "Puerto General San Martn", 
+                    "Villa Constitucin", "Firmat", "Caada de Gmez", "Las Rosas", 
                     "Armstrong", "Frontera", "Sunchales"
                 ]
             },
             "santiago_del_estero": {
                 name: "Santiago del Estero",
                 cities: [
-                    "Santiago del Estero", "La Banda", "Termas de Río Hondo", "Añatuya", 
-                    "Frías", "Monte Quemado", "Quimilí", "Loreto", "Clodomira", "Suncho Corral", 
-                    "Campo Gallo", "Bandera", "Tintina", "Villa Ojo de Agua", "Beltrán"
+                    "Santiago del Estero", "La Banda", "Termas de Ro Hondo", "Aatuya", 
+                    "Fras", "Monte Quemado", "Quimil", "Loreto", "Clodomira", "Suncho Corral", 
+                    "Campo Gallo", "Bandera", "Tintina", "Villa Ojo de Agua", "Beltrn"
                 ]
             },
             "tierra_del_fuego": {
-                name: "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+                name: "Tierra del Fuego, Antrtida e Islas del Atlntico Sur",
                 cities: [
-                    "Ushuaia", "Río Grande", "Tolhuin", "Puerto Almanza", "Puerto Williams"
+                    "Ushuaia", "Ro Grande", "Tolhuin", "Puerto Almanza", "Puerto Williams"
                 ]
             },
             "tucuman": {
-                name: "Tucumán",
+                name: "Tucumn",
                 cities: [
-                    "San Miguel de Tucumán", "Yerba Buena", "Tafí Viejo", "Banda del Río Salí", 
-                    "Las Talitas", "Alderetes", "Aguilares", "Concepción", "Monteros", 
-                    "Famaillá", "Lules", "Simoca", "Bella Vista", "La Cocha", "Graneros", 
-                    "Juan Bautista Alberdi", "Trancas", "Tafí del Valle"
+                    "San Miguel de Tucumn", "Yerba Buena", "Taf Viejo", "Banda del Ro Sal", 
+                    "Las Talitas", "Alderetes", "Aguilares", "Concepcin", "Monteros", 
+                    "Famaill", "Lules", "Simoca", "Bella Vista", "La Cocha", "Graneros", 
+                    "Juan Bautista Alberdi", "Trancas", "Taf del Valle"
                 ]
             }
         };
@@ -814,7 +814,7 @@
             }
         }
 
-        // Función para mostrar mensaje de bienvenida y redirigir
+        // Funcin para mostrar mensaje de bienvenida y redirigir
         function showWelcomeAndRedirect(artistData) {
             // Crear overlay de bienvenida
             const welcomeOverlay = document.createElement('div');
@@ -843,21 +843,21 @@
                     margin: 2rem;
                     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
                 ">
-                    <div style="font-size: 4rem; margin-bottom: 1rem;">🎤</div>
+                    <div style="font-size: 4rem; margin-bottom: 1rem;"></div>
                     <h2 style="
                         color: #3b82f6;
                         font-size: 2rem;
                         font-weight: bold;
                         margin-bottom: 1rem;
                         font-family: 'Montserrat', sans-serif;
-                    ">¡Bienvenido querido artista!</h2>
+                    ">Bienvenido querido artista!</h2>
                     <p style="
                         color: white;
                         font-size: 1.2rem;
                         margin-bottom: 1.5rem;
                         line-height: 1.6;
-                    ">Este es tu panel de artista donde podrás gestionar tu perfil, 
-                    actualizar tu información y seguir el progreso de tus inscripciones.</p>
+                    ">Este es tu panel de artista donde podrs gestionar tu perfil, 
+                    actualizar tu informacin y seguir el progreso de tus inscripciones.</p>
                     <p style="
                         color: #3b82f6;
                         font-size: 1rem;
@@ -890,33 +890,33 @@
             
             // Guardar datos del artista en localStorage para el perfil
             localStorage.setItem('artistData', JSON.stringify(artistData));
-            // 🔥 TAMBIÉN guardar como persistente para que perfil-artista.html lo encuentre
+            //  TAMBIN guardar como persistente para que perfil-artista.html lo encuentre
             localStorage.setItem('artistData_persistent', JSON.stringify(artistData));
-            // Guardar email para búsqueda en Firestore
+            // Guardar email para bsqueda en Firestore
             localStorage.setItem('userEmail', artistData.email);
             
-            console.log('💾 Datos guardados en localStorage:', {
+            console.log(' Datos guardados en localStorage:', {
                 email: artistData.email,
                 nombre: artistData.nombreArtistico,
                 tieneFoto: !!artistData.foto_perfil
             });
             
-            // Redirigir después de 3 segundos
+            // Redirigir despus de 3 segundos
             setTimeout(() => {
                 window.location.href = 'perfil-artista.html';
             }, 3000);
         }
 
-        // Función para mostrar alertas
+        // Funcin para mostrar alertas
         const alertContainer = document.getElementById('alertContainer');
-        console.log('🎯 alertContainer encontrado:', !!alertContainer);
+        console.log(' alertContainer encontrado:', !!alertContainer);
         
         function showAlert(message, type = 'error') {
-            console.log('🔔 showAlert llamada con:', message, type);
-            console.log('📦 alertContainer existe:', !!alertContainer);
+            console.log(' showAlert llamada con:', message, type);
+            console.log(' alertContainer existe:', !!alertContainer);
             
             if (!alertContainer) {
-                console.error('❌ alertContainer NO EXISTE!');
+                console.error(' alertContainer NO EXISTE!');
                 alert(message); // Fallback a alert nativo
                 return;
             }
@@ -926,9 +926,9 @@
                 : 'mb-4 p-4 rounded-xl text-center font-semibold bg-green-500/20 border-2 border-green-500 text-white';
             alertContainer.textContent = message;
             alertContainer.classList.remove('hidden');
-            console.log('✅ Alerta mostrada, clases:', alertContainer.className);
+            console.log(' Alerta mostrada, clases:', alertContainer.className);
             
-            // Auto-ocultar después de 5 segundos
+            // Auto-ocultar despus de 5 segundos
             setTimeout(() => {
                 alertContainer.classList.add('hidden');
             }, 5000);
@@ -938,9 +938,9 @@
         document.getElementById('artist-profile-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            console.log('📝 Formulario enviado, validando datos...');
+            console.log(' Formulario enviado, validando datos...');
             
-            // VALIDACIÓN COMPLETA ANTES DE ENVIAR
+            // VALIDACIN COMPLETA ANTES DE ENVIAR
             const email = document.querySelector('input[name="email"]').value.trim();
             const password = document.querySelector('input[name="password"]')?.value;
             const confirmPassword = document.getElementById('confirmPassword')?.value;
@@ -951,23 +951,23 @@
             const provincia = document.querySelector('select[name="provincia"]').value;
             const ciudad = document.querySelector('select[name="ciudad"]').value;
             
-            // Validar contraseña (nuevo)
+            // Validar contrasea (nuevo)
             if (!password || password.length < 6) {
-                alert('❌ La contraseña debe tener al menos 6 caracteres');
+                alert(' La contrasea debe tener al menos 6 caracteres');
                 document.getElementById('password').focus();
                 return;
             }
             
-            // Validar confirmación de contraseña
+            // Validar confirmacin de contrasea
             if (password !== confirmPassword) {
-                alert('❌ Las contraseñas no coinciden. Por favor, verificá que ambas sean iguales.');
+                alert(' Las contraseas no coinciden. Por favor, verific que ambas sean iguales.');
                 document.getElementById('confirmPassword').focus();
                 return;
             }
             
-            // Validar datos básicos
+            // Validar datos bsicos
             if (!email || !whatsapp || !nombre || !apellido) {
-                alert('❌ Por favor, completa todos los datos básicos (Paso 1)');
+                alert(' Por favor, completa todos los datos bsicos (Paso 1)');
                 document.querySelector('input[name="nombre"]').focus();
                 return;
             }
@@ -975,44 +975,44 @@
             // Validar email
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) {
-                alert('❌ Por favor, ingresa un email válido');
+                alert(' Por favor, ingresa un email vlido');
                 document.querySelector('input[name="email"]').focus();
                 return;
             }
             
-            // Validar nombre artístico
+            // Validar nombre artstico
             if (!nombreArtistico) {
-                alert('❌ Por favor, ingresa tu nombre artístico (Paso 2)');
+                alert(' Por favor, ingresa tu nombre artstico (Paso 2)');
                 document.querySelector('input[name="nombre_artistico"]').focus();
                 return;
             }
             
-            // Validar géneros seleccionados
+            // Validar gneros seleccionados
             const selectedGenres = document.querySelectorAll('input[name="generos[]"]:checked');
             if (selectedGenres.length === 0) {
-                alert('❌ Por favor, selecciona al menos un género musical (Paso 2)');
+                alert(' Por favor, selecciona al menos un gnero musical (Paso 2)');
                 return;
             }
             
-            // Validar ubicación
+            // Validar ubicacin
             if (!provincia || !ciudad) {
-                alert('❌ Por favor, selecciona tu provincia y ciudad (Paso 3)');
+                alert(' Por favor, selecciona tu provincia y ciudad (Paso 3)');
                 return;
             }
             
-            console.log('✅ Validación pasada, creando cuenta...');
+            console.log(' Validacin pasada, creando cuenta...');
             
-            // Deshabilitar botón submit
+            // Deshabilitar botn submit
             const submitBtn = document.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Creando cuenta...';
             
-            // 🔥 PASO 1: CREAR CUENTA EN FIREBASE AUTH
+            //  PASO 1: CREAR CUENTA EN FIREBASE AUTH
             try {
-                console.log('🔐 Creando cuenta en Firebase Auth...');
+                console.log(' Creando cuenta en Firebase Auth...');
                 const userCredential = await firebase.auth().createUserWithEmailAndPassword(email, password);
                 const user = userCredential.user;
-                console.log('✅ Usuario creado con UID:', user.uid);
+                console.log(' Usuario creado con UID:', user.uid);
                 
                 // Guardar datos temporales en Firestore
                 const tempData = {
@@ -1027,10 +1027,10 @@
                 
                 const db = firebase.firestore();
                 await db.collection('pending_registrations').doc(user.uid).set(tempData);
-                console.log('✅ Datos temporales guardados');
+                console.log(' Datos temporales guardados');
                 
-                // 📧 PASO 2: ENVIAR EMAIL CON LINK
-                console.log('📧 Enviando email de verificación...');
+                //  PASO 2: ENVIAR EMAIL CON LINK
+                console.log(' Enviando email de verificacin...');
                 
                 // Configurar URL de retorno (completar-registro.html)
                 const actionCodeSettings = {
@@ -1039,15 +1039,15 @@
                 };
                 
                 await user.sendEmailVerification(actionCodeSettings);
-                console.log('✅ Email enviado con link de verificación');
+                console.log(' Email enviado con link de verificacin');
                 
                 // Mostrar modal simple
                 showEmailSentModal(user.email);
             } catch (emailError) {
-                console.warn('Error enviando email de verificación:', emailError);
+                console.warn('Error enviando email de verificacin:', emailError);
             }
             
-            // Datos básicos
+            // Datos bsicos
             artistData.email = email;
             artistData.whatsapp = whatsapp;
             artistData.nombre = nombre;
@@ -1055,12 +1055,12 @@
             artistData.fechaNacimiento = formData.get('fecha_nacimiento') || '';
             artistData.dni = formData.get('dni') || '';
             
-            // Perfil artístico
+            // Perfil artstico
             artistData.nombreArtistico = nombreArtistico;
             artistData.generos = Array.from(selectedGenres).map(cb => cb.value);
             artistData.biografia = formData.get('biografia') || '';
             
-            // Ubicación
+            // Ubicacin
             artistData.provincia = provincia;
             artistData.ciudad = ciudad;
             artistData.codigoPostal = formData.get('codigo_postal') || '';
@@ -1073,14 +1073,14 @@
             try {
                 console.log('Datos del artista:', artistData);
                 
-                // 🔥 PASO 1: SUBIR FOTO A STORAGE (si existe)
+                //  PASO 1: SUBIR FOTO A STORAGE (si existe)
                 const fotoInput = document.querySelector('input[name="foto_perfil"]');
                 if (fotoInput && fotoInput.files[0]) {
                     try {
-                        console.log('📸 Subiendo foto a Firebase Storage...');
+                        console.log(' Subiendo foto a Firebase Storage...');
                         const fotoFile = fotoInput.files[0];
                         
-                        // Validar tamaño (máximo 5MB)
+                        // Validar tamao (mximo 5MB)
                         if (fotoFile.size > 5 * 1024 * 1024) {
                             throw new Error('La foto no puede superar 5MB');
                         }
@@ -1095,25 +1095,25 @@
                         
                         artistData.foto_perfil = fotoURL;
                         artistData.fotoURL = fotoURL; // Compatibilidad con perfil
-                        console.log('✅ Foto subida exitosamente:', fotoURL);
+                        console.log(' Foto subida exitosamente:', fotoURL);
                     } catch (fotoError) {
-                        console.error('❌ Error subiendo foto:', fotoError);
+                        console.error(' Error subiendo foto:', fotoError);
                         alert('Error al subir la foto: ' + fotoError.message + '. Puedes continuar sin foto.');
                         artistData.foto_perfil = '';
                     }
                 } else {
-                    console.log('📷 No se seleccionó foto de perfil');
+                    console.log(' No se seleccion foto de perfil');
                     artistData.foto_perfil = '';
                 }
                 
-                // 🎥 PASO 2: SUBIR VIDEO A STORAGE (si existe)
+                //  PASO 2: SUBIR VIDEO A STORAGE (si existe)
                 const videoInput = document.querySelector('input[name="video"]');
                 if (videoInput && videoInput.files[0]) {
                     try {
-                        console.log('🎥 Subiendo video a Firebase Storage...');
+                        console.log(' Subiendo video a Firebase Storage...');
                         const videoFile = videoInput.files[0];
                         
-                        // Validar tamaño (máximo 100MB)
+                        // Validar tamao (mximo 100MB)
                         if (videoFile.size > 100 * 1024 * 1024) {
                             throw new Error('El video no puede superar 100MB');
                         }
@@ -1136,15 +1136,15 @@
                             async () => {
                                 const videoURL = await uploadTask.snapshot.ref.getDownloadURL();
                                 artistData.video_url = videoURL;
-                                console.log('✅ Video subido exitosamente:', videoURL);
+                                console.log(' Video subido exitosamente:', videoURL);
                             }
                         );
                         
                         // Esperar a que termine la subida
                         await uploadTask;
                     } catch (videoError) {
-                        console.error('❌ Error subiendo video:', videoError);
-                        alert('Error al subir el video: ' + videoError.message + '. Puedes agregar el video después desde tu perfil.');
+                        console.error(' Error subiendo video:', videoError);
+                        alert('Error al subir el video: ' + videoError.message + '. Puedes agregar el video despus desde tu perfil.');
                         artistData.video_url = '';
                     }
                 } else {
@@ -1152,78 +1152,78 @@
                     const videoURLInput = document.querySelector('input[name="video_url"]');
                     if (videoURLInput && videoURLInput.value) {
                         artistData.video_url = videoURLInput.value;
-                        console.log('🔗 URL de video guardada:', artistData.video_url);
+                        console.log(' URL de video guardada:', artistData.video_url);
                     } else {
-                        console.log('🎬 No se proporcionó video');
+                        console.log(' No se proporcion video');
                         artistData.video_url = '';
                     }
                 }
                 
-                // 💾 PASO 3: GUARDAR EN FIRESTORE CON URLs
+                //  PASO 3: GUARDAR EN FIRESTORE CON URLs
                 if (typeof db !== 'undefined' && db) {
                     try {
-                        // Guardar en Firestore (colección correcta para trigger de email)
+                        // Guardar en Firestore (coleccin correcta para trigger de email)
                         const docRef = await db.collection('artist_profiles').add(artistData);
                         artistData.firestoreId = docRef.id; // Guardar el ID del documento
-                        console.log('✅ Perfil guardado en Firebase (artist_profiles) con ID:', docRef.id);
-                        console.log('📧 Email guardado:', artistData.email);
-                        console.log('📸 Foto URL:', artistData.foto_perfil);
+                        console.log(' Perfil guardado en Firebase (artist_profiles) con ID:', docRef.id);
+                        console.log(' Email guardado:', artistData.email);
+                        console.log(' Foto URL:', artistData.foto_perfil);
                     } catch (firebaseError) {
-                        console.warn('⚠️ No se pudo guardar en Firebase, continuando localmente:', firebaseError);
+                        console.warn(' No se pudo guardar en Firebase, continuando localmente:', firebaseError);
                     }
                 } else {
-                    console.log('📝 Firebase no disponible, guardando solo localmente');
+                    console.log(' Firebase no disponible, guardando solo localmente');
                 }
                 
                 // Mostrar mensaje de bienvenida y redirigir
                 showWelcomeAndRedirect(artistData);
                 
-                }); // Fin del callback de verificación
+                }); // Fin del callback de verificacin
                 
             } catch (error) {
-                console.error('❌ Error al crear cuenta:', error);
+                console.error(' Error al crear cuenta:', error);
                 
-                // Rehabilitar botón
+                // Rehabilitar botn
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Crear mi Perfil de Artista';
                 
                 let errorMessage = '';
                 
                 if (error.code === 'auth/email-already-in-use') {
-                    console.log('🚨🚨🚨 EMAIL YA REGISTRADO:', email);
-                    console.log('🚨 Error completo:', error);
-                    errorMessage = '⚠️ Este email ya está registrado. Si ya tienes cuenta, puedes iniciar sesión o recuperar tu contraseña.';
-                    console.log('🔔 Llamando a showAlert...');
+                    console.log(' EMAIL YA REGISTRADO:', email);
+                    console.log(' Error completo:', error);
+                    errorMessage = ' Este email ya est registrado. Si ya tienes cuenta, puedes iniciar sesin o recuperar tu contrasea.';
+                    console.log(' Llamando a showAlert...');
                     showAlert(errorMessage);
-                    console.log('✅ showAlert ejecutado');
+                    console.log(' showAlert ejecutado');
                     
-                    // Agregar botones de acción debajo de la alerta
+                    // Agregar botones de accin debajo de la alerta
                     setTimeout(() => {
                         const actionButtons = document.createElement('div');
                         actionButtons.className = 'flex gap-3 justify-center mt-4 mb-4';
                         actionButtons.innerHTML = `
                             <a href="login.html" 
                                class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-xl transition-all">
-                                <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesión
+                                <i class="fas fa-sign-in-alt mr-2"></i> Iniciar Sesin
                             </a>
                             <a href="reset-password.html" 
                                class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-3 px-6 rounded-xl transition-all">
-                                <i class="fas fa-key mr-2"></i> Recuperar Contraseña
+                                <i class="fas fa-key mr-2"></i> Recuperar Contrasea
                             </a>
                         `;
                         alertContainer.parentNode.insertBefore(actionButtons, alertContainer.nextSibling);
                         
-                        // Remover botones después de 10 segundos
+                        // Remover botones despus de 10 segundos
                         setTimeout(() => actionButtons.remove(), 10000);
                     }, 100);
                     
                     return;
                 } else if (error.code === 'auth/invalid-email') {
-                    errorMessage = '⚠️ Email inválido';
+                    errorMessage = ' Email invlido';
                 } else if (error.code === 'auth/weak-password') {
-                    errorMessage = '⚠️ La contraseña debe tener al menos 6 caracteres';
+                    errorMessage = ' La contrasea debe tener al menos 6 caracteres';
                 } else {
-                    errorMessage = '❌ Error al crear la cuenta: ' + error.message;
+                    errorMessage = ' Error al crear la cuenta: ' + error.message;
                 }
                 
                 // Mostrar alerta de error
@@ -1231,7 +1231,7 @@
             }
         });
         
-        // 📧 Modal simple - Email enviado
+        //  Modal simple - Email enviado
         function showEmailSentModal(emailAddress) {
             const modal = document.createElement('div');
             modal.id = 'emailSentModal';
@@ -1239,10 +1239,10 @@
                 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
                     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 24px; padding: 50px 40px; max-width: 550px; width: 100%; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.9);">
                         
-                        <div style="font-size: 80px; margin-bottom: 25px; animation: bounce 2s infinite;">📧</div>
+                        <div style="font-size: 80px; margin-bottom: 25px; animation: bounce 2s infinite;"></div>
                         
                         <h2 style="color: white; font-size: 32px; font-weight: bold; margin-bottom: 20px;">
-                            ¡Email Enviado!
+                            Email Enviado!
                         </h2>
                         
                         <p style="color: rgba(255,255,255,0.95); font-size: 18px; margin-bottom: 30px; line-height: 1.7;">
@@ -1252,22 +1252,22 @@
                         
                         <div style="background: rgba(255,255,255,0.15); border-radius: 16px; padding: 30px; margin-bottom: 30px; border: 2px solid rgba(255,255,255,0.2);">
                             <p style="color: white; font-size: 16px; line-height: 2; font-weight: 500;">
-                                <strong style="font-size: 18px; display: block; margin-bottom: 15px;">📋 Próximos pasos:</strong>
-                                1️⃣ Abrí tu correo electrónico<br>
-                                2️⃣ Buscá el email de <strong>VYT MUSIC</strong><br>
-                                3️⃣ Hacé <strong>click en el link</strong><br>
-                                4️⃣ ¡Tu perfil se creará automáticamente! 🎉
+                                <strong style="font-size: 18px; display: block; margin-bottom: 15px;"> Prximos pasos:</strong>
+                                1 Abr tu correo electrnico<br>
+                                2 Busc el email de <strong>VYT MUSIC</strong><br>
+                                3 Hac <strong>click en el link</strong><br>
+                                4 Tu perfil se crear automticamente! 
                             </p>
                         </div>
                         
                         <div style="background: rgba(16, 185, 129, 0.2); border-radius: 12px; padding: 20px; margin-bottom: 25px; border: 2px solid rgba(16, 185, 129, 0.4);">
                             <p style="color: #10b981; font-size: 15px; font-weight: 600;">
-                                ✨ Es muy simple: un click en el email y listo
+                                 Es muy simple: un click en el email y listo
                             </p>
                         </div>
                         
                         <p style="color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 20px;">
-                            💡 Si no ves el email, revisá tu carpeta de SPAM
+                             Si no ves el email, revis tu carpeta de SPAM
                         </p>
                         
                     </div>
@@ -1293,24 +1293,24 @@
                 <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
                     <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 24px; padding: 40px; max-width: 500px; width: 100%; text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.9);">
                         
-                        <div style="font-size: 64px; margin-bottom: 20px;">📧</div>
+                        <div style="font-size: 64px; margin-bottom: 20px;"></div>
                         
                         <h2 style="color: white; font-size: 28px; font-weight: bold; margin-bottom: 15px;">
-                            ¡Verificá tu Email!
+                            Verific tu Email!
                         </h2>
                         
                         <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin-bottom: 25px; line-height: 1.6;">
-                            Te enviamos un email de verificación a:<br>
+                            Te enviamos un email de verificacin a:<br>
                             <strong style="font-size: 18px;">${user.email}</strong>
                         </p>
                         
                         <div style="background: rgba(255,255,255,0.1); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
                             <p style="color: white; font-size: 14px; line-height: 1.8;">
                                 <strong>Pasos:</strong><br>
-                                1️⃣ Abrí tu correo electrónico<br>
-                                2️⃣ Buscá el email de VYT MUSIC<br>
-                                3️⃣ Hacé click en el link de verificación<br>
-                                4️⃣ Volvé acá y clickeá "Ya Verifiqué"
+                                1 Abr tu correo electrnico<br>
+                                2 Busc el email de VYT MUSIC<br>
+                                3 Hac click en el link de verificacin<br>
+                                4 Volv ac y clicke "Ya Verifiqu"
                             </p>
                         </div>
                         
@@ -1319,7 +1319,7 @@
                                        color: white; padding: 18px; border-radius: 12px; border: none; 
                                        font-weight: bold; font-size: 18px; cursor: pointer; margin-bottom: 15px;
                                        transition: all 0.3s; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);">
-                            <i class="fas fa-check-circle mr-2"></i> Ya Verifiqué Mi Email
+                            <i class="fas fa-check-circle mr-2"></i> Ya Verifiqu Mi Email
                         </button>
                         
                         <button id="btnResendEmail" 
@@ -1332,7 +1332,7 @@
                         </button>
                         
                         <p style="color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 20px;">
-                            Si no recibiste el email, revisá la carpeta de SPAM
+                            Si no recibiste el email, revis la carpeta de SPAM
                         </p>
                         
                     </div>
@@ -1343,7 +1343,7 @@
             
             // Handler: Verificar email
             document.getElementById('btnCheckVerification').addEventListener('click', async () => {
-                console.log('🔍 Verificando estado del email...');
+                console.log(' Verificando estado del email...');
                 
                 const checkBtn = document.getElementById('btnCheckVerification');
                 checkBtn.disabled = true;
@@ -1354,29 +1354,29 @@
                     await user.reload();
                     
                     if (user.emailVerified) {
-                        console.log('✅ Email verificado correctamente');
-                        checkBtn.innerHTML = '<i class="fas fa-check mr-2"></i> ¡Verificado!';
+                        console.log(' Email verificado correctamente');
+                        checkBtn.innerHTML = '<i class="fas fa-check mr-2"></i> Verificado!';
                         
                         // Esperar 1 segundo y cerrar modal
                         setTimeout(async () => {
                             modal.remove();
                             
-                            // AHORA SÍ CREAR EL PERFIL
-                            console.log('💾 Creando perfil de artista...');
+                            // AHORA S CREAR EL PERFIL
+                            console.log(' Creando perfil de artista...');
                             await crearPerfilArtista(user, tempData);
                             
                         }, 1000);
                         
                     } else {
-                        alert('⚠️ Aún no verificaste tu email. Por favor, hacé click en el link que te enviamos y volvé a intentar.');
+                        alert(' An no verificaste tu email. Por favor, hac click en el link que te enviamos y volv a intentar.');
                         checkBtn.disabled = false;
-                        checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Ya Verifiqué Mi Email';
+                        checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Ya Verifiqu Mi Email';
                     }
                 } catch (error) {
                     console.error('Error al verificar:', error);
-                    alert('Error al verificar el email. Intentá nuevamente.');
+                    alert('Error al verificar el email. Intent nuevamente.');
                     checkBtn.disabled = false;
-                    checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Ya Verifiqué Mi Email';
+                    checkBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i> Ya Verifiqu Mi Email';
                 }
             });
             
@@ -1384,15 +1384,15 @@
             document.getElementById('btnResendEmail').addEventListener('click', async () => {
                 try {
                     await user.sendEmailVerification();
-                    alert('✅ Email reenviado. Revisá tu bandeja de entrada.');
+                    alert(' Email reenviado. Revis tu bandeja de entrada.');
                 } catch (error) {
                     console.error('Error al reenviar:', error);
-                    alert('Error al reenviar el email. Esperá unos segundos e intentá nuevamente.');
+                    alert('Error al reenviar el email. Esper unos segundos e intent nuevamente.');
                 }
             });
         }
         
-        // 💾 Función para crear el perfil después de verificar email
+        //  Funcin para crear el perfil despus de verificar email
         async function crearPerfilArtista(user, tempData) {
             const artistData = {
                 uid: user.uid,
@@ -1417,7 +1417,7 @@
             try {
                 const db = firebase.firestore();
                 
-                // Guardar en users (para autenticación)
+                // Guardar en users (para autenticacin)
                 await db.collection('users').doc(user.uid).set({
                     uid: user.uid,
                     email: user.email,
@@ -1431,21 +1431,21 @@
                 // Guardar en artist_profiles
                 await db.collection('artist_profiles').doc(user.uid).set(artistData);
                 
-                console.log('✅ Perfil creado exitosamente');
+                console.log(' Perfil creado exitosamente');
                 
                 // Guardar en localStorage
                 localStorage.setItem('artistData', JSON.stringify(artistData));
                 localStorage.setItem('artistData_persistent', JSON.stringify(artistData));
                 localStorage.setItem('userEmail', artistData.email);
                 
-                // Mostrar mensaje de éxito y redirigir
-                alert('🎉 ¡Perfil creado exitosamente! Bienvenido ' + artistData.nombreArtistico);
+                // Mostrar mensaje de xito y redirigir
+                alert(' Perfil creado exitosamente! Bienvenido ' + artistData.nombreArtistico);
                 setTimeout(() => {
                     window.location.href = 'perfil-artista.html';
                 }, 1500);
                 
             } catch (error) {
-                console.error('❌ Error al crear perfil:', error);
+                console.error(' Error al crear perfil:', error);
                 alert('Error al guardar el perfil: ' + error.message);
             }
         }
@@ -1453,9 +1453,9 @@
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🎤 VYT MUSIC - Formulario de perfil de artista iniciado');
+            console.log(' VYT MUSIC - Formulario de perfil de artista iniciado');
             
-            // 👁️ Toggle para mostrar/ocultar contraseña
+            //  Toggle para mostrar/ocultar contrasea
             const togglePassword = document.getElementById('togglePassword');
             const passwordInput = document.getElementById('password');
             const eyeIcon = document.getElementById('eyeIcon');
@@ -1468,7 +1468,7 @@
                 });
             }
             
-            // 👁️ Toggle para confirmar contraseña
+            //  Toggle para confirmar contrasea
             const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
             const confirmPasswordInput = document.getElementById('confirmPassword');
             const eyeIconConfirm = document.getElementById('eyeIconConfirm');
@@ -1481,7 +1481,7 @@
                 });
             }
             
-            // ✅ Validación en tiempo real de contraseñas
+            //  Validacin en tiempo real de contraseas
             const passwordMatch = document.getElementById('passwordMatch');
             
             if (confirmPasswordInput && passwordInput && passwordMatch) {
@@ -1490,10 +1490,10 @@
                         passwordMatch.textContent = '';
                         passwordMatch.className = 'text-gray-400 text-sm mt-1';
                     } else if (passwordInput.value === confirmPasswordInput.value) {
-                        passwordMatch.textContent = '✅ Las contraseñas coinciden';
+                        passwordMatch.textContent = ' Las contraseas coinciden';
                         passwordMatch.className = 'text-green-400 text-sm mt-1';
                     } else {
-                        passwordMatch.textContent = '❌ Las contraseñas no coinciden';
+                        passwordMatch.textContent = ' Las contraseas no coinciden';
                         passwordMatch.className = 'text-red-400 text-sm mt-1';
                     }
                 });
@@ -1501,10 +1501,10 @@
                 passwordInput.addEventListener('input', () => {
                     if (confirmPasswordInput.value !== '') {
                         if (passwordInput.value === confirmPasswordInput.value) {
-                            passwordMatch.textContent = '✅ Las contraseñas coinciden';
+                            passwordMatch.textContent = ' Las contraseas coinciden';
                             passwordMatch.className = 'text-green-400 text-sm mt-1';
                         } else {
-                            passwordMatch.textContent = '❌ Las contraseñas no coinciden';
+                            passwordMatch.textContent = ' Las contraseas no coinciden';
                             passwordMatch.className = 'text-red-400 text-sm mt-1';
                         }
                     }
@@ -1514,13 +1514,13 @@
             // Verificar si ya hay usuario autenticado y redirigir
             firebase.auth().onAuthStateChanged((user) => {
                 if (user && user.emailVerified) {
-                    console.log('✅ Usuario ya autenticado y verificado:', user.email);
+                    console.log(' Usuario ya autenticado y verificado:', user.email);
                     // Verificar si ya tiene perfil de artista
                     firebase.firestore().collection('artist_profiles').doc(user.uid).get()
                         .then(doc => {
                             if (doc.exists) {
                                 console.log('Usuario ya tiene perfil, redirigiendo...');
-                                alert('✅ Ya tenés un perfil de artista creado.\n\nTe vamos a redirigir a tu perfil.');
+                                alert(' Ya tens un perfil de artista creado.\n\nTe vamos a redirigir a tu perfil.');
                                 window.location.href = 'perfil-artista.html';
                             } else {
                                 console.log('Usuario sin perfil, puede crear uno nuevo');
@@ -1533,16 +1533,16 @@
                             }
                         });
                 } else if (user && !user.emailVerified) {
-                    console.log('⚠️ Usuario autenticado pero email NO verificado');
-                    alert('⚠️ Tu email aún no está verificado.\n\nPor favor, revisá tu correo y hacé click en el link de verificación.');
+                    console.log(' Usuario autenticado pero email NO verificado');
+                    alert(' Tu email an no est verificado.\n\nPor favor, revis tu correo y hac click en el link de verificacin.');
                 } else {
-                    console.log('📝 Formulario listo para nuevo registro');
+                    console.log(' Formulario listo para nuevo registro');
                 }
             });
         });
     </script>
 
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     </body>

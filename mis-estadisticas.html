@@ -1,12 +1,12 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Estadísticas - VYT Music</title>
+    <title>Mis Estadsticas - VYT Music</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Revisa tus estadísticas y progreso en VYT Music">
+    <meta name="description" content="Revisa tus estadsticas y progreso en VYT Music">
     <meta name="theme-color" content="#1a1a2e">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -26,7 +26,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Navegación y Gamificación -->
+    <!-- Navegacin y Gamificacin -->
     <script src="/src/navigation-component.js"></script>
     <script src="/src/gamification-enhanced.js"></script>
     
@@ -34,7 +34,7 @@
     <script src="/src/firebase-integration.js" defer></script>
     <script src="/src/firebase-integration.js" defer></script>
     
-    <!-- Estilos dinámicos -->
+    <!-- Estilos dinmicos -->
     <link rel="stylesheet" href="/src/dynamic-assets-styles.css">
     
     <style>
@@ -76,7 +76,7 @@
             font-size: 1.125rem;
         }
 
-        /* Grid de estadísticas */
+        /* Grid de estadsticas */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -84,7 +84,7 @@
             margin-bottom: 2rem;
         }
 
-        /* Tarjeta de estadística */
+        /* Tarjeta de estadstica */
         .stat-card {
             background: #181818;
             border-radius: 12px;
@@ -149,7 +149,7 @@
             color: #00d4ff;
         }
 
-        /* Título de la tarjeta */
+        /* Ttulo de la tarjeta */
         .stat-title {
             font-size: 0.875rem;
             font-weight: 700;
@@ -159,7 +159,7 @@
             margin-bottom: 0.5rem;
         }
 
-        /* Número principal */
+        /* Nmero principal */
         .stat-number {
             font-size: 3rem;
             font-weight: 900;
@@ -219,7 +219,7 @@
             background: linear-gradient(90deg, #00d4ff, #4ce3ff);
         }
 
-        /* Sección de videos */
+        /* Seccin de videos */
         .videos-section {
             background: #181818;
             border-radius: 12px;
@@ -284,7 +284,7 @@
             gap: 0.25rem;
         }
 
-        /* Botón de acción */
+        /* Botn de accin */
         .action-btn {
             background: #1ed760;
             color: #000;
@@ -544,14 +544,14 @@
         <!-- Header -->
         <div class="dashboard-header">
             <h1 class="dashboard-title">
-                <i class="fas fa-chart-line"></i> Mis Estadísticas
+                <i class="fas fa-chart-line"></i> Mis Estadsticas
             </h1>
             <p class="dashboard-subtitle" id="welcomeMessage">
                 Cargando datos...
             </p>
         </div>
 
-        <!-- Grid de estadísticas principales -->
+        <!-- Grid de estadsticas principales -->
         <div class="stats-grid" id="statsGrid">
             <!-- Tarjeta de Votos -->
             <div class="stat-card votos">
@@ -574,7 +574,7 @@
                 <div class="stat-icon">
                     <i class="fas fa-trophy"></i>
                 </div>
-                <div class="stat-title">Posición en Ranking</div>
+                <div class="stat-title">Posicin en Ranking</div>
                 <div class="stat-number" id="rankingNumber">#--</div>
                 <div class="stat-trend">
                     <i class="fas fa-medal"></i>
@@ -602,12 +602,12 @@
             </div>
         </div>
 
-        <!-- FASE 11: Sección de Feedback del Jurado -->
+        <!-- FASE 11: Seccin de Feedback del Jurado -->
         <div id="feedbackJuradoSection" style="display: none;">
-            <!-- Se llenará dinámicamente con loadFeedbackJurado() -->
+            <!-- Se llenar dinmicamente con loadFeedbackJurado() -->
         </div>
 
-        <!-- Botones de acción -->
+        <!-- Botones de accin -->
         <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem;">
             <a href="/subir-video.html" class="action-btn">
                 <i class="fas fa-video"></i> Subir Nuevo Video
@@ -617,13 +617,13 @@
             </a>
         </div>
 
-        <!-- Sección de videos -->
+        <!-- Seccin de videos -->
         <div class="videos-section">
             <h2 class="videos-title">
                 <i class="fas fa-play-circle"></i> Mis Videos
             </h2>
             <div class="videos-grid" id="videosGrid">
-                <!-- Se llenará dinámicamente -->
+                <!-- Se llenar dinmicamente -->
             </div>
         </div>
     </div>
@@ -638,7 +638,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
             firebase.auth().onAuthStateChanged(async (user) => {
                 if (!user) {
-                    showToast('Debes iniciar sesión para ver tus estadísticas', 'error', 3000);
+                    showToast('Debes iniciar sesin para ver tus estadsticas', 'error', 3000);
                     setTimeout(() => {
                         window.location.href = '/index.html#comenzar-ahora';
                     }, 1500);
@@ -650,9 +650,9 @@
                 
                 // Actualizar mensaje de bienvenida
                 document.getElementById('welcomeMessage').textContent = 
-                    `Hola, ${user.displayName || user.email}! Aquí está tu progreso.`;
+                    `Hola, ${user.displayName || user.email}! Aqu est tu progreso.`;
 
-                // Cargar estadísticas
+                // Cargar estadsticas
                 await loadStatistics();
                 
                 // FASE 11: Cargar feedback del jurado
@@ -663,23 +663,23 @@
             });
         });
 
-        // Cargar estadísticas
+        // Cargar estadsticas
         async function loadStatistics() {
             try {
-                showLoading('Cargando estadísticas...');
+                showLoading('Cargando estadsticas...');
 
-                // Usar firebase-integration.js si está disponible
+                // Usar firebase-integration.js si est disponible
                 if (window.FirebaseIntegration && FirebaseIntegration.isAuthenticated()) {
                     const stats = await FirebaseIntegration.getUserStatistics(currentUser.uid);
                     displayStatistics(stats);
 
                     // Setup listeners en tiempo real
                     FirebaseIntegration.subscribeToUserVotes(currentUser.uid, (data) => {
-                        // Actualizar número si cambió
+                        // Actualizar nmero si cambi
                         const currentNumber = parseInt(document.getElementById('votosNumber').textContent) || 0;
                         if (data.totalVotos !== currentNumber) {
                             animateNumber('votosNumber', data.totalVotos, 800);
-                            showToast('¡Recibiste nuevos votos!', 'success', 2000);
+                            showToast('Recibiste nuevos votos!', 'success', 2000);
                         }
                     });
                 } else {
@@ -706,15 +706,15 @@
 
                 hideLoading();
             } catch (error) {
-                console.error('❌ Error cargando estadísticas:', error);
+                console.error(' Error cargando estadsticas:', error);
                 hideLoading();
-                showToast('Error al cargar estadísticas', 'error', 3000);
+                showToast('Error al cargar estadsticas', 'error', 3000);
             }
         }
 
-        // Mostrar estadísticas con animación
+        // Mostrar estadsticas con animacin
         function displayStatistics(stats) {
-            // Animar números
+            // Animar nmeros
             animateNumber('votosNumber', stats.votos || 0, 1500);
             animateNumber('vytMoneyNumber', stats.vytMoney || 0, 1500);
 
@@ -753,7 +753,7 @@
             }
         }
 
-        // Animar número con count-up
+        // Animar nmero con count-up
         function animateNumber(elementId, target, duration) {
             const element = document.getElementById(elementId);
             const start = parseInt(element.textContent) || 0;
@@ -794,7 +794,7 @@
             return { total, semana };
         }
 
-        // Obtener posición en ranking
+        // Obtener posicin en ranking
         async function getRankingPosition() {
             // Obtener todos los artistas ordenados por votos
             const snapshot = await db.collection('artist_profiles')
@@ -853,7 +853,7 @@
                 grid.innerHTML = `
                     <div class="empty-state">
                         <i class="fas fa-video-slash"></i>
-                        <h3 style="color: white; margin-bottom: 0.5rem;">No has subido videos aún</h3>
+                        <h3 style="color: white; margin-bottom: 0.5rem;">No has subido videos an</h3>
                         <p>Comienza a participar subiendo tu primer video</p>
                     </div>
                 `;
@@ -899,11 +899,11 @@
                         totalVotos += doc.data().votos || 0;
                     });
 
-                    // Actualizar número si cambió
+                    // Actualizar nmero si cambi
                     const currentNumber = parseInt(document.getElementById('votosNumber').textContent) || 0;
                     if (totalVotos !== currentNumber) {
                         animateNumber('votosNumber', totalVotos, 800);
-                        showToast('¡Recibiste nuevos votos!', 'success', 2000);
+                        showToast('Recibiste nuevos votos!', 'success', 2000);
                     }
                 });
         }
@@ -922,7 +922,7 @@
             try {
                 const feedbackSection = document.getElementById('feedbackJuradoSection');
                 
-                // Buscar participación activa del usuario con feedback_jurado
+                // Buscar participacin activa del usuario con feedback_jurado
                 const snapshot = await db.collection('participaciones')
                     .where('uid', '==', currentUser.uid)
                     .where('estado', '==', 'activo')
@@ -951,9 +951,9 @@
                     }
                 }
                 
-                console.log('✅ Feedback del jurado cargado');
+                console.log(' Feedback del jurado cargado');
             } catch (error) {
-                console.error('❌ Error cargando feedback del jurado:', error);
+                console.error(' Error cargando feedback del jurado:', error);
             }
         }
         
@@ -963,7 +963,7 @@
             // Calcular estrellas (puntaje de 10 convertir a 5 estrellas)
             const estrellasFull = Math.floor(puntaje / 2);
             const estrellasEmpty = 5 - estrellasFull;
-            const estrellasHTML = '⭐'.repeat(estrellasFull) + 
+            const estrellasHTML = ''.repeat(estrellasFull) + 
                                  '<i class="fas fa-star empty"></i>'.repeat(estrellasEmpty);
             
             // Formatear fecha
@@ -977,25 +977,25 @@
                 });
             }
             
-            // Mapear categoría a icono y texto
+            // Mapear categora a icono y texto
             const categorias = {
-                'vocal': { icon: '🎤', nombre: 'Técnica Vocal' },
-                'interpretacion': { icon: '🎭', nombre: 'Interpretación' },
-                'presencia': { icon: '⭐', nombre: 'Presencia Escénica' },
-                'originalidad': { icon: '💡', nombre: 'Originalidad' }
+                'vocal': { icon: '', nombre: 'Tcnica Vocal' },
+                'interpretacion': { icon: '', nombre: 'Interpretacin' },
+                'presencia': { icon: '', nombre: 'Presencia Escnica' },
+                'originalidad': { icon: '', nombre: 'Originalidad' }
             };
             
-            const catInfo = categorias[categoria] || { icon: '🎵', nombre: categoria || 'General' };
+            const catInfo = categorias[categoria] || { icon: '', nombre: categoria || 'General' };
             
             // Mensaje motivacional si es aspirante
             let mensajeMotivacional = '';
             if (participacion.ready_for_next_round) {
                 mensajeMotivacional = `
                     <div class="mensaje-motivacional">
-                        <div class="icon">🌟</div>
+                        <div class="icon"></div>
                         <div class="text">
-                            <strong>¡Sigue sumando!</strong> Estás preparándote para la próxima etapa. 
-                            Practica con el feedback recibido y vuelve más fuerte.
+                            <strong>Sigue sumando!</strong> Ests preparndote para la prxima etapa. 
+                            Practica con el feedback recibido y vuelve ms fuerte.
                         </div>
                     </div>
                 `;
@@ -1008,7 +1008,7 @@
                             <i class="fas fa-gavel"></i>
                         </div>
                         <div>
-                            <h2 class="feedback-title">🎭 Evaluación del Jurado</h2>
+                            <h2 class="feedback-title"> Evaluacin del Jurado</h2>
                             <p style="color: #b3b3b3; font-size: 0.9rem;">Feedback profesional para tu mejora</p>
                         </div>
                     </div>
@@ -1031,7 +1031,7 @@
                     </div>
                     
                     <div class="comentario-jurado">
-                        <div class="label">💬 Comentario del Jurado</div>
+                        <div class="label"> Comentario del Jurado</div>
                         <p>${comentario || 'Sin comentario adicional.'}</p>
                     </div>
                     
@@ -1059,14 +1059,14 @@
                     <div class="feedback-jurado-card">
                         <div class="mensaje-sin-feedback">
                             <i class="fas fa-hourglass-half"></i>
-                            <p><strong>Tu video aún no ha sido evaluado por el jurado</strong></p>
-                            <p style="font-size: 0.9rem;">El jurado revisará tu video pronto. Mientras tanto, ¡sigue practicando!</p>
+                            <p><strong>Tu video an no ha sido evaluado por el jurado</strong></p>
+                            <p style="font-size: 0.9rem;">El jurado revisar tu video pronto. Mientras tanto, sigue practicando!</p>
                         </div>
                         <div class="mensaje-motivacional">
-                            <div class="icon">🌟</div>
+                            <div class="icon"></div>
                             <div class="text">
-                                <strong>¡Eres aspirante!</strong> Sigue sumando votos y mejorando tu técnica. 
-                                Cada voto cuenta para la próxima etapa.
+                                <strong>Eres aspirante!</strong> Sigue sumando votos y mejorando tu tcnica. 
+                                Cada voto cuenta para la prxima etapa.
                             </div>
                         </div>
                     </div>
@@ -1076,8 +1076,8 @@
                     <div class="feedback-jurado-card">
                         <div class="mensaje-sin-feedback">
                             <i class="fas fa-hourglass-half"></i>
-                            <p><strong>Tu video aún no ha sido evaluado por el jurado</strong></p>
-                            <p style="font-size: 0.9rem;">El jurado revisará tu video pronto.</p>
+                            <p><strong>Tu video an no ha sido evaluado por el jurado</strong></p>
+                            <p style="font-size: 0.9rem;">El jurado revisar tu video pronto.</p>
                         </div>
                     </div>
                 `;

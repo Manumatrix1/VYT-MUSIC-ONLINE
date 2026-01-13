@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ï»¿<!DOCTYPE html>
 <html lang="es">
 <head>
     <script src="/sw-register.js"></script>
@@ -7,7 +7,7 @@
     <title>VYT MUSIC - Principal</title>
     
     <!-- PWA Meta Tags -->
-    <meta name="description" content="VYT Music - Plataforma de certámenes de canto online. Inscríbete, vota y gana premios.">
+    <meta name="description" content="VYT Music - Plataforma de certmenes de canto online. Inscrbete, vota y gana premios.">
     <meta name="theme-color" content="#00d9ff">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -20,7 +20,7 @@
     <!-- Icons -->
     <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/icon-32x32.png">
     <link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192x192.png">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768273951">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
@@ -31,16 +31,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- Empty States -->
-    <link rel="stylesheet" href="/src/empty-states.css?v=1768273951">
+    <link rel="stylesheet" href="/src/empty-states.css?v=1768337820">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Sistema de fondos dinámicos -->
+    <!-- Sistema de fondos dinmicos -->
     <script src="src/dynamic-background.js" defer></script>
     
-    <!-- Sistema de navegación -->
+    <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
     
@@ -107,10 +107,10 @@
         <main class="container">
             <section class="hero-section">
                 <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
-                    <span class="icon-mic"></span> ¡Bienvenido a VYT Music!
+                    <span class="icon-mic"></span> Bienvenido a VYT Music!
                 </h1>
                 <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
-                    La plataforma de certámenes de canto más grande de Argentina. Descubre talentos, 
+                    La plataforma de certmenes de canto ms grande de Argentina. Descubre talentos, 
                     compite con los mejores y haz que tu voz se escuche.
                 </p>
 
@@ -128,21 +128,22 @@
         </main>
     </div>
 
-    <!-- Navegación unificada cargada por navigation.js -->
+    <!-- Navegacin unificada cargada por navigation.js -->
 
     <!-- Firebase y Auth -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-    <script src="firebase-config.js?v=1768273951"></script>
-    <script src="src/auth-handler.js?v=1768273951"></script>
-    <script src="/src/auth-guard.js?v=1768273951"></script>
-    <script src="/src/empty-states.js?v=1768273951"></script>
+    <script src="firebase-config.js?v=1768337820"></script>
+    <script src="src/auth-handler.js?v=1768337820"></script>
+    <script src="/src/auth-guard.js?v=1768337820"></script>
+    <script src="/src/empty-states.js?v=1768337820"></script>
+    <script src="/src/nav-global.js?v=1768337820"></script>
     
     <script>
-        console.log('?? VYT MUSIC - Versión simple sin dependencias externas');
+        console.log('?? VYT MUSIC - Versin simple sin dependencias externas');
         
-        // PROTECCIÓN DE RUTA - Verificar autenticación
+        // PROTECCIN DE RUTA - Verificar autenticacin
         function checkAuth() {
             if (window.authHandler && window.authHandler.initialized) {
                 if (!window.authHandler.isLoggedIn()) {
@@ -159,17 +160,17 @@
         
         checkAuth();
         
-        // Verificar que la navegación se cargó
+        // Verificar que la navegacin se carg
         setTimeout(() => {
             const nav = document.querySelector('.bottom-navigation');
             if (nav) {
-                console.log('? Navegación cargada correctamente');
+                console.log('? Navegacin cargada correctamente');
             } else {
-                console.log('? Error: Navegación no encontrada');
+                console.log('? Error: Navegacin no encontrada');
             }
         }, 100);
 
-        // FUNCIONES DEL MENÚ
+        // FUNCIONES DEL MEN
         function toggleMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             if (menuOverlay.classList.contains('active')) {
@@ -183,24 +184,24 @@
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            console.log('?? Menú sidebar abierto desde la derecha');
+            console.log('?? Men sidebar abierto desde la derecha');
         }
 
         function closeMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            console.log('?? Menú sidebar cerrado');
+            console.log('?? Men sidebar cerrado');
         }
 
         function showContact() {
-            alert('?? Contacto VYT MUSIC\n\n?? Email: info@vytmusic.com\n?? WhatsApp: +54 9 11 1234-5678\n?? Web: vytmusic.com\n\n¡Estamos aquí para ayudarte!');
+            alert('?? Contacto VYT MUSIC\n\n?? Email: info@vytmusic.com\n?? WhatsApp: +54 9 11 1234-5678\n?? Web: vytmusic.com\n\nEstamos aqu para ayudarte!');
             closeMenu();
         }
 
 
 
-        // Cerrar menú con tecla ESC
+        // Cerrar men con tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeMenu();
@@ -208,7 +209,7 @@
         });
     </script>
     
-    <!-- Sistema de Gamificación VYT -->
+    <!-- Sistema de Gamificacin VYT -->
     <script type="module" src="/src/jackpot-widget.js"></script>
     <script type="module" src="/src/vyt-guide.js"></script>
 </body>

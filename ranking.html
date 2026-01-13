@@ -14,12 +14,18 @@
     <meta name="apple-mobile-web-app-title" content="VYT Music">
     <link rel="manifest" href="/manifest.json">
     <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/icon-32x32.png">
-    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1767433485">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
     
-    <!-- Animaciones y Gamificación -->
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Mobile Fixes -->
+    <link rel="stylesheet" href="/mobile-fixes.css">
+    
+    <!-- Animaciones y Gamificacin -->
     <link rel="stylesheet" href="/src/animations.css">
     <script src="/src/gamification.js"></script>
     
@@ -33,19 +39,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="icon-control.css?v=20250929">
+    <link rel="stylesheet" href="icon-control.css?v=1768337820">
     
-    <!-- Sistema de Navegación Unificado -->
+    <!-- Sistema de Navegacin Unificado -->
     <script src="/src/navigation-component.js"></script>
     
-    <!-- Sistema de Gamificación Mejorado -->
+    <!-- Sistema de Gamificacin Mejorado -->
     <script src="/src/gamification-enhanced.js"></script>
     
-    <!-- Sistema de fondos dinámicos -->
+    <!-- Sistema de fondos dinmicos -->
     <script src="src/dynamic-background.js"></script>
     
-    <script src="firebase-config.js"></script>
-    
+    <script src="firebase-config.js"></script>    <script src="/src/auth-guard.js"></script>
+    <script src="/src/nav-global.js"></script>    
     <style>
         body {
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
@@ -244,7 +250,7 @@
             box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
         }
         
-        /* ======= MENÚ HAMBURGUESA ======= */
+        /* ======= MEN HAMBURGUESA ======= */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -350,13 +356,13 @@
         <!-- Header -->
         <header class="text-center mb-12">
             <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" class="w-32 mx-auto mb-4">
-            <h1 class="text-5xl font-bold text-white mb-4">🏆 Ranking de Artistas</h1>
+            <h1 class="text-5xl font-bold text-white mb-4"> Ranking de Artistas</h1>
             <p class="text-gray-300 text-lg max-w-3xl mx-auto">
-                Descubre quiénes lideran el certamen. Vota por tu artista favorito y ayúdalo a subir en el ranking.
+                Descubre quines lideran el certamen. Vota por tu artista favorito y aydalo a subir en el ranking.
             </p>
         </header>
 
-        <!-- Estadísticas Generales -->
+        <!-- Estadsticas Generales -->
         <div class="container mx-auto px-4 pb-32 max-w-6xl">
             <div class="stats-grid">
                 <div class="stat-card">
@@ -369,7 +375,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="text-3xl font-bold text-purple-400 mb-2" id="stat-certamenes">0</div>
-                    <div class="text-gray-300">Certámenes Activos</div>
+                    <div class="text-gray-300">Certmenes Activos</div>
                 </div>
                 <div class="stat-card">
                     <div class="text-3xl font-bold text-yellow-400 mb-2" id="stat-premios">$0</div>
@@ -379,25 +385,25 @@
 
             <!-- Filtros Fase 11: Sistema Federal -->
             <div class="filter-section">
-                <h3>🎯 Filtrar por Estado</h3>
+                <h3> Filtrar por Estado</h3>
                 <div class="filter-row">
                     <button class="filter-btn active" onclick="filterByEstado('todos')" data-filter="todos">
-                        📊 Todos
+                         Todos
                     </button>
                     <button class="filter-btn" onclick="filterByEstado('clasificados')" data-filter="clasificados">
-                        🏆 Clasificados (Top 30)
+                         Clasificados (Top 30)
                     </button>
                     <button class="filter-btn" onclick="filterByEstado('aspirantes')" data-filter="aspirantes">
-                        🌟 Aspirantes
+                         Aspirantes
                     </button>
                 </div>
             </div>
             
             <div class="filter-section mb-8">
-                <h3>📍 Filtrar por Zona</h3>
+                <h3> Filtrar por Zona</h3>
                 <div class="filter-row">
                     <button class="filter-btn active" onclick="filterByZona('todas')" data-zona="todas">
-                        🗺️ Todas las zonas
+                         Todas las zonas
                     </button>
                     <button class="filter-btn" onclick="filterByZona('norte')" data-zona="norte">
                         Norte
@@ -424,8 +430,8 @@
                 <div id="podium-container" class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
                     <div class="text-center text-gray-400 col-span-3 py-12">
                         <i class="fas fa-trophy text-6xl mb-4 opacity-20"></i>
-                        <p class="text-lg">Aún no hay artistas en el podium</p>
-                        <p class="text-sm mt-2">¡Inscribite y comenzá a votar!</p>
+                        <p class="text-lg">An no hay artistas en el podium</p>
+                        <p class="text-sm mt-2">Inscribite y comenz a votar!</p>
                     </div>
                 </div>
             </div>
@@ -454,15 +460,15 @@
             // Simular voto
             console.log(`Votando por artista ${artistId}`);
             
-            // Aquí conectarías con Firebase
-            alert('¡Voto registrado! Gracias por tu participación.');
+            // Aqu conectaras con Firebase
+            alert('Voto registrado! Gracias por tu participacin.');
             
             // Actualizar contador visualmente
             updateVoteCount(artistId);
         }
 
         function updateVoteCount(artistId) {
-            // Lógica para actualizar el contador de votos en tiempo real
+            // Lgica para actualizar el contador de votos en tiempo real
             console.log(`Actualizando votos para artista ${artistId}`);
         }
 
@@ -479,7 +485,7 @@
             });
             event.target.classList.add('active');
             
-            console.log(`🎯 Filtrando por estado: ${estado}`);
+            console.log(` Filtrando por estado: ${estado}`);
             
             // Recargar ranking con filtros aplicados
             loadRankingData();
@@ -494,23 +500,23 @@
             });
             event.target.classList.add('active');
             
-            console.log(`📍 Filtrando por zona: ${zona}`);
+            console.log(` Filtrando por zona: ${zona}`);
             
             // Recargar ranking con filtros aplicados
             loadRankingData();
         }
 
         function loadMoreArtists() {
-            // Cargar más artistas del ranking
-            console.log('Cargando más artistas...');
+            // Cargar ms artistas del ranking
+            console.log('Cargando ms artistas...');
             
-            // Aquí cargarías más datos desde Firebase
-            alert('Próximamente: más artistas en el ranking');
+            // Aqu cargaras ms datos desde Firebase
+            alert('Prximamente: ms artistas en el ranking');
         }
 
         // Inicializar
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('🏆 VYT MUSIC - Ranking iniciado');
+            console.log(' VYT MUSIC - Ranking iniciado');
             
             // Cargar ranking desde Firebase
             loadRankingData();
@@ -546,8 +552,8 @@
                     document.getElementById('ranking-list').innerHTML = `
                         <div class="text-center text-gray-400 py-12">
                             <i class="fas fa-users text-6xl mb-4 opacity-20"></i>
-                            <p class="text-lg">Aún no hay artistas registrados</p>
-                            <p class="text-sm mt-2">¡Sé el primero en inscribirte!</p>
+                            <p class="text-lg">An no hay artistas registrados</p>
+                            <p class="text-sm mt-2">S el primero en inscribirte!</p>
                             <a href="crear-perfil-artista.html" class="inline-block mt-4 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-medium transition-colors">
                                 Crear Perfil
                             </a>
@@ -556,8 +562,8 @@
                     document.getElementById('podium-container').innerHTML = `
                         <div class="text-center text-gray-400 col-span-3 py-12">
                             <i class="fas fa-trophy text-6xl mb-4 opacity-20"></i>
-                            <p class="text-lg">Aún no hay artistas en el podium</p>
-                            <p class="text-sm mt-2">¡Inscribite y comenzá a votar!</p>
+                            <p class="text-lg">An no hay artistas en el podium</p>
+                            <p class="text-sm mt-2">Inscribite y comenz a votar!</p>
                         </div>
                     `;
                     return;
@@ -609,12 +615,12 @@
                 // Badges de Fase 11
                 let estadoBadge = '';
                 if (artista.clasificado) {
-                    estadoBadge = '<span class="badge-clasificado">🏆 Clasificado</span>';
+                    estadoBadge = '<span class="badge-clasificado"> Clasificado</span>';
                 } else if (artista.ready_for_next_round) {
-                    estadoBadge = '<span class="badge-aspirante">🌟 Aspirante</span>';
+                    estadoBadge = '<span class="badge-aspirante"> Aspirante</span>';
                 }
                 
-                let zonaBadge = artista.zona ? `<span class="badge-zona">📍 ${artista.zona.charAt(0).toUpperCase() + artista.zona.slice(1)}</span>` : '';
+                let zonaBadge = artista.zona ? `<span class="badge-zona"> ${artista.zona.charAt(0).toUpperCase() + artista.zona.slice(1)}</span>` : '';
                 
                 let puntajeJurado = '';
                 if (artista.feedback_jurado && artista.feedback_jurado.puntaje) {
@@ -629,7 +635,7 @@
                         ${estadoBadge}
                     </h3>
                     <div class="mb-2">${zonaBadge}</div>
-                    <p class="text-gray-300 mb-2">${artista.cancion || artista.titulo_cancion || 'Sin título'}</p>
+                    <p class="text-gray-300 mb-2">${artista.cancion || artista.titulo_cancion || 'Sin ttulo'}</p>
                     <p class="${pos.color} font-bold text-lg mb-2">${artista.votos || artista.votos_totales || 0} votos</p>
                     ${puntajeJurado}
                     <button class="vote-button w-full mt-4" onclick="voteArtist('${artista.id}')">
@@ -646,7 +652,7 @@
             if (!artistas || artistas.length === 0) {
                 rankingList.innerHTML = `
                     <div class="text-center text-gray-400 py-8">
-                        <p>No hay más artistas en el ranking</p>
+                        <p>No hay ms artistas en el ranking</p>
                     </div>
                 `;
                 return;
@@ -655,19 +661,19 @@
             rankingList.innerHTML = '';
             
             artistas.forEach((artista, index) => {
-                const position = index + 4; // Porque top 3 ya está en podium
+                const position = index + 4; // Porque top 3 ya est en podium
                 const card = document.createElement('div');
                 card.className = 'ranking-card';
                 
                 // Badges de Fase 11
                 let estadoBadge = '';
                 if (artista.clasificado) {
-                    estadoBadge = '<span class="badge-clasificado">🏆 Clasificado</span>';
+                    estadoBadge = '<span class="badge-clasificado"> Clasificado</span>';
                 } else if (artista.ready_for_next_round) {
-                    estadoBadge = '<span class="badge-aspirante">🌟 Aspirante</span>';
+                    estadoBadge = '<span class="badge-aspirante"> Aspirante</span>';
                 }
                 
-                let zonaBadge = artista.zona ? `<span class="badge-zona">📍 ${artista.zona.charAt(0).toUpperCase() + artista.zona.slice(1)}</span>` : '';
+                let zonaBadge = artista.zona ? `<span class="badge-zona"> ${artista.zona.charAt(0).toUpperCase() + artista.zona.slice(1)}</span>` : '';
                 
                 let puntajeJurado = '';
                 if (artista.feedback_jurado && artista.feedback_jurado.puntaje) {
@@ -685,7 +691,7 @@
                                     ${estadoBadge}
                                 </h3>
                                 <div class="mb-1">${zonaBadge} ${puntajeJurado}</div>
-                                <p class="text-gray-400 text-sm">${artista.cancion || artista.titulo_cancion || 'Sin título'}</p>
+                                <p class="text-gray-400 text-sm">${artista.cancion || artista.titulo_cancion || 'Sin ttulo'}</p>
                                 <p class="text-blue-400 font-semibold">${artista.votos || artista.votos_totales || 0} votos</p>
                             </div>
                         </div>
@@ -717,7 +723,7 @@
                 });
                 document.getElementById('stat-votos').textContent = totalVotos.toLocaleString();
                 
-                // Contar certámenes activos
+                // Contar certmenes activos
                 const certamenesSnapshot = await db.collection('certamenes')
                     .where('estado', '==', 'activo')
                     .get();
@@ -732,11 +738,11 @@
                 document.getElementById('stat-premios').textContent = '$' + totalPremios.toLocaleString();
                 
             } catch (error) {
-                console.error('Error cargando estadísticas:', error);
+                console.error('Error cargando estadsticas:', error);
             }
         }
 
-        // FUNCIONES DEL MENÚ HAMBURGUESA
+        // FUNCIONES DEL MEN HAMBURGUESA
         function toggleMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             if (menuOverlay.classList.contains('active')) {
@@ -750,19 +756,19 @@
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            console.log('🔽 Menú sidebar abierto desde la derecha');
+            console.log(' Men sidebar abierto desde la derecha');
         }
 
         function closeMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            console.log('🔼 Menú sidebar cerrado');
+            console.log(' Men sidebar cerrado');
         }
 
 
 
-        // Cerrar menú con tecla ESC
+        // Cerrar men con tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeMenu();
