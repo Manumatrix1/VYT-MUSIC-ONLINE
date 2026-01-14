@@ -227,6 +227,11 @@ async function loadCertamenes() {
             });
         });
         
+        // Verificar si hay certámenes disponibles
+        if (certamenesData.length === 0) {
+            showEmptyState('certamenes');
+        }
+        
         // Cargar conteo de participantes para cada certamen
         await loadParticipantCounts();
         
@@ -237,6 +242,97 @@ async function loadCertamenes() {
         throw error;
     }
 }
+
+// Mostrar estado vacío
+function showEmptyState(type) {
+    let container, message, icon;
+    
+    switch (type) {
+        case 'certamenes':
+            container = document.getElementById('certamenesList') || document.querySelector('.certamenes-grid') || document.getElementById('vyt-certamenes-grid');
+            icon = 'fa-envelope';
+            message = {
+                title: '¡Próximamente!',
+                subtitle: 'No hay certámenes activos en este momento.',
+                action: 'Déjanos tu email y te avisaremos cuando haya novedades.',
+                showEmailForm: true
+            };
+            break;
+        case 'participantes':
+            container = document.getElementById('participantesList');
+            icon = 'fa-users';
+            message = {
+                title: 'Aún no hay participantes',
+                subtitle: 'Sé el primero en inscribirte a este certamen',
+                buttonText: 'Inscribirse Ahora',
+                buttonLink: '/inscripcion-unificada.html'
+            };
+            break;
+        case 'ranking':
+            container = document.getElementById('rankingList');
+            icon = 'fa-star';
+            message = {
+                title: 'El ranking está vacío',
+                subtitle: 'Los votos determinarán el ranking pronto'
+            };
+            break;
+        default:
+            return;
+    }
+    
+    if (container) {
+        container.innerHTML = `
+            <div class="empty-state text-center py-16 px-6 max-w-2xl mx-auto">
+                <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-blue-500/20 to-purple-500/20 mb-6">
+                    <i class="fas ${icon} text-5xl text-blue-400"></i>
+                </div>
+                <h3 class="text-3xl font-bold text-white mb-4">${message.title}</h3>
+                <p class="text-gray-300 text-lg mb-3">${message.subtitle}</p>
+                ${message.action ? `<p class="text-gray-400 mb-8 text-base">${message.action}</p>` : ''}
+                
+                ${message.showEmailForm ? `
+                    <div class="email-subscription-form max-w-md mx-auto">
+                        <form id="emailSubscriptionForm" class="flex flex-col gap-4">
+                            <div class="flex gap-2">
+                                <input 
+                                    type="email" 
+                                    id="subscriberEmail" 
+                                    placeholder="tu@email.com" 
+                                    required
+                                    class="flex-1 px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                />
+                                <button 
+                                    type="submit" 
+                                    class="px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold rounded-lg transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+                                >
+                                    <i class="fas fa-paper-plane"></i>
+                                    <span>Avisarme</span>
+                                </button>
+                            </div>
+                            <p id="subscriptionMessage" class="text-sm text-green-400 hidden"></p>
+                        </form>
+                    </div>
+                ` : ''}
+                
+                ${message.buttonText ? `
+                    <a href="${message.buttonLink}" class="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-3 rounded-full transition-all transform hover:scale-105 shadow-lg mt-6">
+                        <i class="fas ${icon}"></i>
+                        ${message.buttonText}
+                    </a>
+                ` : ''}
+            </div>
+        `;
+        
+        // Agregar listener al formulario si existe
+        if (message.showEmailForm) {
+            const form = document.getElementById('emailSubscriptionForm');
+            if (form) {
+                form.addEventListener('submit', handleEmailSubscription);
+            }
+        }
+    }
+}
+
 
 // Cargar conteo de participantes
 async function loadParticipantCounts() {
@@ -911,6 +1007,81 @@ function handleProvinciaFilter(event) {
 function applyQuickFilter(filterType) {
     // Implementar filtros rápidos
     console.log('Quick filter:', filterType);
+}
+
+// Manejar suscripción de email
+async function handleEmailSubscription(event) {
+    event.preventDefault();
+    
+    const emailInput = document.getElementById('subscriberEmail');
+    const messageEl = document.getElementById('subscriptionMessage');
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+    
+    if (!emailInput || !emailInput.value) {
+        return;
+    }
+    
+    const email = emailInput.value.trim().toLowerCase();
+    
+    // Validación básica de email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        if (messageEl) {
+            messageEl.textContent = '❌ Por favor ingresa un email válido';
+            messageEl.classList.remove('hidden', 'text-green-400');
+            messageEl.classList.add('text-red-400');
+        }
+        return;
+    }
+    
+    // Deshabilitar botón mientras se procesa
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+    }
+    
+    try {
+        // Guardar email en Firestore
+        await setDoc(doc(db, 'email_subscribers', email), {
+            email: email,
+            subscribed_at: serverTimestamp(),
+            source: 'certamenes_empty_state',
+            active: true
+        }, { merge: true });
+        
+        // Mostrar mensaje de éxito
+        if (messageEl) {
+            messageEl.textContent = '✅ ¡Listo! Te avisaremos cuando haya novedades';
+            messageEl.classList.remove('hidden', 'text-red-400');
+            messageEl.classList.add('text-green-400');
+        }
+        
+        // Limpiar input
+        emailInput.value = '';
+        
+        // Resetear botón después de 2 segundos
+        setTimeout(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Avisarme</span>';
+            }
+        }, 2000);
+        
+    } catch (error) {
+        console.error('Error saving email subscription:', error);
+        
+        if (messageEl) {
+            messageEl.textContent = '❌ Hubo un error. Intenta nuevamente';
+            messageEl.classList.remove('hidden', 'text-green-400');
+            messageEl.classList.add('text-red-400');
+        }
+        
+        // Rehabilitar botón
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> <span>Avisarme</span>';
+        }
+    }
 }
 
 // Exportar funciones necesarias para uso global
