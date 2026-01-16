@@ -86,10 +86,8 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
     <script src="firebase-config.js"></script>
-    
-    <!-- Auth Wall Protection -->
-    <script type="module" src="/src/auth-observer.js?v=3.0"></script>
     
     <!-- Auth Guard -->
     <script src="/src/auth-guard.js"></script>
@@ -156,8 +154,6 @@
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
             transition: all 0.3s ease;
         }
 
@@ -165,6 +161,40 @@
             transform: translateY(-4px);
             box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
             border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Grid responsive para certámenes */
+        .vyt-certamenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 20px 0;
+        }
+        
+        /* Mobile: 1 columna */
+        @media (max-width: 640px) {
+            .vyt-certamenes-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 12px;
+            }
+            
+            .certamen-card {
+                margin: 0;
+            }
+            
+            .hero-section {
+                padding: 24px 16px;
+                border-radius: 16px;
+            }
+        }
+        
+        /* Tablet: 2 columnas */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .vyt-certamenes-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
         }
 
         .btn-primary {

@@ -753,7 +753,7 @@ async function checkUserInscriptionStatus(userId) {
 }
 
 // Función para manejar clics en enlaces de inscripción
-async function handleSmartInscriptionClick(event, targetUrl = 'inscripcion_unificada.html') {
+async function handleSmartInscriptionClick(event, targetUrl = 'inscripcion-unificada.html') {
     try {
         const { auth } = await import('../firebase-config.js');
         const user = auth.currentUser;
@@ -803,13 +803,13 @@ function setupSmartHandlers() {
         const href = link.getAttribute('href');
         
         // Solo manejar enlaces a inscripción unificada u online
-        if (href && (href.includes('inscripcion_unificada') || href.includes('inscripcion_online'))) {
+        if (href && (href.includes('inscripcion-unificada') || href.includes('inscripcion_online'))) {
             // Remover event listeners existentes
             link.removeEventListener('click', handleSmartInscriptionClick);
             
             // Agregar nuevo event listener
             link.addEventListener('click', (event) => {
-                handleSmartInscriptionClick(event, 'inscripcion_unificada.html');
+                handleSmartInscriptionClick(event, 'inscripcion-unificada.html');
             });
         }
     });

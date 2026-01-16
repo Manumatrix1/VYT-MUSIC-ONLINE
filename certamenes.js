@@ -1,45 +1,120 @@
 // Certámenes JS - Sistema completo de votación y rankings
-import { db } from './firebase-config.js';
-import { 
-    collection, 
-    getDocs, 
-    doc, 
-    getDoc, 
-    setDoc, 
-    updateDoc, 
-    query, 
-    where, 
-    orderBy, 
-    limit,
-    serverTimestamp,
-    increment,
-    onSnapshot,
-    writeBatch
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+// NOTA: Usa Firebase v8 global (window.firebase)
 
 // Variables globales
+let db; // Inicializado cuando Firebase esté listo
 let certamenesData = [];
 let rankingData = [];
 let currentUser = null;
 let userVotes = {};
 let currentSection = 'home';
 
-// Inicializar la aplicación
-document.addEventListener('DOMContentLoaded', async () => {
-    await initializeApp();
-    setupEventListeners();
-    setupNavigation();
-    await loadAllData();
+// Variable global para estado de inicialización
+let isInitialized = false;
+
+// Esperar a que Firebase esté listo
+document.addEventListener('firebaseReady', async () => {
+    console.log('🔥 [CERTAMENES] Evento firebaseReady recibido');
+    if (!db && !isInitialized) {
+        try {
+            db = firebase.firestore();
+            console.log('✅ [CERTAMENES] Firestore inicializado desde evento');
+            await initializeCertamenesApp();
+        } catch (error) {
+            console.error('❌ [CERTAMENES] Error obteniendo Firestore:', error);
+        }
+    } else {
+        console.log('⚠️ [CERTAMENES] Ya inicializado o db ya existe');
+    }
 });
 
-// Inicializar aplicación
+// Inicializar la aplicación
+async function initializeCertamenesApp() {
+    if (isInitialized) {
+        console.log('⚠️ [CERTAMENES] Ya inicializado, saltando...');
+        return;
+    }
+    
+    try {
+        console.log('🎵 [CERTAMENES] Inicializando App...');
+        
+        // Verificar que db esté disponible
+        if (!db) {
+            console.warn('⚠️ [CERTAMENES] db no disponible todavía');
+            return;
+        }
+        
+        isInitialized = true;
+        
+        // Verificar usuario
+        currentUser = localStorage.getItem('vyt_user_id') || generateUserId();
+        localStorage.setItem('vyt_user_id', currentUser);
+        console.log('👤 [CERTAMENES] Usuario:', currentUser);
+        
+        // Setup listeners
+        setupEventListeners();
+        setupNavigation();
+        
+        // Cargar datos
+        await loadAllData();
+        
+        console.log('✅ [CERTAMENES] App inicializada exitosamente');
+    } catch (error) {
+        console.error('❌ [CERTAMENES] Error inicializando:', error);
+        isInitialized = false;
+        showEmptyState('certamenes');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+    console.log('📄 [CERTAMENES] DOMContentLoaded');
+    
+    // Estrategia 1: Verificar si Firebase YA está inicializado
+    if (window.firebase && window.firebase.apps && window.firebase.apps.length > 0) {
+        console.log('🔥 [CERTAMENES] Firebase YA inicializado (apps.length=' + window.firebase.apps.length + ')');
+        try {
+            db = firebase.firestore();
+            console.log('✅ [CERTAMENES] Firestore desde DOMContentLoaded');
+            await initializeCertamenesApp();
+        } catch (error) {
+            console.error('❌ [CERTAMENES] Error en DOMContentLoaded:', error);
+        }
+    } else {
+        console.log('⏳ [CERTAMENES] Esperando firebaseReady... (registrando listener)');
+        
+        // Estrategia 2: Polling de respaldo cada 500ms durante 10s
+        let attempts = 0;
+        const maxAttempts = 20; // 20 * 500ms = 10 segundos
+        const pollInterval = setInterval(async () => {
+            attempts++;
+            if (window.firebase && window.firebase.apps && window.firebase.apps.length > 0 && !isInitialized) {
+                console.log(`🔥 [CERTAMENES] Firebase detectado en polling (intento ${attempts})`);
+                clearInterval(pollInterval);
+                try {
+                    db = firebase.firestore();
+                    await initializeCertamenesApp();
+                } catch (error) {
+                    console.error('❌ [CERTAMENES] Error en polling:', error);
+                }
+            } else if (attempts >= maxAttempts) {
+                console.error('❌ [CERTAMENES] Timeout esperando Firebase (10s)');
+                clearInterval(pollInterval);
+                showEmptyState('certamenes');
+            }
+        }, 500);
+    }
+});
+
+// Inicializar aplicación (legacy - mantener para compatibilidad)
 async function initializeApp() {
     // Verificar usuario actual desde localStorage
     currentUser = localStorage.getItem('vyt_user_id') || generateUserId();
     localStorage.setItem('vyt_user_id', currentUser);
     
     // Cargar votos del usuario
-    await loadUserVotes();
+    if (db) {
+        await loadUserVotes();
+    }
     
     console.log('App initialized for user:', currentUser);
 }
@@ -209,13 +284,12 @@ async function loadAllData() {
 // Cargar certámenes
 async function loadCertamenes() {
     try {
-        const q = query(
-            collection(db, "certamenes_provincias"),
-            where("activo", "==", true),
-            orderBy("fecha_inicio", "desc")
-        );
+        // Firebase v8 syntax
+        const querySnapshot = await db.collection("certamenes_provinciales")
+            .where("activo", "==", true)
+            .orderBy("fecha_inicio", "desc")
+            .get();
         
-        const querySnapshot = await getDocs(q);
         certamenesData = [];
         
         querySnapshot.forEach((doc) => {
@@ -338,13 +412,12 @@ function showEmptyState(type) {
 async function loadParticipantCounts() {
     for (const certamen of certamenesData) {
         try {
-            const participantesQuery = query(
-                collection(db, "participantes_online"),
-                where("certamen_id", "==", certamen.id),
-                where("pago_completado", "==", true)
-            );
+            // Firebase v8 syntax
+            const snapshot = await db.collection("participantes_online")
+                .where("certamen_id", "==", certamen.id)
+                .where("pago_completado", "==", true)
+                .get();
             
-            const snapshot = await getDocs(participantesQuery);
             certamen.participantes_count = snapshot.size;
             
         } catch (error) {
@@ -411,52 +484,71 @@ function createCertamenCard(certamen) {
         certamen.fecha_inicio.toDate().toLocaleDateString('es-AR') :
         new Date(certamen.fecha_inicio).toLocaleDateString('es-AR');
     
+    // Determinar estado y badge
+    const isActivo = certamen.estado === 'activo';
+    const badgeText = isActivo ? 'ABIERTO' : 'PRÓXIMAMENTE';
+    const badgeBg = isActivo ? 'bg-green-500' : 'bg-yellow-500';
+    
     return `
-        <div class="certamen-card rounded-lg p-6 cursor-pointer" onclick="openCertamenDetail('${certamen.id}')">
-            <div class="relative mb-4 overflow-hidden rounded-lg">
+        <div class="certamen-card bg-gray-900 rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer" 
+             onclick="openCertamenDetail('${certamen.id}')" 
+             style="position: relative;">
+            
+            <!-- Badges flotantes sobre la imagen -->
+            <div class="absolute top-3 left-0 right-0 z-10 px-3 flex justify-between items-start pointer-events-none">
+                <span class="${badgeBg} px-2 py-1 rounded-md text-[10px] font-bold text-white shadow-lg backdrop-blur-sm" 
+                      style="background: ${isActivo ? 'rgba(34, 197, 94, 0.95)' : 'rgba(234, 179, 8, 0.95)'};">
+                    <i class="fas ${isActivo ? 'fa-fire' : 'fa-clock'} mr-1"></i>${badgeText}
+                </span>
+                <span class="bg-gray-800 bg-opacity-95 px-2 py-1 rounded-md text-[10px] font-semibold text-white shadow-lg backdrop-blur-sm">
+                    ${certamen.provincia}
+                </span>
+            </div>
+            
+            <!-- Imagen del certamen -->
+            <div class="relative overflow-hidden" style="height: 160px;">
                 <img src="${certamen.imagen_url || '/api/placeholder/300/200'}" 
                      alt="${certamen.nombre}" 
-                     class="w-full h-40 object-cover transition-transform duration-300 hover:scale-110"
+                     class="w-full h-full object-cover transition-transform duration-300 hover:scale-110"
                      onerror="this.src='/api/placeholder/300/200'">
-                <div class="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
-                    <button class="play-btn">
-                        <i class="fas fa-play"></i>
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-transparent to-transparent"></div>
+                <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300">
+                    <button class="w-14 h-14 bg-spotify-green rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-2xl">
+                        <i class="fas fa-play text-white text-xl ml-1"></i>
                     </button>
                 </div>
-                <div class="absolute top-2 right-2">
-                    <span class="bg-spotify-green px-2 py-1 rounded-full text-xs font-semibold text-white">
-                        ${certamen.provincia}
-                    </span>
-                </div>
-                <div class="absolute top-2 left-2">
-                    <span class="bg-red-500 px-2 py-1 rounded-full text-xs font-semibold text-white">
-                        <i class="fas fa-fire mr-1"></i>
-                        ACTIVO
-                    </span>
-                </div>
             </div>
-            <h3 class="text-lg font-semibold text-white mb-2 hover:text-spotify-green transition-colors">
-                ${certamen.nombre}
-            </h3>
-            <p class="text-spotify-light-gray text-sm mb-3 line-clamp-2">
-                ${certamen.descripcion || 'Participa en este emocionante certamen musical'}
-            </p>
-            <div class="flex items-center justify-between mb-3">
-                <div class="text-sm">
-                    <span class="text-spotify-green font-semibold">$${precio.toLocaleString('es-AR')}</span>
-                    <span class="text-spotify-light-gray ml-1">inscripción</span>
+            
+            <!-- Contenido del card -->
+            <div class="p-4">
+                <h3 class="text-base font-bold text-white mb-2 hover:text-spotify-green transition-colors line-clamp-2" 
+                    style="min-height: 40px;">
+                    ${certamen.nombre}
+                </h3>
+                <p class="text-gray-400 text-xs mb-3 line-clamp-2" style="min-height: 32px;">
+                    ${certamen.descripcion || 'Participa en este emocionante certamen musical'}
+                </p>
+                
+                <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-700">
+                    <div class="flex flex-col">
+                        <span class="text-spotify-green font-bold text-lg leading-tight">$${precio.toLocaleString('es-AR')}</span>
+                        <span class="text-gray-500 text-[10px]">inscripción</span>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-white font-bold text-sm">${certamen.participantes_count}</div>
+                        <div class="text-gray-500 text-[10px]">
+                            <i class="fas fa-users mr-1"></i>inscritos
+                        </div>
+                    </div>
                 </div>
-                <div class="text-xs text-spotify-light-gray">
-                    <i class="fas fa-users mr-1"></i>
-                    ${certamen.participantes_count} participantes
-                </div>
-            </div>
-            <div class="pt-3 border-t border-gray-700">
-                <div class="flex items-center justify-between text-xs text-spotify-light-gray">
-                    <span><i class="fas fa-calendar mr-1"></i>${fechaInicio}</span>
-                    <span class="text-spotify-green font-semibold">
-                        ${certamen.estado === 'activo' ? 'VOTACIÓN ABIERTA' : 'PRÓXIMAMENTE'}
+                
+                <div class="flex items-center justify-between text-xs">
+                    <span class="text-gray-400">
+                        <i class="fas fa-calendar mr-1"></i>${fechaInicio}
                     </span>
+                    <button class="bg-spotify-green hover:bg-green-600 text-white text-xs font-bold py-1 px-3 rounded-full transition-colors">
+                        Ver más
+                    </button>
                 </div>
             </div>
         </div>
@@ -469,15 +561,13 @@ async function loadTopParticipants() {
         const container = document.getElementById('topParticipants');
         if (!container) return;
         
-        // Query para obtener participantes con más votos
-        const q = query(
-            collection(db, "participantes_online"),
-            where("pago_completado", "==", true),
-            orderBy("votos_totales", "desc"),
-            limit(10)
-        );
+        // Firebase v8 syntax - Query para obtener participantes con más votos
+        const querySnapshot = await db.collection("participantes_online")
+            .where("pago_completado", "==", true)
+            .orderBy("votos_totales", "desc")
+            .limit(10)
+            .get();
         
-        const querySnapshot = await getDocs(q);
         const participants = [];
         
         querySnapshot.forEach((doc) => {
@@ -596,14 +686,13 @@ async function openCertamenDetail(certamenId) {
 // Cargar participantes de un certamen
 async function loadCertamenParticipants(certamenId) {
     try {
-        const q = query(
-            collection(db, "participantes_online"),
-            where("certamen_id", "==", certamenId),
-            where("pago_completado", "==", true),
-            orderBy("votos_totales", "desc")
-        );
+        // Firebase v8 syntax
+        const querySnapshot = await db.collection("participantes_online")
+            .where("certamen_id", "==", certamenId)
+            .where("pago_completado", "==", true)
+            .orderBy("votos_totales", "desc")
+            .get();
         
-        const querySnapshot = await getDocs(q);
         const participants = [];
         
         querySnapshot.forEach((doc) => {
@@ -667,17 +756,17 @@ async function handleVote(participantId) {
         const voteData = {
             user_id: currentUser,
             participant_id: participantId,
-            timestamp: serverTimestamp(),
+            timestamp: firebase.firestore.FieldValue.serverTimestamp(),
             ip: await getUserIP()
         };
         
-        // Guardar voto en Firestore
-        await setDoc(doc(db, "votos", `${currentUser}_${participantId}`), voteData);
+        // Guardar voto en Firestore (Firebase v8)
+        await db.collection("votos").doc(`${currentUser}_${participantId}`).set(voteData);
         
-        // Actualizar conteo de votos del participante
-        await updateDoc(doc(db, "participantes_online", participantId), {
-            votos_totales: increment(1),
-            ultima_actualizacion: serverTimestamp()
+        // Actualizar conteo de votos del participante (Firebase v8)
+        await db.collection("participantes_online").doc(participantId).update({
+            votos_totales: firebase.firestore.FieldValue.increment(1),
+            ultima_actualizacion: firebase.firestore.FieldValue.serverTimestamp()
         });
         
         // Actualizar cache local
@@ -707,13 +796,11 @@ async function loadUserVotes() {
             userVotes = JSON.parse(cached);
         }
         
-        // Cargar desde Firestore para sincronizar
-        const q = query(
-            collection(db, "votos"),
-            where("user_id", "==", currentUser)
-        );
+        // Cargar desde Firestore para sincronizar (Firebase v8)
+        const querySnapshot = await db.collection("votos")
+            .where("user_id", "==", currentUser)
+            .get();
         
-        const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
             const data = doc.data();
             userVotes[data.participant_id] = data;
@@ -1041,10 +1128,10 @@ async function handleEmailSubscription(event) {
     }
     
     try {
-        // Guardar email en Firestore
-        await setDoc(doc(db, 'email_subscribers', email), {
+        // Guardar email en Firestore (Firebase v8)
+        await db.collection('email_subscribers').doc(email).set({
             email: email,
-            subscribed_at: serverTimestamp(),
+            subscribed_at: firebase.firestore.FieldValue.serverTimestamp(),
             source: 'certamenes_empty_state',
             active: true
         }, { merge: true });

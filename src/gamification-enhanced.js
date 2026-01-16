@@ -292,10 +292,21 @@ class VYTGamification {
             this.enhanceButtons();
         });
         
-        observer.observe(document.body, {
-            childList: true,
-            subtree: true
-        });
+        // Solo observar si document.body existe
+        if (document.body) {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        } else {
+            // Si body no existe aún, esperar a DOMContentLoaded
+            document.addEventListener('DOMContentLoaded', () => {
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+            });
+        }
     }
 
     /**

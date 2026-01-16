@@ -15,19 +15,47 @@
 // CONFIGURACIÓN
 // ═══════════════════════════════════════════════════════════════════════
 
-const CACHE_VERSION = '3.1';
+const CACHE_VERSION = '3.6';
 const CACHE_NAME = `vyt-music-v${CACHE_VERSION}`;
 const RUNTIME_CACHE = `vyt-music-runtime-v${CACHE_VERSION}`;
 const CACHE_TIMEOUT = 5000; // 5 segundos timeout para network requests
 
-// Assets críticos para funcionamiento offline básico
+// Assets críticos LOCALES (NO incluir CDN externos - se cachean dinámicamente)
 const CRITICAL_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
   '/firebase-config.js',
   '/images/icons/icon-192x192.png',
-  '/images/icons/icon-512x512.png'
+  '/images/icons/icon-512x512.png',
+  // CSS críticos
+  '/style.css',
+  '/mobile-fixes.css',
+  '/design-tokens.css',
+  '/icon-control.css',
+  '/src/navigation-styles.css',
+  '/src/gamification-styles.css',
+  '/src/animations.css',
+  '/src/empty-states.css',
+  // JavaScript crítico
+  '/main.js',
+  '/sw-register.js',
+  '/src/navigation-component.js',
+  // Imagen de fondo principal
+  '/images/fotos/chica-feliz-grabando-una-cancion.jpg',
+  '/images/logos/logo-blanco.png',
+  '/images/logos/logo-negro.png',
+  '/images/logos/logo-dorado.png'
+];
+
+// CDN externos - Cache-First con StaleWhileRevalidate
+const CDN_PATTERNS = [
+  'cdnjs.cloudflare.com',
+  'www.gstatic.com/firebasejs',
+  'cdn.tailwindcss.com',
+  'fonts.googleapis.com',
+  'fonts.gstatic.com',
+  'i.ibb.co'
 ];
 
 // URLs que SIEMPRE deben ir a la red (no cachear)
@@ -142,7 +170,12 @@ self.addEventListener('fetch', (event) => {
     return; // Dejar que el browser maneje la petición normalmente
   }
 
-  // Estrategia según tipo de recurso
+  // CDN externos: NO INTERCEPTAR - el browser los maneja mejor sin SW
+  if (isCDNRequest(url)) {
+    return; // Dejar pasar sin interceptar
+  }
+
+  // Estrategia según tipo de recurso LOCAL
   if (isApiRequest(url)) {
     // APIs y datos dinámicos: NETWORK-FIRST con timeout
     event.respondWith(networkFirstWithTimeout(request, CACHE_TIMEOUT));
@@ -242,6 +275,13 @@ function offlineFallback(request) {
  */
 function shouldBypassCache(url) {
   return NETWORK_ONLY_URLS.some(pattern => url.href.includes(pattern));
+}
+
+/**
+ * Detectar peticiones a CDN externos
+ */
+function isCDNRequest(url) {
+  return CDN_PATTERNS.some(pattern => url.href.includes(pattern));
 }
 
 /**

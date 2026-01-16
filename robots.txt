@@ -15,7 +15,7 @@ Disallow: *.sh
 
 # Allow important pages
 Allow: /principal.html
-Allow: /inscripcion_unificada.html
+Allow: /inscripcion-unificada.html
 Allow: /resultados.html
 Allow: /reglamento.html
 Allow: /nosotros.html

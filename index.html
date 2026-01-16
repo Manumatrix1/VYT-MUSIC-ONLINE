@@ -155,10 +155,15 @@
             background: #000 !important;
         }
         
-        /* ANIMACIONES GAMIFICADAS */
+        /* ANIMACIONES GAMIFICADAS - AZUL/ROSA NEÓN */
         @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 15px rgba(234, 179, 8, 0.5)); }
-            50% { filter: drop-shadow(0 0 30px rgba(234, 179, 8, 0.9)); }
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6)); }
+            50% { filter: drop-shadow(0 0 30px rgba(236, 72, 153, 0.9)); }
+        }
+        
+        @keyframes glow-text {
+            0%, 100% { text-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
+            50% { text-shadow: 0 0 40px rgba(236, 72, 153, 1); }
         }
         
         @keyframes scaleUp {
@@ -175,15 +180,15 @@
             animation: bounce-slow 3s ease-in-out infinite;
         }
         
-        /* Partículas flotantes */
+        /* Partículas flotantes - AZUL/ROSA NEÓN */
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(234, 179, 8, 0.8);
+            width: 5px;
+            height: 5px;
+            background: linear-gradient(45deg, rgba(59, 130, 246, 0.9), rgba(236, 72, 153, 0.9));
             border-radius: 50%;
             animation: float 15s infinite ease-in-out;
-            box-shadow: 0 0 10px rgba(234, 179, 8, 0.8);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 10px rgba(236, 72, 153, 0.6);
         }
         
         .particle-1 {
@@ -223,21 +228,36 @@
                 opacity: 1;
             }
             50% {
-                transform: translate(100px, -100px) scale(2);
-                opacity: 0.8;
+                transform: translate(100px, -100px) scale(2.5);
+                opacity: 0.9;
             }
             90% {
                 opacity: 1;
             }
         }
         
-        /* Efecto hover en botones */
+        /* Efecto hover y clic en botones */
         .user-type-btn:hover {
             animation: none !important;
         }
         
         .user-type-btn:active {
-            transform: scale(0.95) !important;
+            transform: scale(0.92) !important;
+            box-shadow: inset 0 4px 12px rgba(0,0,0,0.4) !important;
+        }
+        
+        /* Efecto de pulso en botón seleccionado */
+        .user-type-btn.selected {
+            animation: pulse-neon 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes pulse-neon {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(236, 72, 153, 0.9);
+            }
         }
     </style>
     
@@ -362,7 +382,7 @@
                  alt="Música" 
                  class="w-full h-full object-cover opacity-40 animate-pulse-slow"
                  style="animation: scaleUp 20s ease-in-out infinite alternate;">
-            <div class="absolute inset-0 bg-gradient-to-br from-purple-900/80 via-black/90 to-pink-900/80"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/85 via-black/95 to-pink-600/80"></div>
             <!-- Partículas animadas -->
             <div class="absolute inset-0 overflow-hidden">
                 <div class="particle particle-1"></div>
@@ -372,7 +392,7 @@
             </div>
         </div>
         
-        <div class="relative z-10 bg-black/60 backdrop-blur-xl rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border-2 border-yellow-400/40 transform hover:scale-[1.02] transition-all duration-300" style="box-shadow: 0 0 60px rgba(234, 179, 8, 0.3);">
+        <div class="relative z-10 bg-black/70 backdrop-blur-xl rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border-2 border-blue-500/50 transform hover:scale-[1.02] transition-all duration-300" style="box-shadow: 0 0 60px rgba(59, 130, 246, 0.4), 0 0 40px rgba(236, 72, 153, 0.3);">
             
             <!-- Contenido del modal -->
             <div class="relative z-10 p-8">
@@ -384,61 +404,65 @@
                              class="w-48 mx-auto mb-4 drop-shadow-2xl animate-bounce-slow"
                              style="filter: drop-shadow(0 0 20px rgba(234, 179, 8, 0.6)); animation: glow 2s ease-in-out infinite alternate;">
                     </div>
-                    <h2 class="text-5xl font-black bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent mb-3 animate-pulse" 
-                        style="text-shadow: 0 0 30px rgba(234, 179, 8, 0.5);">¡Bienvenido! 🎤</h2>
-                    <p class="text-yellow-300 font-bold text-xl drop-shadow-md">🎵 Unite al Certamen de Canto 🎵</p>
+                    <h2 class="text-5xl font-black bg-gradient-to-r from-blue-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent mb-3" 
+                        style="text-shadow: 0 0 30px rgba(59, 130, 246, 0.6); animation: glow-text 2s ease-in-out infinite alternate;">¡Bienvenido! 🎤</h2>
+                    <p class="text-cyan-300 font-bold text-xl drop-shadow-md">🎵 Unite al Certamen de Canto 🎵</p>
                 </div>
 
-                <!-- SELECTOR DE TIPO DE USUARIO - GAMIFICADO -->
+                <!-- SELECTOR DE TIPO DE USUARIO - TECNOLÓGICO NEÓN -->
                 <div class="mb-6 space-y-3">
-                    <p class="text-white font-bold text-center mb-4 text-xl drop-shadow-lg animate-pulse">✨ ¿Qué querés hacer? ✨</p>
+                    <p class="text-cyan-300 font-bold text-center mb-4 text-lg drop-shadow-lg">Seleccioná tu perfil:</p>
                     <div class="grid grid-cols-2 gap-4">
                         <button type="button" id="selectArtistaBtn" onclick="selectUserType('artista')" 
-                                class="user-type-btn border-3 border-purple-400 bg-gradient-to-br from-purple-600/60 to-pink-600/60 backdrop-blur-sm text-white font-black py-6 px-4 rounded-2xl transition-all hover:from-purple-500 hover:to-pink-500 hover:scale-110 hover:rotate-2 shadow-xl transform"
-                                style="box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); transition: all 0.3s ease;">
-                            <i class="fas fa-microphone text-4xl mb-2 block drop-shadow-lg animate-bounce-slow"></i>
+                                class="user-type-btn border-2 border-pink-500 bg-gradient-to-br from-pink-600/50 to-purple-600/50 backdrop-blur-sm text-white font-black py-6 px-4 rounded-2xl transition-all hover:from-pink-500/70 hover:to-purple-500/70 hover:scale-105 shadow-xl transform active:scale-95 active:shadow-inner"
+                                style="box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); transition: all 0.2s ease;">
+                            <i class="fas fa-microphone text-4xl mb-2 block drop-shadow-lg"></i>
                             <span class="text-base drop-shadow-md">SOY ARTISTA</span>
-                            <div class="text-xs mt-1 text-purple-200">🎤 Participar</div>
+                            <div class="text-xs mt-1 text-pink-200">Competir y ganar</div>
                         </button>
                         <button type="button" id="selectVisitanteBtn" onclick="selectUserType('visitante')" 
-                                class="user-type-btn border-3 border-cyan-400 bg-gradient-to-br from-cyan-600/60 to-blue-600/60 backdrop-blur-sm text-white font-black py-6 px-4 rounded-2xl transition-all hover:from-cyan-500 hover:to-blue-500 hover:scale-110 hover:-rotate-2 shadow-xl transform"
-                                style="box-shadow: 0 0 25px rgba(34, 211, 238, 0.5); transition: all 0.3s ease;">
-                            <i class="fas fa-star text-4xl mb-2 block drop-shadow-lg animate-pulse"></i>
+                                class="user-type-btn border-2 border-cyan-400 bg-gradient-to-br from-cyan-500/50 to-blue-600/50 backdrop-blur-sm text-white font-black py-6 px-4 rounded-2xl transition-all hover:from-cyan-400/70 hover:to-blue-500/70 hover:scale-105 shadow-xl transform active:scale-95 active:shadow-inner"
+                                style="box-shadow: 0 0 30px rgba(34, 211, 238, 0.6); transition: all 0.2s ease;">
+                            <i class="fas fa-star text-4xl mb-2 block drop-shadow-lg"></i>
                             <span class="text-base drop-shadow-md">SOY VISITANTE</span>
-                            <div class="text-xs mt-1 text-cyan-200">⭐ Votar</div>
+                            <div class="text-xs mt-1 text-cyan-200">Votar y apoyar</div>
                         </button>
                     </div>
                     <input type="hidden" id="selectedUserType" value="visitante">
+                    <p class="text-xs text-center text-cyan-300/80 mt-2 bg-black/40 rounded-lg p-2">
+                        💡 <strong>Artistas:</strong> completarán perfil después del login<br>
+                        💡 <strong>Visitantes:</strong> acceso directo a votación
+                    </p>
                 </div>
 
                 <div id="loginAlert" class="hidden mb-4 p-3 rounded-lg text-sm bg-red-500/80 text-white font-semibold"></div>
 
-                <!-- Login Social - GAMIFICADO -->
+                <!-- Login Social - TECNOLÓGICO -->
                 <div class="space-y-3 mb-6">
-                    <button id="btnGoogleModal" class="w-full bg-white hover:bg-gray-50 text-gray-800 font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-105 hover:shadow-2xl transform"
-                            style="box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3);">
+                    <button id="btnGoogleModal" class="w-full bg-white hover:bg-gray-50 text-gray-800 font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-105 hover:shadow-2xl transform active:scale-95"
+                            style="box-shadow: 0 4px 20px rgba(255, 255, 255, 0.3); transition: all 0.2s ease;">
                         <svg width="24" height="24" viewBox="0 0 20 20">
                             <path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
                             <path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/>
                             <path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/>
                             <path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/>
                         </svg>
-                        <span>Continuar con Google</span>
+                        <span>Iniciar con Google</span>
                     </button>
 
-                    <button id="btnFacebookModal" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-105 transform"
-                            style="box-shadow: 0 4px 20px rgba(37, 99, 235, 0.5);">
+                    <button id="btnFacebookModal" class="w-full bg-gradient-to-r from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-105 transform active:scale-95"
+                            style="box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5); transition: all 0.2s ease;">
                         <i class="fab fa-facebook-f text-2xl"></i>
-                        <span>Continuar con Facebook</span>
+                        <span>Iniciar con Facebook</span>
                     </button>
                 </div>
 
                 <div class="relative my-6">
                     <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t-2 border-yellow-500/50"></div>
+                        <div class="w-full border-t-2 border-cyan-500/50"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
-                        <span class="px-4 bg-black/60 text-yellow-400 font-bold backdrop-blur-sm rounded-full">o con email</span>
+                        <span class="px-4 bg-black/60 text-cyan-300 font-bold backdrop-blur-sm rounded-full">o con email</span>
                     </div>
                 </div>
 
@@ -812,26 +836,38 @@
             }
         }
 
-        // Modal de Login
+        // Modal de Login - MEJORADO CON FEEDBACK VISUAL
         function selectUserType(type) {
             // Guardar selección
             document.getElementById('selectedUserType').value = type;
             localStorage.setItem('pendingUserType', type);
             
-            // Actualizar UI - resaltar botón seleccionado
+            // Actualizar UI - resaltar botón seleccionado con animación
             const artistaBtn = document.getElementById('selectArtistaBtn');
             const visitanteBtn = document.getElementById('selectVisitanteBtn');
             
-            artistaBtn.classList.remove('ring-4', 'ring-purple-500', 'bg-purple-600/60');
-            visitanteBtn.classList.remove('ring-4', 'ring-blue-500', 'bg-blue-600/60');
+            // Remover clases anteriores
+            artistaBtn.classList.remove('ring-4', 'ring-pink-400', 'selected', 'scale-110');
+            visitanteBtn.classList.remove('ring-4', 'ring-cyan-400', 'selected', 'scale-110');
             
-            if (type === 'artista') {
-                artistaBtn.classList.add('ring-4', 'ring-purple-500', 'bg-purple-600/60');
-            } else {
-                visitanteBtn.classList.add('ring-4', 'ring-blue-500', 'bg-blue-600/60');
-            }
+            // Animación de clic (efecto de presionar)
+            const selectedBtn = type === 'artista' ? artistaBtn : visitanteBtn;
+            selectedBtn.style.transform = 'scale(0.92)';
             
-            console.log('? Tipo de usuario seleccionado:', type);
+            setTimeout(() => {
+                selectedBtn.style.transform = '';
+                
+                // Agregar anillo y clase selected después de la animación
+                if (type === 'artista') {
+                    artistaBtn.classList.add('ring-4', 'ring-pink-400', 'selected', 'scale-110');
+                    console.log('🎤 ARTISTA seleccionado - Completarás datos después del login');
+                } else {
+                    visitanteBtn.classList.add('ring-4', 'ring-cyan-400', 'selected', 'scale-110');
+                    console.log('⭐ VISITANTE seleccionado - Acceso directo después del login');
+                }
+            }, 150);
+            
+            console.log('✅ Tipo de usuario seleccionado:', type);
         }
         
         function openLoginModal() {

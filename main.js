@@ -115,7 +115,7 @@ async function redirectBasedOnInscription(user) {
         window.location.href = 'perfil.html';
     } else {
         // Usuario no inscrito - redirigir a inscripción unificada
-        window.location.href = 'inscripcion_unificada.html';
+        window.location.href = 'inscripcion-unificada.html';
     }
 }
 
@@ -364,7 +364,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 });
 
                 // Para usuarios nuevos, redirigir siempre a inscripción
-                window.location.href = 'inscripcion_unificada.html'; 
+                window.location.href = 'inscripcion-unificada.html'; 
             } catch (error) {
                 console.error("Error al registrarse:", error.message);
                 let errorMessage = 'Error al registrarse.';

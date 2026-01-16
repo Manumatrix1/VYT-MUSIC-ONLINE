@@ -31,7 +31,7 @@
       "queryScope": "COLLECTION",
       "fields": [
         { "fieldPath": "activo", "order": "ASCENDING" },
-        { "fieldPath": "fecha_inicio", "order": "ASCENDING" }
+        { "fieldPath": "fecha_inicio", "order": "DESCENDING" }
       ]
     },
     {

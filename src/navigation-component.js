@@ -36,16 +36,23 @@ class VYTNavigationComponent {
      * Inicializa el sistema de navegación
      */
     async init() {
+        // Renderizar UI inmediatamente (sin esperar Firebase)
+        this.injectStyles();
+        this.createHeader();
+        this.createHamburgerMenu();
+        this.createFooter();
+        this.setupEventListeners();
+        console.log('✅ VYT Navigation Component - UI renderizado');
+        
+        // Cargar datos async (sin bloquear)
         await Promise.all([
             this.checkAuthentication(),
             this.loadSocialConfig()
         ]);
-        this.injectStyles();
-        this.createHeader();
-        this.createHamburgerMenu();
-        this.createFooter(); // Nuevo: Footer con redes sociales
-        this.setupEventListeners();
-        console.log('✅ VYT Navigation Component inicializado');
+        
+        // Actualizar UI con datos de autenticación
+        this.updateAuthUI();
+        console.log('✅ VYT Navigation Component - Datos cargados');
     }
 
     /**
@@ -106,6 +113,24 @@ class VYTNavigationComponent {
                 });
             });
         }
+    }
+
+    /**
+     * Actualiza la UI con los datos de autenticación
+     */
+    updateAuthUI() {
+        // Aquí se actualizaría la UI si fuera necesario
+        // Por ahora, el header ya se renderizó con valores por defecto
+        console.log('🔄 Auth UI actualizado:', this.isAuthenticated);
+    }
+
+    /**
+     * Actualiza menú para visitante no logueado
+     */
+    updateMenuForGuest() {
+        console.log('🔄 Menú actualizado para visitante');
+        this.isAuthenticated = false;
+        this.updateAuthUI();
     }
 
     /**
@@ -880,7 +905,7 @@ class VYTNavigationComponent {
     }
 }
 
-// Inicialización automática cuando el DOM esté listo
+// Inicialización automática cuando el DOM esté listo (NO esperar Firebase)
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
         window.vytNavigation = new VYTNavigationComponent();
