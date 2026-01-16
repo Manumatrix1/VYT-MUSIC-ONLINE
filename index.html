@@ -156,23 +156,24 @@
         }
     </style>
     
-    <!-- SCRIPT INMEDIATO: Ocultar todo hasta que se loguee -->
+    <!-- SCRIPT INMEDIATO: Mostrar solo modal hasta login -->
     <script>
         // Agregar clase modal-open INMEDIATAMENTE
         document.documentElement.classList.add('modal-open');
-        document.body.classList.add('modal-open');
         
-        // Ocultar navegación y contenido AHORA
-        const style = document.createElement('style');
-        style.textContent = `
-            body:not(.logged-in) > *:not(#loginModal):not(script):not(style) {
+        // Ocultar todo EXCEPTO el modal
+        const hideEverything = document.createElement('style');
+        hideEverything.id = 'hide-before-login';
+        hideEverything.textContent = `
+            body.modal-open > *:not(#loginModal):not(script):not(style) {
                 display: none !important;
             }
             #loginModal {
                 display: flex !important;
+                visibility: visible !important;
             }
         `;
-        document.head.appendChild(style);
+        document.head.appendChild(hideEverything);
     </script>
 </head>
 <body class="modal-open">
