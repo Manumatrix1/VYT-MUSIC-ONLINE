@@ -155,15 +155,15 @@
             background: #000 !important;
         }
         
-        /* ANIMACIONES GAMIFICADAS - AZUL/ROSA NEÓN */
+        /* ANIMACIONES - ESTILO SPOTIFY (VERDE/AZUL) */
         @keyframes glow {
-            0%, 100% { filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6)); }
-            50% { filter: drop-shadow(0 0 30px rgba(236, 72, 153, 0.9)); }
+            0%, 100% { filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.5)); }
+            50% { filter: drop-shadow(0 0 25px rgba(16, 185, 129, 0.8)); }
         }
         
         @keyframes glow-text {
-            0%, 100% { text-shadow: 0 0 20px rgba(59, 130, 246, 0.8); }
-            50% { text-shadow: 0 0 40px rgba(236, 72, 153, 1); }
+            0%, 100% { text-shadow: 0 0 20px rgba(16, 185, 129, 0.6); }
+            50% { text-shadow: 0 0 30px rgba(16, 185, 129, 0.9); }
         }
         
         @keyframes scaleUp {
@@ -180,15 +180,15 @@
             animation: bounce-slow 3s ease-in-out infinite;
         }
         
-        /* Partículas flotantes - AZUL/ROSA NEÓN */
+        /* Partículas flotantes - VERDE/AZUL SPOTIFY */
         .particle {
             position: absolute;
-            width: 5px;
-            height: 5px;
-            background: linear-gradient(45deg, rgba(59, 130, 246, 0.9), rgba(236, 72, 153, 0.9));
+            width: 4px;
+            height: 4px;
+            background: linear-gradient(45deg, rgba(16, 185, 129, 0.8), rgba(59, 130, 246, 0.6));
             border-radius: 50%;
             animation: float 15s infinite ease-in-out;
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.8), 0 0 10px rgba(236, 72, 153, 0.6);
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.6), 0 0 5px rgba(59, 130, 246, 0.4);
         }
         
         .particle-1 {
@@ -228,8 +228,8 @@
                 opacity: 1;
             }
             50% {
-                transform: translate(100px, -100px) scale(2.5);
-                opacity: 0.9;
+                transform: translate(80px, -80px) scale(2);
+                opacity: 0.7;
             }
             90% {
                 opacity: 1;
@@ -243,21 +243,11 @@
         
         .user-type-btn:active {
             transform: scale(0.92) !important;
-            box-shadow: inset 0 4px 12px rgba(0,0,0,0.4) !important;
         }
         
-        /* Efecto de pulso en botón seleccionado */
-        .user-type-btn.selected {
-            animation: pulse-neon 1.5s ease-in-out infinite;
-        }
-        
-        @keyframes pulse-neon {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(236, 72, 153, 0.9);
-            }
+        /* Efecto de fade-in para loginSection */
+        #loginSection {
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
     </style>
     
@@ -374,15 +364,15 @@
         </div>
     </div>
 
-    <!-- LOGIN MODAL - VISIBLE POR DEFECTO - GAMIFICADO -->
-    <div id="loginModal" class="fixed inset-0 flex items-center justify-center p-4" style="z-index: 999999; display: flex !important;">
+    <!-- LOGIN MODAL - RESPONSIVE PC/MOBILE -->
+    <div id="loginModal" class="fixed inset-0 flex items-center justify-center p-4 md:p-8" style="z-index: 999999; display: flex !important;">
         <!-- Fondo de imagen con overlay -->
         <div class="absolute inset-0 z-0">
             <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=1920&q=80" 
                  alt="Música" 
                  class="w-full h-full object-cover opacity-40 animate-pulse-slow"
                  style="animation: scaleUp 20s ease-in-out infinite alternate;">
-            <div class="absolute inset-0 bg-gradient-to-br from-blue-900/85 via-black/95 to-pink-600/80"></div>
+            <div class="absolute inset-0 bg-gradient-to-br from-slate-900/95 via-black/98 to-emerald-900/90"></div>
             <!-- Partículas animadas -->
             <div class="absolute inset-0 overflow-hidden">
                 <div class="particle particle-1"></div>
@@ -392,48 +382,113 @@
             </div>
         </div>
         
-        <div class="relative z-10 bg-black/70 backdrop-blur-xl rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border-2 border-blue-500/50 transform hover:scale-[1.02] transition-all duration-300" style="box-shadow: 0 0 60px rgba(59, 130, 246, 0.4), 0 0 40px rgba(236, 72, 153, 0.3);">
+        <!-- CONTENEDOR - Mobile: vertical | Desktop: horizontal -->
+        <div class="relative z-10 bg-black/80 backdrop-blur-xl rounded-3xl w-full max-w-md md:max-w-5xl shadow-2xl overflow-hidden border-2 border-emerald-500/40 transform hover:scale-[1.02] transition-all duration-300" 
+             style="box-shadow: 0 0 50px rgba(16, 185, 129, 0.3), 0 0 30px rgba(59, 130, 246, 0.2);">
             
-            <!-- Contenido del modal -->
-            <div class="relative z-10 p-8">
+            <!-- LAYOUT: Mobile vertical | Desktop horizontal -->
+            <div class="flex flex-col md:flex-row">
                 
-                <div class="text-center mb-6">
-                    <div class="relative inline-block">
+                <!-- PANEL IZQUIERDO - Solo visible en Desktop -->
+                <div class="hidden md:flex md:w-1/2 bg-gradient-to-br from-emerald-900/40 to-slate-900/60 p-12 flex-col justify-center items-center relative overflow-hidden">
+                    <!-- Decoración de fondo -->
+                    <div class="absolute inset-0 opacity-10">
+                        <div class="absolute top-10 left-10 w-32 h-32 bg-emerald-400 rounded-full blur-3xl"></div>
+                        <div class="absolute bottom-10 right-10 w-40 h-40 bg-blue-500 rounded-full blur-3xl"></div>
+                    </div>
+                    
+                    <div class="relative z-10 text-center">
                         <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" 
                              alt="VYT Music" 
-                             class="w-48 mx-auto mb-4 drop-shadow-2xl animate-bounce-slow"
-                             style="filter: drop-shadow(0 0 20px rgba(234, 179, 8, 0.6)); animation: glow 2s ease-in-out infinite alternate;">
+                             class="w-64 mx-auto mb-8 drop-shadow-2xl animate-bounce-slow"
+                             style="filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6));">
+                        
+                        <h2 class="text-5xl font-black bg-gradient-to-r from-emerald-400 to-blue-400 bg-clip-text text-transparent mb-4">
+                            VYT MUSIC
+                        </h2>
+                        <p class="text-emerald-200 text-xl mb-6">Certamen de Canto Online</p>
+                        
+                        <div class="space-y-4 text-left max-w-sm mx-auto">
+                            <div class="flex items-start gap-3 bg-black/40 rounded-xl p-4">
+                                <i class="fas fa-microphone text-emerald-400 text-2xl mt-1"></i>
+                                <div>
+                                    <h4 class="text-white font-bold mb-1">Para Artistas</h4>
+                                    <p class="text-slate-200/80 text-sm">Participá, mostrá tu talento y ganá premios increíbles</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3 bg-black/40 rounded-xl p-4">
+                                <i class="fas fa-star text-blue-400 text-2xl mt-1"></i>
+                                <div>
+                                    <h4 class="text-white font-bold mb-1">Para Visitantes</h4>
+                                    <p class="text-slate-200/80 text-sm">Votá por tus favoritos y apoyá a los talentos</p>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-start gap-3 bg-black/40 rounded-xl p-4">
+                                <i class="fas fa-trophy text-emerald-400 text-2xl mt-1"></i>
+                                <div>
+                                    <h4 class="text-white font-bold mb-1">Certámenes</h4>
+                                    <p class="text-cyan-100/80 text-sm">Local, Provincial y Nacional - elegí tu categoría</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h2 class="text-5xl font-black bg-gradient-to-r from-blue-400 via-cyan-400 to-pink-500 bg-clip-text text-transparent mb-3" 
-                        style="text-shadow: 0 0 30px rgba(59, 130, 246, 0.6); animation: glow-text 2s ease-in-out infinite alternate;">¡Bienvenido! 🎤</h2>
-                    <p class="text-cyan-300 font-bold text-xl drop-shadow-md">🎵 Unite al Certamen de Canto 🎵</p>
                 </div>
+                
+                <!-- PANEL DERECHO - Formulario (Mobile: full | Desktop: 50%) -->
+                <div class="w-full md:w-1/2 p-6 md:p-10">
+                    
+                    <!-- Logo solo en mobile -->
+                    <div class="md:hidden text-center mb-6">
+                        <div class="relative inline-block">
+                            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" 
+                                 alt="VYT Music" 
+                                 class="w-48 mx-auto mb-4 drop-shadow-2xl animate-bounce-slow"
+                                 style="filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.6)); animation: glow 2s ease-in-out infinite alternate;">
+                        </div>
+                        <h2 class="text-4xl font-black text-white mb-3" 
+                            style="text-shadow: 0 0 20px rgba(16, 185, 129, 0.4);">¡Bienvenido! 🎤</h2>
+                        <p class="text-emerald-300 font-bold text-lg drop-shadow-md">Unite al Certamen de Canto</p>
+                    </div>
+                    
+                    <!-- Título solo en desktop -->
+                    <div class="hidden md:block text-center mb-6">
+                        <h2 class="text-4xl font-black text-white mb-3">¡Bienvenido! 🎤</h2>
+                        <p class="text-emerald-300 font-bold text-xl">Comenzá tu experiencia</p>
+                    </div>
 
-                <!-- SELECTOR DE TIPO DE USUARIO - TECNOLÓGICO NEÓN -->
-                <div class="mb-6 space-y-3">
-                    <p class="text-cyan-300 font-bold text-center mb-4 text-lg drop-shadow-lg">Seleccioná tu perfil:</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button type="button" id="selectArtistaBtn" onclick="selectUserType('artista')" 
-                                class="user-type-btn border-2 border-pink-500 bg-gradient-to-br from-pink-600/50 to-purple-600/50 backdrop-blur-sm text-white font-black py-6 px-4 rounded-2xl transition-all hover:from-pink-500/70 hover:to-purple-500/70 hover:scale-105 shadow-xl transform active:scale-95 active:shadow-inner"
-                                style="box-shadow: 0 0 30px rgba(236, 72, 153, 0.6); transition: all 0.2s ease;">
-                            <i class="fas fa-microphone text-4xl mb-2 block drop-shadow-lg"></i>
-                            <span class="text-base drop-shadow-md">SOY ARTISTA</span>
-                            <div class="text-xs mt-1 text-pink-200">Competir y ganar</div>
+                <!-- AVISO: DEBES LOGUEARTE -->
+                <div class="mb-6 space-y-4">
+                    <!-- Mensaje principal -->
+                    <div class="bg-gradient-to-r from-emerald-900/50 to-slate-900/50 border-2 border-emerald-500/40 rounded-2xl p-4 text-center">
+                        <i class="fas fa-info-circle text-emerald-400 text-3xl mb-2"></i>
+                        <p class="text-white font-bold text-lg mb-1">Primero debés iniciar sesión</p>
+                        <p class="text-slate-300 text-sm">Elegí tu perfil y luego ingresá con tus datos</p>
+                    </div>
+                    
+                    <p class="text-emerald-300 font-bold text-center text-base">Seleccioná quién sos:</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" id="selectArtistaBtn" onclick="selectUserTypeAndShowLogin('artista')" 
+                                class="user-type-btn border-2 border-emerald-500/60 bg-gradient-to-br from-emerald-600/30 to-slate-800/50 backdrop-blur-sm text-white font-bold py-5 px-3 rounded-xl transition-all hover:from-emerald-600/50 hover:to-slate-700/60 hover:scale-105 shadow-lg transform active:scale-95"
+                                style="box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); transition: all 0.2s ease;">
+                            <i class="fas fa-microphone text-3xl mb-2 block text-emerald-400"></i>
+                            <span class="text-sm">SOY ARTISTA</span>
+                            <div class="text-xs mt-1 text-slate-300">Participar</div>
                         </button>
-                        <button type="button" id="selectVisitanteBtn" onclick="selectUserType('visitante')" 
-                                class="user-type-btn border-2 border-cyan-400 bg-gradient-to-br from-cyan-500/50 to-blue-600/50 backdrop-blur-sm text-white font-black py-6 px-4 rounded-2xl transition-all hover:from-cyan-400/70 hover:to-blue-500/70 hover:scale-105 shadow-xl transform active:scale-95 active:shadow-inner"
-                                style="box-shadow: 0 0 30px rgba(34, 211, 238, 0.6); transition: all 0.2s ease;">
-                            <i class="fas fa-star text-4xl mb-2 block drop-shadow-lg"></i>
-                            <span class="text-base drop-shadow-md">SOY VISITANTE</span>
-                            <div class="text-xs mt-1 text-cyan-200">Votar y apoyar</div>
+                        <button type="button" id="selectVisitanteBtn" onclick="selectUserTypeAndShowLogin('visitante')" 
+                                class="user-type-btn border-2 border-blue-500/60 bg-gradient-to-br from-blue-600/30 to-slate-800/50 backdrop-blur-sm text-white font-bold py-5 px-3 rounded-xl transition-all hover:from-blue-600/50 hover:to-slate-700/60 hover:scale-105 shadow-lg transform active:scale-95"
+                                style="box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); transition: all 0.2s ease;">
+                            <i class="fas fa-star text-3xl mb-2 block text-blue-400"></i>
+                            <span class="text-sm">SOY VISITANTE</span>
+                            <div class="text-xs mt-1 text-slate-300">Votar</div>
                         </button>
                     </div>
                     <input type="hidden" id="selectedUserType" value="visitante">
-                    <p class="text-xs text-center text-cyan-300/80 mt-2 bg-black/40 rounded-lg p-2">
-                        💡 <strong>Artistas:</strong> completarán perfil después del login<br>
-                        💡 <strong>Visitantes:</strong> acceso directo a votación
-                    </p>
                 </div>
+                
+                <!-- Sección de Login (oculta hasta seleccionar perfil) -->
+                <div id="loginSection" class="hidden">
 
                 <div id="loginAlert" class="hidden mb-4 p-3 rounded-lg text-sm bg-red-500/80 text-white font-semibold"></div>
 
@@ -459,10 +514,10 @@
 
                 <div class="relative my-6">
                     <div class="absolute inset-0 flex items-center">
-                        <div class="w-full border-t-2 border-cyan-500/50"></div>
+                        <div class="w-full border-t-2 border-emerald-500/40"></div>
                     </div>
                     <div class="relative flex justify-center text-sm">
-                        <span class="px-4 bg-black/60 text-cyan-300 font-bold backdrop-blur-sm rounded-full">o con email</span>
+                        <span class="px-4 bg-black/60 text-emerald-300 font-bold backdrop-blur-sm rounded-full">o con email</span>
                     </div>
                 </div>
 
@@ -479,22 +534,30 @@
                             <i class="fas fa-eye" id="toggleIconModal"></i>
                         </button>
                     </div>
-                    <button type="submit" id="btnLoginModal" class="w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 hover:from-yellow-500 hover:via-orange-600 hover:to-pink-600 text-white font-black py-4 rounded-xl transition-all shadow-2xl hover:scale-105 text-lg">
+                    <button type="submit" id="btnLoginModal" class="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white font-black py-4 rounded-xl transition-all shadow-xl hover:scale-105 text-lg"
+                            style="box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);">
                         <span id="loginTextModal">🎤 INICIAR SESIÓN</span>
                     </button>
                 </form>
 
                 <div class="text-center mt-6">
-                    <a href="/recuperar-contrasena.html" class="text-sm text-yellow-400 hover:text-yellow-300 font-semibold drop-shadow-lg">¿Olvidaste tu contraseña?</a>
+                    <a href="/recuperar-contrasena.html" class="text-sm text-emerald-400 hover:text-emerald-300 font-semibold drop-shadow-lg">¿Olvidaste tu contraseña?</a>
                 </div>
 
-                <div class="mt-6 pt-6 border-t-2 border-yellow-500/40 text-center">
+                <div class="mt-6 pt-6 border-t-2 border-emerald-500/30 text-center">
                     <p class="text-white/90 text-sm mb-3 font-semibold drop-shadow-md">¿No tienes cuenta?</p>
-                    <a href="register.html" class="text-yellow-400 hover:text-yellow-300 font-black text-lg drop-shadow-lg">✨ Crear Cuenta</a>
+                    <a href="register.html" class="text-emerald-400 hover:text-emerald-300 font-black text-lg drop-shadow-lg hover:underline">✨ Crear Cuenta</a>
                 </div>
+                </div>
+                <!-- Fin loginSection -->
+                </div>
+                <!-- Fin panel derecho -->
             </div>
+            <!-- Fin flex layout -->
         </div>
+        <!-- Fin contenedor modal -->
     </div>
+    <!-- Fin loginModal -->
 
     <script>
         function initCountdown() {
@@ -836,38 +899,56 @@
             }
         }
 
-        // Modal de Login - MEJORADO CON FEEDBACK VISUAL
-        function selectUserType(type) {
+        // Modal de Login - MEJORADO: Muestra formulario después de seleccionar tipo
+        function selectUserTypeAndShowLogin(type) {
             // Guardar selección
             document.getElementById('selectedUserType').value = type;
             localStorage.setItem('pendingUserType', type);
             
-            // Actualizar UI - resaltar botón seleccionado con animación
+            // Actualizar UI - resaltar botón seleccionado
             const artistaBtn = document.getElementById('selectArtistaBtn');
             const visitanteBtn = document.getElementById('selectVisitanteBtn');
             
             // Remover clases anteriores
-            artistaBtn.classList.remove('ring-4', 'ring-pink-400', 'selected', 'scale-110');
-            visitanteBtn.classList.remove('ring-4', 'ring-cyan-400', 'selected', 'scale-110');
+            artistaBtn.classList.remove('ring-4', 'ring-emerald-400', 'scale-105');
+            visitanteBtn.classList.remove('ring-4', 'ring-blue-400', 'scale-105');
             
-            // Animación de clic (efecto de presionar)
+            // Animación de clic
             const selectedBtn = type === 'artista' ? artistaBtn : visitanteBtn;
             selectedBtn.style.transform = 'scale(0.92)';
             
             setTimeout(() => {
                 selectedBtn.style.transform = '';
                 
-                // Agregar anillo y clase selected después de la animación
+                // Agregar anillo después de la animación
                 if (type === 'artista') {
-                    artistaBtn.classList.add('ring-4', 'ring-pink-400', 'selected', 'scale-110');
-                    console.log('🎤 ARTISTA seleccionado - Completarás datos después del login');
+                    artistaBtn.classList.add('ring-4', 'ring-emerald-400', 'scale-105');
+                    console.log('🎤 ARTISTA seleccionado');
                 } else {
-                    visitanteBtn.classList.add('ring-4', 'ring-cyan-400', 'selected', 'scale-110');
-                    console.log('⭐ VISITANTE seleccionado - Acceso directo después del login');
+                    visitanteBtn.classList.add('ring-4', 'ring-blue-400', 'scale-105');
+                    console.log('⭐ VISITANTE seleccionado');
                 }
+                
+                // MOSTRAR FORMULARIO DE LOGIN con animación
+                const loginSection = document.getElementById('loginSection');
+                loginSection.classList.remove('hidden');
+                loginSection.style.opacity = '0';
+                loginSection.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    loginSection.style.transition = 'all 0.4s ease';
+                    loginSection.style.opacity = '1';
+                    loginSection.style.transform = 'translateY(0)';
+                }, 50);
+                
+                // Scroll suave hacia el formulario (solo en mobile)
+                if (window.innerWidth < 768) {
+                    loginSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
             }, 150);
             
-            console.log('✅ Tipo de usuario seleccionado:', type);
+            console.log('✅ Tipo seleccionado:', type, '- Mostrando formulario de login');
         }
         
         function openLoginModal() {
