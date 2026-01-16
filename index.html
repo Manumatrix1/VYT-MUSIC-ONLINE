@@ -139,23 +139,43 @@
             box-shadow: 0 0 25px rgba(43, 183, 209, 0.5);
         }
         
-        /* OCULTAR NAVEGACIÓN CUANDO MODAL ESTÁ ABIERTO */
-        body.modal-open #vyt-navigation,
-        body.modal-open nav,
-        body.modal-open header,
-        body.modal-open .vyt-nav,
-        body.modal-open [class*="navigation"] {
+        /* OCULTAR TODO EXCEPTO MODAL CUANDO ESTÁ ABIERTO */
+        body.modal-open > *:not(#loginModal):not(script):not(style) {
             display: none !important;
             visibility: hidden !important;
-            opacity: 0 !important;
+        }
+        
+        body.modal-open #loginModal {
+            display: flex !important;
+            visibility: visible !important;
         }
         
         body.modal-open {
             overflow: hidden;
+            background: #000 !important;
         }
     </style>
+    
+    <!-- SCRIPT INMEDIATO: Ocultar todo hasta que se loguee -->
+    <script>
+        // Agregar clase modal-open INMEDIATAMENTE
+        document.documentElement.classList.add('modal-open');
+        document.body.classList.add('modal-open');
+        
+        // Ocultar navegación y contenido AHORA
+        const style = document.createElement('style');
+        style.textContent = `
+            body:not(.logged-in) > *:not(#loginModal):not(script):not(style) {
+                display: none !important;
+            }
+            #loginModal {
+                display: flex !important;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </head>
-<body>
+<body class="modal-open">
     <!-- Slider de Banners Dinmico -->
     <div id="vyt-banner-slider"></div>
     
