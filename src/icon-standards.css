@@ -1,0 +1,279 @@
+/**
+ * VYT MUSIC - ESTÁNDAR DE ICONOS
+ * Font Awesome 6.4.0 - Guía de uso unificada
+ * Fecha: 16 Enero 2026
+ */
+
+/* === CONFIGURACIÓN BASE === */
+:root {
+    --icon-color-default: #b0b8c4;
+    --icon-color-hover: #58a6ff;
+    --icon-color-active: #2dd4bf;
+    --icon-size-sm: 1rem;
+    --icon-size-md: 1.25rem;
+    --icon-size-lg: 1.5rem;
+    --icon-size-xl: 2rem;
+}
+
+/* === CLASE BASE DE ICONOS === */
+.vyt-icon {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands";
+    font-weight: 900; /* Solid icons */
+    font-size: var(--icon-size-md);
+    color: var(--icon-color-default);
+    transition: all 0.3s ease;
+    display: inline-block;
+    line-height: 1;
+}
+
+.vyt-icon:hover {
+    color: var(--icon-color-hover);
+    transform: scale(1.1);
+}
+
+.vyt-icon.active {
+    color: var(--icon-color-active);
+}
+
+/* === MAPEO DE ICONOS ESTÁNDAR === */
+/* Navegación Principal */
+.icon-home::before { content: "\f015"; } /* fa-house */
+.icon-contests::before { content: "\f091"; } /* fa-trophy */
+.icon-profile::before { content: "\f007"; } /* fa-user */
+.icon-money::before { content: "\f53a"; } /* fa-coins */
+.icon-ranking::before { content: "\f080"; } /* fa-chart-line */
+.icon-settings::before { content: "\f013"; } /* fa-gear */
+
+/* Acciones */
+.icon-logout::before { content: "\f2f5"; } /* fa-right-from-bracket */
+.icon-login::before { content: "\f2f6"; } /* fa-right-to-bracket */
+.icon-menu::before { content: "\f0c9"; } /* fa-bars */
+.icon-close::before { content: "\f00d"; } /* fa-times */
+.icon-search::before { content: "\f002"; } /* fa-magnifying-glass */
+.icon-filter::before { content: "\f0b0"; } /* fa-filter */
+.icon-upload::before { content: "\f093"; } /* fa-upload */
+.icon-download::before { content: "\f019"; } /* fa-download */
+.icon-edit::before { content: "\f044"; } /* fa-pen */
+.icon-delete::before { content: "\f2ed"; } /* fa-trash-can */
+.icon-save::before { content: "\f0c7"; } /* fa-floppy-disk */
+
+/* Social & Comunicación */
+.icon-share::before { content: "\f1e0"; } /* fa-share-nodes */
+.icon-heart::before { content: "\f004"; } /* fa-heart */
+.icon-comment::before { content: "\f075"; } /* fa-comment */
+.icon-notification::before { content: "\f0f3"; } /* fa-bell */
+.icon-message::before { content: "\f4ad"; } /* fa-comment-dots */
+
+/* Multimedia */
+.icon-play::before { content: "\f04b"; } /* fa-play */
+.icon-pause::before { content: "\f04c"; } /* fa-pause */
+.icon-stop::before { content: "\f04d"; } /* fa-stop */
+.icon-video::before { content: "\f03d"; } /* fa-video */
+.icon-microphone::before { content: "\f130"; } /* fa-microphone */
+.icon-music::before { content: "\f001"; } /* fa-music */
+.icon-image::before { content: "\f03e"; } /* fa-image */
+
+/* Estados */
+.icon-check::before { content: "\f00c"; } /* fa-check */
+.icon-times::before { content: "\f00d"; } /* fa-xmark */
+.icon-warning::before { content: "\f071"; } /* fa-triangle-exclamation */
+.icon-info::before { content: "\f05a"; } /* fa-circle-info */
+.icon-error::before { content: "\f06a"; } /* fa-circle-exclamation */
+.icon-success::before { content: "\f058"; } /* fa-circle-check */
+
+/* Navegación Secundaria */
+.icon-arrow-left::before { content: "\f060"; } /* fa-arrow-left */
+.icon-arrow-right::before { content: "\f061"; } /* fa-arrow-right */
+.icon-arrow-up::before { content: "\f062"; } /* fa-arrow-up */
+.icon-arrow-down::before { content: "\f063"; } /* fa-arrow-down */
+.icon-chevron-left::before { content: "\f053"; } /* fa-chevron-left */
+.icon-chevron-right::before { content: "\f054"; } /* fa-chevron-right */
+.icon-chevron-up::before { content: "\f077"; } /* fa-chevron-up */
+.icon-chevron-down::before { content: "\f078"; } /* fa-chevron-down */
+
+/* === TAMAÑOS === */
+.vyt-icon-sm { 
+    font-size: var(--icon-size-sm);
+}
+
+.vyt-icon-md { 
+    font-size: var(--icon-size-md);
+}
+
+.vyt-icon-lg { 
+    font-size: var(--icon-size-lg);
+}
+
+.vyt-icon-xl { 
+    font-size: var(--icon-size-xl);
+}
+
+/* === VARIANTES DE COLOR === */
+.vyt-icon-primary {
+    color: var(--color-primario, #58a6ff);
+}
+
+.vyt-icon-secondary {
+    color: var(--color-secundario, #238636);
+}
+
+.vyt-icon-accent {
+    color: var(--color-accent, #2dd4bf);
+}
+
+.vyt-icon-gold {
+    color: var(--color-oro, #FFD700);
+}
+
+.vyt-icon-danger {
+    color: #f85149;
+}
+
+.vyt-icon-success {
+    color: #3fb950;
+}
+
+.vyt-icon-warning {
+    color: #d29922;
+}
+
+.vyt-icon-muted {
+    color: var(--color-texto-secundario, #7d8590);
+}
+
+/* === ANIMACIONES === */
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+@keyframes iconSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes iconBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.vyt-icon-pulse {
+    animation: iconPulse 1.5s ease-in-out infinite;
+}
+
+.vyt-icon-spin {
+    animation: iconSpin 2s linear infinite;
+}
+
+.vyt-icon-bounce {
+    animation: iconBounce 1s ease-in-out infinite;
+}
+
+/* === BADGES EN ICONOS === */
+.vyt-icon-badge {
+    position: relative;
+}
+
+.vyt-icon-badge::after {
+    content: attr(data-badge);
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: #f85149;
+    color: white;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    min-width: 18px;
+    text-align: center;
+    line-height: 1;
+    border: 2px solid var(--color-fondo, #0d1117);
+}
+
+/* === MOBILE === */
+@media (max-width: 768px) {
+    :root {
+        --icon-size-md: 1.5rem;
+        --icon-size-lg: 1.75rem;
+        --icon-size-xl: 2.5rem;
+    }
+    
+    /* Iconos más grandes para touch */
+    .vyt-icon {
+        font-size: var(--icon-size-md);
+    }
+    
+    /* Navegación inferior */
+    .bottom-nav .vyt-icon {
+        font-size: var(--icon-size-lg);
+        margin-bottom: 4px;
+    }
+    
+    /* Aumentar área de toque */
+    .vyt-icon {
+        padding: 8px;
+        margin: -8px;
+    }
+}
+
+/* === INTEGRACIÓN CON NAVEGACIÓN === */
+.header-nav-link .vyt-icon,
+.bottom-nav a .vyt-icon {
+    transition: all 0.3s ease;
+}
+
+.header-nav-link:hover .vyt-icon,
+.header-nav-link.active .vyt-icon,
+.bottom-nav a:hover .vyt-icon,
+.bottom-nav a.active .vyt-icon {
+    color: var(--icon-color-active);
+    transform: scale(1.15);
+}
+
+/* === ACCESIBILIDAD === */
+.vyt-icon[aria-label] {
+    cursor: pointer;
+}
+
+/* Modo de alto contraste */
+@media (prefers-contrast: high) {
+    .vyt-icon {
+        color: #ffffff;
+    }
+    
+    .vyt-icon:hover {
+        color: #00d9ff;
+    }
+}
+
+/* Modo oscuro forzado */
+@media (prefers-color-scheme: dark) {
+    .vyt-icon {
+        filter: brightness(1.2);
+    }
+}
+
+/* === EJEMPLOS DE USO === */
+/*
+BÁSICO:
+<i class="vyt-icon icon-home"></i>
+
+CON TAMAÑO:
+<i class="vyt-icon icon-home vyt-icon-lg"></i>
+
+CON COLOR:
+<i class="vyt-icon icon-trophy vyt-icon-gold"></i>
+
+CON ANIMACIÓN:
+<i class="vyt-icon icon-notification vyt-icon-bounce"></i>
+
+CON BADGE:
+<i class="vyt-icon icon-notification vyt-icon-badge" data-badge="3"></i>
+
+EN BOTÓN:
+<button>
+    <i class="vyt-icon icon-save"></i>
+    <span>Guardar</span>
+</button>
+*/

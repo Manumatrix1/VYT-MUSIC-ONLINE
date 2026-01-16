@@ -1,0 +1,583 @@
+/**
+ * VYT MUSIC - FIXES MOBILE CRÍTICOS
+ * Soluciones copy-paste para problemas identificados
+ * Fecha: 16 Enero 2026
+ * 
+ * INSTRUCCIONES:
+ * 1. Respaldar style.css y mobile-fixes.css
+ * 2. Aplicar estos cambios en los archivos correspondientes
+ * 3. Testear en móvil antes de deploy
+ */
+
+/* ========================================
+   PARTE 1: REEMPLAZAR EN style.css
+   Desde línea ~847 hasta ~880
+   ======================================== */
+
+/* --- Certamenes Online Section - MOBILE FIRST --- */
+.certamen-card {
+    background-color: var(--color-card);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: background-color 0.3s, transform 0.3s;
+    text-decoration: none;
+    color: var(--color-texto-principal);
+    display: flex;
+    position: relative;
+    
+    /* Mobile: Horizontal list layout (por defecto) */
+    flex-direction: row;
+    align-items: center;
+    padding: 0.75rem;
+    gap: 0.75rem;
+    min-height: 70px;
+    max-height: 90px;
+}
+
+/* Desktop: Grid cuadrado (768px+) */
+@media (min-width: 768px) {
+    .certamen-card {
+        display: block;
+        aspect-ratio: 1 / 1;
+        padding: 0;
+        min-height: unset;
+        max-height: unset;
+    }
+}
+
+.certamen-card:hover {
+    background-color: #3a3a3a;
+    transform: translateY(-4px);
+}
+
+.certamen-card img {
+    /* Mobile: Imagen pequeña a la izquierda */
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+}
+
+/* Desktop: Imagen full cover */
+@media (min-width: 768px) {
+    .certamen-card img {
+        width: 100%;
+        height: 100%;
+        border-radius: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+
+.certamen-card:hover img {
+    transform: scale(1.05);
+}
+
+.certamen-card-info {
+    /* Mobile: Info inline sin background */
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Desktop: Info sobre imagen con gradiente */
+@media (min-width: 768px) {
+    .certamen-card-info {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 1rem;
+        background: linear-gradient(to top, rgba(0,0,0,0.95), rgba(0,0,0,0.5) 80%, transparent);
+    }
+}
+
+.certamen-card-info h4 {
+    font-weight: 700;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.7);
+    margin: 0;
+    line-height: 1.2;
+}
+
+/* Desktop: Título más grande */
+@media (min-width: 768px) {
+    .certamen-card-info h4 {
+        font-size: 1.1rem;
+        white-space: normal;
+        line-height: 1.3;
+    }
+}
+
+.certamen-card-info p {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    margin: 2px 0 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Desktop: Subtítulo más visible */
+@media (min-width: 768px) {
+    .certamen-card-info p {
+        font-size: 0.85rem;
+        margin-top: 4px;
+    }
+}
+
+/* Grid container responsive */
+.certamenes-grid,
+.contests-grid,
+.vyt-certamenes-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+/* Mobile: 1 columna */
+@media (max-width: 767px) {
+    .certamenes-grid,
+    .contests-grid,
+    .vyt-certamenes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Tablet: 2 columnas */
+@media (min-width: 768px) and (max-width: 1023px) {
+    .certamenes-grid,
+    .contests-grid,
+    .vyt-certamenes-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+}
+
+/* Desktop: 3-4 columnas */
+@media (min-width: 1024px) {
+    .certamenes-grid,
+    .contests-grid,
+    .vyt-certamenes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+}
+
+
+/* ========================================
+   PARTE 2: AGREGAR AL FINAL DE mobile-fixes.css
+   ======================================== */
+
+/* ===== TOUCH TARGETS - ACCESIBILIDAD MÓVIL ===== */
+@media (max-width: 768px) {
+  /* Todos los botones deben tener mínimo 44x44px (estándar Apple/Google) */
+  button:not(.icon-only),
+  a.btn,
+  .btn-primary,
+  .btn-secondary,
+  input[type="submit"],
+  input[type="button"] {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px 20px !important;
+    font-size: 0.95rem !important;
+  }
+
+  /* Iconos solos pueden ser más pequeños si tienen padding suficiente */
+  button.icon-only,
+  .btn-icon {
+    min-height: 44px !important;
+    min-width: 44px !important;
+    padding: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Espaciado entre elementos clickeables */
+  .certamen-card + .certamen-card {
+    margin-top: 0.75rem !important;
+  }
+  
+  .btn + .btn {
+    margin-top: 12px !important;
+  }
+
+  /* Feedback visual al tocar */
+  button:active,
+  a.btn:active,
+  .certamen-card:active {
+    opacity: 0.7 !important;
+    transform: scale(0.98) !important;
+    transition: all 0.1s ease !important;
+  }
+
+  /* Inputs más grandes para mejor uso */
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="tel"],
+  textarea,
+  select {
+    min-height: 44px !important;
+    font-size: 16px !important; /* Evita zoom automático en iOS */
+    padding: 12px 16px !important;
+  }
+}
+
+/* ===== OVERFLOW Y SCROLL SUAVE ===== */
+@media (max-width: 768px) {
+  /* Evitar scroll horizontal */
+  body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  /* Contenedores con scroll horizontal suave */
+  .horizontal-scroll {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    scroll-behavior: smooth !important;
+  }
+
+  /* Ocultar scrollbar pero mantener funcionalidad */
+  .horizontal-scroll::-webkit-scrollbar {
+    display: none !important;
+  }
+  
+  .horizontal-scroll {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+}
+
+/* ===== MEJORAS DE CONTRASTE MOBILE ===== */
+@media (max-width: 768px) {
+  /* Textos más legibles sobre fondos */
+  .text-overlay,
+  .certamen-card-info h4,
+  .certamen-card-info p {
+    text-shadow: 
+      1px 1px 3px rgba(0,0,0,0.9),
+      0 0 8px rgba(0,0,0,0.8) !important;
+  }
+
+  /* Fondos más oscuros para mejor legibilidad */
+  .hero-section,
+  .modal-content,
+  .card {
+    background-color: rgba(13, 17, 23, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+  }
+}
+
+/* ===== MODAL RESPONSIVO ===== */
+@media (max-width: 768px) {
+  /* Modales ocupan casi toda la pantalla */
+  .modal-backdrop {
+    padding: 1rem !important;
+  }
+
+  .modal-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+  }
+
+  /* Botón cerrar más grande */
+  .modal-close,
+  [onclick*="close"] {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    font-size: 1.5rem !important;
+  }
+}
+
+/* ===== MEJORAS DE RENDIMIENTO ===== */
+@media (max-width: 768px) {
+  /* Reducir animaciones en dispositivos de gama baja */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Optimizar imágenes */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  /* Desactivar hover en touch devices */
+  @media (hover: none) {
+    .certamen-card:hover,
+    button:hover,
+    a:hover {
+      transform: none !important;
+    }
+  }
+}
+
+/* ===== FIX PARA NOTCH DE iPhone ===== */
+@supports (padding: max(0px)) {
+  @media (max-width: 768px) {
+    .header {
+      padding-top: max(1rem, env(safe-area-inset-top)) !important;
+    }
+
+    .bottom-nav {
+      padding-bottom: max(0.5rem, env(safe-area-inset-bottom)) !important;
+    }
+
+    .main-content {
+      padding-bottom: max(80px, calc(65px + env(safe-area-inset-bottom))) !important;
+    }
+  }
+}
+
+/* ===== LANDSCAPE MODE (móvil horizontal) ===== */
+@media (max-width: 812px) and (orientation: landscape) {
+  /* Header más compacto */
+  .header {
+    padding: 0.5rem 1rem !important;
+  }
+
+  /* Navegación inferior oculta en landscape */
+  .bottom-nav {
+    display: none !important;
+  }
+
+  /* Mostrar navegación desktop en landscape */
+  .header-nav {
+    display: flex !important;
+  }
+
+  /* Reducir espacios verticales */
+  .hero-section,
+  .section {
+    padding: 1rem !important;
+  }
+}
+
+
+/* ========================================
+   PARTE 3: REEMPLAZAR EN certamenes.html
+   Buscar línea ~123 y reemplazar CSS inline
+   ======================================== */
+
+/* Grid responsive para certámenes */
+.vyt-certamenes-grid {
+    display: grid;
+    gap: 24px;
+    padding: 20px 0;
+}
+
+/* Mobile: 1 columna */
+@media (max-width: 640px) {
+    .vyt-certamenes-grid {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+        padding: 12px !important;
+    }
+}
+
+/* Tablet: 2 columnas */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .vyt-certamenes-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 20px !important;
+    }
+}
+
+/* Desktop: 3-4 columnas */
+@media (min-width: 1025px) {
+    .vyt-certamenes-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)) !important;
+        gap: 24px !important;
+    }
+}
+
+
+/* ========================================
+   PARTE 4: AGREGAR A index.html
+   Dentro del <style> después de línea ~98
+   ======================================== */
+
+/* === FONDO CON OVERLAY PREMIUM === */
+body {
+    position: relative;
+    font-family: 'Roboto', sans-serif;
+    color: white;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* Imagen de fondo con blur */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    filter: blur(8px) brightness(0.4);
+    z-index: -2;
+}
+
+/* Overlay gradiente para mejor contraste */
+body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        135deg, 
+        rgba(13, 17, 23, 0.85) 0%, 
+        rgba(37, 99, 235, 0.2) 50%,
+        rgba(13, 17, 23, 0.85) 100%
+    );
+    z-index: -1;
+}
+
+/* === MODAL LOGIN PREMIUM === */
+#loginModal {
+    backdrop-filter: blur(10px);
+}
+
+#loginModal > div:first-child {
+    background: rgba(0, 0, 0, 0.9) !important;
+}
+
+#loginModal .relative.bg-cover {
+    background: linear-gradient(
+        145deg, 
+        rgba(13, 17, 23, 0.95) 0%,
+        rgba(30, 30, 45, 0.95) 100%
+    ) !important;
+    border: 2px solid rgba(88, 166, 255, 0.3) !important;
+    box-shadow: 
+        0 0 60px rgba(88, 166, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Borde animado brillante */
+#loginModal .relative.bg-cover::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 2px;
+    background: linear-gradient(
+        45deg, 
+        #58a6ff, 
+        #2dd4bf, 
+        #58a6ff
+    );
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: borderGlow 3s linear infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Logo con glow */
+#loginModal img {
+    filter: drop-shadow(0 0 20px rgba(88, 166, 255, 0.6));
+}
+
+/* Inputs mejorados */
+#loginModal input,
+#loginModal select {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    transition: all 0.3s ease;
+}
+
+#loginModal input::placeholder {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+#loginModal input:focus,
+#loginModal select:focus {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: #58a6ff !important;
+    box-shadow: 0 0 20px rgba(88, 166, 255, 0.3) !important;
+    transform: translateY(-2px);
+    outline: none !important;
+}
+
+/* Botones con glow hover */
+#loginModal button:hover {
+    box-shadow: 
+        0 0 30px rgba(88, 166, 255, 0.5),
+        0 10px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Selector de tipo de usuario mejorado */
+.user-type-btn {
+    position: relative;
+    overflow: hidden;
+}
+
+.user-type-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.user-type-btn:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Mobile: Modal full screen */
+@media (max-width: 768px) {
+    #loginModal .relative.bg-cover {
+        max-width: 95vw !important;
+        max-height: 90vh !important;
+        overflow-y: auto;
+    }
+
+    #loginModal h2 {
+        font-size: 1.75rem !important;
+    }
+
+    #loginModal button,
+    #loginModal input,
+    #loginModal select {
+        min-height: 48px !important;
+        font-size: 16px !important;
+    }
+}

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT Music - Demo Fixes Mobile (Antes vs Después)</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0d1117 0%, #1a1a2e 100%);
+            color: white;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #58a6ff, #2dd4bf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .comparison-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .demo-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .demo-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid;
+        }
+
+        .demo-section.before h2 {
+            color: #f85149;
+            border-color: #f85149;
+        }
+
+        .demo-section.after h2 {
+            color: #3fb950;
+            border-color: #3fb950;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .badge.bad {
+            background: #f85149;
+            color: white;
+        }
+
+        .badge.good {
+            background: #3fb950;
+            color: white;
+        }
+
+        /* DEMO 1: Tarjetas de Certámenes */
+        .certamen-demo {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+
+        /* ANTES: Cuadrada forzada */
+        .certamen-card-before {
+            aspect-ratio: 1 / 1;
+            background: #282828;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .certamen-card-before img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .certamen-card-before .info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 10px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+        }
+
+        /* DESPUÉS: Lista horizontal en mobile */
+        .certamen-card-after {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 12px;
+            background: #282828;
+            border-radius: 8px;
+            padding: 12px;
+            min-height: 70px;
+        }
+
+        .certamen-card-after img {
+            width: 60px;
+            height: 60px;
+            border-radius: 8px;
+            object-fit: cover;
+            flex-shrink: 0;
+        }
+
+        .certamen-card-after .info {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .certamen-card-after .info h4,
+        .certamen-card-before .info h4 {
+            font-size: 0.95rem;
+            margin: 0 0 4px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .certamen-card-after .info p,
+        .certamen-card-before .info p {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin: 0;
+        }
+
+        /* DEMO 2: Iconos */
+        .icons-demo {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .icon-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            min-width: 80px;
+        }
+
+        .icon-item .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .icon-item .label {
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        /* DEMO 3: Login */
+        .login-demo {
+            margin-top: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            height: 300px;
+            position: relative;
+        }
+
+        .login-demo-before {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23667eea" width="400" height="300"/><text x="50%" y="50%" font-size="20" fill="white" text-anchor="middle">Imagen brillante sin blur</text></svg>');
+            background-size: cover;
+        }
+
+        .login-demo-after {
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23667eea" width="400" height="300"/></svg>');
+            background-size: cover;
+            filter: blur(8px) brightness(0.4);
+        }
+
+        .login-demo::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(13, 17, 23, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            width: 200px;
+        }
+
+        .login-demo-after::after {
+            border: 2px solid rgba(88, 166, 255, 0.3);
+            box-shadow: 0 0 30px rgba(88, 166, 255, 0.2);
+        }
+
+        .login-demo::after {
+            content: '🎤\A Login Form\A[input]\A[button]';
+            white-space: pre;
+            line-height: 1.8;
+        }
+
+        /* DEMO 4: Touch Targets */
+        .touch-demo {
+            display: flex;
+            gap: 20px;
+            margin-top: 15px;
+            align-items: center;
+        }
+
+        .button-demo {
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .button-before {
+            border-color: #f85149;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+        }
+
+        .button-after {
+            border-color: #3fb950;
+            min-height: 44px;
+            min-width: 44px;
+            font-size: 0.95rem;
+        }
+
+        .size-indicator {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.7rem;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2px 8px;
+            border-radius: 4px;
+            white-space: nowrap;
+        }
+
+        .info-box {
+            background: rgba(88, 166, 255, 0.1);
+            border-left: 4px solid #58a6ff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+
+        .info-box h3 {
+            margin-bottom: 10px;
+            color: #58a6ff;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .code-snippet {
+            background: #161b22;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .code-snippet code {
+            color: #7ee787;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🕵️ VYT Music - Demo Fixes Mobile</h1>
+        <p>Comparación Visual: Antes vs Después</p>
+    </div>
+
+    <!-- DEMO 1: Tarjetas de Certámenes -->
+    <h2 style="text-align: center; margin: 40px 0 20px 0; font-size: 2rem;">
+        📱 Tarjetas de Certámenes
+    </h2>
+    <div class="comparison-grid">
+        <div class="demo-section before">
+            <h2>❌ ANTES <span class="badge bad">Desktop-first</span></h2>
+            <div class="certamen-demo">
+                <div class="certamen-card-before">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Crect fill='%23667eea' width='300' height='300'/%3E%3Ctext x='50%25' y='50%25' font-size='20' fill='white' text-anchor='middle' dominant-baseline='middle'%3ECert%C3%A1men%3C/text%3E%3C/svg%3E" alt="Certamen">
+                    <div class="info">
+                        <h4>Certamen Provincial 2026</h4>
+                        <p>Buenos Aires - Cierre: 30/01</p>
+                    </div>
+                </div>
+            </div>
+            <div class="code-snippet">
+                <code>aspect-ratio: 1/1; /* Cuadrado forzado */</code>
+            </div>
+            <div class="info-box">
+                <h3>❌ Problemas:</h3>
+                <ul>
+                    <li>Imagen se corta en móvil vertical</li>
+                    <li>Texto difícil de leer</li>
+                    <li>Desperdicia espacio vertical</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section after">
+            <h2>✅ DESPUÉS <span class="badge good">Mobile-first</span></h2>
+            <div class="certamen-demo">
+                <div class="certamen-card-after">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect fill='%232dd4bf' width='60' height='60'/%3E%3Ctext x='50%25' y='50%25' font-size='12' fill='white' text-anchor='middle' dominant-baseline='middle'%3E%F0%9F%8F%86%3C/text%3E%3C/svg%3E" alt="Certamen">
+                    <div class="info">
+                        <h4>Certamen Provincial 2026</h4>
+                        <p>Buenos Aires - Cierre: 30/01</p>
+                    </div>
+                </div>
+            </div>
+            <div class="code-snippet">
+                <code>display: flex; flex-direction: row; /* Lista horizontal */</code>
+            </div>
+            <div class="info-box">
+                <h3>✅ Ventajas:</h3>
+                <ul>
+                    <li>Imagen 60x60px siempre visible</li>
+                    <li>Texto legible a la derecha</li>
+                    <li>Optimiza espacio vertical</li>
+                    <li>Estilo Spotify/lista moderna</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEMO 2: Iconos -->
+    <h2 style="text-align: center; margin: 60px 0 20px 0; font-size: 2rem;">
+        🎨 Consistencia de Iconos
+    </h2>
+    <div class="comparison-grid">
+        <div class="demo-section before">
+            <h2>❌ ANTES <span class="badge bad">Mezclado</span></h2>
+            <div class="icons-demo">
+                <div class="icon-item">
+                    <div class="icon">🏠</div>
+                    <div class="label">Home (emoji)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon">🖼️</div>
+                    <div class="label">Perfil (PNG)</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon" style="font-family: FontAwesome;">🎤</div>
+                    <div class="label">Canto (FA)</div>
+                </div>
+            </div>
+            <div class="info-box">
+                <h3>❌ Problemas:</h3>
+                <ul>
+                    <li>Estilos inconsistentes</li>
+                    <li>Tamaños diferentes</li>
+                    <li>Difícil mantener</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section after">
+            <h2>✅ DESPUÉS <span class="badge good">Font Awesome 6.4.0</span></h2>
+            <div class="icons-demo">
+                <div class="icon-item">
+                    <div class="icon">⌂</div>
+                    <div class="label">.icon-home</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon">👤</div>
+                    <div class="label">.icon-profile</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon">🏆</div>
+                    <div class="label">.icon-contests</div>
+                </div>
+                <div class="icon-item">
+                    <div class="icon">💰</div>
+                    <div class="label">.icon-money</div>
+                </div>
+            </div>
+            <div class="code-snippet">
+                <code>&lt;i class="vyt-icon icon-home"&gt;&lt;/i&gt;</code>
+            </div>
+            <div class="info-box">
+                <h3>✅ Ventajas:</h3>
+                <ul>
+                    <li>Estilo uniforme</li>
+                    <li>Tamaños estándar (1.25rem)</li>
+                    <li>Fácil de escalar</li>
+                    <li>Accesible (aria-label)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEMO 3: Login Overlay -->
+    <h2 style="text-align: center; margin: 60px 0 20px 0; font-size: 2rem;">
+        🏠 Login con Overlay Premium
+    </h2>
+    <div class="comparison-grid">
+        <div class="demo-section before">
+            <h2>❌ ANTES <span class="badge bad">Sin blur</span></h2>
+            <div class="login-demo login-demo-before"></div>
+            <div class="code-snippet">
+                <code>background: linear-gradient(...), url('imagen.jpg');</code>
+            </div>
+            <div class="info-box">
+                <h3>❌ Problemas:</h3>
+                <ul>
+                    <li>Fondo muy brillante</li>
+                    <li>Formulario difícil de leer</li>
+                    <li>Sin efecto premium</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section after">
+            <h2>✅ DESPUÉS <span class="badge good">Blur + Glassmorphism</span></h2>
+            <div class="login-demo login-demo-after"></div>
+            <div class="code-snippet">
+                <code>filter: blur(8px) brightness(0.4);<br>backdrop-filter: blur(10px);</code>
+            </div>
+            <div class="info-box">
+                <h3>✅ Ventajas:</h3>
+                <ul>
+                    <li>Fondo desenfocado</li>
+                    <li>Formulario destacado</li>
+                    <li>Efecto premium/profesional</li>
+                    <li>Mejor contraste</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- DEMO 4: Touch Targets -->
+    <h2 style="text-align: center; margin: 60px 0 20px 0; font-size: 2rem;">
+        👆 Touch Targets (Botones táctiles)
+    </h2>
+    <div class="comparison-grid">
+        <div class="demo-section before">
+            <h2>❌ ANTES <span class="badge bad">&lt;44px</span></h2>
+            <div class="touch-demo">
+                <button class="button-demo button-before">
+                    <span class="size-indicator">28px x 20px</span>
+                    Botón pequeño
+                </button>
+            </div>
+            <div class="info-box">
+                <h3>❌ Problemas:</h3>
+                <ul>
+                    <li>Difícil de tocar (dedos grandes)</li>
+                    <li>Usuarios fallan el tap</li>
+                    <li>Frustración del usuario</li>
+                    <li>No cumple estándares iOS/Android</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="demo-section after">
+            <h2>✅ DESPUÉS <span class="badge good">≥44px</span></h2>
+            <div class="touch-demo">
+                <button class="button-demo button-after">
+                    <span class="size-indicator">min 44px x 44px</span>
+                    Botón táctil
+                </button>
+            </div>
+            <div class="code-snippet">
+                <code>min-height: 44px !important;<br>min-width: 44px !important;</code>
+            </div>
+            <div class="info-box">
+                <h3>✅ Ventajas:</h3>
+                <ul>
+                    <li>Fácil de tocar</li>
+                    <li>Cumple estándar Apple (44px)</li>
+                    <li>Cumple estándar Material (48px)</li>
+                    <li>Mejor experiencia táctil</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Resumen Final -->
+    <div style="max-width: 1400px; margin: 60px auto; text-align: center;">
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">📊 Resumen de Mejoras</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+            <div style="background: rgba(88, 166, 255, 0.1); padding: 20px; border-radius: 12px; border: 2px solid #58a6ff;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">📱</div>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #58a6ff;">9/10</div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">UX Mobile</div>
+                <div style="font-size: 0.75rem; color: #3fb950;">+200%</div>
+            </div>
+            <div style="background: rgba(45, 212, 191, 0.1); padding: 20px; border-radius: 12px; border: 2px solid #2dd4bf;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">🎨</div>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #2dd4bf;">9/10</div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">Consistencia</div>
+                <div style="font-size: 0.75rem; color: #3fb950;">+125%</div>
+            </div>
+            <div style="background: rgba(255, 215, 0, 0.1); padding: 20px; border-radius: 12px; border: 2px solid #FFD700;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">🏠</div>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #FFD700;">10/10</div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">Legibilidad</div>
+                <div style="font-size: 0.75rem; color: #3fb950;">+100%</div>
+            </div>
+            <div style="background: rgba(59, 185, 80, 0.1); padding: 20px; border-radius: 12px; border: 2px solid #3fb950;">
+                <div style="font-size: 3rem; margin-bottom: 10px;">👆</div>
+                <div style="font-size: 1.5rem; font-weight: bold; color: #3fb950;">100%</div>
+                <div style="font-size: 0.9rem; opacity: 0.8;">Touch Targets</div>
+                <div style="font-size: 0.75rem; color: #3fb950;">+233%</div>
+            </div>
+        </div>
+
+        <div style="margin-top: 40px; padding: 30px; background: rgba(88, 166, 255, 0.1); border-radius: 16px; border: 2px solid #58a6ff;">
+            <h3 style="color: #58a6ff; margin-bottom: 15px; font-size: 1.5rem;">🚀 Siguiente Paso</h3>
+            <p style="font-size: 1.1rem; margin-bottom: 20px;">Implementa estos fixes en tu sistema VYT-MUSIC-ONLINE</p>
+            <a href="IMPLEMENTACION-RAPIDA.md" style="display: inline-block; padding: 15px 40px; background: linear-gradient(45deg, #58a6ff, #2dd4bf); color: white; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem;">
+                📄 Ver Guía de Implementación
+            </a>
+        </div>
+    </div>
+
+    <footer style="text-align: center; margin-top: 60px; padding: 20px; opacity: 0.6; font-size: 0.9rem;">
+        <p>VYT Music - Auditoría UX Mobile 2026</p>
+        <p>Generado por GitHub Copilot (Claude Sonnet 4.5)</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,1056 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- FORCE RELOAD SYSTEM - DEBE SER EL PRIMER SCRIPT -->
+    <script src="/src/force-reload.js"></script>
+    
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
+    <script>
+        // FORCE RELOAD si viene de cach
+        if (performance.navigation.type === 2) {
+            location.reload(true);
+        }
+    </script>
+    
+    <script src="/sw-register.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT MUSIC - Certamen de Canto Online</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Plataforma de certmenes de canto online. Inscrbete, vota por tus artistas favoritos y gana premios.">
+    <meta name="theme-color" content="#00d9ff">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="VYT Music">
+    
+    <!-- Manifest -->
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/icons/icon-32x32.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/images/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
+    
+    <!-- Design Tokens - Sistema Unificado -->
+    <link rel="stylesheet" href="/design-tokens.css">
+    
+    <!-- Estilos Principales -->
+    <link rel="stylesheet" href="/style.css?v=1768337821">
+    
+    <!-- Mobile Fixes & Optimizations -->
+    <link rel="stylesheet" href="/mobile-fixes.css?v=1768337820">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animaciones y Gamificacin -->
+    <link rel="stylesheet" href="/src/animations.css">
+    <script src="/src/gamification.js"></script>
+    
+    <!-- Google Analytics 4 - Descomentar y configurar ID -->
+    <!-- <script src="/src/google-analytics.js"></script> -->
+    
+    <!-- Lazy Loading System -->
+    <script src="/src/lazy-loading.js"></script>
+    
+    <!-- Sistema de Navegacin Unificado -->
+    <script src="/src/navigation-component.js"></script>
+    
+    <!-- Sistema de Gamificacin Mejorado -->
+    <script src="/src/gamification-enhanced.js"></script>
+    
+    <!-- Sistema de Multimedia Dinmica -->
+    <link rel="stylesheet" href="/src/dynamic-assets-styles.css">
+    <script src="/src/dynamic-assets-manager.js" defer></script>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Mobile Optimizations -->
+    <script src="/mobile-optimizations.js" defer></script>
+    
+    <!-- LIMPIEZA DE SERVICE WORKERS VIEJOS (ejecutar una vez) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&family=Orbitron:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="icon-control.css?v=1768337820">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --accent-color: #2dd4bf;
+            --bg-dark: #121212;
+        }
+
+        body {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
+        }
+        
+        /* Clase para fondo dinmico desde admin */
+        body.dynamic-background {
+            background: var(--dynamic-bg) !important;
+            background-size: var(--dynamic-bg-size, cover) !important;
+            background-attachment: fixed !important;
+            background-position: var(--dynamic-bg-position, center) !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .countdown-text {
+            font-family: 'Orbitron', sans-serif;
+            color: #2dd4bf;
+            text-shadow: 0 0 5px rgba(45, 212, 191, 0.8), 0 0 10px rgba(45, 212, 191, 0.8), 0 0 15px rgba(45, 212, 191, 0.8);
+        }
+
+        .btn-choice {
+            transition: all 0.3s ease;
+        }
+
+        .btn-choice:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(43, 183, 209, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <!-- Slider de Banners Dinmico -->
+    <div id="vyt-banner-slider"></div>
+    
+    <div class="min-h-screen flex flex-col items-center justify-center text-center p-6">
+        
+        <div class="mb-8">
+            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="Logo VYT Music" class="w-40 md:w-48 mx-auto mb-4">
+            <p class="text-gray-300 text-lg tracking-widest font-display">CERTAMEN DE CANTO</p>
+        </div>
+
+        <div class="mb-8">
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-6 text-white">
+                ¡Bienvenido a la Revolución Musical! <i class="fas fa-music"></i>
+            </h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-4xl mx-auto">
+                Elige tu camino en VYT Music y forma parte de la comunidad musical ms vibrante de Argentina. Ya seas un artista con talento o un fan apasionado, aqu encontrars tu lugar.
+            </p>
+        </div>
+
+        <!-- Video de Presentacin -->
+        <div data-vyt-video="presentacion" class="w-full max-w-4xl mx-auto my-12"></div>
+
+        <div class="mb-12 w-full max-w-lg">
+            <p class="text-sm uppercase tracking-widest text-gray-400 mb-4">Las inscripciones cierran en:</p>
+            <div id="countdown" class="grid grid-cols-4 gap-4 text-center">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+                    <div id="days" class="countdown-text text-3xl md:text-5xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase mt-1">Das</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+                    <div id="hours" class="countdown-text text-3xl md:text-5xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase mt-1">Horas</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+                    <div id="minutes" class="countdown-text text-3xl md:text-5xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase mt-1">Minutos</div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-3 border border-white/20">
+                    <div id="seconds" class="countdown-text text-3xl md:text-5xl font-bold">00</div>
+                    <div class="text-xs text-gray-400 uppercase mt-1">Segundos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Explicacin Simple de Certmenes -->
+        <div class="max-w-4xl mx-auto mb-12 mt-8">
+            <div class="bg-white/5 backdrop-blur-sm border border-white/20 rounded-3xl p-8">
+                <h3 class="text-2xl font-bold text-white mb-6 text-center"><i class="fas fa-trophy"></i> Tipos de Certámenes</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Local -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all">
+                        <div class="text-4xl mb-3"><i class="fas fa-map-marker-alt text-yellow-400"></i></div>
+                        <h4 class="text-xl font-bold text-yellow-400 mb-2">LOCAL</h4>
+                        <p class="text-white/80 text-sm">Tu ciudad o barrio</p>
+                    </div>
+                    
+                    <!-- Provincial -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all">
+                        <div class="text-4xl mb-3"><i class="fas fa-map text-blue-400"></i></div>
+                        <h4 class="text-xl font-bold text-blue-400 mb-2">PROVINCIAL</h4>
+                        <p class="text-white/80 text-sm">Toda tu provincia</p>
+                    </div>
+                    
+                    <!-- Nacional -->
+                    <div class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all">
+                        <div class="text-4xl mb-3"><i class="fas fa-flag text-green-400"></i></div>
+                        <h4 class="text-xl font-bold text-green-400 mb-2">NACIONAL</h4>
+                        <p class="text-white/80 text-sm">Toda Argentina</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botn simple para explorar - SOLO VISIBLE SI EST LOGUEADO -->
+        <div id="contenidoLogueado" class="text-center" style="display: none;">
+            <p class="text-white/80 text-xl mb-6">Quers ver los certmenes activos?</p>
+            <a href="certamenes.html" class="inline-flex items-center justify-center bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-5 px-10 rounded-2xl transition-all duration-300 text-xl shadow-2xl transform hover:scale-105">
+                <i class="fas fa-trophy mr-3 text-2xl"></i>
+                Ver Certmenes
+            </a>
+        </div>
+        
+        <!-- Mensaje para usuarios NO logueados -->
+        <div id="contenidoNoLogueado" class="text-center">
+            <p class="text-white text-2xl mb-8">?? Para participar o votar, eleg cmo quers unirte:</p>
+            <button id="btnComenzar" class="bg-gradient-to-r from-purple-600 via-pink-600 to-orange-500 hover:from-purple-700 hover:via-pink-700 hover:to-orange-600 text-white font-black py-6 px-16 rounded-2xl transition-all shadow-2xl transform hover:scale-105 text-2xl animate-pulse">
+                <i class="fas fa-rocket mr-3"></i> COMENZAR AHORA!
+            </button>
+            <p class="text-white/70 text-sm mt-4">Eleg ser Artista o Visitante en el siguiente paso</p>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="fixed inset-0 bg-black/95 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="relative bg-cover bg-center rounded-3xl max-w-md w-full shadow-2xl overflow-hidden" 
+             style="background-image: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.75)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');">
+            
+            <!-- Overlay decorativo con borde brillante -->
+            <div class="absolute inset-0 border-4 border-yellow-500/50 rounded-3xl pointer-events-none animate-pulse"></div>
+            
+            <!-- Contenido del modal -->
+            <div class="relative z-10 p-8">
+                <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-white/80 hover:text-white text-2xl z-20 bg-black/30 rounded-full w-10 h-10 flex items-center justify-center hover:bg-black/50 transition">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="text-center mb-6">
+                    <img src="https://i.ibb.co/TcFydZg/1-2-Logo.png" alt="VYT Music" class="w-24 h-24 mx-auto mb-4 drop-shadow-2xl">
+                    <h2 class="text-4xl font-black text-white mb-2 drop-shadow-lg" style="text-shadow: 2px 2px 8px rgba(0,0,0,0.8);">¡Bienvenido! 🎤</h2>
+                    <p class="text-yellow-400 font-bold text-lg drop-shadow-md">Unite al Certamen de Canto</p>
+                </div>
+
+                <!-- SELECTOR DE TIPO DE USUARIO -->
+                <div class="mb-6 space-y-3">
+                    <p class="text-white font-bold text-center mb-3 text-lg drop-shadow-lg">¿Qué querés hacer?</p>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button type="button" id="selectArtistaBtn" onclick="selectUserType('artista')" 
+                                class="user-type-btn border-3 border-purple-400 bg-purple-600/40 backdrop-blur-sm text-white font-black py-5 px-4 rounded-2xl transition-all hover:bg-purple-600/70 hover:scale-105 shadow-xl">
+                            <i class="fas fa-microphone text-3xl mb-2 block drop-shadow-lg"></i>
+                            <span class="text-sm drop-shadow-md">SOY ARTISTA</span>
+                        </button>
+                        <button type="button" id="selectVisitanteBtn" onclick="selectUserType('visitante')" 
+                                class="user-type-btn border-3 border-cyan-400 bg-cyan-600/40 backdrop-blur-sm text-white font-black py-5 px-4 rounded-2xl transition-all hover:bg-cyan-600/70 hover:scale-105 shadow-xl">
+                            <i class="fas fa-star text-3xl mb-2 block drop-shadow-lg"></i>
+                            <span class="text-sm drop-shadow-md">SOY VISITANTE</span>
+                        </button>
+                    </div>
+                    <input type="hidden" id="selectedUserType" value="visitante">
+                </div>
+
+                <div id="loginAlert" class="hidden mb-4 p-3 rounded-lg text-sm bg-red-500/80 text-white font-semibold"></div>
+
+                <!-- Login Social -->
+                <div class="space-y-3 mb-6">
+                    <button id="btnGoogleModal" class="w-full bg-white hover:bg-gray-100 text-gray-800 font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-105">
+                        <svg width="20" height="20" viewBox="0 0 20 20">
+                            <path fill="#4285F4" d="M19.6 10.23c0-.82-.1-1.42-.25-2.05H10v3.72h5.5c-.15.96-.74 2.31-2.04 3.22v2.45h3.16c1.89-1.73 2.98-4.3 2.98-7.34z"/>
+                            <path fill="#34A853" d="M13.46 15.13c-.83.59-1.96 1-3.46 1-2.64 0-4.88-1.74-5.68-4.15H1.07v2.52C2.72 17.75 6.09 20 10 20c2.7 0 4.96-.89 6.62-2.42l-3.16-2.45z"/>
+                            <path fill="#FBBC05" d="M3.99 10c0-.69.12-1.35.32-1.97V5.51H1.07A9.973 9.973 0 000 10c0 1.61.39 3.14 1.07 4.49l3.24-2.52c-.2-.62-.32-1.28-.32-1.97z"/>
+                            <path fill="#EA4335" d="M10 3.88c1.88 0 3.13.81 3.85 1.48l2.84-2.76C14.96.99 12.7 0 10 0 6.09 0 2.72 2.25 1.07 5.51l3.24 2.52C5.12 5.62 7.36 3.88 10 3.88z"/>
+                        </svg>
+                        Continuar con Google
+                    </button>
+
+                    <button id="btnFacebookModal" class="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center gap-3 shadow-xl hover:scale-105">
+                        <i class="fab fa-facebook-f text-xl"></i>
+                        Continuar con Facebook
+                    </button>
+                </div>
+
+                <div class="relative my-6">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t-2 border-yellow-500/50"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                        <span class="px-4 bg-black/60 text-yellow-400 font-bold backdrop-blur-sm rounded-full">o con email</span>
+                    </div>
+                </div>
+
+                <!-- Form Email -->
+                <form id="loginFormModal" class="space-y-4">
+                    <div>
+                        <input type="email" id="emailModal" placeholder="tu@email.com" required
+                            class="w-full bg-black/50 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl px-4 py-4 focus:outline-none focus:border-yellow-400 transition font-semibold placeholder-gray-300 shadow-xl">
+                    </div>
+                    <div class="relative">
+                        <input type="password" id="passwordModal" placeholder="Contraseña" required
+                            class="w-full bg-black/50 backdrop-blur-sm border-2 border-white/30 text-white rounded-xl px-4 py-4 pr-12 focus:outline-none focus:border-yellow-400 transition font-semibold placeholder-gray-300 shadow-xl">
+                        <button type="button" onclick="togglePasswordModal()" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/80 hover:text-white bg-black/30 rounded-full w-8 h-8 flex items-center justify-center">
+                            <i class="fas fa-eye" id="toggleIconModal"></i>
+                        </button>
+                    </div>
+                    <button type="submit" id="btnLoginModal" class="w-full bg-gradient-to-r from-yellow-400 via-orange-500 to-pink-500 hover:from-yellow-500 hover:via-orange-600 hover:to-pink-600 text-white font-black py-4 rounded-xl transition-all shadow-2xl hover:scale-105 text-lg">
+                        <span id="loginTextModal">🎤 INICIAR SESIÓN</span>
+                    </button>
+                </form>
+
+                <div class="text-center mt-6">
+                    <a href="/recuperar-contrasena.html" class="text-sm text-yellow-400 hover:text-yellow-300 font-semibold drop-shadow-lg">¿Olvidaste tu contraseña?</a>
+                </div>
+
+                <div class="mt-6 pt-6 border-t-2 border-yellow-500/40 text-center">
+                    <p class="text-white/90 text-sm mb-3 font-semibold drop-shadow-md">¿No tienes cuenta?</p>
+                    <a href="register.html" class="text-yellow-400 hover:text-yellow-300 font-black text-lg drop-shadow-lg">✨ Crear Cuenta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function initCountdown() {
+            const targetDate = new Date();
+            targetDate.setDate(targetDate.getDate() + 7);
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const timeLeft = targetDate.getTime() - now;
+                
+                if (timeLeft > 0) {
+                    const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    
+                    document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                } else {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '00';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                }
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // Funcin para mostrar selector de tipo de usuario - ULTRA SIMPLE
+        function showUserTypeSelector() {
+            return new Promise((resolve) => {
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-4';
+                modal.innerHTML = `
+                    <div class="bg-gradient-to-br from-gray-900 to-black border-4 border-yellow-500 rounded-3xl p-10 max-w-2xl w-full shadow-2xl">
+                        <h2 class="text-4xl font-bold text-white text-center mb-3">Bienvenido! ??</h2>
+                        <p class="text-gray-300 text-center mb-8 text-xl">Qu quers hacer?</p>
+                        
+                        <div class="space-y-6">
+                            <!-- Artista -->
+                            <button id="selectArtista" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-8 px-8 rounded-2xl transition-all transform hover:scale-105 shadow-xl">
+                                <div class="flex items-center justify-center space-x-4">
+                                    <i class="fas fa-microphone text-5xl"></i>
+                                    <div class="text-left">
+                                        <span class="text-2xl block mb-1">SOY ARTISTA</span>
+                                        <p class="text-base font-normal opacity-90">Quiero cantar y participar en certmenes</p>
+                                    </div>
+                                </div>
+                            </button>
+                            
+                            <!-- Visitante -->
+                            <button id="selectVisitante" class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-8 px-8 rounded-2xl transition-all transform hover:scale-105 shadow-xl">
+                                <div class="flex items-center justify-center space-x-4">
+                                    <i class="fas fa-star text-5xl"></i>
+                                    <div class="text-left">
+                                        <span class="text-2xl block mb-1">SOY VISITANTE</span>
+                                        <p class="text-base font-normal opacity-90">Quiero ver y votar a los artistas</p>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <p class="text-gray-400 text-center mt-6 text-sm">?? Hac clic en la opcin que prefieras</p>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+
+                document.getElementById('selectArtista').onclick = () => {
+                    modal.remove();
+                    resolve('artista');
+                };
+
+                document.getElementById('selectVisitante').onclick = () => {
+                    modal.remove();
+                    resolve('visitante');
+                };
+            });
+        }
+
+        // Funcin para crear perfil de artista INMEDIATAMENTE
+        function showCrearPerfilArtista(user) {
+            console.log('?? ========================================');
+            console.log('?? FUNCIN showCrearPerfilArtista LLAMADA');
+            console.log('?? Usuario:', user.email);
+            console.log('?? ========================================');
+            
+            return new Promise((resolve) => {
+                console.log('?? Creando modal de perfil...');
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black/90 backdrop-blur-md z-[100] flex items-center justify-center p-4 overflow-y-auto';
+                modal.innerHTML = `
+                    <div class="bg-gradient-to-br from-gray-900 to-black border-4 border-purple-500 rounded-3xl p-8 max-w-2xl w-full my-8 shadow-2xl">
+                        <h2 class="text-3xl font-bold text-white text-center mb-3">?? Cre tu Perfil de Artista</h2>
+                        <p class="text-gray-300 text-center mb-6">Complet estos datos para continuar</p>
+                        
+                        <form id="formPerfilArtista" class="space-y-4">
+                            <!-- Nombre Artstico -->
+                            <div>
+                                <label class="block text-white font-bold mb-2">Nombre Artstico *</label>
+                                <input type="text" id="nombreArtistico" placeholder="Tu nombre artstico" 
+                                       class="w-full px-4 py-3 rounded-xl bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 outline-none transition" required>
+                            </div>
+                            
+                            <!-- Provincia -->
+                            <div>
+                                <label class="block text-white font-bold mb-2">Provincia *</label>
+                                <select id="provincia" class="w-full px-4 py-3 rounded-xl bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 outline-none transition" required>
+                                    <option value="">Seleccion tu provincia</option>
+                                    <option value="Buenos Aires">Buenos Aires</option>
+                                    <option value="CABA">CABA</option>
+                                    <option value="Catamarca">Catamarca</option>
+                                    <option value="Chaco">Chaco</option>
+                                    <option value="Chubut">Chubut</option>
+                                    <option value="Crdoba">Crdoba</option>
+                                    <option value="Corrientes">Corrientes</option>
+                                    <option value="Entre Ros">Entre Ros</option>
+                                    <option value="Formosa">Formosa</option>
+                                    <option value="Jujuy">Jujuy</option>
+                                    <option value="La Pampa">La Pampa</option>
+                                    <option value="La Rioja">La Rioja</option>
+                                    <option value="Mendoza">Mendoza</option>
+                                    <option value="Misiones">Misiones</option>
+                                    <option value="Neuqun">Neuqun</option>
+                                    <option value="Ro Negro">Ro Negro</option>
+                                    <option value="Salta">Salta</option>
+                                    <option value="San Juan">San Juan</option>
+                                    <option value="San Luis">San Luis</option>
+                                    <option value="Santa Cruz">Santa Cruz</option>
+                                    <option value="Santa Fe">Santa Fe</option>
+                                    <option value="Santiago del Estero">Santiago del Estero</option>
+                                    <option value="Tierra del Fuego">Tierra del Fuego</option>
+                                    <option value="Tucumn">Tucumn</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Ciudad -->
+                            <div>
+                                <label class="block text-white font-bold mb-2">Ciudad *</label>
+                                <input type="text" id="ciudad" placeholder="Tu ciudad" 
+                                       class="w-full px-4 py-3 rounded-xl bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 outline-none transition" required>
+                            </div>
+                            
+                            <!-- Gnero Musical -->
+                            <div>
+                                <label class="block text-white font-bold mb-2">Gnero Musical *</label>
+                                <select id="generoMusical" class="w-full px-4 py-3 rounded-xl bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 outline-none transition" required>
+                                    <option value="">Seleccion tu gnero</option>
+                                    <option value="Pop">Pop</option>
+                                    <option value="Rock">Rock</option>
+                                    <option value="Folklrico">Folklrico</option>
+                                    <option value="Cumbia">Cumbia</option>
+                                    <option value="Reggaeton">Reggaeton</option>
+                                    <option value="Balada">Balada</option>
+                                    <option value="Cuarteto">Cuarteto</option>
+                                    <option value="Tango">Tango</option>
+                                    <option value="Tropical">Tropical</option>
+                                    <option value="Electrnica">Electrnica</option>
+                                    <option value="Rap/Hip Hop">Rap/Hip Hop</option>
+                                    <option value="Jazz">Jazz</option>
+                                    <option value="Blues">Blues</option>
+                                    <option value="Metal">Metal</option>
+                                    <option value="Soul/R&B">Soul/R&B</option>
+                                    <option value="Indie">Indie</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
+                            
+                            <!-- Telfono -->
+                            <div>
+                                <label class="block text-white font-bold mb-2">Telfono (Opcional)</label>
+                                <input type="tel" id="telefono" placeholder="Ej: 3815123456" 
+                                       class="w-full px-4 py-3 rounded-xl bg-gray-800 text-white border-2 border-gray-700 focus:border-purple-500 outline-none transition">
+                            </div>
+                            
+                            <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-105">
+                                ?? Crear Perfil
+                            </button>
+                        </form>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                console.log('?? Modal agregado al DOM');
+
+                document.getElementById('formPerfilArtista').onsubmit = async (e) => {
+                    e.preventDefault();
+                    console.log('?? Formulario enviado');
+                    
+                    const perfilData = {
+                        nombreArtistico: document.getElementById('nombreArtistico').value.trim(),
+                        provincia: document.getElementById('provincia').value,
+                        ciudad: document.getElementById('ciudad').value.trim(),
+                        generoMusical: document.getElementById('generoMusical').value,
+                        telefono: document.getElementById('telefono').value.trim()
+                    };
+                    
+                    // Validacin
+                    if (!perfilData.nombreArtistico || !perfilData.provincia || !perfilData.ciudad || !perfilData.generoMusical) {
+                        alert('Por favor complet todos los campos obligatorios (*)');
+                        return;
+                    }
+                    
+                    modal.remove();
+                    resolve(perfilData);
+                };
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initCountdown();
+            loadDynamicBackground();
+            console.log('🎵 VYT MUSIC - Sistema iniciado correctamente');
+            
+            // Esperar a que Firebase esté listo antes de usarlo
+            window.addEventListener('firebaseReady', async () => {
+                // Verificar si viene con parmetro action=login
+                const urlParams = new URLSearchParams(window.location.search);
+                const action = urlParams.get('action');
+                const forceLogin = action === 'login';
+                
+                // Definir db
+                const db = firebase.firestore();
+                
+                // VERIFICAR SI YA HAY USUARIO LOGUEADO
+                firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    console.log('? Usuario ya logueado:', user.email);
+                    
+                    // Si viene con action=login, verificar perfil
+                    if (forceLogin) {
+                        console.log('?? Usuario ya logueado pero viene de Participar Ahora');
+                        console.log('?? Verificando si tiene perfil de artista...');
+                        
+                        const userDoc = await db.collection('users').doc(user.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            
+                            if (userData.userType === 'artista') {
+                                const artistDoc = await db.collection('artist_profiles').doc(user.uid).get();
+                                
+                                if (!artistDoc.exists) {
+                                    console.log('? Artista sin perfil - Mostrando modal para crear');
+                                    const perfilData = await showCrearPerfilArtista(user);
+                                    
+                                    if (perfilData) {
+                                        await db.collection('artist_profiles').doc(user.uid).set({
+                                            uid: user.uid,
+                                            email: user.email,
+                                            nombreArtistico: perfilData.nombreArtistico,
+                                            provincia: perfilData.provincia,
+                                            ciudad: perfilData.ciudad,
+                                            generoMusical: perfilData.generoMusical,
+                                            telefono: perfilData.telefono || '',
+                                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                            estado: 'activo'
+                                        });
+                                        
+                                        alert('? Perfil creado! Ahora pods participar en certmenes ??');
+                                        window.location.href = 'inscripcion-unificada.html';
+                                    }
+                                } else {
+                                    console.log('? Artista con perfil - Redirigiendo a inscripcin');
+                                    window.location.href = 'inscripcion-unificada.html';
+                                }
+                            } else {
+                                alert('Solo los artistas pueden participar en certmenes.\n\nSi sos artista, contact con soporte.');
+                                window.location.href = 'certamenes.html';
+                            }
+                        }
+                        return;
+                    }
+                    
+                    // Usuario logueado normal - redirigir
+                    try {
+                        const userDoc = await db.collection('users').doc(user.uid).get();
+                        if (userDoc.exists) {
+                            const userData = userDoc.data();
+                            console.log('?? Redirigiendo a la app...');
+                            
+                            if (userData.userType === 'artista') {
+                                window.location.replace('perfil-artista.html');
+                            } else {
+                                window.location.replace('certamenes.html');
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
+                } else {
+                    console.log('?? Usuario no logueado - Mostrando LOGIN directamente');
+                    // NO hay usuario - Mostrar LOGIN DIRECTAMENTE con selector integrado
+                    openLoginModal();
+                }
+            });
+            
+            // Si viene de login.html (#login), abrir modal inmediatamente
+            if (window.location.hash === '#login') {
+                openLoginModal();
+                history.replaceState(null, null, ' '); // Limpiar hash
+            }
+        });
+        
+        // Sistema de fondos dinmicos desde Admin
+        function loadDynamicBackground() {
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'index.html';
+                
+                console.log('?? Verificando configuracin de fondo para:', currentPage);
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log('??? Aplicando fondo personalizado para index.html');
+                    
+                    const config = backgroundConfig[currentPage];
+                    const position = config.position || 'center center';
+                    const scale = config.scale || 1;
+                    const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
+                    
+                    // Aplicar usando variables CSS
+                    document.documentElement.style.setProperty('--dynamic-bg', 
+                        `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('${config.imageData}')`);
+                    document.documentElement.style.setProperty('--dynamic-bg-size', backgroundSize);
+                    document.documentElement.style.setProperty('--dynamic-bg-position', position);
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log(`? Fondo aplicado: ${position}, escala: ${scale}`);
+                } else {
+                    console.log('?? Usando fondo predeterminado para index.html');
+                }
+            } catch (error) {
+                console.error('? Error cargando fondo:', error);
+            }
+        }
+
+        // Modal de Login
+        function selectUserType(type) {
+            // Guardar selección
+            document.getElementById('selectedUserType').value = type;
+            localStorage.setItem('pendingUserType', type);
+            
+            // Actualizar UI - resaltar botón seleccionado
+            const artistaBtn = document.getElementById('selectArtistaBtn');
+            const visitanteBtn = document.getElementById('selectVisitanteBtn');
+            
+            artistaBtn.classList.remove('ring-4', 'ring-purple-500', 'bg-purple-600/60');
+            visitanteBtn.classList.remove('ring-4', 'ring-blue-500', 'bg-blue-600/60');
+            
+            if (type === 'artista') {
+                artistaBtn.classList.add('ring-4', 'ring-purple-500', 'bg-purple-600/60');
+            } else {
+                visitanteBtn.classList.add('ring-4', 'ring-blue-500', 'bg-blue-600/60');
+            }
+            
+            console.log('? Tipo de usuario seleccionado:', type);
+        }
+        
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('flex');
+            // Pre-seleccionar visitante por defecto
+            selectUserType('visitante');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('loginModal').classList.remove('flex');
+        }
+
+        function togglePasswordModal() {
+            const password = document.getElementById('passwordModal');
+            const icon = document.getElementById('toggleIconModal');
+            if (password.type === 'password') {
+                password.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                password.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        function showLoginAlert(message, type) {
+            const alert = document.getElementById('loginAlert');
+            alert.textContent = message;
+            alert.className = `mb-4 p-3 rounded-lg text-sm ${type === 'error' ? 'bg-red-500/20 text-red-200 border border-red-500/50' : 'bg-green-500/20 text-green-200 border border-green-500/50'}`;
+            alert.classList.remove('hidden');
+            if (type === 'success') {
+                setTimeout(() => alert.classList.add('hidden'), 3000);
+            }
+        }
+
+        // Login con Email
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('loginFormModal').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const email = document.getElementById('emailModal').value;
+                const password = document.getElementById('passwordModal').value;
+                const btn = document.getElementById('btnLoginModal');
+                const text = document.getElementById('loginTextModal');
+
+                btn.disabled = true;
+                text.textContent = 'Iniciando...';
+
+                try {
+                    const result = await firebase.auth().signInWithEmailAndPassword(email, password);
+                    showLoginAlert('Bienvenido!', 'success');
+                    
+                    // Guardar en Firestore
+                    await db.collection('users').doc(result.user.uid).set({
+                        lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                    }, { merge: true });
+
+                    setTimeout(() => {
+                        window.location.href = 'principal.html';
+                    }, 1000);
+                } catch (error) {
+                    showLoginAlert(error.message, 'error');
+                    btn.disabled = false;
+                    text.textContent = 'Iniciar Sesin';
+                }
+            });
+
+            // Google Login
+            document.getElementById('btnGoogleModal').addEventListener('click', async () => {
+                const btn = document.getElementById('btnGoogleModal');
+                btn.disabled = true;
+                btn.innerHTML = 'Conectando...';
+
+                try {
+                    const provider = new firebase.auth.GoogleAuthProvider();
+                    await firebase.auth().signInWithRedirect(provider);
+                } catch (error) {
+                    showLoginAlert(error.message, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '... Continuar con Google';
+                }
+            });
+
+            // Facebook Login
+            document.getElementById('btnFacebookModal').addEventListener('click', async () => {
+                const btn = document.getElementById('btnFacebookModal');
+                btn.disabled = true;
+                btn.innerHTML = 'Conectando...';
+
+                try {
+                    const provider = new firebase.auth.FacebookAuthProvider();
+                    await firebase.auth().signInWithRedirect(provider);
+                } catch (error) {
+                    showLoginAlert(error.message, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '... Continuar con Facebook';
+                }
+            });
+
+            // Check redirect result - Usuario vuelve de Google/Facebook
+            firebase.auth().getRedirectResult().then(async (result) => {
+                if (result.user) {
+                    console.log('? Usuario detectado despus de redirect:', result.user.email);
+                    
+                    // Recuperar el tipo que eligi ANTES del login
+                    const pendingType = localStorage.getItem('pendingUserType');
+                    localStorage.removeItem('pendingUserType');
+                    
+                    if (!pendingType) {
+                        console.log('?? No hay tipo pendiente, usuario existente');
+                        return; // Es un usuario que ya existe
+                    }
+                    
+                    console.log('?? Usuario nuevo con tipo:', pendingType);
+                    
+                    // Verificar si ya existe en BD
+                    const userDoc = await db.collection('users').doc(result.user.uid).get();
+                    
+                    if (!userDoc.exists) {
+                        // Crear usuario en Firestore
+                        await db.collection('users').doc(result.user.uid).set({
+                            uid: result.user.uid,
+                            email: result.user.email,
+                            displayName: result.user.displayName || result.user.email.split('@')[0],
+                            photoURL: result.user.photoURL || '',
+                            userType: pendingType,
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                            emailVerified: result.user.emailVerified
+                        });
+                        
+                        console.log('?? Usuario creado con tipo:', pendingType);
+                        
+                        // Email de verificacin
+                        if (!result.user.emailVerified) {
+                            try {
+                                await result.user.sendEmailVerification();
+                                console.log('?? Email de verificacin enviado');
+                            } catch (emailError) {
+                                console.log('?? No se pudo enviar email:', emailError);
+                            }
+                        }
+                        
+                        // Si es ARTISTA ? Crear perfil INMEDIATAMENTE
+                        if (pendingType === 'artista') {
+                            console.log('?? ========================================');
+                            console.log('?? ARTISTA NUEVO - MOSTRANDO MODAL PERFIL');
+                            console.log('?? ========================================');
+                            
+                            const perfilData = await showCrearPerfilArtista(result.user);
+                            
+                            console.log('?? Datos del perfil recibidos:', perfilData);
+                            
+                            if (perfilData) {
+                                console.log('?? Guardando perfil en Firestore...');
+                                
+                                await db.collection('artist_profiles').doc(result.user.uid).set({
+                                    uid: result.user.uid,
+                                    email: result.user.email,
+                                    nombreArtistico: perfilData.nombreArtistico,
+                                    provincia: perfilData.provincia,
+                                    ciudad: perfilData.ciudad,
+                                    generoMusical: perfilData.generoMusical,
+                                    telefono: perfilData.telefono || '',
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                                    estado: 'activo'
+                                });
+                                
+                                console.log('? Perfil de artista creado exitosamente');
+                                alert('? Perfil creado! Ya pods participar en certmenes ??');
+                                
+                                setTimeout(() => {
+                                    console.log('?? Redirigiendo a certamenes.html');
+                                    window.location.href = 'certamenes.html';
+                                }, 1000);
+                            } else {
+                                console.log('? Usuario cancel la creacin del perfil');
+                            }
+                        } else {
+                            console.log('?? Visitante - Redirigiendo a certmenes');
+                            window.location.href = 'certamenes.html';
+                        }
+                    }
+                }
+            }).catch(error => {
+                console.error('? Error en redirect:', error);
+            });
+            }); // Cierre del firebaseReady listener
+        });
+    </script>
+    
+    <!-- Firebase SDK v8 (Compatible y estable) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <!-- Auto-Login Modal -->
+    <script>
+    console.log('🎵 INDEX.HTML: Script iniciado');
+    
+    // Esperar a que Firebase esté listo usando el evento personalizado
+    window.addEventListener('firebaseReady', () => {
+        console.log('🔒 Verificando autenticación...');
+        firebase.auth().onAuthStateChanged((user) => {
+            console.log('✅ Firebase Auth Ready - Usuario:', user ? user.email : 'NO logueado');
+            
+            if (!user) {
+                console.log('🚫 Usuario NO logueado');
+                document.getElementById('contenidoNoLogueado').style.display = 'block';
+                document.getElementById('contenidoLogueado').style.display = 'none';
+            } else {
+                console.log('✅ Usuario logueado:', user.email);
+                document.getElementById('contenidoNoLogueado').style.display = 'none';
+                document.getElementById('contenidoLogueado').style.display = 'block';
+            }
+        });
+    });
+    
+    // Handler para botn Comenzar
+    document.addEventListener('DOMContentLoaded', () => {
+        const btnComenzar = document.getElementById('btnComenzar');
+        
+        if (btnComenzar) {
+            btnComenzar.addEventListener('click', () => {
+                console.log('?? Clic en COMENZAR AHORA');
+                showWelcomeModal();
+            });
+        }
+    });
+    
+    function showWelcomeModal() {
+        const modal = document.createElement('div');
+        modal.id = 'welcomeModal';
+        modal.innerHTML = `
+            <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+                <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 24px; padding: 50px 40px; max-width: 550px; width: 100%; box-shadow: 0 25px 80px rgba(0,0,0,0.9);">
+                    
+                    <!-- Ttulo Principal -->
+                    <div style="text-align: center; margin-bottom: 35px;">
+                        <h1 style="font-size: 42px; font-weight: 900; margin-bottom: 15px; color: white; text-shadow: 0 4px 20px rgba(0,0,0,0.4);">
+                            ?? Bienvenido a VYT MUSIC!
+                        </h1>
+                        <p style="font-size: 18px; color: rgba(255,255,255,0.95); line-height: 1.6;">
+                            La plataforma de certmenes de canto online.<br>
+                            <strong>Cmo quers participar?</strong>
+                        </p>
+                    </div>
+                    
+                    <!-- Opciones de Usuario -->
+                    <div style="display: grid; gap: 20px; margin-bottom: 30px;">
+                        
+                        <!-- Opcin Artista -->
+                        <button id="btnSoyArtista" 
+                                style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); 
+                                       color: white; padding: 25px; border-radius: 16px; border: none; 
+                                       cursor: pointer; transition: all 0.3s; text-align: left;
+                                       box-shadow: 0 8px 25px rgba(245, 87, 108, 0.4);">
+                            <div style="display: flex; align-items: center; gap: 20px;">
+                                <div style="font-size: 48px; line-height: 1;">??</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">Soy Artista</div>
+                                    <div style="font-size: 15px; opacity: 0.95;">Quiero participar en certmenes de canto</div>
+                                </div>
+                                <div style="font-size: 24px;">?</div>
+                            </div>
+                        </button>
+                        
+                        <!-- Opcin Visitante -->
+                        <button id="btnSoyVisitante" 
+                                style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); 
+                                       color: white; padding: 25px; border-radius: 16px; border: none; 
+                                       cursor: pointer; transition: all 0.3s; text-align: left;
+                                       box-shadow: 0 8px 25px rgba(79, 172, 254, 0.4);">
+                            <div style="display: flex; align-items: center; gap: 20px;">
+                                <div style="font-size: 48px; line-height: 1;">??</div>
+                                <div style="flex: 1;">
+                                    <div style="font-size: 24px; font-weight: bold; margin-bottom: 5px;">Soy Visitante</div>
+                                    <div style="font-size: 15px; opacity: 0.95;">Quiero votar y apoyar artistas</div>
+                                </div>
+                                <div style="font-size: 24px;">?</div>
+                            </div>
+                        </button>
+                        
+                    </div>
+                    
+                    <!-- Ya tengo cuenta -->
+                    <div style="text-align: center; margin-top: 25px; padding-top: 25px; border-top: 1px solid rgba(255,255,255,0.2);">
+                        <p style="color: rgba(255,255,255,0.8); margin-bottom: 12px; font-size: 15px;">
+                            Ya tens cuenta?
+                        </p>
+                        <button id="btnYaTengoCuenta" 
+                                style="background: rgba(255,255,255,0.15); color: white; 
+                                       padding: 12px 30px; border-radius: 10px; border: 2px solid rgba(255,255,255,0.3);
+                                       font-weight: bold; font-size: 16px; cursor: pointer; transition: all 0.3s;">
+                            Iniciar Sesin
+                        </button>
+                    </div>
+                    
+                    <!-- Botn Cerrar (X) -->
+                    <button id="btnCerrarModal" 
+                            style="position: absolute; top: 20px; right: 20px; 
+                                   background: rgba(255,255,255,0.2); color: white; 
+                                   width: 40px; height: 40px; border-radius: 50%; 
+                                   border: none; font-size: 24px; cursor: pointer; 
+                                   display: flex; align-items: center; justify-content: center;
+                                   transition: all 0.3s;">
+                        
+                    </button>
+                    
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(modal);
+        
+        // Hover effects
+        const btnArtista = document.getElementById('btnSoyArtista');
+        const btnVisitante = document.getElementById('btnSoyVisitante');
+        const btnYaTengo = document.getElementById('btnYaTengoCuenta');
+        const btnCerrar = document.getElementById('btnCerrarModal');
+        
+        btnArtista.addEventListener('mouseenter', () => {
+            btnArtista.style.transform = 'scale(1.03)';
+            btnArtista.style.boxShadow = '0 12px 35px rgba(245, 87, 108, 0.6)';
+        });
+        btnArtista.addEventListener('mouseleave', () => {
+            btnArtista.style.transform = 'scale(1)';
+            btnArtista.style.boxShadow = '0 8px 25px rgba(245, 87, 108, 0.4)';
+        });
+        
+        btnVisitante.addEventListener('mouseenter', () => {
+            btnVisitante.style.transform = 'scale(1.03)';
+            btnVisitante.style.boxShadow = '0 12px 35px rgba(79, 172, 254, 0.6)';
+        });
+        btnVisitante.addEventListener('mouseleave', () => {
+            btnVisitante.style.transform = 'scale(1)';
+            btnVisitante.style.boxShadow = '0 8px 25px rgba(79, 172, 254, 0.4)';
+        });
+        
+        btnYaTengo.addEventListener('mouseenter', () => {
+            btnYaTengo.style.background = 'rgba(255,255,255,0.25)';
+        });
+        btnYaTengo.addEventListener('mouseleave', () => {
+            btnYaTengo.style.background = 'rgba(255,255,255,0.15)';
+        });
+        
+        btnCerrar.addEventListener('mouseenter', () => {
+            btnCerrar.style.background = 'rgba(255,255,255,0.4)';
+            btnCerrar.style.transform = 'rotate(90deg)';
+        });
+        btnCerrar.addEventListener('mouseleave', () => {
+            btnCerrar.style.background = 'rgba(255,255,255,0.2)';
+            btnCerrar.style.transform = 'rotate(0deg)';
+        });
+        
+        // Handlers
+        document.getElementById('btnSoyArtista').addEventListener('click', () => {
+            window.location.href = 'crear-perfil-artista.html';
+        });
+        
+        document.getElementById('btnSoyVisitante').addEventListener('click', () => {
+            window.location.href = 'registro-visitante.html';
+        });
+        
+        document.getElementById('btnYaTengoCuenta').addEventListener('click', () => {
+            window.location.href = 'login.html';
+        });
+        
+        document.getElementById('btnCerrarModal').addEventListener('click', () => {
+            modal.remove();
+        });
+    }
+    
+    console.log('? Script de modal cargado');
+    </script>
+    
+    <!-- PWA Installer -->
+    </body>
+</html>

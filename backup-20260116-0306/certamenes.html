@@ -1,0 +1,601 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- LIMPIEZA AGRESIVA DE SW VIEJOS -->
+    <script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then(regs => {
+            regs.forEach(reg => {
+                if (!reg.active || !reg.active.scriptURL.includes('sw-simple.js')) {
+                    reg.unregister();
+                    console.log(' SW viejo eliminado:', reg.scope);
+                }
+            });
+        });
+        caches.keys().then(names => {
+            names.forEach(name => {
+                if (!name.includes('v3-force')) {
+                    caches.delete(name);
+                    console.log(' Cach viejo eliminado:', name);
+                }
+            });
+        });
+    }
+    </script>
+    <script src="/sw-register.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT Music - Certmenes</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Explora los certmenes de canto disponibles en VYT Music">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="VYT Music">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png?v=1768337820">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Design Tokens - Sistema Unificado -->
+    <link rel="stylesheet" href="/design-tokens.css?v=3.0">
+    
+    <!-- Estilos Principales -->
+    <link rel="stylesheet" href="/style.css?v=1768337821">
+    
+    <!-- Sistema de Navegación -->
+    <link rel="stylesheet" href="/src/navigation-styles.css?v=3.0">
+    
+    <!-- Mobile Fixes & Optimizations -->
+    <link rel="stylesheet" href="/mobile-fixes.css?v=3.0">
+    
+    <!-- Empty States Styles -->
+    <link rel="stylesheet" href="/src/empty-states.css?v=3.0">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animaciones y Gamificacin -->
+    <link rel="stylesheet" href="/src/animations.css?v=3.0">
+    <script src="/src/gamification.js?v=3.0"></script>
+    
+    <!-- Lazy Loading System -->
+    <script src="/src/lazy-loading.js?v=3.0"></script>
+    
+    <!--Start of Tawk.to Script-->
+    <script type="text/javascript">
+    var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+    
+    // Callback cuando Tawk.to se carga
+    Tawk_API.onLoad = function(){
+        console.log('Tawk.to widget cargado correctamente');
+    };
+    
+    (function(){
+    var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+    s1.async=true;
+    s1.src='https://embed.tawk.to/68b5b0ec2ccfc9192268fd71/1j42rm7na';
+    s1.charset='UTF-8';
+    s1.setAttribute('crossorigin','*');
+    s0.parentNode.insertBefore(s1,s0);
+    })();
+    </script>
+    <!--End of Tawk.to Script-->
+    
+    <!-- Firebase Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="firebase-config.js"></script>
+    
+    <!-- Auth Guard -->
+    <script src="/src/auth-guard.js"></script>
+    
+    <!-- Empty States Handler -->
+    <script src="/src/empty-states.js"></script>
+    <script src="/src/auth-handler.js"></script>
+</head>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome para iconos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Sistema de Navegacin Unificado -->
+    <script src="/src/navigation-component.js"></script>
+    
+    <!-- Sistema de Gamificacin Mejorado -->
+    <script src="/src/gamification-enhanced.js"></script>
+    
+    <!-- Sistema de Multimedia Dinmica -->
+    <link rel="stylesheet" href="/src/dynamic-assets-styles.css">
+    <script src="/src/dynamic-assets-manager.js" defer></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        /*  TODO EL CSS INLINE - NAVEGACIN NEGRA TRANSPARENTE */
+        body {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('images/fotos/chica-feliz-grabando-una-cancion.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            font-family: 'Roboto', sans-serif;
+            color: white;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Clase para fondo dinmico desde admin */
+        body.dynamic-background {
+            background: var(--dynamic-bg) !important;
+            background-size: var(--dynamic-bg-size, cover) !important;
+            background-attachment: fixed !important;
+            background-position: var(--dynamic-bg-position, center) !important;
+            background-repeat: no-repeat !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(45, 212, 191, 0.1));
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 48px;
+            text-align: center;
+            margin-bottom: 48px;
+        }
+
+        .certamen-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .certamen-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+        
+        /* Grid responsive para certámenes */
+        .vyt-certamenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            padding: 20px 0;
+        }
+        
+        /* Mobile: 1 columna */
+        @media (max-width: 640px) {
+            .vyt-certamenes-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+                padding: 12px;
+            }
+            
+            .certamen-card {
+                margin: 0;
+            }
+            
+            .hero-section {
+                padding: 24px 16px;
+                border-radius: 16px;
+            }
+        }
+        
+        /* Tablet: 2 columnas */
+        @media (min-width: 641px) and (max-width: 1024px) {
+            .vyt-certamenes-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Estilos del contenido */
+        .hero-section {
+
+        .menu-container {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 300px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px 0;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            overflow-y: auto;
+        }
+
+        .menu-overlay.active .menu-container {
+            transform: translateX(0);
+        }
+
+        .menu-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .menu-header h3 {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .menu-icon {
+            margin-right: 16px;
+            font-size: 18px;
+            width: 24px;
+            text-align: center;
+        }
+
+        .menu-close {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 24px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .menu-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .main-container {
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .vyt-certamenes-container {
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 24px;
+            }
+            .btn-primary {
+                padding: 12px 24px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor principal de certmenes estilo Spotify -->
+    <div class="vyt-certamenes-container">
+        
+        <!-- Encabezado con ttulo y descripcin -->
+        <div class="vyt-certamenes-header">
+            <h1 class="vyt-certamenes-title">
+                 Explora los Certmenes
+            </h1>
+            <p style="font-size: 1.125rem; color: rgba(255, 255, 255, 0.8); margin-bottom: 2rem; text-align: center;">
+                Encuentra tu certamen perfecto y comienza tu carrera musical
+            </p>
+        </div>
+
+        <!-- Chips de filtrado por categora -->
+        <div id="vyt-filter-chips" class="vyt-filter-chips">
+            <!-- Se generarn dinmicamente desde dynamic-assets-manager.js -->
+        </div>
+
+        <!-- Grilla de certmenes -->
+        <div id="vyt-certamenes-grid" class="vyt-certamenes-grid">
+            <!-- Se cargarn dinmicamente desde Firestore -->
+        </div>
+
+    </div>
+    <main style="max-width: 1200px; margin: 0 auto; padding: 0 20px 100px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 24px;">
+            
+            <!-- Card 1: Pop Nacional -->
+            <div class="certamen-card card-3d fade-in-up shine-effect" data-category="pop" style="animation-delay: 0.1s;">
+                <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #10B981, #059669); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; box-shadow: 0 2px 8px rgba(16, 185, 129, 0.25); backdrop-filter: blur(8px);">
+                         Abierto
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #3B82F6;">
+                        Certamen Nacional de Pop
+                    </h3>
+                    <p style="opacity: 0.85; font-size: 0.95rem; line-height: 1.5;">
+                        El certamen de msica Pop ms importante de Argentina. Compite con artistas de todo el pas.
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span class="category-pill" style="background: rgba(59, 130, 246, 0.2); color: #60A5FA; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                         Pop
+                    </span>
+                    <span class="category-pill" style="background: rgba(245, 158, 11, 0.2); color: #FBBF24; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        <span data-counter="247">247</span> inscritos
+                    </span>
+                </div>
+                
+                <!-- Barra de progreso -->
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
+                        <span style="opacity: 0.8;">Cupos disponibles</span>
+                        <span style="font-weight: 700; color: #3B82F6;"><span data-counter="82">82</span>%</span>
+                    </div>
+                    <div class="progress-bar" style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden;">
+                        <div style="height: 100%; background: linear-gradient(90deg, #3B82F6, #2DD4BF); border-radius: 10px; transition: width 1s ease;" data-progress="82"></div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="handleParticipar()" class="btn-game" style="flex: 1; background: linear-gradient(135deg, #3B82F6, #2563EB); border: none; color: white; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;">
+                         Participar
+                    </button>
+                    <a href="reglamento.html" class="btn-game" style="flex: 0.5; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 14px; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; font-size: 14px;">
+                        
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 2: Rock Regional -->
+            <div class="certamen-card card-3d fade-in-up shine-effect" data-category="rock" style="animation-delay: 0.2s;">
+                <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #F59E0B, #D97706); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25); backdrop-filter: blur(8px);">
+                         Prximamente
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #EF4444;">
+                        Certamen de Rock Regional
+                    </h3>
+                    <p style="opacity: 0.85; font-size: 0.95rem; line-height: 1.5;">
+                        Demuestra tu potencia sobre el escenario. Rock nacional con toda la energa.
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span class="category-pill" style="background: rgba(239, 68, 68, 0.2); color: #F87171; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                         Rock
+                    </span>
+                    <span class="category-pill" style="background: rgba(107, 114, 128, 0.2); color: #9CA3AF; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        Inscripcin pronta
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="padding: 12px; background: rgba(245, 158, 11, 0.1); border-radius: 8px; border-left: 3px solid #F59E0B;">
+                        <p style="font-size: 13px; margin: 0; opacity: 0.9;"> Abre: 20 de Enero 2026</p>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px;">
+                    <button disabled class="btn-game" style="flex: 1; background: rgba(107, 114, 128, 0.3); border: none; color: rgba(255, 255, 255, 0.5); padding: 14px; border-radius: 12px; font-weight: 700; cursor: not-allowed; font-size: 14px;">
+                         Prximamente
+                    </button>
+                    <a href="reglamento.html" class="btn-game" style="flex: 0.5; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 14px; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; font-size: 14px;">
+                        
+                    </a>
+                </div>
+            </div>
+
+            <!-- Card 3: Folklore Tradicional -->
+            <div class="certamen-card card-3d fade-in-up shine-effect" data-category="folklore" style="animation-delay: 0.3s;">
+                <div style="position: absolute; top: 12px; right: 12px; z-index: 10;">
+                    <span class="status-badge" style="background: linear-gradient(135deg, #8B5CF6, #7C3AED); padding: 4px 10px; border-radius: 12px; font-size: 10px; font-weight: 600; box-shadow: 0 2px 8px rgba(139, 92, 246, 0.25); backdrop-filter: blur(8px);">
+                         En Curso
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 16px;">
+                    <h3 style="font-size: 1.5rem; font-weight: 800; margin-bottom: 8px; color: #8B5CF6;">
+                        Folklore Tradicional Argentino
+                    </h3>
+                    <p style="opacity: 0.85; font-size: 0.95rem; line-height: 1.5;">
+                        Celebra las races musicales de Argentina con zambas, chacareras y ms.
+                    </p>
+                </div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap;">
+                    <span class="category-pill" style="background: rgba(139, 92, 246, 0.2); color: #A78BFA; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                         Folklore
+                    </span>
+                    <span class="category-pill" style="background: rgba(16, 185, 129, 0.2); color: #34D399; padding: 4px 12px; font-size: 11px; pointer-events: none;">
+                        <span data-counter="156">156</span> votantes
+                    </span>
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 12px;">
+                        <span style="opacity: 0.8;">Fase de votacin</span>
+                        <span style="font-weight: 700; color: #8B5CF6;"><span data-counter="45">45</span>%</span>
+                    </div>
+                    <div class="progress-bar" style="height: 8px; background: rgba(255, 255, 255, 0.1); border-radius: 10px; overflow: hidden;">
+                        <div style="height: 100%; background: linear-gradient(90deg, #8B5CF6, #A78BFA); border-radius: 10px; transition: width 1s ease;" data-progress="45"></div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 12px;">
+                    <button onclick="handleParticipar()" class="btn-game" style="flex: 1; background: linear-gradient(135deg, #8B5CF6, #7C3AED); border: none; color: white; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; font-size: 14px;">
+                         Votar
+                    </button>
+                    <a href="reglamento.html" class="btn-game" style="flex: 0.5; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 14px; border-radius: 12px; font-weight: 600; text-align: center; text-decoration: none; font-size: 14px;">
+                        
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Navegacin unificada cargada por navigation.js -->
+
+    <script>
+        console.log(' VYT MUSIC - Certmenes con navegacin negra transparente');
+
+        // Funcin para manejar participacin
+        async function handleParticipar() {
+            console.log(' Clic en Participar Ahora');
+            
+            // Verificar si el usuario est autenticado
+            const user = firebase.auth().currentUser;
+            
+            if (!user) {
+                console.log(' Usuario no autenticado - Redirigiendo a Comenzar Ahora');
+                window.location.href = 'index.html#comenzar-ahora';
+                return;
+            }
+            
+            console.log(' Usuario autenticado:', user.email);
+            
+            // Si est logueado, verificar perfil y continuar con inscripcin
+            window.location.href = 'inscripcion-unificada.html';
+        }
+
+        // FUNCIONES DEL MEN
+        function toggleMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            if (menuOverlay.classList.contains('active')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+
+        function openMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            menuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            console.log(' Men abierto desde la derecha');
+        }
+
+        function closeMenu() {
+            const menuOverlay = document.getElementById('menuOverlay');
+            menuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+            console.log(' Men cerrado');
+        }
+
+
+
+        // Cerrar men con tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeMenu();
+            }
+        });
+        
+        // Cargar fondo dinmico al inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDynamicBackground();
+        });
+        
+        // Sistema de fondos dinmicos desde Admin
+        function loadDynamicBackground() {
+            try {
+                const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
+                const currentPage = 'certamenes.html';
+                
+                console.log(' Verificando configuracin de fondo para:', currentPage);
+                
+                if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
+                    console.log(' Aplicando fondo personalizado para certamenes.html');
+                    
+                    const config = backgroundConfig[currentPage];
+                    const position = config.position || 'center center';
+                    const scale = config.scale || 1;
+                    const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
+                    
+                    // Aplicar usando variables CSS
+                    document.documentElement.style.setProperty('--dynamic-bg', 
+                        `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('${config.imageData}')`);
+                    document.documentElement.style.setProperty('--dynamic-bg-size', backgroundSize);
+                    document.documentElement.style.setProperty('--dynamic-bg-position', position);
+                    document.body.classList.add('dynamic-background');
+                    
+                    console.log(` Fondo aplicado: ${position}, escala: ${scale}`);
+                } else {
+                    console.log(' Usando fondo predeterminado para certamenes.html');
+                }
+            } catch (error) {
+                console.error(' Error cargando fondo:', error);
+            }
+        }
+        
+        // Cargar fondo dinmico al inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDynamicBackground();
+        });
+    </script>
+    
+    <!-- Certámenes JS Module -->
+    <script type="module" src="/certamenes.js"></script>
+    
+</body>
+</html>

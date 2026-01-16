@@ -1,0 +1,395 @@
+/**
+ * VYT MUSIC - MOBILE FIXES & OPTIMIZATIONS
+ * Correcciones específicas para experiencia mobile
+ * Fecha: 12 de Enero 2026
+ */
+
+/* ===== 1. HEADER LIMPIO NEGRO PURO ===== */
+header,
+.header,
+nav.header,
+.navigation-header {
+  background-color: #0a0a0f !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Eliminar cualquier badge de versión roja */
+.version-badge,
+.beta-badge,
+[class*="version"],
+[class*="beta"] {
+  display: none !important;
+}
+
+/* ===== 2. CARRUSEL MOBILE OPTIMIZADO ===== */
+@media (max-width: 768px) {
+  /* Hero section más compacta */
+  .hero-section {
+    padding: 24px 16px !important;
+  }
+
+  .hero-section h1 {
+    font-size: 1.5rem !important;
+    margin-bottom: 12px !important;
+  }
+
+  .hero-section p {
+    font-size: 0.9rem !important;
+    margin-bottom: 20px !important;
+  }
+
+  /* Flechas del carrusel 32px máximo */
+  .carousel-button,
+  .carousel-prev,
+  .carousel-next,
+  button[class*="carousel"],
+  button[class*="slider"] {
+    width: 32px !important;
+    height: 32px !important;
+    max-width: 32px !important;
+    max-height: 32px !important;
+    font-size: 14px !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  /* Título del carrusel con fondo semi-transparente para legibilidad */
+  .carousel-title,
+  .slider-title,
+  h1.hero-title,
+  .hero-section h1 {
+    font-size: 1.2rem !important;
+    line-height: 1.3 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    padding: 0.75rem 1rem !important;
+    border-radius: 8px !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    z-index: 10 !important;
+    position: relative !important;
+  }
+
+  /* Texto del carrusel con fondo semi-transparente */
+  .carousel-text,
+  .slider-text,
+  .hero-description,
+  .carousel-content p {
+    background: rgba(0, 0, 0, 0.6) !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 6px !important;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    z-index: 10 !important;
+    position: relative !important;
+  }
+
+  /* Botones más pequeños y compactos */
+  .btn-inscribirse,
+  .btn-participar,
+  .btn-primary,
+  a[href*="inscripcion"],
+  button[class*="inscrib"] {
+    max-width: 280px !important;
+    width: 100% !important;
+    padding: 10px 20px !important;
+    font-size: 0.85rem !important;
+    margin: 0 auto !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  /* Contenedor de botones centrado */
+  .hero-section > div:last-child,
+  [style*="flex-direction: column"] {
+    max-width: 320px !important;
+    margin: 0 auto !important;
+  }
+}
+
+/* ===== 3. CARDS DE CERTÁMENES ESTILO LISTA SPOTIFY ===== */
+@media (max-width: 768px) {
+  .certamen-card,
+  .contest-card,
+  [class*="certamen"][class*="card"] {
+    /* Diseño horizontal delgado */
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    padding: 0.75rem !important;
+    border-radius: 8px !important;
+    margin-bottom: 0.5rem !important;
+    min-height: 60px !important;
+    max-height: 80px !important;
+    gap: 0.75rem !important;
+  }
+
+  /* Imagen pequeña a la izquierda */
+  .certamen-card img,
+  .contest-card img,
+  .certamen-thumbnail {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 6px !important;
+    object-fit: cover !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* Contenido en el medio */
+  .certamen-card-content,
+  .certamen-info,
+  .contest-info {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .certamen-card h3,
+  .certamen-card .title,
+  .contest-title {
+    font-size: 0.95rem !important;
+    font-weight: 600 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .certamen-card p,
+  .certamen-card .subtitle,
+  .contest-subtitle {
+    font-size: 0.75rem !important;
+    opacity: 0.7 !important;
+    margin: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Botón de participar como icono sutil a la derecha */
+  .certamen-card button,
+  .certamen-card .btn-participar,
+  .contest-action-btn {
+    all: unset !important;
+    width: 32px !important;
+    height: 32px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 50% !important;
+    background: rgba(45, 212, 191, 0.2) !important;
+    color: #2dd4bf !important;
+    font-size: 14px !important;
+    flex-shrink: 0 !important;
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+  }
+
+  .certamen-card button:hover,
+  .certamen-card button:active {
+    background: rgba(45, 212, 191, 0.3) !important;
+    transform: scale(1.05) !important;
+  }
+
+  /* Ocultar textos largos de botones, solo mostrar icono */
+  .certamen-card button span:not(.icon):not(.fa):not([class*="icon"]) {
+    display: none !important;
+  }
+
+  /* Grid de certámenes: 1 columna en mobile */
+  .certamenes-grid,
+  .contests-grid,
+  [class*="certamen"][class*="grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 0.5rem !important;
+  }
+}
+
+/* ===== 4. AVATAR VYT-GUIDE POSICIÓN MOBILE ===== */
+@media (max-width: 768px) {
+  #vyt-guide-avatar,
+  .vyt-guide,
+  .guide-avatar,
+  [id*="guide"][id*="avatar"] {
+    bottom: 80px !important; /* 80px del fondo para no tapar navegación */
+    right: 16px !important;
+    width: 56px !important;
+    height: 56px !important;
+  }
+
+  /* Si tiene tooltip o bubble */
+  .guide-tooltip,
+  .guide-bubble,
+  #vyt-guide-avatar .tooltip {
+    bottom: calc(100% + 8px) !important;
+    right: 0 !important;
+    max-width: 200px !important;
+    font-size: 0.85rem !important;
+  }
+}
+
+/* ===== 5. NAVEGACIÓN INFERIOR MOBILE ===== */
+@media (max-width: 768px) {
+  .bottom-navigation,
+  .mobile-nav,
+  nav[class*="bottom"] {
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    z-index: 1000 !important;
+    background: #0a0a0f !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+    padding: 0.5rem !important;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3) !important;
+  }
+}
+
+/* ===== 6. CONTENEDOR PRINCIPAL CON PADDING BOTTOM ===== */
+@media (max-width: 768px) {
+  body,
+  main,
+  .main-container {
+    padding-bottom: 90px !important; /* Espacio para navegación inferior + avatar */
+  }
+}
+
+/* ===== 7. OPTIMIZACIÓN DE IMÁGENES MOBILE ===== */
+@media (max-width: 768px) {
+  img[loading="lazy"],
+  .lazy-image {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  /* Placeholder mientras carga */
+  img[loading="lazy"]:not([src]) {
+    background: linear-gradient(90deg, #1a1a2e 0%, #2a2a3e 50%, #1a1a2e 100%) !important;
+    background-size: 200% 100% !important;
+    animation: shimmer 1.5s infinite !important;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* ===== 8. BOTONES MOBILE OPTIMIZADOS ===== */
+@media (max-width: 768px) {
+  button,
+  .btn,
+  a.btn {
+    min-height: 44px !important; /* iOS touch target minimum */
+    padding: 0.75rem 1.25rem !important;
+  }
+
+  /* Prevenir zoom al hacer focus en inputs */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important; /* Previene auto-zoom en iOS */
+  }
+}
+
+/* ===== 9. MODALES Y OVERLAYS MOBILE ===== */
+@media (max-width: 768px) {
+  .modal,
+  .overlay,
+  [class*="modal"] {
+    max-width: 95vw !important;
+    max-height: 90vh !important;
+    margin: 5vh auto !important;
+  }
+
+  .modal-content,
+  .modal-body {
+    max-height: 70vh !important;
+    overflow-y: auto !important;
+  }
+}
+
+/* ===== 10. TABLAS RESPONSIVE ===== */
+@media (max-width: 768px) {
+  table {
+    display: block !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+/* ===== 11. HEADER STICKY MOBILE ===== */
+@media (max-width: 768px) {
+  header.sticky,
+  .sticky-header {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 999 !important;
+    background: #0a0a0f !important;
+  }
+}
+
+/* ===== 12. SAFE AREAS PARA NOTCH (iPhone X+) ===== */
+@supports (padding: env(safe-area-inset-top)) {
+  header {
+    padding-top: env(safe-area-inset-top) !important;
+  }
+
+  .bottom-navigation {
+    padding-bottom: env(safe-area-inset-bottom) !important;
+  }
+}
+
+/* ===== 13. ANIMACIONES SUAVES EN MOBILE ===== */
+@media (max-width: 768px) {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* ===== 14. SCROLL SUAVE ===== */
+html {
+  scroll-behavior: smooth !important;
+  -webkit-overflow-scrolling: touch !important;
+}
+
+/* ===== 15. PREVENIR SELECCIÓN ACCIDENTAL ===== */
+@media (max-width: 768px) {
+  .btn,
+  button,
+  .card,
+  .certamen-card {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -webkit-touch-callout: none !important;
+    user-select: none !important;
+  }
+
+  /* Permitir selección en textos */
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  span,
+  a {
+    user-select: text !important;
+  }
+}
