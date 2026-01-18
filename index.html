@@ -971,8 +971,8 @@
                 }
             });
 
-            // Google Login
-            document.getElementById('btnGoogleModal').addEventListener('click', async () => {
+            // Google Login - CAPTURE PHASE para ejecutar antes que gamification
+            document.getElementById('btnGoogleModal').addEventListener('click', async (e) => {
                 console.log('🔵 Click en botón Google detectado');
                 
                 // Verificar que Firebase esté inicializado
@@ -1029,9 +1029,9 @@
                     btn.disabled = false;
                     btn.innerHTML = originalHTML;
                 }
-            });
+            }, true);
 
-            // Facebook Login
+            // Facebook Login - CAPTURE PHASE
             document.getElementById('btnFacebookModal').addEventListener('click', async () => {
                 console.log('🔵 Click en botón Facebook detectado');
                 
@@ -1088,7 +1088,7 @@
                     btn.disabled = false;
                     btn.innerHTML = '... Continuar con Facebook';
                 }
-            });
+            }, true); // Capture phase
 
             // Check redirect result - Usuario vuelve de Google/Facebook
             firebase.auth().getRedirectResult().then(async (result) => {
