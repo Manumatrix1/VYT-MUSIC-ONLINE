@@ -942,6 +942,14 @@
 
         // Login con Email
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🔧 DOMContentLoaded: Registrando listeners de login');
+            
+            // Verificar que botones existen
+            const btnGoogle = document.getElementById('btnGoogleModal');
+            const btnFacebook = document.getElementById('btnFacebookModal');
+            console.log('🔧 Botón Google existe:', !!btnGoogle);
+            console.log('🔧 Botón Facebook existe:', !!btnFacebook);
+            
             document.getElementById('loginFormModal').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const email = document.getElementById('emailModal').value;
@@ -972,6 +980,7 @@
             });
 
             // Google Login - CAPTURE PHASE para ejecutar antes que gamification
+            console.log('🔧 Registrando listener de Google...');
             document.getElementById('btnGoogleModal').addEventListener('click', async (e) => {
                 console.log('🔵 Click en botón Google detectado');
                 
@@ -1032,6 +1041,7 @@
             }, true);
 
             // Facebook Login - CAPTURE PHASE
+            console.log('🔧 Registrando listener de Facebook...');
             document.getElementById('btnFacebookModal').addEventListener('click', async () => {
                 console.log('🔵 Click en botón Facebook detectado');
                 
