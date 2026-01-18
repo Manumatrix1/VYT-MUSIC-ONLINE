@@ -486,9 +486,22 @@
             return new Promise((resolve) => {
                 firebase.auth().onAuthStateChanged(async (user) => {
                     if (user) {
+                        // Verificar si tiene perfil de artista
+                        const db = firebase.firestore();
+                        const artistProfile = await db.collection('artist_profiles').doc(user.uid).get();
+                        
+                        if (!artistProfile.exists) {
+                            // NO tiene perfil de artista - redirigir a crear perfil
+                            alert('⚠️ Para inscribirte en un certamen necesitas crear tu perfil de artista primero.');
+                            window.location.href = 'crear-perfil-artista.html';
+                            resolve(null);
+                            return;
+                        }
+                        
                         await loadUserProfile();
                         resolve(user);
                     } else {
+                        // No está logueado - redirigir a login
                         window.location.href = 'login.html';
                         resolve(null);
                     }

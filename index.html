@@ -402,6 +402,29 @@
                         <p class="text-emerald-300 font-bold text-lg drop-shadow-md">Unite al Certamen de Canto</p>
                     </div>
                     
+                    <!-- CONTADOR DE INSCRIPCIONES -->
+                    <div class="mb-6 bg-gradient-to-r from-cyan-500/30 to-blue-500/30 border-2 border-cyan-300 rounded-2xl p-4" style="box-shadow: 0 0 30px rgba(34, 211, 238, 0.5), inset 0 0 20px rgba(34, 211, 238, 0.1);">
+                        <p class="text-sm uppercase tracking-widest text-cyan-300 mb-3 text-center font-bold" style="text-shadow: 0 0 15px rgba(34, 211, 238, 1);">⏰ ¡INSCRIBITE YA! Cierra en:</p>
+                        <div id="countdownModal" class="grid grid-cols-4 gap-3 text-center">
+                            <div class="bg-black/60 backdrop-blur-sm rounded-lg p-3 border-2 border-cyan-300 flex flex-col items-center justify-center" style="box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), inset 0 0 15px rgba(34, 211, 238, 0.2);">
+                                <div id="daysModal" class="text-4xl font-black text-cyan-300 leading-none" style="font-family: 'Orbitron', monospace; text-shadow: 0 0 20px rgba(34, 211, 238, 1), 0 0 40px rgba(34, 211, 238, 0.8);">00</div>
+                                <div class="text-xs text-cyan-200 uppercase mt-2 font-bold">Días</div>
+                            </div>
+                            <div class="bg-black/60 backdrop-blur-sm rounded-lg p-3 border-2 border-cyan-300 flex flex-col items-center justify-center" style="box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), inset 0 0 15px rgba(34, 211, 238, 0.2);">
+                                <div id="hoursModal" class="text-4xl font-black text-cyan-300 leading-none" style="font-family: 'Orbitron', monospace; text-shadow: 0 0 20px rgba(34, 211, 238, 1), 0 0 40px rgba(34, 211, 238, 0.8);">00</div>
+                                <div class="text-xs text-cyan-200 uppercase mt-2 font-bold">Horas</div>
+                            </div>
+                            <div class="bg-black/60 backdrop-blur-sm rounded-lg p-3 border-2 border-cyan-300 flex flex-col items-center justify-center" style="box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), inset 0 0 15px rgba(34, 211, 238, 0.2);">
+                                <div id="minutesModal" class="text-4xl font-black text-cyan-300 leading-none" style="font-family: 'Orbitron', monospace; text-shadow: 0 0 20px rgba(34, 211, 238, 1), 0 0 40px rgba(34, 211, 238, 0.8);">00</div>
+                                <div class="text-xs text-cyan-200 uppercase mt-2 font-bold">Min</div>
+                            </div>
+                            <div class="bg-black/60 backdrop-blur-sm rounded-lg p-3 border-2 border-cyan-300 flex flex-col items-center justify-center" style="box-shadow: 0 0 20px rgba(34, 211, 238, 0.6), inset 0 0 15px rgba(34, 211, 238, 0.2);">
+                                <div id="secondsModal" class="text-4xl font-black text-cyan-300 leading-none" style="font-family: 'Orbitron', monospace; text-shadow: 0 0 20px rgba(34, 211, 238, 1), 0 0 40px rgba(34, 211, 238, 0.8);">00</div>
+                                <div class="text-xs text-cyan-200 uppercase mt-2 font-bold">Seg</div>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <!-- ¿Ya tenés cuenta? - Siempre visible -->
                     <div class="mb-6">
                         <div class="text-center mb-4">
@@ -484,7 +507,7 @@
     <script>
         function initCountdown() {
             const targetDate = new Date();
-            targetDate.setDate(targetDate.getDate() + 7);
+            targetDate.setHours(targetDate.getHours() + 24);
             
             function updateCountdown() {
                 const now = new Date().getTime();
@@ -496,14 +519,34 @@
                     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
                     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
                     
-                    document.getElementById('days').textContent = days.toString().padStart(2, '0');
-                    document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-                    document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-                    document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                    // Actualizar contador principal
+                    const daysEl = document.getElementById('days');
+                    const hoursEl = document.getElementById('hours');
+                    const minutesEl = document.getElementById('minutes');
+                    const secondsEl = document.getElementById('seconds');
+                    
+                    if (daysEl) daysEl.textContent = days.toString().padStart(2, '0');
+                    if (hoursEl) hoursEl.textContent = hours.toString().padStart(2, '0');
+                    if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '0');
+                    if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '0');
+                    
+                    // Actualizar contador del modal
+                    const daysModalEl = document.getElementById('daysModal');
+                    const hoursModalEl = document.getElementById('hoursModal');
+                    const minutesModalEl = document.getElementById('minutesModal');
+                    const secondsModalEl = document.getElementById('secondsModal');
+                    
+                    if (daysModalEl) daysModalEl.textContent = days.toString().padStart(2, '0');
+                    if (hoursModalEl) hoursModalEl.textContent = hours.toString().padStart(2, '0');
+                    if (minutesModalEl) minutesModalEl.textContent = minutes.toString().padStart(2, '0');
+                    if (secondsModalEl) secondsModalEl.textContent = seconds.toString().padStart(2, '0');
                 } else {
-                    documcontenido vertical -->
-            </div>
-            <!-- Fin contenedor
+                    // Tiempo terminado
+                    if (daysModalEl) daysModalEl.textContent = '00';
+                    if (hoursModalEl) hoursModalEl.textContent = '00';
+                    if (minutesModalEl) minutesModalEl.textContent = '00';
+                    if (secondsModalEl) secondsModalEl.textContent = '00';
+                }
             }
             
             updateCountdown();
@@ -694,7 +737,14 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎵 Inicializando contador...');
             initCountdown();
+            
+            // Forzar actualización inmediata del contador
+            setTimeout(() => {
+                console.log('✅ Contador debe estar funcionando');
+            }, 100);
+            
             loadDynamicBackground();
             console.log('🎵 VYT MUSIC - Sistema iniciado correctamente');
             
@@ -926,28 +976,95 @@
             // Google Login
             document.getElementById('btnGoogleModal').addEventListener('click', async () => {
                 const btn = document.getElementById('btnGoogleModal');
+                const originalHTML = btn.innerHTML;
                 btn.disabled = true;
-                btn.innerHTML = 'Conectando...';
+                btn.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Conectando...';
 
                 try {
                     const provider = new firebase.auth.GoogleAuthProvider();
-                    await firebase.auth().signInWithRedirect(provider);
+                    provider.addScope('email');
+                    provider.addScope('profile');
+                    const result = await firebase.auth().signInWithPopup(provider);
+                    
+                    console.log('✅ Login con Google exitoso:', result.user.email);
+                    
+                    // Verificar si existe en Firestore
+                    const db = firebase.firestore();
+                    const userDoc = await db.collection('users').doc(result.user.uid).get();
+                    
+                    if (!userDoc.exists) {
+                        // Usuario nuevo - crear perfil básico
+                        await db.collection('users').doc(result.user.uid).set({
+                            uid: result.user.uid,
+                            email: result.user.email,
+                            displayName: result.user.displayName || result.user.email.split('@')[0],
+                            photoURL: result.user.photoURL || '',
+                            userType: 'visitante', // Por defecto visitante
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                            emailVerified: true
+                        });
+                        console.log('✅ Perfil de usuario creado');
+                    } else {
+                        // Usuario existente - actualizar último login
+                        await db.collection('users').doc(result.user.uid).update({
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                    
+                    // Redirigir a principal
+                    window.location.href = 'principal.html';
+                    
                 } catch (error) {
-                    showLoginAlert(error.message, 'error');
+                    console.error('❌ Error en login con Google:', error);
+                    showLoginAlert('Error al conectar con Google: ' + error.message, 'error');
                     btn.disabled = false;
-                    btn.innerHTML = '... Continuar con Google';
+                    btn.innerHTML = originalHTML;
                 }
             });
 
             // Facebook Login
             document.getElementById('btnFacebookModal').addEventListener('click', async () => {
                 const btn = document.getElementById('btnFacebookModal');
+                const originalHTML = btn.innerHTML;
                 btn.disabled = true;
-                btn.innerHTML = 'Conectando...';
+                btn.innerHTML = '<i class="fab fa-facebook-f animate-pulse"></i> Conectando...';
 
                 try {
                     const provider = new firebase.auth.FacebookAuthProvider();
-                    await firebase.auth().signInWithRedirect(provider);
+                    provider.addScope('email');
+                    provider.addScope('public_profile');
+                    const result = await firebase.auth().signInWithPopup(provider);
+                    
+                    console.log('✅ Login con Facebook exitoso:', result.user.email);
+                    
+                    // Verificar si existe en Firestore
+                    const db = firebase.firestore();
+                    const userDoc = await db.collection('users').doc(result.user.uid).get();
+                    
+                    if (!userDoc.exists) {
+                        // Usuario nuevo - crear perfil básico
+                        await db.collection('users').doc(result.user.uid).set({
+                            uid: result.user.uid,
+                            email: result.user.email,
+                            displayName: result.user.displayName || result.user.email.split('@')[0],
+                            photoURL: result.user.photoURL || '',
+                            userType: 'visitante', // Por defecto visitante
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp(),
+                            emailVerified: true
+                        });
+                        console.log('✅ Perfil de usuario creado');
+                    } else {
+                        // Usuario existente - actualizar último login
+                        await db.collection('users').doc(result.user.uid).update({
+                            lastLogin: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    }
+                    
+                    // Redirigir a principal
+                    window.location.href = 'principal.html';
+                    
                 } catch (error) {
                     showLoginAlert(error.message, 'error');
                     btn.disabled = false;
