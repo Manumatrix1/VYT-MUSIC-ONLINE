@@ -17,6 +17,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Sistema de Navegación Unificado -->
+    <script src="/src/navigation-component.js"></script>
+    
     <!-- Video Player Component Styles -->
     <link rel="stylesheet" href="/src/video-player-styles.css">
     
@@ -334,6 +337,14 @@
             if (videoPlayerInstance) {
                 videoPlayerInstance.destroy();
             }
+        });
+    </script>
+    
+    <!-- Inicializar Sistema de Navegación -->
+    <script>
+        new VYTNavigationComponent({
+            transparent: false,
+            showAuth: true
         });
     </script>
 </body>

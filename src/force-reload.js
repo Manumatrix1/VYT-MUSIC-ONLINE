@@ -4,7 +4,7 @@
  */
 
 (function() {
-  const APP_VERSION = '1768338821';
+  const APP_VERSION = '1768425600'; // Cambio para forzar reload
   const VERSION_KEY = 'vyt_app_version';
   const LAST_RELOAD_KEY = 'vyt_last_reload';
   
