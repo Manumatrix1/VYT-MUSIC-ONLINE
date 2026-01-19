@@ -1100,7 +1100,9 @@
                 }
             }, true); // Capture phase
 
-            // Check redirect result - Usuario vuelve de Google/Facebook
+            // Check redirect result - COMENTADO TEMPORALMENTE para no romper el script
+            // TODO: Mover esto a cuando Firebase esté listo
+            /*
             firebase.auth().getRedirectResult().then(async (result) => {
                 if (result.user) {
                     console.log('? Usuario detectado despus de redirect:', result.user.email);
@@ -1188,6 +1190,7 @@
             }).catch(error => {
                 console.error('? Error en redirect:', error);
             });
+            */
         }); // Cierre del DOMContentLoaded
     </script>
     
