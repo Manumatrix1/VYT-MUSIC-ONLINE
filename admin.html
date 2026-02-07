@@ -1505,8 +1505,8 @@
                     const password = document.getElementById('admin-password').value;
                     const errorDiv = document.getElementById('login-error');
                     
-                    // NUEVA CONTRASENA SEGURA (cambiada desde default)
-                    if (email === 'admin@vyt.com' && password === 'VYT2026_Admin_Secure!') {
+                    // Credenciales personalizadas del administrador
+                    if (email === 'luciano21martinez@gmail.com' && password === '@Aaron31981842') {
                         console.log('Login exitoso con credenciales de desarrollo');
                         
                         // Guardar sesin en localStorage
@@ -1557,7 +1557,7 @@
                         console.log(' Admin cargado exitosamente');
                     } else {
                         console.log(' Credenciales incorrectas');
-                        errorDiv.textContent = 'Credenciales incorrectas. Usa: admin@vyt.com / VYT2026_Admin_Secure!';
+                        errorDiv.textContent = 'Credenciales incorrectas. Verifica tu email y contraseña.';
                         errorDiv.classList.remove('hidden');
                     }
                 });
