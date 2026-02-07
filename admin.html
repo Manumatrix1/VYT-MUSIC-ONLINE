@@ -16,6 +16,14 @@
     
     <!-- Design Tokens - Sistema Unificado -->
     <link rel="stylesheet" href="/design-tokens.css">
+
+    <script>
+        if (localStorage.getItem('vyt_debug') !== 'true' && !window.__vytAdminConsoleMuted) {
+            window.__vytAdminConsoleMuted = true;
+            window.__vytAdminConsoleLog = console.log;
+            console.log = () => {};
+        }
+    </script>
     
     <!-- Firebase SDK v8 -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
@@ -47,10 +55,14 @@
             collection: (db, path) => db.collection(path),
             getDocs: (ref) => ref.get(),
             getDoc: (ref) => ref.get(),
+            addDoc: (ref, data) => ref.add(data),
             doc: (db, path) => db.doc(path),
             setDoc: (ref, data) => ref.set(data),
             updateDoc: (ref, data) => ref.update(data),
-            deleteDoc: (ref) => ref.delete()
+            deleteDoc: (ref) => ref.delete(),
+            orderBy: (field, direction) => ({ orderBy: [field, direction] }),
+            query: (collection, ...constraints) => collection,
+            limit: (num) => ({ limit: num })
         };
         
         // Alias para db global
@@ -89,6 +101,41 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
             background: #f8fafc;
+        }
+        
+        /* ESTILOS PARA INPUTS - TEXTO NEGRO VISIBLE */
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        input[type="datetime-local"],
+        input[type="url"],
+        textarea,
+        select {
+            color: #1f2937 !important;
+            background-color: white !important;
+        }
+        
+        /* Estilos especiales para datetime-local para que el picker sea visible */
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+            filter: invert(0);
+            cursor: pointer;
+            opacity: 1;
+        }
+        
+        input[type="datetime-local"]::-webkit-datetime-edit {
+            color: #1f2937;
+        }
+        
+        input[type="datetime-local"]::-webkit-datetime-edit-fields-wrapper {
+            color: #1f2937;
+        }
+        
+        input::placeholder,
+        textarea::placeholder {
+            color: #9ca3af !important;
         }
     </style>
 </head>
@@ -727,12 +774,20 @@
                             
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Imagen del Certamen</label>
-                                    <input type="file" id="certamen-imagen" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">📸 Imagen del Certamen</label>
+                                    <input type="file" id="certamen-imagen-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                                    <p class="text-xs text-gray-500 mt-1">🖼️ Sube directamente desde tu PC (JPG, PNG, max 5MB)</p>
+                                    <div id="upload-progress" class="hidden mt-2">
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div id="upload-progress-bar" class="bg-blue-600 h-2 rounded-full transition-all" style="width: 0%"></div>
+                                        </div>
+                                        <p class="text-xs text-blue-600 mt-1" id="upload-status">Subiendo imagen...</p>
+                                    </div>
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de Inscripcin</label>
-                                    <input type="url" id="certamen-url-inscripcion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://...">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL de Inscripción (opcional)</label>
+                                    <input type="url" id="certamen-url-inscripcion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="/inscripcion-unificada.html">
+                                    <p class="text-xs text-gray-500 mt-1">⚙️ Deja vacío para usar la inscripción por defecto</p>
                                 </div>
                             </div>
                             
@@ -1412,6 +1467,36 @@
                 });
             }
             
+            // Event listener para formulario de crear certamen
+            const certamenForm = document.getElementById('certamen-form');
+            if (certamenForm) {
+                certamenForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const imagenFileInput = document.getElementById('certamen-imagen-file');
+                    const imagenFile = imagenFileInput.files[0];
+                    
+                    const formData = {
+                        nombre: document.getElementById('certamen-nombre').value,
+                        provincia: document.getElementById('certamen-provincia').value,
+                        descripcion: document.getElementById('certamen-descripcion').value,
+                        fechaInicio: document.getElementById('certamen-fecha-inicio').value,
+                        fechaFin: document.getElementById('certamen-fecha-fin').value,
+                        precio: document.getElementById('certamen-precio').value,
+                        orden: document.getElementById('certamen-orden').value,
+                        activo: document.getElementById('certamen-activo').checked,
+                        imagenFile: imagenFile,
+                        urlInscripcion: document.getElementById('certamen-url-inscripcion').value
+                    };
+                    
+                    const success = await window.createCertamen(formData);
+                    if (success) {
+                        window.cancelCreateCertamen();
+                        window.loadCertamenes();
+                    }
+                });
+            }
+            
             // Agregar funcionalidad al botn de login principal
             const loginBtn = document.getElementById('login-btn');
             if (loginBtn) {
@@ -1420,9 +1505,9 @@
                     const password = document.getElementById('admin-password').value;
                     const errorDiv = document.getElementById('login-error');
                     
-                    // Credenciales bsicas
-                    if (email === 'admin@vyt.com' && password === 'vytonline') {
-                        console.log(' Login exitoso con credenciales bsicas');
+                    // NUEVA CONTRASENA SEGURA (cambiada desde default)
+                    if (email === 'admin@vyt.com' && password === 'VYT2026_Admin_Secure!') {
+                        console.log('Login exitoso con credenciales de desarrollo');
                         
                         // Guardar sesin en localStorage
                         localStorage.setItem('admin_session', JSON.stringify({
@@ -2105,6 +2190,14 @@
                     fecha_aprobacion: new Date()
                 });
                 
+                // Registrar en audit log
+                if (window.registrarAuditLog) {
+                    await window.registrarAuditLog('aprobar_participante', {
+                        collection: collection,
+                        participante_id: id
+                    });
+                }
+                
                 console.log(` Participante ${id} aprobado`);
                 alert('Participante aprobado exitosamente');
                 
@@ -2203,6 +2296,14 @@
                     fecha_rechazo: new Date()
                 });
                 
+                // Registrar en audit log
+                if (window.registrarAuditLog) {
+                    await window.registrarAuditLog('rechazar_participante', {
+                        collection: collection,
+                        participante_id: id
+                    });
+                }
+                
                 console.log(` Participante ${id} rechazado`);
                 alert('Participante rechazado');
                 
@@ -2238,6 +2339,14 @@
                     estado: 'pendiente'
                 });
                 
+                // Registrar en audit log
+                if (window.registrarAuditLog) {
+                    await window.registrarAuditLog('desaprobar_participante', {
+                        collection: collection,
+                        participante_id: id
+                    });
+                }
+                
                 console.log(` Participante ${id} desaprobado`);
                 alert('Participante movido a pendientes');
                 
@@ -2257,8 +2366,170 @@
             }
         };
 
-        window.editarParticipanteReal = function(id, collection) {
-            alert(`Funcin de edicin para participante ${id} en desarrollo`);
+        window.editarParticipanteReal = async function(id, collection) {
+            if (!db || !window.firestoreQuery) {
+                alert('Firebase no disponible');
+                return;
+            }
+            
+            try {
+                const { doc, getDoc, updateDoc } = window.firestoreQuery;
+                const docRef = doc(db, collection, id);
+                const docSnap = await getDoc(docRef);
+                
+                if (!docSnap.exists()) {
+                    alert('Participante no encontrado');
+                    return;
+                }
+                
+                const data = docSnap.data();
+                
+                // Crear modal de edicion
+                const modal = document.createElement('div');
+                modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+                modal.style.zIndex = '9999';
+                modal.innerHTML = `
+                    <div class="bg-white rounded-lg p-6 max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <h3 class="text-xl font-bold text-gray-900 mb-4">
+                            Editar Inscripcion
+                        </h3>
+                        
+                        <form id="edit-inscripcion-form" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Nombre Artista</label>
+                                <input type="text" id="edit-nombre" value="${data.nombre_artista || ''}" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Email</label>
+                                <input type="email" id="edit-email" value="${data.email || ''}" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border" required>
+                            </div>
+                            
+                            ${data.whatsapp ? `
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">WhatsApp</label>
+                                <input type="text" id="edit-whatsapp" value="${data.whatsapp || ''}" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                            ` : ''}
+                            
+                            ${data.provincia ? `
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Provincia</label>
+                                <input type="text" id="edit-provincia" value="${data.provincia || ''}" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                            ` : ''}
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Video URL</label>
+                                <input type="url" id="edit-video" value="${data.video_link || ''}" 
+                                       class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700">Estado</label>
+                                <select id="edit-estado" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm p-2 border">
+                                    <option value="pendiente" ${data.estado === 'pendiente' ? 'selected' : ''}>Pendiente</option>
+                                    <option value="aprobado" ${data.estado === 'aprobado' ? 'selected' : ''}>Aprobado</option>
+                                    <option value="rechazado" ${data.estado === 'rechazado' ? 'selected' : ''}>Rechazado</option>
+                                </select>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3 mt-6">
+                                <button type="button" onclick="this.closest('.fixed').remove()" 
+                                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400">
+                                    Cancelar
+                                </button>
+                                <button type="submit" 
+                                        class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                    Guardar Cambios
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                `;
+                
+                document.body.appendChild(modal);
+                
+                // Handler del formulario
+                document.getElementById('edit-inscripcion-form').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const updatedData = {
+                        nombre_artista: document.getElementById('edit-nombre').value,
+                        email: document.getElementById('edit-email').value,
+                        video_link: document.getElementById('edit-video').value,
+                        estado: document.getElementById('edit-estado').value,
+                        fecha_ultima_modificacion: new Date(),
+                        modificado_por_admin: true
+                    };
+                    
+                    // Campos opcionales
+                    const whatsappInput = document.getElementById('edit-whatsapp');
+                    const provinciaInput = document.getElementById('edit-provincia');
+                    
+                    if (whatsappInput) updatedData.whatsapp = whatsappInput.value;
+                    if (provinciaInput) updatedData.provincia = provinciaInput.value;
+                    
+                    try {
+                        await updateDoc(docRef, updatedData);
+                        
+                        // Registrar en audit log
+                        if (window.registrarAuditLog) {
+                            await window.registrarAuditLog('editar_inscripcion', {
+                                collection: collection,
+                                participante_id: id,
+                                cambios: Object.keys(updatedData)
+                            });
+                        }
+                        
+                        alert('Inscripcion actualizada correctamente');
+                        modal.remove();
+                        
+                        // Recargar lista
+                        if (collection === 'participantes_online') {
+                            loadRealParticipants();
+                        }
+                    } catch (error) {
+                        console.error('Error actualizando inscripcion:', error);
+                        alert('Error al actualizar: ' + error.message);
+                    }
+                });
+                
+            } catch (error) {
+                console.error('Error cargando datos para edicion:', error);
+                alert('Error: ' + error.message);
+            }
+        };
+
+        // NUEVA FUNCION: Registrar Audit Log
+        window.registrarAuditLog = async function(action, details = {}) {
+            if (!db || !window.firestoreQuery) {
+                console.warn('Firebase no disponible para audit log');
+                return;
+            }
+            
+            try {
+                const { collection, addDoc } = window.firestoreQuery;
+                
+                const logData = {
+                    action: action,
+                    details: details,
+                    admin_email: document.getElementById('admin-user-email')?.textContent || 'unknown',
+                    timestamp: new Date(),
+                    user_agent: navigator.userAgent,
+                    ip_address: 'client-side'
+                };
+                
+                await addDoc(collection(db, 'audit_logs'), logData);
+                console.log('Audit log registrado:', action);
+            } catch (error) {
+                console.error('Error registrando audit log:', error);
+                // No hacer fail de la operacion principal si falla el log
+            }
         };
 
         // Actualizar las funciones de carga para usar datos reales
@@ -2369,11 +2640,9 @@
             const certamenesContainer = document.getElementById('certamenes-list');
             if (!certamenesContainer) return;
             
-            // Usar la funcin existente que ya est definida
-            if (window.loadCertamenes && typeof window.loadCertamenes === 'function') {
-                window.loadCertamenes();
-            } else {
-                certamenesContainer.innerHTML = `
+            // NO llamar a window.loadCertamenes() para evitar loop infinito
+            // Mostrar mensaje demo directamente
+            certamenesContainer.innerHTML = `
                     <div class="space-y-4">
                         <div class="border border-gray-200 rounded-lg p-4">
                             <div class="flex justify-between items-start mb-2">
@@ -2400,10 +2669,137 @@
                         </div>
                     </div>
                 `;
-            }
         }
 
         // ===== FUNCIONES PARA GESTIN DE CERTMENES =====
+        // Función para crear certamen
+        // Función para subir imagen a Firebase Storage
+        window.uploadCertamenImage = async function(file) {
+            if (!file) return '';
+            
+            // Validar tamaño (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ La imagen es muy grande. Máximo 5MB');
+                return '';
+            }
+            
+            try {
+                const storage = firebase.storage();
+                const timestamp = Date.now();
+                const fileName = `certamenes/${timestamp}_${file.name}`;
+                const storageRef = storage.ref(fileName);
+                
+                // Mostrar progress bar
+                const progressDiv = document.getElementById('upload-progress');
+                const progressBar = document.getElementById('upload-progress-bar');
+                const statusText = document.getElementById('upload-status');
+                
+                if (progressDiv) {
+                    progressDiv.classList.remove('hidden');
+                    progressBar.style.width = '0%';
+                    statusText.textContent = '📤 Iniciando subida...';
+                }
+                
+                const uploadTask = storageRef.put(file);
+                
+                return new Promise((resolve, reject) => {
+                    uploadTask.on('state_changed',
+                        (snapshot) => {
+                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                            if (progressBar) progressBar.style.width = progress + '%';
+                            if (statusText) statusText.textContent = `📤 Subiendo imagen... ${Math.round(progress)}%`;
+                        },
+                        (error) => {
+                            console.error('Error subiendo imagen:', error);
+                            if (progressDiv) progressDiv.classList.add('hidden');
+                            alert('❌ Error al subir imagen: ' + error.message);
+                            reject(error);
+                        },
+                        async () => {
+                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                            if (statusText) {
+                                statusText.textContent = '✅ ¡Imagen cargada exitosamente!';
+                                statusText.style.color = '#10b981';
+                            }
+                            if (progressBar) {
+                                progressBar.style.backgroundColor = '#10b981';
+                            }
+                            
+                            // Mostrar alerta adicional
+                            console.log('✅ Imagen subida:', downloadURL);
+                            
+                            setTimeout(() => {
+                                if (progressDiv) progressDiv.classList.add('hidden');
+                                if (progressBar) progressBar.style.backgroundColor = '#3b82f6';
+                                if (statusText) statusText.style.color = '#3b82f6';
+                            }, 3000);
+                            
+                            resolve(downloadURL);
+                        }
+                    );
+                });
+            } catch (error) {
+                console.error('Error en uploadCertamenImage:', error);
+                alert('❌ Error subiendo imagen: ' + error.message);
+                return '';
+            }
+        };
+        
+        // Función para crear certamen
+        window.createCertamen = async function(formData) {
+            if (!db) {
+                alert('❌ Firebase no está inicializado. Recargá la página e intentá de nuevo.');
+                console.error('db no está definido');
+                return false;
+            }
+            
+            try {
+                const { collection, addDoc } = window.firestoreQuery;
+                
+                if (!collection || !addDoc) {
+                    alert('❌ Error: Funciones de Firestore no disponibles');
+                    return false;
+                }
+                
+                // Si hay imagen, subirla primero
+                let imagenUrl = '';
+                if (formData.imagenFile) {
+                    console.log('📤 Subiendo imagen...');
+                    imagenUrl = await window.uploadCertamenImage(formData.imagenFile);
+                    if (!imagenUrl) {
+                        alert('⚠️ No se pudo subir la imagen, pero podés continuar sin ella.');
+                    }
+                }
+                
+                const certamenData = {
+                    nombre: formData.nombre,
+                    provincia: formData.provincia || 'Buenos Aires',
+                    descripcion: formData.descripcion || '',
+                    fecha_inicio: new Date(formData.fechaInicio),
+                    fecha_fin: new Date(formData.fechaFin),
+                    precio: parseInt(formData.precio) || 5000,
+                    orden: parseInt(formData.orden) || 1,
+                    activo: formData.activo || false,
+                    imagen_url: imagenUrl,
+                    url_inscripcion: formData.urlInscripcion || '/inscripcion-unificada.html',
+                    fecha_creacion: new Date(),
+                    participantes_count: 0
+                };
+                
+                console.log('💾 Guardando certamen en Firestore...');
+                const collectionRef = collection(db, 'certamenes_provinciales');
+                await addDoc(collectionRef, certamenData);
+                
+                alert('✅ ¡Certamen creado exitosamente!' + (imagenUrl ? '\n\n📸 Imagen subida correctamente' : ''));
+                console.log('✅ Certamen guardado');
+                return true;
+            } catch (error) {
+                console.error('❌ Error creando certamen:', error);
+                alert('❌ Error al crear certamen: ' + error.message + '\n\nDetalles: ' + error.code);
+                return false;
+            }
+        };
+        
         window.openCreateCertamenModal = function() {
             const form = document.getElementById('create-certamen-form');
             form.classList.remove('hidden');
@@ -2944,20 +3340,14 @@
             const pagosContainer = document.getElementById('pagos-list');
             if (!pagosContainer) return;
             
-            // Usar la funcin existente si est disponible
-            if (window.loadPagos && typeof window.loadPagos === 'function') {
-                // Evitar recursin infinita
-                const originalLoadPagos = window.loadPagos;
-                window.loadPagos = function() {
-                    console.log(' Cargando pagos...');
-                    loadRealPagos();
-                };
-                originalLoadPagos();
-                window.loadPagos = function() {
-                    console.log(' Cargando pagos...');
-                    loadRealPagos();
-                };
-            }
+            // NO llamar a window.loadPagos() para evitar loop infinito
+            // Mostrar mensaje demo directamente
+            pagosContainer.innerHTML = `
+                <div class="text-center py-8">
+                    <p class="text-gray-500 mb-4">⚠️ Firebase no disponible - Modo Demo</p>
+                    <p class="text-sm text-gray-400">Los datos reales se cargarán cuando Firebase esté conectado</p>
+                </div>
+            `;
         }
 
         // Actualizar las funciones principales para usar datos reales
@@ -3406,6 +3796,11 @@
         function cargarVideosPendientes() {
             const videosParaAprobacion = JSON.parse(localStorage.getItem('videosParaAprobacion') || '[]');
             const container = document.getElementById('videos-pendientes-lista');
+            
+            if (!container) {
+                console.warn('⚠️ Contenedor videos-pendientes-lista no encontrado');
+                return;
+            }
             
             if (videosParaAprobacion.length === 0) {
                 container.innerHTML = `

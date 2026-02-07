@@ -495,6 +495,66 @@ class InscriptionFormHandler {
      * @param {Object} formData - Datos validados del formulario
      */
     async submitForm(formData) {
+        // 🔥 PASO 1: VALIDACIÓN DE AUTENTICACIÓN (CRÍTICO)
+        
+        // 1.1 Verificar que el usuario esté logueado
+        if (!this.currentUser) {
+            this.showNotification('⚠️ Debes iniciar sesión para inscribirte', 'error');
+            console.warn('❌ Intento de inscripción sin autenticación');
+            
+            // Guardar URL actual para volver después del login
+            localStorage.setItem('redirectAfterLogin', window.location.href);
+            
+            setTimeout(() => {
+                window.location.href = '/login.html';
+            }, 2000);
+            return;
+        }
+
+        console.log('✅ Usuario autenticado:', this.currentUser.uid);
+
+        // 1.2 Verificar que tenga perfil de artista creado (solo para inscripciones online)
+        if (this.formType === 'online') {
+            try {
+                this.showNotification('Verificando tu perfil de artista...', 'info');
+                
+                const artistProfileRef = doc(db, 'artist_profiles', this.currentUser.uid);
+                const artistProfileSnap = await getDoc(artistProfileRef);
+                
+                if (!artistProfileSnap.exists()) {
+                    this.showNotification('⚠️ Primero debes crear tu perfil de artista', 'error');
+                    console.warn('❌ Usuario sin perfil de artista:', this.currentUser.uid);
+                    
+                    setTimeout(() => {
+                        window.location.href = '/crear-perfil-artista.html';
+                    }, 2500);
+                    return;
+                }
+
+                const artistData = artistProfileSnap.data();
+                
+                // Verificar que el perfil esté completo
+                if (!artistData.profileComplete) {
+                    this.showNotification('⚠️ Debes completar tu perfil de artista antes de inscribirte', 'error');
+                    console.warn('❌ Perfil de artista incompleto:', this.currentUser.uid);
+                    
+                    setTimeout(() => {
+                        window.location.href = '/crear-perfil-artista.html';
+                    }, 2500);
+                    return;
+                }
+
+                console.log('✅ Perfil de artista verificado:', artistData.artistName || artistData.nombre_artista);
+
+            } catch (error) {
+                console.error('❌ Error verificando perfil de artista:', error);
+                this.showNotification('Error al verificar tu perfil. Intenta nuevamente.', 'error');
+                return;
+            }
+        }
+
+        // 1.3 Todo OK - Procesar inscripción
+        console.log('✅ Validaciones completadas - Procesando inscripción...');
         this.showNotification('Procesando tu inscripción...', 'info');
 
         if (this.formType === 'online') {
@@ -534,7 +594,8 @@ class InscriptionFormHandler {
             certamen_id: this.selectedCertamen.id,
             certamen_nombre: this.selectedCertamen.nombre,
             precio_certamen: this.selectedCertamen.precio,
-            aprobado: false,
+            estado: 'pendiente',  // ✅ String estandarizado
+            aprobado: false,      // Mantener para compatibilidad
             pago_completado: formData.esPrueba,
             tipo_inscripcion: formData.esPrueba ? 'prueba' : 'completa',
             votos_gratuitos: 0,
@@ -570,7 +631,8 @@ class InscriptionFormHandler {
             email: formData.email,
             telefono: formData.telefono,
             video_link: formData.video,
-            aprobado: false,
+            estado: 'pendiente',  // ✅ String estandarizado
+            aprobado: false,      // Mantener para compatibilidad
             tipo_inscripcion: formData.esPrueba ? 'prueba' : 'completa',
             votos_gratuitos: 0,
             descuento_aplicado: false,
@@ -579,8 +641,8 @@ class InscriptionFormHandler {
             uid: this.currentUser?.uid || null
         };
 
-        // Guardar en Firestore
-        await addDoc(collection(db, "participantes_presenciales"), inscripcionDoc);
+        // Guardar en Firestore (colección SINGULAR)
+        await addDoc(collection(db, "participantes_presencial"), inscripcionDoc);
 
         this.showSuccessModal();
         this.resetForm();
@@ -730,7 +792,7 @@ class InscriptionFormHandler {
 async function checkUserInscriptionStatus(userId) {
     try {
         // Importar dinámicamente
-        const { db } = await import('../firebase-config.js');
+        const { db } = await import('../firebase-config.module.js');
         const { query, where, collection, getDocs } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
         
         // Buscar en participantes_online
@@ -755,7 +817,7 @@ async function checkUserInscriptionStatus(userId) {
 // Función para manejar clics en enlaces de inscripción
 async function handleSmartInscriptionClick(event, targetUrl = 'inscripcion-unificada.html') {
     try {
-        const { auth } = await import('../firebase-config.js');
+        const { auth } = await import('../firebase-config.module.js');
         const user = auth.currentUser;
         
         if (!user) {

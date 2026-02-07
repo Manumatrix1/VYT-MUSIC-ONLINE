@@ -4,17 +4,22 @@ service cloud.firestore {
     
     // ===== REGLAS PARA USUARIOS =====
     match /users/{userId} {
-      // Los usuarios pueden leer y escribir solo sus propios datos
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Lectura: usuarios propios o admins
+      allow read: if request.auth != null && 
+        (request.auth.uid == userId || isAdmin());
       
-      // Los admins pueden leer todos los usuarios
-      allow read: if isAdmin();
+      // Creación: solo el usuario puede crear su propio documento
+      allow create: if request.auth != null && 
+        request.auth.uid == userId &&
+        request.resource.data.role != 'admin';  // No puede autoasignarse admin
       
-      // Permitir creación de nuevos usuarios autenticados
-      allow create: if request.auth != null && request.auth.uid == userId;
+      // Actualización: usuarios solo sus datos, SIN TOCAR campo 'role'
+      allow update: if request.auth != null && 
+        request.auth.uid == userId &&
+        !request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'isAdmin']);
       
-      // Permitir acceso básico para login (lectura temporal)
-      allow read: if request.auth != null;
+      // Solo admins pueden cambiar roles
+      allow update: if isAdmin();
     }
     
     // ===== REGLAS PARA PERFILES DE ARTISTAS =====
@@ -40,22 +45,32 @@ service cloud.firestore {
       // Solo admins pueden crear/modificar certámenes
       allow write: if isAdmin();
     }
+
+    match /certamenes_nacionales/{certamenId} {
+      // Lectura pública de certámenes activos
+      allow read: if true;
+
+      // Solo admins pueden crear/modificar certámenes
+      allow write: if isAdmin();
+    }
     
     // ===== REGLAS PARA PARTICIPANTES ONLINE =====
     match /participantes_online/{participanteId} {
-      // PERMITIR INSCRIPCIONES SIN AUTENTICACIÓN
-      // Los usuarios pueden crear inscripciones libremente (registro público)
-      allow create: if validateInscripcionData();
+      // Inscripciones requieren autenticación
+      allow create: if request.auth != null && 
+        validateInscripcionData() &&
+        request.resource.data.uid == request.auth.uid;
       
       // Los usuarios autenticados pueden leer su propia participación
       allow read: if request.auth != null && 
         (resource.data.uid == request.auth.uid || isAdmin());
         
-      // Permitir lectura pública para mostrar participantes (si es necesario)
-      allow read: if isAdmin();
+      // Lectura pública para listados (solo datos básicos)
+      allow read: if true;
       
       // Solo admins pueden modificar participaciones
       allow update: if isAdmin();
+      allow delete: if isAdmin();
     }
     
     // ===== REGLAS PARA PARTICIPACIONES (SISTEMA FEDERAL - FASE 11) =====
@@ -249,11 +264,48 @@ service cloud.firestore {
       allow create, update: if false;
     }
     
+    // ===== REGLAS PARA AUDIT LOGS (NUEVO) =====
+    match /audit_logs/{logId} {
+      // Solo admins pueden leer audit logs
+      allow read: if isAdmin();
+      
+      // Admins pueden crear logs (desde cliente)
+      allow create: if isAdmin();
+      
+      // Nadie puede modificar o eliminar logs
+      allow update, delete: if false;
+    }
+    
     // ===== REGLAS PARA CONFIGURACIÓN DEL SISTEMA =====
     match /configuracion_sistema/{configId} {
-      // Permitir lectura y escritura sin autenticación
-      // NOTA: Esta página solo se accede desde el admin, no es pública
-      allow read, write: if true;
+      // Lectura pública de configuración
+      allow read: if true;
+      
+      // Solo admins pueden escribir configuración
+      allow write: if isAdmin();
+    }
+    
+    // ===== REGLAS PARA SUSCRIPCIONES DE EMAIL =====
+    match /email_subscriptions/{subscriptionId} {
+      // Usuarios autenticados pueden crear/actualizar su propia suscripción
+      allow create: if request.auth != null && 
+        request.resource.data.userId == request.auth.uid;
+      
+      // Usuarios pueden actualizar su propia suscripción (cambiar activo/inactivo)
+      allow update: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Usuarios pueden leer su propia suscripción
+      allow read: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+      
+      // Admins pueden leer todas las suscripciones
+      allow read: if isAdmin();
+      
+      // Permitir creación anónima para emails sin login (solo email y timestamp)
+      allow create: if !request.resource.data.keys().hasAny(['userId']) &&
+        request.resource.data.email is string &&
+        request.resource.data.email.size() > 0;
     }
     
     // ===== REGLAS PARA VYT MONEY =====
@@ -261,11 +313,14 @@ service cloud.firestore {
       // Los usuarios pueden leer solo su propio balance
       allow read: if request.auth != null && request.auth.uid == userId;
       
+      // Los admins pueden leer todos los balances
+      allow read: if isAdmin();
+      
       // Solo el sistema (Cloud Functions) puede escribir
       allow write: if false;
       
-      // Los admins pueden leer todos los balances
-      allow read: if isAdmin();
+      // Admins pueden ajustar balances manualmente (con audit log)
+      allow write: if isAdmin();
     }
     
     // ===== FUNCIONES AUXILIARES =====
@@ -288,13 +343,14 @@ service cloud.firestore {
     // Validar datos de inscripción online
     function validateInscripcionData() {
       let data = request.resource.data;
-      return data.keys().hasAll(['email', 'nombre', 'apellido', 'nombre_artista']) &&
+      return data.keys().hasAll(['email', 'nombre_artista', 'estado']) &&
         data.email is string &&
-        data.nombre is string &&
-        data.apellido is string &&
+        data.email.matches('.*@.*\\..*') &&
         data.nombre_artista is string &&
-        data.email.size() > 0 &&
-        data.nombre.size() > 0;
+        data.nombre_artista.size() >= 2 &&
+        data.estado in ['pendiente', 'aprobado', 'rechazado', 'aprobado_pendiente_pago'] &&
+        (!data.keys().hasAny(['certamen_id']) || 
+         (data.certamen_id is string && data.certamen_id.size() > 0));
     }
     
     // Validar datos de voto
