@@ -851,13 +851,28 @@
         // ================================
         async function loadCertamenes() {
             try {
+                console.log('🔍 Cargando certámenes...');
+                
+                // Consulta SIN orderBy para evitar requerir índice compuesto
                 const snapshot = await db.collection('certamenes_provinciales')
                     .where('activo', '==', true)
-                    .orderBy('fecha_inicio', 'desc')
-                    .limit(12)
+                    .limit(20)
                     .get();
                 
-                const certamenes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                console.log('📊 Certámenes encontrados:', snapshot.size);
+                
+                const certamenes = snapshot.docs.map(doc => {
+                    const data = { id: doc.id, ...doc.data() };
+                    console.log('📄 Certamen:', data.nombre, '| Activo:', data.activo, '| Destacado:', data.destacado);
+                    return data;
+                });
+                
+                // Ordenar en cliente por fecha_inicio descendente
+                certamenes.sort((a, b) => {
+                    const dateA = a.fecha_inicio?.seconds || 0;
+                    const dateB = b.fecha_inicio?.seconds || 0;
+                    return dateB - dateA;
+                });
                 
                 const container = document.getElementById('certamenesGrid');
                 
