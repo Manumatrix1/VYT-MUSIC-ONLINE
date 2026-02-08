@@ -273,6 +273,7 @@ function setupQuickFilters() {
 // Cargar todos los datos iniciales
 async function loadAllData() {
     try {
+        console.log('📦 [CERTAMENES] loadAllData() - Iniciando carga de datos...');
         showLoading(true);
         
         // Cargar en paralelo
@@ -283,9 +284,11 @@ async function loadAllData() {
             loadTopParticipants()
         ]);
         
+        console.log('✅ [CERTAMENES] loadAllData() - Todos los datos cargados');
         showLoading(false);
     } catch (error) {
-        console.error('Error loading initial data:', error);
+        console.error('❌ [CERTAMENES] Error loading initial data:', error);
+        console.error('❌ [CERTAMENES] Error details:', error.message, error.stack);
         showError('Error al cargar los datos iniciales');
         showLoading(false);
     }
@@ -294,21 +297,34 @@ async function loadAllData() {
 // Cargar certámenes
 async function loadCertamenes() {
     try {
+        console.log('🔍 [CERTAMENES] loadCertamenes() - Iniciando...');
+        console.log('🔍 [CERTAMENES] db disponible:', typeof db, db);
+        
+        if (!db) {
+            console.error('❌ [CERTAMENES] db no está definido en loadCertamenes');
+            return;
+        }
+        
         // Firebase v8 syntax
         const querySnapshot = await db.collection("certamenes_provinciales")
             .where("activo", "==", true)
             .get();
         
+        console.log('📊 [CERTAMENES] Query ejecutada, docs:', querySnapshot.size);
+        
         certamenesData = [];
         
         querySnapshot.forEach((doc) => {
             const data = doc.data();
+            console.log('📄 [CERTAMENES] Certamen encontrado:', doc.id, data.nombre, '| Activo:', data.activo);
             certamenesData.push({
                 id: doc.id,
                 ...data,
                 participantes_count: 0 // Se cargará después
             });
         });
+        
+        console.log('✅ [CERTAMENES] Total certámenes cargados:', certamenesData.length);
         
         // Ordenar por fecha en cliente para evitar indice compuesto
         certamenesData.sort((a, b) => {
@@ -328,7 +344,8 @@ async function loadCertamenes() {
         console.log('Certámenes loaded:', certamenesData.length);
         
     } catch (error) {
-        console.error('Error loading certámenes:', error);
+        console.error('❌ [CERTAMENES] Error loading certámenes:', error);
+        console.error('❌ [CERTAMENES] Error stack:', error.stack);
         throw error;
     }
 }
