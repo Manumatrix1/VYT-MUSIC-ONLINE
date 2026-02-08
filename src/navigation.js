@@ -8,10 +8,7 @@ class VYTNavigation {
     }
 
     getCurrentPage() {
-if (!window.__vytNavigationInitialized) {
-    window.__vytNavigationInitialized = true;
-    new VYTNavigation();
-}
+        const path = window.location.pathname.toLowerCase();
         if (path.includes('principal') || path === '/') return 'principal';
         if (path.includes('certamen')) return 'certamenes';
         if (path.includes('ranking') || path.includes('resultados')) return 'ranking';

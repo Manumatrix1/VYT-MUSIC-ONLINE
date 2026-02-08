@@ -579,7 +579,7 @@
     <script>
         console.log('🎵 VYT MUSIC - Certámenes con navegación negra transparente');
 
-        const db = firebase.firestore();
+        // db ya está disponible globalmente desde firebase-config.js
         let currentSlide = 0;
         let destacados = [];
         let autoRotateInterval;
@@ -853,10 +853,25 @@
         // Cargar fondo dinámico al inicializar
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicBackground();
+        });
+        
+        // Esperar a que Firebase esté listo antes de cargar datos
+        window.addEventListener('firebaseReady', function() {
+            console.log('✅ Firebase listo, cargando datos...');
             loadDestacados();
             loadVideos();
             loadCertamenes();
         });
+        
+        // Fallback: si Firebase ya está listo cuando se carga el script
+        if (typeof db !== 'undefined' && db !== null) {
+            console.log('✅ Firebase ya estaba listo, cargando datos inmediatamente...');
+            setTimeout(() => {
+                loadDestacados();
+                loadVideos();
+                loadCertamenes();
+            }, 500);
+        }
         
         // Pausar auto-rotate al hacer hover en carousel
         const carouselContainer = document.getElementById('carouselDestacados');
