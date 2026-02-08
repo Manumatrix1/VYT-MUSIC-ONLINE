@@ -34,21 +34,31 @@
     <!-- Inicializar Firebase inline -->
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSyAWOnR2xjr-UkJYUPiSUUcxF7Y5y3JXU8Y",
+            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
             authDomain: "vytonlineprueva.firebaseapp.com",
             projectId: "vytonlineprueva",
             storageBucket: "vytonlineprueva.firebasestorage.app",
-            messagingSenderId: "1005311892426",
-            appId: "1:1005311892426:web:11eb8a5a574df9bea7e1a9"
+            messagingSenderId: "175483939728",
+            appId: "1:175483939728:web:230294acca9221d1d1a115",
+            measurementId: "G-PWRTMBH631"
         };
         
         // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         
         // Exportar a window para compatibilidad
-        window.firebaseDB = firebase.firestore();
-        window.firebaseAuth = firebase.auth();
-        window.firebaseStorage = firebase.storage();
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+        const storage = firebase.storage();
+        
+        window.db = db;
+        window.firebaseDB = db;
+        window.firebaseAuth = auth;
+        window.firebaseStorage = storage;
+        
+        console.log('✅ Firebase inicializado en admin');
+        console.log('✅ db disponible:', typeof db);
+        console.log('✅ storage disponible:', typeof storage);
         
         // Exportar funciones de Firestore (compatibilidad con SDK v8)
         window.firestoreQuery = {
@@ -64,11 +74,6 @@
             query: (collection, ...constraints) => collection,
             limit: (num) => ({ limit: num })
         };
-        
-        // Alias para db global
-        window.db = window.firebaseDB;
-        
-        console.log(' Firebase inicializado en admin');
     </script>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -2805,7 +2810,13 @@
             }
             
             try {
-                const storage = firebase.storage();
+                const storage = window.firebaseStorage || firebase.storage();
+                if (!storage) {
+                    alert('❌ Firebase Storage no está inicializado');
+                    console.error('Storage no disponible');
+                    return '';
+                }
+                
                 const timestamp = Date.now();
                 const fileName = `certamenes/${timestamp}_${file.name}`;
                 const storageRef = storage.ref(fileName);
@@ -2970,7 +2981,13 @@
             }
             
             try {
-                const storage = firebase.storage();
+                const storage = window.firebaseStorage || firebase.storage();
+                if (!storage) {
+                    alert('❌ Firebase Storage no está inicializado');
+                    console.error('Storage no disponible');
+                    return '';
+                }
+                
                 const timestamp = Date.now();
                 const fileName = `video_thumbnails/${timestamp}_${file.name}`;
                 const storageRef = storage.ref(fileName);
