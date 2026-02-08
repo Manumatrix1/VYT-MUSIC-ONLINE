@@ -67,6 +67,11 @@
     <!-- Font Awesome para iconos -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="/firebase-config.js"></script>
+    
     <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
@@ -247,6 +252,266 @@
                 font-size: 14px;
             }
         }
+        
+        /* NUEVOS ESTILOS - Carousel Destacados */
+        .carousel-destacados {
+            position: relative;
+            margin: 32px 0;
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+            position: relative;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(45, 212, 191, 0.2));
+            border-radius: 16px;
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 16px;
+        }
+        
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.9) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 32px;
+            border-radius: 16px;
+        }
+        
+        .carousel-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+        }
+        
+        .carousel-nav:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-nav.prev { left: 16px; }
+        .carousel-nav.next { right: 16px; }
+        
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        
+        .carousel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background: linear-gradient(135deg, #3B82F6, #2DD4BF);
+            width: 32px;
+            border-radius: 5px;
+        }
+        
+        /* Videos Grid */
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+        
+        .video-card-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .video-card-item:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .video-thumbnail-container {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, rgba(107, 114, 142, 0.3), rgba(107, 33, 168, 0.3));
+            overflow: hidden;
+        }
+        
+        .video-thumbnail-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-play-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .video-card-item:hover .video-play-overlay {
+            opacity: 1;
+        }
+        
+        .video-play-overlay i {
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .video-info {
+            padding: 16px;
+        }
+        
+        .video-title {
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .video-subtitle {
+            font-size: 0.8125rem;
+            opacity: 0.7;
+        }
+        
+        /* Grid Certámenes */
+        .certamenes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+        
+        .certamen-grid-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .certamen-grid-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+        }
+        
+        .certamen-image-container {
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, rgba(240, 147, 251, 0.3), rgba(245, 87, 108, 0.3));
+            overflow: hidden;
+        }
+        
+        .certamen-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .certamen-grid-info {
+            padding: 16px;
+        }
+        
+        .certamen-grid-title {
+            font-weight: 700;
+            font-size: 0.9375rem;
+            margin-bottom: 8px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .certamen-grid-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8125rem;
+            opacity: 0.7;
+        }
+        
+        .certamen-status-badge {
+            background: linear-gradient(135deg, #22C55E, #16A34A);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.6875rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        @media (max-width: 768px) {
+            .videos-grid {
+                grid-template-columns: 1fr;
+            }
+            .certamenes-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 12px;
+            }
+            .carousel-nav {
+                width: 36px;
+                height: 36px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -259,7 +524,7 @@
         <main class="container">
             <section class="hero-section">
                 <h1 style="font-size: 3rem; font-weight: bold; margin-bottom: 24px; line-height: 1.1;">
-                     Certmenes VYT Music
+                    🎤 Certámenes VYT Music
                 </h1>
                 <p style="font-size: 1.25rem; margin-bottom: 32px; max-width: 800px; margin-left: auto; margin-right: auto; opacity: 0.9;">
                     Encuentra tu certamen perfecto y comienza tu carrera musical. Participa, compite y haz que tu 
@@ -267,38 +532,42 @@
                 </p>
             </section>
 
-            <!-- Certmenes Activos -->
+            <!-- Carousel Certámenes Destacados -->
             <section style="margin-bottom: 48px;">
-                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 24px; text-align: center;">
-                     Certmenes Activos - Inscrbete Ya!
+                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px; text-align: center;">
+                    ⭐ Certámenes Destacados
                 </h2>
-                
-                <div class="certamen-card">
-                    <h3 style="font-size: 1.5rem; font-weight: bold; margin-bottom: 16px; color: #3B82F6;">
-                        Certamen Nacional de Pop
-                    </h3>
-                    <p style="margin-bottom: 16px; opacity: 0.9;">
-                        El certamen de msica Pop ms importante de Argentina. Participa con tu mejor interpretacin y compite con 
-                        artistas de todo el pas. Todos las edades pueden participar.
-                    </p>
-                    <div style="display: flex; flex-wrap: wrap; gap: 16px; margin-bottom: 16px;">
-                        <span style="background: rgba(34, 197, 94, 0.2); color: #22C55E; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                            Disponible
-                        </span>
-                        <span style="background: rgba(59, 130, 246, 0.2); color: #3B82F6; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                            Pop
-                        </span>
-                        <span style="background: rgba(245, 158, 11, 0.2); color: #F59E0B; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
-                            247 Inscritos
-                        </span>
+                <div id="carouselDestacados" class="carousel-destacados">
+                    <div style="text-align: center; padding: 60px 20px;">
+                        <i class="fas fa-spinner fa-spin text-4xl mb-4"></i>
+                        <p>Cargando destacados...</p>
                     </div>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <a href="inscripcion-certamen.html" class="btn-primary">
-                             Participar Ahora
-                        </a>
-                        <button class="btn-primary" style="background: linear-gradient(135deg, #6B7280, #4B5563);">
-                             Ver Reglamento
-                        </button>
+                </div>
+                <div id="carouselDots" class="carousel-dots"></div>
+            </section>
+            
+            <!-- Videos Recomendados -->
+            <section style="margin-bottom: 48px;">
+                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">
+                    📹 Esto puede gustarte
+                </h2>
+                <div id="videosGrid" class="videos-grid">
+                    <div style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
+                        <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                        <p>Cargando videos...</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Todos los Certámenes -->
+            <section style="margin-bottom: 48px;">
+                <h2 style="font-size: 2rem; font-weight: bold; margin-bottom: 20px;">
+                    🏆 Todos los Certámenes
+                </h2>
+                <div id="certamenesGrid" class="certamenes-grid">
+                    <div style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
+                        <i class="fas fa-spinner fa-spin text-3xl mb-4"></i>
+                        <p>Cargando certámenes...</p>
                     </div>
                 </div>
             </section>
@@ -308,9 +577,249 @@
     <!-- Navegacin unificada cargada por navigation.js -->
 
     <script>
-        console.log(' VYT MUSIC - Certmenes con navegacin negra transparente');
+        console.log('🎵 VYT MUSIC - Certámenes con navegación negra transparente');
 
-        // FUNCIONES DEL MEN
+        const db = firebase.firestore();
+        let currentSlide = 0;
+        let destacados = [];
+        let autoRotateInterval;
+
+        // ================================
+        // CAROUSEL DESTACADOS
+        // ================================
+        async function loadDestacados() {
+            try {
+                const snapshot = await db.collection('certamenes_provinciales')
+                    .where('destacado', '==', true)
+                    .where('activo', '==', true)
+                    .limit(5)
+                    .get();
+                
+                if (snapshot.empty) {
+                    const fallback = await db.collection('certamenes_provinciales')
+                        .where('activo', '==', true)
+                        .orderBy('fecha_inicio', 'desc')
+                        .limit(3)
+                        .get();
+                    
+                    destacados = fallback.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                } else {
+                    destacados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                }
+                
+                renderCarousel();
+            } catch (error) {
+                console.error('Error cargando destacados:', error);
+                document.getElementById('carouselDestacados').innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <i class="fas fa-exclamation-circle text-3xl mb-4"></i>
+                        <p>No se pudieron cargar los certámenes destacados</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderCarousel() {
+            const container = document.getElementById('carouselDestacados');
+            const dotsContainer = document.getElementById('carouselDots');
+            
+            if (destacados.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px;">
+                        <i class="fas fa-star text-4xl mb-4"></i>
+                        <p>No hay certámenes destacados disponibles</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const carouselHTML = `
+                <button class="carousel-nav prev" onclick="prevSlide()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-track" id="carouselTrack">
+                    ${destacados.map((cert, index) => `
+                        <div class="carousel-item">
+                            ${cert.imagen_url ? `<img src="${cert.imagen_url}" alt="${cert.nombre}">` : ''}
+                            <div class="carousel-overlay">
+                                <span class="carousel-badge">⭐ Destacado</span>
+                                <h3 style="font-size: 1.75rem; font-weight: 900; margin-bottom: 8px;">${cert.nombre || 'Certamen VYT'}</h3>
+                                <p style="font-size: 0.9375rem; opacity: 0.9; margin-bottom: 16px;">
+                                    📅 ${cert.fecha_inicio ? new Date(cert.fecha_inicio.seconds * 1000).toLocaleDateString() : 'Por confirmar'}
+                                    • 💰 $${cert.precio || '0'}
+                                    ${cert.provincia ? `• 📍 ${cert.provincia}` : ''}
+                                </p>
+                                <button class="btn-primary" onclick="irACertamen('${cert.id}')">
+                                    Participar Ahora
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="carousel-nav next" onclick="nextSlide()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            container.innerHTML = carouselHTML;
+            
+            dotsContainer.innerHTML = destacados.map((_, i) => 
+                `<div class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
+            ).join('');
+            
+            startAutoRotate();
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % destacados.length;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + destacados.length) % destacados.length;
+            updateCarousel();
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+        
+        function updateCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            if (track) {
+                track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+        
+        function startAutoRotate() {
+            clearInterval(autoRotateInterval);
+            autoRotateInterval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        }
+        
+        function irACertamen(id) {
+            window.location.href = `certamen-individual.html?id=${id}`;
+        }
+
+        // ================================
+        // VIDEOS RECOMENDADOS
+        // ================================
+        async function loadVideos() {
+            try {
+                const snapshot = await db.collection('videos_recomendados')
+                    .where('activo', '==', true)
+                    .orderBy('orden', 'asc')
+                    .limit(6)
+                    .get();
+                
+                const videos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('videosGrid');
+                
+                if (videos.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
+                            <i class="fas fa-video text-4xl mb-4"></i>
+                            <p>No hay videos disponibles</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = videos.map(video => `
+                    <div class="video-card-item" onclick="abrirVideo('${video.url || '#'}')">
+                        <div class="video-thumbnail-container">
+                            ${video.thumbnail ? `<img src="${video.thumbnail}" alt="${video.titulo}">` : ''}
+                            <div class="video-play-overlay">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">${video.titulo || 'Video sin título'}</div>
+                            <div class="video-subtitle">${video.descripcion || 'VYT Music'}</div>
+                        </div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error cargando videos:', error);
+                document.getElementById('videosGrid').innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
+                        <i class="fas fa-exclamation-circle text-3xl mb-4"></i>
+                        <p>No se pudieron cargar los videos</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function abrirVideo(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank');
+            }
+        }
+
+        // ================================
+        // GRID CERTÁMENES
+        // ================================
+        async function loadCertamenes() {
+            try {
+                const snapshot = await db.collection('certamenes_provinciales')
+                    .where('activo', '==', true)
+                    .orderBy('fecha_inicio', 'desc')
+                    .limit(12)
+                    .get();
+                
+                const certamenes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('certamenesGrid');
+                
+                if (certamenes.length === 0) {
+                    container.innerHTML = `
+                        <div style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
+                            <i class="fas fa-music text-4xl mb-4"></i>
+                            <p>No hay certámenes disponibles</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = certamenes.map(cert => `
+                    <a href="certamen-individual.html?id=${cert.id}" class="certamen-grid-card">
+                        <div class="certamen-image-container">
+                            ${cert.imagen_url ? `<img src="${cert.imagen_url}" alt="${cert.nombre}">` : ''}
+                        </div>
+                        <div class="certamen-grid-info">
+                            <div class="certamen-grid-title">${cert.nombre || 'Certamen VYT'}</div>
+                            <div class="certamen-grid-meta">
+                                ${cert.activo ? '<span class="certamen-status-badge">Activo</span>' : ''}
+                                <span>${cert.provincia || 'Nacional'}</span>
+                            </div>
+                        </div>
+                    </a>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error cargando certámenes:', error);
+                document.getElementById('certamenesGrid').innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
+                        <i class="fas fa-exclamation-circle text-3xl mb-4"></i>
+                        <p>No se pudieron cargar los certámenes</p>
+                    </div>
+                `;
+            }
+        }
+
+        // ================================
+        // FUNCIONES DEL MENÚ
+        // ================================
         function toggleMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             if (menuOverlay.classList.contains('active')) {
@@ -324,59 +833,70 @@
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.add('active');
             document.body.style.overflow = 'hidden';
-            console.log(' Men abierto desde la derecha');
+            console.log('✅ Menú abierto desde la derecha');
         }
 
         function closeMenu() {
             const menuOverlay = document.getElementById('menuOverlay');
             menuOverlay.classList.remove('active');
             document.body.style.overflow = '';
-            console.log(' Men cerrado');
+            console.log('✅ Menú cerrado');
         }
 
-
-
-        // Cerrar men con tecla ESC
+        // Cerrar menú con tecla ESC
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 closeMenu();
             }
         });
         
-        // Cargar fondo dinmico al inicializar
+        // Cargar fondo dinámico al inicializar
         document.addEventListener('DOMContentLoaded', function() {
             loadDynamicBackground();
+            loadDestacados();
+            loadVideos();
+            loadCertamenes();
         });
         
-        // Sistema de fondos dinmicos desde Admin
+        // Pausar auto-rotate al hacer hover en carousel
+        const carouselContainer = document.getElementById('carouselDestacados');
+        if (carouselContainer) {
+            carouselContainer.addEventListener('mouseenter', () => {
+                clearInterval(autoRotateInterval);
+            });
+            carouselContainer.addEventListener('mouseleave', () => {
+                startAutoRotate();
+            });
+        }
+        
+        // Sistema de fondos dinámicos desde Admin
         function loadDynamicBackground() {
             try {
                 const backgroundConfig = JSON.parse(localStorage.getItem('backgroundConfig') || '{}');
                 const currentPage = 'certamenes.html';
                 
-                console.log(' Verificando configuracin de fondo para:', currentPage);
+                console.log('🖼️ Verificando configuración de fondo para:', currentPage);
                 
                 if (backgroundConfig[currentPage] && backgroundConfig[currentPage].imageData) {
-                    console.log(' Aplicando fondo personalizado para certamenes.html');
+                    console.log('✅ Aplicando fondo personalizado para certamenes.html');
                     
                     const config = backgroundConfig[currentPage];
                     const position = config.position || 'center center';
                     const scale = config.scale || 1;
                     const backgroundSize = scale > 1 ? `${scale * 100}%` : 'cover';
                     
-                    // Aplicar usando variables CSS
                     document.documentElement.style.setProperty('--dynamic-bg', 
                         `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), url('${config.imageData}')`);
                     document.documentElement.style.setProperty('--dynamic-bg-size', backgroundSize);
                     document.documentElement.style.setProperty('--dynamic-bg-position', position);
                     document.body.classList.add('dynamic-background');
                     
-                    console.log(` Fondo aplicado: ${position}, escala: ${scale}`);
+                    console.log(`✅ Fondo aplicado: ${position}, escala: ${scale}`);
                 } else {
-                    console.log(' Usando fondo predeterminado para certamenes.html');
+                    console.log('✅ Usando fondo predeterminado para certamenes.html');
                 }
             } catch (error) {
-                console.error(' Error cargando fondo:', error);
+                console.error('❌ Error cargando fondo:', error);
             }
         }
     </script>
