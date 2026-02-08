@@ -12,20 +12,33 @@ let currentSection = 'home';
 // Variable global para estado de inicialización
 let isInitialized = false;
 
+// Función para intentar inicializar con db disponible
+async function tryInitWithDb() {
+    if (isInitialized) return;
+    
+    // Intentar obtener db desde firebase-config.js
+    if (window.db) {
+        console.log('✅ [CERTAMENES] Usando window.db de firebase-config.js');
+        db = window.db;
+        await initializeCertamenesApp();
+        return true;
+    }
+    
+    // Intentar crear db desde firebase global
+    if (typeof firebase !== 'undefined' && firebase.firestore) {
+        console.log('✅ [CERTAMENES] Creando db desde firebase global');
+        db = firebase.firestore();
+        await initializeCertamenesApp();
+        return true;
+    }
+    
+    return false;
+}
+
 // Esperar a que Firebase esté listo
 window.addEventListener('firebaseReady', async () => {
     console.log('🔥 [CERTAMENES] Evento firebaseReady recibido');
-    if (!db && !isInitialized) {
-        try {
-            db = firebase.firestore();
-            console.log('✅ [CERTAMENES] Firestore inicializado desde evento');
-            await initializeCertamenesApp();
-        } catch (error) {
-            console.error('❌ [CERTAMENES] Error obteniendo Firestore:', error);
-        }
-    } else {
-        console.log('⚠️ [CERTAMENES] Ya inicializado o db ya existe');
-    }
+    await tryInitWithDb();
 });
 
 // Inicializar la aplicación
@@ -69,40 +82,37 @@ async function initializeCertamenesApp() {
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('📄 [CERTAMENES] DOMContentLoaded');
     
-    // Estrategia 1: Verificar si Firebase YA está inicializado
-    if (window.firebase && window.firebase.apps && window.firebase.apps.length > 0) {
-        console.log('🔥 [CERTAMENES] Firebase YA inicializado (apps.length=' + window.firebase.apps.length + ')');
-        try {
-            db = firebase.firestore();
-            console.log('✅ [CERTAMENES] Firestore desde DOMContentLoaded');
-            await initializeCertamenesApp();
-        } catch (error) {
-            console.error('❌ [CERTAMENES] Error en DOMContentLoaded:', error);
-        }
-    } else {
-        console.log('⏳ [CERTAMENES] Esperando firebaseReady... (registrando listener)');
-        
-        // Estrategia 2: Polling de respaldo cada 500ms durante 10s
-        let attempts = 0;
-        const maxAttempts = 20; // 20 * 500ms = 10 segundos
-        const pollInterval = setInterval(async () => {
-            attempts++;
-            if (window.firebase && window.firebase.apps && window.firebase.apps.length > 0 && !isInitialized) {
-                console.log(`🔥 [CERTAMENES] Firebase detectado en polling (intento ${attempts})`);
-                clearInterval(pollInterval);
-                try {
-                    db = firebase.firestore();
-                    await initializeCertamenesApp();
-                } catch (error) {
-                    console.error('❌ [CERTAMENES] Error en polling:', error);
-                }
-            } else if (attempts >= maxAttempts) {
-                console.error('❌ [CERTAMENES] Timeout esperando Firebase (10s)');
-                clearInterval(pollInterval);
-                showEmptyState('certamenes');
-            }
-        }, 500);
+    // Esperar un poco para que firebase-config.js se ejecute
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    // Intentar inicializar inmediatamente
+    const initialized = await tryInitWithDb();
+    
+    if (initialized) {
+        console.log('✅ [CERTAMENES] Inicializado en DOMContentLoaded');
+        return;
     }
+    
+    console.log('⏳ [CERTAMENES] Iniciando polling de respaldo...');
+    
+    // Polling de respaldo cada 500ms durante 15s
+    let attempts = 0;
+    const maxAttempts = 30; // 30 * 500ms = 15 segundos
+    const pollInterval = setInterval(async () => {
+        attempts++;
+        console.log(`🔍 [CERTAMENES] Polling intento ${attempts}/${maxAttempts}`);
+        
+        const success = await tryInitWithDb();
+        
+        if (success) {
+            console.log(`✅ [CERTAMENES] Inicializado en polling (intento ${attempts})`);
+            clearInterval(pollInterval);
+        } else if (attempts >= maxAttempts) {
+            console.error('❌ [CERTAMENES] Timeout esperando Firebase (15s)');
+            clearInterval(pollInterval);
+            showEmptyState('certamenes');
+        }
+    }, 500);
 });
 
 // Inicializar aplicación (legacy - mantener para compatibilidad)
