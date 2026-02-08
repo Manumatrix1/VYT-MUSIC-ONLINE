@@ -11,13 +11,29 @@ class NotificationSystem {
     }
 
     init() {
-        this.createNotificationContainer();
-        this.loadStoredNotifications();
-        this.isInitialized = true;
-        console.log('📧 Sistema de notificaciones inicializado');
+        // Esperar a que el DOM esté listo antes de crear el contenedor
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                this.createNotificationContainer();
+                this.loadStoredNotifications();
+                this.isInitialized = true;
+                console.log('📧 Sistema de notificaciones inicializado');
+            });
+        } else {
+            this.createNotificationContainer();
+            this.loadStoredNotifications();
+            this.isInitialized = true;
+            console.log('📧 Sistema de notificaciones inicializado');
+        }
     }
 
     createNotificationContainer() {
+        // Verificar que document.body existe
+        if (!document.body) {
+            console.warn('⚠️ document.body no disponible aún');
+            return;
+        }
+        
         // Crear contenedor de notificaciones si no existe
         if (!document.getElementById('notification-container')) {
             const container = document.createElement('div');
@@ -39,8 +55,14 @@ class NotificationSystem {
 
     // Mostrar notificación toast
     showToast(message, type = 'info', duration = 5000) {
-        const container = document.getElementById('notification-container');
-        if (!container) return;
+        let container = document.getElementById('notification-container');
+        
+        // Si no existe el contenedor, intentar crearlo
+        if (!container) {
+            this.createNotificationContainer();
+            container = document.getElementById('notification-container');
+            if (!container) return; // Si aún no existe, salir
+        }
 
         const toast = document.createElement('div');
         const id = 'toast_' + Date.now();
