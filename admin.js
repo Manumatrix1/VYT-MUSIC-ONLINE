@@ -1,4 +1,4 @@
-import { auth, db, storage, functions } from './firebase-config.js';
+import { auth, db, storage, functions } from './firebase-config.module.js';
 import { onAuthStateChanged, signOut, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { collection, getDocs, doc, updateDoc, getDoc, onSnapshot, setDoc, addDoc, deleteDoc, query, orderBy, where, serverTimestamp, writeBatch, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";

@@ -1,8 +1,8 @@
 // Service Worker OPTIMIZADO - Estrategias de cache avanzadas
-const CACHE_NAME = 'vyt-optimized-v5';
-const CACHE_STATIC = 'vyt-static-v5';
-const CACHE_DYNAMIC = 'vyt-dynamic-v5';
-const CACHE_IMAGES = 'vyt-images-v5';
+const CACHE_NAME = 'vyt-optimized-v6';
+const CACHE_STATIC = 'vyt-static-v6';
+const CACHE_DYNAMIC = 'vyt-dynamic-v6';
+const CACHE_IMAGES = 'vyt-images-v6';
 
 const urlsToCache = [
   '/',
@@ -19,7 +19,7 @@ const urlsToCache = [
 
 // Instalación: precachear recursos críticos
 self.addEventListener('install', event => {
-  self.skipWaitng();
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_STATIC).then(cache => cache.addAll(urlsToCache))
   );
@@ -50,24 +50,24 @@ self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // ESTRATEGIA 1: Cache-First para assets estáticos (CSS, JS, fonts)
+  // ESTRATEGIA 1: Network-First para assets estáticos (CSS, JS, fonts)
   if (request.destination === 'style' || 
       request.destination === 'script' || 
       request.destination === 'font' ||
       url.pathname.endsWith('.css') ||
       url.pathname.endsWith('.js')) {
     event.respondWith(
-      caches.match(request).then(cached => {
-        if (cached) {
-          return cached;
-        }
-        return fetch(request).then(response => {
-          return caches.open(CACHE_STATIC).then(cache => {
-            cache.put(request, response.clone());
-            return response;
-          });
-        });
-      })
+      fetch(request)
+        .then(response => {
+          if (response.ok) {
+            return caches.open(CACHE_STATIC).then(cache => {
+              cache.put(request, response.clone());
+              return response;
+            });
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
     );
     return;
   }

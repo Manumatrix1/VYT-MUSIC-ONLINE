@@ -200,12 +200,19 @@ exports.registrarVoto = onCall(async (request) => {
 });
 
 // ===== IMPORT YOUTUBE AUTOMATION =====
+// COMENTADO - YouTube automation se desplegará después con sus claves
+// const youtubeAutomation = require('./youtube-automation');
+// exports.triggerYouTubeUpload = youtubeAutomation.triggerYouTubeUpload;
+// exports.youtubeUploadCallback = youtubeAutomation.youtubeUploadCallback;
+// exports.retryYouTubeUpload = youtubeAutomation.retryYouTubeUpload;
+// exports.checkYouTubeUploadStatus = youtubeAutomation.checkYouTubeUploadStatus;
 
-const youtubeAutomation = require('./youtube-automation');
+// ===== TRIGGERS AUTOMÁTICOS DE EMAILS =====
+// COMENTADO TEMPORALMENTE - Problema con permisos Google Cloud
+// Se pueden enviar emails manualmente desde admin.html mientras tanto
+// const triggers = require('./triggers');
+// exports.onNewInscription = triggers.onNewInscription;
+// exports.onPaymentConfirmed = triggers.onPaymentConfirmed;
+// exports.onVideoApproved = triggers.onVideoApproved;
 
-exports.triggerYouTubeUpload = youtubeAutomation.triggerYouTubeUpload;
-exports.youtubeUploadCallback = youtubeAutomation.youtubeUploadCallback;
-exports.retryYouTubeUpload = youtubeAutomation.retryYouTubeUpload;
-exports.checkYouTubeUploadStatus = youtubeAutomation.checkYouTubeUploadStatus;
-
-console.log('✅ VYT Music Online Functions v2 - Loaded successfully');
+console.log('✅ VYT Music Online Functions v2 (funciones básicas + emails manuales) - Loaded successfully');

@@ -241,13 +241,7 @@ class VYTDynamicAssetsManager {
      */
     renderCertamenes(certamenes, container) {
         if (!certamenes || certamenes.length === 0) {
-            container.innerHTML = `
-                <div class="vyt-empty-state">
-                    <i class="fas fa-music"></i>
-                    <h3>No hay certámenes disponibles</h3>
-                    <p>Vuelve pronto para descubrir nuevos certámenes</p>
-                </div>
-            `;
+            this.showEmptyStateCertamenes(container);
             return;
         }
 
@@ -414,14 +408,357 @@ class VYTDynamicAssetsManager {
     }
 
     /**
+     * Muestra empty state con opción de suscripción
+     */
+    showEmptyStateCertamenes(container) {
+        const user = firebase?.auth()?.currentUser;
+        const isLoggedIn = !!user;
+
+        container.innerHTML = `
+            <div class="vyt-empty-state-gamified" style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 65vh;
+                text-align: center;
+                padding: 20px;
+                animation: fadeInScale 0.6s ease-out;
+            ">
+                <div style="max-width: 480px; position: relative;">
+                    <!-- Badge COMING SOON animado -->
+                    <div style="
+                        display: inline-block;
+                        background: linear-gradient(135deg, #f59e0b, #ef4444);
+                        color: white;
+                        font-weight: 700;
+                        padding: 6px 18px;
+                        border-radius: 50px;
+                        font-size: 0.75rem;
+                        letter-spacing: 1.5px;
+                        box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+                        animation: pulse 2s infinite;
+                        margin-bottom: 25px;
+                    ">
+                        ⚡ PRÓXIMAMENTE
+                    </div>
+                    
+                    <!-- Icono principal con efectos -->
+                    <div style="
+                        position: relative;
+                        display: inline-block;
+                        margin-bottom: 25px;
+                    ">
+                        <!-- Círculo de fondo con glow -->
+                        <div style="
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 120px;
+                            height: 120px;
+                            background: radial-gradient(circle, rgba(139, 92, 246, 0.25), transparent);
+                            border-radius: 50%;
+                            animation: glow 3s ease-in-out infinite;
+                        "></div>
+                        
+                        <!-- Icono micrófono 3D -->
+                        <div style="
+                            font-size: 70px;
+                            filter: drop-shadow(0 8px 20px rgba(139, 92, 246, 0.5));
+                            animation: float 3s ease-in-out infinite;
+                            position: relative;
+                            z-index: 2;
+                        ">🎤</div>
+                        
+                        <!-- Partículas flotantes -->
+                        <div style="
+                            position: absolute;
+                            top: 10%;
+                            left: -20px;
+                            font-size: 20px;
+                            opacity: 0.7;
+                            animation: sparkle1 2s infinite;
+                        ">✨</div>
+                        <div style="
+                            position: absolute;
+                            top: 25%;
+                            right: -25px;
+                            font-size: 18px;
+                            opacity: 0.7;
+                            animation: sparkle2 2.5s infinite;
+                        ">⭐</div>
+                        <div style="
+                            position: absolute;
+                            bottom: 15%;
+                            left: -15px;
+                            font-size: 16px;
+                            opacity: 0.6;
+                            animation: sparkle3 3s infinite;
+                        ">🎵</div>
+                    </div>
+                    
+                    <!-- Título llamativo -->
+                    <h2 style="
+                        font-size: clamp(1.75rem, 4vw, 2.25rem);
+                        font-weight: 800;
+                        background: linear-gradient(135deg, #fff, #a78bfa, #60a5fa);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                        background-clip: text;
+                        margin-bottom: 12px;
+                        line-height: 1.3;
+                    ">
+                        Nuevos Certámenes en Camino
+                    </h2>
+                    
+                    <p style="
+                        font-size: 1rem;
+                        color: rgba(255,255,255,0.85);
+                        margin-bottom: 30px;
+                        line-height: 1.6;
+                        font-weight: 400;
+                    ">
+                        ${isLoggedIn 
+                            ? 'Sé el primero en enterarte cuando lancemos nuevos certámenes' 
+                            : 'Dejanos tu email y te avisamos antes que nadie'}
+                    </p>
+                    
+                    <!-- Card de acción con glassmorphism -->
+                    <div style="
+                        background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15));
+                        backdrop-filter: blur(15px);
+                        border-radius: 18px;
+                        padding: 28px 24px;
+                        border: 1.5px solid rgba(255, 255, 255, 0.2);
+                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+                    ">
+                        ${isLoggedIn ? `
+                            <div style="
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                gap: 10px;
+                                margin-bottom: 18px;
+                                padding: 12px;
+                                background: rgba(16, 185, 129, 0.12);
+                                border-radius: 10px;
+                                border: 1px solid rgba(16, 185, 129, 0.25);
+                            ">
+                                <i class="fas fa-check-circle" style="color: #10b981; font-size: 1.1rem;"></i>
+                                <span style="color: white; font-size: 0.9rem; font-weight: 500;">
+                                    ${user.email}
+                                </span>
+                            </div>
+                            <button id="btnSuscribirNuevos" onclick="suscribirseACertamenes()" style="
+                                width: 100%;
+                                background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+                                color: white;
+                                border: none;
+                                padding: 16px 32px;
+                                border-radius: 12px;
+                                font-size: 1rem;
+                                font-weight: 700;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+                                position: relative;
+                                overflow: hidden;
+                            ">
+                                <span style="position: relative; z-index: 2;">
+                                    <i class="fas fa-bell" style="margin-right: 8px; animation: ring 2s infinite;"></i>
+                                    Avisarme de Nuevos Certámenes
+                                </span>
+                            </button>
+                            <p id="mensajeSuscripcion" style="
+                                color: #10b981;
+                                margin-top: 15px;
+                                display: none;
+                                font-weight: 600;
+                                font-size: 0.95rem;
+                                animation: fadeIn 0.3s;
+                            ">
+                                <i class="fas fa-check-double"></i> ¡Listo! Te avisaremos por email
+                            </p>
+                        ` : `
+                            <form id="emailSubscriptionForm" style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                    <input 
+                                        type="email" 
+                                        id="subscriberEmail" 
+                                        placeholder="✉️ tu@email.com" 
+                                        required
+                                        style="
+                                            flex: 1;
+                                            min-width: 200px;
+                                            padding: 14px 20px;
+                                            border-radius: 12px;
+                                            background: rgba(255,255,255,0.08);
+                                            border: 1.5px solid rgba(255,255,255,0.25);
+                                            color: white;
+                                            font-size: 0.95rem;
+                                            outline: none;
+                                            transition: all 0.3s;
+                                            font-weight: 400;
+                                        "
+                                    />
+                                    <button 
+                                        type="submit" 
+                                        style="
+                                            padding: 14px 28px;
+                                            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+                                            color: white;
+                                            border: none;
+                                            border-radius: 12px;
+                                            font-size: 0.95rem;
+                                            font-weight: 700;
+                                            cursor: pointer;
+                                            transition: all 0.3s ease;
+                                            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
+                                            white-space: nowrap;
+                                        ">
+                                        <i class="fas fa-paper-plane" style="margin-right: 6px;"></i>Avisarme
+                                    </button>
+                                </div>
+                                <p id="subscriptionMessage" style="
+                                    color: #10b981;
+                                    margin: 0;
+                                    display: none;
+                                    font-weight: 600;
+                                    font-size: 0.9rem;
+                                    animation: fadeIn 0.3s;
+                                "></p>
+                            </form>
+                        `}
+                    </div>
+                </div>
+            </div>
+            
+            <style>
+                @keyframes fadeInScale {
+                    from { opacity: 0; transform: scale(0.9); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                @keyframes float {
+                    0%, 100% { transform: translateY(0px); }
+                    50% { transform: translateY(-10px); }
+                }
+                @keyframes glow {
+                    0%, 100% { opacity: 0.4; transform: translate(-50%, -50%) scale(1); }
+                    50% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.08); }
+                }
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.03); }
+                }
+                @keyframes sparkle1 {
+                    0%, 100% { opacity: 0.3; transform: translateY(0) rotate(0deg); }
+                    50% { opacity: 1; transform: translateY(-10px) rotate(180deg); }
+                }
+                @keyframes sparkle2 {
+                    0%, 100% { opacity: 0.4; transform: translateY(0) rotate(0deg) scale(1); }
+                    50% { opacity: 1; transform: translateY(-15px) rotate(-180deg) scale(1.2); }
+                }
+                @keyframes sparkle3 {
+                    0%, 100% { opacity: 0.5; transform: translateX(0); }
+                    50% { opacity: 1; transform: translateX(-10px); }
+                }
+                @keyframes ring {
+                    0%, 100% { transform: rotate(0deg); }
+                    10%, 30% { transform: rotate(-10deg); }
+                    20%, 40% { transform: rotate(10deg); }
+                    50% { transform: rotate(0deg); }
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; transform: translateY(-10px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                
+                #subscriberEmail:focus {
+                    border-color: #8b5cf6;
+                    background: rgba(255,255,255,0.15);
+                    box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.2);
+                }
+                
+                #btnSuscribirNuevos:hover,
+                form button[type="submit"]:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 10px 35px rgba(139, 92, 246, 0.6);
+                }
+                
+                #btnSuscribirNuevos:active,
+                form button[type="submit"]:active {
+                    transform: translateY(0px);
+                }
+                
+                /* Responsive */
+                @media (max-width: 640px) {
+                    form > div {
+                        flex-direction: column;
+                    }
+                    form input,
+                    form button {
+                        width: 100%;
+                    }
+                }
+            </style>
+        `;
+        
+        // Agregar event listener si no está logueado
+        if (!isLoggedIn) {
+            setTimeout(() => {
+                const form = document.getElementById('emailSubscriptionForm');
+                if (form) {
+                    form.addEventListener('submit', this.handleEmailSubscription.bind(this));
+                }
+            }, 100);
+        }
+    }
+
+    /**
+     * Maneja la suscripción de email
+     */
+    async handleEmailSubscription(e) {
+        e.preventDefault();
+        const email = document.getElementById('subscriberEmail').value;
+        const message = document.getElementById('subscriptionMessage');
+        
+        try {
+            // Guardar en Firestore
+            const db = firebase.firestore();
+            await db.collection('email_subscriptions').add({
+                email: email,
+                tipo: 'nuevos_certamenes',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                origen: 'certamenes_empty_state'
+            });
+            
+            message.style.display = 'block';
+            message.innerHTML = '<i class="fas fa-check"></i> ¡Listo! Te avisaremos cuando haya nuevos certámenes';
+            document.getElementById('subscriberEmail').value = '';
+            
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        } catch (error) {
+            console.error('Error guardando suscripción:', error);
+            message.style.display = 'block';
+            message.style.color = '#ef4444';
+            message.textContent = 'Error al suscribirse. Intenta de nuevo.';
+        }
+    }
+
+    /**
      * Muestra mensaje de error
      */
     showCertamenesError(container) {
         container.innerHTML = `
-            <div class="vyt-empty-state">
-                <i class="fas fa-exclamation-triangle"></i>
-                <h3>Error al cargar certámenes</h3>
-                <p>Por favor, intenta recargar la página</p>
+            <div class="vyt-empty-state" style="text-align: center; padding: 60px 20px;">
+                <i class="fas fa-exclamation-triangle" style="font-size: 80px; color: #ef4444; margin-bottom: 20px;"></i>
+                <h3 style="font-size: 2rem; color: white; margin-bottom: 15px;">Error al cargar certámenes</h3>
+                <p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 25px;">Por favor, intenta recargar la página</p>
+                <button onclick="window.location.reload()" style="background: linear-gradient(135deg, #3B82F6, #2DD4BF); color: white; border: none; padding: 15px 30px; border-radius: 50px; font-size: 1rem; font-weight: 700; cursor: pointer;">
+                    <i class="fas fa-redo" style="margin-right: 8px;"></i>Recargar Página
+                </button>
             </div>
         `;
     }
@@ -445,9 +782,34 @@ class VYTDynamicAssetsManager {
         setTimeout(() => {
             this.initBannerSlider();
             this.initVideoEmbeds();
-            // Inicializar certámenes si estamos en la página correcta
-            this.initCertamenesGrid();
+            // Inicializar certamenes cuando Firebase este listo
+            this.initCertamenesGridWhenReady();
         }, 100);
+    }
+
+    /**
+     * Espera Firebase antes de cargar certamenes
+     */
+    initCertamenesGridWhenReady() {
+        const tryInit = () => {
+            if (typeof firebase !== 'undefined' && firebase.apps && firebase.apps.length > 0) {
+                this.initCertamenesGrid();
+                return true;
+            }
+            return false;
+        };
+
+        if (tryInit()) return;
+
+        if (typeof window !== 'undefined') {
+            window.addEventListener('firebaseReady', () => {
+                tryInit();
+            }, { once: true });
+        }
+
+        setTimeout(() => {
+            tryInit();
+        }, 8000);
     }
 
     /**

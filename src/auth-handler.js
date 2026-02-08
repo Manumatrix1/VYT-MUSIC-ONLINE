@@ -10,10 +10,17 @@ class AuthHandler {
     }
 
     // Inicializar listener de autenticación
-    init() {
+    async init() {
         if (!firebase || !firebase.auth) {
             console.error('Firebase Auth no disponible');
             return;
+        }
+
+        // Persistir la sesion para evitar logins repetidos
+        try {
+            await firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+        } catch (error) {
+            console.warn('⚠️ No se pudo configurar persistencia de sesion:', error);
         }
 
         firebase.auth().onAuthStateChanged(async (user) => {
@@ -60,17 +67,30 @@ class AuthHandler {
 
     // Login con Google
     async loginWithGoogle() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        provider.addScope('email');
+        provider.addScope('profile');
+
         try {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            provider.addScope('email');
-            provider.addScope('profile');
-            
-            // Usar redirect en lugar de popup (más confiable)
+            // Usar redirect para evitar bloqueos de popup/CSP
             await firebase.auth().signInWithRedirect(provider);
-            
-            // El resultado se maneja en getRedirectResult
             return { success: true, redirecting: true };
         } catch (error) {
+            const fallbackErrors = [
+                'auth/operation-not-supported-in-this-environment',
+                'auth/web-storage-unsupported'
+            ];
+
+            if (fallbackErrors.includes(error.code)) {
+                try {
+                    const result = await firebase.auth().signInWithPopup(provider);
+                    return { success: true, user: result.user };
+                } catch (popupError) {
+                    console.error('Error login Google (popup):', popupError);
+                    return { success: false, error: this.getErrorMessage(popupError) };
+                }
+            }
+
             console.error('Error login Google:', error);
             return { success: false, error: this.getErrorMessage(error) };
         }
@@ -105,15 +125,10 @@ class AuthHandler {
             const provider = new firebase.auth.FacebookAuthProvider();
             provider.addScope('email');
             provider.addScope('public_profile');
-            
-            const result = await firebase.auth().signInWithPopup(provider);
-            
-            // Si es usuario nuevo, preguntar tipo
-            if (result.additionalUserInfo.isNewUser) {
-                await this.showUserTypeSelector(result.user);
-            }
-            
-            return { success: true, user: result.user };
+
+            // Usar redirect para evitar bloqueos de popup/CSP
+            await firebase.auth().signInWithRedirect(provider);
+            return { success: true, redirecting: true };
         } catch (error) {
             return { success: false, error: this.getErrorMessage(error) };
         }
@@ -237,12 +252,8 @@ class AuthHandler {
 
     // Actualizar UI según estado de autenticación
     updateUIForLoggedUser() {
-        // Actualizar menú hamburguesa con opciones de usuario logueado
-        if (typeof window.vytNavigation !== 'undefined' && window.vytNavigation) {
-            window.vytNavigation.updateMenuForUser(this.userType, this.user);
-        } else {
-            console.warn('⚠️ vytNavigation no está disponible aún');
-        }
+        // Navigation component maneja su propia actualización via onAuthStateChanged
+        console.log('✅ UI actualizado para usuario logueado');
 
         // Ocultar botones de login
         const loginButtons = document.querySelectorAll('.login-required');
@@ -254,10 +265,8 @@ class AuthHandler {
     }
 
     updateUIForGuest() {
-        // Actualizar menú para visitante no logueado
-        if (window.vytNavigation) {
-            window.vytNavigation.updateMenuForGuest();
-        }
+        // Navigation component maneja su propia actualización
+        console.log('ℹ️ UI actualizado para visitante');
 
         // Mostrar botones de login
         const loginButtons = document.querySelectorAll('.login-required');

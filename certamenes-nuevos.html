@@ -5,7 +5,7 @@
     <!-- Version: 2026-01-04-19:15 UTC-8 -->
     <!-- LIMPIEZA AGRESIVA DE SW VIEJOS -->
     <script>
-    if ('serviceWorker' in navigator) {
+    if (localStorage.getItem('vyt_sw_cleanup') === 'true' && 'serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(regs => {
             regs.forEach(reg => {
                 if (!reg.active || !reg.active.scriptURL.includes('sw-simple.js')) {

@@ -2,6 +2,16 @@
 // Configuración de Firebase para VYT Music (versión actualizada)
 // Uso de Firebase v9+ para mejor rendimiento y compatibilidad
 
+// Debug gate: set localStorage.vyt_debug = 'true' to enable console.log
+if (typeof window !== 'undefined') {
+    const debugEnabled = localStorage.getItem('vyt_debug') === 'true';
+    if (!debugEnabled && !window.__vytConsoleMuted) {
+        window.__vytConsoleMuted = true;
+        window.__vytConsoleLog = console.log;
+        console.log = () => {};
+    }
+}
+
 // Configuración de Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
@@ -195,7 +205,9 @@ window.addEventListener('online', async () => {
     if (!isOnline) {
         console.log('🌐 Conexión restaurada, habilitando Firestore...');
         try {
-            await enableNetwork(db);
+            if (db && typeof db.enableNetwork === 'function') {
+                await db.enableNetwork();
+            }
             isOnline = true;
         } catch (error) {
             console.error('Error habilitando red:', error);
@@ -207,7 +219,9 @@ window.addEventListener('offline', async () => {
     if (isOnline) {
         console.log('📡 Sin conexión, usando modo offline...');
         try {
-            await disableNetwork(db);
+            if (db && typeof db.disableNetwork === 'function') {
+                await db.disableNetwork();
+            }
             isOnline = false;
         } catch (error) {
             console.error('Error deshabilitando red:', error);

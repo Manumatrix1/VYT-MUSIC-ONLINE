@@ -4,7 +4,7 @@
     <!-- LIMPIEZA INMEDIATA DE SW - EJECUTA PRIMERO -->
     <script>
         (async function() {
-            if ('serviceWorker' in navigator) {
+            if (localStorage.getItem('vyt_sw_cleanup') === 'true' && 'serviceWorker' in navigator) {
                 const registrations = await navigator.serviceWorker.getRegistrations();
                 for (let reg of registrations) {
                     await reg.unregister();
@@ -13,7 +13,7 @@
                 for (let name of cacheNames) {
                     await caches.delete(name);
                 }
-                console.log('🗑️ SW y caché limpiados INMEDIATAMENTE');
+                console.log('🗑️ SW y caché limpiados (flag activado)');
             }
         })();
     </script>
@@ -74,6 +74,13 @@
     
     <!-- Lazy Loading System -->
     <script src="/src/lazy-loading.js"></script>
+    
+    <!-- Firebase SDK v8 (DEBE cargarse ANTES de navigation-component) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
+    <script src="firebase-config.js"></script>
     
     <!-- Sistema de Navegacin Unificado -->
     <script src="/src/navigation-component.js"></script>
@@ -829,6 +836,7 @@
                     openLoginModal();
                 }
             });
+        });
             
             // Si viene de login.html (#login), abrir modal inmediatamente
             if (window.location.hash === '#login') {
@@ -1195,12 +1203,8 @@
         }); // Cierre del DOMContentLoaded
     </script>
     
-    <!-- Firebase SDK v8 (Compatible y estable) -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-storage.js"></script>
-    <script src="firebase-config.js"></script>
+    <!-- Firebase SDK ya cargado en el <head> -->
+
     
     <!-- Auto-Login Modal -->
     <script>

@@ -227,9 +227,6 @@
                     <button onclick="showPage('certamenes')" class="admin-nav-btn bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-trophy mr-1"></i>Certmenes
                     </button>
-                    <button onclick="showPage('videos')" class="admin-nav-btn bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <i class="fas fa-video mr-1"></i>Videos
-                    </button>
                     <button onclick="window.location.href='configuracion-sistema.html'" class="admin-nav-btn bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2 rounded-lg transition-colors">
                         <i class="fas fa-cog mr-1"></i> Configuracin
                     </button>
@@ -767,14 +764,10 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Orden</label>
                                     <input type="number" id="certamen-orden" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" value="1">
                                 </div>
-                                <div class="flex flex-col gap-2">
+                                <div class="flex items-end">
                                     <label class="flex items-center">
                                         <input type="checkbox" id="certamen-activo" class="mr-2" checked>
                                         <span class="text-sm font-medium text-gray-700">Certamen Activo</span>
-                                    </label>
-                                    <label class="flex items-center">
-                                        <input type="checkbox" id="certamen-destacado" class="mr-2">
-                                        <span class="text-sm font-medium text-gray-700">⭐ Destacar en Carousel</span>
                                     </label>
                                 </div>
                             </div>
@@ -783,7 +776,7 @@
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-1">📸 Imagen del Certamen</label>
                                     <input type="file" id="certamen-imagen-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
-                                    <p class="text-xs text-gray-500 mt-1">🖼️ Formato recomendado: 1080x1080px (cuadrado). Máximo 20MB</p>
+                                    <p class="text-xs text-gray-500 mt-1">🖼️ Sube directamente desde tu PC (JPG, PNG, max 5MB)</p>
                                     <div id="upload-progress" class="hidden mt-2">
                                         <div class="w-full bg-gray-200 rounded-full h-2">
                                             <div id="upload-progress-bar" class="bg-blue-600 h-2 rounded-full transition-all" style="width: 0%"></div>
@@ -831,93 +824,6 @@
                             <div class="text-center py-8 text-gray-500">
                                 <i class="fas fa-trophy text-4xl mb-4"></i>
                                 <p>Haz clic en "Actualizar" para cargar certmenes</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Sección Gestión de Videos Recomendados -->
-            <section id="videos-section" class="admin-section">
-                <div class="max-w-7xl mx-auto">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl font-bold text-gray-900">📹 Videos Recomendados</h2>
-                        <button onclick="openCreateVideoModal()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-                            <i class="fas fa-plus mr-1"></i>Agregar Video
-                        </button>
-                    </div>
-
-                    <!-- Formulario Crear Video -->
-                    <div id="create-video-form" class="bg-white p-6 rounded-lg shadow-sm border mb-6 hidden">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-4">Agregar Nuevo Video</h3>
-                        <form id="video-form">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Título del Video</label>
-                                    <input type="text" id="video-titulo" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="Ej: Tutorial de Canto para Principiantes">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">URL del Video (YouTube, Vimeo, etc.)</label>
-                                    <input type="url" id="video-url" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="https://youtube.com/watch?v=...">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Descripción / Subtítulo</label>
-                                    <input type="text" id="video-descripcion" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" placeholder="Ej: VYT Music Academy">
-                                </div>
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Orden de Aparición</label>
-                                    <input type="number" id="video-orden" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500" value="1" min="1">
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">🖼️ Thumbnail (Imagen Miniatura)</label>
-                                    <input type="file" id="video-thumbnail-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500">
-                                    <p class="text-xs text-gray-500 mt-1">Formato: 1280x720px (16:9). Máximo 10MB</p>
-                                    <div id="video-upload-progress" class="hidden mt-2">
-                                        <div class="w-full bg-gray-200 rounded-full h-2">
-                                            <div id="video-upload-progress-bar" class="bg-red-600 h-2 rounded-full transition-all" style="width: 0%"></div>
-                                        </div>
-                                        <p class="text-xs text-red-600 mt-1" id="video-upload-status">Subiendo imagen...</p>
-                                    </div>
-                                </div>
-                                <div class="flex items-center">
-                                    <label class="flex items-center">
-                                        <input type="checkbox" id="video-activo" class="mr-2" checked>
-                                        <span class="text-sm font-medium text-gray-700">✅ Video Activo</span>
-                                    </label>
-                                </div>
-                            </div>
-                            
-                            <div class="flex gap-4 pt-4">
-                                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors">
-                                    <i class="fas fa-save mr-1"></i>Guardar Video
-                                </button>
-                                <button type="button" onclick="cancelCreateVideo()" class="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg transition-colors">
-                                    <i class="fas fa-times mr-1"></i>Cancelar
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-
-                    <!-- Lista de Videos -->
-                    <div class="bg-white rounded-lg shadow-sm border">
-                        <div class="p-4 border-b">
-                            <div class="flex justify-between items-center">
-                                <h3 class="font-semibold text-gray-900">Videos Configurados</h3>
-                                <button onclick="loadVideos()" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm transition-colors">
-                                    <i class="fas fa-sync mr-1"></i>Actualizar
-                                </button>
-                            </div>
-                        </div>
-                        <div id="videos-list" class="p-4">
-                            <div class="text-center py-8 text-gray-500">
-                                <i class="fas fa-video text-4xl mb-4"></i>
-                                <p>Haz clic en "Actualizar" para cargar videos</p>
                             </div>
                         </div>
                     </div>
@@ -1579,7 +1485,6 @@
                         precio: document.getElementById('certamen-precio').value,
                         orden: document.getElementById('certamen-orden').value,
                         activo: document.getElementById('certamen-activo').checked,
-                        destacado: document.getElementById('certamen-destacado').checked,
                         imagenFile: imagenFile,
                         urlInscripcion: document.getElementById('certamen-url-inscripcion').value
                     };
@@ -1592,32 +1497,6 @@
                 });
             }
             
-            // Event listener para formulario de crear video
-            const videoForm = document.getElementById('video-form');
-            if (videoForm) {
-                videoForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    
-                    const thumbnailFileInput = document.getElementById('video-thumbnail-file');
-                    const thumbnailFile = thumbnailFileInput.files[0];
-                    
-                    const formData = {
-                        titulo: document.getElementById('video-titulo').value,
-                        url: document.getElementById('video-url').value,
-                        descripcion: document.getElementById('video-descripcion').value,
-                        orden: document.getElementById('video-orden').value,
-                        activo: document.getElementById('video-activo').checked,
-                        thumbnailFile: thumbnailFile
-                    };
-                    
-                    const success = await window.createVideo(formData);
-                    if (success) {
-                        window.cancelCreateVideo();
-                        window.loadVideos();
-                    }
-                });
-            }
-            
             // Agregar funcionalidad al botn de login principal
             const loginBtn = document.getElementById('login-btn');
             if (loginBtn) {
@@ -1626,8 +1505,8 @@
                     const password = document.getElementById('admin-password').value;
                     const errorDiv = document.getElementById('login-error');
                     
-                    // Credenciales personalizadas del administrador
-                    if (email === 'luciano21martinez@gmail.com' && password === '@Aaron31981842') {
+                    // NUEVA CONTRASENA SEGURA (cambiada desde default)
+                    if (email === 'admin@vyt.com' && password === 'VYT2026_Admin_Secure!') {
                         console.log('Login exitoso con credenciales de desarrollo');
                         
                         // Guardar sesin en localStorage
@@ -1678,7 +1557,7 @@
                         console.log(' Admin cargado exitosamente');
                     } else {
                         console.log(' Credenciales incorrectas');
-                        errorDiv.textContent = 'Credenciales incorrectas. Verifica tu email y contraseña.';
+                        errorDiv.textContent = 'Credenciales incorrectas. Usa: admin@vyt.com / vytonline';
                         errorDiv.classList.remove('hidden');
                     }
                 });
@@ -2798,9 +2677,9 @@
         window.uploadCertamenImage = async function(file) {
             if (!file) return '';
             
-            // Validar tamaño (max 20MB)
-            if (file.size > 20 * 1024 * 1024) {
-                alert('❌ La imagen es muy grande. Máximo 20MB');
+            // Validar tamaño (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                alert('❌ La imagen es muy grande. Máximo 5MB');
                 return '';
             }
             
@@ -2901,7 +2780,6 @@
                     precio: parseInt(formData.precio) || 5000,
                     orden: parseInt(formData.orden) || 1,
                     activo: formData.activo || false,
-                    destacado: formData.destacado || false,
                     imagen_url: imagenUrl,
                     url_inscripcion: formData.urlInscripcion || '/inscripcion-unificada.html',
                     fecha_creacion: new Date(),
@@ -2942,222 +2820,6 @@
         window.exportCertamenes = function() {
             console.log(' Exportando certmenes...');
             alert('Funcin de exportacin de certmenes - Prximamente');
-        };
-
-        // ================================
-        // FUNCIONES VIDEOS RECOMENDADOS
-        // ================================
-        
-        window.openCreateVideoModal = function() {
-            const form = document.getElementById('create-video-form');
-            form.classList.remove('hidden');
-            document.getElementById('video-titulo').focus();
-        };
-
-        window.cancelCreateVideo = function() {
-            const form = document.getElementById('create-video-form');
-            form.classList.add('hidden');
-            document.getElementById('video-form').reset();
-        };
-
-        window.uploadVideoThumbnail = async function(file) {
-            if (!file) return '';
-            
-            // Validar tamaño (max 10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                alert('❌ La imagen es muy grande. Máximo 10MB');
-                return '';
-            }
-            
-            try {
-                const storage = firebase.storage();
-                const timestamp = Date.now();
-                const fileName = `video_thumbnails/${timestamp}_${file.name}`;
-                const storageRef = storage.ref(fileName);
-                
-                const progressDiv = document.getElementById('video-upload-progress');
-                const progressBar = document.getElementById('video-upload-progress-bar');
-                const statusText = document.getElementById('video-upload-status');
-                
-                if (progressDiv) {
-                    progressDiv.classList.remove('hidden');
-                    progressBar.style.width = '0%';
-                    statusText.textContent = '📤 Subiendo thumbnail...';
-                }
-                
-                const uploadTask = storageRef.put(file);
-                
-                return new Promise((resolve, reject) => {
-                    uploadTask.on('state_changed',
-                        (snapshot) => {
-                            const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                            if (progressBar) progressBar.style.width = progress + '%';
-                            if (statusText) statusText.textContent = `📤 Subiendo... ${Math.round(progress)}%`;
-                        },
-                        (error) => {
-                            console.error('Error subiendo thumbnail:', error);
-                            if (progressDiv) progressDiv.classList.add('hidden');
-                            alert('❌ Error al subir imagen: ' + error.message);
-                            reject(error);
-                        },
-                        async () => {
-                            const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
-                            if (statusText) {
-                                statusText.textContent = '✅ ¡Thumbnail cargado!';
-                                statusText.style.color = '#10b981';
-                            }
-                            if (progressBar) {
-                                progressBar.style.backgroundColor = '#10b981';
-                            }
-                            
-                            setTimeout(() => {
-                                if (progressDiv) progressDiv.classList.add('hidden');
-                            }, 2000);
-                            
-                            resolve(downloadURL);
-                        }
-                    );
-                });
-            } catch (error) {
-                console.error('Error en uploadVideoThumbnail:', error);
-                alert('❌ Error al subir thumbnail');
-                return '';
-            }
-        };
-
-        window.createVideo = async function(formData) {
-            if (!db) {
-                alert('❌ Firebase no está inicializado');
-                return false;
-            }
-            
-            try {
-                const { collection, addDoc } = window.firestoreQuery;
-                
-                // Subir thumbnail si existe
-                let thumbnailUrl = '';
-                if (formData.thumbnailFile) {
-                    console.log('📤 Subiendo thumbnail...');
-                    thumbnailUrl = await window.uploadVideoThumbnail(formData.thumbnailFile);
-                    if (!thumbnailUrl) {
-                        alert('⚠️ No se pudo subir el thumbnail, pero podés continuar.');
-                    }
-                }
-                
-                const videoData = {
-                    titulo: formData.titulo,
-                    url: formData.url,
-                    descripcion: formData.descripcion || '',
-                    thumbnail: thumbnailUrl,
-                    orden: parseInt(formData.orden) || 1,
-                    activo: formData.activo || false,
-                    fecha_creacion: new Date(),
-                    vistas: 0
-                };
-                
-                console.log('💾 Guardando video en Firestore...');
-                const collectionRef = collection(db, 'videos_recomendados');
-                await addDoc(collectionRef, videoData);
-                
-                alert('✅ ¡Video agregado exitosamente!');
-                console.log('✅ Video guardado');
-                return true;
-            } catch (error) {
-                console.error('❌ Error creando video:', error);
-                alert('❌ Error al crear video: ' + error.message);
-                return false;
-            }
-        };
-
-        window.loadVideos = async function() {
-            console.log('📹 Cargando videos...');
-            
-            if (!db) {
-                alert('❌ Firebase no disponible');
-                return;
-            }
-            
-            try {
-                const { collection, getDocs, orderBy, query } = window.firestoreQuery;
-                
-                const videosRef = collection(db, 'videos_recomendados');
-                const q = query(videosRef, orderBy('orden', 'asc'));
-                const snapshot = await getDocs(q);
-                
-                const container = document.getElementById('videos-list');
-                
-                if (snapshot.empty) {
-                    container.innerHTML = `
-                        <div class="text-center py-8 text-gray-500">
-                            <i class="fas fa-video text-4xl mb-4"></i>
-                            <p>No hay videos configurados</p>
-                        </div>
-                    `;
-                    return;
-                }
-                
-                let html = '<div class="space-y-4">';
-                
-                snapshot.forEach(doc => {
-                    const video = doc.data();
-                    const activo = video.activo ? '✅ Activo' : '❌ Inactivo';
-                    const activoClass = video.activo ? 'bg-green-100' : 'bg-gray-100';
-                    
-                    html += `
-                        <div class="border rounded-lg p-4 ${activoClass}">
-                            <div class="flex gap-4">
-                                ${video.thumbnail ? `
-                                    <img src="${video.thumbnail}" alt="Thumbnail" class="w-32 h-20 object-cover rounded">
-                                ` : `
-                                    <div class="w-32 h-20 bg-gray-300 rounded flex items-center justify-center">
-                                        <i class="fas fa-video text-gray-500"></i>
-                                    </div>
-                                `}
-                                <div class="flex-1">
-                                    <h4 class="font-semibold text-gray-900">${video.titulo || 'Sin título'}</h4>
-                                    <p class="text-sm text-gray-600">${video.descripcion || ''}</p>
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        Orden: ${video.orden || 1} • ${activo}
-                                    </p>
-                                    <a href="${video.url}" target="_blank" class="text-xs text-blue-600 hover:underline">
-                                        🔗 ${video.url}
-                                    </a>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button onclick="eliminarVideo('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                });
-                
-                html += '</div>';
-                container.innerHTML = html;
-                
-                console.log(`✅ ${snapshot.size} videos cargados`);
-                
-            } catch (error) {
-                console.error('❌ Error cargando videos:', error);
-                alert('Error al cargar videos: ' + error.message);
-            }
-        };
-
-        window.eliminarVideo = async function(id) {
-            if (!confirm('¿Estás seguro de eliminar este video?')) {
-                return;
-            }
-            
-            try {
-                const { doc, deleteDoc } = window.firestoreQuery;
-                await deleteDoc(doc(db, 'videos_recomendados', id));
-                alert('✅ Video eliminado');
-                window.loadVideos();
-            } catch (error) {
-                console.error('Error eliminando video:', error);
-                alert('❌ Error al eliminar video');
-            }
         };
 
         window.editCertamen = function(id) {

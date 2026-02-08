@@ -1,5 +1,5 @@
 // Importaciones optimizadas con lazy loading
-import { db } from './firebase-config.js';
+import { db } from './firebase-config.module.js';
 
 // Cache para datos frecuentemente accedidos
 const dataCache = new Map();

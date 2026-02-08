@@ -2,7 +2,7 @@
 // Diseño: Cristal Neón, Sticky en Desktop, Barra Superior en Móvil
 // Lectura en tiempo real desde Firebase
 
-import { db } from '../firebase-config.js';
+import { db } from '../firebase-config.module.js';
 import { doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 class JackpotWidget {
@@ -332,7 +332,7 @@ class JackpotWidget {
     async loadUserStatus() {
         try {
             // Importar auth dinámicamente
-            const { auth } = await import('../firebase-config.js');
+            const { auth } = await import('../firebase-config.module.js');
             const { onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js");
             const { collection, query, where, getDocs, limit } = await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js");
             

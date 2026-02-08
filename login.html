@@ -300,7 +300,7 @@
 
     <div class="login-container">
         <div class="logo-section">
-            <img src="https://i.ibb.co/Ldwq7cNx/logo-blanco.png" alt="VYT Music" style="filter: brightness(0);">
+            <img src="/images/logo-original.png" alt="VYT Music" style="filter: brightness(0);">
             <h1>Bienvenido! </h1>
             <p>Inicia sesin para continuar</p>
         </div>
@@ -387,9 +387,13 @@
         });
 
         // Esperar a que authHandler est listo
+        const authInitStartedAt = Date.now();
         function waitForAuth() {
             if (window.authHandler && window.authHandler.initialized) {
                 initLoginHandlers();
+            } else if (Date.now() - authInitStartedAt > 5000) {
+                showMessage('Error de conexión con Firebase. Reintenta en unos segundos.', 'error');
+                setTimeout(waitForAuth, 1000);
             } else {
                 setTimeout(waitForAuth, 100);
             }
@@ -403,9 +407,37 @@
         }
 
         function initLoginHandlers() {
+            const redirectAfterLogin = () => {
+                if (window.authHandler.isArtista()) {
+                    window.location.href = 'perfil-artista.html';
+                } else {
+                    window.location.href = 'perfil.html';
+                }
+            };
+
+            // Si viene de redirect o ya esta logueado, redirigir
+            (async () => {
+                const redirectResult = await window.authHandler.handleRedirectResult();
+                if (redirectResult && redirectResult.success) {
+                    showMessage('Bienvenido! Redirigiendo...', 'success');
+                    setTimeout(redirectAfterLogin, 800);
+                    return;
+                }
+
+                if (window.authHandler.isLoggedIn()) {
+                    showMessage('Bienvenido! Redirigiendo...', 'success');
+                    setTimeout(redirectAfterLogin, 800);
+                }
+            })();
+
             // Login con email
             document.getElementById('loginForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
+
+                if (!window.authHandler || !window.authHandler.initialized) {
+                    showMessage('Sistema de autenticación cargando. Intenta nuevamente.', 'error');
+                    return;
+                }
                 
                 const email = document.getElementById('email').value;
                 const password = document.getElementById('password').value;
@@ -421,13 +453,7 @@
 
                 if (result.success) {
                     showMessage('Bienvenido! Redirigiendo...', 'success');
-                    setTimeout(() => {
-                        if (window.authHandler.isArtista()) {
-                            window.location.href = 'perfil-artista.html';
-                        } else {
-                            window.location.href = 'perfil.html';
-                        }
-                    }, 1000);
+                    setTimeout(redirectAfterLogin, 1000);
                 } else {
                     showMessage(result.error, 'error');
                     btnLogin.disabled = false;
@@ -445,14 +471,9 @@
                 const result = await window.authHandler.loginWithGoogle();
 
                 if (result.success) {
+                    if (result.redirecting) return;
                     showMessage('Bienvenido! Redirigiendo...', 'success');
-                    setTimeout(() => {
-                        if (window.authHandler.isArtista()) {
-                            window.location.href = 'perfil-artista.html';
-                        } else {
-                            window.location.href = 'perfil.html';
-                        }
-                    }, 1000);
+                    setTimeout(redirectAfterLogin, 1000);
                 } else {
                     showMessage(result.error, 'error');
                     btn.disabled = false;
@@ -469,14 +490,9 @@
                 const result = await window.authHandler.loginWithFacebook();
 
                 if (result.success) {
+                    if (result.redirecting) return;
                     showMessage('Bienvenido! Redirigiendo...', 'success');
-                    setTimeout(() => {
-                        if (window.authHandler.isArtista()) {
-                            window.location.href = 'perfil-artista.html';
-                        } else {
-                            window.location.href = 'perfil.html';
-                        }
-                    }, 1000);
+                    setTimeout(redirectAfterLogin, 1000);
                 } else {
                     showMessage(result.error, 'error');
                     btn.disabled = false;

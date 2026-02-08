@@ -27,9 +27,55 @@ class VYTNavigationComponent {
      * Detecta la página actual basándose en la URL
      */
     detectCurrentPage() {
-        const path = window.location.pathname;
-        const page = path.split('/').pop() || 'index.html';
-        return page.replace('.html', '') || 'index';
+        const path = window.location.pathname || '';
+        const parts = path.split('/').filter(Boolean);
+        return parts.length > 0 ? parts[parts.length - 1] : 'index.html';
+    }
+
+    /**
+     * Verifica si Firebase esta listo
+     */
+    isFirebaseReady() {
+        return (
+            typeof firebase !== 'undefined' &&
+            firebase.apps &&
+            firebase.apps.length > 0 &&
+            typeof firebase.auth === 'function'
+        );
+    }
+
+    /**
+     * Espera a Firebase con timeout
+     */
+    async waitForFirebaseReady(timeout = 8000) {
+        if (this.isFirebaseReady()) return true;
+
+        if (typeof window !== 'undefined' && typeof window.waitForFirebase === 'function') {
+            try {
+                await window.waitForFirebase(timeout);
+                return this.isFirebaseReady();
+            } catch (error) {
+                return false;
+            }
+        }
+
+        return new Promise((resolve) => {
+            let resolved = false;
+            const timer = setTimeout(() => {
+                if (!resolved) {
+                    resolved = true;
+                    resolve(false);
+                }
+            }, timeout);
+
+            window.addEventListener('firebaseReady', () => {
+                if (!resolved) {
+                    resolved = true;
+                    clearTimeout(timer);
+                    resolve(true);
+                }
+            }, { once: true });
+        });
     }
 
     /**
@@ -91,28 +137,31 @@ class VYTNavigationComponent {
      */
     async checkAuthentication() {
         // Verificar si existe Firebase Auth
-        if (typeof firebase !== 'undefined' && firebase.auth) {
-            return new Promise((resolve) => {
-                firebase.auth().onAuthStateChanged(async (user) => {
-                    if (user) {
-                        this.isAuthenticated = true;
-                        this.userName = user.displayName || user.email;
-                        
-                        // Obtener tipo de usuario desde Firestore
-                        try {
-                            const db = firebase.firestore();
-                            const userDoc = await db.collection('users').doc(user.uid).get();
-                            if (userDoc.exists) {
-                                this.userType = userDoc.data().userType || 'visitante';
-                            }
-                        } catch (error) {
-                            console.warn('No se pudo obtener tipo de usuario:', error);
-                        }
-                    }
-                    resolve();
-                });
-            });
+        if (!this.isFirebaseReady()) {
+            const ready = await this.waitForFirebaseReady();
+            if (!ready) return;
         }
+
+        return new Promise((resolve) => {
+            firebase.auth().onAuthStateChanged(async (user) => {
+                if (user) {
+                    this.isAuthenticated = true;
+                    this.userName = user.displayName || user.email;
+                    
+                    // Obtener tipo de usuario desde Firestore
+                    try {
+                        const db = firebase.firestore();
+                        const userDoc = await db.collection('users').doc(user.uid).get();
+                        if (userDoc.exists) {
+                            this.userType = userDoc.data().userType || 'visitante';
+                        }
+                    } catch (error) {
+                        console.warn('No se pudo obtener tipo de usuario:', error);
+                    }
+                }
+                resolve();
+            });
+        });
     }
 
     /**

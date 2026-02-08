@@ -13,7 +13,7 @@ let currentSection = 'home';
 let isInitialized = false;
 
 // Esperar a que Firebase esté listo
-document.addEventListener('firebaseReady', async () => {
+window.addEventListener('firebaseReady', async () => {
     console.log('🔥 [CERTAMENES] Evento firebaseReady recibido');
     if (!db && !isInitialized) {
         try {
@@ -287,7 +287,6 @@ async function loadCertamenes() {
         // Firebase v8 syntax
         const querySnapshot = await db.collection("certamenes_provinciales")
             .where("activo", "==", true)
-            .orderBy("fecha_inicio", "desc")
             .get();
         
         certamenesData = [];
@@ -301,6 +300,13 @@ async function loadCertamenes() {
             });
         });
         
+        // Ordenar por fecha en cliente para evitar indice compuesto
+        certamenesData.sort((a, b) => {
+            const dateA = a.fecha_inicio?.toDate?.() || new Date(a.fecha_inicio || 0);
+            const dateB = b.fecha_inicio?.toDate?.() || new Date(b.fecha_inicio || 0);
+            return dateB - dateA;
+        });
+
         // Verificar si hay certámenes disponibles
         if (certamenesData.length === 0) {
             showEmptyState('certamenes');
@@ -324,6 +330,16 @@ function showEmptyState(type) {
     switch (type) {
         case 'certamenes':
             container = document.getElementById('certamenesList') || document.querySelector('.certamenes-grid') || document.getElementById('vyt-certamenes-grid');
+            
+            // USAR VERSION AVANZADA del dynamic-assets-manager (detecta usuario logueado)
+            if (container && window.vytAssetsManager && typeof window.vytAssetsManager.showEmptyStateCertamenes === 'function') {
+                console.log('🎯 [CERTAMENES] Usando empty state avanzado');
+                window.vytAssetsManager.showEmptyStateCertamenes(container);
+                return; // Salir temprano, no usar fallback
+            }
+            
+            // FALLBACK si dynamic-assets-manager no está disponible
+            console.warn('⚠️ [CERTAMENES] Dynamic Assets Manager no disponible, usando fallback');
             icon = 'fa-envelope';
             message = {
                 title: '¡Próximamente!',
@@ -564,8 +580,6 @@ async function loadTopParticipants() {
         // Firebase v8 syntax - Query para obtener participantes con más votos
         const querySnapshot = await db.collection("participantes_online")
             .where("pago_completado", "==", true)
-            .orderBy("votos_totales", "desc")
-            .limit(10)
             .get();
         
         const participants = [];
@@ -577,7 +591,11 @@ async function loadTopParticipants() {
             });
         });
         
-        if (participants.length === 0) {
+        // Ordenar y recortar top 10 en cliente para evitar indice compuesto
+        participants.sort((a, b) => (b.votos_totales || 0) - (a.votos_totales || 0));
+        const topParticipants = participants.slice(0, 10);
+
+        if (topParticipants.length === 0) {
             container.innerHTML = `
                 <div class="text-center py-8">
                     <i class="fas fa-trophy text-4xl text-gray-600 mb-4"></i>
@@ -587,7 +605,7 @@ async function loadTopParticipants() {
             return;
         }
         
-        container.innerHTML = participants.map((participant, index) => 
+        container.innerHTML = topParticipants.map((participant, index) => 
             createParticipantRow(participant, index + 1)
         ).join('');
         
@@ -690,7 +708,6 @@ async function loadCertamenParticipants(certamenId) {
         const querySnapshot = await db.collection("participantes_online")
             .where("certamen_id", "==", certamenId)
             .where("pago_completado", "==", true)
-            .orderBy("votos_totales", "desc")
             .get();
         
         const participants = [];
@@ -702,6 +719,9 @@ async function loadCertamenParticipants(certamenId) {
             });
         });
         
+        // Ordenar por votos en cliente para evitar indice compuesto
+        participants.sort((a, b) => (b.votos_totales || 0) - (a.votos_totales || 0));
+
         // Mostrar participantes en la sección de certámenes
         const container = document.getElementById('certamenesList');
         if (container) {

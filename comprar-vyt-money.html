@@ -255,7 +255,7 @@
     </main>
 
     <script type="module">
-        import { auth, db, functions } from './firebase-config.js';
+        import { auth, db, functions } from './firebase-config.module.js';
         import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
         import { httpsCallable } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js";
         import { doc, getDoc, updateDoc, increment, arrayUnion, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";

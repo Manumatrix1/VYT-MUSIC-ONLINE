@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VYT Music - Certámenes</title>
+    
+    <!-- Design Tokens -->
+    <link rel="stylesheet" href="/design-tokens.css">
+    
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Explora los certámenes de canto disponibles en VYT Music">
+    <meta name="theme-color" content="#121212">
+    <link rel="apple-touch-icon" href="/images/icons/apple-touch-icon.png">
+    <link rel="manifest" href="/manifest.json">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Firebase v8 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="/firebase-config.js"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(180deg, #1a1a1a 0%, #121212 100%);
+            color: #ffffff;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+        
+        /* HEADER SPOTIFY STYLE */
+        .spotify-header {
+            padding: 24px 16px 16px;
+            background: linear-gradient(180deg, #1DB954 0%, #121212 100%);
+            min-height: 280px;
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .header-title {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+        
+        .header-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        
+        /* MAIN CONTAINER */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        
+        /* SECCIÓN CAROUSEL DESTACADO */
+        .hero-carousel {
+            margin: -100px 0 32px;
+            position: relative;
+        }
+        
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-item {
+            min-width: 100%;
+            position: relative;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .carousel-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.8) 0%, transparent 60%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 24px;
+        }
+        
+        .carousel-badge {
+            display: inline-block;
+            background: #1DB954;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            width: fit-content;
+        }
+        
+        .carousel-title {
+            font-size: 1.75rem;
+            font-weight: 900;
+            margin-bottom: 8px;
+        }
+        
+        .carousel-info {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-bottom: 16px;
+        }
+        
+        .carousel-cta {
+            background: #1DB954;
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 500px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            width: fit-content;
+        }
+        
+        .carousel-cta:hover {
+            transform: scale(1.05);
+            background: #1ed760;
+        }
+        
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(0,0,0,0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        
+        .carousel-nav:hover {
+            background: rgba(0,0,0,0.8);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .carousel-nav.prev { left: 16px; }
+        .carousel-nav.next { right: 16px; }
+        
+        .carousel-dots {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 16px;
+        }
+        
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .carousel-dot.active {
+            background: #1DB954;
+            width: 24px;
+            border-radius: 4px;
+        }
+        
+        /* SECCIONES */
+        .section {
+            margin-bottom: 40px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+        }
+        
+        .section-link {
+            color: #b3b3b3;
+            font-size: 0.875rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        
+        .section-link:hover {
+            color: white;
+        }
+        
+        /* GRID VIDEOS */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        
+        .video-card {
+            background: #181818;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .video-card:hover {
+            background: #282828;
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 6px;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .video-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .video-play-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .video-card:hover .video-play-icon {
+            opacity: 1;
+        }
+        
+        .video-play-icon i {
+            font-size: 3rem;
+            color: white;
+        }
+        
+        .video-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .video-subtitle {
+            font-size: 0.75rem;
+            color: #b3b3b3;
+        }
+        
+        /* GRID CERTÁMENES */
+        .certamen-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+        }
+        
+        .certamen-card {
+            background: #181818;
+            border-radius: 8px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .certamen-card:hover {
+            background: #282828;
+            transform: translateY(-4px);
+        }
+        
+        .certamen-image {
+            width: 100%;
+            aspect-ratio: 1;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 6px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        
+        .certamen-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .certamen-title {
+            font-size: 0.875rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .certamen-info {
+            font-size: 0.75rem;
+            color: #b3b3b3;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .certamen-badge {
+            background: #1DB954;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.625rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        /* LOADING */
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255,255,255,0.1);
+            border-top-color: #1DB954;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 1.5rem;
+            }
+            
+            .carousel-title {
+                font-size: 1.25rem;
+            }
+            
+            .section-title {
+                font-size: 1.25rem;
+            }
+            
+            .certamen-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 12px;
+            }
+            
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .carousel-nav {
+                width: 32px;
+                height: 32px;
+                font-size: 0.875rem;
+            }
+        }
+        
+        /* EMPTY STATE */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            opacity: 0.6;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER SPOTIFY STYLE -->
+    <div class="spotify-header">
+        <div class="header-content">
+            <h1 class="header-title">🎤 Certámenes VYT Music</h1>
+            <p class="header-subtitle">Descubre los mejores concursos de canto y demuestra tu talento</p>
+        </div>
+    </div>
+    
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        
+        <!-- CAROUSEL DESTACADOS -->
+        <section class="hero-carousel">
+            <div id="carouselDestacados" class="carousel-container">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Cargando destacados...</p>
+                </div>
+            </div>
+            <div id="carouselDots" class="carousel-dots"></div>
+        </section>
+        
+        <!-- VIDEOS RECOMENDADOS -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Esto puede gustarte</h2>
+                <a href="#" class="section-link">Ver todo</a>
+            </div>
+            <div id="videosGrid" class="video-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Cargando videos...</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- TODOS LOS CERTÁMENES -->
+        <section class="section">
+            <div class="section-header">
+                <h2 class="section-title">Todos los certámenes</h2>
+                <a href="#" class="section-link">Ver todos</a>
+            </div>
+            <div id="certamenesGrid" class="certamen-grid">
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Cargando certámenes...</p>
+                </div>
+            </div>
+        </section>
+        
+    </div>
+    
+    <script>
+        console.log('🎵 VYT Music - Layout Spotify');
+        
+        const db = firebase.firestore();
+        let currentSlide = 0;
+        let destacados = [];
+        
+        // ================================
+        // CARGAR CERTÁMENES DESTACADOS
+        // ================================
+        async function loadDestacados() {
+            try {
+                const snapshot = await db.collection('certamenes_provinciales')
+                    .where('destacado', '==', true)
+                    .where('activo', '==', true)
+                    .limit(5)
+                    .get();
+                
+                if (snapshot.empty) {
+                    // Si no hay destacados, mostrar los más recientes
+                    const fallback = await db.collection('certamenes_provinciales')
+                        .where('activo', '==', true)
+                        .orderBy('fecha_inicio', 'desc')
+                        .limit(3)
+                        .get();
+                    
+                    destacados = fallback.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                } else {
+                    destacados = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                }
+                
+                renderCarousel();
+                
+            } catch (error) {
+                console.error('Error cargando destacados:', error);
+                document.getElementById('carouselDestacados').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>No se pudieron cargar los certámenes destacados</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function renderCarousel() {
+            const container = document.getElementById('carouselDestacados');
+            const dotsContainer = document.getElementById('carouselDots');
+            
+            if (destacados.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-star"></i>
+                        <p>No hay certámenes destacados disponibles</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            const carouselHTML = `
+                <button class="carousel-nav prev" onclick="prevSlide()">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <div class="carousel-track" id="carouselTrack">
+                    ${destacados.map((cert, index) => `
+                        <div class="carousel-item">
+                            ${cert.imagen_url ? `<img src="${cert.imagen_url}" alt="${cert.nombre}">` : ''}
+                            <div class="carousel-overlay">
+                                <span class="carousel-badge">⭐ Destacado</span>
+                                <h3 class="carousel-title">${cert.nombre || 'Certamen VYT'}</h3>
+                                <p class="carousel-info">
+                                    📅 ${cert.fecha_inicio ? new Date(cert.fecha_inicio.seconds * 1000).toLocaleDateString() : 'Por confirmar'}
+                                    • 💰 $${cert.precio || '0'}
+                                    • 🎵 ${cert.genero || 'Todos los géneros'}
+                                </p>
+                                <button class="carousel-cta" onclick="irACertamen('${cert.id}')">
+                                    Participar Ahora
+                                </button>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <button class="carousel-nav next" onclick="nextSlide()">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            `;
+            
+            container.innerHTML = carouselHTML;
+            
+            // Crear dots
+            dotsContainer.innerHTML = destacados.map((_, i) => 
+                `<div class="carousel-dot ${i === 0 ? 'active' : ''}" onclick="goToSlide(${i})"></div>`
+            ).join('');
+            
+            // Auto-rotate
+            startAutoRotate();
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % destacados.length;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + destacados.length) % destacados.length;
+            updateCarousel();
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            updateCarousel();
+        }
+        
+        function updateCarousel() {
+            const track = document.getElementById('carouselTrack');
+            const dots = document.querySelectorAll('.carousel-dot');
+            
+            if (track) {
+                track.style.transform = `translateX(-${currentSlide * 100}%)`;
+            }
+            
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentSlide);
+            });
+        }
+        
+        let autoRotateInterval;
+        function startAutoRotate() {
+            autoRotateInterval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        }
+        
+        function irACertamen(id) {
+            window.location.href = `certamen-individual.html?id=${id}`;
+        }
+        
+        // ================================
+        // CARGAR VIDEOS RECOMENDADOS
+        // ================================
+        async function loadVideos() {
+            try {
+                const snapshot = await db.collection('videos_recomendados')
+                    .where('activo', '==', true)
+                    .orderBy('orden', 'asc')
+                    .limit(6)
+                    .get();
+                
+                const videos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('videosGrid');
+                
+                if (videos.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-video"></i>
+                            <p>No hay videos disponibles</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = videos.map(video => `
+                    <div class="video-card" onclick="abrirVideo('${video.url || '#'}')">
+                        <div class="video-thumbnail">
+                            ${video.thumbnail ? `<img src="${video.thumbnail}" alt="${video.titulo}">` : ''}
+                            <div class="video-play-icon">
+                                <i class="fas fa-play-circle"></i>
+                            </div>
+                        </div>
+                        <div class="video-title">${video.titulo || 'Video sin título'}</div>
+                        <div class="video-subtitle">${video.descripcion || 'VYT Music'}</div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error cargando videos:', error);
+                document.getElementById('videosGrid').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>No se pudieron cargar los videos</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function abrirVideo(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank');
+            }
+        }
+        
+        // ================================
+        // CARGAR TODOS LOS CERTÁMENES
+        // ================================
+        async function loadCertamenes() {
+            try {
+                const snapshot = await db.collection('certamenes_provinciales')
+                    .where('activo', '==', true)
+                    .orderBy('fecha_inicio', 'desc')
+                    .limit(12)
+                    .get();
+                
+                const certamenes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                
+                const container = document.getElementById('certamenesGrid');
+                
+                if (certamenes.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-music"></i>
+                            <p>No hay certámenes disponibles</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = certamenes.map(cert => `
+                    <a href="certamen-individual.html?id=${cert.id}" class="certamen-card">
+                        <div class="certamen-image">
+                            ${cert.imagen_url ? `<img src="${cert.imagen_url}" alt="${cert.nombre}">` : ''}
+                        </div>
+                        <div class="certamen-title">${cert.nombre || 'Certamen VYT'}</div>
+                        <div class="certamen-info">
+                            ${cert.estado === 'activo' ? '<span class="certamen-badge">Activo</span>' : ''}
+                            <span>${cert.provincia || 'Nacional'}</span>
+                        </div>
+                    </a>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error cargando certámenes:', error);
+                document.getElementById('certamenesGrid').innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <p>No se pudieron cargar los certámenes</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // ================================
+        // INICIALIZAR
+        // ================================
+        document.addEventListener('DOMContentLoaded', () => {
+            loadDestacados();
+            loadVideos();
+            loadCertamenes();
+        });
+        
+        // Pausar auto-rotate al hacer hover
+        document.addEventListener('DOMContentLoaded', () => {
+            const carousel = document.getElementById('carouselDestacados');
+            if (carousel) {
+                carousel.addEventListener('mouseenter', () => {
+                    clearInterval(autoRotateInterval);
+                });
+                carousel.addEventListener('mouseleave', () => {
+                    startAutoRotate();
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -10,7 +10,11 @@ class AuthGuard {
       'login.html',
       'register.html',
       'registro-visitante.html',
-      'nosotros.html'
+      'nosotros.html',
+      'certamenes.html',
+      'certamenes-nuevos.html',
+      'ranking.html',
+      'LIMPIAR-TODO.html'
     ];
     
     this.currentPage = window.location.pathname.split('/').pop() || 'index.html';
@@ -38,38 +42,80 @@ class AuthGuard {
 
     console.log('🔒 Auth Guard activado para:', this.currentPage);
 
-    // Verificar autenticación inmediatamente
-    this.checkAuth();
-
-    // Verificar cada 2 segundos si el usuario sigue autenticado
-    this.checkInterval = setInterval(() => {
-      this.checkAuth();
-    }, 2000);
+    // Esperar a Firebase antes de iniciar checks para evitar app/no-app
+    this.waitForFirebaseThenStart();
   }
 
   /**
-   * Verificar estado de autenticación
+   * Verifica si Firebase ya esta listo
    */
-  checkAuth() {
-    if (typeof firebase === 'undefined' || !firebase.auth) {
-      console.warn('⚠️ Firebase Auth no disponible aún');
+  isFirebaseReady() {
+    return (
+      typeof firebase !== 'undefined' &&
+      firebase.apps &&
+      firebase.apps.length > 0 &&
+      typeof firebase.auth === 'function'
+    );
+  }
+
+  /**
+   * Espera Firebase y luego arranca el check de autenticacion
+   */
+  waitForFirebaseThenStart() {
+    const tryStart = () => {
+      if (!this.isFirebaseReady()) {
+        return false;
+      }
+
+      // Usar onAuthStateChanged en lugar de polling
+      this.setupAuthListener();
+
+      return true;
+    };
+
+    if (tryStart()) return;
+
+    if (typeof window !== 'undefined') {
+      window.addEventListener('firebaseReady', () => {
+        tryStart();
+      }, { once: true });
+    }
+
+    // Fallback por si el evento no llega
+    setTimeout(() => {
+      tryStart();
+    }, 10000);
+  }
+
+  /**
+   * Configurar listener de autenticación (NO hace polling)
+   */
+  setupAuthListener() {
+    if (!this.isFirebaseReady()) {
+      console.warn('⚠️ Firebase Auth no disponible');
       return;
     }
 
-    const user = firebase.auth().currentUser;
-
-    if (!user) {
-      console.log('🚫 Usuario no autenticado - Redirigiendo a login');
-      this.redirectToLogin();
-    } else {
-      console.log('✅ Usuario autenticado:', user.email);
-    }
+    // Listener único - Firebase notifica cambios automáticamente
+    firebase.auth().onAuthStateChanged((user) => {
+      if (!user) {
+        console.log('🚫 Usuario no autenticado - Redirigiendo a login');
+        this.redirectToLogin();
+      } else {
+        console.log('✅ Usuario autenticado:', user.email);
+      }
+    });
   }
 
   /**
    * Redirigir a página de login
    */
   redirectToLogin() {
+    // Evitar loops infinitos
+    if (window.location.pathname.includes('index.html') || window.location.pathname === '/') {
+      return; // Ya estamos en index
+    }
+
     // Guardar la página actual para volver después del login
     sessionStorage.setItem('redirect_after_login', window.location.href);
     
@@ -95,10 +141,8 @@ class AuthGuard {
    * Detener verificación
    */
   destroy() {
-    if (this.checkInterval) {
-      clearInterval(this.checkInterval);
-      this.checkInterval = null;
-    }
+    // Limpieza si es necesaria
+    console.log('🛑 Auth Guard destruido');
   }
 }
 
@@ -111,16 +155,6 @@ if (document.readyState === 'loading') {
 } else {
   window.authGuard = new AuthGuard();
   window.authGuard.init();
-}
-
-// Verificar cuando Firebase Auth esté listo
-if (typeof firebase !== 'undefined' && firebase.auth) {
-  firebase.auth().onAuthStateChanged((user) => {
-    if (!user && window.authGuard && !window.authGuard.isPublicPage()) {
-      console.log('🔐 Auth cambió - Usuario deslogueado');
-      window.authGuard.redirectToLogin();
-    }
-  });
 }
 
 // Exportar para uso global

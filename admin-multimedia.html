@@ -11,6 +11,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="manifest" href="/manifest.json">
+
+    <script>
+        if (localStorage.getItem('vyt_debug') !== 'true' && !window.__vytAdminMultimediaConsoleMuted) {
+            window.__vytAdminMultimediaConsoleMuted = true;
+            window.__vytAdminMultimediaConsoleLog = console.log;
+            console.log = () => {};
+        }
+    </script>
     
     <!-- Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>

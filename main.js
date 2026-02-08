@@ -19,7 +19,7 @@ const initializeFirebase = async () => {
         authMethods,
         firestoreMethods
     ] = await Promise.all([
-        import('./firebase-config.js'),
+        import('./firebase-config.module.js'),
         import("https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"),
         import("https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js")
     ]);
