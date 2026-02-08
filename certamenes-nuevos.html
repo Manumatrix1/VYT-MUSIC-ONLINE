@@ -75,6 +75,19 @@
     <!-- Sistema de navegacin -->
     <link rel="stylesheet" href="/src/navigation-styles.css">
     <script src="/src/navigation.js"></script>
+    
+    <!-- Animaciones y Gamificación -->
+    <link rel="stylesheet" href="/src/animations.css?v=3.0">
+    <script src="/src/gamification.js?v=3.0"></script>
+    <script src="/src/gamification-enhanced.js?v=2026-02-07"></script>
+    
+    <!-- Sistema de Multimedia Dinámica (mensaje "Nuevos Certámenes") -->
+    <link rel="stylesheet" href="/src/dynamic-assets-styles.css">
+    <script src="/src/dynamic-assets-manager.js?v=2026-02-07" defer></script>
+    
+    <!-- Sistema de Suscripción de Emails -->
+    <script src="/src/email-subscription.js?v=2026-02-07"></script>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
@@ -123,9 +136,35 @@
         }
 
         .certamen-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
-            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.2);
+            border-color: rgba(59, 130, 246, 0.6);
+        }
+        
+        .certamen-grid-card:hover::before {
+            top: -100%;
+            left: -100%;
+        }
+        
+        .certamen-grid-card:active {
+            transform: translateY(-4px) scale(1.01);
+        }
+        
+        /* Animación de pulso para badges */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6); }
+        }
+        
+        .certamen-status-badge {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        /* Animación de campanita para notificaciones */
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }
+            10%, 30% { transform: rotate(-10deg); }
+            20%, 40% { transform: rotate(10deg); }
         }
 
         .btn-primary {
@@ -369,13 +408,34 @@
             border-radius: 12px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .video-card-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
+            transition: left 0.5s;
+            z-index: 1;
         }
         
         .video-card-item:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+            transform: translateY(-8px) scale(1.03);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 16px 40px rgba(59, 130, 246, 0.3), 0 0 30px rgba(59, 130, 246, 0.15);
+        }
+        
+        .video-card-item:hover::before {
+            left: 100%;
+        }
+        
+        .video-card-item:active {
+            transform: translateY(-4px) scale(1.02);
         }
         
         .video-thumbnail-container {
@@ -451,9 +511,29 @@
         }
         
         .certamen-grid-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.2);
+            transform: translateY(-8px) scale(1.02);
+            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.4), 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .certamen-grid-card:active {
+            transform: translateY(-4px) scale(1.01);
+        }
+        
+        /* Animación de pulso para badges */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 5px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6); }
+        }
+        
+        .certamen-status-badge {
+            animation: pulse-glow 2s infinite;
+        }
+        
+        /* Animación de campanita para notificaciones */
+        @keyframes ring {
+            0%, 100% { transform: rotate(0deg); }\n            10%, 30% { transform: rotate(-10deg); }
+            20%, 40% { transform: rotate(10deg); }
         }
         
         .certamen-image-container {
@@ -782,10 +862,74 @@
                 const container = document.getElementById('certamenesGrid');
                 
                 if (certamenes.length === 0) {
+                    // Mensaje gamificado "Nuevos Certámenes en Camino"
                     container.innerHTML = `
-                        <div style="text-align: center; padding: 40px 20px; grid-column: 1 / -1;">
-                            <i class="fas fa-music text-4xl mb-4"></i>
-                            <p>No hay certámenes disponibles</p>
+                        <div style="
+                            text-align: center; 
+                            padding: 60px 30px; 
+                            grid-column: 1 / -1;
+                            background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 130, 246, 0.15));
+                            backdrop-filter: blur(15px);
+                            border-radius: 24px;
+                            border: 1.5px solid rgba(255, 255, 255, 0.2);
+                            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+                        ">
+                            <!-- Icono animado -->
+                            <div style="
+                                width: 80px;
+                                height: 80px;
+                                margin: 0 auto 24px;
+                                background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+                                border-radius: 50%;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                box-shadow: 0 10px 40px rgba(139, 92, 246, 0.4);
+                                animation: pulse-glow 2s infinite;
+                            ">
+                                <i class="fas fa-star" style="font-size: 2.5rem; color: white;"></i>
+                            </div>
+                            
+                            <!-- Título llamativo -->
+                            <h2 style="
+                                font-size: clamp(1.75rem, 4vw, 2.25rem);
+                                font-weight: 800;
+                                background: linear-gradient(135deg, #fff, #a78bfa, #60a5fa);
+                                -webkit-background-clip: text;
+                                -webkit-text-fill-color: transparent;
+                                background-clip: text;
+                                margin-bottom: 12px;
+                                line-height: 1.3;
+                            ">
+                                🎵 Nuevos Certámenes en Camino
+                            </h2>
+                            
+                            <p style="
+                                font-size: 1rem;
+                                color: rgba(255,255,255,0.85);
+                                margin-bottom: 30px;
+                                line-height: 1.6;
+                                font-weight: 400;
+                            ">
+                                Sé el primero en enterarte cuando lancemos nuevos certámenes
+                            </p>
+                            
+                            <!-- Botón de suscripción -->
+                            <button onclick="if(typeof suscribirseACertamenes === 'function') suscribirseACertamenes()" style="
+                                background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+                                color: white;
+                                border: none;
+                                padding: 16px 32px;
+                                border-radius: 12px;
+                                font-size: 1rem;
+                                font-weight: 700;
+                                cursor: pointer;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+                            ">
+                                <i class="fas fa-bell" style="margin-right: 8px; animation: ring 2s infinite;"></i>
+                                Avisarme de Nuevos Certámenes
+                            </button>
                         </div>
                     `;
                     return;
