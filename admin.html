@@ -46,19 +46,15 @@
         // Inicializar Firebase
         firebase.initializeApp(firebaseConfig);
         
-        // Exportar a window para compatibilidad
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-        const storage = firebase.storage();
-        
-        window.db = db;
-        window.firebaseDB = db;
-        window.firebaseAuth = auth;
-        window.firebaseStorage = storage;
+        // Exportar a window (sin const/let/var para evitar redeclaraciones)
+        window.db = firebase.firestore();
+        window.firebaseDB = window.db;
+        window.firebaseAuth = firebase.auth();
+        window.firebaseStorage = firebase.storage();
         
         console.log('✅ Firebase inicializado en admin');
-        console.log('✅ db disponible:', typeof db);
-        console.log('✅ storage disponible:', typeof storage);
+        console.log('✅ db disponible:', typeof window.db);
+        console.log('✅ storage disponible:', typeof window.firebaseStorage);
         
         // Exportar funciones de Firestore (compatibilidad con SDK v8)
         window.firestoreQuery = {
