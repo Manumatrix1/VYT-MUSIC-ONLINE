@@ -316,21 +316,55 @@ service cloud.firestore {
       // Los admins pueden leer todos los balances
       allow read: if isAdmin();
       
-      // Solo el sistema (Cloud Functions) puede escribir
+      // ⭐ ACTUALIZADO: Solo Cloud Functions pueden escribir (seguridad mejorada)
+      // Elimina riesgo de manipulación manual sin audit log
       allow write: if false;
       
-      // Admins pueden ajustar balances manualmente (con audit log)
-      allow write: if isAdmin();
+      // ⚠️ Nota: Admins deben usar adjustUserBalance() Cloud Function
+      // que registra automáticamente en audit_logs
+    }
+    
+    // ===== AUDIT LOGS (NUEVO - FASE 1) =====
+    match /audit_logs/{logId} {
+      // Solo admins pueden leer logs
+      allow read: if isAdmin();
+      
+      // Solo Cloud Functions pueden crear logs
+      allow create: if false;
+      
+      // Logs son inmutables (no se pueden modificar ni eliminar)
+      allow update, delete: if false;
+    }
+    
+    // ===== SYSTEM MIGRATIONS (NUEVO - Para scripts de normalización) =====
+    match /_system_migrations/{migrationId} {
+      // Solo admins pueden leer estado de migraciones
+      allow read: if isAdmin();
+      
+      // Solo Cloud Functions/Scripts pueden escribir
+      allow write: if false;
     }
     
     // ===== FUNCIONES AUXILIARES =====
     
-    // Verificar si el usuario es administrador
-    function isAdmin() {
+    // ⭐ NUEVO: Verificar admin con custom claims (Performance optimizada)
+    function isAdminByClaims() {
+      return request.auth != null && 
+        request.auth.token.admin == true;
+    }
+    
+    // LEGACY: Verificar admin por Firestore (durante transición)
+    function isAdminByFirestore() {
       return request.auth != null && 
         request.auth.uid != null &&
         exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+    
+    // ⭐ HÍBRIDO: Usa custom claims primero, fallback a Firestore
+    // Durante transición (30 días), ambos métodos son válidos
+    function isAdmin() {
+      return isAdminByClaims() || isAdminByFirestore();
     }
     
     // Validar datos de usuario

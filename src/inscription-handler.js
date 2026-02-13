@@ -62,18 +62,65 @@ class InscriptionFormHandler {
      */
     async loadCertamenes() {
         try {
-            const certamenesRef = collection(db, 'certamenes');
-            const snapshot = await getDocs(certamenesRef);
+            console.log('🔍 Cargando certámenes disponibles...');
             
-            this.certamenes = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data()
-            })).filter(certamen => certamen.activo !== false);
+            // ✅ LEER DE LA COLECCIÓN CORRECTA (la misma que usa el frontend público)
+            const certamenesRef = collection(db, 'certamenes_provinciales');
+            
+            // ✅ FILTRAR solo certámenes activos y con fechas válidas
+            const q = query(
+                certamenesRef, 
+                where('activo', '==', true)
+            );
+            
+            const snapshot = await getDocs(q);
+            
+            console.log(`📊 Certámenes encontrados: ${snapshot.size}`);
+            
+            this.certamenes = snapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
+                    id: doc.id,
+                    nombre: data.nombre || data.name || 'Sin nombre',
+                    provincia: data.provincia || '',
+                    precio: data.precio || data.precio_inscripcion || 0,
+                    descripcion: data.descripcion || '',
+                    imagen: data.imagen_url || data.imageUrl || '',
+                    fecha_inicio: data.fecha_inicio,
+                    fecha_fin: data.fecha_fin,
+                    activo: data.activo ?? true
+                };
+            }).filter(certamen => {
+                // Validar que tenga los campos mínimos requeridos
+                const valido = certamen.nombre && certamen.provincia && certamen.precio > 0;
+                if (!valido) {
+                    console.warn('⚠️ Certamen incompleto descartado:', certamen);
+                }
+                return valido;
+            });
 
+            console.log(`✅ Certámenes válidos cargados: ${this.certamenes.length}`);
+            
+            // ✅ VERIFICAR que haya certámenes disponibles
+            if (this.certamenes.length === 0) {
+                this.showNotification(
+                    '⚠️ No hay certámenes activos en este momento. Por favor, vuelve más tarde.',
+                    'warning'
+                );
+            }
+            
             this.populateCertamenSelect();
+            
         } catch (error) {
-            console.error('Error cargando certámenes:', error);
-            this.showNotification('Error al cargar los certámenes disponibles', 'error');
+            console.error('❌ Error cargando certámenes:', error);
+            this.showNotification(
+                'Error al cargar los certámenes disponibles. Por favor, recarga la página.',
+                'error'
+            );
+            
+            // ✅ ASEGURAR que la lista quede vacía en caso de error
+            this.certamenes = [];
+            this.populateCertamenSelect();
         }
     }
 
@@ -405,8 +452,27 @@ class InscriptionFormHandler {
     async handleFormSubmit(event) {
         event.preventDefault();
 
+        // ✅ VALIDACIÓN #1: Evitar doble submit
         if (this.isSubmitting) {
             this.showNotification('Ya se está procesando tu inscripción, por favor espera...', 'warning');
+            return;
+        }
+        
+        // ✅ VALIDACIÓN #2: Verificar que haya certámenes cargados
+        if (this.certamenes.length === 0) {
+            this.showNotification(
+                '⚠️ No hay certámenes disponibles. Por favor, recarga la página.',
+                'error'
+            );
+            return;
+        }
+        
+        // ✅ VALIDACIÓN #3: Verificar que se seleccionó un certamen
+        if (!this.selectedCertamen || !this.selectedCertamen.id) {
+            this.showNotification(
+                '⚠️ Por favor, selecciona un certamen antes de continuar.',
+                'error'
+            );
             return;
         }
 
@@ -435,11 +501,27 @@ class InscriptionFormHandler {
             await this.submitForm(formData);
 
         } catch (error) {
-            console.error('Error en envío del formulario:', error);
-            this.showNotification('Ocurrió un error inesperado. Por favor, intenta nuevamente.', 'error');
+            console.error('❌ Error en envío del formulario:', error);
+            console.error('Stack:', error.stack);
+            
+            // ✅ MENSAJE DE ERROR MÁS ESPECÍFICO
+            let errorMessage = 'Ocurrió un error inesperado.';
+            
+            if (error.message.includes('permission')) {
+                errorMessage = 'Error de permisos. Por favor, inicia sesión nuevamente.';
+            } else if (error.message.includes('network')) {
+                errorMessage = 'Error de conexión. Verifica tu internet.';
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+            
+            this.showNotification(errorMessage, 'error');
+            
         } finally {
+            // ✅ GARANTIZAR que SIEMPRE se resetee el estado
             this.isSubmitting = false;
             this.updateSubmitButton(false);
+            console.log('✅ Formulario reseteado - listo para nuevo intento');
         }
     }
 

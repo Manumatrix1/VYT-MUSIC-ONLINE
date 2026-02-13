@@ -27,7 +27,14 @@ exports.healthCheck = onRequest({ cors: true }, async (req, res) => {
 
 // ===== INITIALIZE FIRESTORE =====
 
-exports.initializeFirestoreStructure = onRequest({ cors: true }, async (req, res) => {
+exports.initializeFirestoreStructure = onRequest(async (req, res) => {
+  // CORS manual para v1
+  res.set('Access-Control-Allow-Origin', '*');
+  if (req.method === 'OPTIONS') {
+    res.status(204).send('');
+    return;
+  }
+  
   try {
     console.log('🔄 Inicializando estructura de Firestore...');
     
@@ -199,6 +206,21 @@ exports.registrarVoto = onCall(async (request) => {
   }
 });
 
+// ===== ADMIN CLAIMS MANAGEMENT (NUEVO - FASE 1) =====
+const adminClaims = require('./admin-claims');
+exports.setAdminClaim = adminClaims.setAdminClaim;
+exports.getUserClaims = adminClaims.getUserClaims;
+exports.refreshUserToken = adminClaims.refreshUserToken;
+exports.listAdmins = adminClaims.listAdmins;
+exports.migrateAdminClaims = adminClaims.migrateAdminClaims;
+
+// ===== VYT MONEY AUDIT LOGGING (NUEVO - FASE 1) =====
+const vytMoneyAudit = require('./vyt-money-audit');
+exports.adjustUserBalance = vytMoneyAudit.adjustUserBalance;
+exports.getAuditLogs = vytMoneyAudit.getAuditLogs;
+exports.getUserAuditTrail = vytMoneyAudit.getUserAuditTrail;
+exports.exportAuditLogs = vytMoneyAudit.exportAuditLogs;
+
 // ===== IMPORT YOUTUBE AUTOMATION =====
 // COMENTADO - YouTube automation se desplegará después con sus claves
 // const youtubeAutomation = require('./youtube-automation');
@@ -215,4 +237,4 @@ exports.registrarVoto = onCall(async (request) => {
 // exports.onPaymentConfirmed = triggers.onPaymentConfirmed;
 // exports.onVideoApproved = triggers.onVideoApproved;
 
-console.log('✅ VYT Music Online Functions v2 (funciones básicas + emails manuales) - Loaded successfully');
+console.log('✅ VYT Music Online Functions v2 + Admin Claims + Audit Logging - Loaded successfully');

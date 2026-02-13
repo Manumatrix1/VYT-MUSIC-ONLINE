@@ -577,7 +577,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadCertamenes = async () => {
         certamenesListDiv.innerHTML = '<p class="text-gray-500">Cargando certámenes...</p>';;
         try {
-            const q = query(collection(db, "certamenes_online"), orderBy("orden", "asc"));
+            // ✅ UNIFICADO: Usar certamenes_provinciales
+            const q = query(collection(db, "certamenes_provinciales"), orderBy("orden", "asc"));
             const querySnapshot = await getDocs(q);
             certamenesListDiv.innerHTML = '';
             if (querySnapshot.empty) {
@@ -590,10 +591,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 item.className = 'artist-list-item';
                 item.innerHTML = `
                     <div class="flex items-center gap-4">
-                        <img src="${certamen.imageUrl || 'https://placehold.co/64x64/374151/9ca3af?text=VYT'}" alt="Portada" class="w-16 h-16 object-cover rounded-md bg-gray-700">
+                        <img src="${certamen.imageUrl || certamen.imagen_url || 'https://placehold.co/64x64/374151/9ca3af?text=VYT'}" alt="Portada" class="w-16 h-16 object-cover rounded-md bg-gray-700">
                         <div>
-                            <p class="font-semibold">${certamen.name}</p>
-                            <p class="text-xs text-gray-400">${certamen.descripcion || 'Sin descripción'}</p>
+                            <p class="font-semibold">${certamen.nombre || certamen.name}</p>
+                            <p class="text-xs text-gray-400">${certamen.provincia || ''} • ${certamen.descripcion || 'Sin descripción'}</p>
                         </div>
                     </div>
                     <div class="flex gap-2">
@@ -613,20 +614,22 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.target.classList.contains('delete-certamen-btn')) {
             const docId = e.target.dataset.id;
             if (confirm("¿Estás seguro de que quieres eliminar este certamen? Esto podría afectar portadas asociadas.")) {
-                await deleteDoc(doc(db, "certamenes_online", docId));
+                // ✅ UNIFICADO: Usar certamenes_provinciales
+                await deleteDoc(doc(db, "certamenes_provinciales", docId));
                 loadCertamenes();
             }
         }
         if (e.target.classList.contains('edit-certamen-btn')) {
             // This is the new logic to open the modal
             const docId = e.target.dataset.id;
-            const docRef = doc(db, "certamenes_online", docId);
+            // ✅ UNIFICADO: Usar certamenes_provinciales
+            const docRef = doc(db, "certamenes_provinciales", docId);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
                 const data = docSnap.data();
                 editCertamenIdInput.value = docId;
-                editCertamenModalTitle.textContent = data.name;
-                editCertamenCoverPreview.innerHTML = data.imageUrl ? `<img src="${data.imageUrl}" class="max-h-40 rounded-lg object-contain">` : '<p class="text-gray-500">Sin portada</p>';
+                editCertamenModalTitle.textContent = data.nombre || data.name;
+                editCertamenCoverPreview.innerHTML = data.imageUrl || data.imagen_url ? `<img src="${data.imageUrl || data.imagen_url}" class="max-h-40 rounded-lg object-contain">` : '<p class="text-gray-500">Sin portada</p>';
                 editCertamenVideoUrlInput.value = data.videoUrl || '';
                 editCertamenVideoPreview.innerHTML = data.videoUrl ? `<iframe src="https://www.youtube.com/embed/${getYouTubeVideoId(data.videoUrl)}" class="w-full aspect-video rounded-lg"></iframe>` : '<p class="text-gray-500">Sin video</p>';
                 editCertamenModal.classList.remove('hidden');
@@ -645,7 +648,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const videoUrl = editCertamenVideoUrlInput.value;
 
         const updates = {
-            videoUrl: videoUrl || "" // Save empty string if cleared
+            videoUrl: videoUrl || "", // Save empty string if cleared
+            updatedAt: serverTimestamp()
         };
 
         try {
@@ -653,9 +657,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 const storageRef = ref(storage, `certamen_covers/${certamenId}_${Date.now()}_${coverFile.name}`);
                 await uploadBytesResumable(storageRef, coverFile);
                 updates.imageUrl = await getDownloadURL(storageRef);
+                updates.imagen_url = await getDownloadURL(storageRef); // Alias para compatibilidad
             }
 
-            const docRef = doc(db, "certamenes_online", certamenId);
+            // ✅ UNIFICADO: Usar certamenes_provinciales
+            const docRef = doc(db, "certamenes_provinciales", certamenId);
             await updateDoc(docRef, updates);
 
             alert("Certamen actualizado correctamente.");
@@ -1190,16 +1196,65 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Event Listeners for new forms ---
     certamenForm.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        // ✅ VALIDAR QUE TODOS LOS CAMPOS REQUERIDOS EXISTAN
+        const provincia = document.getElementById('certamen-provincia')?.value;
+        const nombre = document.getElementById('certamen-nombre')?.value;
+        const precio = document.getElementById('certamen-precio')?.value;
+        const fechaInicio = document.getElementById('certamen-fecha-inicio')?.value;
+        const fechaFin = document.getElementById('certamen-fecha-fin')?.value;
+        
+        if (!provincia || !nombre || !precio || !fechaInicio || !fechaFin) {
+            alert('⚠️ Por favor, completa todos los campos obligatorios (Provincia, Nombre, Precio, Fechas)');
+            return;
+        }
+        
+        // ✅ ESTRUCTURA UNIFICADA - Coincide con lo que espera el Frontend
         const certamenData = {
-            name: document.getElementById('certamen-nombre').value,
-            descripcion: document.getElementById('certamen-descripcion').value,
-            orden: Number(document.getElementById('certamen-orden').value) || 0,
-            createdAt: serverTimestamp()
+            // Campos en ESPAÑOL (como espera certamenes.js)
+            nombre: nombre,
+            provincia: provincia,
+            descripcion: document.getElementById('certamen-descripcion')?.value || '',
+            
+            // Datos económicos
+            precio: Number(precio) || 0,
+            precio_inscripcion: Number(precio) || 0, // Alias para compatibilidad
+            
+            // Fechas en formato ISO string
+            fecha_inicio: fechaInicio,
+            fecha_fin: fechaFin,
+            
+            // Estado
+            activo: document.getElementById('certamen-activo')?.checked ?? true,
+            ranking_habilitado: document.getElementById('certamen-ranking-habilitado')?.checked ?? true,
+            
+            // Multimedia (si existen)
+            imagen_url: document.getElementById('certamen-imagen')?.value || '',
+            imageUrl: document.getElementById('certamen-imagen')?.value || '', // Alias
+            url_inscripcion: document.getElementById('certamen-url-inscripcion')?.value || '',
+            
+            // Organización
+            orden: Number(document.getElementById('certamen-orden')?.value) || 0,
+            
+            // Timestamps
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp()
         };
-        await addDoc(collection(db, "certamenes_online"), certamenData);
-        alert("Certamen guardado.");
-        certamenForm.reset();
-        loadCertamenes(); // Refresh lists
+        
+        try {
+            // ✅ GUARDAR EN LA COLECCIÓN CORRECTA (la que usa el frontend)
+            await addDoc(collection(db, "certamenes_provinciales"), certamenData);
+            
+            alert("✅ Certamen guardado correctamente y visible en el frontend");
+            certamenForm.reset();
+            
+            // Recargar AMBAS listas
+            loadCertamenes(); // Para certamenes_online (si se usa)
+            loadCertamenesProvinciales(); // Para la vista principal
+        } catch (error) {
+            console.error("Error guardando certamen:", error);
+            alert(`❌ Error al guardar el certamen: ${error.message}`);
+        }
     });
 
     homeVideoForm.addEventListener('submit', saveHomeVideo);
@@ -1511,7 +1566,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Load certámenes provinciales
     const loadCertamenesProvinciales = async () => {
         try {
-            const querySnapshot = await getDocs(collection(db, "certamenes_provincias"));
+            // ✅ CORREGIDO: certamenes_provinciales (con 'les' al final)
+            const querySnapshot = await getDocs(collection(db, "certamenes_provinciales"));
             const certamenes = [];
             querySnapshot.forEach((doc) => {
                 certamenes.push({ id: doc.id, ...doc.data() });
@@ -1998,7 +2054,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 destacado: false
             };
             
-            await addDoc(collection(db, "certamenes_provincias"), certamenData);
+            // ✅ CORREGIDO: certamenes_provinciales (con 'les' al final)
+            await addDoc(collection(db, "certamenes_provinciales"), certamenData);
             showStatus('✅ Certamen creado correctamente', 'success');
             
         } catch (error) {
@@ -2010,7 +2067,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Habilitar/deshabilitar certamen
     const toggleCertamen = async (certamenId, currentState) => {
         try {
-            await updateDoc(doc(db, "certamenes_provincias", certamenId), {
+            // ✅ CORREGIDO: certamenes_provinciales (con 'les' al final)
+            await updateDoc(doc(db, "certamenes_provinciales", certamenId), {
                 activo: !currentState,
                 fecha_actualizacion: serverTimestamp()
             });
@@ -2040,7 +2098,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 fecha_actualizacion_premios: serverTimestamp()
             };
             
-            await updateDoc(doc(db, "certamenes_provincias", certamenId), premiosData);
+            // ✅ CORREGIDO: certamenes_provinciales (con 'les' al final)
+            await updateDoc(doc(db, "certamenes_provinciales", certamenId), premiosData);
             showStatus('✅ Premios actualizados correctamente', 'success');
             
         } catch (error) {
@@ -2153,7 +2212,8 @@ document.addEventListener('DOMContentLoaded', () => {
             };
             
             // Actualizar certamen
-            await updateDoc(doc(db, "certamenes_provincias", certamenId), winnersData);
+            // ✅ CORREGIDO: certamenes_provinciales (con 'les' al final)
+            await updateDoc(doc(db, "certamenes_provinciales", certamenId), winnersData);
             
             // Actualizar participantes ganadores
             if (firstPlace) {
@@ -2189,7 +2249,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const exportCertamenData = async (certamenId) => {
         try {
             // Obtener datos del certamen
-            const certamenDoc = await getDoc(doc(db, "certamenes_provincias", certamenId));
+            // ✅ CORREGIDO: certamenes_provinciales (con 'les' al final)
+            const certamenDoc = await getDoc(doc(db, "certamenes_provinciales", certamenId));
             const certamenData = certamenDoc.data();
             
             // Obtener participantes

@@ -1,0 +1,105 @@
+# Archivos y directorios ignorados por Firebase Hosting
+
+# node_modules
+node_modules/
+**/node_modules/**
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+firebase-debug.log*
+firebase-debug.*.log
+*.log.txt
+
+# Archivos ejecutables (prohibidos en Spark plan)
+*.bat
+*.exe
+*.msi
+*.ps1
+*.sh
+*.cmd
+*.command
+
+# Documentación de desarrollo
+*.md
+!README.md
+
+# Archivos temporales
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDEs
+.vscode/
+.idea/
+*.sublime*
+*.swp
+*.swo
+*~
+
+# Firebase local
+.firebase/
+.firebaserc.local
+
+# Configuraciones locales
+.env
+.env.local
+.env.*.local
+
+# Archivos de backup
+*.bak
+*.backup
+*~
+
+# Tests
+__tests__/
+*.test.js
+*.spec.js
+
+# Archivos de análisis
+ANALISIS*.md
+AUDITORIA*.md
+ESTADO*.md
+CHECKLIST*.md
+CAMBIOS*.md
+GUIA*.md
+CLEANUP*.md
+FASE*.md
+EXPANSION*.md
+IMPLEMENTACION*.md
+CONFIGURAR*.md
+ARQUITECTURA*.md
+DEPLOY*.md
+FIXES*.css.map
+
+# Archivos de desarrollo
+export-firestore-local.js
+import-firestore-local.js
+init-database.js
+migrate-certamenes.js
+setup-admin.js
+generate-*.js
+crear-*.ps1
+deploy*.ps1
+deploy*.sh
+limpiar-*.ps1
+
+# Archivos de salida
+deploy_output.txt
+deploy-functions-log.txt
+
+# CORS config
+cors.json
+
+# Source maps (opcional)
+# *.map

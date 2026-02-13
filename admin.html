@@ -18,11 +18,9 @@
     <link rel="stylesheet" href="/design-tokens.css">
 
     <script>
-        if (localStorage.getItem('vyt_debug') !== 'true' && !window.__vytAdminConsoleMuted) {
-            window.__vytAdminConsoleMuted = true;
-            window.__vytAdminConsoleLog = console.log;
-            console.log = () => {};
-        }
+        // LOGS HABILITADOS PARA DEBUG
+        localStorage.setItem('vyt_debug', 'true');
+        console.log('🔥 VYT Admin - Console logs ACTIVADOS');
     </script>
     
     <!-- Firebase SDK v8 -->
@@ -33,48 +31,80 @@
     
     <!-- Inicializar Firebase inline -->
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
-            authDomain: "vytonlineprueva.firebaseapp.com",
-            projectId: "vytonlineprueva",
-            storageBucket: "vytonlineprueva.firebasestorage.app",
-            messagingSenderId: "175483939728",
-            appId: "1:175483939728:web:230294acca9221d1d1a115",
-            measurementId: "G-PWRTMBH631"
-        };
+        // Función para inicializar Firebase cuando esté disponible
+        function initFirebase() {
+            if (typeof firebase === 'undefined') {
+                console.warn('⏳ Firebase SDK aún no disponible, reintentando...');
+                setTimeout(initFirebase, 100);
+                return;
+            }
+            
+            try {
+                const firebaseConfig = {
+                    apiKey: "AIzaSyB_LRm2DUhQXwlaCFGc4pqzWs6OiMdRqlk",
+                    authDomain: "vytonlineprueva.firebaseapp.com",
+                    projectId: "vytonlineprueva",
+                    storageBucket: "vytonlineprueva.firebasestorage.app",
+                    messagingSenderId: "175483939728",
+                    appId: "1:175483939728:web:230294acca9221d1d1a115",
+                    measurementId: "G-PWRTMBH631"
+                };
+                
+                // Verificar que no esté ya inicializado
+                if (!firebase.apps || firebase.apps.length === 0) {
+                    firebase.initializeApp(firebaseConfig);
+                    console.log('🔥 Firebase inicializado');
+                } else {
+                    console.log('🔥 Firebase ya estaba inicializado');
+                }
+                
+                // Exportar a window de forma síncrona
+                window.db = firebase.firestore();
+                window.firebaseDB = window.db;
+                window.firebaseAuth = firebase.auth();
+                window.firebaseStorage = firebase.storage();
+                window.firebaseReady = true;
+                
+                console.log('✅ Firebase COMPLETAMENTE listo');
+                console.log('✅ db:', typeof window.db);
+                console.log('✅ auth:', typeof window.firebaseAuth);
+                console.log('✅ storage:', typeof window.firebaseStorage);
+                
+                // Exportar funciones de Firestore (compatibilidad con SDK v8)
+                window.firestoreQuery = {
+                    collection: (db, path) => db.collection(path),
+                    getDocs: (ref) => ref.get(),
+                    getDoc: (ref) => ref.get(),
+                    addDoc: (ref, data) => ref.add(data),
+                    doc: (db, path) => db.doc(path),
+                    setDoc: (ref, data) => ref.set(data),
+                    updateDoc: (ref, data) => ref.update(data),
+                    deleteDoc: (ref) => ref.delete(),
+                    orderBy: (field, direction) => ({ orderBy: [field, direction] }),
+                    query: (collection, ...constraints) => collection,
+                    limit: (num) => ({ limit: num })
+                };
+                
+                // Disparar evento personalizado
+                window.dispatchEvent(new Event('firebaseReady'));
+                
+            } catch (error) {
+                console.error('❌ Error inicializando Firebase:', error);
+                setTimeout(initFirebase, 500); // Reintentar
+            }
+        }
         
-        // Inicializar Firebase
-        firebase.initializeApp(firebaseConfig);
-        
-        // Exportar a window (sin const/let/var para evitar redeclaraciones)
-        window.db = firebase.firestore();
-        window.firebaseDB = window.db;
-        window.firebaseAuth = firebase.auth();
-        window.firebaseStorage = firebase.storage();
-        
-        console.log('✅ Firebase inicializado en admin');
-        console.log('✅ db disponible:', typeof window.db);
-        console.log('✅ storage disponible:', typeof window.firebaseStorage);
-        
-        // Exportar funciones de Firestore (compatibilidad con SDK v8)
-        window.firestoreQuery = {
-            collection: (db, path) => db.collection(path),
-            getDocs: (ref) => ref.get(),
-            getDoc: (ref) => ref.get(),
-            addDoc: (ref, data) => ref.add(data),
-            doc: (db, path) => db.doc(path),
-            setDoc: (ref, data) => ref.set(data),
-            updateDoc: (ref, data) => ref.update(data),
-            deleteDoc: (ref) => ref.delete(),
-            orderBy: (field, direction) => ({ orderBy: [field, direction] }),
-            query: (collection, ...constraints) => collection,
-            limit: (num) => ({ limit: num })
-        };
+        // Iniciar cuando el DOM esté listo
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initFirebase);
+        } else {
+            initFirebase(); // DOM ya está listo
+        }
     </script>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="src/notification-system.js"></script>
+    <!-- <script src="src/notification-system.js"></script> TEMPORALMENTE DESHABILITADO -->
     <style>
         :root {
             --color-primario: #00d9ff;
@@ -115,8 +145,33 @@
         input[type="url"],
         textarea,
         select {
-            color: #1f2937 !important;
-            background-color: white !important;
+            color: #000000 !important;
+            background-color: #ffffff !important;
+            -webkit-text-fill-color: #000000 !important;
+            opacity: 1 !important;
+            font-family: system-ui, -apple-system, sans-serif !important;
+        }
+        
+        /* Asegurar que los bullets de password sean visibles */
+        input[type="password"] {
+            letter-spacing: 0.1em;
+            font-weight: 500;
+        }
+        
+        /* Forzar visibilidad en autofill */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-text-fill-color: #000000 !important;
+            -webkit-box-shadow: 0 0 0px 1000px #ffffff inset !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        
+        /* Placeholder visible */
+        input::placeholder {
+            color: #9ca3af !important;
+            opacity: 0.6 !important;
         }
         
         /* Estilos especiales para datetime-local para que el picker sea visible */
@@ -152,17 +207,26 @@
             <form id="login-form" class="space-y-6">
                 <div>
                     <label for="admin-email" class="block text-sm font-medium text-gray-700 mb-2">Email de administrador</label>
-                    <input type="email" id="admin-email" required 
+                    <input type="email" id="admin-email" required autocomplete="email"
+                           value="luciano21martinez@gmail.com"
+                           style="color: #000000 !important; background-color: #ffffff !important; -webkit-text-fill-color: #000000 !important;"
                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                 </div>
                 
                 <div>
-                    <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">Contrasea</label>
-                    <input type="password" id="admin-password" required 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                    <label for="admin-password" class="block text-sm font-medium text-gray-700 mb-2">Contraseña</label>
+                    <div class="relative">
+                        <input type="password" id="admin-password" required autocomplete="current-password"
+                               placeholder="@Aaron31981842"
+                               style="color: #000000 !important; background-color: #ffffff !important; -webkit-text-fill-color: #000000 !important;"
+                               class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <button type="button" id="toggle-password" class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-eye" id="eye-icon"></i>
+                        </button>
+                    </div>
                 </div>
                 
-                <button type="button" id="login-btn" 
+                <button type="submit" id="login-btn" 
                         class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
                     <i class="fas fa-sign-in-alt mr-2"></i>Iniciar Sesin
                 </button>
@@ -785,6 +849,22 @@
                                     <label class="block text-sm font-medium text-gray-700 mb-1">📸 Imagen del Certamen</label>
                                     <input type="file" id="certamen-imagen-file" accept="image/*" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                                     <p class="text-xs text-gray-500 mt-1">🖼️ Formato recomendado: 1080x1080px (cuadrado). Máximo 20MB</p>
+                                    
+                                    <!-- VISTA PREVIA DE IMAGEN -->
+                                    <div id="imagen-preview-container" class="hidden mt-3">
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">Vista Previa:</label>
+                                        <div class="relative inline-block">
+                                            <img id="imagen-preview" src="" alt="Vista previa" class="w-48 h-48 object-cover rounded-lg border-2 border-gray-300 shadow-sm">
+                                            <button type="button" onclick="clearImagePreview()" class="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center shadow-lg">
+                                                <i class="fas fa-times text-xs"></i>
+                                            </button>
+                                        </div>
+                                        <p class="text-xs text-gray-600 mt-2">
+                                            <i class="fas fa-info-circle"></i> 
+                                            <span id="imagen-info"></span>
+                                        </p>
+                                    </div>
+                                    
                                     <div id="upload-progress" class="hidden mt-2">
                                         <div class="w-full bg-gray-200 rounded-full h-2">
                                             <div id="upload-progress-bar" class="bg-blue-600 h-2 rounded-full transition-all" style="width: 0%"></div>
@@ -1476,14 +1556,55 @@
                         adminUserEmail.textContent = session.email;
                         showPage('inicio');
                         
-                        // Cargar datos
-                        setTimeout(() => {
-                            tryQuickFirebaseConnection();
-                        }, 500);
+                        // Cargar datos - ESPERAR a que Firebase esté listo
+                        console.log('⏳ Esperando Firebase para cargar datos...');
                         
-                        initializeWithRealData().catch((error) => {
-                            console.warn(' Error cargando datos:', error.message);
-                        });
+                        function cargarDatosConFirebase() {
+                            if (window.firebaseReady && window.db && window.firestoreQuery) {
+                                console.log('✅ Firebase listo, iniciando carga de datos...');
+                                
+                                setTimeout(() => {
+                                    if (typeof tryQuickFirebaseConnection === 'function') {
+                                        tryQuickFirebaseConnection();
+                                    }
+                                }, 500);
+                                
+                                if (typeof initializeWithRealData === 'function') {
+                                    initializeWithRealData().catch((error) => {
+                                        console.warn('⚠️ Error cargando datos:', error.message);
+                                        if (typeof loadSimulatedData === 'function') {
+                                            loadSimulatedData();
+                                        }
+                                    });
+                                } else {
+                                    console.log('📊 Cargando datos simulados...');
+                                    if (typeof loadSimulatedData === 'function') {
+                                        loadSimulatedData();
+                                    }
+                                }
+                            } else {
+                                console.log('⏳ Esperando Firebase... (reintentando en 200ms)');
+                                setTimeout(cargarDatosConFirebase, 200);
+                            }
+                        }
+                        
+                        // Iniciar carga de datos
+                        cargarDatosConFirebase();
+                        
+                        // Timeout de seguridad (15 segundos)
+                        setTimeout(() => {
+                            if (!window.firebaseReady) {
+                                console.error('❌ Firebase no se inicializó en 15 segundos');
+                                console.log('📊 Forzando datos simulados...');
+                                if (typeof loadSimulatedData === 'function') {
+                                    loadSimulatedData();
+                                }
+                            }
+                        }, 15000);
+                                console.error('❌ Firebase no se inicializó en 10 segundos');
+                                loadSimulatedData();
+                            }
+                        }, 10000);
                     } else {
                         // Sesin expirada
                         localStorage.removeItem('admin_session');
@@ -1593,6 +1714,64 @@
                 });
             }
             
+            // ===== VISTA PREVIA DE IMAGEN DEL CERTAMEN =====
+            const imagenFileInput = document.getElementById('certamen-imagen-file');
+            if (imagenFileInput) {
+                imagenFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        // Validar que sea imagen
+                        if (!file.type.startsWith('image/')) {
+                            alert('⚠️ Por favor selecciona un archivo de imagen válido');
+                            clearImagePreview();
+                            return;
+                        }
+                        
+                        // Validar tamaño (max 20MB)
+                        if (file.size > 20 * 1024 * 1024) {
+                            alert('⚠️ La imagen es muy grande. Máximo 20MB');
+                            clearImagePreview();
+                            return;
+                        }
+                        
+                        // Mostrar vista previa
+                        const reader = new FileReader();
+                        reader.onload = function(event) {
+                            const previewContainer = document.getElementById('imagen-preview-container');
+                            const previewImg = document.getElementById('imagen-preview');
+                            const imagenInfo = document.getElementById('imagen-info');
+                            
+                            previewImg.src = event.target.result;
+                            previewContainer.classList.remove('hidden');
+                            
+                            // Mostrar info del archivo
+                            const sizeInKB = (file.size / 1024).toFixed(2);
+                            imagenInfo.textContent = `${file.name} - ${sizeInKB} KB`;
+                            
+                            console.log('✅ Vista previa cargada:', file.name);
+                        };
+                        reader.readAsDataURL(file);
+                    } else {
+                        clearImagePreview();
+                    }
+                });
+            }
+            
+            // Función global para limpiar vista previa
+            window.clearImagePreview = function() {
+                const previewContainer = document.getElementById('imagen-preview-container');
+                const previewImg = document.getElementById('imagen-preview');
+                const imagenFileInput = document.getElementById('certamen-imagen-file');
+                const imagenInfo = document.getElementById('imagen-info');
+                
+                if (previewContainer) previewContainer.classList.add('hidden');
+                if (previewImg) previewImg.src = '';
+                if (imagenFileInput) imagenFileInput.value = '';
+                if (imagenInfo) imagenInfo.textContent = '';
+                
+                console.log('🗑️ Vista previa limpiada');
+            };
+            
             // Event listener para formulario de crear video
             const videoForm = document.getElementById('video-form');
             if (videoForm) {
@@ -1622,14 +1801,28 @@
             // Agregar funcionalidad al botn de login principal
             const loginBtn = document.getElementById('login-btn');
             if (loginBtn) {
-                loginBtn.addEventListener('click', function() {
-                    const email = document.getElementById('admin-email').value;
+                loginBtn.addEventListener('click', async function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('admin-email').value.trim();
                     const password = document.getElementById('admin-password').value;
                     const errorDiv = document.getElementById('login-error');
                     
-                    // Credenciales personalizadas del administrador
-                    if (email === 'luciano21martinez@gmail.com' && password === '@Aaron31981842') {
-                        console.log('Login exitoso con credenciales de desarrollo');
+                    console.log('🔑 Intento de login');
+                    console.log('Email ingresado:', '"' + email + '"', 'length:', email.length);
+                    console.log('Password ingresado:', '"' + password + '"', 'length:', password.length);
+                    
+                    // Credenciales personalizadas del administrador (case-insensitive email)
+                    const emailCorrecto = 'luciano21martinez@gmail.com';
+                    const passwordCorrecta = '@Aaron31981842';
+                    
+                    console.log('Email esperado:', '"' + emailCorrecto + '"');
+                    console.log('Password esperado:', '"' + passwordCorrecta + '"');
+                    console.log('Email match:', email.toLowerCase() === emailCorrecto.toLowerCase());
+                    console.log('Password match:', password === passwordCorrecta);
+                    
+                    if (email.toLowerCase() === emailCorrecto.toLowerCase() && password === passwordCorrecta) {
+                        console.log('✅ Login exitoso con credenciales de desarrollo');
                         
                         // Guardar sesin en localStorage
                         localStorage.setItem('admin_session', JSON.stringify({
@@ -1646,41 +1839,120 @@
                         // Mostrar la seccin de inicio
                         showPage('inicio');
                         
-                        // Intentar cargar datos reales primero, luego simulados
-                        console.log(' Intentando cargar datos reales...');
+                        // **AUTENTICAR CON FIREBASE (NO BLOQUEANTE)**
+                        setTimeout(async () => {
+                            try {
+                                if (window.firebaseReady && typeof firebase !== 'undefined' && firebase.auth) {
+                                    await firebase.auth().signInWithEmailAndPassword(email, password);
+                                    console.log('✅ Autenticado con Firebase Auth');
+                                } else {
+                                    console.log('⚠️ Firebase Auth no disponible, continuando sin autenticación');
+                                }
+                            } catch (authError) {
+                                console.warn('⚠️ Error autenticando con Firebase:', authError.message);
+                                console.log('▶️ Continuando en modo sin autenticación');
+                            }
+                        }, 500);
                         
-                        // Intentar conexin rpida con Firebase
+                        // Intentar cargar datos reales - ESPERAR a Firebase  
+                        console.log('⏳ Esperando Firebase para cargar datos (login)...');
+                        
+                        function cargarDatosConFirebase() {
+                            if (window.firebaseReady && window.db && window.firestoreQuery) {
+                                console.log('✅ Firebase listo, iniciando carga de datos...');
+                                
+                                setTimeout(() => {
+                                    if (typeof tryQuickFirebaseConnection === 'function') {
+                                        tryQuickFirebaseConnection();
+                                    }
+                                }, 1000);
+                                
+                                if (typeof initializeWithRealData === 'function') {
+                                    initializeWithRealData().then(() => {
+                                        console.log('✅ Datos reales cargados exitosamente');
+                                    }).catch((error) => {
+                                        console.warn('⚠️ Error cargando datos reales:', error.message);
+                                        console.log('📊 Fallback: Usando datos simulados realistas');
+                                        if (typeof loadSimulatedData === 'function') {
+                                            loadSimulatedData();
+                                        }
+                                    });
+                                } else {
+                                    console.log('📊 Cargando datos simulados...');
+                                    if (typeof loadSimulatedData === 'function') {
+                                        loadSimulatedData();
+                                    }
+                                }
+                            } else {
+                                console.log('⏳ Esperando Firebase... (reintentando en 200ms)');
+                                setTimeout(cargarDatosConFirebase, 200);
+                            }
+                        }
+                        
+                        // Iniciar carga de datos
+                        cargarDatosConFirebase();
+                        
+                        // Timeout de seguridad (15 segundos)
                         setTimeout(() => {
-                            tryQuickFirebaseConnection();
-                        }, 1000);
-                        
-                        initializeWithRealData().then(() => {
-                            console.log(' Datos reales cargados exitosamente');
-                        }).catch((error) => {
-                            console.warn(' Error cargando datos reales:', error.message);
-                            console.log(' Fallback: Usando datos simulados realistas');
-                            loadSimulatedData();
-                        });
+                            if (!window.firebaseReady) {
+                                console.error('❌ Firebase no se inicializó en 15 segundos (login)');
+                                console.log('📊 Forzando datos simulados...');
+                                if (typeof loadSimulatedData === 'function') {
+                                    loadSimulatedData();
+                                }
+                            }
+                        }, 15000);
                         
                         // Cargar configuraciones de fondos desde Firebase
                         setTimeout(() => {
-                            loadFromFirebase().then((config) => {
-                                if (config) {
-                                    console.log(' Configuraciones de fondos cargadas desde Firebase');
-                                    // Actualizar previews si es necesario
-                                    updatePreviewsFromConfig(config);
-                                }
-                            }).catch((error) => {
-                                console.log(' No se pudieron cargar configuraciones de Firebase:', error.message);
-                            });
+                            if (window.firebaseReady) {
+                                loadFromFirebase().then((config) => {
+                                    if (config) {
+                                        console.log('✅ Configuraciones de fondos cargadas desde Firebase');
+                                        updatePreviewsFromConfig(config);
+                                    }
+                                }).catch((error) => {
+                                    console.log('⚠️ No se pudieron cargar configuraciones de Firebase:', error.message);
+                                });
+                            }
                         }, 2000);
                         
                         errorDiv.classList.add('hidden');
                         console.log(' Admin cargado exitosamente');
                     } else {
                         console.log(' Credenciales incorrectas');
-                        errorDiv.textContent = 'Credenciales incorrectas. Verifica tu email y contraseña.';
+                        console.log('Expected:', 'luciano21martinez@gmail.com', '@Aaron31981842');
+                        console.log('Received:', email, password);
+                        errorDiv.textContent = 'Credenciales incorrectas. Email: luciano21martinez@gmail.com';
                         errorDiv.classList.remove('hidden');
+                    }
+                });
+            }
+            
+            // Permitir login con Enter
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    document.getElementById('login-btn').click();
+                });
+            }
+            
+            // Toggle mostrar/ocultar contraseña
+            const togglePasswordBtn = document.getElementById('toggle-password');
+            const passwordInput = document.getElementById('admin-password');
+            const eyeIcon = document.getElementById('eye-icon');
+            
+            if (togglePasswordBtn && passwordInput && eyeIcon) {
+                togglePasswordBtn.addEventListener('click', function() {
+                    if (passwordInput.type === 'password') {
+                        passwordInput.type = 'text';
+                        eyeIcon.classList.remove('fa-eye');
+                        eyeIcon.classList.add('fa-eye-slash');
+                    } else {
+                        passwordInput.type = 'password';
+                        eyeIcon.classList.remove('fa-eye-slash');
+                        eyeIcon.classList.add('fa-eye');
                     }
                 });
             }
@@ -1725,8 +1997,9 @@
                 const participantesPresencialRef = collection(db, 'participantes_presencial');
                 const participantesPresencialSnapshot = await getDocs(participantesPresencialRef);
 
-                // Cargar certmenes
-                const certamenesRef = collection(db, 'certamenes');
+                // Cargar certámenes
+                // ✅ CORREGIDO: certamenes_provinciales
+                const certamenesRef = collection(db, 'certamenes_provinciales');
                 const certamenesSnapshot = await getDocs(certamenesRef);
 
                 // Cargar transacciones VYT Money
@@ -2678,8 +2951,9 @@
                 
                 const certamenesContainer = document.getElementById('certamenes-list');
                 
+                // ✅ CORREGIDO: certamenes_provinciales
                 const certamenesRef = query(
-                    collection(db, 'certamenes'),
+                    collection(db, 'certamenes_provinciales'),
                     orderBy('fecha_creacion', 'desc')
                 );
                 const certamenesSnapshot = await getDocs(certamenesRef);
@@ -2939,6 +3213,11 @@
             const form = document.getElementById('create-certamen-form');
             form.classList.add('hidden');
             document.getElementById('certamen-form').reset();
+            
+            // Limpiar vista previa de imagen
+            if (typeof window.clearImagePreview === 'function') {
+                window.clearImagePreview();
+            }
         };
 
         window.loadCertamenes = function() {
