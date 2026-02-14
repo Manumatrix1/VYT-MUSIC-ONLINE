@@ -103,11 +103,37 @@
         .strength-fair { background: #ffd93d; width: 50%; }
         .strength-good { background: #6bcf7f; width: 75%; }
         .strength-strong { background: #40c057; width: 100%; }
+
+        /* Navegación mejorada con iconos */
+        header {
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        header .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        header .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            header .nav-links a span {
+                display: none;
+            }
+            header .nav-links {
+                gap: 12px;
+            }
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
     
-    <!-- Navegacin superior -->
+    <!-- Navegación superior -->
     <header class="fixed top-0 left-0 right-0 z-50 bg-black/50 backdrop-blur-sm">
         <div class="container mx-auto px-4 py-3 flex items-center justify-between">
             <a href="index.html" class="flex items-center space-x-3">
@@ -116,9 +142,20 @@
                 </div>
                 <span class="text-xl font-bold text-white">VYT MUSIC</span>
             </a>
-            <a href="login.html" class="text-gray-300 hover:text-white transition-colors">
-                Ya tienes cuenta? Iniciar sesin
-            </a>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a href="certamenes.html" class="nav-link text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-trophy"></i>
+                    <span>Certámenes</span>
+                </a>
+                <a href="login.html" class="nav-link text-gray-300 hover:text-white transition-colors">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Iniciar sesión</span>
+                </a>
+            </div>
         </div>
     </header>
 

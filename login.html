@@ -272,31 +272,109 @@
             transform: translateY(-2px);
         }
 
-        .back-home {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: white;
-            font-size: 24px;
-            text-decoration: none;
-            transition: all 0.3s;
-        }
-
-        .back-home:hover {
-            transform: translateX(-5px);
-        }
-
         @media (max-width: 768px) {
             .login-container {
                 padding: 30px 20px;
             }
         }
+        /* Navegación superior simple */
+        .simple-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .simple-nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .simple-nav .logo img {
+            width: 40px;
+            height: 40px;
+            filter: brightness(0);
+        }
+
+        .simple-nav .logo span {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .simple-nav .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .simple-nav .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .simple-nav .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .simple-nav .nav-links i {
+            font-size: 16px;
+        }
+
+        body {
+            padding-top: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .simple-nav .nav-links a span {
+                display: none;
+            }
+            .simple-nav .nav-links {
+                gap: 15px;
+            }
+            body {
+                padding-top: 70px;
+            }
+        }
     </style>
 </head>
 <body>
-    <a href="index.html" class="back-home">
-        <i class="fas fa-arrow-left"></i>
-    </a>
+    <!-- Navegación superior -->
+    <nav class="simple-nav">
+        <a href="index.html" class="logo">
+            <img src="/images/logo-original.png" alt="VYT Music">
+            <span>VYT Music</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </a>
+            <a href="certamenes.html">
+                <i class="fas fa-trophy"></i>
+                <span>Certámenes</span>
+            </a>
+            <a href="nosotros.html">
+                <i class="fas fa-info-circle"></i>
+                <span>Nosotros</span>
+            </a>
+        </div>
+    </nav>
 
     <div class="login-container">
         <div class="logo-section">
