@@ -4,7 +4,18 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "**/*.sh",
+      "**/*.bat",
+      "**/*.exe",
+      "**/*.cmd",
+      "**/*.ps1",
+      "**/*.bin",
+      "**/*.msi",
+      "scripts/**",
+      "functions/**",
+      "**/*.md",
+      "!README.md"
     ],
     "headers": [
       {
