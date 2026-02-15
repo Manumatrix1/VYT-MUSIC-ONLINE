@@ -8,14 +8,15 @@
       "**/*.sh",
       "**/*.bat",
       "**/*.exe",
-      "**/*.cmd",
       "**/*.ps1",
-      "**/*.bin",
-      "**/*.msi",
-      "scripts/**",
-      "functions/**",
+      "**/*.cmd",
+      "**/scripts/**",
+      "**/functions/**",
       "**/*.md",
-      "!README.md"
+      "**/.git/**",
+      "**/.vscode/**",
+      "**/test/**",
+      "**/*.log"
     ],
     "headers": [
       {
